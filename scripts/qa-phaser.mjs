@@ -8,10 +8,11 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
 const output = resolve(process.env.QA_OUTPUT || '/private/tmp/last-chapter-qa');
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({
+const server = await chromium.launchServer({
   channel: process.env.BROWSER_CHANNEL || 'chrome',
   headless: true,
 });
+const browser = await chromium.connect(server.wsEndpoint());
 const results = [];
 
 async function snapshot(page) {
@@ -283,5 +284,16 @@ try {
   }
   throw error;
 } finally {
-  await browser.close();
+  // Bound graceful shutdown: this host sometimes stalls during Chrome cleanup.
+  // The fallback can terminate only the browser server owned by this run.
+  const cleanup = setTimeout(() => {
+    console.warn('Chrome fixture did not close promptly; terminating the owned browser server.');
+    void server.kill();
+  }, 5000);
+  try {
+    await browser.close();
+    await server.close();
+  } finally {
+    clearTimeout(cleanup);
+  }
 }

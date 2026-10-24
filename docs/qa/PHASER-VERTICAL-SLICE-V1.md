@@ -61,6 +61,9 @@ the failure scenarios. Artifacts are in `/private/tmp/last-chapter-qa` and
 for room composition, portrait/choice layout, tablet wrapping and fallback presentation.
 Normal desktop/tablet play produced no prototype console or page errors; deliberately
 blocked resources produced the expected fallback or recovery UI.
+The final built-site run also verified bounded fixture cleanup: installed Chrome
+stalled on graceful shutdown, the runner stopped its own server after five seconds,
+and the command exited successfully. All gameplay assertions completed before cleanup.
 
 The suite covers real key/pointer input, four object inspections, navigation around
 furniture, visible walking frames, held Enter protection, focus/choice navigation,

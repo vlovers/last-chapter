@@ -34,5 +34,7 @@ four objects, both gift endings, confidentiality response, conversation resume, 
 guard, desktop/tablet layout, reduced motion, silent/portrait fallbacks, initialization
 failure and production save isolation. It writes screenshots and a JSON result file.
 A passing browser smoke is not a full accessibility audit or an audio listening review.
+The runner owns its Chrome server and allows five seconds for graceful shutdown,
+then terminates only that fixture if the installed browser stalls during cleanup.
 
 See [V1 QA record](qa/PHASER-VERTICAL-SLICE-V1.md) for the checks actually executed.
