@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { answerConversation, conversationView, startConversation, validateTopic } from '../src/phaser/conversation-engine';
+import {
+  answerConversation,
+  conversationView,
+  startConversation,
+  validateTopic,
+} from '../src/phaser/conversation-engine';
 import { maraLetterDecision } from '../src/phaser/mara-letter-decision';
 
 describe('Mara letter resolution', () => {
@@ -13,7 +18,11 @@ describe('Mara letter resolution', () => {
     expect(conversationView(maraLetterDecision, letter).text).toContain('третій шлях');
   });
   it('can be left without a penalty', () => {
-    const session = answerConversation(maraLetterDecision, startConversation(maraLetterDecision), 'later');
+    const session = answerConversation(
+      maraLetterDecision,
+      startConversation(maraLetterDecision),
+      'later',
+    );
     expect(session.finished).toBe(true);
   });
   it('remembers a supportive answer', () => {

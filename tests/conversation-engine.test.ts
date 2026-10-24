@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { answerConversation, conversationView, normalizeMemories, restoreConversation, startConversation, validateTopic } from '../src/phaser/conversation-engine';
+import {
+  answerConversation,
+  conversationView,
+  normalizeMemories,
+  restoreConversation,
+  startConversation,
+  validateTopic,
+} from '../src/phaser/conversation-engine';
 import { maraBookClub } from '../src/phaser/mara-book-club';
 
 describe('optional book-club conversation', () => {
@@ -23,21 +30,39 @@ describe('optional book-club conversation', () => {
     expect(restoreConversation(maraBookClub, JSON.stringify(s))).toEqual(s);
   });
   it('rejects unknown and inaccessible options', () => {
-    expect(() => answerConversation(maraBookClub, startConversation(maraBookClub), 'not-a-choice')).toThrow();
+    expect(() =>
+      answerConversation(maraBookClub, startConversation(maraBookClub), 'not-a-choice'),
+    ).toThrow();
   });
   it('detects a reachable conversation loop with no way to leave', () => {
-    expect(validateTopic({
-      id: 'trapped', title: 'Trapped', entry: 'a',
-      nodes: [
-        { id: 'a', speaker: 'A', text: 'Hello', choices: [{ id: 'next', label: 'Next', next: 'b' }] },
-        { id: 'b', speaker: 'B', text: 'Again', choices: [{ id: 'again', label: 'Again', next: 'a' }] },
-      ],
-    })).toContain('No path to exit: a');
+    expect(
+      validateTopic({
+        id: 'trapped',
+        title: 'Trapped',
+        entry: 'a',
+        nodes: [
+          {
+            id: 'a',
+            speaker: 'A',
+            text: 'Hello',
+            choices: [{ id: 'next', label: 'Next', next: 'b' }],
+          },
+          {
+            id: 'b',
+            speaker: 'B',
+            text: 'Again',
+            choices: [{ id: 'again', label: 'Again', next: 'a' }],
+          },
+        ],
+      }),
+    ).toContain('No path to exit: a');
   });
 
   it('detects dead ends and empty choice labels', () => {
     const errors = validateTopic({
-      id: 'invalid', title: 'Invalid', entry: 'a',
+      id: 'invalid',
+      title: 'Invalid',
+      entry: 'a',
       nodes: [{ id: 'a', speaker: 'A', text: 'Hello', choices: [] }],
     });
     expect(errors).toContain('Dead end: a');
@@ -57,6 +82,11 @@ describe('optional book-club conversation', () => {
   });
 
   it('rejects tampered session state', () => {
-    expect(restoreConversation(maraBookClub, '{"topic":"mara.book-club.v1","node":"bad","memories":[],"finished":false}')).toBeNull();
+    expect(
+      restoreConversation(
+        maraBookClub,
+        '{"topic":"mara.book-club.v1","node":"bad","memories":[],"finished":false}',
+      ),
+    ).toBeNull();
   });
 });

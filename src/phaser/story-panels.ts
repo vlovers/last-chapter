@@ -1,5 +1,12 @@
 import type { FiveDayStory } from './five-day-story';
-import { answerConversation, conversationView, normalizeMemories, restoreConversation, startConversation, type ConversationSession } from './conversation-engine';
+import {
+  answerConversation,
+  conversationView,
+  normalizeMemories,
+  restoreConversation,
+  startConversation,
+  type ConversationSession,
+} from './conversation-engine';
 import { maraBookClub } from './mara-book-club';
 import { maraAfterHours } from './mara-after-hours';
 import { maraReturnVisit } from './mara-return-visit';
@@ -35,22 +42,36 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const afterHoursKey = 'last-chapter:conversation:mara:after-hours:v1';
   let conversation: ConversationSession = startConversation(maraBookClub);
   let afterHours: ConversationSession = startConversation(maraAfterHours);
-  const sharedMemories = () => normalizeMemories([...conversation.memories, ...afterHours.memories, ...returnVisit.memories, ...letterDecision.memories]);
+  const sharedMemories = () =>
+    normalizeMemories([
+      ...conversation.memories,
+      ...afterHours.memories,
+      ...returnVisit.memories,
+      ...letterDecision.memories,
+    ]);
   try {
     const saved = localStorage.getItem(conversationKey);
     if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
     const savedAfterHours = localStorage.getItem(afterHoursKey);
-    if (savedAfterHours) afterHours = restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours;
+    if (savedAfterHours)
+      afterHours = restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours;
     const savedReturn = localStorage.getItem(returnKey);
     if (savedReturn) returnVisit = restoreConversation(maraReturnVisit, savedReturn) ?? returnVisit;
     const savedLetter = localStorage.getItem(letterKey);
-    if (savedLetter) letterDecision = restoreConversation(maraLetterDecision, savedLetter) ?? letterDecision;
-  } catch { /* storage may be unavailable */ }
+    if (savedLetter)
+      letterDecision = restoreConversation(maraLetterDecision, savedLetter) ?? letterDecision;
+  } catch {
+    /* storage may be unavailable */
+  }
   const saveConversation = () => {
-    try { localStorage.setItem(conversationKey, JSON.stringify(conversation));
+    try {
+      localStorage.setItem(conversationKey, JSON.stringify(conversation));
       localStorage.setItem(afterHoursKey, JSON.stringify(afterHours));
       localStorage.setItem(returnKey, JSON.stringify(returnVisit));
-      localStorage.setItem(letterKey, JSON.stringify(letterDecision)); } catch { /* optional */ }
+      localStorage.setItem(letterKey, JSON.stringify(letterDecision));
+    } catch {
+      /* optional */
+    }
   };
   const conversationButton = document.createElement('button');
   conversationButton.type = 'button';
@@ -94,24 +115,59 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         const button = element('button', topic.title);
         button.type = 'button';
         button.setAttribute('aria-pressed', String(selectedTopic.id === topic.id));
-        button.addEventListener('click', () => { selectedTopic = topic; refresh(); });
+        button.addEventListener('click', () => {
+          selectedTopic = topic;
+          refresh();
+        });
         topicSelector.append(button);
       }
       panel.append(topicSelector, element('h2', selectedTopic.title));
-      const activeConversation = selectedTopic.id === maraBookClub.id ? conversation : selectedTopic.id === maraAfterHours.id ? afterHours : selectedTopic.id === maraReturnVisit.id ? returnVisit : letterDecision;
+      const activeConversation =
+        selectedTopic.id === maraBookClub.id
+          ? conversation
+          : selectedTopic.id === maraAfterHours.id
+            ? afterHours
+            : selectedTopic.id === maraReturnVisit.id
+              ? returnVisit
+              : letterDecision;
       if (activeConversation.finished) {
-        panel.append(element('p', 'Розмову завершено. Можна почати нову, зберігши попередні думки.'));
+        panel.append(
+          element('p', 'Розмову завершено. Можна почати нову, зберігши попередні думки.'),
+        );
         const again = element('button', 'Поговорити знову');
         again.type = 'button';
-        again.addEventListener('click', () => { const next = startConversation(selectedTopic, sharedMemories()); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next; else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next; else conversation = next; saveConversation(); refresh(); });
+        again.addEventListener('click', () => {
+          const next = startConversation(selectedTopic, sharedMemories());
+          if (selectedTopic.id === maraAfterHours.id) afterHours = next;
+          else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next;
+          else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next;
+          else conversation = next;
+          saveConversation();
+          refresh();
+        });
         panel.append(again);
       } else {
-        const node = conversationView(selectedTopic, { ...activeConversation, memories: sharedMemories() });
+        const node = conversationView(selectedTopic, {
+          ...activeConversation,
+          memories: sharedMemories(),
+        });
         panel.append(element('h3', node.speaker), element('p', node.text));
         for (const choice of node.choices) {
           const button = element('button', choice.label);
           button.type = 'button';
-          button.addEventListener('click', () => { const next = answerConversation(selectedTopic, { ...activeConversation, memories: sharedMemories() }, choice.id); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next; else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next; else conversation = next; saveConversation(); refresh(); });
+          button.addEventListener('click', () => {
+            const next = answerConversation(
+              selectedTopic,
+              { ...activeConversation, memories: sharedMemories() },
+              choice.id,
+            );
+            if (selectedTopic.id === maraAfterHours.id) afterHours = next;
+            else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next;
+            else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next;
+            else conversation = next;
+            saveConversation();
+            refresh();
+          });
           panel.append(button);
         }
       }
@@ -135,7 +191,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         }
         evidence.append(card);
       }
-      if (!story.evidence.length) evidence.append(element('p', 'Огляньте кота, полиці й прилавок, щоб знайти зачіпки.'));
+      if (!story.evidence.length)
+        evidence.append(element('p', 'Огляньте кота, полиці й прилавок, щоб знайти зачіпки.'));
       panel.append(evidence);
       const notes = element('ul', '', 'story-notes');
       for (const note of story.notes) notes.append(element('li', note));

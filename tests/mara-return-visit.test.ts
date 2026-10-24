@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { answerConversation, conversationView, startConversation, validateTopic } from '../src/phaser/conversation-engine';
+import {
+  answerConversation,
+  conversationView,
+  startConversation,
+  validateTopic,
+} from '../src/phaser/conversation-engine';
 import { maraReturnVisit } from '../src/phaser/mara-return-visit';
 
 describe('Mara return visit', () => {

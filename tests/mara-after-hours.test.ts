@@ -41,11 +41,16 @@ describe('Mara after-hours conversations', () => {
   });
 
   it('changes personal dialogue after a boundary-respecting response', () => {
-    const session = { ...startConversation(maraAfterHours, ['after:frank-boundary']), node: 'personal' };
+    const session = {
+      ...startConversation(maraAfterHours, ['after:frank-boundary']),
+      node: 'personal',
+    };
     expect(conversationView(maraAfterHours, session).text).toContain('не тиснеш');
   });
 
   it('supports ending immediately', () => {
-    expect(answerConversation(maraAfterHours, startConversation(maraAfterHours), 'exit').finished).toBe(true);
+    expect(
+      answerConversation(maraAfterHours, startConversation(maraAfterHours), 'exit').finished,
+    ).toBe(true);
   });
 });

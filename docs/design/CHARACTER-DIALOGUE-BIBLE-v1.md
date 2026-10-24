@@ -1,12 +1,16 @@
 # LAST CHAPTER — Character & Dialogue Bible v1.0 (editorial specification)
+
 Date: 2026-10-25
 Status: DESIGN ONLY. None of the conversations below is implemented or playtested.
 
 ## Creative promise
+
 A Ukrainian-language narrative bookshop game, not a collection of unrelated mini-games. The player can complete a visit in two minutes or spend 15–25 optional minutes discussing books, characters, ethics, and personal experiences with one returning customer. Conversations must be entertaining without yielding a quest item. Canonical narrative remains authored and works offline. No compulsory romance, timers, or daily-grind systems.
 
 ## Natali interview → explicit writing requirements
+
 This is a creative preference matrix, not an in-world biography or a character based on Natali.
+
 - Favorite reading worlds: Harry Potter (comfort, belonging, magic); Fourth Wing / Empyrean (Xaden, Violet, adventure, loyalty); ACOTAR / Двір шипів і троянд (Tamlin, Rhysand, Feyre, Nesta, Cassian); darker thrillers and romance including Verity, Haunting Adeline, My Dark Romeo, and Я бачу, вас цікавить пітьма. Discuss real books as books, never import their characters into the game's fictional reality.
 - Favorite complex men: Tamlin and Xaden. Distinguish attraction, empathy, defense of conduct, and real-life relationship standards. No NPC may declare a player's preference morally wrong.
 - Favorite women and couples: Nesta, My Dark Romeo's heroine; Nesta/Cassian, Xaden/Violet, Rhys/Feyre, Damon/Winter. Use debates about agency, growth, chemistry, trust, and earned vulnerability.
@@ -18,15 +22,19 @@ This is a creative preference matrix, not an in-world biography or a character b
 - Other interview answers should be added as verified mappings before claiming complete 25/25 coverage. Do not invent quotes or ratings for unverified answers.
 
 ## Core interaction: the conversation hub
+
 For each returning character, topics belong to four layers:
+
 1. **Light:** shop gossip, Frank, books, funny incidents, reading rituals.
 2. **Book club:** opinionated discussion of actual books and literary themes.
 3. **Personal:** memories and values unlocked through attention and trust.
 4. **Plot:** optional investigation and required dramatic turning points.
-Each topic has a hook, 3–5 distinct argument beats, 2–4 response choices per beat, at least one genuine counterargument, optional digressions, and a graceful exit. Player can return later; NPC recalls at least one meaningful stance, not just a generic affinity score.
+   Each topic has a hook, 3–5 distinct argument beats, 2–4 response choices per beat, at least one genuine counterargument, optional digressions, and a graceful exit. Player can return later; NPC recalls at least one meaningful stance, not just a generic affinity score.
 
 ## Flag contract (proposed)
+
 Use stable topic IDs, not dialogue text, as save keys:
+
 - discussed:acotar_tamlin_rhysand
 - stance:tamlin:empathy | stance:tamlin:accountability | stance:tamlin:undecided
 - stance:rhysand:double_standard | stance:rhysand:distinct_context
@@ -34,9 +42,10 @@ Use stable topic IDs, not dialogue text, as save keys:
 - stance:fiction_vs_reality:separate | stance:fiction_vs_reality:aligned
 - discussed:hp:belonging
 - memory:mara:debate_recalled
-Avoid writing any one of these to the existing production save until versioned compatibility and flag limits are checked. Do not make agreement a prerequisite for friendship.
+  Avoid writing any one of these to the existing production save until versioned compatibility and flag limits are checked. Do not make agreement a prerequisite for friendship.
 
 ## Featured 15–20 minute conversation: Tamlin vs Rhysand
+
 **Topic ID:** books.acotar.tamlin-rhysand
 **Speaker:** Mara, bookseller's regular; sharp, funny, initially critical of Tamlin, also willing to critique Rhysand.
 **Entry:** She sees an ACOTAR book and asks whether liking a fictional character is the same as approving their behavior.
@@ -49,6 +58,7 @@ Avoid writing any one of these to the existing production save until versioned c
 **Exit at every beat:** 'Повернімося до книжки, яку ти шукала' / 'Продовжимо іншим разом'. No missed reward or friendship penalty.
 
 ## Sample original Ukrainian lines (not a full scene)
+
 МАРА: «Можна співчувати Тамліну й водночас не хотіти опинитися на місці людини, за яку він усе вирішує».
 ГРАВЕЦЬ: «А Різанду читачі не пробачають схожі речі лише тому, що він харизматичний?»
 МАРА: «Іноді пробачають. Але подвійні стандарти не роблять два вчинки однаковими. Давай розберемося, де саме вони схожі».
@@ -58,6 +68,7 @@ Avoid writing any one of these to the existing production save until versioned c
 МАРА: «Пам’ятаєш нашу суперечку? Я тоді сказала, що захист і контроль легко переплутати. Мені довелося перевірити це не лише на сторінках».
 
 ## Other long-form debate topics
+
 - Xaden vs 'trust requires full disclosure' (Fourth Wing); loyalty, secrets, context.
 - Nesta vs 'unlikable heroine'; anger, trauma, responsibility, earned change.
 - Rhys/Feyre vs Nesta/Cassian; chemistry, partnership, personal agency.
@@ -69,6 +80,7 @@ Avoid writing any one of these to the existing production save until versioned c
 - Disliked tropes: characters may love second chances or slow burn and articulate why.
 
 ## Character ensemble — working placeholders, not locked canon
+
 Mara: funny and opinionated; publicly confident, privately uneasy about a past relationship. Debates Tamlin/Rhysand.
 Adrian: reserved collector; fiercely protective, conflates secrecy with responsibility. Discusses Xaden and trust.
 Solomiia: warm and perceptive; gives others good advice, avoids asking for help. Discusses Nesta and agency.
@@ -76,16 +88,17 @@ Lev: acerbic author; says uncomfortable truths in fiction, lies by omission in l
 Eva: quiet, returns books; remembers tiny details, hides an important timeline discrepancy. Discusses mystery endings and reader assumptions.
 Every character needs: public want, private need, flaw, self-deception, contradiction, personal boundaries, relationships with other NPCs, five-day arc, three independent life events, and at least one scene unrelated to the central mystery.
 
-
 ## Mandatory recurring conversation: Frank, the grey Devon Rex
+
 **Topic ID:** shop.frank.meet-and-talk. This is a real optional conversation, not just a 'pet cat' button. Introduce it organically during Mara's first or second bookstore visit, when Frank interrupts a heated Tamlin/Rhysand debate by sitting on the disputed book. The player can stay on the literary topic or switch to Frank without penalty.
 
 **First conversation (4–7 minutes, authored target):**
+
 - The visitor notices Frank's large ears, grey curly coat, and unusual appearance; the player explains he is a Devon Rex, not a sphynx.
 - Discuss his name, habits, favorite sleeping spots, and which visitors he approaches or avoids; distinguish funny guesses about his motives from facts.
 - Three stances: 'Він просто вибирає найтепліше місце', 'Френк чудово розбирається в людях', 'Він таємно керує книгарнею'. Each prompts different humor, not a relationship score.
 - The visitor tells a personal story about an animal, attachment, or home, with the option to decline personal questions.
-- Frank physically interrupts (walks across the counter, sits on a bookmark) and reveals a *small* character detail, not a compulsory clue.
+- Frank physically interrupts (walks across the counter, sits on a bookmark) and reveals a _small_ character detail, not a compulsory clue.
 
 **Recurring callbacks:** One visit later Mara remembers the player's interpretation of Frank. Adrian claims Frank dislikes him; Frank then chooses his coat. Solomiia has a different anecdote. At least one late-game scene is quiet and tender, with Frank nearby and no investigation reward.
 
@@ -99,6 +112,7 @@ Every character needs: public want, private need, flaw, self-deception, contradi
 **Acceptance:** topic accessible without completing a mystery; at least three distinct branches, a graceful exit and resume, two later callbacks, and no fabricated memories or cat-care chores. Frank's physical animations are a separate implementation task.
 
 ## Production quality gates
+
 - Script and UI are Ukrainian; localization later only if commissioned.
 - No copied passages, distinctive fictional scenes, cover art, or proprietary character designs from referenced books. Names and original critical discussion are acceptable editorial references; check spoilers and publication rights before release.
 - No forced agreement, fake choice, hidden affinity punishment, or abrupt 'quest complete' after a serious conversation.
@@ -107,6 +121,7 @@ Every character needs: public want, private need, flaw, self-deception, contradi
 - **Do not mark this feature implemented** until the dialogue engine, authored scene, localization review, and playtests are complete.
 
 ## Next implementation slice
+
 1. Implement reusable topic hub and resume/exit navigation without altering mandatory 19-stage progression.
 2. Author the full Tamlin/Rhysand scene at the above beat count, including distinct answers, counterarguments, and optional branches.
 3. Persist selected opinions and topic completion in a versioned compatible save model.

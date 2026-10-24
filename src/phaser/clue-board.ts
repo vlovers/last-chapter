@@ -10,10 +10,36 @@ export interface Clue {
 }
 
 export const CLUES: readonly Clue[] = [
-  { id: 'bookmark', label: 'Закладка Френка', detail: 'На закладці — нерівний відбиток старого штампа книгарні. Кіт знайшов її не випадково?', flag: 'clue_bookmark', required: ['met_frank'] },
-  { id: 'stamp', label: 'Старий штамп', detail: 'У прилавку — штамп з таким самим надщербленим краєм. Його використовували ще до затоплення.', flag: 'clue_stamp', required: ['explored_counter'] },
-  { id: 'shelf', label: 'Нотатка на форзаці', detail: 'За книжками є короткий запис: «Не плутати дату бронювання з датою отримання».', flag: 'clue_shelf', required: ['explored_shelves'] },
-  { id: 'timeline', label: 'Зіставити три знахідки', detail: 'Закладка, штамп і нотатка вказують на старі записи замовлень. Це привід перевірити хронологію, а не звинувачувати когось.', flag: 'clue_timeline', required: ['clue_bookmark', 'clue_stamp', 'clue_shelf'] },
+  {
+    id: 'bookmark',
+    label: 'Закладка Френка',
+    detail: 'На закладці — нерівний відбиток старого штампа книгарні. Кіт знайшов її не випадково?',
+    flag: 'clue_bookmark',
+    required: ['met_frank'],
+  },
+  {
+    id: 'stamp',
+    label: 'Старий штамп',
+    detail:
+      'У прилавку — штамп з таким самим надщербленим краєм. Його використовували ще до затоплення.',
+    flag: 'clue_stamp',
+    required: ['explored_counter'],
+  },
+  {
+    id: 'shelf',
+    label: 'Нотатка на форзаці',
+    detail: 'За книжками є короткий запис: «Не плутати дату бронювання з датою отримання».',
+    flag: 'clue_shelf',
+    required: ['explored_shelves'],
+  },
+  {
+    id: 'timeline',
+    label: 'Зіставити три знахідки',
+    detail:
+      'Закладка, штамп і нотатка вказують на старі записи замовлень. Це привід перевірити хронологію, а не звинувачувати когось.',
+    flag: 'clue_timeline',
+    required: ['clue_bookmark', 'clue_stamp', 'clue_shelf'],
+  },
 ];
 
 export function accessibleClues(flags: readonly string[]): readonly Clue[] {

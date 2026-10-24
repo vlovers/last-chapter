@@ -33,7 +33,8 @@ export function validateTopic(topic: ConversationTopic): string[] {
   for (const node of topic.nodes) {
     if (!node.choices.length) errors.push('Dead end: ' + node.id);
     if (!node.text.trim()) errors.push('Empty text: ' + node.id);
-    for (const variant of node.variants ?? []) if (!variant.text.trim()) errors.push('Empty variant: ' + node.id);
+    for (const variant of node.variants ?? [])
+      if (!variant.text.trim()) errors.push('Empty variant: ' + node.id);
     const choices = new Set<string>();
     for (const choice of node.choices) {
       if (!choice.label.trim()) errors.push('Empty choice label: ' + node.id);
@@ -72,42 +73,75 @@ export function validateTopic(topic: ConversationTopic): string[] {
   return errors;
 }
 export function normalizeMemories(memories: readonly string[]): string[] {
-  return [...new Set(memories.filter((memory) => memory.length > 0 && memory.length <= 120))].slice(-80);
+  return [...new Set(memories.filter((memory) => memory.length > 0 && memory.length <= 120))].slice(
+    -80,
+  );
 }
 
-export function startConversation(topic: ConversationTopic, memories: readonly string[] = []): ConversationSession {
+export function startConversation(
+  topic: ConversationTopic,
+  memories: readonly string[] = [],
+): ConversationSession {
   if (validateTopic(topic).length) throw new Error('Invalid conversation graph');
-  return { topic: topic.id, node: topic.entry, memories: normalizeMemories(memories), finished: false };
+  return {
+    topic: topic.id,
+    node: topic.entry,
+    memories: normalizeMemories(memories),
+    finished: false,
+  };
 }
 export function conversationView(topic: ConversationTopic, session: ConversationSession) {
   if (session.topic !== topic.id || session.finished) throw new Error('Conversation not active');
   const node = topic.nodes.find((item) => item.id === session.node);
   if (!node) throw new Error('Invalid conversation node');
   const variant = node.variants?.find((v) => session.memories.includes(v.when));
-  return { ...node, text: variant?.text ?? node.text, choices: node.choices.filter((c) =>
-    (!c.requires || session.memories.includes(c.requires)) && (!c.excludes || !session.memories.includes(c.excludes))) };
+  return {
+    ...node,
+    text: variant?.text ?? node.text,
+    choices: node.choices.filter(
+      (c) =>
+        (!c.requires || session.memories.includes(c.requires)) &&
+        (!c.excludes || !session.memories.includes(c.excludes)),
+    ),
+  };
 }
-export function answerConversation(topic: ConversationTopic, session: ConversationSession, choiceId: string): ConversationSession {
+export function answerConversation(
+  topic: ConversationTopic,
+  session: ConversationSession,
+  choiceId: string,
+): ConversationSession {
   const choice = conversationView(topic, session).choices.find((c) => c.id === choiceId);
   if (!choice) throw new Error('Unavailable conversation choice');
   return {
     topic: topic.id,
     node: choice.next === '__exit' ? session.node : choice.next,
-    memories: normalizeMemories(choice.remember
-      ? [...session.memories, choice.remember] : session.memories),
+    memories: normalizeMemories(
+      choice.remember ? [...session.memories, choice.remember] : session.memories,
+    ),
     finished: choice.next === '__exit',
   };
 }
-export function restoreConversation(topic: ConversationTopic, raw: string): ConversationSession | null {
+export function restoreConversation(
+  topic: ConversationTopic,
+  raw: string,
+): ConversationSession | null {
   try {
     const x: unknown = JSON.parse(raw);
     if (!x || typeof x !== 'object') return null;
     const s = x as Record<string, unknown>;
-    if (s.topic !== topic.id || typeof s.node !== 'string' || typeof s.finished !== 'boolean' ||
-        !Array.isArray(s.memories) || s.memories.length > 80 ||
-        !s.memories.every((m: unknown) => typeof m === 'string' && m.length <= 120) ||
-        new Set(s.memories).size !== s.memories.length ||
-        !topic.nodes.some((n) => n.id === s.node)) return null;
+    if (
+      s.topic !== topic.id ||
+      typeof s.node !== 'string' ||
+      typeof s.finished !== 'boolean' ||
+      !Array.isArray(s.memories) ||
+      s.memories.length > 80 ||
+      !s.memories.every((m: unknown) => typeof m === 'string' && m.length <= 120) ||
+      new Set(s.memories).size !== s.memories.length ||
+      !topic.nodes.some((n) => n.id === s.node)
+    )
+      return null;
     return { topic: topic.id, node: s.node, finished: s.finished, memories: [...s.memories] };
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 }
