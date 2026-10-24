@@ -3,6 +3,7 @@ import { answerConversation, conversationView, restoreConversation, startConvers
 import { maraBookClub } from './mara-book-club';
 import { maraAfterHours } from './mara-after-hours';
 import { maraReturnVisit } from './mara-return-visit';
+import { maraLetterDecision } from './mara-letter-decision';
 
 declare global {
   interface Window {
@@ -26,12 +27,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   let mode: 'journal' | 'catalog' | 'conversation' | null = null;
   const conversationKey = 'last-chapter:conversation:mara:v1';
   let selectedTopic = maraBookClub;
+  const letterKey = 'last-chapter:conversation:mara:letter:v1';
+  let letterDecision: ConversationSession = startConversation(maraLetterDecision);
   const returnKey = 'last-chapter:conversation:mara:return:v1';
   let returnVisit: ConversationSession = startConversation(maraReturnVisit);
   const afterHoursKey = 'last-chapter:conversation:mara:after-hours:v1';
   let conversation: ConversationSession = startConversation(maraBookClub);
   let afterHours: ConversationSession = startConversation(maraAfterHours);
-  const sharedMemories = () => [...new Set([...conversation.memories, ...afterHours.memories, ...returnVisit.memories])];
+  const sharedMemories = () => [...new Set([...conversation.memories, ...afterHours.memories, ...returnVisit.memories, ...letterDecision.memories])];
   try {
     const saved = localStorage.getItem(conversationKey);
     if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
@@ -39,11 +42,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     if (savedAfterHours) afterHours = restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours;
     const savedReturn = localStorage.getItem(returnKey);
     if (savedReturn) returnVisit = restoreConversation(maraReturnVisit, savedReturn) ?? returnVisit;
+    const savedLetter = localStorage.getItem(letterKey);
+    if (savedLetter) letterDecision = restoreConversation(maraLetterDecision, savedLetter) ?? letterDecision;
   } catch { /* storage may be unavailable */ }
   const saveConversation = () => {
     try { localStorage.setItem(conversationKey, JSON.stringify(conversation));
       localStorage.setItem(afterHoursKey, JSON.stringify(afterHours));
-      localStorage.setItem(returnKey, JSON.stringify(returnVisit)); } catch { /* optional */ }
+      localStorage.setItem(returnKey, JSON.stringify(returnVisit));
+      localStorage.setItem(letterKey, JSON.stringify(letterDecision)); } catch { /* optional */ }
   };
   const conversationButton = document.createElement('button');
   conversationButton.type = 'button';
@@ -81,9 +87,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     panel.hidden = mode === null;
     panel.replaceChildren();
     if (mode === 'conversation') {
-      if (story.day < 3 && selectedTopic.id === maraReturnVisit.id) selectedTopic = maraBookClub;
+      if ((story.day < 3 && selectedTopic.id === maraReturnVisit.id) || (story.day < 4 && selectedTopic.id === maraLetterDecision.id)) selectedTopic = maraBookClub;
       const topicSelector = element('div', '', 'story-filters');
-      for (const topic of [maraBookClub, maraAfterHours, ...(story.day >= 3 ? [maraReturnVisit] : [])]) {
+      for (const topic of [maraBookClub, maraAfterHours, ...(story.day >= 3 ? [maraReturnVisit] : []), ...(story.day >= 4 ? [maraLetterDecision] : [])]) {
         const button = element('button', topic.title);
         button.type = 'button';
         button.setAttribute('aria-pressed', String(selectedTopic.id === topic.id));
@@ -91,12 +97,12 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         topicSelector.append(button);
       }
       panel.append(topicSelector, element('h2', selectedTopic.title));
-      const activeConversation = selectedTopic.id === maraBookClub.id ? conversation : selectedTopic.id === maraAfterHours.id ? afterHours : returnVisit;
+      const activeConversation = selectedTopic.id === maraBookClub.id ? conversation : selectedTopic.id === maraAfterHours.id ? afterHours : selectedTopic.id === maraReturnVisit.id ? returnVisit : letterDecision;
       if (activeConversation.finished) {
         panel.append(element('p', 'Розмову завершено. Можна почати нову, зберігши попередні думки.'));
         const again = element('button', 'Поговорити знову');
         again.type = 'button';
-        again.addEventListener('click', () => { const next = startConversation(selectedTopic, sharedMemories()); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next; else conversation = next; saveConversation(); refresh(); });
+        again.addEventListener('click', () => { const next = startConversation(selectedTopic, sharedMemories()); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next; else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next; else conversation = next; saveConversation(); refresh(); });
         panel.append(again);
       } else {
         const node = conversationView(selectedTopic, { ...activeConversation, memories: sharedMemories() });
@@ -104,7 +110,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         for (const choice of node.choices) {
           const button = element('button', choice.label);
           button.type = 'button';
-          button.addEventListener('click', () => { const next = answerConversation(selectedTopic, { ...activeConversation, memories: sharedMemories() }, choice.id); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next; else conversation = next; saveConversation(); refresh(); });
+          button.addEventListener('click', () => { const next = answerConversation(selectedTopic, { ...activeConversation, memories: sharedMemories() }, choice.id); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next; else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next; else conversation = next; saveConversation(); refresh(); });
           panel.append(button);
         }
       }
