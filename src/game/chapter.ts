@@ -177,5 +177,9 @@ export function advanceToNora(state: ChapterState): ChapterState {
 export function startBookClub(state: ChapterState): ChapterState {
   if (state.stage !== 'nora') throw new Error('Finish Nora first');
   if (currentNode(noraVisit, state.dialogue).options.length) throw new Error('Finish Nora first');
-  return { ...state, stage: 'book-club', dialogue: { ...startDialogue(bookClub), flags: state.flags } };
+  return {
+    ...state,
+    stage: 'book-club',
+    dialogue: { ...startDialogue(bookClub), flags: state.flags },
+  };
 }

@@ -26,8 +26,18 @@ export const bookClub: DialogueStory = {
       speaker: 'Анна',
       text: '«Мої учні сперечалися, чи мапа показує шлях, чи лише пропонує його. Я сказала: можливо, хороша книжка теж не веде нас за руку».',
       options: [
-        { id: 'maps-follow', label: '«Іноді дорогу обираємо самі»', next: 'maps', requires: ['anna_chose_maps'] },
-        { id: 'mystery-follow', label: '«У детективі важливо не плутати здогад із доказом»', next: 'mystery', requires: ['anna_chose_mystery'] },
+        {
+          id: 'maps-follow',
+          label: '«Іноді дорогу обираємо самі»',
+          next: 'maps',
+          requires: ['anna_chose_maps'],
+        },
+        {
+          id: 'mystery-follow',
+          label: '«У детективі важливо не плутати здогад із доказом»',
+          next: 'mystery',
+          requires: ['anna_chose_mystery'],
+        },
         { id: 'books-general', label: '«Яку історію ви хотіли б почути?»', next: 'stories' },
         { id: 'books-back', label: 'Повернутися до інших гостей', next: 'welcome' },
       ],
@@ -36,26 +46,52 @@ export const bookClub: DialogueStory = {
       id: 'maps',
       speaker: 'Анна',
       text: '«Саме так! Один хлопчик сказав, що на карті немає місця для несподіваних друзів. Тепер він хоче намалювати власну».',
-      options: [{ id: 'maps-back', label: '«Це варто показати на наступній зустрічі»', next: 'welcome', grants: ['club_encouraged_children'] }],
+      options: [
+        {
+          id: 'maps-back',
+          label: '«Це варто показати на наступній зустрічі»',
+          next: 'welcome',
+          grants: ['club_encouraged_children'],
+        },
+      ],
     },
     {
       id: 'mystery',
       speaker: 'Пані Міллер',
       text: '«Підтримую. Я одного разу звинуватила листоношу в крадіжці горщика. А горщик стояв у мене за дверима». Анна усміхається: «Ось чому ми перевіряємо факти».',
-      options: [{ id: 'mystery-back', label: '«Домовмося спочатку слухати»', next: 'welcome', grants: ['club_chose_evidence'] }],
+      options: [
+        {
+          id: 'mystery-back',
+          label: '«Домовмося спочатку слухати»',
+          next: 'welcome',
+          grants: ['club_chose_evidence'],
+        },
+      ],
     },
     {
       id: 'stories',
       speaker: 'Мара',
       text: '«Про когось, хто навчився просити про допомогу. Без героїчного порятунку в останню хвилину. Просто людина каже: мені важко. І хтось відповідає: я поруч».',
-      options: [{ id: 'stories-back', label: '«У нас є місце для таких історій»', next: 'welcome', grants: ['club_made_space'] }],
+      options: [
+        {
+          id: 'stories-back',
+          label: '«У нас є місце для таких історій»',
+          next: 'welcome',
+          grants: ['club_made_space'],
+        },
+      ],
     },
     {
       id: 'mara',
       speaker: 'Мара',
       text: '«Коли герої не обов’язково отримують усе, чого хотіли, але нарешті говорять правду. І коли ніхто не мусить удавати, що минуле не болить». Вона підсуває булочку до порожнього стільця.',
       options: [
-        { id: 'mara-listen', label: '«Тут можна говорити без поспіху»', next: 'welcome', grants: ['club_made_space'] },
+        {
+          id: 'mara-listen',
+          label: '«Тут можна говорити без поспіху»',
+          next: 'welcome',
+          grants: ['club_made_space'],
+        },
         { id: 'mara-change', label: '«Яка булочка сьогодні найкраща?»', next: 'welcome' },
       ],
     },
@@ -64,7 +100,12 @@ export const bookClub: DialogueStory = {
       speaker: 'Пані Міллер',
       text: '«Найскладніша загадка — чому люди мовчать, коли їм сумно. Але я більше не збираюся розв’язувати чужі життя, наче кросворди». Вона дивиться на Анну й обережно змінює тему. «А хто хоче чаю?»',
       options: [
-        { id: 'miller-respect', label: '«Давайте не обговорювати чужих таємниць»', next: 'welcome', grants: ['club_respected_privacy'] },
+        {
+          id: 'miller-respect',
+          label: '«Давайте не обговорювати чужих таємниць»',
+          next: 'welcome',
+          grants: ['club_respected_privacy'],
+        },
         { id: 'miller-tea', label: '«Я поставлю чайник»', next: 'welcome' },
       ],
     },
