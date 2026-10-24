@@ -1,3 +1,4 @@
+import { annaVisit } from '../content/anna';
 import { irisVisit } from '../content/iris';
 import { millerVisit } from '../content/first-day';
 import { maraVisit } from '../content/mara';
@@ -10,7 +11,7 @@ import {
   type DialogueStory,
 } from './dialogue';
 
-export type ChapterStage = 'miller' | 'mara' | 'evening' | 'complete' | 'iris' | 'day2-complete';
+export type ChapterStage = 'miller' | 'mara' | 'evening' | 'complete' | 'iris' | 'anna' | 'day2-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
 export interface ChapterState {
@@ -30,8 +31,10 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
     case 'complete':
       return firstEvening;
     case 'iris':
-    case 'day2-complete':
       return irisVisit;
+    case 'anna':
+    case 'day2-complete':
+      return annaVisit;
   }
 };
 
@@ -65,7 +68,14 @@ export function startSecondDay(state: ChapterState): ChapterState {
 
 /** Day 2 currently contains an Iris encounter; later scenes will be inserted before its end. */
 export function finishSecondDay(state: ChapterState): ChapterState {
-  if (state.stage !== 'iris') throw new Error('Day 2 has not started');
-  if (currentNode(irisVisit, state.dialogue).options.length) throw new Error('Finish the conversation');
+  if (state.stage !== 'anna') throw new Error('Finish the Iris and Anna visits first');
+  if (currentNode(annaVisit, state.dialogue).options.length) throw new Error('Finish the conversation');
   return { ...state, stage: 'day2-complete' };
+}
+
+/** Move from the Iris encounter to Anna, retaining Day 1 and Day 2 flags. */
+export function advanceSecondDay(state: ChapterState): ChapterState {
+  if (state.stage !== 'iris') throw new Error('Finish Day 1 before meeting Anna');
+  if (currentNode(irisVisit, state.dialogue).options.length) throw new Error('Finish the Iris conversation');
+  return { ...state, stage: 'anna', dialogue: { ...startDialogue(annaVisit), flags: state.flags } };
 }
