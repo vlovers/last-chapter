@@ -76,6 +76,28 @@ Lev: acerbic author; says uncomfortable truths in fiction, lies by omission in l
 Eva: quiet, returns books; remembers tiny details, hides an important timeline discrepancy. Discusses mystery endings and reader assumptions.
 Every character needs: public want, private need, flaw, self-deception, contradiction, personal boundaries, relationships with other NPCs, five-day arc, three independent life events, and at least one scene unrelated to the central mystery.
 
+
+## Mandatory recurring conversation: Frank, the grey Devon Rex
+**Topic ID:** shop.frank.meet-and-talk. This is a real optional conversation, not just a 'pet cat' button. Introduce it organically during Mara's first or second bookstore visit, when Frank interrupts a heated Tamlin/Rhysand debate by sitting on the disputed book. The player can stay on the literary topic or switch to Frank without penalty.
+
+**First conversation (4–7 minutes, authored target):**
+- The visitor notices Frank's large ears, grey curly coat, and unusual appearance; the player explains he is a Devon Rex, not a sphynx.
+- Discuss his name, habits, favorite sleeping spots, and which visitors he approaches or avoids; distinguish funny guesses about his motives from facts.
+- Three stances: 'Він просто вибирає найтепліше місце', 'Френк чудово розбирається в людях', 'Він таємно керує книгарнею'. Each prompts different humor, not a relationship score.
+- The visitor tells a personal story about an animal, attachment, or home, with the option to decline personal questions.
+- Frank physically interrupts (walks across the counter, sits on a bookmark) and reveals a *small* character detail, not a compulsory clue.
+
+**Recurring callbacks:** One visit later Mara remembers the player's interpretation of Frank. Adrian claims Frank dislikes him; Frank then chooses his coat. Solomiia has a different anecdote. At least one late-game scene is quiet and tender, with Frank nearby and no investigation reward.
+
+**Ukrainian sample:**
+МАРА: «Пробач, але хто це в тебе? Він дивиться так, ніби знає фінал усіх книжок».
+ГРАВЕЦЬ: «Це Френк. Девон-рекс. І так, він засуджує кожного, хто загинає кутики сторінок».
+МАРА: «Тоді нам доведеться порозумітися. Я закладаю сторінки чеками».
+[Френк вмощується просто на книжці.]
+МАРА: «Отже, в нашій суперечці про Тамліна й Різанда він обрав третю сторону — свою».
+
+**Acceptance:** topic accessible without completing a mystery; at least three distinct branches, a graceful exit and resume, two later callbacks, and no fabricated memories or cat-care chores. Frank's physical animations are a separate implementation task.
+
 ## Production quality gates
 - Script and UI are Ukrainian; localization later only if commissioned.
 - No copied passages, distinctive fictional scenes, cover art, or proprietary character designs from referenced books. Names and original critical discussion are acceptable editorial references; check spoilers and publication rights before release.
