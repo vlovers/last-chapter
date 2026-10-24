@@ -10,20 +10,19 @@
 body {
   margin: 0;
   min-height: 100svh;
-  padding: 24px;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(ellipse at 50% 15%, #47303d, #17131c 80%);
+  padding: 12px;
+  background: radial-gradient(ellipse at 50% 0, #343a32, #161c20 85%);
 }
 main {
-  width: min(1152px, 100%);
+  width: min(1286px, 100%);
+  margin: 0 auto;
 }
 .masthead {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 16px;
-  padding: 0 4px 18px;
+  padding: 0 2px 10px;
 }
 .eyebrow {
   color: #c9a58c;
@@ -33,9 +32,9 @@ main {
 }
 h1 {
   font:
-    32px Georgia,
+    26px Georgia,
     serif;
-  margin: 6px 0 0;
+  margin: 3px 0 0;
 }
 h1 span {
   font:
@@ -158,7 +157,7 @@ button:disabled {
   left: 50%;
   transform: translateX(-50%);
   background: #302837ee;
-  border-color: #e4b477;
+  border-color: #d5b27b;
   white-space: nowrap;
   z-index: 2;
   font-size: 14px;
@@ -176,49 +175,56 @@ button:disabled {
   pointer-events: none;
   z-index: 1;
 }
+/* A game-native dialogue dock leaves the complete room visible. Long copy
+   scrolls inside the dock rather than clipping choices or covering characters. */
 #dialogue {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
+  position: relative;
   z-index: 5;
   display: grid;
-  grid-template-columns: 130px 1fr;
-  gap: 20px;
-  background: #2d2532fa;
-  padding: 18px;
-  border: 2px solid #ba8b68;
-  box-shadow: 0 8px 30px #0b0814a0;
-  max-height: calc(100% - 24px);
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 18px;
+  background: #e9d9b5;
+  color: #362f2d;
+  padding: 14px 20px;
+  border-top: 4px solid #78583e;
+  box-shadow:
+    inset 0 2px #f8ebc9,
+    inset 0 -3px #c4ac80;
+  max-height: min(48svh, 340px);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #8b6c49 #d5c298;
 }
 .portrait-frame {
   align-self: start;
-  background: #49323d;
-  border: 2px solid #8f6558;
-  padding: 8px;
+  background: #364f49;
+  border: 2px solid #664d3b;
+  box-shadow: 0 0 0 2px #c2a476;
+  padding: 3px;
   text-align: center;
 }
 #portrait {
   display: block;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   object-fit: contain;
   image-rendering: pixelated;
 }
 #portrait-fallback {
   display: grid;
   place-items: center;
-  height: 110px;
+  aspect-ratio: 4 / 5;
+  color: #f5dfb7;
   font:
-    50px Georgia,
+    40px Georgia,
     serif;
 }
 #mood {
   display: block;
-  color: #dbbc9b;
-  font-size: 12px;
-  padding-top: 8px;
+  color: #f0dcba;
+  font-size: 10px;
+  line-height: 1.4;
+  padding: 4px 0 2px;
 }
 .dialogue-title {
   display: flex;
@@ -230,50 +236,95 @@ button:disabled {
   font:
     22px Georgia,
     serif;
-  color: #f0bd7e;
+  color: #684532;
   margin: 0;
 }
 #close-dialogue {
   padding: 0;
   min-width: 44px;
   font-size: 25px;
+  color: #684532;
   border-color: transparent;
   background: transparent;
 }
+#close-dialogue:hover {
+  background: #d0b98e;
+}
 #dialogue-text {
-  font-size: clamp(14px, 1.6vw, 18px);
-  line-height: 1.6;
-  margin: 4px 0 14px;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 2px 0 10px;
+  max-width: 94ch;
 }
 #choices {
   display: grid;
-  gap: 7px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  counter-reset: choice;
 }
 #choices button {
+  position: relative;
   text-align: left;
+  padding: 9px 14px 9px 28px;
   font-size: 14px;
   line-height: 1.4;
-  background: #44323e;
-  border-color: #77585c;
+  background: #3b4943;
+  color: #fff0cf;
+  border: 1px solid #65755d;
+  box-shadow:
+    inset 0 1px #7e8b6d,
+    0 2px #aa906c;
+}
+#choices button:only-child {
+  grid-column: 1 / -1;
+}
+#choices button::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: calc(50% - 3px);
+  width: 5px;
+  height: 5px;
+  border-top: 2px solid #d4b377;
+  border-right: 2px solid #d4b377;
+  transform: rotate(45deg);
 }
 #choices button:hover,
-#choices button:focus {
-  background: #634550;
-  border-color: #efc18b;
+#choices button:focus-visible {
+  background: #586147;
+  border-color: #a8793f;
+  outline: 3px solid #77502f;
+  outline-offset: 2px;
+}
+#choices button:focus-visible::before {
+  border-color: #fff3c7;
+}
+#dialogue :focus-visible {
+  outline-color: #77502f;
 }
 .dialogue-body small {
   display: block;
-  margin-top: 12px;
+  margin-top: 9px;
   font-size: 10px;
-  color: #c2a48e;
+  color: #705a45;
+}
+#stage.talking #toast,
+#stage.talking #context-action {
+  display: none;
+}
+#dialogue.object-note {
+  grid-template-columns: minmax(0, 1fr);
+}
+#dialogue.object-note .portrait-frame {
+  display: none;
 }
 footer {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  color: #b99783;
+  color: #bdaf94;
   font-size: 11px;
-  padding: 15px 4px 0;
+  padding: 9px 2px 0;
 }
 dialog {
   background: #302837;
@@ -325,32 +376,26 @@ kbd {
 }
 @media (max-width: 850px) {
   body {
-    padding: 14px;
+    padding: 10px;
   }
   h1 {
-    font-size: 25px;
+    font-size: 23px;
   }
   #dialogue {
-    grid-template-columns: 84px 1fr;
-    gap: 12px;
-    padding: 12px;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 14px;
+    padding: 12px 14px;
+    max-height: 48svh;
   }
-  #portrait-fallback {
-    height: 65px;
+  #choices {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+  #dialogue-text {
+    font-size: 15px;
   }
   .dialogue-body small {
     display: none;
-  }
-  #dialogue-text {
-    line-height: 1.45;
-    margin-bottom: 10px;
-  }
-  #choices button {
-    font-size: 13px;
-    padding: 8px;
   }
   .hud {
     top: 8px;
@@ -368,26 +413,22 @@ kbd {
 @media (max-width: 550px) {
   body {
     padding: 8px;
-    place-items: start center;
   }
   .masthead {
-    padding: 12px 2px;
+    padding: 4px 2px 10px;
   }
   h1 {
-    font-size: 22px;
+    font-size: 21px;
   }
   h1 span {
     display: block;
-    margin: 4px 0 0;
+    margin: 3px 0 0;
   }
   .masthead a {
     font-size: 11px;
   }
   .eyebrow {
     font-size: 9px;
-  }
-  #game {
-    min-height: 300px;
   }
   #objective {
     display: none;
@@ -396,26 +437,26 @@ kbd {
     justify-content: end;
   }
   #dialogue {
-    grid-template-columns: 50px 1fr;
-    gap: 8px;
-    max-height: calc(100% - 12px);
-  }
-  .portrait-frame {
-    padding: 3px;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px 10px;
+    max-height: 55svh;
   }
   #mood {
     display: none;
   }
   #portrait-fallback {
-    height: 40px;
-    font-size: 24px;
+    font-size: 26px;
   }
   #dialogue-text {
     font-size: 14px;
   }
+  #choices button {
+    font-size: 13px;
+  }
   #context-action {
     font-size: 12px;
-    bottom: 55px;
+    bottom: 42px;
     max-width: 96%;
     white-space: normal;
   }
@@ -432,7 +473,7 @@ kbd {
   @keyframes appear {
     from {
       opacity: 0.5;
-      transform: translateY(5px);
+      transform: translateY(3px);
     }
   }
 }
@@ -470,7 +511,7 @@ body.reduced #dialogue {
 .hotspot:hover,
 .hotspot:focus-visible {
   background: #f0bd7e0c;
-  border-color: #e4b477;
+  border-color: #d5b27b;
 }
 .hotspot:hover span,
 .hotspot:focus-visible span {

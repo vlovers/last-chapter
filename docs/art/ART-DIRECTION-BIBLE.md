@@ -76,3 +76,15 @@ Native sizes are planning targets. Confirm with the chosen licensed pack before 
 ## Coordination with Codex
 
 Do not edit `public/phaser-prototype/scene.js`, `phaser-prototype/index.html`, or gameplay modules during the concurrent vertical-slice task. Treat this document as a production contract to review together after the agent finishes.
+
+## V4 implementation status
+
+The isolated slice now implements four original shelf arrangements, olive/walnut
+materials, furniture/cloth/joinery detail, contact shadows, localized warm pools,
+a cold layered exterior, revised 32×48 actors and three 64×80 Mara expressions.
+No marketplace pack was imported. The dialogue is a parchment dock below the room;
+all native 640×360 canvas pixels remain visible during conversations. The desktop
+capture uses exact 2× scaling; narrower tablet layouts use uniform nearest-neighbor fit.
+See [V4 comparisons and QA](v4/README.md). This supersedes the earlier concurrent-task
+coordination note for the completed V4 art work; production story integration remains
+outside this pass.

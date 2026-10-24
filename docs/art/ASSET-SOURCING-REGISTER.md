@@ -30,3 +30,12 @@ This register tracks _candidates_, not imported or licensed-to-ship assets. Chec
 ## Coordination
 
 Codex owns the live Phaser vertical slice. This register is documentation-only and intentionally does not change runtime code. Do not merge to main without explicit approval.
+
+## V4 shipped original sources
+
+No candidate pack above was imported. V4 uses original code-native room/actor art
+and three original 64×80 Mara SVG expressions under `public/art/bookshop/`.
+`public/phaser-prototype/assets.js` records their local paths, dimensions and
+`project-original` provenance. See [source attribution](../../public/art/bookshop/ATTRIBUTION.md)
+and [before/after report](v4/README.md). The synchronized four-frame rain source remains
+unwired; the tested procedural weather layer is active.

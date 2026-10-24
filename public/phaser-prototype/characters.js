@@ -13,11 +13,17 @@ export function createCharacters(scene) {
         if (!scene.anims.exists(key))
           scene.anims.create({
             key,
-            frames: scene.anims.generateFrameNumbers(name, {
-              start: offset + start,
-              end: offset + end,
-            }),
-            frameRate: rate,
+            frames:
+              kind === 'idle'
+                ? [
+                    { key: name, frame: offset, duration: 2400 },
+                    { key: name, frame: offset + 1, duration: 160 },
+                  ]
+                : scene.anims.generateFrameNumbers(name, {
+                    start: offset + start,
+                    end: offset + end,
+                  }),
+            frameRate: kind === 'idle' ? 60 : rate,
             repeat: -1,
           });
       }

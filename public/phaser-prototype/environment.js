@@ -1,323 +1,448 @@
-import { WIDTH, HEIGHT, COLORS as C, BOOK_COLORS as palettes } from './config.js';
+import { WIDTH, HEIGHT, COLORS, BOOK_COLORS } from './config.js';
+import { drawShelf } from './shelf-art.js';
 
-// Original code-native pixel art; integer coordinates, orthographic three-quarter view.
+// Original V4 room painting. Furniture footprints match world.js exactly.
+// Every raised new prop sits on an existing solid object or on the back wall.
 export function drawEnvironment(scene) {
-  scene.cameras.main.setBackgroundColor('#201b27');
+  scene.cameras.main.setBackgroundColor('#1c2026');
+  const ink = COLORS.dark,
+    wood = COLORS.wood,
+    honey = COLORS.woodLight,
+    paper = COLORS.cream;
   const g = scene.add.graphics().setDepth(0);
-  const r = (x, y, w, h, c) => {
-    g.fillStyle(c);
-    g.fillRect(x, y, w, h);
-  };
-  // Orthographic three-quarter room: a visible walkable floor, not a flat facade.
-  r(0, 0, WIDTH, HEIGHT, C.void);
-  r(13, 9, 614, 155, C.wall);
-  r(21, 17, 598, 140, C.plaster);
-  for (let y = 20; y < 157; y += 22) r(21, y, 598, 1, 0x70505b);
-  for (let x = 24; x < 619; x += 35) r(x, 18, 2, 136, 0x6a4853);
-  r(13, 149, 614, 11, C.wood);
-  r(21, 159, 598, 184, C.floor);
-  for (let y = 159, row = 0; y < 343; y += 22, row++) {
-    r(21, y, 598, 3, C.floorLight);
-    for (let x = 21 + (row % 2) * 38; x < 619; x += 76) r(x, y + 3, 2, 19, 0x67434a);
-    for (let x = 34 + (row % 2) * 27; x < 600; x += 81) r(x, y + 11, 17, 1, 0x96624f);
-  }
-  r(12, 9, 9, 337, C.wood);
-  r(619, 9, 9, 337, C.wood);
-  r(12, 342, 616, 7, C.dark);
-  // Window, weather and Bellwick's rooftops.
-  r(249, 22, 144, 117, C.dark);
-  r(255, 28, 132, 105, 0x5d7c89);
-  r(255, 79, 132, 54, 0xa0787d);
-  for (let i = 0; i < 8; i++) {
-    const x = 255 + i * 17,
-      h = 18 + ((i * 7) % 24);
-    r(x, 133 - h, 19, h, 0x4c5068);
-    r(x + 6, 125 - h, 3, 5, C.gold);
-  }
-  r(317, 28, 7, 105, C.woodLight);
-  r(255, 74, 132, 6, C.woodLight);
-  r(245, 18, 152, 9, C.wood);
-  r(245, 133, 152, 9, C.wood);
-  // Detailed wooden shelves, each with a footprint and visible side face.
-  const shelf = (x, y, w, h, seed) => {
-    r(x + 7, y + 8, w, h, C.dark);
-    r(x, y, w, h, C.wood);
-    r(x + 5, y + 5, w - 10, h - 10, 0x342b37);
-    for (let level = 0; level < 3; level++) {
-      const sy = y + 9 + level * Math.floor((h - 16) / 3);
-      for (let i = 0; i < Math.floor((w - 15) / 7); i++) {
-        const bh = 12 + ((i * 11 + seed * 7 + level * 5) % 12);
-        const bx = x + 8 + i * 7,
-          by = sy + 23 - bh;
-        r(bx, by, 5, bh, palettes[(i + level + seed) % palettes.length]);
-        r(bx, by, 1, bh, 0x43333c);
-        if (i % 3 === 0) {
-          r(bx + 1, by + 3, 4, 1, C.gold);
-          r(bx + 1, by + bh - 3, 4, 1, C.gold);
-        }
-        if (i % 4 === 0) r(bx + 2, by + 4, 1, bh - 7, C.cream);
-      }
-      r(x + 3, sy + 23, w - 6, 5, C.woodLight);
-    }
-    r(x + w - 7, y + 5, 7, h - 10, 0x714651);
-    r(x + 7, y + h, w - 7, 9, 0x543943);
-  };
-  shelf(29, 29, 94, 117, 1);
-  shelf(129, 29, 94, 117, 3);
-  shelf(409, 29, 93, 117, 5);
-  shelf(509, 29, 94, 117, 2);
-  // Back wall: a notice board, reading lamp, and framed landscape.
-  r(230, 21, 12, 109, C.wood);
-  r(230, 50, 12, 6, C.gold);
-  r(230, 57, 12, 13, 0xceb084);
-  r(376, 20, 22, 25, C.wood);
-  r(380, 24, 14, 17, 0x688984);
-  r(383, 29, 8, 8, C.gold);
-  // Carpet creates an explicit navigable reading zone.
-  r(265, 205, 285, 116, 0x5b3944);
-  r(274, 214, 267, 98, 0xa65f56);
-  r(281, 221, 253, 84, 0x713f4c);
-  for (let i = 0; i < 9; i++) r(289 + i * 27, 225, 14, 3, C.gold);
-  for (let i = 0; i < 9; i++) r(289 + i * 27, 300, 14, 3, C.gold);
-  // Art pass 3: an inhabited reading corner with woven carpet, book stacks and floor details.
-  // These are native-resolution pixels; no borrowed game artwork or external image dependency.
-  for (let y = 230; y < 301; y += 9) {
-    for (let x = 290 + (Math.floor(y / 9) % 2) * 7; x < 526; x += 18) {
-      r(x, y, 3, 2, 0x986357);
-    }
-  }
-  for (let x = 286; x < 527; x += 18) {
-    r(x, 218, 7, 3, C.gold);
-    r(x, 306, 7, 3, C.gold);
-  }
-  for (let y = 230; y < 300; y += 16) {
-    r(279, y, 3, 8, C.gold);
-    r(535, y, 3, 8, C.gold);
-  }
-  // Scattered leaves near the entrance and the bookshop's worn floorboards.
-  for (const [x, y, shade] of [
-    [588, 330, C.gold],
-    [599, 326, C.red],
-    [572, 336, C.woodLight],
-    [48, 331, C.gold],
-    [61, 323, C.red],
-    [242, 329, C.cream],
-  ]) {
-    r(x, y, 7, 3, shade);
-    r(x + 2, y - 2, 3, 2, shade);
-  }
-  // A handwritten shop sign and framed book illustration.
-  r(28, 169, 82, 27, C.dark);
-  r(31, 172, 76, 21, C.woodLight);
-  r(35, 176, 68, 13, C.ink);
-  r(42, 180, 54, 2, C.gold);
-  r(50, 185, 38, 1, C.cream);
-  r(397, 159, 31, 38, C.dark);
-  r(400, 162, 25, 32, C.woodLight);
-  r(404, 166, 17, 24, C.teal);
-  r(407, 174, 11, 10, C.cream);
-  r(409, 170, 7, 3, C.gold);
-  // Low window-seat cushions make the rain-facing nook feel lived in.
-  r(245, 147, 152, 8, C.woodLight);
-  r(258, 142, 35, 7, C.red);
-  r(300, 142, 35, 7, C.jade);
-  r(342, 142, 35, 7, C.red);
-  // Three-dimensional stacks with alternating spine colors.
-  for (const [x, y, count] of [
-    [250, 189, 4],
-    [552, 300, 3],
-    [45, 245, 3],
-  ]) {
-    for (let i = 0; i < count; i++) {
-      const offset = i % 2 === 0 ? 0 : 3;
-      r(x + offset + 2, y - i * 5 + 2, 24, 5, C.dark);
-      r(x + offset, y - i * 5, 24, 5, palettes[(i + count) % palettes.length]);
-      r(x + offset + 3, y - i * 5 + 1, 17, 1, C.cream);
-    }
-  }
-  // Reusable pixel-art furniture is drawn as separate depth-sorted game objects.
-  const piece = (x, y, draw) => {
-    const bottoms = new Map([
-      [160, 55],
-      [365, 30],
-      [484, 19],
-      [556, 20],
-      [575, 8],
-      [55, 4],
-    ]);
-    const p = scene.add.graphics({ x, y }).setDepth(y + bottoms.get(x));
-    const f = (a, b, w, h, c) => {
-      p.fillStyle(c);
-      p.fillRect(a, b, w, h);
+  const painter =
+    (graphics) =>
+    (x, y, w, h, color, alpha = 1) => {
+      graphics.fillStyle(color, alpha);
+      graphics.fillRect(x, y, w, h);
     };
-    draw(f);
-    return p;
-  };
-  piece(160, 261, (f) => {
-    f(-89, -18, 178, 19, C.woodLight);
-    f(-85, 1, 170, 50, C.wood);
-    f(-79, 6, 158, 36, 0x75464b);
-    for (let i = 0; i < 4; i++) f(-70 + i * 37, 11, 29, 24, 0x8f5750);
-    f(-85, 48, 170, 7, C.dark);
-    f(-63, -25, 46, 7, C.gold);
-    f(-59, -33, 46, 8, C.teal);
-    f(-54, -39, 43, 6, C.red);
-    f(12, -24, 29, 8, C.cream);
-    f(17, -30, 20, 6, C.gold);
-    f(57, -24, 12, 11, 0x6f8d87);
-    f(59, -28, 8, 5, C.cream);
-  });
-  piece(365, 261, (f) => {
-    f(-49, -7, 98, 15, C.dark);
-    f(-52, -17, 104, 24, C.wood);
-    f(-46, -12, 92, 15, C.woodLight);
-    f(-43, -8, 86, 9, 0x895754);
-    f(-36, -13, 28, 12, C.teal);
-    f(-33, -16, 28, 3, C.gold);
-    f(6, -10, 24, 11, C.cream);
-    f(8, -13, 21, 3, C.red);
-    f(-43, 7, 9, 23, C.wood);
-    f(34, 7, 9, 23, C.wood);
-  });
-  piece(484, 286, (f) => {
-    f(-27, -43, 54, 47, C.dark);
-    f(-22, -39, 44, 40, C.teal);
-    f(-27, -15, 54, 24, 0x9c6d67);
-    f(-19, -9, 38, 14, 0xc48b75);
-    f(-13, -28, 25, 15, C.cream);
-    f(-24, 9, 8, 10, C.wood);
-    f(16, 9, 8, 10, C.wood);
-  });
-  piece(575, 314, (f) => {
-    f(-29, -25, 58, 30, C.dark);
-    f(-26, -22, 52, 25, C.wood);
-    for (let i = 0; i < 7; i++) f(-22 + i * 7, -32 - (i % 3) * 4, 6, 19, palettes[i]);
-    f(-24, -1, 48, 4, C.woodLight);
-  });
-  piece(55, 303, (f) => {
-    f(-22, -20, 44, 24, C.dark);
-    f(-18, -23, 36, 25, C.woodLight);
-    f(-12, -16, 24, 16, C.cream);
-    f(-7, -9, 14, 2, C.wood);
-  });
-  piece(556, 181, (f) => {
-    f(-15, -3, 30, 23, C.wood);
-    f(-12, -8, 24, 11, C.woodLight);
-    f(-2, -44, 5, 38, C.jade);
-    for (const [x, y] of [
-      [-23, -41],
-      [9, -50],
-      [-19, -29],
-      [7, -32],
-      [-7, -56],
-    ])
-      f(x, y, 22, 13, C.jade);
-  });
-  // Door with a visible step and entrance rug.
-  r(571, 147, 49, 72, C.dark);
-  r(578, 154, 35, 58, C.wood);
-  r(583, 161, 24, 44, 0x644453);
-  r(602, 185, 4, 4, C.gold);
-  r(560, 218, 60, 9, C.woodLight);
-  r(548, 232, 72, 20, 0x523a42);
-  // Warm lamp and ambient glow.
-  r(318, 0, 4, 48, C.woodLight);
-  r(298, 48, 44, 5, C.gold);
-  g.fillStyle(C.gold);
-  g.fillTriangle(306, 36, 335, 36, 346, 51);
-  g.fillTriangle(306, 36, 295, 51, 346, 51);
-  const halo = scene.add
-    .circle(320, 71, 58, 0xffc885, 0.07)
-    .setBlendMode(Phaser.BlendModes.ADD)
-    .setDepth(3);
-
-  // Contact shadows and small shop props sit in the floor layer.
+  const r = painter(g);
+  r(0, 0, WIDTH, HEIGHT, 0x1c2026);
+  // Aged olive plaster and walnut wainscot. Quiet contrast to the amber wood.
+  r(13, 9, 614, 151, 0x363b36);
+  r(21, 18, 598, 130, 0x6b7060);
+  r(21, 18, 598, 9, 0x535c50);
   for (const [x, y, w] of [
-    [74, 312, 172],
-    [316, 286, 98],
-    [459, 301, 50],
-    [543, 202, 32],
+    [37, 24, 64],
+    [252, 20, 77],
+    [415, 23, 45],
+    [521, 25, 51],
+    [360, 128, 36],
   ]) {
-    g.fillStyle(0x201b27, 0.24);
-    g.fillEllipse(x + w / 2, y, w + 12, 10);
+    r(x, y, w, 1, 0x777a66);
+    r(x + 5, y + 3, Math.floor(w / 2), 1, 0x636c5b);
   }
-  // Register, open ledger, paper roll, pen and a brass service bell.
-  const props = scene.add.graphics().setDepth(317);
-  props.fillStyle(0x302837);
-  props.fillRect(176, 232, 20, 11);
-  props.fillStyle(0x769a82);
-  props.fillRect(178, 234, 16, 5);
-  props.fillStyle(0xe6c19a);
-  props.fillRect(136, 237, 23, 6);
-  props.fillStyle(0x9b604c);
-  props.fillRect(147, 237, 1, 6);
-  props.fillStyle(0xf0bd7e);
-  props.fillRect(207, 238, 10, 5);
-  props.fillRect(211, 235, 2, 3);
-  // A reading lamp in the corner: its foot is sorted with the chair.
-  const lamp = scene.add.graphics().setDepth(303);
-  lamp.fillStyle(0x302837);
-  lamp.fillRect(522, 241, 3, 61);
-  lamp.fillRect(514, 300, 20, 4);
-  lamp.fillStyle(0xf0bd7e);
-  lamp.fillRect(513, 234, 21, 10);
-  lamp.fillRect(517, 230, 13, 4);
-  const readingGlow = scene.add
-    .circle(496, 248, 49, 0xffc885, 0.065)
-    .setDepth(310)
-    .setBlendMode(Phaser.BlendModes.ADD);
-  // Light spills onto the floor in restrained, stepped bands of native pixels.
-  const floorLight = scene.add.graphics().setDepth(0.5);
-  floorLight.fillStyle(0xf0bd7e, 0.045);
-  floorLight.fillPoints(
-    [
-      { x: 261, y: 165 },
-      { x: 378, y: 165 },
-      { x: 442, y: 335 },
-      { x: 246, y: 335 },
-    ],
-    true,
-  );
-  floorLight.lineStyle(1, 0xf0bd7e, 0.08);
-  for (let y = 175; y < 335; y += 22)
-    floorLight.lineBetween(271, y, 378 + Math.floor((y - 165) / 3), y);
-  // A curtain, brass hooks, and bookmarks: authored marks, no fake readable text.
-  r(246, 29, 8, 68, C.red);
-  r(247, 30, 2, 66, 0xd49076);
-  r(386, 29, 8, 68, C.red);
-  r(387, 30, 2, 66, 0xd49076);
-  r(247, 94, 7, 3, C.gold);
-  r(386, 94, 7, 3, C.gold);
-  r(254, 97, 2, 10, C.gold);
-  r(383, 97, 2, 10, C.gold);
-  r(229, 92, 12, 20, C.cream);
-  r(232, 97, 6, 1, C.ink);
-  r(232, 101, 7, 1, C.ink);
-  // The wrapped parcel appears only after the player finishes Mara's request.
-  const parcel = scene.add.graphics().setDepth(318).setVisible(false);
-  parcel.fillStyle(0xd9b388);
-  parcel.fillRect(113, 227, 28, 9);
-  parcel.fillStyle(0x9b604c);
-  parcel.fillRect(125, 227, 2, 9);
-  parcel.fillRect(113, 231, 28, 1);
-  parcel.fillStyle(C.cream);
-  parcel.fillRect(129, 228, 7, 3);
-  // Tea steam remains subtle and becomes static when motion is reduced.
+  r(21, 145, 598, 15, 0x604435);
+  r(21, 147, 598, 2, honey);
+  r(21, 151, 598, 3, 0x402f2c);
+  // Individual staggered floorboards: grain clusters, joinery and a few authored knots.
+  const plankColors = [0x90674c, 0x986e50, 0x8b6046, 0x9d7353, 0x896248];
+  r(21, 159, 598, 184, 0x483a32);
+  for (let row = 0, y = 159; y < 343; row++, y += 18) {
+    for (let col = -1, x = 21 - (row % 3) * 33; x < 619; col++, x += 101) {
+      const left = Math.max(21, x),
+        right = Math.min(619, x + 100);
+      r(left, y + 1, right - left, Math.min(16, 342 - y), plankColors[(row * 3 + col + 9) % 5]);
+      r(left + 1, y + 1, Math.max(0, right - left - 2), 1, 0xb08a62);
+      if (x > 25 && x + 82 < 619 && y + 16 <= 343) {
+        r(x + 3, y + 5, 1, 1, 0x5f4939);
+        r(x + 3, y + 13, 1, 1, 0x5f4939);
+        r(x + 16, y + 7, 29 + (row % 3) * 6, 1, 0x7e593f);
+        r(x + 22, y + 9, 12, 1, 0xa77d55);
+        if ((row + col) % 4 === 0) {
+          r(x + 69, y + 12, 8, 1, 0x6d513c);
+          r(x + 72, y + 11, 3, 1, 0x6d513c);
+        }
+      }
+    }
+  }
+  r(21, 159, 598, 3, ink, 0.45);
+  r(21, 162, 598, 4, ink, 0.15);
+  // Deep window reveal; cold glass with three layers of Bellwick roofs.
+  r(243, 16, 156, 130, 0x3a302c);
+  r(248, 21, 146, 117, 0x22333e);
+  for (let i = 0; i < 10; i++)
+    r(
+      255,
+      28 + i * 10,
+      132,
+      10,
+      [0x344b5c, 0x3a5465, 0x405d6c, 0x496b79, 0x537681][Math.min(4, Math.floor(i / 2))],
+    );
+  const outside = (x, base, w, h, color) => {
+    r(x, base - h, w, h, color);
+    for (let step = 0; step < 4; step++)
+      r(x + step * 2, base - h - step * 2, w - step * 4, 2, color);
+  };
+  for (const [x, w, h] of [
+    [256, 18, 19],
+    [279, 25, 27],
+    [309, 19, 22],
+    [335, 22, 32],
+    [364, 21, 23],
+  ])
+    outside(x, 109, w, h, 0x3d5667);
+  for (const [x, w, h] of [
+    [255, 33, 23],
+    [291, 26, 17],
+    [326, 29, 22],
+    [359, 28, 29],
+  ]) {
+    outside(x, 133, w, h, 0x293e50);
+    r(x + 4, 136 - h, 3, 6, 0xd6af78);
+    r(x + 12, 136 - h, 3, 6, 0x9d9b82);
+    r(x + 1, 130, w - 2, 1, 0x77949b);
+  }
+  // Interior frame remains in front of rain, using the same glass/mullion coordinates.
+  r(249, 22, 6, 117, wood);
+  r(387, 22, 6, 117, 0x49382f);
+  r(317, 28, 7, 105, 0x9b754e);
+  r(317, 28, 2, 105, honey);
+  r(255, 74, 132, 6, 0x9b754e);
+  r(255, 74, 132, 1, paper);
+  r(245, 18, 152, 6, honey);
+  r(245, 24, 152, 2, 0x4b392f);
+  r(241, 133, 160, 6, honey);
+  r(246, 139, 150, 8, 0x684632);
+  r(249, 141, 145, 1, 0x3e332c);
+  r(245, 147, 152, 8, 0x47382e);
+  // Heavy sage curtains, gathered below the top rail.
+  for (const x of [246, 386]) {
+    r(x, 28, 8, 65, 0x45534a);
+    r(x + 1, 28, 2, 65, 0x8b9471);
+    r(x + 5, 28, 2, 61, 0x34443f);
+    r(x, 91, 8, 3, 0xcb9c61);
+    r(x + 6, 95, 2, 12, 0xcb9c61);
+    r(x + 5, 105, 4, 3, paper);
+  }
+  // Four authored collections, each with empty bays, folios and face-out covers.
+  for (const [i, x] of [29, 129, 409, 509].entries()) drawShelf(r, x, 29, i, BOOK_COLORS);
+  // A tiny wall clock and layered notices occupy narrow gaps, never walkable floor.
+  r(228, 35, 16, 21, 0x49392f);
+  r(230, 37, 12, 16, honey);
+  r(232, 39, 8, 12, paper);
+  r(235, 41, 1, 6, ink);
+  r(235, 46, 4, 1, ink);
+  r(233, 50, 5, 1, 0xb39974);
+  r(228, 86, 15, 31, 0x49392f);
+  r(230, 89, 11, 25, 0xb59b71);
+  r(229, 92, 8, 11, paper);
+  r(234, 101, 8, 12, 0xa9b393);
+  r(232, 94, 1, 1, 0x9d6547);
+  r(237, 103, 1, 1, 0x9d6547);
+  r(377, 21, 21, 25, wood);
+  r(380, 24, 15, 19, honey);
+  r(382, 26, 11, 15, 0x435f60);
+  r(383, 35, 9, 5, 0x779176);
+  r(385, 30, 4, 4, paper);
+  // Cushion seams and a folded window-seat blanket, safely behind the floor boundary.
+  for (const [x, color] of [
+    [259, 0x9c5d52],
+    [302, 0x87916d],
+    [345, 0x9c5d52],
+  ]) {
+    r(x, 143, 33, 7, color);
+    r(x + 2, 142, 29, 1, paper);
+    r(x + 4, 147, 24, 1, 0x644f3c);
+  }
+  // Worn wine-red reading rug, with a restrained woven border and floral corners.
+  r(265, 205, 285, 116, 0x3d3434);
+  r(269, 208, 277, 109, 0x78504b);
+  r(273, 211, 269, 103, 0xbd9565);
+  r(276, 214, 263, 97, 0x75464a);
+  r(282, 220, 251, 85, 0x503d40);
+  for (let x = 277; x < 540; x += 12) {
+    r(x, 215, 5, 1, paper);
+    r(x + 3, 308, 5, 1, paper);
+  }
+  for (const [x, y] of [
+    [285, 224],
+    [523, 224],
+    [285, 298],
+    [523, 298],
+  ]) {
+    r(x - 3, y, 7, 1, 0xc39769);
+    r(x, y - 3, 1, 7, 0xc39769);
+    r(x - 1, y - 1, 3, 3, 0xab6b59);
+    r(x - 5, y - 4, 2, 2, 0x7e8970);
+  }
+  for (let x = 270; x < 546; x += 7) {
+    r(x, 204, 1, 3, 0xd0ac7b);
+    r(x + 2, 318, 1, 4, 0xd0ac7b);
+  }
+  // Contact occlusion is below sprites and furniture. Short, dark foot contact + soft apron.
+  for (const [x, y, w, h] of [
+    [70, 309, 180, 8],
+    [313, 283, 104, 10],
+    [457, 297, 54, 10],
+    [541, 199, 30, 8],
+    [546, 314, 58, 7],
+    [33, 303, 44, 5],
+  ]) {
+    r(x - 3, y + 2, w + 6, h, ink, 0.12);
+    r(x, y, w, h - 1, ink, 0.23);
+    r(x + 3, y, w - 6, 2, ink, 0.35);
+  }
+  const book = (f, x, y, w, color, h = 4) => {
+    f(x + 1, y + 1, w, h, ink);
+    f(x, y, w, h, color);
+    f(x + 2, y + 1, w - 4, Math.max(1, h - 2), paper);
+    f(x + 1, y + h - 1, w - 1, 1, color);
+  };
+  const piece = (x, y, depth, draw) => {
+    const object = scene.add.graphics({ x, y }).setDepth(depth);
+    draw(painter(object));
+    return object;
+  };
+  // Counter: thick bevelled top, glazed panels, moulding and worn brass handles.
+  piece(160, 261, 316, (f) => {
+    f(-90, -18, 180, 19, 0x543d30);
+    f(-90, -18, 180, 3, paper);
+    f(-88, -15, 176, 13, 0xb68b5b);
+    f(-85, -12, 170, 8, 0xc99e6c);
+    f(-90, -2, 180, 3, 0x61432f);
+    f(-86, 1, 172, 48, wood);
+    for (const x of [-79, -24, 31]) {
+      f(x, 7, 48, 34, 0x533c30);
+      f(x + 2, 9, 44, 29, 0xa0754c);
+      f(x + 5, 12, 38, 24, 0x80573c);
+      f(x + 5, 12, 1, 24, 0xba8a55);
+      f(x + 19, 16, 8, 2, 0x332d29);
+      f(x + 20, 16, 6, 1, honey);
+    }
+    f(-86, 45, 172, 5, honey);
+    f(-86, 50, 172, 5, 0x3d302b);
+    f(-79, -11, 28, 1, 0x8e6847);
+    f(44, -7, 29, 1, 0xab7d50);
+    book(f, -67, -23, 32, 0x426563, 5);
+    book(f, -63, -29, 31, 0x996354, 5);
+    book(f, -68, -34, 34, 0xb59b71, 4);
+    // A paper roll, order ledger, fountain pen, register, mug and bell.
+    f(-21, -23, 25, 8, 0xc7ad82);
+    f(-19, -25, 23, 4, paper);
+    f(-18, -24, 2, 1, 0x977455);
+    f(6, -24, 26, 9, paper);
+    f(18, -24, 1, 9, 0xac8d68);
+    for (let i = 0; i < 3; i++) {
+      f(9, -22 + i * 2, 6, 1, 0xb39b76);
+      f(22, -22 + i * 2, 7, 1, 0xb39b76);
+    }
+    f(35, -23, 1, 8, ink);
+    f(35, -24, 1, 2, honey);
+    f(45, -24, 19, 9, 0x364a45);
+    f(47, -29, 15, 7, 0x60756a);
+    f(49, -27, 10, 3, 0xc3c19b);
+    f(48, -20, 2, 1, paper);
+    f(52, -20, 2, 1, paper);
+    f(56, -20, 2, 1, paper);
+    f(67, -23, 10, 8, 0x527878);
+    f(68, -25, 8, 2, paper);
+    f(77, -22, 3, 5, honey);
+    f(78, -21, 1, 3, 0x544331);
+    f(-33, -20, 9, 4, honey);
+    f(-31, -22, 5, 2, honey);
+    f(-29, -24, 1, 2, paper);
+  });
+  // Reading table, open book with bookmark, pencil, saucer and a small dried flower.
+  piece(365, 261, 291, (f) => {
+    f(-43, 2, 8, 28, 0x4b382d);
+    f(35, 2, 8, 28, 0x4b382d);
+    f(-42, 10, 2, 18, 0xb18a55);
+    f(36, 10, 2, 18, 0xb18a55);
+    f(-37, 18, 74, 4, 0x654831);
+    f(-52, -17, 104, 23, 0x593e30);
+    f(-50, -17, 100, 3, paper);
+    f(-50, -14, 100, 16, honey);
+    f(-47, -11, 94, 11, 0xb18352);
+    f(-49, 3, 98, 3, 0x745035);
+    f(-37, -15, 33, 13, 0x475f58);
+    f(-35, -16, 29, 12, paper);
+    f(-21, -16, 1, 12, 0xa28a65);
+    for (let i = 0; i < 3; i++) {
+      f(-32, -13 + i * 3, 8, 1, 0xbca582);
+      f(-17, -13 + i * 3, 8, 1, 0xbca582);
+    }
+    f(-12, -5, 2, 6, 0xa95f4e);
+    f(2, -9, 1, 9, 0x635239);
+    f(13, -6, 13, 3, 0xe4c994);
+    f(16, -11, 7, 6, 0x6e8880);
+    f(17, -12, 5, 1, paper);
+    f(35, -10, 6, 8, 0x76856e);
+    f(37, -20, 1, 10, 0x84986c);
+    f(34, -22, 6, 3, 0xc6a877);
+  });
+  // Upholstered armchair: rounded stepped silhouette, piping and a knitted throw.
+  piece(484, 286, 305, (f) => {
+    f(-23, -43, 46, 3, ink);
+    f(-26, -40, 52, 39, ink);
+    f(-22, -40, 44, 34, 0x355e5b);
+    f(-19, -38, 38, 29, 0x56847a);
+    f(-17, -36, 1, 23, 0x8ca58c);
+    f(17, -36, 1, 23, 0x294c4b);
+    f(-28, -14, 10, 21, 0x9c6e53);
+    f(18, -14, 10, 21, 0x9c6e53);
+    f(-27, -16, 8, 3, 0xd1a57a);
+    f(19, -16, 8, 3, 0xd1a57a);
+    f(-19, -9, 38, 14, 0x6e9482);
+    f(-17, -8, 34, 2, 0x9eb095);
+    f(-18, 5, 36, 3, 0x3b5c50);
+    f(-23, 8, 7, 11, 0x4e382d);
+    f(16, 8, 7, 11, 0x4e382d);
+    f(-11, -31, 24, 20, 0xd9be87);
+    f(-9, -29, 20, 16, 0xead5a4);
+    f(-7, -26, 16, 1, 0xb79b70);
+    // Throw hangs over the right arm, within the chair's solid footprint.
+    for (let i = 0; i < 5; i++) f(12 + i * 2, -34 + i * 3, 6, 25, i % 2 ? 0xa57964 : 0xc09b76);
+    for (let i = 0; i < 4; i++) f(16 + i * 3, 6, 1, 4, paper);
+  });
+  piece(575, 314, 322, (f) => {
+    f(-29, -25, 58, 30, ink);
+    f(-27, -23, 54, 25, wood);
+    f(-23, -21, 46, 20, 0x513f30);
+    for (const [x, h, color] of [
+      [-21, 22, 2],
+      [-13, 28, 0],
+      [-4, 24, 4],
+      [5, 20, 6],
+      [13, 25, 3],
+    ]) {
+      f(x, -h - 14, 7, h, BOOK_COLORS[color]);
+      f(x + 1, -h - 12, 5, 1, paper);
+    }
+    f(-27, -12, 54, 5, honey);
+    f(-27, -1, 54, 4, honey);
+    f(-24, -21, 3, 24, wood);
+    f(21, -21, 3, 24, wood);
+    f(-7, -10, 14, 7, paper);
+    f(-4, -8, 8, 1, 0xa58a61);
+  });
+  piece(55, 303, 307, (f) => {
+    f(-22, -23, 44, 27, 0x684937);
+    f(-20, -22, 40, 24, 0xb18a5d);
+    f(-20, -22, 40, 2, paper);
+    f(-1, -22, 3, 24, 0x856442);
+    f(-19, -4, 39, 1, 0xd0ab75);
+    f(-13, -15, 13, 8, paper);
+    f(-11, -13, 8, 1, 0xb59b74);
+    f(7, -13, 6, 3, 0x594938);
+  });
+  // A rooted plant in a ribbed terracotta pot, leaf silhouettes instead of square blocks.
+  piece(556, 181, 205, (f) => {
+    f(-15, -3, 30, 6, 0xbc8b62);
+    f(-13, 3, 26, 13, 0x9a664a);
+    f(-10, 16, 20, 7, 0x6e4939);
+    f(-11, 4, 2, 10, 0xc79a6a);
+    f(8, 4, 2, 10, 0x684834);
+    f(-12, -1, 24, 2, 0x473d30);
+    f(-1, -40, 2, 38, 0x8a9664);
+    for (const [x, y, side] of [
+      [-22, -38, 1],
+      [5, -47, -1],
+      [-20, -24, 1],
+      [4, -31, -1],
+      [-8, -55, 1],
+    ]) {
+      f(x + 4, y, 8, 3, 0x8b9e6b);
+      f(x + 1, y + 3, 16, 4, 0x6e8b5d);
+      f(x, y + 7, 19, 4, 0x526f50);
+      f(x + 4, y + 11, 12, 3, 0x3e5c47);
+      f(x + (side > 0 ? 8 : 6), y + 4, 2, 7, 0xa5ad79);
+    }
+  });
+  // The existing small book piles retain their original solid footprints.
+  piece(250, 189, 194, (f) => {
+    book(f, 0, 0, 25, BOOK_COLORS[3]);
+    book(f, 3, -5, 24, BOOK_COLORS[1]);
+    book(f, 1, -10, 25, BOOK_COLORS[2]);
+  });
+  piece(45, 245, 249, (f) => {
+    book(f, 0, 0, 25, BOOK_COLORS[5]);
+    book(f, 2, -5, 24, BOOK_COLORS[4]);
+    book(f, 0, -10, 26, BOOK_COLORS[0]);
+  });
+  // Entry: panelled oak door, glazed transom, umbrella hooks, coir doormat.
+  r(571, 147, 49, 72, 0x322e29);
+  r(576, 150, 38, 63, wood);
+  r(581, 155, 28, 23, 0x3c5761);
+  r(583, 157, 24, 18, 0x587782);
+  r(594, 156, 2, 22, honey);
+  r(581, 177, 28, 3, honey);
+  r(581, 184, 28, 24, 0x654937);
+  r(584, 187, 22, 18, 0x956e49);
+  r(602, 184, 4, 3, paper);
+  r(603, 187, 2, 3, honey);
+  r(573, 213, 44, 5, 0x433a2c);
+  r(560, 218, 60, 5, 0xd0a770);
+  r(562, 223, 56, 4, 0x674c35);
+  r(548, 232, 72, 20, 0x3e3832);
+  r(551, 234, 66, 16, 0x866c49);
+  for (let x = 553; x < 616; x += 4) r(x, 236, 1, 12, 0xa68a5c);
+  // Gently shaded pendant and reading lamp. Pools are layered low-alpha bands,
+  // not full-screen filters or a single hard circular halo.
+  r(319, 9, 2, 24, 0xc0a16d);
+  r(316, 31, 8, 3, honey);
+  for (let i = 0; i < 6; i++)
+    r(
+      307 - i * 2,
+      34 + i * 3,
+      26 + i * 4,
+      3,
+      [0xb98750, 0xc89b5e, 0xd8ad6b, 0xe3bc7c, 0xf3d49a, 0xf5d89d][i],
+    );
+  r(296, 52, 48, 2, 0x614431);
+  r(301, 54, 38, 2, 0xffdfa1);
+  const pool = (x, y, w, h, depth) => {
+    const glow = scene.add.graphics().setDepth(depth);
+    for (let i = 0; i < 6; i++) {
+      glow.fillStyle(0xffcf87, 0.018 + i * 0.005);
+      glow.fillEllipse(x, y, w - i * 12, h - i * 10);
+    }
+    return glow;
+  };
+  const halo = pool(320, 78, 146, 138, 2);
+  const readingGlow = pool(492, 267, 106, 94, 310);
+  piece(523, 300, 305, (f) => {
+    f(-8, 0, 19, 4, 0x463a30);
+    f(-4, -2, 12, 3, honey);
+    f(0, -62, 2, 61, 0xb19461);
+    f(2, -62, 1, 61, 0x4c4736);
+    for (let i = 0; i < 5; i++)
+      f(-6 - i, -69 + i * 2, 14 + i * 2, 2, [0x8d7956, 0xb39b65, 0xc8b478, 0xdfc28a, 0xe9d39e][i]);
+    f(-10, -59, 23, 2, paper);
+    f(-5, -57, 13, 2, 0xffdc99);
+  });
+  // Cold reflected window light rests on the floor, below the actors.
+  const reflection = scene.add.graphics().setDepth(0.5);
+  for (let i = 0; i < 5; i++) {
+    const y = 163 + i * 7;
+    const f = painter(reflection);
+    f(276 - i * 2, y, 34 + i * 3, 4, 0x86a3ab, 0.06 - i * 0.008);
+    f(326, y, 42 + i * 3, 4, 0x86a3ab, 0.06 - i * 0.008);
+  }
+  const parcel = piece(113, 229, 318, (f) => {
+    f(0, -2, 29, 9, 0x96744b);
+    f(0, -2, 29, 5, 0xddc395);
+    f(1, -2, 27, 1, paper);
+    f(12, -2, 2, 9, 0x8b6345);
+    f(0, 1, 29, 1, 0x8b6345);
+    f(17, -1, 8, 3, paper);
+  }).setVisible(false);
   const steam = scene.add.graphics().setDepth(318).setAlpha(0.2);
-  steam.lineStyle(1, C.cream, 1);
-  steam.lineBetween(220, 230, 218, 225);
-  steam.lineBetween(218, 225, 220, 221);
-  steam.lineBetween(225, 227, 223, 222);
-  const foreground = scene.add.graphics().setDepth(350);
-  foreground.fillStyle(0x201b27, 0.2);
-  foreground.fillRect(21, 336, 598, 6);
-  foreground.fillStyle(0x302837);
-  foreground.fillRect(18, 334, 16, 9);
-  foreground.fillRect(606, 332, 14, 11);
-  foreground.fillStyle(0x4b7976);
-  foreground.fillRect(19, 324, 8, 12);
-  foreground.fillRect(26, 329, 8, 6);
-  foreground.fillRect(608, 320, 8, 15);
-  foreground.fillRect(601, 325, 8, 6);
+  steam.lineStyle(1, paper, 1);
+  steam.lineBetween(230, 234, 228, 229);
+  steam.lineBetween(228, 229, 230, 225);
+  steam.lineBetween(235, 231, 233, 226);
+  // Architectural foreground frames the room without obstructing the walkable aisle.
+  const front = scene.add.graphics().setDepth(350);
+  const f = painter(front);
+  f(12, 9, 9, 337, 0x473b30);
+  f(14, 9, 2, 334, honey);
+  f(619, 9, 9, 337, 0x473b30);
+  f(620, 9, 1, 334, honey);
+  f(12, 9, 616, 7, 0x342f2b);
+  f(17, 15, 606, 2, 0xa77d53);
+  f(12, 342, 616, 7, 0x332c29);
+  f(17, 341, 606, 2, honey);
+  f(21, 337, 598, 4, ink, 0.2);
   return { halo, readingGlow, parcel, steam };
 }

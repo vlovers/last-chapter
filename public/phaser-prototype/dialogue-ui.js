@@ -46,6 +46,8 @@ export class DialogueUI {
   }
   show(node, isMara, completed, reduced) {
     this.element.hidden = false;
+    this.element.closest('#stage').classList.add('talking');
+    this.element.classList.toggle('object-note', !isMara);
     this.element.dataset.mood = node.mood ?? 'quiet';
     this.mood.textContent =
       { warm: 'Усміхається', thoughtful: 'Замислилася', firm: 'Рішуче' }[node.mood] ?? 'Тиха мить';
@@ -54,8 +56,9 @@ export class DialogueUI {
     this.portrait.hidden = !isMara;
     this.fallback.hidden = isMara;
     if (isMara) {
-      const path = ASSET_MANIFEST.find((entry) => entry.id === 'mara-portrait').path;
-      if (!this.portrait.getAttribute('src')) this.portrait.src = path;
+      const id = ['thoughtful', 'firm'].includes(node.mood) ? `mara-${node.mood}` : 'mara-portrait';
+      const path = ASSET_MANIFEST.find((entry) => entry.id === id).path;
+      if (this.portrait.getAttribute('src') !== path) this.portrait.src = path;
       if (this.portrait.complete && !this.portrait.naturalWidth) this.useFallback('mara-portrait');
     } else this.useFallback('object');
     this.close.textContent = '×';
@@ -87,9 +90,11 @@ export class DialogueUI {
     }
     this.element.classList.toggle('still', reduced);
     (this.choices.querySelector('button') ?? this.close).focus({ preventScroll: true });
+    this.element.scrollIntoView({ block: 'nearest', behavior: 'instant' });
   }
   hide() {
     this.element.hidden = true;
+    this.element.closest('#stage').classList.remove('talking');
   }
   destroy() {
     this.lifecycle.abort();
