@@ -208,7 +208,9 @@ function render(): void {
                 : chapter.stage === 'eleanor'
                   ? 'Зустріти Томаса →'
                   : chapter.stage === 'thomas'
-                    ? 'Завершити зустріч →'
+                    ? 'Зустріти Нору →'
+                    : chapter.stage === 'nora'
+                      ? 'Завершити зустріч →'
                     : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
@@ -221,7 +223,9 @@ function render(): void {
                 : chapter.stage === 'eleanor'
                   ? advanceToThomas(chapter)
                   : chapter.stage === 'thomas'
-                    ? finishThirdDay(chapter)
+                    ? advanceToNora(chapter)
+                    : chapter.stage === 'nora'
+                      ? finishThirdDay(chapter)
                     : advanceChapter(chapter);
         persistChapter();
         render();
