@@ -940,7 +940,6 @@ h1 {
   image-rendering: pixelated;
 }
 
-
 /* Game Screen V2: stage-first layout, dialogue beneath the scene, optional journal. */
 body {
   padding: clamp(10px, 2vw, 28px);
@@ -979,13 +978,17 @@ body {
   min-width: 0;
   padding: clamp(16px, 2vw, 28px);
 }
-.story-panel h1 { font-size: clamp(24px, 2.7vw, 35px); }
+.story-panel h1 {
+  font-size: clamp(24px, 2.7vw, 35px);
+}
 .story-panel .actions {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
   align-items: stretch;
 }
 .story-panel .actions .book-shelf,
-.story-panel .actions .season-epilogue { grid-column: 1 / -1; }
+.story-panel .actions .season-epilogue {
+  grid-column: 1 / -1;
+}
 .notebook {
   min-width: 0;
   padding: 0;
@@ -1000,14 +1003,18 @@ body {
   cursor: pointer;
   list-style: none;
 }
-.notebook-drawer summary::-webkit-details-marker { display: none; }
+.notebook-drawer summary::-webkit-details-marker {
+  display: none;
+}
 .notebook-drawer summary::after {
   content: '▾';
   position: absolute;
   right: 20px;
-  transition: transform .2s;
+  transition: transform 0.2s;
 }
-.notebook-drawer[open] summary::after { transform: rotate(180deg); }
+.notebook-drawer[open] summary::after {
+  transform: rotate(180deg);
+}
 .notebook-drawer summary:focus-visible {
   outline: 3px solid #ffdf9f;
   outline-offset: -4px;
@@ -1025,8 +1032,12 @@ body {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: 'art' 'story' 'notebook';
   }
-  .illustration.illustration--pixel { min-height: 0; }
-  .notebook-drawer__contents { max-height: none; }
+  .illustration.illustration--pixel {
+    min-height: 0;
+  }
+  .notebook-drawer__contents {
+    max-height: none;
+  }
 }
 @media (max-width: 480px) {
   .illustration--pixel .shop-hotspot {
@@ -1036,8 +1047,12 @@ body {
     max-width: 40%;
     line-height: 1.15;
   }
-  .story-panel .actions { grid-template-columns: minmax(0, 1fr); }
+  .story-panel .actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .notebook-drawer summary::after { transition: none; }
+  .notebook-drawer summary::after {
+    transition: none;
+  }
 }
