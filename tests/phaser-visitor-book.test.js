@@ -6,6 +6,8 @@ describe('book browsing visuals', () => {
     const empty = BROWSE_ACTIONS.filter((action) => !action.prop);
     expect(reading.length).toBeGreaterThanOrEqual(2);
     expect(empty.length).toBeGreaterThanOrEqual(1);
-    expect(reading.every((action) => ['up', 'left', 'right', 'down'].includes(action.facing))).toBe(true);
+    expect(reading.every((action) => ['up', 'left', 'right', 'down'].includes(action.facing))).toBe(
+      true,
+    );
   });
 });
