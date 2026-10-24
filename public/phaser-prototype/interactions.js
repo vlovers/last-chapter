@@ -77,7 +77,7 @@ export class Interactions {
       button.style.top = `${rect.y / 3.6}%`;
       button.style.width = `${rect.w / 6.4}%`;
       button.style.height = `${rect.h / 3.6}%`;
-      button.hidden = state.mode !== 'explore' || (spot.id === 'mara' && state.mara !== 'ready');
+      button.hidden = state.mode !== 'explore' || (spot.id === 'mara' && (state.mara !== 'ready' || state.visitorVisible === false));
       button.classList.toggle('nearby', spot === this.nearest);
     }
     this.hint.hidden = !this.nearest || state.mode !== 'explore';
@@ -87,7 +87,7 @@ export class Interactions {
     if (
       highlighted &&
       state.mode === 'explore' &&
-      (highlighted.id !== 'mara' || state.mara === 'ready')
+      (highlighted.id !== 'mara' || (state.mara === 'ready' && state.visitorVisible !== false))
     ) {
       const rect = highlighted.rect;
       this.outline.lineStyle(1, 0xf0bd7e, eligible(player, highlighted, state) ? 0.9 : 0.45);

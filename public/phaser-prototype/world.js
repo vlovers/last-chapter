@@ -128,7 +128,7 @@ export function findPath(start, goal) {
 export function eligible(player, spot, state) {
   return (
     state.mode === 'explore' &&
-    (spot.id !== 'mara' || state.mara === 'ready') &&
+    (spot.id !== 'mara' || (state.mara === 'ready' && state.visitorVisible !== false)) &&
     distance(player, spot.approach) <= 32
   );
 }

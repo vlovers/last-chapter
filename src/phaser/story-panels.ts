@@ -1,4 +1,10 @@
 import type { FiveDayStory } from './five-day-story';
+
+declare global {
+  interface Window {
+    __lastChapterRefresh?: () => void;
+  }
+}
 import type { CatalogFilter } from '../game/catalog';
 
 /** The Phaser shell owns movement; this accessible DOM dock owns reading and reference material. */

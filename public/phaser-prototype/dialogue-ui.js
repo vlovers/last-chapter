@@ -13,7 +13,7 @@ export class DialogueUI {
     this.close = document.querySelector('#close-dialogue');
     this.onChoose = onChoose;
     this.close.addEventListener('click', onClose, options);
-    this.portrait.addEventListener('error', () => this.useFallback('mara-portrait'), options);
+    this.portrait.addEventListener('error', () => this.useFallback('mara-portrait', this.name.textContent), options);
     this.element.addEventListener(
       'keydown',
       (event) => {
@@ -37,11 +37,11 @@ export class DialogueUI {
       options,
     );
   }
-  useFallback(id) {
+  useFallback(id, speaker = '') {
     const fallback = assetFallback(id);
     this.portrait.hidden = true;
     this.fallback.hidden = false;
-    this.fallback.textContent = fallback.initials;
+    this.fallback.textContent = speaker.trim().charAt(0) || fallback.initials;
     this.fallback.style.background = fallback.color;
   }
   show(node, isMara, completed, reduced) {
@@ -55,19 +55,11 @@ export class DialogueUI {
     this.text.textContent = node.text;
     this.portrait.hidden = !isMara;
     this.fallback.hidden = isMara;
-    if (isMara && node.portrait) {
-      const path = node.portrait;
-      if (this.portrait.getAttribute('src') !== path) this.portrait.src = path;
-      if (this.portrait.complete && !this.portrait.naturalWidth) this.useFallback('mara-portrait');
-    } else if (isMara) {
-      this.useFallback('object');
-    }
-    if (isMara && !node.portrait) {
-      // Existing standalone prototype continues to use its original Mara portrait.
+    if (isMara) {
       const id = ['thoughtful', 'firm'].includes(node.mood) ? `mara-${node.mood}` : 'mara-portrait';
-      const path = ASSET_MANIFEST.find((entry) => entry.id === id).path;
+      const path = node.portrait ?? ASSET_MANIFEST.find((entry) => entry.id === id).path;
       if (this.portrait.getAttribute('src') !== path) this.portrait.src = path;
-      if (this.portrait.complete && !this.portrait.naturalWidth) this.useFallback('mara-portrait');
+      if (this.portrait.complete && !this.portrait.naturalWidth) this.useFallback('mara-portrait', node.speaker);
     } else this.useFallback('object');
     this.close.textContent = '×';
     this.close.setAttribute(
@@ -80,7 +72,23 @@ export class DialogueUI {
     for (const choice of node.choices) {
       const button = document.createElement('button');
       button.type = 'button';
-      button.textContent = choice.label;
+      if (choice.book) {
+        const detail = document.createElement('span');
+        detail.className = 'recommendation';
+        const name = document.createElement('strong');
+        name.textContent = choice.book.title;
+        const meta = document.createElement('small');
+        meta.textContent = `${choice.book.genre} · ${choice.book.length}`;
+        const summary = document.createElement('span');
+        summary.textContent = choice.book.blurb;
+        const reader = document.createElement('span');
+        reader.textContent = `Чому підходить: ${choice.book.readerFit}`;
+        const impact = document.createElement('span');
+        impact.textContent = `Що може змінитися: ${choice.book.possibleImpact}`;
+        detail.append(name, meta, summary, reader, impact);
+        button.append(detail);
+        button.setAttribute('aria-label', `${choice.label}: ${choice.book.title}`);
+      } else button.textContent = choice.label;
       button.addEventListener('click', () => {
         if (performance.now() - opened < 220) return;
         this.onChoose(choice.id);

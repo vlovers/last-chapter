@@ -1,6 +1,6 @@
 // Original 32×48 V4 actor art. One-pixel contours and stepped silhouettes match
 // the environment's native density. All direction/stride variants share feet anchors.
-export function drawPerson(context, ox, direction, frame, mara) {
+export function drawPerson(context, ox, direction, frame, mara, palette = {}) {
   const r = (x, y, w, h, color) => {
     context.fillStyle = color;
     context.fillRect(ox + x, y, w, h);
@@ -19,6 +19,7 @@ export function drawPerson(context, ox, direction, frame, mara) {
     boot: '#382f2d',
     paper: '#efdbb1',
     gold: '#dfb66e',
+    ...palette,
   };
   const side = direction === 'left' || direction === 'right';
   const right = direction === 'right';
