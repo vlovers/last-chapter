@@ -28,6 +28,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const afterHoursKey = 'last-chapter:conversation:mara:after-hours:v1';
   let conversation: ConversationSession = startConversation(maraBookClub);
   let afterHours: ConversationSession = startConversation(maraAfterHours);
+  const sharedMemories = () => [...new Set([...conversation.memories, ...afterHours.memories])];
   try {
     const saved = localStorage.getItem(conversationKey);
     if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
@@ -88,15 +89,15 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         panel.append(element('p', 'Розмову завершено. Можна почати нову, зберігши попередні думки.'));
         const again = element('button', 'Поговорити знову');
         again.type = 'button';
-        again.addEventListener('click', () => { const next = startConversation(selectedTopic, activeConversation.memories); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else conversation = next; saveConversation(); refresh(); });
+        again.addEventListener('click', () => { const next = startConversation(selectedTopic, sharedMemories()); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else conversation = next; saveConversation(); refresh(); });
         panel.append(again);
       } else {
-        const node = conversationView(selectedTopic, activeConversation);
+        const node = conversationView(selectedTopic, { ...activeConversation, memories: sharedMemories() });
         panel.append(element('h3', node.speaker), element('p', node.text));
         for (const choice of node.choices) {
           const button = element('button', choice.label);
           button.type = 'button';
-          button.addEventListener('click', () => { const next = answerConversation(selectedTopic, activeConversation, choice.id); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else conversation = next; saveConversation(); refresh(); });
+          button.addEventListener('click', () => { const next = answerConversation(selectedTopic, { ...activeConversation, memories: sharedMemories() }, choice.id); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else conversation = next; saveConversation(); refresh(); });
           panel.append(button);
         }
       }
