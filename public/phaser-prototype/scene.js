@@ -108,9 +108,11 @@ class Bookshop extends Phaser.Scene {
       $('#game').focus();
       void this.audio.unlock();
       if (!this.reduced) this.cameras.main.fadeIn(500, 32, 27, 39);
-      this.toast(this.story
-        ? `Пахне папером і чаєм. День ${this.story.day}. На вас чекає ${this.story.visitor}.`
-        : 'Пахне папером і чаєм. Мара щойно зайшла з дощу.');
+      this.toast(
+        this.story
+          ? `Пахне папером і чаєм. День ${this.story.day}. На вас чекає ${this.story.visitor}.`
+          : 'Пахне папером і чаєм. Мара щойно зайшла з дощу.',
+      );
     });
     this.listen(window, 'keydown', (event) => {
       if (!this.started || this.failed || this.state.mode !== 'explore' || $('#settings').open)
@@ -284,7 +286,8 @@ class Bookshop extends Phaser.Scene {
     if (this.story) $('#story-tools').inert = true;
     this.dialogue.show(
       node,
-      this.activeDialogue.kind === 'mara' || (this.activeDialogue.kind === 'story' && Boolean(node.portrait)),
+      this.activeDialogue.kind === 'mara' ||
+        (this.activeDialogue.kind === 'story' && Boolean(node.portrait)),
       this.state.completed,
       this.reduced,
     );
@@ -323,11 +326,12 @@ class Bookshop extends Phaser.Scene {
       $(selector).inert = false;
     $('#game').focus();
     if (this.story) this.refreshStory();
-    this.toast(this.story
-      ? 'Книгарня знову тиха. Продовжуйте, коли будете готові.'
-      : this.state.completed
-        ? 'Мара усміхається. Подарунок обрано — можна ще трохи побути серед книжок.'
-        : 'У книгарні тихо. До розмови можна повернутися.',
+    this.toast(
+      this.story
+        ? 'Книгарня знову тиха. Продовжуйте, коли будете готові.'
+        : this.state.completed
+          ? 'Мара усміхається. Подарунок обрано — можна ще трохи побути серед книжок.'
+          : 'У книгарні тихо. До розмови можна повернутися.',
     );
   }
   follow(character, path, amount) {
@@ -361,9 +365,11 @@ class Bookshop extends Phaser.Scene {
           updateCharacter(mara, next, this.reduced);
           if (this.reduced || !this.arrival.length) {
             this.state = transition(this.state, { type: 'arrive' });
-            this.toast(this.story
-              ? `До книгарні завітала ${this.story.visitor}.`
-              : 'Мара зняла мокрий шарф. Підійдіть, щоб привітатися.');
+            this.toast(
+              this.story
+                ? `До книгарні завітала ${this.story.visitor}.`
+                : 'Мара зняла мокрий шарф. Підійдіть, щоб привітатися.',
+            );
             if (!this.story)
               $('#objective').textContent = 'Допоможіть Марі обрати книжку на подарунок.';
           }

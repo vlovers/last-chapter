@@ -104,8 +104,10 @@ export class FiveDayStory {
     return dayOf(this.chapter.stage);
   }
   get visitor(): string {
-    return stagePeople[this.stage]?.name ?? (this.stage === 'season-complete'
-      ? 'Завершення історії' : 'Наступний день');
+    return (
+      stagePeople[this.stage]?.name ??
+      (this.stage === 'season-complete' ? 'Завершення історії' : 'Наступний день')
+    );
   }
   get actor(): string | null {
     return stagePeople[this.stage]?.actor ?? null;
@@ -114,7 +116,9 @@ export class FiveDayStory {
     return storyProgress(this.stage);
   }
   get notes(): readonly string[] {
-    return journalFacts.filter(([flag]) => this.chapter.flags.includes(flag)).map(([, text]) => text);
+    return journalFacts
+      .filter(([flag]) => this.chapter.flags.includes(flag))
+      .map(([, text]) => text);
   }
   get orders() {
     return completedOrders(this.chapter);
@@ -163,8 +167,18 @@ export class FiveDayStory {
       return {
         id: option.id,
         label: option.label,
-        ...(book ? { book: { title: book.title, genre: book.genre, length: book.length,
-          blurb: book.blurb, readerFit: book.readerFit, possibleImpact: book.possibleImpact } } : {}),
+        ...(book
+          ? {
+              book: {
+                title: book.title,
+                genre: book.genre,
+                length: book.length,
+                blurb: book.blurb,
+                readerFit: book.readerFit,
+                possibleImpact: book.possibleImpact,
+              },
+            }
+          : {}),
       };
     });
     if (!choices.length && sequence[this.stage])

@@ -13,7 +13,11 @@ export class DialogueUI {
     this.close = document.querySelector('#close-dialogue');
     this.onChoose = onChoose;
     this.close.addEventListener('click', onClose, options);
-    this.portrait.addEventListener('error', () => this.useFallback('mara-portrait', this.name.textContent), options);
+    this.portrait.addEventListener(
+      'error',
+      () => this.useFallback('mara-portrait', this.name.textContent),
+      options,
+    );
     this.element.addEventListener(
       'keydown',
       (event) => {
@@ -59,7 +63,8 @@ export class DialogueUI {
       const id = ['thoughtful', 'firm'].includes(node.mood) ? `mara-${node.mood}` : 'mara-portrait';
       const path = node.portrait ?? ASSET_MANIFEST.find((entry) => entry.id === id).path;
       if (this.portrait.getAttribute('src') !== path) this.portrait.src = path;
-      if (this.portrait.complete && !this.portrait.naturalWidth) this.useFallback('mara-portrait', node.speaker);
+      if (this.portrait.complete && !this.portrait.naturalWidth)
+        this.useFallback('mara-portrait', node.speaker);
     } else this.useFallback('object');
     this.close.textContent = '×';
     this.close.setAttribute(

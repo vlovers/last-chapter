@@ -106,7 +106,14 @@ export function createCharacterSheets(scene, names = ['player', 'mara']) {
     DIRECTIONS.forEach((direction, row) => {
       for (let frame = 0; frame < 6; frame++) {
         const index = row * 6 + frame;
-        drawPerson(context, index * 32, direction, frame, name === 'mara', VISITOR_PALETTES[name] ?? {});
+        drawPerson(
+          context,
+          index * 32,
+          direction,
+          frame,
+          name === 'mara',
+          VISITOR_PALETTES[name] ?? {},
+        );
         texture.add(index, 0, index * 32, 0, 32, 48);
       }
     });

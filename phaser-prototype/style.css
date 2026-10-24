@@ -593,10 +593,14 @@ body.reduced #dialogue {
 }
 #story-panel h2 {
   margin: 0 0 14px;
-  font: 24px Georgia, serif;
+  font:
+    24px Georgia,
+    serif;
 }
 #story-panel h3 {
-  font: 18px Georgia, serif;
+  font:
+    18px Georgia,
+    serif;
 }
 .story-notes {
   line-height: 1.7;

@@ -36,7 +36,10 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     for (const day of story.progress) {
       const item = element('li', String(day.day), `day-step day-step--${day.status}`);
       item.title = day.label;
-      item.setAttribute('aria-label', `${day.label} · ${day.status === 'completed' ? 'завершено' : day.status === 'current' ? 'зараз' : 'попереду'}`);
+      item.setAttribute(
+        'aria-label',
+        `${day.label} · ${day.status === 'completed' ? 'завершено' : day.status === 'current' ? 'зараз' : 'попереду'}`,
+      );
       if (day.status === 'current') item.setAttribute('aria-current', 'step');
       timeline.append(item);
     }
@@ -54,7 +57,11 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       panel.append(notes, element('h3', 'Замовлення відвідувачів'));
       for (const order of story.orders) {
         const receipt = element('article', '', 'story-receipt');
-        receipt.append(element('strong', order.customer), element('span', order.book.title), element('small', order.note));
+        receipt.append(
+          element('strong', order.customer),
+          element('span', order.book.title),
+          element('small', order.note),
+        );
         panel.append(receipt);
       }
       if (!story.orders.length) panel.append(element('p', 'Ще немає виконаних замовлень.'));
@@ -62,20 +69,29 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       panel.append(element('h2', 'Книжки на полицях'));
       const filters = element('div', '', 'story-filters');
       const labels: readonly [CatalogFilter, string][] = [
-        ['all', 'Усі'], ['mystery', 'Детективи'], ['literary', 'Проза та листи'],
+        ['all', 'Усі'],
+        ['mystery', 'Детективи'],
+        ['literary', 'Проза та листи'],
       ];
       for (const [value, label] of labels) {
         const button = element('button', label);
         button.type = 'button';
         button.setAttribute('aria-pressed', String(filter === value));
-        button.addEventListener('click', () => { filter = value; refresh(); });
+        button.addEventListener('click', () => {
+          filter = value;
+          refresh();
+        });
         filters.append(button);
       }
       panel.append(filters);
       const shelf = element('div', '', 'story-book-grid');
       for (const book of story.catalog(filter)) {
         const card = element('article', '', 'story-book');
-        card.append(element('h3', book.title), element('small', `${book.genre} · ${book.length}`), element('p', book.blurb));
+        card.append(
+          element('h3', book.title),
+          element('small', `${book.genre} · ${book.length}`),
+          element('p', book.blurb),
+        );
         const details = element('details', '');
         const summary = element('summary', 'Чому варто прочитати');
         details.append(summary, element('p', book.readerFit), element('p', book.possibleImpact));

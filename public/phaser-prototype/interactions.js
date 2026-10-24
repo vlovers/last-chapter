@@ -77,7 +77,9 @@ export class Interactions {
       button.style.top = `${rect.y / 3.6}%`;
       button.style.width = `${rect.w / 6.4}%`;
       button.style.height = `${rect.h / 3.6}%`;
-      button.hidden = state.mode !== 'explore' || (spot.id === 'mara' && (state.mara !== 'ready' || state.visitorVisible === false));
+      button.hidden =
+        state.mode !== 'explore' ||
+        (spot.id === 'mara' && (state.mara !== 'ready' || state.visitorVisible === false));
       button.classList.toggle('nearby', spot === this.nearest);
     }
     this.hint.hidden = !this.nearest || state.mode !== 'explore';
