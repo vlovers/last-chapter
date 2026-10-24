@@ -1,306 +1,163 @@
-/* Original Phaser proof of concept; no third-party art assets. */
+/* Original 2.5D bookstore art study. All pixels are drawn locally; no third-party assets. */
+/* global Phaser */
 const status = document.querySelector('#status');
-const W = 640,
-  H = 360;
-const palette = {
-  wall: 0x4b3443,
-  trim: 0x91614f,
-  floor: 0x654550,
-  floorLine: 0x92635a,
-  dark: 0x292333,
-  wood: 0xb27a57,
-  light: 0xf3bf81,
-  teal: 0x71928b,
-  leaf: 0x78926b,
-  rose: 0xbd786b,
+const W = 640;
+const H = 360;
+const C = {
+  void: 0x201b27, wall: 0x3e303e, plaster: 0x624454, wood: 0x9b604c,
+  woodLight: 0xc38a61, gold: 0xf0bd7e, dark: 0x302837, floor: 0x825646,
+  floorLight: 0xa77455, teal: 0x4b7976, jade: 0x769a82, red: 0xb36a5f,
+  cream: 0xe6c19a, ink: 0x43333c,
 };
+const palettes = [0x9a6565,0xd7a06d,0x698c88,0x6d6884,0xc6b28a,0x9b775b,0x738c70];
 class Bookshop extends Phaser.Scene {
-  constructor() {
-    super('bookshop');
-  }
+  constructor() { super('bookshop'); }
   create() {
-    this.cameras.main.setBackgroundColor('#241c2b');
-    const g = this.add.graphics();
-    const rect = (x, y, w, h, color) => {
-      g.fillStyle(color);
-      g.fillRect(x, y, w, h);
-    };
-    rect(0, 0, W, H, palette.wall);
-    rect(0, 235, W, 125, palette.floor);
-    for (let y = 235; y < H; y += 22) {
-      rect(0, y, W, 3, palette.floorLine);
-      for (let x = (((y / 22) | 0) % 2) * 35; x < W; x += 70) rect(x, y + 4, 2, 18, 0x4c3644);
+    this.cameras.main.setBackgroundColor('#201b27');
+    const g = this.add.graphics().setDepth(0);
+    const r = (x,y,w,h,c) => { g.fillStyle(c); g.fillRect(x,y,w,h); };
+    // Orthographic three-quarter room: a visible walkable floor, not a flat facade.
+    r(0,0,W,H,C.void);
+    r(13,9,614,155,C.wall);
+    r(21,17,598,140,C.plaster);
+    for(let y=20;y<157;y+=22) r(21,y,598,1,0x70505b);
+    for(let x=24;x<619;x+=35) r(x,18,2,136,0x6a4853);
+    r(13,149,614,11,C.wood);
+    r(21,159,598,184,C.floor);
+    for(let y=159,row=0;y<343;y+=22,row++){
+      r(21,y,598,3,C.floorLight);
+      for(let x=21+(row%2)*38;x<619;x+=76) r(x,y+3,2,19,0x67434a);
+      for(let x=34+(row%2)*27;x<600;x+=81) r(x,y+11,17,1,0x96624f);
     }
-    rect(0, 0, W, 12, 0x352635);
-    rect(0, 228, W, 8, palette.trim);
-    // Tall shelves, stocked with varied book spines.
-    for (const sx of [28, 158, 502]) {
-      rect(sx, 38, 104, 200, palette.trim);
-      rect(sx + 8, 45, 88, 184, palette.dark);
-      for (let row = 0; row < 3; row++) {
-        const sy = 49 + row * 57;
-        for (let i = 0; i < 11; i++) {
-          const colors = [palette.rose, palette.teal, palette.light, 0x8a7789, 0xc18e73];
-          const height = 27 + ((i * 7 + row * 11) % 17);
-          rect(sx + 10 + i * 8, sy + 44 - height, 6, height, colors[(i + row) % colors.length]);
-          if (i % 3 === 0)
-            rect(sx + 12 + i * 8, sy + 48 - height, 1, Math.max(4, height - 8), 0xe7cda4);
+    r(12,9,9,337,C.wood);r(619,9,9,337,C.wood);r(12,342,616,7,C.dark);
+    // Window, weather and Bellwick's rooftops.
+    r(249,22,144,117,C.dark);r(255,28,132,105,0x5d7c89);
+    r(255,79,132,54,0xa0787d);
+    for(let i=0;i<8;i++){
+      const x=255+i*17, h=18+(i*7)%24;
+      r(x,133-h,19,h,0x4c5068);r(x+6,125-h,3,5,C.gold);
+    }
+    r(317,28,7,105,C.woodLight);r(255,74,132,6,C.woodLight);
+    r(245,18,152,9,C.wood);r(245,133,152,9,C.wood);
+    this.rain=this.add.graphics().setDepth(2);
+    this.drops=Array.from({length:55},(_,i)=>({x:258+(i*31)%127,y:30+(i*47)%98,s:1+i%3}));
+    // Detailed wooden shelves, each with a footprint and visible side face.
+    const shelf=(x,y,w,h,seed)=>{
+      r(x+7,y+8,w,h,C.dark);r(x,y,w,h,C.wood);r(x+5,y+5,w-10,h-10,0x342b37);
+      for(let level=0;level<3;level++){
+        const sy=y+9+level*((h-16)/3);
+        for(let i=0;i<Math.floor((w-15)/7);i++){
+          const bh=12+((i*11+seed*7+level*5)%12);
+          const bx=x+8+i*7, by=sy+23-bh;
+          r(bx,by,5,bh,palettes[(i+level+seed)%palettes.length]);
+          if(i%4===0)r(bx+2,by+4,1,bh-7,C.cream);
         }
-        rect(sx + 5, sy + 44, 94, 6, 0xc28c66);
+        r(x+3,sy+23,w-6,5,C.woodLight);
       }
+      r(x+w-7,y+5,7,h-10,0x714651);
+      r(x+7,y+h, w-7,9,0x543943);
+    };
+    shelf(29,29,94,117,1);shelf(129,29,94,117,3);shelf(409,29,93,117,5);shelf(509,29,94,117,2);
+    // Back wall: a notice board, reading lamp, and framed landscape.
+    r(230,21,12,109,C.wood);
+    r(230,50,12,6,C.gold);
+    r(230,57,12,13,0xceb084);
+    r(376,20,22,25,C.wood);
+    r(380,24,14,17,0x688984);
+    r(383,29,8,8,C.gold);
+    // Carpet creates an explicit navigable reading zone.
+    r(265,205,285,116,0x5b3944);r(274,214,267,98,0xa65f56);
+    r(281,221,253,84,0x713f4c);
+    for(let i=0;i<9;i++)r(289+i*27,225,14,3,C.gold);
+    for(let i=0;i<9;i++)r(289+i*27,300,14,3,C.gold);
+    // Reusable pixel-art furniture is drawn as separate depth-sorted game objects.
+    const piece=(x,y,draw)=>{const p=this.add.graphics({x,y}).setDepth(y);const f=(a,b,w,h,c)=>{p.fillStyle(c);p.fillRect(a,b,w,h);};draw(f);return p;};
+    piece(160,261,f=>{
+      f(-89,-18,178,19,C.woodLight);f(-85,1,170,50,C.wood);f(-79,6,158,36,0x75464b);
+      for(let i=0;i<4;i++)f(-70+i*37,11,29,24,0x8f5750);
+      f(-85,48,170,7,C.dark);
+      f(-63,-25,46,7,C.gold);f(-59,-33,46,8,C.teal);f(-54,-39,43,6,C.red);
+      f(12,-24,29,8,C.cream);f(17,-30,20,6,C.gold);
+      f(57,-24,12,11,0x6f8d87);f(59,-28,8,5,C.cream);
+    });
+    piece(365,261,f=>{
+      f(-49,-7,98,15,C.dark);f(-52,-17,104,24,C.wood);f(-46,-12,92,15,C.woodLight);
+      f(-43,-8,86,9,0x895754);f(-36,-13,28,12,C.teal);f(-33,-16,28,3,C.gold);
+      f(6,-10,24,11,C.cream);f(8,-13,21,3,C.red);
+      f(-43,7,9,23,C.wood);f(34,7,9,23,C.wood);
+    });
+    piece(484,286,f=>{
+      f(-27,-43,54,47,C.dark);f(-22,-39,44,40,C.teal);f(-27,-15,54,24,0x9c6d67);
+      f(-19,-9,38,14,0xc48b75);f(-13,-28,25,15,C.cream);
+      f(-24,9,8,10,C.wood);f(16,9,8,10,C.wood);
+    });
+    piece(575,314,f=>{
+      f(-29,-25,58,30,C.dark);f(-26,-22,52,25,C.wood);
+      for(let i=0;i<7;i++)f(-22+i*7,-32-(i%3)*4,6,19,palettes[i]);
+      f(-24,-1,48,4,C.woodLight);
+    });
+    piece(55,303,f=>{f(-22,-20,44,24,C.dark);f(-18,-23,36,25,C.woodLight);f(-12,-16,24,16,C.cream);f(-7,-9,14,2,C.wood);});
+    piece(556,218,f=>{
+      f(-15,-3,30,23,C.wood);f(-12,-8,24,11,C.woodLight);
+      f(-2,-44,5,38,C.jade);
+      for(const [x,y] of [[-23,-41],[9,-50],[-19,-29],[7,-32],[-7,-56]])f(x,y,22,13,C.jade);
+    });
+    // Door with a visible step and entrance rug.
+    r(571,147,49,72,C.dark);r(578,154,35,58,C.wood);r(583,161,24,44,0x644453);r(602,185,4,4,C.gold);
+    r(560,218,60,9,C.woodLight);r(548,232,72,20,0x523a42);
+    // Warm lamp and ambient glow.
+    r(318,0,4,48,C.woodLight);r(298,48,44,5,C.gold);
+    g.fillStyle(C.gold);g.fillTriangle(306,36,335,36,346,51);g.fillTriangle(306,36,295,51,346,51);
+    const halo=this.add.circle(320,71,58,0xffc885,.07).setBlendMode(Phaser.BlendModes.ADD).setDepth(3);
+    this.tweens.add({targets:halo,alpha:{from:.6,to:1},duration:1800,yoyo:true,repeat:-1});
+    // Two original 16px-style characters with a shared sprite drawing function.
+    const character=(x,y,coat,hair)=>{
+      const container=this.add.container(x,y).setDepth(y);
+      const p=this.add.graphics();container.add(p);
+      const draw=(step=false)=>{
+        p.clear();const f=(a,b,w,h,c)=>{p.fillStyle(c);p.fillRect(a,b,w,h);};
+        f(-7,0,6,8,C.dark);f(2,step?2:0,6,8,C.dark);
+        f(-9,-19,18,20,coat);f(-6,-36,12,17,0xe8b58d);
+        f(-8,-40,16,9,hair);f(-9,-33,4,12,hair);f(5,-33,4,12,hair);
+        f(-4,-28,2,2,C.ink);f(3,-28,2,2,C.ink);f(-2,-22,4,2,C.red);
+      };draw();return {container,draw};
+    };
+    const reader=character(100,212,0x81607e,0x503842);
+    this.tweens.add({targets:reader.container,y:215,duration:1400,yoyo:true,repeat:-1,onUpdate:()=>reader.container.setDepth(reader.container.y)});
+    const mara=character(584,237,0x688e86,0x513740);
+    this.tweens.add({targets:mara.container,x:403,y:265,duration:3900,ease:'Sine.easeInOut',onUpdate:()=>{
+      mara.container.setDepth(mara.container.y);mara.draw(Math.floor(this.time.now/170)%2===0);
+    },onComplete:()=>{mara.draw();status.textContent='Мара підійшла до столика. «Тут так затишно, коли надворі дощить».';
+    }});
+    // Native pointer targets plus keyboard-accessible HTML controls below the canvas.
+    const spots=[
+      {x:29,y:29,w:195,h:120,label:'Книжкові полиці',text:'На полицях стоять історії, які чекають на своїх читачів.'},
+      {x:249,y:22,w:144,h:117,label:'Дощове вікно',text:'За вікном Беллвік повільно занурюється в осінній вечір.'},
+      {x:70,y:235,w:180,h:79,label:'Прилавок',text:'Тут зберігаються замовлення, записки й теплий чай.'},
+      {x:541,y:159,w:34,h:69,label:'Рослина',text:'Зелень оживляє навіть найпохмуріший день.'},
+      {x:305,y:235,w:120,h:62,label:'Читацький столик',text:'Книжки відкриті на найцікавіших сторінках.'},
+    ];
+    for(const spot of spots){
+      const zone=this.add.zone(spot.x,spot.y,spot.w,spot.h).setOrigin(0).setInteractive({useHandCursor:true});
+      zone.on('pointerdown',()=>{status.textContent=spot.text;});
     }
-    // Rainy window with silhouette rooftops.
-    rect(286, 30, 190, 168, palette.trim);
-    rect(294, 38, 174, 152, 0x526879);
-    rect(294, 130, 174, 60, 0x9a7886);
-    for (let i = 0; i < 9; i++) {
-      const x = 294 + i * 20;
-      rect(x, 155 + (i % 3) * 8, 20, 40, 0x4b465e);
-      rect(x + 7, 172 + (i % 2) * 8, 4, 7, 0xf0bc75);
+    const controls=document.querySelector('#interactions');
+    controls.replaceChildren();
+    for(const spot of spots){
+      const button=document.createElement('button');button.type='button';button.textContent=spot.label;
+      button.addEventListener('click',()=>{status.textContent=spot.text;});
+      controls.append(button);
     }
-    rect(377, 38, 7, 152, palette.wood);
-    rect(294, 113, 174, 7, palette.wood);
-    this.rain = this.add.graphics().setDepth(2);
-    this.drops = Array.from({ length: 45 }, (_, i) => ({
-      x: 296 + ((i * 47) % 168),
-      y: 40 + ((i * 23) % 145),
-      s: 1 + (i % 3),
-    }));
-    // Pendant lamp and cozy halo.
-    rect(241, 0, 5, 61, palette.trim);
-    rect(216, 60, 54, 7, palette.light);
-    g.fillStyle(palette.light);
-    g.fillTriangle(228, 44, 258, 44, 274, 63);
-    g.fillTriangle(228, 44, 216, 63, 274, 63);
-    this.add.circle(244, 75, 68, 0xffc785, 0.085).setBlendMode(Phaser.BlendModes.ADD);
-    // Rug and reading nook.
-    rect(278, 273, 220, 68, 0x9c605b);
-    rect(286, 281, 204, 52, 0x704452);
-    rect(299, 286, 178, 4, 0xe4a86e);
-    rect(299, 327, 178, 4, 0xe4a86e);
-    rect(454, 210, 35, 34, 0x765a64);
-    rect(460, 218, 25, 25, 0xb78571);
-    rect(453, 240, 45, 10, 0xd29d74);
-    // Checkout counter, objects and book stacks.
-    rect(108, 218, 182, 20, 0xc48b61);
-    rect(110, 237, 180, 78, 0x885454);
-    rect(121, 249, 158, 57, 0x6c414a);
-    rect(123, 202, 62, 15, 0x9e7374);
-    rect(130, 193, 61, 9, 0xc89473);
-    rect(135, 185, 56, 8, 0x6b8d8a);
-    rect(205, 204, 32, 14, 0xd5bb96);
-    rect(209, 198, 24, 6, 0xe8d4b0);
-    rect(251, 208, 17, 10, 0xf2d0a3);
-    // Indoor greenery.
-    rect(470, 204, 27, 26, 0xbb7959);
-    rect(480, 158, 5, 48, 0x71926b);
-    for (const [x, y] of [
-      [463, 160],
-      [489, 151],
-      [467, 179],
-      [491, 175],
-      [478, 143],
-    ])
-      rect(x, y, 18, 13, palette.leaf);
-    // Door on the right, with a brass handle.
-    rect(564, 218, 58, 121, 0x372a36);
-    rect(571, 225, 45, 107, 0x8b574e);
-    rect(580, 235, 27, 71, 0x5c4350);
-    rect(600, 279, 5, 5, palette.light);
-    // Art Pass 1: foreground objects drawn in their own Phaser layers.
-    // These independent GameObjects can later be replaced with licensed sprite sheets.
-    const prop = (x, y, draw, depth = y) => {
-      const art = this.add.graphics({ x, y }).setDepth(depth);
-      draw(art);
-      return art;
-    };
-    const fill = (g, x, y, w, h, color) => {
-      g.fillStyle(color);
-      g.fillRect(x, y, w, h);
-    };
-    // A low table with a patterned runner, scattered books and a reading lamp.
-    prop(335, 279, (p) => {
-      fill(p, -38, -9, 76, 34, 0x3c2936);
-      fill(p, -42, -17, 84, 32, 0x9f6855);
-      fill(p, -37, -12, 74, 22, 0xc28b65);
-      fill(p, -32, -7, 64, 12, 0x744953);
-      fill(p, -28, -4, 56, 7, 0x9d6d60);
-      fill(p, -23, -11, 18, 10, 0x638c8b);
-      fill(p, -21, -13, 18, 3, 0xf0c38c);
-      fill(p, 3, -9, 21, 10, 0xe0b582);
-      fill(p, 6, -12, 17, 3, 0x9c6862);
-      fill(p, 29, -12, 6, 8, 0xeacba2);
-    });
-    // Upholstered armchair and a small cushion.
-    prop(426, 296, (p) => {
-      fill(p, -19, -25, 38, 38, 0x473442);
-      fill(p, -15, -23, 30, 30, 0x64867c);
-      fill(p, -20, -4, 40, 18, 0x9d6d68);
-      fill(p, -14, -1, 28, 11, 0xb98779);
-      fill(p, -8, -13, 15, 10, 0xd9ae84);
-      fill(p, -18, 13, 5, 6, 0x4e3541);
-      fill(p, 13, 13, 5, 6, 0x4e3541);
-    });
-    // Book crate, its contents, and loose parcels near the entrance.
-    prop(548, 314, (p) => {
-      fill(p, -21, -17, 42, 27, 0x70434b);
-      fill(p, -24, -20, 48, 7, 0xb7825f);
-      fill(p, -18, -15, 36, 20, 0x9d6c55);
-      for (let i = 0; i < 6; i++) {
-        fill(
-          p,
-          -15 + i * 6,
-          -24 - (i % 3) * 3,
-          5,
-          15 + (i % 3) * 3,
-          [0x668982, 0xe2ae77, 0xb67870][i % 3],
-        );
-      }
-      fill(p, -19, 1, 38, 3, 0xc3936e);
-    });
-    // Detailed floor clutter makes the room feel lived-in rather than a showroom.
-    prop(54, 292, (p) => {
-      fill(p, -17, -14, 34, 24, 0xa77357);
-      fill(p, -13, -11, 26, 17, 0xc69670);
-      fill(p, -9, -8, 18, 11, 0xe0b98c);
-      fill(p, -5, -6, 10, 2, 0x91675d);
-      fill(p, -5, -2, 8, 2, 0x91675d);
-    });
-    // A second visitor stays near the shelves.
-    const visitor2 = this.add.container(82, 251).setDepth(251);
-    const visitorArt = this.add.graphics();
-    visitor2.add(visitorArt);
-    fill(visitorArt, -8, -17, 16, 15, 0x6e4d70);
-    fill(visitorArt, -6, -30, 12, 15, 0xe2b18c);
-    fill(visitorArt, -8, -33, 16, 9, 0x5b404a);
-    fill(visitorArt, -5, -22, 2, 2, 0x352935);
-    fill(visitorArt, 3, -22, 2, 2, 0x352935);
-    fill(visitorArt, -6, -2, 5, 8, 0x41303d);
-    fill(visitorArt, 2, -2, 5, 8, 0x41303d);
-    this.tweens.add({
-      targets: visitor2,
-      y: 254,
-      duration: 1200,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut',
-    });
-    // Subtle lamp flicker, without flashing the whole screen.
-    const lampLight = this.add
-      .circle(245, 79, 52, 0xffd29b, 0.035)
-      .setBlendMode(Phaser.BlendModes.ADD)
-      .setDepth(3);
-    this.tweens.add({
-      targets: lampLight,
-      alpha: { from: 0.55, to: 0.95 },
-      duration: 1700,
-      yoyo: true,
-      repeat: -1,
-    });
-    // Phaser-native character: animated walk, idle and depth ordering.
-    this.visitor = this.add.container(590, 287).setDepth(290);
-    const vg = this.add.graphics();
-    this.visitor.add(vg);
-    const drawVisitor = (walking) => {
-      vg.clear();
-      vg.fillStyle(0x342b38);
-      vg.fillRect(-7, 13, 5, 9);
-      vg.fillRect(2, 13 + (walking ? 2 : 0), 5, 9);
-      vg.fillStyle(0x77918b);
-      vg.fillRect(-9, -3, 18, 18);
-      vg.fillStyle(0xe6b28e);
-      vg.fillRect(-7, -20, 14, 17);
-      vg.fillStyle(0x51353e);
-      vg.fillRect(-9, -24, 18, 8);
-      vg.fillRect(-9, -18, 4, 11);
-      vg.fillRect(5, -18, 4, 11);
-      vg.fillStyle(0x302733);
-      vg.fillRect(-4, -11, 2, 2);
-      vg.fillRect(3, -11, 2, 2);
-      vg.fillStyle(0xc77c74);
-      vg.fillRect(-2, -5, 4, 2);
-    };
-    drawVisitor(false);
-    this.tweens.add({
-      targets: this.visitor,
-      x: 333,
-      y: 260,
-      duration: 3500,
-      ease: 'Sine.easeInOut',
-      onUpdate: () => {
-        this.visitor.setDepth(this.visitor.y);
-        drawVisitor(Math.floor(this.time.now / 160) % 2 === 0);
-      },
-      onComplete: () => {
-        drawVisitor(false);
-        status.textContent = 'Мара завітала до книгарні. «Може, знайдемо щось цікаве для читання?»';
-      },
-    });
-    // Phaser-native hit areas: no permanent HTML hotspot labels.
-    const interact = (x, y, w, h, label, description) => {
-      const area = this.add.zone(x, y, w, h).setOrigin(0).setInteractive({ useHandCursor: true });
-      area.on('pointerover', () => {
-        this.input.setDefaultCursor('pointer');
-        status.textContent = label;
-      });
-      area.on('pointerout', () => this.input.setDefaultCursor('default'));
-      area.on('pointerdown', () => {
-        status.textContent = description;
-        this.cameras.main.flash(120, 255, 209, 158, false);
-      });
-    };
-    interact(
-      28,
-      38,
-      238,
-      200,
-      'Книжкові полиці',
-      'На полицях — старі видання, листівки та забуті історії.',
-    );
-    interact(286, 30, 190, 168, 'Дощове вікно', 'Беллвік ховається за осіннім дощем.');
-    interact(
-      108,
-      195,
-      182,
-      122,
-      'Робоче місце',
-      'На прилавку лежать книги, чашка чаю та замовлення.',
-    );
-    interact(
-      458,
-      140,
-      54,
-      100,
-      'Кімнатна рослина',
-      'Рослина пережила не одну осінь у цій книгарні.',
-    );
-    this.add
-      .text(16, 340, 'PHASER · ЕКСПЕРИМЕНТАЛЬНА СЦЕНА', {
-        fontFamily: 'monospace',
-        fontSize: '9px',
-        color: '#f2c995',
-      })
-      .setDepth(20);
+    this.add.text(17,344,'БЕЛЛВІК · КНИГАРНЯ',{fontFamily:'monospace',fontSize:'9px',color:'#efc390'}).setDepth(500);
   }
-  update(_time, delta) {
-    this.rain.clear();
-    this.rain.lineStyle(1, 0xc8d9e7, 0.45);
-    for (const d of this.drops) {
-      d.y += delta * 0.075 * d.s;
-      if (d.y > 189) d.y = 40;
-      this.rain.lineBetween(d.x, d.y, d.x - 3, d.y + 9);
+  update(_time,delta){
+    this.rain.clear();this.rain.lineStyle(1,0xc5d6dd,.5);
+    for(const drop of this.drops){
+      drop.y+=delta*.055*drop.s;if(drop.y>131)drop.y=30;
+      this.rain.lineBetween(drop.x,drop.y,drop.x-2,drop.y+7);
     }
   }
 }
-new Phaser.Game({
-  type: Phaser.AUTO,
-  parent: 'game',
-  width: W,
-  height: H,
-  pixelArt: true,
-  roundPixels: true,
-  backgroundColor: '#241c2b',
-  scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-  scene: [Bookshop],
-  render: { antialias: false },
-});
+new Phaser.Game({type:Phaser.AUTO,parent:'game',width:W,height:H,pixelArt:true,roundPixels:true,
+  backgroundColor:'#201b27',scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},
+  scene:[Bookshop],render:{antialias:false}});
