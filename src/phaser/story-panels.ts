@@ -1,6 +1,7 @@
 import type { FiveDayStory } from './five-day-story';
 import { answerConversation, conversationView, restoreConversation, startConversation, type ConversationSession } from './conversation-engine';
 import { maraBookClub } from './mara-book-club';
+import { maraAfterHours } from './mara-after-hours';
 
 declare global {
   interface Window {
@@ -23,13 +24,19 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const controls = { journal, catalog };
   let mode: 'journal' | 'catalog' | 'conversation' | null = null;
   const conversationKey = 'last-chapter:conversation:mara:v1';
+  let selectedTopic = maraBookClub;
+  const afterHoursKey = 'last-chapter:conversation:mara:after-hours:v1';
   let conversation: ConversationSession = startConversation(maraBookClub);
+  let afterHours: ConversationSession = startConversation(maraAfterHours);
   try {
     const saved = localStorage.getItem(conversationKey);
     if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
+    const savedAfterHours = localStorage.getItem(afterHoursKey);
+    if (savedAfterHours) afterHours = restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours;
   } catch { /* storage may be unavailable */ }
   const saveConversation = () => {
-    try { localStorage.setItem(conversationKey, JSON.stringify(conversation)); } catch { /* optional */ }
+    try { localStorage.setItem(conversationKey, JSON.stringify(conversation));
+      localStorage.setItem(afterHoursKey, JSON.stringify(afterHours)); } catch { /* optional */ }
   };
   const conversationButton = document.createElement('button');
   conversationButton.type = 'button';
@@ -67,20 +74,29 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     panel.hidden = mode === null;
     panel.replaceChildren();
     if (mode === 'conversation') {
-      panel.append(element('h2', maraBookClub.title));
+      const topicSelector = element('div', '', 'story-filters');
+      for (const topic of [maraBookClub, maraAfterHours]) {
+        const button = element('button', topic.title);
+        button.type = 'button';
+        button.setAttribute('aria-pressed', String(selectedTopic.id === topic.id));
+        button.addEventListener('click', () => { selectedTopic = topic; refresh(); });
+        topicSelector.append(button);
+      }
+      panel.append(topicSelector, element('h2', selectedTopic.title));
+      conversation = selectedTopic.id === maraBookClub.id ? conversation : afterHours;
       if (conversation.finished) {
         panel.append(element('p', 'Розмову завершено. Можна почати нову, зберігши попередні думки.'));
         const again = element('button', 'Поговорити знову');
         again.type = 'button';
-        again.addEventListener('click', () => { conversation = startConversation(maraBookClub, conversation.memories); saveConversation(); refresh(); });
+        again.addEventListener('click', () => { conversation = startConversation(selectedTopic, conversation.memories); if (selectedTopic.id === maraAfterHours.id) afterHours = conversation; saveConversation(); refresh(); });
         panel.append(again);
       } else {
-        const node = conversationView(maraBookClub, conversation);
+        const node = conversationView(selectedTopic, conversation);
         panel.append(element('h3', node.speaker), element('p', node.text));
         for (const choice of node.choices) {
           const button = element('button', choice.label);
           button.type = 'button';
-          button.addEventListener('click', () => { conversation = answerConversation(maraBookClub, conversation, choice.id); saveConversation(); refresh(); });
+          button.addEventListener('click', () => { conversation = answerConversation(selectedTopic, conversation, choice.id); if (selectedTopic.id === maraAfterHours.id) afterHours = conversation; saveConversation(); refresh(); });
           panel.append(button);
         }
       }
