@@ -60,7 +60,8 @@ class Bookshop extends Phaser.Scene {
       spot.label = `Продовжити історію · ${this.story.visitor}`;
       this.interactions.buttons.get('mara')?.setAttribute('aria-label', spot.label);
     }
-    $('#objective').textContent = `День ${this.story.day} · ${this.story.visitor}. Підійдіть до відвідувача.`;
+    $('#objective').textContent =
+      `День ${this.story.day} · ${this.story.visitor}. Підійдіть до відвідувача.`;
   }
   listen(target, event, handler) {
     target.addEventListener(event, handler, { signal: this.lifecycle.signal });
@@ -212,11 +213,12 @@ class Bookshop extends Phaser.Scene {
   }
   interact(spot) {
     if (!eligible(this.characters.player, spot, this.state)) return;
-    this.activeDialogue = this.story && spot.id === 'mara'
-      ? { kind: 'story' }
-      : spot.id === 'mara'
-        ? (this.savedConversation ?? openDialogue('mara', this.state.completed))
-        : openDialogue(spot.id);
+    this.activeDialogue =
+      this.story && spot.id === 'mara'
+        ? { kind: 'story' }
+        : spot.id === 'mara'
+          ? (this.savedConversation ?? openDialogue('mara', this.state.completed))
+          : openDialogue(spot.id);
     if (!this.activeDialogue) return;
     if (spot.id !== 'mara') this.state = transition(this.state, { type: 'inspect', id: spot.id });
     this.state = transition(this.state, { type: 'open' });
@@ -227,8 +229,10 @@ class Bookshop extends Phaser.Scene {
     this.showDialogue();
   }
   showDialogue() {
-    const node = this.activeDialogue?.kind === 'story'
-      ? this.story.open() : dialogueNode(this.activeDialogue, this.state);
+    const node =
+      this.activeDialogue?.kind === 'story'
+        ? this.story.open()
+        : dialogueNode(this.activeDialogue, this.state);
     if (!node) throw new Error('Missing dialogue node');
     for (const selector of ['#game', '#hotspots', '.hud', '#context-action'])
       $(selector).inert = true;
@@ -311,7 +315,8 @@ class Bookshop extends Phaser.Scene {
           if (this.reduced || !this.arrival.length) {
             this.state = transition(this.state, { type: 'arrive' });
             this.toast('Мара зняла мокрий шарф. Підійдіть, щоб привітатися.');
-            if (!this.story) $('#objective').textContent = 'Допоможіть Марі обрати книжку на подарунок.';
+            if (!this.story)
+              $('#objective').textContent = 'Допоможіть Марі обрати книжку на подарунок.';
           }
         } else updateCharacter(mara, mara, this.reduced, this.state.completed);
         const axis = (positive, negative) =>
