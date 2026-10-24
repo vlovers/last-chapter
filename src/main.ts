@@ -1,5 +1,6 @@
 import { opening } from './content/intro';
 import { bookForChoice, type Book } from './content/books';
+import { catalogEntries, matchingOrderOptions, type CatalogFilter } from './game/catalog';
 import {
   advanceChapter,
   advanceSecondDay,
@@ -24,6 +25,7 @@ if (!app) throw new Error('Не знайдено контейнер гри');
 let chapter = restoreChapter();
 let previewBook: Book | null = null;
 let activeSpot: ShopSpotId | null = null;
+let catalogFilter: CatalogFilter = 'all';
 
 function restoreChapter() {
   try {
@@ -364,7 +366,65 @@ function render(): void {
         activeSpot = null;
         render();
       });
-      inspection.append(inspectionHeading, inspectionText, closeInspection);
+      inspection.append(inspectionHeading, inspectionText);
+      if (activeSpot === 'shelves') {
+        const filterGroup = document.createElement('div');
+        filterGroup.className = 'catalog-filters';
+        filterGroup.setAttribute('role', 'group');
+        filterGroup.setAttribute('aria-label', 'Фільтр книжок');
+        const filters: readonly [CatalogFilter, string][] = [
+          ['all', 'Усі'],
+          ['mystery', 'Детективи'],
+          ['literary', 'Проза та листи'],
+        ];
+        for (const [id, title] of filters) {
+          const filterButton = document.createElement('button');
+          filterButton.type = 'button';
+          filterButton.textContent = title;
+          filterButton.setAttribute('aria-pressed', String(catalogFilter === id));
+          filterButton.addEventListener('click', () => {
+            catalogFilter = id;
+            render();
+          });
+          filterGroup.append(filterButton);
+        }
+        inspection.append(filterGroup);
+        const catalog = document.createElement('div');
+        catalog.className = 'catalog-list';
+        const story = stageStory(chapter.stage);
+        const node = currentNode(story, chapter.dialogue);
+        const options = availableOptions(story, chapter.dialogue);
+        const orderOptions = matchingOrderOptions(chapter.stage, node.id, options);
+        for (const entry of catalogEntries(catalogFilter)) {
+          const card = document.createElement('article');
+          card.className = 'catalog-entry';
+          const name = document.createElement('h3');
+          name.textContent = entry.title;
+          const genre = document.createElement('p');
+          genre.className = 'catalog-meta';
+          genre.textContent = `${entry.genre} · ${entry.length}`;
+          const blurb = document.createElement('p');
+          blurb.textContent = entry.blurb;
+          card.append(name, genre, blurb);
+          const availableOrder = orderOptions.find((option) => option.id === entry.id);
+          if (availableOrder) {
+            const recommend = document.createElement('button');
+            recommend.type = 'button';
+            recommend.textContent = `Порадити «${entry.title}»`;
+            recommend.addEventListener('click', () => {
+              chapter = chooseChapterOption(chapter, availableOrder.id);
+              activeSpot = null;
+              previewBook = null;
+              persistChapter();
+              render();
+            });
+            card.append(recommend);
+          }
+          catalog.append(card);
+        }
+        inspection.append(catalog);
+      }
+      inspection.append(closeInspection);
       storyPanel.append(inspection);
     }
   }
