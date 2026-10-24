@@ -1,11 +1,8 @@
 import type { ChapterState, ChapterStage } from './chapter';
 import { stageStory } from './chapter';
-import { currentNode } from './dialogue';
+import { currentNode, startDialogue } from './dialogue';
 import { noraVisit } from '../content/nora';
-import { irisDecision } from '../content/day-four-iris';
-import { maraDecision } from '../content/day-four-mara';
-import { startDialogue } from './dialogue';
-
+ 
 export const SAVE_KEY = 'last-chapter:save:v1';
 const VERSION = 1;
 

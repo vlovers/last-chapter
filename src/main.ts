@@ -88,7 +88,9 @@ function render(): void {
     'aria-label',
     'Інтерактивна книгарня з книжковими полицями, вікном і прилавком',
   );
+  illustration.classList.add('illustration--pixel');
   illustration.innerHTML = `
+    <img class="pixel-scene" src="/art/bookshop-pixel.svg" alt="" aria-hidden="true" />
     <div class="scene-wall-art" aria-hidden="true"><span>ОСТАННІЙ РОЗДІЛ</span></div>
     <div class="scene-window" aria-hidden="true"><div class="scene-sky"></div><div class="scene-roof"></div><div class="scene-leaves">✦ ✧ ✦</div><div class="scene-window-cross"></div></div>
     <div class="scene-bookshelf scene-bookshelf-left" aria-hidden="true">

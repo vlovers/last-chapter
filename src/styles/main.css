@@ -671,3 +671,18 @@ h1 {
 .season-epilogue p {
   margin: 0 0 10px;
 }
+
+/* Original pixel-grid bookshop vertical slice. Legacy CSS room remains a no-image fallback. */
+.illustration--pixel { background: #302638; }
+.pixel-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  z-index: 7;
+  pointer-events: none;
+}
+.illustration--pixel::before { z-index: 8; }
+.illustration--pixel::after { z-index: 9; }

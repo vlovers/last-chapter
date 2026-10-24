@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270" shape-rendering="crispEdges" role="img" aria-label="Осіння книгарня з дощем за вікном">
+<rect width="480" height="270" fill="#302638"/><rect y="0" width="480" height="192" fill="#483544"/>
+<rect x="8" y="8" width="464" height="182" fill="none" stroke="#655063" stroke-width="8"/>
+<!-- window and sky -->
+<rect x="290" y="26" width="148" height="132" fill="#5d3e45" stroke="#986347" stroke-width="10"/>
+<rect x="300" y="36" width="128" height="112" fill="#53677b"/>
+<rect x="300" y="96" width="128" height="52" fill="#9b6b70"/>
+<rect x="307" y="113" width="16" height="35" fill="#57465e"/><rect x="326" y="101" width="19" height="47" fill="#6c5264"/><rect x="351" y="117" width="21" height="31" fill="#57465e"/><rect x="380" y="107" width="21" height="41" fill="#665267"/>
+<path d="M300 131h128" stroke="#db9864" stroke-width="3"/>
+<g fill="#e5b67c"><rect x="313" y="125" width="3" height="5"/><rect x="337" y="116" width="3" height="5"/><rect x="392" y="122" width="3" height="5"/></g>
+<path d="M364 36v112M300 91h128" stroke="#ba835b" stroke-width="7"/>
+<g stroke="#b7c2cc" stroke-width="2" opacity=".6"><path d="M309 47v10m20 6v12m15-27v9m36 3v10m20-21v11m-90 47v8m30 0v10m43-18v12m26-7v11"/></g>
+<!-- left bookcase -->
+<rect x="20" y="32" width="194" height="176" fill="#6a433f"/><rect x="28" y="40" width="178" height="160" fill="#2a2636"/>
+<g fill="#a96d57"><rect x="28" y="89" width="178" height="9"/><rect x="28" y="141" width="178" height="9"/><rect x="28" y="191" width="178" height="9"/></g>
+<g fill="#bf7969"><rect x="36" y="51" width="11" height="38"/><rect x="61" y="47" width="12" height="42"/><rect x="99" y="56" width="11" height="33"/><rect x="140" y="50" width="11" height="39"/><rect x="171" y="45" width="12" height="44"/><rect x="36" y="106" width="11" height="35"/><rect x="76" y="103" width="11" height="38"/><rect x="123" y="101" width="11" height="40"/><rect x="164" y="109" width="11" height="32"/><rect x="53" y="158" width="11" height="33"/><rect x="102" y="155" width="11" height="36"/><rect x="144" y="162" width="11" height="29"/></g>
+<g fill="#7e9b92"><rect x="49" y="54" width="10" height="35"/><rect x="84" y="48" width="13" height="41"/><rect x="114" y="51" width="12" height="38"/><rect x="155" y="57" width="13" height="32"/><rect x="50" y="103" width="13" height="38"/><rect x="90" y="107" width="14" height="34"/><rect x="138" y="102" width="12" height="39"/><rect x="178" y="100" width="12" height="41"/><rect x="33" y="157" width="15" height="34"/><rect x="67" y="154" width="13" height="37"/><rect x="118" y="159" width="14" height="32"/><rect x="161" y="155" width="12" height="36"/></g>
+<g fill="#d8a76f"><rect x="77" y="57" width="6" height="32"/><rect x="128" y="48" width="9" height="41"/><rect x="186" y="57" width="10" height="32"/><rect x="67" y="110" width="6" height="31"/><rect x="109" y="110" width="10" height="31"/><rect x="153" y="106" width="8" height="35"/><rect x="83" y="162" width="14" height="29"/><rect x="177" y="160" width="12" height="31"/></g>
+<!-- lamp -->
+<rect x="246" width="5" height="39" fill="#a97c63"/><path d="M226 40h46l11 20h-68z" fill="#e5b67d"/><rect x="235" y="60" width="28" height="3" fill="#fff0ad"/>
+<!-- floor and counter -->
+<rect y="204" width="480" height="66" fill="#493445"/><path d="M0 235h480M0 255h480" stroke="#624651" stroke-width="3"/>
+<rect x="110" y="194" width="290" height="61" fill="#7a4b4c"/><rect x="102" y="185" width="306" height="16" fill="#bd875c"/><rect x="119" y="204" width="272" height="46" fill="none" stroke="#9d6856" stroke-width="6"/>
+<rect x="166" y="171" width="64" height="14" fill="#b46b66"/><rect x="174" y="166" width="64" height="6" fill="#d8a778"/><rect x="188" y="160" width="44" height="6" fill="#69818a"/>
+<rect x="327" y="161" width="20" height="24" fill="#d7b18c"/><rect x="346" y="165" width="6" height="13" fill="#d7b18c"/><rect x="330" y="157" width="14" height="4" fill="#f3d6ac"/>
+<!-- plant -->
+<rect x="438" y="184" width="26" height="27" fill="#b27657"/><rect x="444" y="179" width="14" height="5" fill="#e1a374"/>
+<g fill="#718c67"><rect x="448" y="143" width="6" height="39"/><rect x="431" y="148" width="16" height="9"/><rect x="457" y="152" width="17" height="9"/><rect x="436" y="136" width="12" height="9"/><rect x="451" y="128" width="12" height="13"/></g>
+<!-- dust particles -->
+<g fill="#ffd9a0" opacity=".65"><rect x="246" y="92" width="2" height="2"/><rect x="277" y="119" width="2" height="2"/><rect x="263" y="154" width="2" height="2"/></g>
+</svg>
