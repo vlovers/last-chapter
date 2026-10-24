@@ -1,6 +1,6 @@
 import type { ChapterState } from './chapter';
 
-export type ShopSpotId = 'shelves' | 'window' | 'counter' | 'plant';
+export type ShopSpotId = 'shelves' | 'window' | 'counter' | 'plant' | 'frank';
 export interface ShopSpot {
   readonly id: ShopSpotId;
   readonly title: string;
@@ -10,6 +10,7 @@ export interface ShopSpot {
 }
 
 export const shopSpots: readonly ShopSpot[] = [
+  { id: 'frank', title: 'Френк', description: 'Погладити кота', detail: 'Френк — маленький сірий девон-рекс із великими вухами й хвилястою шерстю. Він муркоче та притримує лапою закладку: «Не кожна таємниця просить, щоб її розкрили».', discoveryFlag: 'met_frank' },
   {
     id: 'shelves',
     title: 'Книжкові полиці',
