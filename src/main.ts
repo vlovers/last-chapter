@@ -1,4 +1,5 @@
 import { opening } from './content/intro';
+import { bookForChoice, type Book } from './content/books';
 import { advanceChapter, chooseChapterOption, stageStory, startChapter } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
@@ -7,6 +8,7 @@ import './styles/main.css';
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('Не знайдено контейнер гри');
 let chapter = restoreChapter();
+let previewBook: Book | null = null;
 
 function restoreChapter() {
   try {
@@ -57,22 +59,79 @@ function render(): void {
     const restart = document.createElement('button');
     restart.type = 'button';
     restart.textContent = 'Почати знову';
-    restart.addEventListener('click', () => { chapter = startChapter(); persistChapter(); render(); });
+    restart.addEventListener('click', () => { chapter = startChapter(); previewBook = null; persistChapter(); render(); });
     actions.append(restart);
   } else {
     const story = stageStory(chapter.stage);
     const node = currentNode(story, chapter.dialogue);
     dialogue.textContent = `${node.speaker}: «${node.text}»`;
-    for (const option of availableOptions(story, chapter.dialogue)) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.textContent = option.label;
-      button.addEventListener('click', () => {
-        chapter = chooseChapterOption(chapter, option.id);
-        persistChapter();
-        render();
-      });
-      actions.append(button);
+    if (node.id === 'order' && (chapter.stage === 'miller' || chapter.stage === 'mara')) {
+      const shelf = document.createElement('section');
+      shelf.className = 'book-shelf';
+      const shelfHeading = document.createElement('h2');
+      shelfHeading.textContent = 'Оберіть книжку для відвідувача';
+      shelf.append(shelfHeading);
+      for (const option of availableOptions(story, chapter.dialogue)) {
+        const book = bookForChoice(chapter.stage, node.id, option.id);
+        if (!book) continue;
+        const card = document.createElement('article');
+        card.className = 'book-card';
+        const title = document.createElement('h3');
+        title.textContent = book.title;
+        const meta = document.createElement('p');
+        meta.className = 'book-meta';
+        meta.textContent = `${book.genre} · ${book.length} · ${book.tone}`;
+        const blurb = document.createElement('p');
+        blurb.textContent = book.blurb;
+        const inspect = document.createElement('button');
+        inspect.type = 'button';
+        inspect.className = 'book-inspect';
+        inspect.textContent = previewBook?.id === book.id ? 'Згорнути подробиці' : 'Докладніше про книжку';
+        inspect.setAttribute('aria-expanded', String(previewBook?.id === book.id));
+        inspect.addEventListener('click', () => {
+          previewBook = previewBook?.id === book.id ? null : book;
+          render();
+        });
+        card.append(title, meta, blurb, inspect);
+        if (previewBook?.id === book.id) {
+          const details = document.createElement('div');
+          details.className = 'book-details';
+          const fit = document.createElement('p');
+          const fitHeading = document.createElement('strong');
+          fitHeading.textContent = 'Чому ця книжка підходить: ';
+          fit.append(fitHeading, document.createTextNode(book.readerFit));
+          const impact = document.createElement('p');
+          const impactHeading = document.createElement('strong');
+          impactHeading.textContent = 'Що може змінитися: ';
+          impact.append(impactHeading, document.createTextNode(book.possibleImpact));
+          const confirm = document.createElement('button');
+          confirm.type = 'button';
+          confirm.textContent = `Порадити «${book.title}»`;
+          confirm.addEventListener('click', () => {
+            chapter = chooseChapterOption(chapter, option.id);
+            previewBook = null;
+            persistChapter();
+            render();
+          });
+          details.append(fit, impact, confirm);
+          card.append(details);
+        }
+        shelf.append(card);
+      }
+      actions.append(shelf);
+    } else {
+      for (const option of availableOptions(story, chapter.dialogue)) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = option.label;
+        button.addEventListener('click', () => {
+          chapter = chooseChapterOption(chapter, option.id);
+          previewBook = null;
+          persistChapter();
+          render();
+        });
+        actions.append(button);
+      }
     }
     if (node.options.length === 0) {
       const next = document.createElement('button');
