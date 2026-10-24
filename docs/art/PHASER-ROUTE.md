@@ -1,7 +1,10 @@
-# Phaser prototype route
+# Phaser prototype — direct entry and lint fixes
 
-Run `npm run dev`, then visit **http://localhost:5173/phaser-prototype/**.
+The first route was in `public/`, where Vite's SPA fallback served the main game. The prototype is now available through two direct entries:
 
-The prototype HTML entry is now in the Vite project root at `phaser-prototype/index.html`. Vite serves that route as an HTML entry rather than falling back to the story app. The separate, original Phaser scene script remains at `public/phaser-prototype/scene.js`, reachable via `/phaser-prototype/scene.js`.
+- `/phaser-prototype/index.html`: explicit Vite HTML entry (most reliable during development).
+- `/phaser-prototype/`: directory route, enabled by `appType: 'mpa'` in Vite configuration.
 
-This prototype currently uses Phaser 3.90.0 from jsDelivr and requires internet access. The main game at `/` is unchanged. Run `npm run check` and visually verify the route after pulling.
+The prototype is listed as a build input so production output includes it. Only the standalone prototype script receives a read-only Phaser global for ESLint; ordinary game scripts remain unchanged. Browser-extension warnings from `evmAsk.js` / `contentscript.js` are unrelated to the prototype.
+
+Run `npm run check` and then open the **explicit** `http://localhost:5173/phaser-prototype/index.html` route. The page heading must contain `Phaser prototype`, and the main story UI must not appear. Phaser is loaded from CDN for this experiment; offline access is not supported. No changes to saves or current story implementation.

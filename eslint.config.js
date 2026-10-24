@@ -7,4 +7,5 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   { languageOptions: { globals: globals.browser } },
+  { files: ['public/phaser-prototype/**/*.js'], languageOptions: { globals: { Phaser: 'readonly' } } },
 );
