@@ -38,3 +38,15 @@ Public listing checks show a better-matched candidate than a generic RPG tileset
 ### Practical decision
 
 Prefer **PixelNestStudio.R** for furniture and bookstore props if the $1 purchase is acceptable; otherwise inspect the free Cozy Starter and feyza5 archives before deciding. Do not mix packs just because both are pixel art: compare camera angle, native pixel scale, outline weight and palette first. Characters/animation remain a separate asset decision. No pack has been downloaded or added to the repository in this pass; the source-page terms still need confirmation against the archive's included licence.
+
+
+## Prototype polish pass — reduced motion and touch accessibility
+
+Commit pass (2026-10-24):
+
+- The Phaser scene now reads `prefers-reduced-motion`. With reduced motion enabled, rain is drawn as a static overlay and the lamp pulse, visitor bob and visitor travel tween are disabled.
+- Interaction buttons now have a minimum 42px touch target, visible keyboard focus, hover feedback and a two-column layout on narrow screens.
+- The canvas uses `touch-action: manipulation` to avoid unnecessary touch gesture delays.
+- This is a usability/accessibility improvement only; it does not replace the placeholder graphics. The narrative engine and save data remain unchanged.
+
+Validation still required in the local checkout: `npm run check`, then inspect `/phaser-prototype/` with normal motion and OS reduced-motion enabled, desktop and mobile widths, and keyboard-only navigation. External Phaser CDN availability remains a prototype dependency.
