@@ -2,7 +2,7 @@ import type { ChapterState, ChapterStage } from './chapter';
 import { stageStory } from './chapter';
 import { currentNode, startDialogue } from './dialogue';
 import { noraVisit } from '../content/nora';
- 
+
 export const SAVE_KEY = 'last-chapter:save:v1';
 const VERSION = 1;
 

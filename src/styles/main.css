@@ -673,7 +673,9 @@ h1 {
 }
 
 /* Original pixel-grid bookshop vertical slice. Legacy CSS room remains a no-image fallback. */
-.illustration--pixel { background: #302638; }
+.illustration--pixel {
+  background: #302638;
+}
 .pixel-scene {
   position: absolute;
   inset: 0;
@@ -684,5 +686,9 @@ h1 {
   z-index: 7;
   pointer-events: none;
 }
-.illustration--pixel::before { z-index: 8; }
-.illustration--pixel::after { z-index: 9; }
+.illustration--pixel::before {
+  z-index: 8;
+}
+.illustration--pixel::after {
+  z-index: 9;
+}
