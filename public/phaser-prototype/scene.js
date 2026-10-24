@@ -4,17 +4,49 @@ const dialogue = document.querySelector('#dialogue');
 const dialogueText = document.querySelector('#dialogue-text');
 const dialogueChoices = document.querySelector('#dialogue-choices');
 const conversation = {
-  start: { text: 'За вікном знову дощ. Порадите щось на вечір?', options: [
-    ['Щось тепле й затишне', 'comfort'], ['Історію із загадкою', 'mystery'], ['Як минув твій день?', 'day'],
-  ] },
-  comfort: { text: 'Саме те, що потрібно. Візьму книжку й заварю чай із корицею.', options: [['Ще поговорити', 'start'], ['Попрощатися', 'end']] },
-  mystery: { text: 'Люблю, коли остання сторінка змінює все! Тільки не розповідайте фінал.', options: [['Ще поговорити', 'start'], ['Попрощатися', 'end']] },
-  day: { text: 'У пекарні сьогодні був гармидер. Але тут так тихо, що вже легше дихати.', options: [['Порадити книжку', 'start'], ['Попрощатися', 'end']] },
-  end: { text: 'Дякую за розмову. Ще побачимося!', options: [['Поговорити ще', 'start'], ['Закрити', null]] },
+  start: {
+    text: 'За вікном знову дощ. Порадите щось на вечір?',
+    options: [
+      ['Щось тепле й затишне', 'comfort'],
+      ['Історію із загадкою', 'mystery'],
+      ['Як минув твій день?', 'day'],
+    ],
+  },
+  comfort: {
+    text: 'Саме те, що потрібно. Візьму книжку й заварю чай із корицею.',
+    options: [
+      ['Ще поговорити', 'start'],
+      ['Попрощатися', 'end'],
+    ],
+  },
+  mystery: {
+    text: 'Люблю, коли остання сторінка змінює все! Тільки не розповідайте фінал.',
+    options: [
+      ['Ще поговорити', 'start'],
+      ['Попрощатися', 'end'],
+    ],
+  },
+  day: {
+    text: 'У пекарні сьогодні був гармидер. Але тут так тихо, що вже легше дихати.',
+    options: [
+      ['Порадити книжку', 'start'],
+      ['Попрощатися', 'end'],
+    ],
+  },
+  end: {
+    text: 'Дякую за розмову. Ще побачимося!',
+    options: [
+      ['Поговорити ще', 'start'],
+      ['Закрити', null],
+    ],
+  },
 };
 function showConversation(id = 'start') {
   const node = conversation[id];
-  if (!node) { dialogue.hidden = true; return; }
+  if (!node) {
+    dialogue.hidden = true;
+    return;
+  }
   dialogue.hidden = false;
   dialogueText.textContent = 'Мара: «' + node.text + '»';
   dialogueChoices.replaceChildren();
@@ -340,7 +372,8 @@ class Bookshop extends Phaser.Scene {
         onUpdate: () => mara.setDepth(mara.y),
         onComplete: () => {
           mara.setFrame(4);
-          if (dialogue.hidden) status.textContent = 'Мара біля столика. Натисніть на неї, щоб поговорити.';
+          if (dialogue.hidden)
+            status.textContent = 'Мара біля столика. Натисніть на неї, щоб поговорити.';
         },
       });
     }
