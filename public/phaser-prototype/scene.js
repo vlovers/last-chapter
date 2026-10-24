@@ -14,6 +14,7 @@ import { visitorEntrance } from './visitor-entrances.js';
 import { browsingRoute, visitorApproach, browsingAction } from './visitor-roaming.js';
 import { pauseVisitor, resumeVisitor, shouldBrowse } from './visitor-lifecycle.js';
 import { createVisitorBook } from './visitor-book.js';
+import { visitorReaction } from './visitor-reactions.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -455,6 +456,17 @@ class Bookshop extends Phaser.Scene {
           this.activeDialogue?.kind === 'mara' &&
             dialogueNode(this.activeDialogue, this.state)?.mood === 'warm',
         );
+      }
+      const speaking = this.story && this.state.mode === 'dialogue' && this.activeDialogue?.kind === 'story';
+      const stationary = this.state.mara === 'ready' && !this.roaming.path.length;
+      if (this.story && stationary && this.state.visitorVisible !== false) {
+        const reaction = visitorReaction(mara, player, speaking, time, this.reduced);
+        if (reaction.facing && (speaking || this.roaming.engaged)) {
+          mara.direction = reaction.facing;
+          updateCharacter(mara, mara, this.reduced);
+        }
+        mara.sprite.y = Math.round(mara.y + 1 - reaction.lift);
+        if (speaking) mara.sprite.setTint(reaction.glow);
       }
       this.visitorBook.update(
         mara,
