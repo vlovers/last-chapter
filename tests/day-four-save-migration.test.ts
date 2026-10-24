@@ -14,7 +14,9 @@ describe('Day 4 save compatibility', () => {
     expect(state?.flags).toContain('saw_envelope');
   });
   it('preserves completed Day 4 when Mara flags exist but Leo flags do not', () => {
-    const state = decodeSave(checkpoint(['iris_letter_choice_respected', 'mara_supported_independence']));
+    const state = decodeSave(
+      checkpoint(['iris_letter_choice_respected', 'mara_supported_independence']),
+    );
     expect(state?.stage).toBe('day4-complete');
     expect(state?.dialogue.node).toBe('end');
   });
