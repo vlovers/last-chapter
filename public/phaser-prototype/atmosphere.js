@@ -15,7 +15,6 @@ export function createAtmosphere(scene, lights, reduced) {
       rain.lineBetween(drop.x, drop.y, drop.x - 1, Math.min(drop.y < 69 ? 73 : 131, drop.y + 5));
     }
   };
-  draw();
   // Subtle environmental grade sits behind furniture and characters.
   const dayGrade = scene.add.graphics().setDepth(1.25);
   const moods = [
@@ -26,6 +25,7 @@ export function createAtmosphere(scene, lights, reduced) {
     { color: 0xf5c389, alpha: 0.085, rain: 0.22 },
   ];
   mood = moods[0];
+  draw();
   const applyDay = (day) => {
     mood = moods[Math.max(0, Math.min(moods.length - 1, day - 1))];
     dayGrade.clear().fillStyle(mood.color, mood.alpha).fillRect(21, 18, 598, 320);
