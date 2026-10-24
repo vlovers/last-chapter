@@ -59,13 +59,29 @@ function render(): void {
   app.replaceChildren();
   const container = document.createElement('main');
   container.className = 'scene';
+  container.dataset.stage = chapter.stage;
 
   const illustration = document.createElement('div');
   illustration.className = 'illustration';
   illustration.setAttribute('role', 'img');
   illustration.setAttribute('aria-label', 'Книгарня з книжковими полицями, вікном і теплою лампою');
-  illustration.innerHTML =
-    '<div class="window"><div class="moon"></div></div><div class="shelves"><span>▤ ▥ ▤ ▥</span><span>▥ ▤ ▥ ▤</span><span>▤ ▥ ▤ ▥</span></div><div class="lamp"></div><div class="counter"></div>';
+  illustration.innerHTML = `
+    <div class="scene-wall-art" aria-hidden="true"><span>ОСТАННІЙ РОЗДІЛ</span></div>
+    <div class="scene-window" aria-hidden="true"><div class="scene-sky"></div><div class="scene-roof"></div><div class="scene-leaves">✦ ✧ ✦</div><div class="scene-window-cross"></div></div>
+    <div class="scene-bookshelf scene-bookshelf-left" aria-hidden="true">
+      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="scene-bookshelf scene-bookshelf-right" aria-hidden="true">
+      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="scene-pendant" aria-hidden="true"></div>
+    <div class="scene-plant" aria-hidden="true"><span>❦</span></div>
+    <div class="scene-counter" aria-hidden="true"><div class="counter-books"></div><div class="counter-cup"></div></div>
+    <div class="scene-foreground" aria-hidden="true"></div>
+  `;
 
   const heading = document.createElement('h1');
   heading.textContent = `${opening.shop} · ${opening.town}`;
@@ -73,6 +89,7 @@ function render(): void {
   subtitle.className = 'subtitle';
   subtitle.textContent = stageNames[chapter.stage];
   const dialogue = document.createElement('blockquote');
+  dialogue.className = 'dialogue-card';
   const actions = document.createElement('div');
   actions.className = 'actions';
 
@@ -299,7 +316,10 @@ function render(): void {
     notes.append(item);
   }
   notebook.append(label, notes);
-  container.append(illustration, heading, subtitle, dialogue, actions, notebook);
+  const storyPanel = document.createElement('section');
+  storyPanel.className = 'story-panel';
+  storyPanel.append(heading, subtitle, dialogue, actions);
+  container.append(illustration, storyPanel, notebook);
   app.append(container);
 }
 render();
