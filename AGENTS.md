@@ -15,7 +15,7 @@ Last Chapter is an early-stage cozy pixel-art browser game about running a small
 
 ## Commands
 
-Use Node 22 and npm. `npm install` (temporary until lockfile), `npm run dev`, `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run check`. Do not claim success if verification was not run. Next mandatory tooling task: generate and commit a compatible lockfile, then switch installs to `npm ci`.
+Use Node 22 and npm. `npm ci`, `npm run dev`, `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run check`. Do not claim success if verification was not run.
 
 ## Narrative invariants
 

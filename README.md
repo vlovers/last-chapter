@@ -9,11 +9,11 @@ A browser-first **pixel-art small-town bookshop narrative game**. Customers arri
 Requires Node.js 22 and npm.
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
-Open the localhost URL displayed by Vite. Run `npm run check` for formatting, lint, type checks, unit tests and build. **Bootstrap gap:** a reproducible lockfile has not yet been generated in this environment; generate and commit `package-lock.json`, switch to `npm ci` in both CI and docs, and verify clean installation before treating the setup as complete.
+Open the localhost URL displayed by Vite. Run `npm run check` for formatting, lint, type checks, unit tests and build. A committed `package-lock.json` pins dependencies. CI uses `npm ci` for reproducible installation.
 
 ## Intended play loop
 

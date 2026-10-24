@@ -5,7 +5,7 @@
 - [x] Minimal browser-first structure, interaction spike and separated deterministic game rules.
 - [x] Agent instructions, engineering docs, PR/issue templates and initial CI definition.
 - [x] Unit test source for rumor provenance and phase transitions.
-- [ ] Generate committed lockfile and verify reproducible `npm ci`.
+- [x] Generate committed lockfile; CI now uses `npm ci` (verify new run).
 - [ ] Run quality gate and verify GitHub CI after PR.
 - [ ] Review repository ruleset/branch protection with owner (do not change automatically).
 
