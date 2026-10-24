@@ -801,3 +801,14 @@ h1 {
     animation: none;
   }
 }
+
+/* Mood changes with story stages, without extra save-state migration. */
+.illustration--pixel[data-mood='morning'] .pixel-scene { filter: brightness(1.12) saturate(.92); }
+.illustration--pixel[data-mood='morning'] .pixel-lamp-glow { opacity: .3; }
+.illustration--pixel[data-mood='evening'] .pixel-scene { filter: brightness(.74) saturate(1.12); }
+.illustration--pixel[data-mood='evening'] .pixel-lamp-glow { opacity: 1; background: radial-gradient(ellipse at 50% 10%, #ffc57a85, transparent 72%); }
+.illustration--pixel[data-mood='evening'] .pixel-rain { opacity: .55; }
+.illustration--pixel .shop-hotspot { min-height: 32px; }
+@media (prefers-reduced-motion: reduce) {
+  .illustration--pixel .pixel-rain, .illustration--pixel .pixel-lamp-glow { animation: none; }
+}

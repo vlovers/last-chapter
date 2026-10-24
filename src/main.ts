@@ -1,4 +1,5 @@
 import { storyProgress } from './game/progress';
+import { sceneMood } from './game/scene-mood';
 import { seasonEnding } from './game/endings';
 import { opening } from './content/intro';
 import { bookForChoice, type Book } from './content/books';
@@ -89,11 +90,12 @@ function render(): void {
     'Інтерактивна книгарня з книжковими полицями, вікном і прилавком',
   );
   illustration.classList.add('illustration--pixel');
+  illustration.dataset.mood = sceneMood(chapter.stage);
   illustration.innerHTML = `
-    <div class="pixel-stage" aria-hidden="true">
+    <div class="pixel-stage">
       <img class="pixel-scene" src="/art/bookshop-pixel.svg" alt="" />
-      <div class="pixel-rain"></div>
-      <div class="pixel-lamp-glow"></div>
+      <div class="pixel-rain" aria-hidden="true"></div>
+      <div class="pixel-lamp-glow" aria-hidden="true"></div>
     </div>
   `;
 
