@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { irisDecision } from '../src/content/day-four-iris';
-import { finishFourthDay, startFourthDay, type ChapterState } from '../src/game/chapter';
+import { advanceToDayFourMara, finishFourthDay, startFourthDay, type ChapterState } from '../src/game/chapter';
 import {
   availableOptions,
   selectOption,
@@ -37,8 +37,9 @@ describe('Day 4: Iris and the sealed letter', () => {
     }
     expect(state.flags).toContain('iris_letter_delivery_offered');
     expect(state.flags).toContain('iris_letter_choice_respected');
-    state = finishFourthDay(state);
-    expect(state.stage).toBe('day4-complete');
+    state = advanceToDayFourMara(state);
+    expect(state.stage).toBe('day4-mara');
+    expect(() => finishFourthDay(state)).toThrow('Finish Leo first');
     expect(decodeSave(encodeSave(state))).toEqual(state);
   });
 });

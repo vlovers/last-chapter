@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { maraDecision } from '../src/content/day-four-mara';
-import { advanceToDayFourMara, finishFourthDay, type ChapterState } from '../src/game/chapter';
+import {
+  advanceToDayFourLeo,
+  advanceToDayFourMara,
+  finishFourthDay,
+  type ChapterState,
+} from '../src/game/chapter';
 import {
   availableOptions,
   selectOption,
@@ -43,7 +48,9 @@ describe('Day 4: Mara has her own story', () => {
       const next = selectOption(maraDecision, state.dialogue, id);
       state = { ...state, dialogue: next, flags: [...new Set([...state.flags, ...next.flags])] };
     }
-    state = finishFourthDay(state);
+    state = advanceToDayFourLeo(state);
+    expect(state.stage).toBe('day4-leo');
+    expect(() => finishFourthDay(state)).toThrow('Finish the conversation');
     expect(state.flags).toContain('mara_letter_privacy_respected');
     expect(state.flags).toContain('iris_letter_choice_respected');
     expect(decodeSave(encodeSave(state))).toEqual(state);

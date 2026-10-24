@@ -19,10 +19,11 @@ describe('customer service ledger', () => {
   });
   it('does not duplicate receipts and survives save restoration', () => {
     const original = startChapter();
-    const flags = ['sold_witnesses', 'sold_witnesses', 'explored_shelves'];
+    const flags = ['sold_witnesses', 'explored_shelves'];
     const state = { ...original, flags, dialogue: { ...original.dialogue, flags } };
     const restored = decodeSave(encodeSave(state));
     expect(restored).not.toBeNull();
+    expect(completedOrders({ flags: ['sold_witnesses', 'sold_witnesses'] })).toHaveLength(1);
     expect(completedOrders(restored!)).toHaveLength(1);
     expect(completedOrders(restored!)[0]?.book.title).toBe('Ніхто не знає кінцівки');
   });

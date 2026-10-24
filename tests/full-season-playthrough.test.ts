@@ -48,6 +48,14 @@ const order: readonly ChapterStage[] = [
   'season-complete',
 ];
 
+const completionStages: readonly ChapterStage[] = [
+  'complete',
+  'day2-complete',
+  'day3-complete',
+  'day4-complete',
+  'season-complete',
+];
+
 const transitions: Partial<Record<ChapterStage, (state: ChapterState) => ChapterState>> = {
   miller: advanceChapter,
   mara: advanceChapter,
@@ -100,7 +108,8 @@ describe('Complete five-day save-and-resume playthrough', () => {
         expect(saved).toEqual(state);
         state = saved!;
         if (stage === 'season-complete') break;
-        if (availableOptions(stageStory(stage), state.dialogue).length) {
+        // Completion checkpoints reuse the last dialogue but reject new choices.
+        if (!completionStages.includes(stage) && availableOptions(stageStory(stage), state.dialogue).length) {
           state = finishScene(state, reverse);
         }
         const transition = transitions[stage];
