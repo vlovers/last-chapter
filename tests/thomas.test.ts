@@ -5,6 +5,7 @@ import {
   currentNode,
   selectOption,
   startDialogue,
+  type DialogueState,
   validateDialogue,
 } from '../src/game/dialogue';
 
@@ -17,7 +18,7 @@ describe('Thomas and rumor privacy', () => {
     );
   });
   it('allows a private conversation without disclosing counseling', () => {
-    let state = { ...startDialogue(thomasVisit), flags: ['rumor_heard'] };
+    let state: DialogueState = { ...startDialogue(thomasVisit), flags: ['rumor_heard'] };
     for (const id of ['greet', 'rumor', 'rumor-boundary', 'boundary-back', 'finish'])
       state = selectOption(thomasVisit, state, id);
     expect(currentNode(thomasVisit, state).id).toBe('end');

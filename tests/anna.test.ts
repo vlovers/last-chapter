@@ -5,6 +5,7 @@ import {
   currentNode,
   selectOption,
   startDialogue,
+  type DialogueState,
   validateDialogue,
 } from '../src/game/dialogue';
 
@@ -17,7 +18,7 @@ describe('Anna visit and rumor boundaries', () => {
     expect(availableOptions(annaVisit, state).some((option) => option.id === 'rumor')).toBe(false);
   });
   it('allows Anna to set boundaries when the rumor was heard', () => {
-    let state = { ...startDialogue(annaVisit), flags: ['rumor_heard'] };
+    let state: DialogueState = { ...startDialogue(annaVisit), flags: ['rumor_heard'] };
     for (const id of ['hello', 'rumor', 'rumor-apologize', 'respect-books', 'browse'])
       state = selectOption(annaVisit, state, id);
     expect(currentNode(annaVisit, state).id).toBe('end');

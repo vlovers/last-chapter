@@ -5,6 +5,7 @@ import {
   currentNode,
   selectOption,
   startDialogue,
+  type DialogueState,
   validateDialogue,
 } from '../src/game/dialogue';
 
@@ -15,7 +16,7 @@ describe('Nora and confidentiality', () => {
     expect(availableOptions(noraVisit, state).some((option) => option.id === 'rumor')).toBe(false);
   });
   it('allows respecting privacy without revealing client details', () => {
-    let state = { ...startDialogue(noraVisit), flags: ['rumor_heard'] };
+    let state: DialogueState = { ...startDialogue(noraVisit), flags: ['rumor_heard'] };
     for (const id of ['hello', 'rumor', 'rumor-respect', 'boundary-back', 'end'])
       state = selectOption(noraVisit, state, id);
     expect(currentNode(noraVisit, state).id).toBe('end');
