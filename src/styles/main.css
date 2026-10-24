@@ -1079,5 +1079,7 @@ body {
   z-index: 10;
 }
 @media (max-width: 600px) {
-  .scene-hint { display: none; }
+  .scene-hint {
+    display: none;
+  }
 }
