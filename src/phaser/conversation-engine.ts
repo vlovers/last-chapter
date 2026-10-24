@@ -71,9 +71,13 @@ export function validateTopic(topic: ConversationTopic): string[] {
   for (const id of ids) if (!exitReachable.has(id)) errors.push('No path to exit: ' + id);
   return errors;
 }
+export function normalizeMemories(memories: readonly string[]): string[] {
+  return [...new Set(memories.filter((memory) => memory.length > 0 && memory.length <= 120))].slice(-80);
+}
+
 export function startConversation(topic: ConversationTopic, memories: readonly string[] = []): ConversationSession {
   if (validateTopic(topic).length) throw new Error('Invalid conversation graph');
-  return { topic: topic.id, node: topic.entry, memories: [...memories], finished: false };
+  return { topic: topic.id, node: topic.entry, memories: normalizeMemories(memories), finished: false };
 }
 export function conversationView(topic: ConversationTopic, session: ConversationSession) {
   if (session.topic !== topic.id || session.finished) throw new Error('Conversation not active');
@@ -89,8 +93,8 @@ export function answerConversation(topic: ConversationTopic, session: Conversati
   return {
     topic: topic.id,
     node: choice.next === '__exit' ? session.node : choice.next,
-    memories: choice.remember && !session.memories.includes(choice.remember)
-      ? [...session.memories, choice.remember] : [...session.memories],
+    memories: normalizeMemories(choice.remember
+      ? [...session.memories, choice.remember] : session.memories),
     finished: choice.next === '__exit',
   };
 }
