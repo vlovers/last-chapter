@@ -281,6 +281,7 @@ class Bookshop extends Phaser.Scene {
     for (const selector of ['#game', '#hotspots', '.hud', '#context-action'])
       $(selector).inert = true;
     $('#context-action').hidden = true;
+    if (this.story) $('#story-tools').inert = true;
     this.dialogue.show(
       node,
       this.activeDialogue.kind === 'mara' || (this.activeDialogue.kind === 'story' && Boolean(node.portrait)),
@@ -317,6 +318,7 @@ class Bookshop extends Phaser.Scene {
     this.activeDialogue = null;
     this.state = transition(this.state, { type: 'close' });
     this.dialogue.hide();
+    if (this.story) $('#story-tools').inert = false;
     for (const selector of ['#game', '#hotspots', '.hud', '#context-action'])
       $(selector).inert = false;
     $('#game').focus();

@@ -60,6 +60,7 @@ describe('canonical Phaser story bridge', () => {
     expect(story.notes.some((note) => note.includes('полиці'))).toBe(true);
     expect(story.catalog('all')).toHaveLength(5);
     expect(story.catalog('mystery').length).toBeGreaterThan(0);
+    expect(story.catalog('literary').length).toBeGreaterThan(0);
     expect(story.progress.find((day) => day.status === 'current')?.day).toBe(1);
     const restored = new FiveDayStory();
     expect(restored.notes).toEqual(story.notes);
