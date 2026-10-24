@@ -74,7 +74,9 @@ export class FiveDayStory {
     const story = stageStory(this.stage);
     const node = currentNode(story, this.chapter.dialogue);
     const choices = availableOptions(story, this.chapter.dialogue).map(option => {
-      const book = bookForChoice(this.stage, node.id, option.id);
+      const book = ['miller', 'mara'].includes(this.stage)
+        ? bookForChoice(this.stage as 'miller' | 'mara', node.id, option.id)
+        : undefined;
       return { id: option.id, label: book ? `${option.label} · «${book.title}»` : option.label };
     });
     if (!choices.length && sequence[this.stage]) choices.push({ id: '__advance', label: sequence[this.stage]!.label });

@@ -4,7 +4,6 @@ import { SAVE_KEY, encodeSave } from '../src/game/save';
 import { chooseChapterOption, startChapter } from '../src/game/chapter';
 
 const values = new Map<string, string>();
-const previousStorage = globalThis.localStorage;
 Object.defineProperty(globalThis, 'localStorage', {
   configurable: true,
   value: {
@@ -41,7 +40,4 @@ describe('canonical Phaser story bridge', () => {
     expect(story.stage).toBe('miller');
     expect(() => story.choose('__advance')).toThrow();
   });
-});
-afterEach(() => {
-  if (previousStorage) Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: previousStorage });
 });
