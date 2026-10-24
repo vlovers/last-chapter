@@ -4,6 +4,7 @@ import { maraBookClub } from './mara-book-club';
 import { maraAfterHours } from './mara-after-hours';
 import { maraReturnVisit } from './mara-return-visit';
 import { maraLetterDecision } from './mara-letter-decision';
+import { allowedMaraTopic, availableMaraTopics } from './mara-topic-availability';
 
 declare global {
   interface Window {
@@ -87,9 +88,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     panel.hidden = mode === null;
     panel.replaceChildren();
     if (mode === 'conversation') {
-      if ((story.day < 3 && selectedTopic.id === maraReturnVisit.id) || (story.day < 4 && selectedTopic.id === maraLetterDecision.id)) selectedTopic = maraBookClub;
+      selectedTopic = allowedMaraTopic(story.day, selectedTopic);
       const topicSelector = element('div', '', 'story-filters');
-      for (const topic of [maraBookClub, maraAfterHours, ...(story.day >= 3 ? [maraReturnVisit] : []), ...(story.day >= 4 ? [maraLetterDecision] : [])]) {
+      for (const topic of availableMaraTopics(story.day)) {
         const button = element('button', topic.title);
         button.type = 'button';
         button.setAttribute('aria-pressed', String(selectedTopic.id === topic.id));
