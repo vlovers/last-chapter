@@ -109,7 +109,10 @@ function render(): void {
     button.className = `shop-hotspot shop-hotspot--${spot.id}`;
     button.textContent = '';
     const spotGlyphs: Record<ShopSpotId, string> = {
-      shelves: '▤', window: '☂', counter: '✉', plant: '✿',
+      shelves: '▤',
+      window: '☂',
+      counter: '✉',
+      plant: '✿',
     };
     button.textContent = spotGlyphs[spot.id];
     button.title = spot.description;
