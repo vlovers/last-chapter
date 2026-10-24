@@ -13,7 +13,7 @@ interface SavedChapter {
   history: string[];
 }
 
-const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete', 'iris', 'anna', 'day2-complete'];
+const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete', 'iris', 'anna', 'leo', 'day2-complete'];
 
 export function encodeSave(state: ChapterState): string {
   const save: SavedChapter = {

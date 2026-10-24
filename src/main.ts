@@ -1,6 +1,6 @@
 import { opening } from './content/intro';
 import { bookForChoice, type Book } from './content/books';
-import { advanceChapter, advanceSecondDay, chooseChapterOption, finishSecondDay, stageStory, startChapter, startSecondDay } from './game/chapter';
+import { advanceChapter, advanceSecondDay, advanceToLeo, chooseChapterOption, finishSecondDay, stageStory, startChapter, startSecondDay } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
 import './styles/main.css';
@@ -33,6 +33,7 @@ const stageNames = {
   complete: 'Кінець першого дня',
   iris: 'День другий · Айріс',
   anna: 'День другий · Анна',
+  leo: 'День другий · Лео',
   'day2-complete': 'Кінець зустрічі з Айріс',
 } as const;
 
@@ -61,7 +62,7 @@ function render(): void {
   if (chapter.stage === 'complete' || chapter.stage === 'day2-complete') {
     dialogue.textContent = chapter.stage === 'complete'
       ? 'Перший день завершено. Ваші рішення та знахідки залишаться з вами. Наступного ранку до книгарні завітає Айріс.'
-      : 'Зустрічі з Айріс та Анною завершено. Продовження другого дня ще створюється.';
+      : 'Зустрічі з Айріс, Анною та Лео завершено. Продовження другого дня ще створюється.';
     if (chapter.stage === 'complete') {
       const continueButton = document.createElement('button');
       continueButton.type = 'button';
@@ -161,9 +162,9 @@ function render(): void {
       next.type = 'button';
       next.className = 'next';
       next.textContent =
-        chapter.stage === 'evening' ? 'Завершити перший день →' : chapter.stage === 'iris' ? 'Зустріти Анну →' : chapter.stage === 'anna' ? 'Завершити зустрічі →' : 'Наступна сцена →';
+        chapter.stage === 'evening' ? 'Завершити перший день →' : chapter.stage === 'iris' ? 'Зустріти Анну →' : chapter.stage === 'anna' ? 'Зустріти Лео →' : chapter.stage === 'leo' ? 'Завершити зустрічі →' : 'Наступна сцена →';
       next.addEventListener('click', () => {
-        chapter = chapter.stage === 'iris' ? advanceSecondDay(chapter) : chapter.stage === 'anna' ? finishSecondDay(chapter) : advanceChapter(chapter);
+        chapter = chapter.stage === 'iris' ? advanceSecondDay(chapter) : chapter.stage === 'anna' ? advanceToLeo(chapter) : chapter.stage === 'leo' ? finishSecondDay(chapter) : advanceChapter(chapter);
         persistChapter();
         render();
       });
@@ -185,6 +186,9 @@ function render(): void {
     ['leo_likes_trains', 'Мара каже, що Лео любить потяги й розклади.'],
     ['mara_talked_about_leo', 'Мара хоче подарувати Лео книжку, яка покаже, що вона його розуміє.'],
     ['saw_receipt', 'Картка бронювання: Лео Марш. Підпису про отримання немає.'],
+    ['leo_shared_future_plan', 'Лео й Мара мріють разом побачити зимове море.'],
+    ['leo_letter_disclosed_carefully', 'Ви повідомили Лео про лист, не наполягаючи на його відкритті.'],
+    ['leo_letter_pressured', 'Ви тиснули на Лео через знайдений лист.'],
     ['anna_listened_to', 'Ви вислухали Анну, не роблячи висновків про її шлюб.'],
     ['anna_rumor_boundary', 'Анна попросила не обговорювати її сім’ю через чутки.'],
     ['anna_rumor_pressed', 'Ви наполягали на розмові про непідтверджену чутку.'],

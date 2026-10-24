@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { irisVisit } from '../src/content/iris';
-import { advanceChapter, advanceSecondDay, chooseChapterOption, finishSecondDay, startChapter, startSecondDay } from '../src/game/chapter';
+import { advanceChapter, advanceSecondDay, advanceToLeo, chooseChapterOption, finishSecondDay, startChapter, startSecondDay } from '../src/game/chapter';
 import { currentNode, validateDialogue } from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
@@ -27,6 +27,9 @@ describe('Day 2 Iris encounter', () => {
     expect(state.stage).toBe('anna');
     for (const id of ['hello', 'teacher', 'teacher-rest', 'rest-listen', 'listened-books', 'maps', 'purchase-end']) state = chooseChapterOption(state, id);
     expect(state.flags).toContain('anna_listened_to');
+    state = advanceToLeo(state);
+    for (const id of ['greet', 'letter', 'letter-privacy', 'privacy-end']) state = chooseChapterOption(state, id);
+    expect(state.flags).toContain('leo_letter_disclosed_carefully');
     state = finishSecondDay(state);
     expect(state.stage).toBe('day2-complete');
   });
