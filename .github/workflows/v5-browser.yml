@@ -30,10 +30,17 @@ jobs:
           PLAYWRIGHT_MODULE: ../node_modules/playwright/index.mjs
           QA_OUTPUT: /tmp/last-chapter-v5-qa
         run: npm run test:browser:v5
+      - name: Run isolated V4 regression browser smoke
+        env:
+          PLAYWRIGHT_MODULE: ../node_modules/playwright/index.mjs
+          QA_OUTPUT: /tmp/last-chapter-isolated-qa
+        run: npm run test:browser
       - name: Upload QA screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: v5-browser-qa
-          path: /tmp/last-chapter-v5-qa
+          path: |
+            /tmp/last-chapter-v5-qa
+            /tmp/last-chapter-isolated-qa
           if-no-files-found: ignore
