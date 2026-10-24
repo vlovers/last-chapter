@@ -14,7 +14,16 @@ import {
 } from './dialogue';
 
 export type ChapterStage =
-  'miller' | 'mara' | 'evening' | 'complete' | 'iris' | 'anna' | 'leo' | 'day2-complete' | 'eleanor' | 'day3-complete';
+  | 'miller'
+  | 'mara'
+  | 'evening'
+  | 'complete'
+  | 'iris'
+  | 'anna'
+  | 'leo'
+  | 'day2-complete'
+  | 'eleanor'
+  | 'day3-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
 export interface ChapterState {
@@ -53,7 +62,11 @@ export const startChapter = (): ChapterState => ({
 });
 
 export function chooseChapterOption(state: ChapterState, id: string): ChapterState {
-  if (state.stage === 'complete' || state.stage === 'day2-complete' || state.stage === 'day3-complete')
+  if (
+    state.stage === 'complete' ||
+    state.stage === 'day2-complete' ||
+    state.stage === 'day3-complete'
+  )
     throw new Error('Chapter segment completed');
   const next = selectOption(stageStory(state.stage), state.dialogue, id);
   return { ...state, dialogue: next, flags: [...new Set([...state.flags, ...next.flags])] };
@@ -108,12 +121,17 @@ export function advanceToLeo(state: ChapterState): ChapterState {
 /** Start Day 3 after all Day 2 conversations, retaining world discoveries. */
 export function startThirdDay(state: ChapterState): ChapterState {
   if (state.stage !== 'day2-complete') throw new Error('Finish Day 2 first');
-  return { ...state, stage: 'eleanor', dialogue: { ...startDialogue(eleanorVisit), flags: state.flags } };
+  return {
+    ...state,
+    stage: 'eleanor',
+    dialogue: { ...startDialogue(eleanorVisit), flags: state.flags },
+  };
 }
 
 /** Day 3 is in progress; currently concludes after Eleanor's visit. */
 export function finishThirdDay(state: ChapterState): ChapterState {
   if (state.stage !== 'eleanor') throw new Error('Finish Eleanor first');
-  if (currentNode(eleanorVisit, state.dialogue).options.length) throw new Error('Finish the conversation');
+  if (currentNode(eleanorVisit, state.dialogue).options.length)
+    throw new Error('Finish the conversation');
   return { ...state, stage: 'day3-complete' };
 }

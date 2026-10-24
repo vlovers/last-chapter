@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { eleanorVisit } from '../src/content/eleanor';
 import { finishThirdDay, startThirdDay, type ChapterState } from '../src/game/chapter';
-import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 describe('Eleanor and Day 3', () => {
@@ -29,6 +35,8 @@ describe('Eleanor and Day 3', () => {
     expect(finishThirdDay(state).stage).toBe('day3-complete');
   });
   it('does not start early', () => {
-    expect(() => startThirdDay({ stage: 'miller', dialogue: startDialogue(eleanorVisit), flags: [] })).toThrow();
+    expect(() =>
+      startThirdDay({ stage: 'miller', dialogue: startDialogue(eleanorVisit), flags: [] }),
+    ).toThrow();
   });
 });

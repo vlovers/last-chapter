@@ -72,13 +72,17 @@ function render(): void {
   const actions = document.createElement('div');
   actions.className = 'actions';
 
-  if (chapter.stage === 'complete' || chapter.stage === 'day2-complete' || chapter.stage === 'day3-complete') {
+  if (
+    chapter.stage === 'complete' ||
+    chapter.stage === 'day2-complete' ||
+    chapter.stage === 'day3-complete'
+  ) {
     dialogue.textContent =
       chapter.stage === 'complete'
         ? 'Перший день завершено. Ваші рішення та знахідки залишаться з вами. Наступного ранку до книгарні завітає Айріс.'
         : chapter.stage === 'day2-complete'
-        ? 'Другий день завершено. Наступного ранку до книгарні завітає Елеонора.'
-        : 'Розмова з Елеонорою завершена. Решта третього дня ще створюється.';
+          ? 'Другий день завершено. Наступного ранку до книгарні завітає Елеонора.'
+          : 'Розмова з Елеонорою завершена. Решта третього дня ще створюється.';
     if (chapter.stage === 'complete') {
       const continueButton = document.createElement('button');
       continueButton.type = 'button';
@@ -229,9 +233,15 @@ function render(): void {
     ['mara_talked_about_leo', 'Мара хоче подарувати Лео книжку, яка покаже, що вона його розуміє.'],
     ['saw_receipt', 'Картка бронювання: Лео Марш. Підпису про отримання немає.'],
     ['eleanor_confirmed_closure', 'Елеонора підтвердила закриття книгарні після затоплення.'],
-    ['eleanor_confirmed_reservation', 'Елеонора пам’ятає бронювання Лео, але не знає, чи він приходив.'],
+    [
+      'eleanor_confirmed_reservation',
+      'Елеонора пам’ятає бронювання Лео, але не знає, чи він приходив.',
+    ],
     ['eleanor_confirmed_missing_notification', 'Немає доказів, що Лео повідомили про закриття.'],
-    ['eleanor_supported_privacy', 'Елеонора радить поважати право авторки й адресата листа на рішення.'],
+    [
+      'eleanor_supported_privacy',
+      'Елеонора радить поважати право авторки й адресата листа на рішення.',
+    ],
     ['leo_shared_future_plan', 'Лео й Мара мріють разом побачити зимове море.'],
     [
       'leo_letter_disclosed_carefully',
