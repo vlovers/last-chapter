@@ -70,6 +70,7 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
     case 'thomas':
       return thomasVisit;
     case 'book-club':
+    case 'day3-complete':
       return bookClub;
     case 'day4-iris':
       return irisDecision;
@@ -82,7 +83,6 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
     case 'season-complete':
       return finalReading;
     case 'nora':
-    case 'day3-complete':
       return noraVisit;
   }
 };

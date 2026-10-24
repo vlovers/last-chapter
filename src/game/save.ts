@@ -1,6 +1,7 @@
 import type { ChapterState, ChapterStage } from './chapter';
 import { stageStory } from './chapter';
 import { currentNode } from './dialogue';
+import { noraVisit } from '../content/nora';
 
 export const SAVE_KEY = 'last-chapter:save:v1';
 const VERSION = 1;
@@ -62,7 +63,18 @@ export function decodeSave(raw: string): ChapterState | null {
       flags: obj.flags as string[],
       history: obj.history as string[],
     };
-    currentNode(stageStory(stage), dialogue);
+    try {
+      currentNode(stageStory(stage), dialogue);
+    } catch {
+      // Older Day 3 saves were created before the book-club finale existed.
+      // Preserve their completion checkpoint rather than resetting the entire story.
+      if (stage !== 'day3-complete') return null;
+      try {
+        currentNode(noraVisit, dialogue);
+      } catch {
+        return null;
+      }
+    }
     if (obj.flags.length > 128 || obj.history.length > 256) return null;
     // Save data is untrusted: a malformed payload must never bypass a dialogue gate.
     if (new Set(obj.flags).size !== obj.flags.length) return null;
