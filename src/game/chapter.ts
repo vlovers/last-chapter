@@ -1,3 +1,4 @@
+import { irisDecision } from '../content/day-four-iris';
 import { bookClub } from '../content/book-club';
 import { noraVisit } from '../content/nora';
 import { thomasVisit } from '../content/thomas';
@@ -29,7 +30,9 @@ export type ChapterStage =
   | 'thomas'
   | 'nora'
   | 'book-club'
-  | 'day3-complete';
+  | 'day3-complete'
+  | 'day4-iris'
+  | 'day4-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
 export interface ChapterState {
@@ -61,6 +64,9 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
       return thomasVisit;
     case 'book-club':
       return bookClub;
+    case 'day4-iris':
+    case 'day4-complete':
+      return irisDecision;
     case 'nora':
     case 'day3-complete':
       return noraVisit;
@@ -77,7 +83,8 @@ export function chooseChapterOption(state: ChapterState, id: string): ChapterSta
   if (
     state.stage === 'complete' ||
     state.stage === 'day2-complete' ||
-    state.stage === 'day3-complete'
+    state.stage === 'day3-complete' ||
+    state.stage === 'day4-complete'
   )
     throw new Error('Chapter segment completed');
   const next = selectOption(stageStory(state.stage), state.dialogue, id);
@@ -182,4 +189,18 @@ export function startBookClub(state: ChapterState): ChapterState {
     stage: 'book-club',
     dialogue: { ...startDialogue(bookClub), flags: state.flags },
   };
+}
+
+/** Begin Day 4 without revealing private correspondence or discarding previous choices. */
+export function startFourthDay(state: ChapterState): ChapterState {
+  if (state.stage !== 'day3-complete') throw new Error('Finish Day 3 first');
+  return { ...state, stage: 'day4-iris', dialogue: { ...startDialogue(irisDecision), flags: state.flags } };
+}
+
+/** Close the first Day 4 encounter only after the conversation is complete. */
+export function finishFourthDay(state: ChapterState): ChapterState {
+  if (state.stage !== 'day4-iris') throw new Error('Finish the Day 4 visit first');
+  if (currentNode(irisDecision, state.dialogue).options.length)
+    throw new Error('Finish the conversation');
+  return { ...state, stage: 'day4-complete' };
 }

@@ -15,6 +15,8 @@ import {
   advanceToNora,
   finishThirdDay,
   startBookClub,
+  startFourthDay,
+  finishFourthDay,
 } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
@@ -58,7 +60,9 @@ const stageNames = {
   thomas: 'День третій · Томас',
   nora: 'День третій · Нора',
   'book-club': 'День третій · Книжковий клуб',
-  'day3-complete': 'Кінець поточного третього дня',
+  'day3-complete': 'Кінець третього дня',
+  'day4-iris': 'День четвертий · Айріс',
+  'day4-complete': 'День четвертий · Перша зустріч завершена',
 } as const;
 
 function render(): void {
@@ -125,14 +129,17 @@ function render(): void {
   if (
     chapter.stage === 'complete' ||
     chapter.stage === 'day2-complete' ||
-    chapter.stage === 'day3-complete'
+    chapter.stage === 'day3-complete' ||
+    chapter.stage === 'day4-complete'
   ) {
     dialogue.textContent =
       chapter.stage === 'complete'
         ? 'Перший день завершено. Ваші рішення та знахідки залишаться з вами. Наступного ранку до книгарні завітає Айріс.'
         : chapter.stage === 'day2-complete'
           ? 'Другий день завершено. Наступного ранку до книгарні завітає Елеонора.'
-          : 'Книжковий клуб завершився. У книгарні знову з’явилося місце для спільних історій.';
+          : chapter.stage === 'day3-complete'
+            ? 'Книжковий клуб завершився. Наступного ранку Айріс повернеться до книгарні.'
+            : 'Розмова з Айріс завершена. Наступні зустрічі четвертого дня ще готуються.';
     if (chapter.stage === 'complete') {
       const continueButton = document.createElement('button');
       continueButton.type = 'button';
@@ -150,6 +157,17 @@ function render(): void {
       continueButton.textContent = 'Почати третій день →';
       continueButton.addEventListener('click', () => {
         chapter = startThirdDay(chapter);
+        persistChapter();
+        render();
+      });
+      actions.append(continueButton);
+    }
+    if (chapter.stage === 'day3-complete') {
+      const continueButton = document.createElement('button');
+      continueButton.type = 'button';
+      continueButton.textContent = 'Почати четвертий день →';
+      continueButton.addEventListener('click', () => {
+        chapter = startFourthDay(chapter);
         persistChapter();
         render();
       });
@@ -260,6 +278,8 @@ function render(): void {
                       ? 'Відкрити книжковий клуб →'
                       : chapter.stage === 'book-club'
                         ? 'Завершити третій день →'
+                        : chapter.stage === 'day4-iris'
+                          ? 'Завершити розмову з Айріс →'
                         : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
@@ -277,6 +297,8 @@ function render(): void {
                       ? startBookClub(chapter)
                       : chapter.stage === 'book-club'
                         ? finishThirdDay(chapter)
+                        : chapter.stage === 'day4-iris'
+                          ? finishFourthDay(chapter)
                         : advanceChapter(chapter);
         persistChapter();
         render();
@@ -341,6 +363,11 @@ function render(): void {
     ['club_respected_privacy', 'Книжковий клуб домовився не перетворювати чужі історії на плітки.'],
     ['club_chose_evidence', 'Учасники клубу нагадали одне одному перевіряти факти.'],
     ['club_encouraged_children', 'Анна планує принести малюнки учнів на наступну зустріч.'],
+    ['iris_letter_choice_respected', 'Ви залишили рішення щодо листа за Айріс.'],
+    ['iris_letter_delivery_offered', 'Ви запропонували допомогти з листом лише за згоди Айріс.'],
+    ['iris_letter_pressured_day4', 'Ви наполягали, щоб Айріс передала лист негайно.'],
+    ['iris_offered_exhibition', 'Ви запропонували Айріс показати малюнки в книгарні.'],
+    ['iris_supported_autonomy', 'Ви підтримали право Айріс самій обирати майбутнє.'],
     ['saw_envelope', 'У книжці знайдено запечатаний лист від Айріс до Лео.'],
     ['opened_private_letter', 'Ви розкрили приватного листа без дозволу.'],
     ['letter_secured', 'Лист залишився у безпечному місці.'],
