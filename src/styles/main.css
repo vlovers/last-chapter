@@ -582,3 +582,12 @@ h1 {
   outline: 3px solid #ffdf9f;
   outline-offset: 3px;
 }
+
+/* Customer order ledger is derived from narrative decisions, including older saves. */
+.orders-heading { margin: 20px 0 12px; padding-top: 17px; border-top: 1px solid #795f70; font-size: 15px; color: #f2c991; }
+.orders-list { display: grid; gap: 10px; }
+.order-receipt { display: grid; gap: 4px; padding: 12px; border-radius: 8px; background: #443748; border-left: 3px solid #9eb48d; }
+.order-receipt strong { color: #f4ce9e; font-size: 13px; }
+.order-receipt span { font: 700 17px Georgia, serif; }
+.order-receipt small { color: #ddc9bb; line-height: 1.5; }
+.order-pending { font-size: 13px; line-height: 1.6; color: #ddc9bb; margin: 0; }

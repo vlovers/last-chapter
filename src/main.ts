@@ -18,6 +18,7 @@ import {
 import { availableOptions, currentNode } from './game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
 import { inspectShopSpot, shopSpots, type ShopSpotId } from './game/exploration';
+import { completedOrders, currentCustomer } from './game/service';
 import './styles/main.css';
 
 const app = document.querySelector<HTMLDivElement>('#app');
@@ -346,7 +347,38 @@ function render(): void {
     item.textContent = 'Поки що тут немає записів.';
     notes.append(item);
   }
-  notebook.append(label, notes);
+  const orderHeading = document.createElement('h3');
+  orderHeading.className = 'orders-heading';
+  orderHeading.textContent = 'Замовлення відвідувачів';
+  const orders = document.createElement('div');
+  orders.className = 'orders-list';
+  const receipts = completedOrders(chapter);
+  const customer = currentCustomer(chapter.stage);
+  if (customer && !receipts.some((receipt) => receipt.customer === customer)) {
+    const pending = document.createElement('p');
+    pending.className = 'order-pending';
+    pending.textContent = `${customer}: очікує на вашу рекомендацію.`;
+    orders.append(pending);
+  }
+  if (receipts.length === 0 && !orders.childNodes.length) {
+    const empty = document.createElement('p');
+    empty.className = 'order-pending';
+    empty.textContent = 'Ще немає виконаних замовлень.';
+    orders.append(empty);
+  }
+  for (const receipt of receipts) {
+    const row = document.createElement('article');
+    row.className = 'order-receipt';
+    const name = document.createElement('strong');
+    name.textContent = receipt.customer;
+    const title = document.createElement('span');
+    title.textContent = receipt.book.title;
+    const note = document.createElement('small');
+    note.textContent = receipt.note;
+    row.append(name, title, note);
+    orders.append(row);
+  }
+  notebook.append(label, notes, orderHeading, orders);
   const storyPanel = document.createElement('section');
   storyPanel.className = 'story-panel';
   storyPanel.append(heading, subtitle);
