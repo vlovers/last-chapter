@@ -46,6 +46,11 @@
         image-rendering: pixelated;
         touch-action: manipulation;
       }
+      #dialogue { padding: 18px 20px; margin-top: 14px; background: #352738; border: 2px solid #b88765; }
+      #dialogue[hidden] { display: none; }
+      #dialogue-text { margin: 0 0 14px; font-size: 17px; }
+      #dialogue-choices { display: flex; flex-wrap: wrap; gap: 8px; }
+      #dialogue-choices button { flex: 1 1 180px; }
       #status {
         padding: 16px 20px;
         background: #312632;
@@ -101,6 +106,7 @@
         aria-label="Предмети книгарні"
         style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px"
       ></div>
+      <section id="dialogue" aria-label="Розмова з Марою" hidden><p id="dialogue-text"></p><div id="dialogue-choices"></div></section>
       <p id="status" role="status" aria-live="polite">Книгарня прокидається. За вікном дощить…</p>
       <p>
         <small

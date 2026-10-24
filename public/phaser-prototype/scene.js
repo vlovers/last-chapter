@@ -1,5 +1,33 @@
 /* Original 2.5D bookstore art study. All pixels are drawn locally; no third-party assets. */
 const status = document.querySelector('#status');
+const dialogue = document.querySelector('#dialogue');
+const dialogueText = document.querySelector('#dialogue-text');
+const dialogueChoices = document.querySelector('#dialogue-choices');
+const conversation = {
+  start: { text: 'За вікном знову дощ. Порадите щось на вечір?', options: [
+    ['Щось тепле й затишне', 'comfort'], ['Історію із загадкою', 'mystery'], ['Як минув твій день?', 'day'],
+  ] },
+  comfort: { text: 'Саме те, що потрібно. Візьму книжку й заварю чай із корицею.', options: [['Ще поговорити', 'start'], ['Попрощатися', 'end']] },
+  mystery: { text: 'Люблю, коли остання сторінка змінює все! Тільки не розповідайте фінал.', options: [['Ще поговорити', 'start'], ['Попрощатися', 'end']] },
+  day: { text: 'У пекарні сьогодні був гармидер. Але тут так тихо, що вже легше дихати.', options: [['Порадити книжку', 'start'], ['Попрощатися', 'end']] },
+  end: { text: 'Дякую за розмову. Ще побачимося!', options: [['Поговорити ще', 'start'], ['Закрити', null]] },
+};
+function showConversation(id = 'start') {
+  const node = conversation[id];
+  if (!node) { dialogue.hidden = true; return; }
+  dialogue.hidden = false;
+  dialogueText.textContent = 'Мара: «' + node.text + '»';
+  dialogueChoices.replaceChildren();
+  for (const [label, next] of node.options) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = label;
+    button.addEventListener('click', () => showConversation(next));
+    dialogueChoices.append(button);
+  }
+  status.textContent = 'Ви розмовляєте з Марою.';
+}
+
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const W = 640;
 const H = 360;
@@ -296,6 +324,8 @@ class Bookshop extends Phaser.Scene {
       });
     }
     const mara = this.add.sprite(584, 237, 'bookshop-visitors', 4).setOrigin(0.5, 1).setDepth(237);
+    mara.setInteractive({ useHandCursor: true });
+    mara.on('pointerdown', () => showConversation());
     if (prefersReducedMotion) {
       mara.setPosition(403, 265).setDepth(265);
       mara.setFrame(4);
@@ -310,7 +340,7 @@ class Bookshop extends Phaser.Scene {
         onUpdate: () => mara.setDepth(mara.y),
         onComplete: () => {
           mara.setFrame(4);
-          status.textContent = 'Мара підійшла до столика. «Тут так затишно, коли надворі дощить».';
+          if (dialogue.hidden) status.textContent = 'Мара біля столика. Натисніть на неї, щоб поговорити.';
         },
       });
     }
@@ -368,6 +398,11 @@ class Bookshop extends Phaser.Scene {
     }
     const controls = document.querySelector('#interactions');
     controls.replaceChildren();
+    const talkButton = document.createElement('button');
+    talkButton.type = 'button';
+    talkButton.textContent = 'Поговорити з Марою';
+    talkButton.addEventListener('click', () => showConversation());
+    controls.append(talkButton);
     for (const spot of spots) {
       const button = document.createElement('button');
       button.type = 'button';
