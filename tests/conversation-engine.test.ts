@@ -25,6 +25,25 @@ describe('optional book-club conversation', () => {
   it('rejects unknown and inaccessible options', () => {
     expect(() => answerConversation(maraBookClub, startConversation(maraBookClub), 'not-a-choice')).toThrow();
   });
+  it('detects a reachable conversation loop with no way to leave', () => {
+    expect(validateTopic({
+      id: 'trapped', title: 'Trapped', entry: 'a',
+      nodes: [
+        { id: 'a', speaker: 'A', text: 'Hello', choices: [{ id: 'next', label: 'Next', next: 'b' }] },
+        { id: 'b', speaker: 'B', text: 'Again', choices: [{ id: 'again', label: 'Again', next: 'a' }] },
+      ],
+    })).toContain('No path to exit: a');
+  });
+
+  it('detects dead ends and empty choice labels', () => {
+    const errors = validateTopic({
+      id: 'invalid', title: 'Invalid', entry: 'a',
+      nodes: [{ id: 'a', speaker: 'A', text: 'Hello', choices: [] }],
+    });
+    expect(errors).toContain('Dead end: a');
+    expect(errors).toContain('No path to exit: a');
+  });
+
   it('rejects tampered session state', () => {
     expect(restoreConversation(maraBookClub, '{"topic":"mara.book-club.v1","node":"bad","memories":[],"finished":false}')).toBeNull();
   });
