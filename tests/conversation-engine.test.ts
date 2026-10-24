@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { answerConversation, conversationView, restoreConversation, startConversation, validateTopic } from '../src/phaser/conversation-engine';
+import { answerConversation, conversationView, normalizeMemories, restoreConversation, startConversation, validateTopic } from '../src/phaser/conversation-engine';
 import { maraBookClub } from '../src/phaser/mara-book-club';
 
 describe('optional book-club conversation', () => {
@@ -42,6 +42,18 @@ describe('optional book-club conversation', () => {
     });
     expect(errors).toContain('Dead end: a');
     expect(errors).toContain('No path to exit: a');
+  });
+
+  it('keeps shared memory snapshots within the restore limit', () => {
+    const memories = Array.from({ length: 100 }, (_, i) => 'choice:' + i);
+    const session = startConversation(maraBookClub, memories);
+    expect(session.memories).toHaveLength(80);
+    expect(session.memories[0]).toBe('choice:20');
+    expect(restoreConversation(maraBookClub, JSON.stringify(session))).toEqual(session);
+  });
+
+  it('deduplicates memories across multiple conversations', () => {
+    expect(normalizeMemories(['frank', 'frank', 'mara'])).toEqual(['frank', 'mara']);
   });
 
   it('rejects tampered session state', () => {
