@@ -18,7 +18,7 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: npm ci --no-audit --no-fund
-      - run: npx prettier --write index.html phaser-prototype/style.css phaser-prototype/main.js public/phaser-prototype/{visitor-art,character-art,assets,characters,scene,world,interactions,dialogue-ui}.js src/phaser/{five-day-story,journal-facts,story-panels}.ts src/main.ts tests/phaser-five-day-story.test.ts docs/architecture/PHASER-V5-MIGRATION.md
+      - run: npx prettier --write index.html phaser-prototype/style.css phaser-prototype/main.js public/phaser-prototype/{visitor-art,character-art,assets,characters,scene,world,interactions,dialogue-ui}.js src/phaser/{five-day-story,journal-facts,story-panels}.ts src/main.ts tests/phaser-five-day-story.test.ts scripts/qa-phaser.mjs scripts/qa-phaser-v5.mjs docs/architecture/PHASER-V5-MIGRATION.md
       - name: Commit formatting changes to feature branch
         run: |
           if ! git diff --quiet; then
