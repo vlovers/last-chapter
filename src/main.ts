@@ -65,7 +65,10 @@ function render(): void {
 
   const illustration = document.createElement('div');
   illustration.className = 'illustration';
-  illustration.setAttribute('aria-label', 'Інтерактивна книгарня з книжковими полицями, вікном і прилавком');
+  illustration.setAttribute(
+    'aria-label',
+    'Інтерактивна книгарня з книжковими полицями, вікном і прилавком',
+  );
   illustration.innerHTML = `
     <div class="scene-wall-art" aria-hidden="true"><span>ОСТАННІЙ РОЗДІЛ</span></div>
     <div class="scene-window" aria-hidden="true"><div class="scene-sky"></div><div class="scene-roof"></div><div class="scene-leaves">✦ ✧ ✦</div><div class="scene-window-cross"></div></div>
