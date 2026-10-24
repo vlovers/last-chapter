@@ -1,5 +1,5 @@
 import type { FiveDayStory } from './five-day-story';
-import { answerConversation, conversationView, restoreConversation, startConversation, type ConversationSession } from './conversation-engine';
+import { answerConversation, conversationView, normalizeMemories, restoreConversation, startConversation, type ConversationSession } from './conversation-engine';
 import { maraBookClub } from './mara-book-club';
 import { maraAfterHours } from './mara-after-hours';
 import { maraReturnVisit } from './mara-return-visit';
@@ -35,7 +35,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const afterHoursKey = 'last-chapter:conversation:mara:after-hours:v1';
   let conversation: ConversationSession = startConversation(maraBookClub);
   let afterHours: ConversationSession = startConversation(maraAfterHours);
-  const sharedMemories = () => [...new Set([...conversation.memories, ...afterHours.memories, ...returnVisit.memories, ...letterDecision.memories])];
+  const sharedMemories = () => normalizeMemories([...conversation.memories, ...afterHours.memories, ...returnVisit.memories, ...letterDecision.memories]);
   try {
     const saved = localStorage.getItem(conversationKey);
     if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
