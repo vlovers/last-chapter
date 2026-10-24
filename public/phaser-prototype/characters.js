@@ -1,8 +1,8 @@
 import { DIRECTIONS } from './config.js';
 import { createCharacterSheets } from './assets.js';
-export function createCharacters(scene) {
-  createCharacterSheets(scene);
-  for (const name of ['player', 'mara'])
+export function createCharacters(scene, names = ['player', 'mara']) {
+  createCharacterSheets(scene, names);
+  for (const name of names)
     for (const direction of DIRECTIONS) {
       const offset = DIRECTIONS.indexOf(direction) * 6;
       for (const [kind, start, end, rate] of [

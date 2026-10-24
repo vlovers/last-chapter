@@ -1,5 +1,6 @@
 import { DIRECTIONS } from './config.js';
 import { drawPerson } from './character-art.js';
+import { VISITOR_PALETTES } from './visitor-art.js';
 
 export const ASSET_MANIFEST = [
   {
@@ -94,9 +95,9 @@ export function assetFallback(id) {
     ? { label: 'Мара', initials: 'М', color: '#8b5261' }
     : { label: 'Книгарня', initials: 'К', color: '#4b7976' };
 }
-export function createCharacterSheets(scene) {
+export function createCharacterSheets(scene, names = ['player', 'mara']) {
   validateManifest(ASSET_MANIFEST);
-  for (const name of ['player', 'mara']) {
+  for (const name of names) {
     if (scene.textures.exists(name)) continue;
     const texture = scene.textures.createCanvas(name, 32 * 24, 48);
     if (!texture) throw new Error(`Cannot create ${name} texture`);
@@ -105,7 +106,14 @@ export function createCharacterSheets(scene) {
     DIRECTIONS.forEach((direction, row) => {
       for (let frame = 0; frame < 6; frame++) {
         const index = row * 6 + frame;
-        drawPerson(context, index * 32, direction, frame, name === 'mara');
+        drawPerson(
+          context,
+          index * 32,
+          direction,
+          frame,
+          name === 'mara',
+          VISITOR_PALETTES[name] ?? {},
+        );
         texture.add(index, 0, index * 32, 0, 32, 48);
       }
     });

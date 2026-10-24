@@ -1,4 +1,6 @@
-import { assetFallback, ASSET_MANIFEST } from './assets.js';
+import { assetFallback } from './assets.js';
+import { portraitDataUrl } from './visitor-portraits.js';
+import { normalizeEmotion, emotionLabel } from './visitor-emotions.js';
 export class DialogueUI {
   constructor(onChoose, onClose) {
     this.lifecycle = new AbortController();
@@ -13,7 +15,11 @@ export class DialogueUI {
     this.close = document.querySelector('#close-dialogue');
     this.onChoose = onChoose;
     this.close.addEventListener('click', onClose, options);
-    this.portrait.addEventListener('error', () => this.useFallback('mara-portrait'), options);
+    this.portrait.addEventListener(
+      'error',
+      () => this.useFallback('mara-portrait', this.name.textContent),
+      options,
+    );
     this.element.addEventListener(
       'keydown',
       (event) => {
@@ -37,30 +43,43 @@ export class DialogueUI {
       options,
     );
   }
-  useFallback(id) {
+  useFallback(id, speaker = '') {
     const fallback = assetFallback(id);
     this.portrait.hidden = true;
     this.fallback.hidden = false;
-    this.fallback.textContent = fallback.initials;
+    this.fallback.textContent = speaker.trim().charAt(0) || fallback.initials;
     this.fallback.style.background = fallback.color;
   }
-  show(node, isMara, completed, reduced) {
+  show(node, isMara, completed, reduced, actor = null) {
     this.element.hidden = false;
     this.element.closest('#stage').classList.add('talking');
     this.element.classList.toggle('object-note', !isMara);
-    this.element.dataset.mood = node.mood ?? 'quiet';
-    this.mood.textContent =
-      { warm: 'Усміхається', thoughtful: 'Замислилася', firm: 'Рішуче' }[node.mood] ?? 'Тиха мить';
+    const emotion = normalizeEmotion(node.mood);
+    this.element.dataset.mood = emotion;
+    this.mood.textContent = emotionLabel(emotion);
     this.name.textContent = node.speaker;
+    const visitorNames = {
+      'Пані Міллер': 'miller',
+      Мара: 'mara',
+      Ірис: 'iris',
+      Анна: 'anna',
+      Лео: 'leo',
+      Елеонора: 'eleanor',
+      Томас: 'thomas',
+      Нора: 'nora',
+    };
+    this.element.dataset.visitor = actor ?? visitorNames[node.speaker] ?? 'narrator';
     this.text.textContent = node.text;
-    this.portrait.hidden = !isMara;
-    this.fallback.hidden = isMara;
-    if (isMara) {
-      const id = ['thoughtful', 'firm'].includes(node.mood) ? `mara-${node.mood}` : 'mara-portrait';
-      const path = ASSET_MANIFEST.find((entry) => entry.id === id).path;
-      if (this.portrait.getAttribute('src') !== path) this.portrait.src = path;
-      if (this.portrait.complete && !this.portrait.naturalWidth) this.useFallback('mara-portrait');
-    } else this.useFallback('object');
+    const visitor = this.element.dataset.visitor;
+    const image = isMara ? portraitDataUrl(visitor, emotion) : null;
+    if (image) {
+      this.portrait.hidden = false;
+      this.fallback.hidden = true;
+      this.portrait.alt = `Піксельний портрет: ${node.speaker}`;
+      if (this.portrait.getAttribute('src') !== image) this.portrait.src = image;
+    } else {
+      this.useFallback('object', node.speaker);
+    }
     this.close.textContent = '×';
     this.close.setAttribute(
       'aria-label',
@@ -72,7 +91,23 @@ export class DialogueUI {
     for (const choice of node.choices) {
       const button = document.createElement('button');
       button.type = 'button';
-      button.textContent = choice.label;
+      if (choice.book) {
+        const detail = document.createElement('span');
+        detail.className = 'recommendation';
+        const name = document.createElement('strong');
+        name.textContent = choice.book.title;
+        const meta = document.createElement('small');
+        meta.textContent = `${choice.book.genre} · ${choice.book.length}`;
+        const summary = document.createElement('span');
+        summary.textContent = choice.book.blurb;
+        const reader = document.createElement('span');
+        reader.textContent = `Чому підходить: ${choice.book.readerFit}`;
+        const impact = document.createElement('span');
+        impact.textContent = `Що може змінитися: ${choice.book.possibleImpact}`;
+        detail.append(name, meta, summary, reader, impact);
+        button.append(detail);
+        button.setAttribute('aria-label', `${choice.label}: ${choice.book.title}`);
+      } else button.textContent = choice.label;
       button.addEventListener('click', () => {
         if (performance.now() - opened < 220) return;
         this.onChoose(choice.id);

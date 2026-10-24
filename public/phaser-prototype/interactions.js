@@ -1,6 +1,7 @@
 import { HOTSPOTS, nearestSpot, eligible } from './world.js';
+import { visitorApproach } from './visitor-roaming.js';
 export class Interactions {
-  constructor(scene, onInteract) {
+  constructor(scene, onInteract, includePlant = false) {
     this.scene = scene;
     this.lifecycle = new AbortController();
     this.root = document.querySelector('#hotspots');
@@ -8,6 +9,17 @@ export class Interactions {
     this.outline = scene.add.graphics().setDepth(900);
     this.spots = [
       ...HOTSPOTS,
+      ...(includePlant
+        ? [
+            { id: 'frank', label: 'Погладити Френка', rect: { x: 463, y: 171, w: 34, h: 29 }, approach: { x: 477, y: 216 } },
+            {
+              id: 'plant',
+              label: 'Рослина біля вікна',
+              rect: { x: 531, y: 168, w: 40, h: 40 },
+              approach: { x: 520, y: 215 },
+            },
+          ]
+        : []),
       {
         id: 'mara',
         label: 'Поговорити з Марою',
@@ -68,7 +80,7 @@ export class Interactions {
   update(player, mara, state) {
     const maraSpot = this.spots.find((spot) => spot.id === 'mara');
     maraSpot.rect = { x: mara.x - 16, y: mara.y - 47, w: 32, h: 48 };
-    maraSpot.approach = { x: mara.x - 25, y: mara.y };
+    maraSpot.approach = visitorApproach(mara);
     this.nearest = nearestSpot(player, this.spots, state);
     for (const spot of this.spots) {
       const button = this.buttons.get(spot.id),
@@ -77,7 +89,9 @@ export class Interactions {
       button.style.top = `${rect.y / 3.6}%`;
       button.style.width = `${rect.w / 6.4}%`;
       button.style.height = `${rect.h / 3.6}%`;
-      button.hidden = state.mode !== 'explore' || (spot.id === 'mara' && state.mara !== 'ready');
+      button.hidden =
+        state.mode !== 'explore' ||
+        (spot.id === 'mara' && (state.mara !== 'ready' || state.visitorVisible === false));
       button.classList.toggle('nearby', spot === this.nearest);
     }
     this.hint.hidden = !this.nearest || state.mode !== 'explore';
@@ -87,7 +101,7 @@ export class Interactions {
     if (
       highlighted &&
       state.mode === 'explore' &&
-      (highlighted.id !== 'mara' || state.mara === 'ready')
+      (highlighted.id !== 'mara' || (state.mara === 'ready' && state.visitorVisible !== false))
     ) {
       const rect = highlighted.rect;
       this.outline.lineStyle(1, 0xf0bd7e, eligible(player, highlighted, state) ? 0.9 : 0.45);

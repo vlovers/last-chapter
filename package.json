@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:browser": "node scripts/qa-phaser.mjs",
+    "test:browser:v5": "node scripts/qa-phaser-v5.mjs",
     "lint": "eslint .",
     "format:check": "prettier --check .",
     "format": "prettier --write .",

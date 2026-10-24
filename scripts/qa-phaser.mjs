@@ -124,9 +124,9 @@ try {
   const errors = [];
   captureErrors(page, errors);
   await page.goto(base);
-  await page.locator('#app h1').waitFor();
+  await page.locator('#story-tools').waitFor();
   const saveBefore = await page.evaluate(() => JSON.stringify(localStorage));
-  const headingBefore = await page.locator('#app h1').textContent();
+  const headingBefore = await page.locator('h1').textContent();
   await start(page);
   assert.equal((await snapshot(page)).audio.muted, true);
   assert.equal((await snapshot(page)).mara.direction, 'left');
@@ -314,10 +314,13 @@ try {
   });
 
   await page.goto(base);
-  await page.locator('#app h1').waitFor();
-  assert.equal(await page.locator('#app h1').textContent(), headingBefore);
+  await page.locator('#story-tools').waitFor();
+  assert.equal(await page.locator('h1').textContent(), headingBefore);
   assert.equal(await page.evaluate(() => JSON.stringify(localStorage)), saveBefore);
-  results.push({ test: 'production narrative still loads with unchanged save', status: 'passed' });
+  results.push({
+    test: 'canonical root still loads; isolated prototype leaves five-day save unchanged',
+    status: 'passed',
+  });
   await writeFile(
     `${output}/results.json`,
     JSON.stringify({ base, browser: await browser.version(), results }, null, 2),
