@@ -17,7 +17,12 @@ export const maraDecision: DialogueStory = {
       options: [
         { id: 'work', label: '«Ти змогла відмовитися від зайвої зміни?»', next: 'work' },
         { id: 'book', label: '«Як тобі книжка для Лео?»', next: 'book' },
-        { id: 'letter', label: '«Є дещо з минулого, що може стосуватися Лео»', next: 'letter', requires: ['saw_envelope'] },
+        {
+          id: 'letter',
+          label: '«Є дещо з минулого, що може стосуватися Лео»',
+          next: 'letter',
+          requires: ['saw_envelope'],
+        },
         { id: 'future', label: '«Чого ти сама хочеш цього року?»', next: 'future' },
         { id: 'finish', label: 'Побажати Марі гарного вечора', next: 'end' },
       ],
@@ -26,16 +31,38 @@ export const maraDecision: DialogueStory = {
       id: 'work',
       speaker: 'Мара',
       text: '«Сказала, що в неділю не працюватиму. Начальниця здивувалася, але світ не впав. Можливо, я нарешті встигну прочитати власну книжку».',
-      options: [{ id: 'work-back', label: '«Твій час теж важливий»', next: 'greet', grants: ['mara_supported_independence'] }],
+      options: [
+        {
+          id: 'work-back',
+          label: '«Твій час теж важливий»',
+          next: 'greet',
+          grants: ['mara_supported_independence'],
+        },
+      ],
     },
     {
       id: 'book',
       speaker: 'Мара',
       text: '«Мені подобається, що ти слухаєш людей, перш ніж щось радити. Я досі думаю, як вручити Лео подарунок. Хочеться, щоб це була наша маленька історія».',
       options: [
-        { id: 'station', label: '«Він точно оцінить історію про станцію»', next: 'station', requires: ['sold_station'] },
-        { id: 'roads', label: '«Мапи — гарна нагода спланувати подорож»', next: 'roads', requires: ['sold_roads'] },
-        { id: 'letters', label: '«Історії в листах дають привід поговорити»', next: 'letters', requires: ['sold_letters'] },
+        {
+          id: 'station',
+          label: '«Він точно оцінить історію про станцію»',
+          next: 'station',
+          requires: ['sold_station'],
+        },
+        {
+          id: 'roads',
+          label: '«Мапи — гарна нагода спланувати подорож»',
+          next: 'roads',
+          requires: ['sold_roads'],
+        },
+        {
+          id: 'letters',
+          label: '«Історії в листах дають привід поговорити»',
+          next: 'letters',
+          requires: ['sold_letters'],
+        },
         { id: 'book-back', label: '«Нехай це буде твій сюрприз»', next: 'greet' },
       ],
     },
@@ -43,34 +70,77 @@ export const maraDecision: DialogueStory = {
       id: 'station',
       speaker: 'Мара',
       text: '«Я вже сховала всередині квиток із нашої першої спільної поїздки. Він навіть не здогадується». Вона сміється. «І не кажи йому!»',
-      options: [{ id: 'station-back', label: '«Обіцяю зберегти сюрприз»', next: 'greet', grants: ['mara_gift_encouraged'] }],
+      options: [
+        {
+          id: 'station-back',
+          label: '«Обіцяю зберегти сюрприз»',
+          next: 'greet',
+          grants: ['mara_gift_encouraged'],
+        },
+      ],
     },
     {
       id: 'roads',
       speaker: 'Мара',
       text: '«Я заклала сторінку, де герої вирушають без плану. Може, ми теж одного дня просто сядемо на потяг і поїдемо до моря».',
-      options: [{ id: 'roads-back', label: '«Бажаю вам цієї подорожі»', next: 'greet', grants: ['mara_gift_encouraged'] }],
+      options: [
+        {
+          id: 'roads-back',
+          label: '«Бажаю вам цієї подорожі»',
+          next: 'greet',
+          grants: ['mara_gift_encouraged'],
+        },
+      ],
     },
     {
       id: 'letters',
       speaker: 'Мара',
       text: '«Я боялася, що це надто серйозний подарунок. Але Лео іноді легше читати про почуття, ніж називати свої». Вона усміхається. «Ми вчимося разом».',
-      options: [{ id: 'letters-back', label: '«Головне — ваші власні слова»', next: 'greet', grants: ['mara_gift_encouraged'] }],
+      options: [
+        {
+          id: 'letters-back',
+          label: '«Головне — ваші власні слова»',
+          next: 'greet',
+          grants: ['mara_gift_encouraged'],
+        },
+      ],
     },
     {
       id: 'future',
       speaker: 'Мара',
       text: '«Відкрити маленький ранковий столик біля пекарні. Щоб люди могли сидіти з кавою й книжкою стільки, скільки хочуть. І щоб я теж іноді могла просто сидіти».',
-      options: [{ id: 'future-back', label: '«Це чудова мрія — твоя власна»', next: 'greet', grants: ['mara_future_supported'] }],
+      options: [
+        {
+          id: 'future-back',
+          label: '«Це чудова мрія — твоя власна»',
+          next: 'greet',
+          grants: ['mara_future_supported'],
+        },
+      ],
     },
     {
       id: 'letter',
       speaker: 'Мара',
       text: 'Мара завмирає, але не перебиває. «Я розумію, що в Лео було життя до мене. І в мене було. Але якщо це чужий лист, я не хочу, щоб ти читав його мені замість авторки».',
       options: [
-        { id: 'privacy', label: '«Не розкриватиму нічого без згоди»', next: 'privacy', grants: ['mara_letter_privacy_respected'] },
-        { id: 'truth', label: '«Ти маєш право поговорити з Лео про свої почуття»', next: 'truth', grants: ['mara_supported_independence'] },
-        { id: 'push', label: '«Тобі слід дізнатися все прямо зараз»', next: 'push', grants: ['mara_letter_pressured'] },
+        {
+          id: 'privacy',
+          label: '«Не розкриватиму нічого без згоди»',
+          next: 'privacy',
+          grants: ['mara_letter_privacy_respected'],
+        },
+        {
+          id: 'truth',
+          label: '«Ти маєш право поговорити з Лео про свої почуття»',
+          next: 'truth',
+          grants: ['mara_supported_independence'],
+        },
+        {
+          id: 'push',
+          label: '«Тобі слід дізнатися все прямо зараз»',
+          next: 'push',
+          grants: ['mara_letter_pressured'],
+        },
       ],
     },
     {

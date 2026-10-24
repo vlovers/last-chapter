@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { maraDecision } from '../src/content/day-four-mara';
 import { advanceToDayFourMara, finishFourthDay, type ChapterState } from '../src/game/chapter';
-import { availableOptions, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 describe('Day 4: Mara has her own story', () => {
@@ -9,14 +14,22 @@ describe('Day 4: Mara has her own story', () => {
   it('only refers to the specific gift when that book was sold', () => {
     const greet = selectOption(maraDecision, startDialogue(maraDecision), 'greet');
     const book = selectOption(maraDecision, greet, 'book');
-    expect(availableOptions(maraDecision, book).map((option) => option.id)).not.toContain('station');
+    expect(availableOptions(maraDecision, book).map((option) => option.id)).not.toContain(
+      'station',
+    );
     const withGift = { ...book, flags: ['sold_station'] };
-    expect(availableOptions(maraDecision, withGift).map((option) => option.id)).toContain('station');
-    expect(availableOptions(maraDecision, withGift).map((option) => option.id)).not.toContain('roads');
+    expect(availableOptions(maraDecision, withGift).map((option) => option.id)).toContain(
+      'station',
+    );
+    expect(availableOptions(maraDecision, withGift).map((option) => option.id)).not.toContain(
+      'roads',
+    );
   });
   it('does not expose the private letter before it is discovered', () => {
     const greet = selectOption(maraDecision, startDialogue(maraDecision), 'greet');
-    expect(availableOptions(maraDecision, greet).map((option) => option.id)).not.toContain('letter');
+    expect(availableOptions(maraDecision, greet).map((option) => option.id)).not.toContain(
+      'letter',
+    );
   });
   it('persists Mara’s choices and guards day transitions', () => {
     const irisDone: ChapterState = {

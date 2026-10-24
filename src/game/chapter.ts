@@ -198,7 +198,11 @@ export function startBookClub(state: ChapterState): ChapterState {
 /** Begin Day 4 without revealing private correspondence or discarding previous choices. */
 export function startFourthDay(state: ChapterState): ChapterState {
   if (state.stage !== 'day3-complete') throw new Error('Finish Day 3 first');
-  return { ...state, stage: 'day4-iris', dialogue: { ...startDialogue(irisDecision), flags: state.flags } };
+  return {
+    ...state,
+    stage: 'day4-iris',
+    dialogue: { ...startDialogue(irisDecision), flags: state.flags },
+  };
 }
 
 /** Close the first Day 4 encounter only after the conversation is complete. */
@@ -212,6 +216,11 @@ export function finishFourthDay(state: ChapterState): ChapterState {
 /** Meet Mara after Iris has finished, carrying forward every previous decision. */
 export function advanceToDayFourMara(state: ChapterState): ChapterState {
   if (state.stage !== 'day4-iris') throw new Error('Finish Iris first');
-  if (currentNode(irisDecision, state.dialogue).options.length) throw new Error('Finish Iris first');
-  return { ...state, stage: 'day4-mara', dialogue: { ...startDialogue(maraDecision), flags: state.flags } };
+  if (currentNode(irisDecision, state.dialogue).options.length)
+    throw new Error('Finish Iris first');
+  return {
+    ...state,
+    stage: 'day4-mara',
+    dialogue: { ...startDialogue(maraDecision), flags: state.flags },
+  };
 }

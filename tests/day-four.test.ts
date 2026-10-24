@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { irisDecision } from '../src/content/day-four-iris';
 import { finishFourthDay, startFourthDay, type ChapterState } from '../src/game/chapter';
-import { availableOptions, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 describe('Day 4: Iris and the sealed letter', () => {
@@ -10,9 +15,13 @@ describe('Day 4: Iris and the sealed letter', () => {
   });
   it('does not reveal letter discussion without finding the envelope', () => {
     const welcome = selectOption(irisDecision, startDialogue(irisDecision), 'welcome');
-    expect(availableOptions(irisDecision, welcome).map((option) => option.id)).not.toContain('letter');
+    expect(availableOptions(irisDecision, welcome).map((option) => option.id)).not.toContain(
+      'letter',
+    );
     const withEvidence = { ...welcome, flags: ['saw_envelope'] };
-    expect(availableOptions(irisDecision, withEvidence).map((option) => option.id)).toContain('letter');
+    expect(availableOptions(irisDecision, withEvidence).map((option) => option.id)).toContain(
+      'letter',
+    );
   });
   it('preserves consent choices across saves and does not advance prematurely', () => {
     const previous: ChapterState = {

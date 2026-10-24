@@ -16,7 +16,12 @@ export const irisDecision: DialogueStory = {
       text: '«Я не хочу, щоб сім років мого життя вмістилися в один конверт. Але й робити вигляд, що його немає, більше не можу». Вона проводить пальцем по краю альбому.',
       options: [
         { id: 'art', label: '«Розкажи про свої малюнки»', next: 'art' },
-        { id: 'letter', label: '«Можемо поговорити про лист»', next: 'letter', requires: ['saw_envelope'] },
+        {
+          id: 'letter',
+          label: '«Можемо поговорити про лист»',
+          next: 'letter',
+          requires: ['saw_envelope'],
+        },
         { id: 'past', label: '«Що для тебе змінилося після повернення?»', next: 'past' },
         { id: 'leave', label: '«Не поспішай із рішенням»', next: 'end' },
       ],
@@ -25,22 +30,51 @@ export const irisDecision: DialogueStory = {
       id: 'art',
       speaker: 'Айріс',
       text: '«Колись я малювала лише місця, з яких хотіла втекти. Тепер — місця, де можна залишитися. Ось це вікно книгарні. Бачиш, я залишила світло всередині?»',
-      options: [{ id: 'art-back', label: '«Тут завжди знайдеться місце для твоїх малюнків»', next: 'welcome', grants: ['iris_offered_exhibition'] }],
+      options: [
+        {
+          id: 'art-back',
+          label: '«Тут завжди знайдеться місце для твоїх малюнків»',
+          next: 'welcome',
+          grants: ['iris_offered_exhibition'],
+        },
+      ],
     },
     {
       id: 'past',
       speaker: 'Айріс',
       text: '«Я думала, що повернення дасть відповідь на всі запитання. Насправді воно дало мені право ставити нові. Мені не потрібно повертати минуле, щоб не боятися його».',
-      options: [{ id: 'past-back', label: '«Ти можеш обрати, що буде далі»', next: 'welcome', grants: ['iris_supported_autonomy'] }],
+      options: [
+        {
+          id: 'past-back',
+          label: '«Ти можеш обрати, що буде далі»',
+          next: 'welcome',
+          grants: ['iris_supported_autonomy'],
+        },
+      ],
     },
     {
       id: 'letter',
       speaker: 'Айріс',
       text: '«Це мої слова, але адресовані вони були Лео. Я не знаю, чи хочу, щоб він їх прочитав. І не хочу, щоб хтось вирішував замість нас».',
       options: [
-        { id: 'respect', label: '«Лист залишиться запечатаним, доки ти не вирішиш»', next: 'respect', grants: ['iris_letter_choice_respected'] },
-        { id: 'offer', label: '«Я можу передати його лише з твоєї згоди»', next: 'offer', grants: ['iris_letter_delivery_offered'] },
-        { id: 'pressure', label: '«Лео має прочитати його просто зараз»', next: 'pressure', grants: ['iris_letter_pressured_day4'] },
+        {
+          id: 'respect',
+          label: '«Лист залишиться запечатаним, доки ти не вирішиш»',
+          next: 'respect',
+          grants: ['iris_letter_choice_respected'],
+        },
+        {
+          id: 'offer',
+          label: '«Я можу передати його лише з твоєї згоди»',
+          next: 'offer',
+          grants: ['iris_letter_delivery_offered'],
+        },
+        {
+          id: 'pressure',
+          label: '«Лео має прочитати його просто зараз»',
+          next: 'pressure',
+          grants: ['iris_letter_pressured_day4'],
+        },
         { id: 'letter-back', label: '«Можемо повернутися до цього пізніше»', next: 'welcome' },
       ],
     },
@@ -54,7 +88,14 @@ export const irisDecision: DialogueStory = {
       id: 'offer',
       speaker: 'Айріс',
       text: '«Можливо, колись я попрошу тебе. Але не сьогодні. Спершу я хочу поговорити з ним сама — якщо він теж цього захоче».',
-      options: [{ id: 'offer-back', label: '«Я нічого не передаватиму без дозволу»', next: 'welcome', grants: ['iris_letter_choice_respected'] }],
+      options: [
+        {
+          id: 'offer-back',
+          label: '«Я нічого не передаватиму без дозволу»',
+          next: 'welcome',
+          grants: ['iris_letter_choice_respected'],
+        },
+      ],
     },
     {
       id: 'pressure',

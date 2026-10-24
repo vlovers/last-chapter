@@ -282,9 +282,9 @@ function render(): void {
                         ? 'Завершити третій день →'
                         : chapter.stage === 'day4-iris'
                           ? 'Зустріти Мару →'
-                        : chapter.stage === 'day4-mara'
-                          ? 'Завершити зустріч із Марою →'
-                        : 'Наступна сцена →';
+                          : chapter.stage === 'day4-mara'
+                            ? 'Завершити зустріч із Марою →'
+                            : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
           chapter.stage === 'iris'
@@ -303,9 +303,9 @@ function render(): void {
                         ? finishThirdDay(chapter)
                         : chapter.stage === 'day4-iris'
                           ? advanceToDayFourMara(chapter)
-                        : chapter.stage === 'day4-mara'
-                          ? finishFourthDay(chapter)
-                        : advanceChapter(chapter);
+                          : chapter.stage === 'day4-mara'
+                            ? finishFourthDay(chapter)
+                            : advanceChapter(chapter);
         persistChapter();
         render();
       });
