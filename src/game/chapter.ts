@@ -77,7 +77,12 @@ export function chooseChapterOption(state: ChapterState, id: string): ChapterSta
 }
 
 export function advanceChapter(state: ChapterState): ChapterState {
-  if (state.stage === 'complete' || state.stage === 'day2-complete' || state.stage === 'day3-complete') return state;
+  if (
+    state.stage === 'complete' ||
+    state.stage === 'day2-complete' ||
+    state.stage === 'day3-complete'
+  )
+    return state;
   if (!['miller', 'mara', 'evening'].includes(state.stage)) {
     throw new Error('Use the explicit Day 2 transitions');
   }

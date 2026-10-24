@@ -54,4 +54,3 @@ describe('Eleanor and Day 3', () => {
     ).toThrow();
   });
 });
-
