@@ -1,6 +1,6 @@
 # V5 — canonical Phaser route and shared narrative bridge
 
-Status: **first integration pass; requires local verification and further gameplay/art work**.
+Status: **canonical gameplay integrated; browser-smoke verified; needs full human playthrough and character-art polish before merging**.
 
 ## Implemented in this branch
 
@@ -9,6 +9,7 @@ Status: **first integration pass; requires local verification and further gamepl
 - `FiveDayStory` calls the existing `src/game/chapter.ts`, `dialogue.ts`, `save.ts`, `cast.ts`, and book-selection lookup. It never duplicates the authored five-day dialogue graphs.
 - The scene's visitor interaction opens the current canonical narrative node; choices use the shared transition functions. Day checkpoints and the season ending are navigable.
 - Existing `last-chapter:save:v1` is loaded and updated through the existing codec. No migration/reset of prior saves is performed.
+- The root scene now includes a stage-aware visitor silhouette palette, five-day timeline, canonical journal and catalogue, detailed book recommendations and discoverable room notes.
 
 ## Known incomplete parts (do not call V5 finished)
 
@@ -16,7 +17,7 @@ Status: **first integration pass; requires local verification and further gamepl
 - The old standalone Phaser fixture remains at `/phaser-prototype/`, by design.
 - The canonical route now offers the five-day progress bar, searchable-by-category catalog, journal facts, completed orders, and detailed recommendation cards. The remaining task is to improve their visual design and cross-input accessibility; do not claim parity without browser QA.
 - The root narrative still uses a shared visitor interaction point; characters do not yet have independent stage-specific entrances/departures.
-- Root-specific end-to-end browser QA still needs expansion. Existing V4 screenshots and checks do not prove the new route.
+- Root Chrome smoke now checks entry, catalog, journal, first visit, save/reload, 19-stage story traversal and season ending. It does not yet exercise every stage through the live dialogue UI or verify mobile, touch and the isolated V4 regression fixture.
 - The old DOM implementation is retained in source as migration reference, not rendered on `/`.
 
 ## Verification before review
