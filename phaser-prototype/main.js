@@ -1,9 +1,14 @@
 import Phaser from 'phaser';
 import './style.css';
 import { FiveDayStory } from '../src/phaser/five-day-story';
+import { mountStoryPanels } from '../src/phaser/story-panels';
 
 // Only the canonical route uses the shared five-day narrative.
-if (location.pathname === '/') window.__lastChapterStory = new FiveDayStory();
+if (location.pathname === '/') {
+  const story = new FiveDayStory();
+  window.__lastChapterStory = story;
+  mountStoryPanels(story);
+}
 
 // Bundle the engine locally; keep the isolated public modules free of production state.
 window.Phaser = Phaser;

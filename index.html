@@ -68,6 +68,17 @@
         </section>
         <p id="toast" role="status" aria-live="polite">Книгарня прокидається. За вікном дощить…</p>
       </section>
+      <section id="story-tools" class="story-tools" aria-label="Історія та книгарня">
+        <div class="story-toolbar">
+          <ol id="day-timeline" class="story-timeline" aria-label="Прогрес п’яти днів"></ol>
+          <div class="story-toolbar-actions">
+            <button id="story-continue" type="button">Продовжити історію</button>
+            <button id="catalog-toggle" type="button" aria-expanded="false" aria-controls="story-panel">Каталог книжок</button>
+            <button id="journal-toggle" type="button" aria-expanded="false" aria-controls="story-panel">Нотатник</button>
+          </div>
+        </div>
+        <section id="story-panel" hidden aria-live="polite"></section>
+      </section>
       <footer>
         <span>Клацніть на підлогу, щоб підійти. На предмет — щоб оглянути.</span
         ><span>Стрілки / WASD · E — взаємодія · R — обрати предмет</span>
@@ -76,7 +87,7 @@
         <h2 id="settings-title">Трохи затишку</h2>
         <p>
           Рухайтеся стрілками або WASD. Клацніть на вільну підлогу, щоб підійти. Натисніть на
-          предмет або Мару, щоб підійти й почати розмову.
+          предмет або відвідувача, щоб підійти й почати розмову.
         </p>
         <p>
           <kbd>E</kbd> — взаємодія поруч. <kbd>R</kbd> — наступний предмет, <kbd>Enter</kbd> —

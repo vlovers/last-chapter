@@ -529,3 +529,140 @@ body.reduced #dialogue {
 #dialogue.still {
   animation: none;
 }
+
+/* Shared five-day tools live below the room so they never cover playable space. */
+.story-tools {
+  margin-top: 12px;
+  border: 2px solid #98775a;
+  background: #27252c;
+  color: #f2dfc5;
+}
+.story-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px;
+}
+.story-toolbar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.story-toolbar-actions button {
+  min-height: 42px;
+  font-size: 13px;
+}
+.story-toolbar-actions [aria-expanded='true'],
+.story-filters [aria-pressed='true'] {
+  background: #725340;
+  border-color: #f1ca8f;
+}
+.story-timeline {
+  display: flex;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.day-step {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border: 1px solid #695b59;
+  border-radius: 50%;
+  color: #b3aaa1;
+}
+.day-step--completed {
+  background: #47685c;
+  color: #f8ebd0;
+}
+.day-step--current {
+  background: #e3b780;
+  border-color: #e3b780;
+  color: #28212b;
+  font-weight: bold;
+}
+#story-panel {
+  padding: 18px;
+  border-top: 1px solid #745943;
+  max-height: 48svh;
+  overflow-y: auto;
+}
+#story-panel h2 {
+  margin: 0 0 14px;
+  font: 24px Georgia, serif;
+}
+#story-panel h3 {
+  font: 18px Georgia, serif;
+}
+.story-notes {
+  line-height: 1.7;
+  padding-left: 22px;
+}
+.story-receipt {
+  display: grid;
+  gap: 5px;
+  padding: 12px 0;
+  border-bottom: 1px solid #655347;
+}
+.story-receipt small,
+.story-book small {
+  color: #c5b39a;
+}
+.story-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.story-book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 12px;
+}
+.story-book {
+  padding: 14px;
+  background: #362e32;
+  border: 1px solid #78634c;
+  line-height: 1.6;
+}
+.story-book h3 {
+  margin: 0 0 4px;
+}
+.story-book details {
+  padding-top: 8px;
+}
+.story-book summary {
+  cursor: pointer;
+  color: #f0c892;
+}
+#choices button:has(.recommendation) {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px 12px 28px;
+}
+.recommendation {
+  display: grid;
+  gap: 5px;
+}
+.recommendation strong {
+  font-size: 15px;
+}
+.recommendation small {
+  color: #e0d8b7;
+}
+.recommendation span {
+  font-size: 12px;
+  line-height: 1.5;
+}
+@media (max-width: 550px) {
+  .story-toolbar-actions {
+    width: 100%;
+  }
+  .story-toolbar-actions button {
+    flex: 1 1 auto;
+  }
+}

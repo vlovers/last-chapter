@@ -26,6 +26,28 @@ import { decodeSave, encodeSave, SAVE_KEY } from '../game/save';
 import { castMember } from '../game/cast';
 import { bookForChoice } from '../content/books';
 import { seasonEnding } from '../game/endings';
+import { inspectShopSpot, shopSpots, type ShopSpotId } from '../game/exploration';
+import { completedOrders } from '../game/service';
+import { storyProgress } from '../game/progress';
+import { catalogEntries, type CatalogFilter } from '../game/catalog';
+import { journalFacts } from './journal-facts';
+
+const stagePeople: Partial<Record<ChapterStage, { name: string; actor: string | null }>> = {
+  miller: { name: 'Пані Міллер', actor: 'miller' },
+  mara: { name: 'Мара', actor: 'mara' },
+  evening: { name: 'Вечір у книгарні', actor: null },
+  iris: { name: 'Айріс', actor: 'iris' },
+  anna: { name: 'Анна', actor: 'anna' },
+  leo: { name: 'Лео', actor: 'leo' },
+  eleanor: { name: 'Елеонора', actor: 'eleanor' },
+  thomas: { name: 'Томас', actor: 'thomas' },
+  nora: { name: 'Нора', actor: 'nora' },
+  'book-club': { name: 'Книжковий клуб', actor: null },
+  'day4-iris': { name: 'Айріс', actor: 'iris' },
+  'day4-mara': { name: 'Мара', actor: 'mara' },
+  'day4-leo': { name: 'Лео', actor: 'leo' },
+  'day5-reading': { name: 'Вечір історій', actor: null },
+};
 
 const checkpoints: Partial<
   Record<ChapterStage, { label: string; next: (state: ChapterState) => ChapterState }>
@@ -82,9 +104,30 @@ export class FiveDayStory {
     return dayOf(this.chapter.stage);
   }
   get visitor(): string {
-    if (checkpoints[this.stage]) return 'Наступний день';
-    if (this.stage === 'season-complete') return 'Завершення історії';
-    return currentNode(stageStory(this.stage), this.chapter.dialogue).speaker;
+    return stagePeople[this.stage]?.name ?? (this.stage === 'season-complete'
+      ? 'Завершення історії' : 'Наступний день');
+  }
+  get actor(): string | null {
+    return stagePeople[this.stage]?.actor ?? null;
+  }
+  get progress() {
+    return storyProgress(this.stage);
+  }
+  get notes(): readonly string[] {
+    return journalFacts.filter(([flag]) => this.chapter.flags.includes(flag)).map(([, text]) => text);
+  }
+  get orders() {
+    return completedOrders(this.chapter);
+  }
+  catalog(filter: CatalogFilter = 'all') {
+    return catalogEntries(filter);
+  }
+  inspect(id: string) {
+    const spot = shopSpots.find((item) => item.id === id);
+    if (!spot) return null;
+    this.chapter = inspectShopSpot(this.chapter, id as ShopSpotId);
+    this.persist();
+    return { speaker: spot.title, text: spot.detail, choices: [], portrait: '' };
   }
   private persist(): void {
     try {
@@ -117,7 +160,12 @@ export class FiveDayStory {
       const book = ['miller', 'mara'].includes(this.stage)
         ? bookForChoice(this.stage as 'miller' | 'mara', node.id, option.id)
         : undefined;
-      return { id: option.id, label: book ? `${option.label} · «${book.title}»` : option.label };
+      return {
+        id: option.id,
+        label: option.label,
+        ...(book ? { book: { title: book.title, genre: book.genre, length: book.length,
+          blurb: book.blurb, readerFit: book.readerFit, possibleImpact: book.possibleImpact } } : {}),
+      };
     });
     if (!choices.length && sequence[this.stage])
       choices.push({ id: '__advance', label: sequence[this.stage]!.label });

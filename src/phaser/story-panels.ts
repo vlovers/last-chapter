@@ -1,0 +1,102 @@
+import type { FiveDayStory } from './five-day-story';
+import type { CatalogFilter } from '../game/catalog';
+
+/** The Phaser shell owns movement; this accessible DOM dock owns reading and reference material. */
+export function mountStoryPanels(story: FiveDayStory): () => void {
+  const root = document.querySelector<HTMLElement>('#story-tools');
+  const journal = document.querySelector<HTMLButtonElement>('#journal-toggle');
+  const catalog = document.querySelector<HTMLButtonElement>('#catalog-toggle');
+  const panel = document.querySelector<HTMLElement>('#story-panel');
+  const timeline = document.querySelector<HTMLOListElement>('#day-timeline');
+  const continueButton = document.querySelector<HTMLButtonElement>('#story-continue');
+  if (!root || !journal || !catalog || !panel || !timeline || !continueButton) {
+    throw new Error('Не знайдено панель історії');
+  }
+  const controls = { journal, catalog };
+  let mode: 'journal' | 'catalog' | null = null;
+  let filter: CatalogFilter = 'all';
+  const element = <K extends keyof HTMLElementTagNameMap>(
+    tag: K,
+    text: string,
+    className = '',
+  ): HTMLElementTagNameMap[K] => {
+    const node = document.createElement(tag);
+    node.textContent = text;
+    if (className) node.className = className;
+    return node;
+  };
+  const refresh = () => {
+    timeline.replaceChildren();
+    for (const day of story.progress) {
+      const item = element('li', String(day.day), `day-step day-step--${day.status}`);
+      item.title = day.label;
+      item.setAttribute('aria-label', `${day.label} · ${day.status === 'completed' ? 'завершено' : day.status === 'current' ? 'зараз' : 'попереду'}`);
+      if (day.status === 'current') item.setAttribute('aria-current', 'step');
+      timeline.append(item);
+    }
+    continueButton.textContent = `День ${story.day} · ${story.visitor} · Продовжити`;
+    for (const [name, button] of Object.entries(controls)) {
+      button.setAttribute('aria-expanded', String(mode === name));
+    }
+    panel.hidden = mode === null;
+    panel.replaceChildren();
+    if (mode === 'journal') {
+      panel.append(element('h2', 'Нотатник книгаря'));
+      const notes = element('ul', '', 'story-notes');
+      for (const note of story.notes) notes.append(element('li', note));
+      if (!story.notes.length) notes.append(element('li', 'Поки що тут немає записів.'));
+      panel.append(notes, element('h3', 'Замовлення відвідувачів'));
+      for (const order of story.orders) {
+        const receipt = element('article', '', 'story-receipt');
+        receipt.append(element('strong', order.customer), element('span', order.book.title), element('small', order.note));
+        panel.append(receipt);
+      }
+      if (!story.orders.length) panel.append(element('p', 'Ще немає виконаних замовлень.'));
+    } else if (mode === 'catalog') {
+      panel.append(element('h2', 'Книжки на полицях'));
+      const filters = element('div', '', 'story-filters');
+      const labels: readonly [CatalogFilter, string][] = [
+        ['all', 'Усі'], ['mystery', 'Детективи'], ['literary', 'Проза та листи'],
+      ];
+      for (const [value, label] of labels) {
+        const button = element('button', label);
+        button.type = 'button';
+        button.setAttribute('aria-pressed', String(filter === value));
+        button.addEventListener('click', () => { filter = value; refresh(); });
+        filters.append(button);
+      }
+      panel.append(filters);
+      const shelf = element('div', '', 'story-book-grid');
+      for (const book of story.catalog(filter)) {
+        const card = element('article', '', 'story-book');
+        card.append(element('h3', book.title), element('small', `${book.genre} · ${book.length}`), element('p', book.blurb));
+        const details = element('details', '');
+        const summary = element('summary', 'Чому варто прочитати');
+        details.append(summary, element('p', book.readerFit), element('p', book.possibleImpact));
+        card.append(details);
+        shelf.append(card);
+      }
+      panel.append(shelf);
+    }
+  };
+  const toggle = (next: 'journal' | 'catalog') => {
+    mode = mode === next ? null : next;
+    refresh();
+  };
+  const journalClick = () => toggle('journal');
+  const catalogClick = () => toggle('catalog');
+  const continueClick = () => {
+    window.dispatchEvent(new CustomEvent('last-chapter:continue'));
+  };
+  journal.addEventListener('click', journalClick);
+  catalog.addEventListener('click', catalogClick);
+  continueButton.addEventListener('click', continueClick);
+  window.__lastChapterRefresh = refresh;
+  refresh();
+  return () => {
+    journal.removeEventListener('click', journalClick);
+    catalog.removeEventListener('click', catalogClick);
+    continueButton.removeEventListener('click', continueClick);
+    window.__lastChapterRefresh = undefined;
+  };
+}
