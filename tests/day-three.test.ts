@@ -1,7 +1,12 @@
 import { thomasVisit } from '../src/content/thomas';
 import { describe, expect, it } from 'vitest';
 import { eleanorVisit } from '../src/content/eleanor';
-import { advanceToThomas, finishThirdDay, startThirdDay, type ChapterState } from '../src/game/chapter';
+import {
+  advanceToThomas,
+  finishThirdDay,
+  startThirdDay,
+  type ChapterState,
+} from '../src/game/chapter';
 import {
   availableOptions,
   currentNode,

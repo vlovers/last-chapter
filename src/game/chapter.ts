@@ -142,6 +142,11 @@ export function finishThirdDay(state: ChapterState): ChapterState {
 /** Advance Day 3 from Eleanor to Thomas without losing previous discoveries. */
 export function advanceToThomas(state: ChapterState): ChapterState {
   if (state.stage !== 'eleanor') throw new Error('Finish Eleanor first');
-  if (currentNode(eleanorVisit, state.dialogue).options.length) throw new Error('Finish Eleanor first');
-  return { ...state, stage: 'thomas', dialogue: { ...startDialogue(thomasVisit), flags: state.flags } };
+  if (currentNode(eleanorVisit, state.dialogue).options.length)
+    throw new Error('Finish Eleanor first');
+  return {
+    ...state,
+    stage: 'thomas',
+    dialogue: { ...startDialogue(thomasVisit), flags: state.flags },
+  };
 }
