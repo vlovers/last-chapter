@@ -55,7 +55,15 @@ export class DialogueUI {
     this.text.textContent = node.text;
     this.portrait.hidden = !isMara;
     this.fallback.hidden = isMara;
-    if (isMara) {
+    if (isMara && node.portrait) {
+      const path = node.portrait;
+      if (this.portrait.getAttribute('src') !== path) this.portrait.src = path;
+      if (this.portrait.complete && !this.portrait.naturalWidth) this.useFallback('mara-portrait');
+    } else if (isMara) {
+      this.useFallback('object');
+    }
+    if (isMara && !node.portrait) {
+      // Existing standalone prototype continues to use its original Mara portrait.
       const id = ['thoughtful', 'firm'].includes(node.mood) ? `mara-${node.mood}` : 'mara-portrait';
       const path = ASSET_MANIFEST.find((entry) => entry.id === id).path;
       if (this.portrait.getAttribute('src') !== path) this.portrait.src = path;

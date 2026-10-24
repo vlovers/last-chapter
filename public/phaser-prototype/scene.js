@@ -27,6 +27,7 @@ class Bookshop extends Phaser.Scene {
     validateManifest(ASSET_MANIFEST);
     validateDialogue();
     this.state = initialState();
+    this.story = window.__lastChapterStory ?? null;
     this.started = false;
     this.failed = false;
     this.keys = new Set();
@@ -44,12 +45,22 @@ class Bookshop extends Phaser.Scene {
     );
     this.interactions = new Interactions(this, (spot) => this.approach(spot));
     this.interactions.update(this.characters.player, this.characters.mara, this.state);
+    this.refreshStory();
     this.bindControls();
     this.events.once('shutdown', () => this.cleanup());
     this.events.once('destroy', () => this.cleanup());
     $('#loading-message').textContent = 'Дощ залишиться за дверима. Книжки вже чекають.';
     $('#enter').disabled = false;
     $('#enter').focus();
+  }
+  refreshStory() {
+    if (!this.story) return;
+    const spot = this.interactions.spots.find((item) => item.id === 'mara');
+    if (spot) {
+      spot.label = `Продовжити історію · ${this.story.visitor}`;
+      this.interactions.buttons.get('mara')?.setAttribute('aria-label', spot.label);
+    }
+    $('#objective').textContent = `День ${this.story.day} · ${this.story.visitor}. Підійдіть до відвідувача.`;
   }
   listen(target, event, handler) {
     target.addEventListener(event, handler, { signal: this.lifecycle.signal });
@@ -201,8 +212,9 @@ class Bookshop extends Phaser.Scene {
   }
   interact(spot) {
     if (!eligible(this.characters.player, spot, this.state)) return;
-    this.activeDialogue =
-      spot.id === 'mara'
+    this.activeDialogue = this.story && spot.id === 'mara'
+      ? { kind: 'story' }
+      : spot.id === 'mara'
         ? (this.savedConversation ?? openDialogue('mara', this.state.completed))
         : openDialogue(spot.id);
     if (!this.activeDialogue) return;
@@ -215,19 +227,27 @@ class Bookshop extends Phaser.Scene {
     this.showDialogue();
   }
   showDialogue() {
-    const node = dialogueNode(this.activeDialogue, this.state);
+    const node = this.activeDialogue?.kind === 'story'
+      ? this.story.open() : dialogueNode(this.activeDialogue, this.state);
     if (!node) throw new Error('Missing dialogue node');
     for (const selector of ['#game', '#hotspots', '.hud', '#context-action'])
       $(selector).inert = true;
     $('#context-action').hidden = true;
     this.dialogue.show(
       node,
-      this.activeDialogue.kind === 'mara',
+      this.activeDialogue.kind === 'mara' || this.activeDialogue.kind === 'story',
       this.state.completed,
       this.reduced,
     );
   }
   choose(id) {
+    if (this.activeDialogue?.kind === 'story') {
+      this.story.choose(id);
+      this.audio.play('dialogue');
+      this.refreshStory();
+      this.showDialogue();
+      return;
+    }
     const result = chooseDialogue(this.activeDialogue, id);
     if (!result || this.state.mode !== 'dialogue') return;
     this.activeDialogue = result.dialogue;
@@ -252,6 +272,7 @@ class Bookshop extends Phaser.Scene {
     for (const selector of ['#game', '#hotspots', '.hud', '#context-action'])
       $(selector).inert = false;
     $('#game').focus();
+    if (this.story) this.refreshStory();
     this.toast(
       this.state.completed
         ? 'Мара усміхається. Подарунок обрано — можна ще трохи побути серед книжок.'
@@ -290,7 +311,7 @@ class Bookshop extends Phaser.Scene {
           if (this.reduced || !this.arrival.length) {
             this.state = transition(this.state, { type: 'arrive' });
             this.toast('Мара зняла мокрий шарф. Підійдіть, щоб привітатися.');
-            $('#objective').textContent = 'Допоможіть Марі обрати книжку на подарунок.';
+            if (!this.story) $('#objective').textContent = 'Допоможіть Марі обрати книжку на подарунок.';
           }
         } else updateCharacter(mara, mara, this.reduced, this.state.completed);
         const axis = (positive, negative) =>
