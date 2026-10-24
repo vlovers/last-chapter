@@ -57,6 +57,9 @@ export function chooseChapterOption(state: ChapterState, id: string): ChapterSta
 
 export function advanceChapter(state: ChapterState): ChapterState {
   if (state.stage === 'complete' || state.stage === 'day2-complete') return state;
+  if (!['miller', 'mara', 'evening'].includes(state.stage)) {
+    throw new Error('Use the explicit Day 2 transitions');
+  }
   if (currentNode(stageStory(state.stage), state.dialogue).options.length > 0) {
     throw new Error('Finish the conversation before continuing');
   }
@@ -75,7 +78,7 @@ export function startSecondDay(state: ChapterState): ChapterState {
   return { ...state, stage: 'iris', dialogue: { ...startDialogue(irisVisit), flags: state.flags } };
 }
 
-/** Day 2 currently contains an Iris encounter; later scenes will be inserted before its end. */
+/** Finish the current Day 2 sequence after Leo's visit. */
 export function finishSecondDay(state: ChapterState): ChapterState {
   if (state.stage !== 'leo') throw new Error('Finish all Day 2 visits first');
   if (currentNode(leoVisit, state.dialogue).options.length)

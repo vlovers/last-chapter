@@ -43,7 +43,7 @@ const stageNames = {
   iris: 'День другий · Айріс',
   anna: 'День другий · Анна',
   leo: 'День другий · Лео',
-  'day2-complete': 'Кінець зустрічі з Айріс',
+  'day2-complete': 'Кінець другого дня',
 } as const;
 
 function render(): void {
