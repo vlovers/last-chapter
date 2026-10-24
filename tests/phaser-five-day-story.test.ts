@@ -18,7 +18,7 @@ describe('canonical Phaser story bridge', () => {
     const story = new FiveDayStory();
     expect(story.stage).toBe('miller');
     expect(story.day).toBe(1);
-    expect(story.open().speaker).toBe('Пані Міллер');
+    expect(story.open().speaker).toBe('Оповідач');
   });
   it('uses the shared dialogue graph and persists each choice in the legacy save format', () => {
     const story = new FiveDayStory();
