@@ -107,7 +107,12 @@ function render(): void {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = `shop-hotspot shop-hotspot--${spot.id}`;
-    button.textContent = spot.description;
+    button.textContent = '';
+    const spotGlyphs: Record<ShopSpotId, string> = {
+      shelves: '▤', window: '☂', counter: '✉', plant: '✿',
+    };
+    button.textContent = spotGlyphs[spot.id];
+    button.title = spot.description;
     button.setAttribute('aria-label', spot.title + ': ' + spot.description);
     button.setAttribute('aria-pressed', String(activeSpot === spot.id));
     if (chapter.flags.includes(spot.discoveryFlag)) button.classList.add('shop-hotspot--visited');

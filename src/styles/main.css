@@ -1083,3 +1083,73 @@ body {
     display: none;
   }
 }
+
+/* Art direction V3: in-world affordances and a quieter, less dashboard-like shell. */
+body {
+  background: #19141d;
+}
+.scene { width: min(1180px, 100%); gap: 14px; }
+.illustration.illustration--pixel {
+  border: 3px solid #865d50;
+  border-radius: 3px;
+  box-shadow: 0 22px 56px #09070a8f, 0 0 0 5px #241c24;
+}
+.illustration--pixel .shop-hotspot {
+  display: grid;
+  place-items: center;
+  width: clamp(30px, 3.2vw, 46px);
+  height: clamp(30px, 3.2vw, 46px);
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  border: 2px solid #f8d6a4c9;
+  border-radius: 50%;
+  background: #292032dd;
+  color: #ffe2a8;
+  box-shadow: 0 0 0 4px #17131d77, 0 4px 12px #100c14b3;
+  font-size: clamp(19px, 2vw, 27px);
+  line-height: 1;
+  text-shadow: 0 2px #2a1b2d;
+  opacity: .86;
+  transition: transform .16s ease, opacity .16s ease, background .16s ease;
+}
+.illustration--pixel .shop-hotspot:hover,
+.illustration--pixel .shop-hotspot:focus-visible,
+.illustration--pixel .shop-hotspot[aria-pressed='true'] {
+  transform: scale(1.12);
+  opacity: 1;
+  background: #765168;
+}
+.illustration--pixel .shop-hotspot--shelves { left: 29%; top: 35%; }
+.illustration--pixel .shop-hotspot--window { right: 13%; top: 27%; }
+.illustration--pixel .shop-hotspot--counter { left: 51%; bottom: 19%; }
+.illustration--pixel .shop-hotspot--plant { right: 7%; bottom: 20%; }
+.illustration--pixel .pixel-rain { right: 7%; top: 15%; width: 29%; height: 44%; opacity: .23; }
+.illustration--pixel .pixel-lamp-glow { left: 40%; top: 19%; width: 25%; height: 51%; }
+.story-panel, .notebook {
+  background: #28202ddd;
+  border: 1px solid #66515b;
+  border-radius: 4px;
+  box-shadow: 0 12px 28px #0c091399;
+}
+.story-panel h1 { font-size: clamp(24px, 2.5vw, 31px); margin-bottom: 4px; }
+.story-panel .subtitle { margin-bottom: 14px; }
+.dialogue-card {
+  background: #3a2e3e;
+  border: 1px solid #745a63;
+  border-left: 4px solid #e9ae74;
+  border-radius: 4px;
+  line-height: 1.65;
+}
+.story-panel .actions { grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }
+.story-panel .actions button { border-radius: 3px; }
+.scene-hint { border-radius: 3px; background: #251a2dc9; }
+@media(max-width: 600px){
+  .illustration--pixel .shop-hotspot {
+    width: 28px; height: 28px; font-size: 17px;
+    padding: 0; max-width: none;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .illustration--pixel .shop-hotspot { transition: none; }
+}
