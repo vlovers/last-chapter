@@ -24,6 +24,7 @@ export type ChapterStage =
   | 'leo'
   | 'day2-complete'
   | 'eleanor'
+  | 'thomas'
   | 'day3-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
@@ -76,7 +77,7 @@ export function chooseChapterOption(state: ChapterState, id: string): ChapterSta
 }
 
 export function advanceChapter(state: ChapterState): ChapterState {
-  if (state.stage === 'complete' || state.stage === 'day2-complete') return state;
+  if (state.stage === 'complete' || state.stage === 'day2-complete' || state.stage === 'day3-complete') return state;
   if (!['miller', 'mara', 'evening'].includes(state.stage)) {
     throw new Error('Use the explicit Day 2 transitions');
   }
@@ -131,7 +132,7 @@ export function startThirdDay(state: ChapterState): ChapterState {
   };
 }
 
-/** Day 3 is in progress; currently concludes after Eleanor's visit. */
+/** Finish the current Day 3 sequence after Thomas's visit. */
 export function finishThirdDay(state: ChapterState): ChapterState {
   if (state.stage !== 'thomas') throw new Error('Finish Thomas first');
   if (currentNode(thomasVisit, state.dialogue).options.length)

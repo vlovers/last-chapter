@@ -49,7 +49,7 @@ const stageNames = {
   'day2-complete': 'Кінець другого дня',
   eleanor: 'День третій · Елеонора',
   thomas: 'День третій · Томас',
-  'day3-complete': 'Кінець зустрічі з Елеонорою',
+  'day3-complete': 'Кінець поточного третього дня',
 } as const;
 
 function render(): void {
@@ -203,7 +203,11 @@ function render(): void {
               ? 'Зустріти Лео →'
               : chapter.stage === 'leo'
                 ? 'Завершити зустрічі →'
-                : 'Наступна сцена →';
+                : chapter.stage === 'eleanor'
+          ? 'Зустріти Томаса →'
+          : chapter.stage === 'thomas'
+            ? 'Завершити зустріч →'
+            : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
           chapter.stage === 'iris'
@@ -212,7 +216,11 @@ function render(): void {
               ? advanceToLeo(chapter)
               : chapter.stage === 'leo'
                 ? finishSecondDay(chapter)
-                : advanceChapter(chapter);
+                : chapter.stage === 'eleanor'
+                ? advanceToThomas(chapter)
+                : chapter.stage === 'thomas'
+                  ? finishThirdDay(chapter)
+                  : advanceChapter(chapter);
         persistChapter();
         render();
       });

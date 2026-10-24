@@ -22,6 +22,9 @@ const stages: readonly ChapterStage[] = [
   'anna',
   'leo',
   'day2-complete',
+  'eleanor',
+  'thomas',
+  'day3-complete',
 ];
 
 export function encodeSave(state: ChapterState): string {

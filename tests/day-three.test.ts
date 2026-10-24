@@ -44,7 +44,9 @@ describe('Eleanor and Day 3', () => {
     }
     state = { ...state, flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
     expect(state.flags).toContain('thomas_shared_work_stress');
-    expect(finishThirdDay(state).stage).toBe('day3-complete');
+    state = finishThirdDay(state);
+    expect(state.stage).toBe('day3-complete');
+    expect(decodeSave(encodeSave(state))).toEqual(state);
   });
   it('does not start early', () => {
     expect(() =>
@@ -52,3 +54,4 @@ describe('Eleanor and Day 3', () => {
     ).toThrow();
   });
 });
+
