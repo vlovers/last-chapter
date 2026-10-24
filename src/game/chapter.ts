@@ -1,3 +1,4 @@
+import { maraDecision } from '../content/day-four-mara';
 import { irisDecision } from '../content/day-four-iris';
 import { bookClub } from '../content/book-club';
 import { noraVisit } from '../content/nora';
@@ -32,6 +33,7 @@ export type ChapterStage =
   | 'book-club'
   | 'day3-complete'
   | 'day4-iris'
+  | 'day4-mara'
   | 'day4-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
@@ -65,8 +67,10 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
     case 'book-club':
       return bookClub;
     case 'day4-iris':
-    case 'day4-complete':
       return irisDecision;
+    case 'day4-mara':
+    case 'day4-complete':
+      return maraDecision;
     case 'nora':
     case 'day3-complete':
       return noraVisit;
@@ -199,8 +203,15 @@ export function startFourthDay(state: ChapterState): ChapterState {
 
 /** Close the first Day 4 encounter only after the conversation is complete. */
 export function finishFourthDay(state: ChapterState): ChapterState {
-  if (state.stage !== 'day4-iris') throw new Error('Finish the Day 4 visit first');
-  if (currentNode(irisDecision, state.dialogue).options.length)
+  if (state.stage !== 'day4-mara') throw new Error('Finish Mara first');
+  if (currentNode(maraDecision, state.dialogue).options.length)
     throw new Error('Finish the conversation');
   return { ...state, stage: 'day4-complete' };
+}
+
+/** Meet Mara after Iris has finished, carrying forward every previous decision. */
+export function advanceToDayFourMara(state: ChapterState): ChapterState {
+  if (state.stage !== 'day4-iris') throw new Error('Finish Iris first');
+  if (currentNode(irisDecision, state.dialogue).options.length) throw new Error('Finish Iris first');
+  return { ...state, stage: 'day4-mara', dialogue: { ...startDialogue(maraDecision), flags: state.flags } };
 }
