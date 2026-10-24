@@ -22,9 +22,11 @@ describe('interactive book catalog', () => {
     expect(matchingOrderOptions('miller', 'order', millerOrder).map((option) => option.id)).toEqual(
       ['orchard', 'witnesses'],
     );
-    expect(matchingOrderOptions('mara', 'order', maraOrder).map((option) => option.id)).toEqual(
-      ['station', 'roads', 'letters'],
-    );
+    expect(matchingOrderOptions('mara', 'order', maraOrder).map((option) => option.id)).toEqual([
+      'station',
+      'roads',
+      'letters',
+    ]);
     expect(matchingOrderOptions('miller', 'hello', millerOrder)).toEqual([]);
     expect(matchingOrderOptions('nora', 'order', maraOrder)).toEqual([]);
   });
