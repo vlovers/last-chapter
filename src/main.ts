@@ -1,6 +1,6 @@
 import { opening } from './content/intro';
 import { bookForChoice, type Book } from './content/books';
-import { advanceChapter, chooseChapterOption, stageStory, startChapter } from './game/chapter';
+import { advanceChapter, chooseChapterOption, finishSecondDay, stageStory, startChapter, startSecondDay } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
 import './styles/main.css';
@@ -31,6 +31,8 @@ const stageNames = {
   mara: 'День · Мара',
   evening: 'Вечір · Стара коробка',
   complete: 'Кінець першого дня',
+  iris: 'День другий · Айріс',
+  'day2-complete': 'Кінець зустрічі з Айріс',
 } as const;
 
 function render(): void {
@@ -55,9 +57,21 @@ function render(): void {
   const actions = document.createElement('div');
   actions.className = 'actions';
 
-  if (chapter.stage === 'complete') {
-    dialogue.textContent =
-      'Перший день добіг кінця. Це лише короткий сюжетний прототип. Продовження ще створюється.';
+  if (chapter.stage === 'complete' || chapter.stage === 'day2-complete') {
+    dialogue.textContent = chapter.stage === 'complete'
+      ? 'Перший день завершено. Ваші рішення та знахідки залишаться з вами. Наступного ранку до книгарні завітає Айріс.'
+      : 'Розмова з Айріс завершена. Решта другого дня ще створюється.';
+    if (chapter.stage === 'complete') {
+      const continueButton = document.createElement('button');
+      continueButton.type = 'button';
+      continueButton.textContent = 'Почати другий день →';
+      continueButton.addEventListener('click', () => {
+        chapter = startSecondDay(chapter);
+        persistChapter();
+        render();
+      });
+      actions.append(continueButton);
+    }
     const restart = document.createElement('button');
     restart.type = 'button';
     restart.textContent = 'Почати знову';
@@ -146,9 +160,9 @@ function render(): void {
       next.type = 'button';
       next.className = 'next';
       next.textContent =
-        chapter.stage === 'evening' ? 'Завершити перший день →' : 'Наступна сцена →';
+        chapter.stage === 'evening' ? 'Завершити перший день →' : chapter.stage === 'iris' ? 'Завершити зустріч →' : 'Наступна сцена →';
       next.addEventListener('click', () => {
-        chapter = advanceChapter(chapter);
+        chapter = chapter.stage === 'iris' ? finishSecondDay(chapter) : advanceChapter(chapter);
         persistChapter();
         render();
       });
@@ -170,6 +184,9 @@ function render(): void {
     ['leo_likes_trains', 'Мара каже, що Лео любить потяги й розклади.'],
     ['mara_talked_about_leo', 'Мара хоче подарувати Лео книжку, яка покаже, що вона його розуміє.'],
     ['saw_receipt', 'Картка бронювання: Лео Марш. Підпису про отримання немає.'],
+    ['iris_boundary_respected', 'Ви поважали бажання Айріс не поспішати з особистою розмовою.'],
+    ['iris_requested_privacy', 'Айріс попросила поки що не передавати знайдений лист.'],
+    ['iris_recalled_closure', 'Айріс пам’ятає зачинену книгарню перед своїм від’їздом.'],
     ['saw_repair_note', 'Журнал ремонту підтверджує, що книгарню закрили через протікання.'],
     ['mara_boundaries_respected', 'Мара вдячна, що ви не наполягали на особистій розмові.'],
     ['mara_listened_about_work', 'Мара зізналася, що їй важко відмовляти в додатковій роботі.'],

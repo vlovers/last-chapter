@@ -1,3 +1,4 @@
+import { irisVisit } from '../content/iris';
 import { millerVisit } from '../content/first-day';
 import { maraVisit } from '../content/mara';
 import { firstEvening } from '../content/evening';
@@ -9,7 +10,7 @@ import {
   type DialogueStory,
 } from './dialogue';
 
-export type ChapterStage = 'miller' | 'mara' | 'evening' | 'complete';
+export type ChapterStage = 'miller' | 'mara' | 'evening' | 'complete' | 'iris' | 'day2-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
 export interface ChapterState {
@@ -28,6 +29,9 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
       return firstEvening;
     case 'complete':
       return firstEvening;
+    case 'iris':
+    case 'day2-complete':
+      return irisVisit;
   }
 };
 
@@ -38,17 +42,30 @@ export const startChapter = (): ChapterState => ({
 });
 
 export function chooseChapterOption(state: ChapterState, id: string): ChapterState {
-  if (state.stage === 'complete') throw new Error('Chapter segment completed');
+  if (state.stage === 'complete' || state.stage === 'day2-complete') throw new Error('Chapter segment completed');
   const next = selectOption(stageStory(state.stage), state.dialogue, id);
   return { ...state, dialogue: next, flags: [...new Set([...state.flags, ...next.flags])] };
 }
 
 export function advanceChapter(state: ChapterState): ChapterState {
-  if (state.stage === 'complete') return state;
+  if (state.stage === 'complete' || state.stage === 'day2-complete') return state;
   if (currentNode(stageStory(state.stage), state.dialogue).options.length > 0) {
     throw new Error('Finish the conversation before continuing');
   }
   const nextStage = stages[stages.indexOf(state.stage) + 1];
   if (!nextStage) throw new Error('Invalid chapter stage');
-  return { ...state, stage: nextStage, dialogue: startDialogue(stageStory(nextStage)) };
+  return { ...state, stage: nextStage, dialogue: { ...startDialogue(stageStory(nextStage)), flags: state.flags } };
+}
+
+/** Explicitly begin Day 2, preserving discoveries and consent decisions from Day 1. */
+export function startSecondDay(state: ChapterState): ChapterState {
+  if (state.stage !== 'complete') throw new Error('Finish Day 1 before starting Day 2');
+  return { ...state, stage: 'iris', dialogue: { ...startDialogue(irisVisit), flags: state.flags } };
+}
+
+/** Day 2 currently contains an Iris encounter; later scenes will be inserted before its end. */
+export function finishSecondDay(state: ChapterState): ChapterState {
+  if (state.stage !== 'iris') throw new Error('Day 2 has not started');
+  if (currentNode(irisVisit, state.dialogue).options.length) throw new Error('Finish the conversation');
+  return { ...state, stage: 'day2-complete' };
 }
