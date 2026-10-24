@@ -33,6 +33,18 @@ const orderDefinitions = [
     note: 'Можливість прочитати історію разом.',
   },
   {
+    flag: 'anna_chose_maps',
+    customer: 'Анна',
+    id: 'roads',
+    note: 'Історія для розмови з учнями про вибір і дороги.',
+  },
+  {
+    flag: 'anna_chose_mystery',
+    customer: 'Анна',
+    id: 'witnesses',
+    note: 'Загадка для обговорення різних версій подій.',
+  },
+  {
     flag: 'sold_letters',
     customer: 'Мара',
     id: 'letters',
@@ -52,5 +64,6 @@ export function completedOrders(state: Pick<ChapterState, 'flags'>): readonly Or
 export function currentCustomer(stage: ChapterState['stage']): string | null {
   if (stage === 'miller') return 'Пані Міллер';
   if (stage === 'mara') return 'Мара';
+  if (stage === 'anna') return 'Анна';
   return null;
 }
