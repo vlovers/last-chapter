@@ -16,12 +16,14 @@ import {
 } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
+import { inspectShopSpot, shopSpots, type ShopSpotId } from './game/exploration';
 import './styles/main.css';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('Не знайдено контейнер гри');
 let chapter = restoreChapter();
 let previewBook: Book | null = null;
+let activeSpot: ShopSpotId | null = null;
 
 function restoreChapter() {
   try {
@@ -63,8 +65,7 @@ function render(): void {
 
   const illustration = document.createElement('div');
   illustration.className = 'illustration';
-  illustration.setAttribute('role', 'img');
-  illustration.setAttribute('aria-label', 'Книгарня з книжковими полицями, вікном і теплою лампою');
+  illustration.setAttribute('aria-label', 'Інтерактивна книгарня з книжковими полицями, вікном і прилавком');
   illustration.innerHTML = `
     <div class="scene-wall-art" aria-hidden="true"><span>ОСТАННІЙ РОЗДІЛ</span></div>
     <div class="scene-window" aria-hidden="true"><div class="scene-sky"></div><div class="scene-roof"></div><div class="scene-leaves">✦ ✧ ✦</div><div class="scene-window-cross"></div></div>
@@ -82,6 +83,26 @@ function render(): void {
     <div class="scene-counter" aria-hidden="true"><div class="counter-books"></div><div class="counter-cup"></div></div>
     <div class="scene-foreground" aria-hidden="true"></div>
   `;
+
+  const hotspots = document.createElement('div');
+  hotspots.className = 'shop-hotspots';
+  for (const spot of shopSpots) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `shop-hotspot shop-hotspot--${spot.id}`;
+    button.textContent = spot.description;
+    button.setAttribute('aria-label', spot.title + ': ' + spot.description);
+    button.setAttribute('aria-pressed', String(activeSpot === spot.id));
+    if (chapter.flags.includes(spot.discoveryFlag)) button.classList.add('shop-hotspot--visited');
+    button.addEventListener('click', () => {
+      chapter = inspectShopSpot(chapter, spot.id);
+      activeSpot = activeSpot === spot.id ? null : spot.id;
+      persistChapter();
+      render();
+    });
+    hotspots.append(button);
+  }
+  illustration.append(hotspots);
 
   const heading = document.createElement('h1');
   heading.textContent = `${opening.shop} · ${opening.town}`;
@@ -132,6 +153,7 @@ function render(): void {
     restart.addEventListener('click', () => {
       chapter = startChapter();
       previewBook = null;
+      activeSpot = null;
       persistChapter();
       render();
     });
@@ -257,6 +279,10 @@ function render(): void {
   label.textContent = 'Нотатник книгаря';
   const notes = document.createElement('ul');
   const facts: readonly [string, string][] = [
+    ['explored_shelves', 'Ви оглянули книжкові полиці та знайшли п’ять видань для рекомендацій.'],
+    ['explored_window', 'За вікном книгарні — дощовий осінній Беллвік.'],
+    ['explored_counter', 'На шухляді прилавка написано: «Спочатку вислухай».'],
+    ['explored_plant', 'Рослина біля вікна пережила багато зим.'],
     ['heard_about_leak', 'Пані Міллер каже, що сім років тому книгарню затопило.'],
     [
       'rumor_heard',
@@ -318,7 +344,28 @@ function render(): void {
   notebook.append(label, notes);
   const storyPanel = document.createElement('section');
   storyPanel.className = 'story-panel';
-  storyPanel.append(heading, subtitle, dialogue, actions);
+  storyPanel.append(heading, subtitle);
+  if (activeSpot) {
+    const spot = shopSpots.find((item) => item.id === activeSpot);
+    if (spot) {
+      const inspection = document.createElement('aside');
+      inspection.className = 'shop-inspection';
+      const inspectionHeading = document.createElement('h2');
+      inspectionHeading.textContent = spot.title;
+      const inspectionText = document.createElement('p');
+      inspectionText.textContent = spot.detail;
+      const closeInspection = document.createElement('button');
+      closeInspection.type = 'button';
+      closeInspection.textContent = 'Повернутися до розмови';
+      closeInspection.addEventListener('click', () => {
+        activeSpot = null;
+        render();
+      });
+      inspection.append(inspectionHeading, inspectionText, closeInspection);
+      storyPanel.append(inspection);
+    }
+  }
+  storyPanel.append(dialogue, actions);
   container.append(illustration, storyPanel, notebook);
   app.append(container);
 }

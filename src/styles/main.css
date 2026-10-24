@@ -425,3 +425,38 @@ h1 {
     transition: none;
   }
 }
+
+/* Keyboard-accessible interactive room hotspots, positioned over the illustrated objects. */
+.shop-hotspots { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
+.shop-hotspot {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  padding: 7px 10px;
+  border: 1px solid #f7d7a7c9;
+  border-radius: 999px;
+  background: #302338e8;
+  color: #ffe5bc;
+  font: 700 11px/1.3 'Manrope', system-ui, sans-serif;
+  box-shadow: 0 3px 15px #180e208c;
+  transition: transform .15s, background .15s;
+}
+.shop-hotspot:hover, .shop-hotspot[aria-pressed='true'] { background: #815568; transform: translateY(-2px); }
+.shop-hotspot:focus-visible { outline: 3px solid #ffdf9f; outline-offset: 3px; }
+.shop-hotspot--visited { border-color: #a9b990; }
+.shop-hotspot--shelves { left: 7%; top: 45%; }
+.shop-hotspot--window { right: 9%; top: 26%; }
+.shop-hotspot--counter { left: 35%; bottom: 12%; }
+.shop-hotspot--plant { right: 3%; bottom: 26%; }
+.shop-inspection { border: 1px solid #c09172; background: #443448; padding: 18px; margin: 0 0 18px; border-radius: 9px; }
+.shop-inspection h2 { margin: 0 0 8px; font: 700 23px Georgia, serif; color: #ffd8a1; }
+.shop-inspection p { margin: 0 0 15px; line-height: 1.75; }
+.shop-inspection button { border: 1px solid #e8b782; border-radius: 6px; background: transparent; color: #ffe1b8; padding: 10px 14px; cursor: pointer; font: inherit; }
+.shop-inspection button:focus-visible { outline: 3px solid #ffdf9f; outline-offset: 3px; }
+@media (max-width: 540px) {
+  .shop-hotspot { font-size: 9px; padding: 5px 7px; }
+  .shop-hotspot--plant { right: 1%; bottom: 22%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shop-hotspot { transition: none; }
+}
