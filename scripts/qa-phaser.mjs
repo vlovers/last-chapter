@@ -18,10 +18,7 @@ const results = [];
 function assertMaraPortrait(src) {
   const isMaraSvg = Boolean(src?.split('?')[0].endsWith('/mara.svg'));
   const isInlinePng = Boolean(src?.startsWith('data:image/png;base64,'));
-  assert.ok(
-    isMaraSvg || isInlinePng,
-    `Unexpected Mara portrait source: ${src?.slice(0, 100)}`,
-  );
+  assert.ok(isMaraSvg || isInlinePng, `Unexpected Mara portrait source: ${src?.slice(0, 100)}`);
 }
 
 async function snapshot(page) {
