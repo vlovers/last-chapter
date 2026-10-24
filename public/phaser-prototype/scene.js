@@ -147,7 +147,14 @@ class Bookshop extends Phaser.Scene {
       fill(p, -24, -20, 48, 7, 0xb7825f);
       fill(p, -18, -15, 36, 20, 0x9d6c55);
       for (let i = 0; i < 6; i++) {
-        fill(p, -15 + i * 6, -24 - (i % 3) * 3, 5, 15 + (i % 3) * 3, [0x668982, 0xe2ae77, 0xb67870][i % 3]);
+        fill(
+          p,
+          -15 + i * 6,
+          -24 - (i % 3) * 3,
+          5,
+          15 + (i % 3) * 3,
+          [0x668982, 0xe2ae77, 0xb67870][i % 3],
+        );
       }
       fill(p, -19, 1, 38, 3, 0xc3936e);
     });
@@ -170,10 +177,26 @@ class Bookshop extends Phaser.Scene {
     fill(visitorArt, 3, -22, 2, 2, 0x352935);
     fill(visitorArt, -6, -2, 5, 8, 0x41303d);
     fill(visitorArt, 2, -2, 5, 8, 0x41303d);
-    this.tweens.add({ targets: visitor2, y: 254, duration: 1200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    this.tweens.add({
+      targets: visitor2,
+      y: 254,
+      duration: 1200,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
     // Subtle lamp flicker, without flashing the whole screen.
-    const lampLight = this.add.circle(245, 79, 52, 0xffd29b, 0.035).setBlendMode(Phaser.BlendModes.ADD).setDepth(3);
-    this.tweens.add({ targets: lampLight, alpha: { from: 0.55, to: 0.95 }, duration: 1700, yoyo: true, repeat: -1 });
+    const lampLight = this.add
+      .circle(245, 79, 52, 0xffd29b, 0.035)
+      .setBlendMode(Phaser.BlendModes.ADD)
+      .setDepth(3);
+    this.tweens.add({
+      targets: lampLight,
+      alpha: { from: 0.55, to: 0.95 },
+      duration: 1700,
+      yoyo: true,
+      repeat: -1,
+    });
     // Phaser-native character: animated walk, idle and depth ordering.
     this.visitor = this.add.container(590, 287).setDepth(290);
     const vg = this.add.graphics();
