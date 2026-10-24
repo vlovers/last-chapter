@@ -115,6 +115,54 @@ class Bookshop extends Phaser.Scene {
     r(281, 221, 253, 84, 0x713f4c);
     for (let i = 0; i < 9; i++) r(289 + i * 27, 225, 14, 3, C.gold);
     for (let i = 0; i < 9; i++) r(289 + i * 27, 300, 14, 3, C.gold);
+    // Art pass 3: an inhabited reading corner with woven carpet, book stacks and floor details.
+    // These are native-resolution pixels; no borrowed game artwork or external image dependency.
+    for (let y = 230; y < 301; y += 9) {
+      for (let x = 290 + ((y / 9) % 2) * 7; x < 526; x += 18) {
+        r(x, y, 3, 2, 0x986357);
+      }
+    }
+    for (let x = 286; x < 527; x += 18) {
+      r(x, 218, 7, 3, C.gold);
+      r(x, 306, 7, 3, C.gold);
+    }
+    for (let y = 230; y < 300; y += 16) {
+      r(279, y, 3, 8, C.gold);
+      r(535, y, 3, 8, C.gold);
+    }
+    // Scattered leaves near the entrance and the bookshop's worn floorboards.
+    for (const [x, y, shade] of [
+      [588, 330, C.gold], [599, 326, C.red], [572, 336, C.woodLight],
+      [48, 331, C.gold], [61, 323, C.red], [242, 329, C.cream],
+    ]) {
+      r(x, y, 7, 3, shade);
+      r(x + 2, y - 2, 3, 2, shade);
+    }
+    // A handwritten shop sign and framed book illustration.
+    r(28, 169, 82, 27, C.dark);
+    r(31, 172, 76, 21, C.woodLight);
+    r(35, 176, 68, 13, C.ink);
+    r(42, 180, 54, 2, C.gold);
+    r(50, 185, 38, 1, C.cream);
+    r(397, 159, 31, 38, C.dark);
+    r(400, 162, 25, 32, C.woodLight);
+    r(404, 166, 17, 24, C.teal);
+    r(407, 174, 11, 10, C.cream);
+    r(409, 170, 7, 3, C.gold);
+    // Low window-seat cushions make the rain-facing nook feel lived in.
+    r(245, 147, 152, 8, C.woodLight);
+    r(258, 142, 35, 7, C.red);
+    r(300, 142, 35, 7, C.jade);
+    r(342, 142, 35, 7, C.red);
+    // Three-dimensional stacks with alternating spine colors.
+    for (const [x, y, count] of [[250, 189, 4], [552, 300, 3], [45, 245, 3]]) {
+      for (let i = 0; i < count; i++) {
+        const offset = i % 2 === 0 ? 0 : 3;
+        r(x + offset + 2, y - i * 5 + 2, 24, 5, C.dark);
+        r(x + offset, y - i * 5, 24, 5, palettes[(i + count) % palettes.length]);
+        r(x + offset + 3, y - i * 5 + 1, 17, 1, C.cream);
+      }
+    }
     // Reusable pixel-art furniture is drawn as separate depth-sorted game objects.
     const piece = (x, y, draw) => {
       const p = this.add.graphics({ x, y }).setDepth(y);
