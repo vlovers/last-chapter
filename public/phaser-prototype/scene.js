@@ -24,6 +24,12 @@ class Bookshop extends Phaser.Scene {
   constructor() {
     super('bookshop');
   }
+  preload() {
+    this.load.spritesheet('bookshop-visitors', '/assets/bookshop/visitors.svg', {
+      frameWidth: 32,
+      frameHeight: 48,
+    });
+  }
   create() {
     this.cameras.main.setBackgroundColor('#201b27');
     const g = this.add.graphics().setDepth(0);
@@ -205,59 +211,52 @@ class Bookshop extends Phaser.Scene {
         repeat: -1,
       });
     }
-    // Two original 16px-style characters with a shared sprite drawing function.
-    const character = (x, y, coat, hair) => {
-      const container = this.add.container(x, y).setDepth(y);
-      const p = this.add.graphics();
-      container.add(p);
-      const draw = (step = false) => {
-        p.clear();
-        const f = (a, b, w, h, c) => {
-          p.fillStyle(c);
-          p.fillRect(a, b, w, h);
-        };
-        f(-7, 0, 6, 8, C.dark);
-        f(2, step ? 2 : 0, 6, 8, C.dark);
-        f(-9, -19, 18, 20, coat);
-        f(-6, -36, 12, 17, 0xe8b58d);
-        f(-8, -40, 16, 9, hair);
-        f(-9, -33, 4, 12, hair);
-        f(5, -33, 4, 12, hair);
-        f(-4, -28, 2, 2, C.ink);
-        f(3, -28, 2, 2, C.ink);
-        f(-2, -22, 4, 2, C.red);
-      };
-      draw();
-      return { container, draw };
-    };
-    const reader = character(100, 212, 0x81607e, 0x503842);
+    // Original local SVG sprite sheet: two characters, each with four walk frames.
+    this.anims.create({
+      key: 'reader-idle',
+      frames: [{ key: 'bookshop-visitors', frame: 0 }],
+      frameRate: 1,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: 'mara-walk',
+      frames: this.anims.generateFrameNumbers('bookshop-visitors', { start: 4, end: 7 }),
+      frameRate: 6,
+      repeat: -1,
+    });
+    const reader = this.add
+      .sprite(100, 212, 'bookshop-visitors', 0)
+      .setOrigin(0.5, 1)
+      .setDepth(212);
+    reader.play('reader-idle');
     if (!prefersReducedMotion) {
       this.tweens.add({
-        targets: reader.container,
+        targets: reader,
         y: 215,
         duration: 1400,
         yoyo: true,
         repeat: -1,
-        onUpdate: () => reader.container.setDepth(reader.container.y),
+        onUpdate: () => reader.setDepth(reader.y),
       });
     }
-    const mara = character(584, 237, 0x688e86, 0x513740);
+    const mara = this.add
+      .sprite(584, 237, 'bookshop-visitors', 4)
+      .setOrigin(0.5, 1)
+      .setDepth(237);
     if (prefersReducedMotion) {
-      mara.container.setPosition(403, 265).setDepth(265);
-      mara.draw();
+      mara.setPosition(403, 265).setDepth(265);
+      mara.setFrame(4);
     } else {
+      mara.play('mara-walk');
       this.tweens.add({
-        targets: mara.container,
+        targets: mara,
         x: 403,
         y: 265,
         duration: 3900,
         ease: 'Sine.easeInOut',
-        onUpdate: () => {
-          mara.container.setDepth(mara.container.y);
-          mara.draw(Math.floor(this.time.now / 170) % 2 === 0);
-        },
+        onUpdate: () => mara.setDepth(mara.y),
         onComplete: () => {
-          mara.draw();
+          mara.setFrame(4);
           status.textContent = 'Мара підійшла до столика. «Тут так затишно, коли надворі дощить».';
         },
       });
