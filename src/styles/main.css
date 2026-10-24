@@ -652,7 +652,9 @@ h1 {
   border-color: #f2bc7b;
   background: #e5ad78;
   color: #2e2330;
-  box-shadow: 0 0 0 2px #392f41, 0 0 0 4px #e5ad78;
+  box-shadow:
+    0 0 0 2px #392f41,
+    0 0 0 4px #e5ad78;
 }
 .season-epilogue {
   padding: 18px;
@@ -661,5 +663,11 @@ h1 {
   background: #34413e;
   line-height: 1.7;
 }
-.season-epilogue h2 { margin: 0 0 12px; color: #ffdfad; font-family: Georgia, serif; }
-.season-epilogue p { margin: 0 0 10px; }
+.season-epilogue h2 {
+  margin: 0 0 12px;
+  color: #ffdfad;
+  font-family: Georgia, serif;
+}
+.season-epilogue p {
+  margin: 0 0 10px;
+}

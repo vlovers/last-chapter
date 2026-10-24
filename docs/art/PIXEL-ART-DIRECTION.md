@@ -11,6 +11,7 @@ Use original, detailed 2D pixel art for the bookshop and Bellwick, with a modern
 One original bookshop interior at an internal design resolution of **480 × 270** pixels (16:9), displayed with integer nearest-neighbor scaling where possible. Do not stretch the background to fill arbitrarily tall viewports; letterbox or crop intentionally. The current CSS scene remains a fallback until an actual approved sprite exists.
 
 **Layers (back to front):**
+
 1. Rainy Bellwick skyline and moving leaves outside the window.
 2. Interior walls, sign and fixed architecture.
 3. Shelves, book spines, clock, lamp and plants.

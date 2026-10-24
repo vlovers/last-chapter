@@ -21,8 +21,11 @@ export function storyProgress(stage: ChapterStage): readonly DayProgress[] {
   return labels.map((label, index) => ({
     day: index + 1,
     label,
-    status: index < current || (stage === 'season-complete' && index === current)
-      ? 'completed'
-      : index === current ? 'current' : 'upcoming',
+    status:
+      index < current || (stage === 'season-complete' && index === current)
+        ? 'completed'
+        : index === current
+          ? 'current'
+          : 'upcoming',
   }));
 }
