@@ -4,11 +4,13 @@ export interface ConversationChoice {
   next: string;
   remember?: string;
   requires?: string;
+  excludes?: string;
 }
 export interface ConversationNode {
   id: string;
   speaker: string;
   text: string;
+  variants?: readonly { when: string; text: string }[];
   choices: readonly ConversationChoice[];
 }
 export interface ConversationTopic {
@@ -30,6 +32,7 @@ export function validateTopic(topic: ConversationTopic): string[] {
   if (!ids.has(topic.entry)) errors.push('Missing entry');
   for (const node of topic.nodes) {
     if (!node.text.trim()) errors.push('Empty text: ' + node.id);
+    for (const variant of node.variants ?? []) if (!variant.text.trim()) errors.push('Empty variant: ' + node.id);
     const choices = new Set<string>();
     for (const choice of node.choices) {
       if (choices.has(choice.id)) errors.push('Duplicate choice: ' + node.id);
@@ -57,7 +60,9 @@ export function conversationView(topic: ConversationTopic, session: Conversation
   if (session.topic !== topic.id || session.finished) throw new Error('Conversation not active');
   const node = topic.nodes.find((item) => item.id === session.node);
   if (!node) throw new Error('Invalid conversation node');
-  return { ...node, choices: node.choices.filter((c) => !c.requires || session.memories.includes(c.requires)) };
+  const variant = node.variants?.find((v) => session.memories.includes(v.when));
+  return { ...node, text: variant?.text ?? node.text, choices: node.choices.filter((c) =>
+    (!c.requires || session.memories.includes(c.requires)) && (!c.excludes || !session.memories.includes(c.excludes))) };
 }
 export function answerConversation(topic: ConversationTopic, session: ConversationSession, choiceId: string): ConversationSession {
   const choice = conversationView(topic, session).choices.find((c) => c.id === choiceId);
