@@ -11,7 +11,9 @@ describe('visitor browsing moments', () => {
   });
   it('rotates behaviors for each visitor', () => {
     for (const id of VISITOR_IDS) {
-      const moments = new Set(Array.from({ length: BROWSE_ACTIONS.length }, (_, step) => browsingAction(id, step).label));
+      const moments = new Set(
+        Array.from({ length: BROWSE_ACTIONS.length }, (_, step) => browsingAction(id, step).label),
+      );
       expect(moments.size).toBe(BROWSE_ACTIONS.length);
     }
   });
