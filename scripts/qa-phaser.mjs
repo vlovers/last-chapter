@@ -174,7 +174,8 @@ try {
   await page.getByRole('heading', { name: 'Мара', exact: true }).waitFor();
   await ready(page);
   await checkPresentation(page, true);
-  assert.ok((await page.locator('#portrait').getAttribute('src')).endsWith('/mara.svg'));
+  const openingPortrait = await page.locator('#portrait').getAttribute('src');
+  assert.ok(openingPortrait && /\/mara(?:-[a-z-]+)?\.svg(?:\?.*)?$/.test(openingPortrait), `Unexpected Mara portrait: ${openingPortrait}`);
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('ArrowUp');
   await page.screenshot({ path: `${output}/mara-dialogue.png`, fullPage: true });
