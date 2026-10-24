@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { irisDecision } from '../src/content/day-four-iris';
-import { advanceToDayFourMara, finishFourthDay, startFourthDay, type ChapterState } from '../src/game/chapter';
+import {
+  advanceToDayFourMara,
+  finishFourthDay,
+  startFourthDay,
+  type ChapterState,
+} from '../src/game/chapter';
 import {
   availableOptions,
   selectOption,

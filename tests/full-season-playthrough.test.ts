@@ -109,7 +109,10 @@ describe('Complete five-day save-and-resume playthrough', () => {
         state = saved!;
         if (stage === 'season-complete') break;
         // Completion checkpoints reuse the last dialogue but reject new choices.
-        if (!completionStages.includes(stage) && availableOptions(stageStory(stage), state.dialogue).length) {
+        if (
+          !completionStages.includes(stage) &&
+          availableOptions(stageStory(stage), state.dialogue).length
+        ) {
           state = finishScene(state, reverse);
         }
         const transition = transitions[stage];
