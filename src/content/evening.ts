@@ -17,7 +17,11 @@ export const firstEvening: DialogueStory = {
         },
         { id: 'book', label: 'Оглянути синю книжку', next: 'book', grants: ['saw_blue_book'] },
         { id: 'letter', label: 'Оглянути конверт', next: 'letter', grants: ['saw_envelope'] },
-        { id: 'eleanor-notes', label: 'Прочитати записку Елеонори на коробці', next: 'eleanor-notes' },
+        {
+          id: 'eleanor-notes',
+          label: 'Прочитати записку Елеонори на коробці',
+          next: 'eleanor-notes',
+        },
       ],
     },
     {
@@ -25,8 +29,18 @@ export const firstEvening: DialogueStory = {
       speaker: 'Оповідач',
       text: 'На внутрішньому боці кришки Елеонора залишила записку: «Не викидати. Книжки, які не встигли забрати до затоплення». Нижче — маленьке намальоване серце й приписка: «І не забути повернути Беатріс банку».',
       options: [
-        { id: 'eleanor-history', label: 'Знайти згадку про ремонт у старому журналі', next: 'repair-ledger', grants: ['saw_repair_note'] },
-        { id: 'eleanor-memory', label: 'Занотувати питання для Елеонори', next: 'eleanor-memory', grants: ['ask_eleanor_next_day'] },
+        {
+          id: 'eleanor-history',
+          label: 'Знайти згадку про ремонт у старому журналі',
+          next: 'repair-ledger',
+          grants: ['saw_repair_note'],
+        },
+        {
+          id: 'eleanor-memory',
+          label: 'Занотувати питання для Елеонори',
+          next: 'eleanor-memory',
+          grants: ['ask_eleanor_next_day'],
+        },
         { id: 'eleanor-back', label: 'Повернутися до коробки', next: 'box' },
       ],
     },
@@ -36,7 +50,12 @@ export const firstEvening: DialogueStory = {
       text: 'Старий журнал відкривається на сторінці з плямами. «Протікання над задньою полицею. Відвідувачів не пускати до завершення ремонту». Дата збігається з тижнем бронювання Лео. Це підтверджує закриття, але не пояснює, хто мав повідомити покупців.',
       options: [
         { id: 'repair-back', label: 'Повернутися до коробки', next: 'box' },
-        { id: 'repair-question', label: 'Записати питання для Елеонори', next: 'eleanor-memory', grants: ['ask_eleanor_next_day'] },
+        {
+          id: 'repair-question',
+          label: 'Записати питання для Елеонори',
+          next: 'eleanor-memory',
+          grants: ['ask_eleanor_next_day'],
+        },
       ],
     },
     {

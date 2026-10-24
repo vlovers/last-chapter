@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { maraVisit } from '../src/content/mara';
-import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 
 describe('Mara optional conversation hub', () => {
   it('has valid destinations and unique options', () => {
@@ -9,7 +15,22 @@ describe('Mara optional conversation hub', () => {
 
   it('supports a long discussion and returns to the original book order', () => {
     let state = startDialogue(maraVisit);
-    for (const id of ['hello', 'thank', 'talk', 'fiction', 'fiction-ask', 'ask-respect', 'respect-more', 'bakery', 'bakery-tired', 'tired-ask', 'silence-return', 'gift-now', 'station', 'finish-station']) {
+    for (const id of [
+      'hello',
+      'thank',
+      'talk',
+      'fiction',
+      'fiction-ask',
+      'ask-respect',
+      'respect-more',
+      'bakery',
+      'bakery-tired',
+      'tired-ask',
+      'silence-return',
+      'gift-now',
+      'station',
+      'finish-station',
+    ]) {
       expect(availableOptions(maraVisit, state).some((option) => option.id === id)).toBe(true);
       state = selectOption(maraVisit, state, id);
     }
