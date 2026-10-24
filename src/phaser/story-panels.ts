@@ -1,4 +1,6 @@
 import type { FiveDayStory } from './five-day-story';
+import { answerConversation, conversationView, restoreConversation, startConversation, type ConversationSession } from './conversation-engine';
+import { maraBookClub } from './mara-book-club';
 
 declare global {
   interface Window {
@@ -19,7 +21,21 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     throw new Error('Не знайдено панель історії');
   }
   const controls = { journal, catalog };
-  let mode: 'journal' | 'catalog' | null = null;
+  let mode: 'journal' | 'catalog' | 'conversation' | null = null;
+  const conversationKey = 'last-chapter:conversation:mara:v1';
+  let conversation: ConversationSession = startConversation(maraBookClub);
+  try {
+    const saved = localStorage.getItem(conversationKey);
+    if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
+  } catch { /* storage may be unavailable */ }
+  const saveConversation = () => {
+    try { localStorage.setItem(conversationKey, JSON.stringify(conversation)); } catch { /* optional */ }
+  };
+  const conversationButton = document.createElement('button');
+  conversationButton.type = 'button';
+  conversationButton.textContent = 'Поговорити з Марою';
+  conversationButton.setAttribute('aria-expanded', 'false');
+  root.append(conversationButton);
   let filter: CatalogFilter = 'all';
   const element = <K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -47,9 +63,28 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     for (const [name, button] of Object.entries(controls)) {
       button.setAttribute('aria-expanded', String(mode === name));
     }
+    conversationButton.setAttribute('aria-expanded', String(mode === 'conversation'));
     panel.hidden = mode === null;
     panel.replaceChildren();
-    if (mode === 'journal') {
+    if (mode === 'conversation') {
+      panel.append(element('h2', maraBookClub.title));
+      if (conversation.finished) {
+        panel.append(element('p', 'Розмову завершено. Можна почати нову, зберігши попередні думки.'));
+        const again = element('button', 'Поговорити знову');
+        again.type = 'button';
+        again.addEventListener('click', () => { conversation = startConversation(maraBookClub, conversation.memories); saveConversation(); refresh(); });
+        panel.append(again);
+      } else {
+        const node = conversationView(maraBookClub, conversation);
+        panel.append(element('h3', node.speaker), element('p', node.text));
+        for (const choice of node.choices) {
+          const button = element('button', choice.label);
+          button.type = 'button';
+          button.addEventListener('click', () => { conversation = answerConversation(maraBookClub, conversation, choice.id); saveConversation(); refresh(); });
+          panel.append(button);
+        }
+      }
+    } else if (mode === 'journal') {
       panel.append(element('h2', 'Нотатник книгаря'));
       panel.append(element('h3', 'Дошка знахідок'));
       const evidence = element('div', '', 'story-book-grid');
@@ -121,21 +156,25 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       panel.append(shelf);
     }
   };
-  const toggle = (next: 'journal' | 'catalog') => {
+  const toggle = (next: 'journal' | 'catalog' | 'conversation') => {
     mode = mode === next ? null : next;
     refresh();
   };
+  const conversationClick = () => toggle('conversation');
   const journalClick = () => toggle('journal');
   const catalogClick = () => toggle('catalog');
   const continueClick = () => {
     window.dispatchEvent(new CustomEvent('last-chapter:continue'));
   };
+  conversationButton.addEventListener('click', conversationClick);
   journal.addEventListener('click', journalClick);
   catalog.addEventListener('click', catalogClick);
   continueButton.addEventListener('click', continueClick);
   window.__lastChapterRefresh = refresh;
   refresh();
   return () => {
+    conversationButton.removeEventListener('click', conversationClick);
+    conversationButton.remove();
     journal.removeEventListener('click', journalClick);
     catalog.removeEventListener('click', catalogClick);
     continueButton.removeEventListener('click', continueClick);
