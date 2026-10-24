@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { VISITOR_IDS } from '../public/phaser-prototype/visitor-art.js';
-import { VISITOR_ENTRANCES, visitorEntrance } from '../public/phaser-prototype/visitor-entrances.js';
+import {
+  VISITOR_ENTRANCES,
+  visitorEntrance,
+} from '../public/phaser-prototype/visitor-entrances.js';
 import { canStand, distance } from '../public/phaser-prototype/world.js';
 
 describe('five-day visitor staging', () => {

@@ -683,7 +683,9 @@ body.reduced #dialogue {
 .portrait-frame {
   background: #506257;
   border: 3px solid #71533c;
-  box-shadow: 0 0 0 3px #d7b784, 0 5px 12px #6a503540;
+  box-shadow:
+    0 0 0 3px #d7b784,
+    0 5px 12px #6a503540;
 }
 #portrait-fallback {
   min-height: 112px;
@@ -691,18 +693,34 @@ body.reduced #dialogue {
   color: #f8e9ce;
   text-shadow: 2px 3px #243b37;
 }
-#dialogue[data-visitor='miller'] #portrait-fallback { background: #76647e !important; }
-#dialogue[data-visitor='iris'] #portrait-fallback { background: #526e88 !important; }
-#dialogue[data-visitor='anna'] #portrait-fallback { background: #8b7051 !important; }
-#dialogue[data-visitor='leo'] #portrait-fallback { background: #526c62 !important; }
-#dialogue[data-visitor='eleanor'] #portrait-fallback { background: #72627f !important; }
-#dialogue[data-visitor='thomas'] #portrait-fallback { background: #667b86 !important; }
-#dialogue[data-visitor='nora'] #portrait-fallback { background: #5d7974 !important; }
+#dialogue[data-visitor='miller'] #portrait-fallback {
+  background: #76647e !important;
+}
+#dialogue[data-visitor='iris'] #portrait-fallback {
+  background: #526e88 !important;
+}
+#dialogue[data-visitor='anna'] #portrait-fallback {
+  background: #8b7051 !important;
+}
+#dialogue[data-visitor='leo'] #portrait-fallback {
+  background: #526c62 !important;
+}
+#dialogue[data-visitor='eleanor'] #portrait-fallback {
+  background: #72627f !important;
+}
+#dialogue[data-visitor='thomas'] #portrait-fallback {
+  background: #667b86 !important;
+}
+#dialogue[data-visitor='nora'] #portrait-fallback {
+  background: #5d7974 !important;
+}
 .dialogue-title {
   padding-bottom: 7px;
   border-bottom: 1px solid #cbb38d;
 }
-.dialogue-title h2 { font-size: clamp(22px, 2.3vw, 28px); }
+.dialogue-title h2 {
+  font-size: clamp(22px, 2.3vw, 28px);
+}
 #dialogue-text {
   max-width: 68ch;
   font-size: clamp(16px, 1.35vw, 18px);
@@ -724,8 +742,11 @@ body.reduced #dialogue {
   padding: 10px 15px 10px 30px;
   font-size: 15px;
 }
-#choices button::before { border-color: #6d806b; }
-#choices button:hover, #choices button:focus-visible {
+#choices button::before {
+  border-color: #6d806b;
+}
+#choices button:hover,
+#choices button:focus-visible {
   background: #fff7df;
   color: #2d3028;
   border-color: #7b8d76;
@@ -733,18 +754,47 @@ body.reduced #dialogue {
 #choices button:has(.recommendation) {
   padding: 13px 18px 13px 30px;
 }
-.recommendation small { color: #6a604d; }
-.recommendation strong { font-size: 17px; }
-.recommendation span { font-size: 13px; }
-#dialogue.object-note { grid-template-columns: 1fr; }
+.recommendation small {
+  color: #6a604d;
+}
+.recommendation strong {
+  font-size: 17px;
+}
+.recommendation span {
+  font-size: 13px;
+}
+#dialogue.object-note {
+  grid-template-columns: 1fr;
+}
 @media (max-width: 850px) {
-  #dialogue { grid-template-columns: 80px minmax(0, 1fr); padding: 14px 16px; gap: 16px; }
-  #dialogue-text { font-size: 16px; }
+  #dialogue {
+    grid-template-columns: 80px minmax(0, 1fr);
+    padding: 14px 16px;
+    gap: 16px;
+  }
+  #dialogue-text {
+    font-size: 16px;
+  }
 }
 @media (max-width: 550px) {
-  #dialogue { grid-template-columns: 56px minmax(0, 1fr); gap: 11px; padding: 12px; max-height: 60svh; }
-  #portrait-fallback { min-height: 68px; font-size: 30px; }
-  .dialogue-title h2 { font-size: 20px; }
-  #dialogue-text { font-size: 15px; line-height: 1.5; }
-  #choices button { font-size: 14px; }
+  #dialogue {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 11px;
+    padding: 12px;
+    max-height: 60svh;
+  }
+  #portrait-fallback {
+    min-height: 68px;
+    font-size: 30px;
+  }
+  .dialogue-title h2 {
+    font-size: 20px;
+  }
+  #dialogue-text {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  #choices button {
+    font-size: 14px;
+  }
 }
