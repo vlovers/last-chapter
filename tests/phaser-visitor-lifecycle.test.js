@@ -1,7 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { pauseVisitor, resumeVisitor, shouldBrowse } from '../public/phaser-prototype/visitor-lifecycle.js';
+import {
+  pauseVisitor,
+  resumeVisitor,
+  shouldBrowse,
+} from '../public/phaser-prototype/visitor-lifecycle.js';
 describe('visitor dialogue and browsing lifecycle', () => {
-  const walking = { engaged: false, path: [{ x: 10, y: 20 }], goal: { facing: 'up' }, step: 3, pause: 100 };
+  const walking = {
+    engaged: false,
+    path: [{ x: 10, y: 20 }],
+    goal: { facing: 'up' },
+    step: 3,
+    pause: 100,
+  };
   it('halts an active route when the player starts interacting', () => {
     const stopped = pauseVisitor(walking);
     expect(stopped).toMatchObject({ engaged: true, path: [], goal: null, step: 3 });
