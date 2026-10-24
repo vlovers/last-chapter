@@ -3,12 +3,24 @@ import { VISITOR_PALETTES } from './visitor-art.js';
 // Hand-authored geometric pixel portraits. Canvas stays local and deterministic;
 // no remote media, user images or character text is involved.
 const SKIN = {
-  mara: '#e3ad8c', miller: '#e1b393', iris: '#e9bf9d', anna: '#dbad88',
-  leo: '#d8a585', eleanor: '#d7a98b', thomas: '#c99d82', nora: '#dfa98d',
+  mara: '#e3ad8c',
+  miller: '#e1b393',
+  iris: '#e9bf9d',
+  anna: '#dbad88',
+  leo: '#d8a585',
+  eleanor: '#d7a98b',
+  thomas: '#c99d82',
+  nora: '#dfa98d',
 };
 const NAMES = {
-  mara: 'Мара', miller: 'Пані Міллер', iris: 'Ірис', anna: 'Анна',
-  leo: 'Лео', eleanor: 'Елеонора', thomas: 'Томас', nora: 'Нора',
+  mara: 'Мара',
+  miller: 'Пані Міллер',
+  iris: 'Ірис',
+  anna: 'Анна',
+  leo: 'Лео',
+  eleanor: 'Елеонора',
+  thomas: 'Томас',
+  nora: 'Нора',
 };
 export const PORTRAIT_NAMES = Object.freeze(NAMES);
 
@@ -20,7 +32,10 @@ export function portraitDataUrl(id, mood = 'quiet') {
   canvas.height = 80;
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
-  const r = (x, y, w, h, color) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); };
+  const r = (x, y, w, h, color) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+  };
   const hair = p.hair ?? '#674a45';
   const hairLight = p.hairLight ?? '#a77967';
   const coat = p.coat ?? '#8b5261';
