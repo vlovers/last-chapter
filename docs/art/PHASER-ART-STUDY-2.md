@@ -25,4 +25,3 @@ Shortlist checked on 2026-10-24:
 - Add a small asset manifest and a check that referenced local files exist. Keep this Phaser experiment isolated from the story engine and save data until visual and interaction parity is confirmed.
 
 No external asset files have been imported yet. These are candidates, not a claim that the licenses or archive contents have been independently inspected. Re-check the included license before shipping.
-
