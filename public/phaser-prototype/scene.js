@@ -11,7 +11,7 @@ import { Interactions } from './interactions.js';
 import { BookshopAudio } from './audio.js';
 import { VISITOR_IDS } from './visitor-art.js';
 import { visitorEntrance } from './visitor-entrances.js';
-import { browsingRoute, visitorApproach } from './visitor-roaming.js';
+import { browsingRoute, visitorApproach, browsingAction } from './visitor-roaming.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -37,7 +37,7 @@ class Bookshop extends Phaser.Scene {
     this.path = [];
     this.arrival = [{ x: 440, y: 220 }];
     this.visitorPace = 0.7;
-    this.roaming = { path: [], pause: 1800, step: 0, engaged: false };
+    this.roaming = { path: [], pause: 1800, step: 0, engaged: false, goal: null };
     this.reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.lifecycle = new AbortController();
     this.audio = new BookshopAudio();
@@ -77,7 +77,7 @@ class Bookshop extends Phaser.Scene {
         this.arrival = [{ x: entrance.x, y: entrance.y }];
         this.visitorPace = entrance.pace;
         this.state = { ...this.state, mara: 'arriving' };
-        this.roaming = { path: [], pause: 1800, step: 0, engaged: false };
+        this.roaming = { path: [], pause: 1800, step: 0, engaged: false, goal: null };
       }
     }
     if (!actor && this.state.mara === 'arriving') {
@@ -407,11 +407,16 @@ class Bookshop extends Phaser.Scene {
           } else if (this.roaming.path.length) {
             const next = this.follow(mara, this.roaming.path, amount * this.visitorPace);
             updateCharacter(mara, next, false);
-            if (!this.roaming.path.length) this.roaming.pause = 1700;
+            if (!this.roaming.path.length) {
+              this.roaming.pause = 1700;
+              mara.direction = this.roaming.goal?.facing ?? 'up';
+              this.toast(this.story.visitor + ' ' + (this.roaming.goal?.label ?? 'оглядає книгарню') + '.');
+            }
           } else {
             updateCharacter(mara, mara, false);
             this.roaming.pause -= Math.min(delta, 50);
             if (this.roaming.pause <= 0) {
+              this.roaming.goal = browsingAction(this.story.actor, this.roaming.step);
               this.roaming.path = browsingRoute(mara, this.story.actor, this.roaming.step++);
               this.roaming.pause = 2000;
             }
