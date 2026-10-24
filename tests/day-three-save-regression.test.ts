@@ -13,7 +13,12 @@ describe('Day 3 completion checkpoint regression', () => {
   it('restores a newly completed Day 3 and advances to Day 4', () => {
     const state: ChapterState = {
       stage: 'book-club',
-      dialogue: { ...startDialogue(bookClub), node: 'end', flags: ['club_respected_privacy'], history: ['privacy'] },
+      dialogue: {
+        ...startDialogue(bookClub),
+        node: 'end',
+        flags: ['club_respected_privacy'],
+        history: ['privacy'],
+      },
       flags: ['club_respected_privacy'],
     };
     const completed = finishThirdDay(state);
@@ -27,7 +32,12 @@ describe('Day 3 completion checkpoint regression', () => {
     expect(legacyNode).toBeDefined();
     const old: ChapterState = {
       stage: 'day3-complete',
-      dialogue: { ...startDialogue(noraVisit), node: legacyNode!.id, flags: ['nora_confidentiality_respected'], history: [] },
+      dialogue: {
+        ...startDialogue(noraVisit),
+        node: legacyNode!.id,
+        flags: ['nora_confidentiality_respected'],
+        history: [],
+      },
       flags: ['nora_confidentiality_respected'],
     };
     const restored = decodeSave(encodeSave(old));
@@ -36,11 +46,13 @@ describe('Day 3 completion checkpoint regression', () => {
   });
 
   it('rejects unrelated dialogue nodes in a Day 3 checkpoint', () => {
-    const malformed = JSON.parse(encodeSave({
-      stage: 'day3-complete',
-      dialogue: { ...startDialogue(bookClub), node: 'not-a-scene' },
-      flags: [],
-    })) as Record<string, unknown>;
+    const malformed = JSON.parse(
+      encodeSave({
+        stage: 'day3-complete',
+        dialogue: { ...startDialogue(bookClub), node: 'not-a-scene' },
+        flags: [],
+      }),
+    ) as Record<string, unknown>;
     expect(decodeSave(JSON.stringify(malformed))).toBeNull();
   });
 });
