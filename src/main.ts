@@ -1,4 +1,5 @@
 import { storyProgress } from './game/progress';
+import { castMember } from './game/cast';
 import { sceneMood } from './game/scene-mood';
 import { seasonEnding } from './game/endings';
 import { opening } from './content/intro';
@@ -217,7 +218,31 @@ function render(): void {
   } else {
     const story = stageStory(chapter.stage);
     const node = currentNode(story, chapter.dialogue);
-    dialogue.textContent = `${node.speaker}: «${node.text}»`;
+    const member = castMember(node.speaker);
+    if (member) {
+      dialogue.classList.add('dialogue-card--character');
+      const portrait = document.createElement('div');
+      portrait.className = `character-portrait character-portrait--${member.id}`;
+      portrait.setAttribute('aria-hidden', 'true');
+      const monogram = document.createElement('span');
+      monogram.className = 'character-portrait__monogram';
+      monogram.textContent = member.monogram;
+      const motif = document.createElement('span');
+      motif.className = 'character-portrait__motif';
+      motif.textContent = member.motif;
+      portrait.append(monogram, motif);
+      const speech = document.createElement('div');
+      speech.className = 'dialogue-card__speech';
+      const speakerName = document.createElement('strong');
+      speakerName.className = 'dialogue-card__speaker';
+      speakerName.textContent = member.name;
+      const speechText = document.createElement('p');
+      speechText.textContent = node.text;
+      speech.append(speakerName, speechText);
+      dialogue.append(portrait, speech);
+    } else {
+      dialogue.textContent = `${node.speaker}: «${node.text}»`;
+    }
     if (node.id === 'order' && (chapter.stage === 'miller' || chapter.stage === 'mara')) {
       const shelf = document.createElement('section');
       shelf.className = 'book-shelf';
