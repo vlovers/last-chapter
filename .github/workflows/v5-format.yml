@@ -17,7 +17,7 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: npm ci --no-audit --no-fund
-      - run: npx prettier --write phaser-prototype/style.css public/phaser-prototype/dialogue-ui.js tests/phaser-visitor-staging.test.js public/phaser-prototype/visitor-portraits.js public/phaser-prototype/dialogue-ui.js
+      - run: npx prettier --write phaser-prototype/style.css public/phaser-prototype/dialogue-ui.js public/phaser-prototype/visitor-roaming.js tests/phaser-visitor-roaming.test.js tests/phaser-visitor-staging.test.js public/phaser-prototype/visitor-portraits.js public/phaser-prototype/dialogue-ui.js
       - run: |
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
