@@ -81,6 +81,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     panel.hidden = mode === null;
     panel.replaceChildren();
     if (mode === 'conversation') {
+      if (story.day < 3 && selectedTopic.id === maraReturnVisit.id) selectedTopic = maraBookClub;
       const topicSelector = element('div', '', 'story-filters');
       for (const topic of [maraBookClub, maraAfterHours, ...(story.day >= 3 ? [maraReturnVisit] : [])]) {
         const button = element('button', topic.title);
