@@ -1,3 +1,4 @@
+import { storyProgress } from './game/progress';
 import { seasonEnding } from './game/endings';
 import { opening } from './content/intro';
 import { bookForChoice, type Book } from './content/books';
@@ -490,6 +491,19 @@ function render(): void {
   const storyPanel = document.createElement('section');
   storyPanel.className = 'story-panel';
   storyPanel.append(heading, subtitle);
+  const timeline = document.createElement('ol');
+  timeline.className = 'day-timeline';
+  timeline.setAttribute('aria-label', 'Прогрес історії');
+  for (const day of storyProgress(chapter.stage)) {
+    const marker = document.createElement('li');
+    marker.className = `day-timeline__day day-timeline__day--${day.status}`;
+    marker.textContent = String(day.day);
+    marker.title = `${day.label} · ${day.status === 'completed' ? 'завершено' : day.status === 'current' ? 'зараз' : 'попереду'}`;
+    marker.setAttribute('aria-label', marker.title);
+    if (day.status === 'current') marker.setAttribute('aria-current', 'step');
+    timeline.append(marker);
+  }
+  storyPanel.append(timeline);
   if (activeSpot) {
     const spot = shopSpots.find((item) => item.id === activeSpot);
     if (spot) {

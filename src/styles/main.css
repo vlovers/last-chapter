@@ -622,3 +622,44 @@ h1 {
   color: #ddc9bb;
   margin: 0;
 }
+
+/* Chapter progress is a status display, never an interactive shortcut around the story. */
+.day-timeline {
+  display: flex;
+  gap: 9px;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+}
+.day-timeline__day {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #836c77;
+  border-radius: 6px;
+  background: #392f41;
+  color: #bca9ae;
+  font-size: 12px;
+  font-weight: 800;
+}
+.day-timeline__day--completed {
+  border-color: #9aaf8b;
+  color: #d9ebc9;
+  background: #405043;
+}
+.day-timeline__day--current {
+  border-color: #f2bc7b;
+  background: #e5ad78;
+  color: #2e2330;
+  box-shadow: 0 0 0 2px #392f41, 0 0 0 4px #e5ad78;
+}
+.season-epilogue {
+  padding: 18px;
+  border: 1px solid #9aaf8b;
+  border-radius: 8px;
+  background: #34413e;
+  line-height: 1.7;
+}
+.season-epilogue h2 { margin: 0 0 12px; color: #ffdfad; font-family: Georgia, serif; }
+.season-epilogue p { margin: 0 0 10px; }

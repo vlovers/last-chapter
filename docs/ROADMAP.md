@@ -37,7 +37,7 @@
 
 **Entry:** gameplay and narrative loops have passed playtests.
 
-- [ ] Original pixel-art location, portraits, expressions, lighting, weather and animation.
+- [ ] Original pixel-art location, portraits, expressions, lighting, weather and animation (direction documented in `docs/art/PIXEL-ART-DIRECTION.md`; no production sprites yet).
 - [ ] Music, ambience, sound controls and reduced-motion support.
 - [ ] Final responsive UX and Cyrillic typography; keyboard/touch/screen reader review.
 - [ ] Browser regression/performance tests, licenses and provenance.
@@ -52,4 +52,4 @@
 
 ## Current honest status
 
-The browser currently contains only a **short Day 1 prototype** with two visitors, five book cards, an evening letter and basic local saves. The five-day Story Bible and character designs are **documents**, not implemented playable chapters. Phase 1 is not complete.
+The browser now contains a **first-pass playable path through Days 1–5**, including branching conversations, a book club, letter/rumor choices and composable epilogues. This is a **short narrative prototype**, not the targeted 4–5-hour finished game. Significant dialogue expansion, continuity review, scenario coverage, playtesting and production art remain. CI has not been confirmed green for the latest branch HEAD.
