@@ -107,8 +107,75 @@ class Bookshop extends Phaser.Scene {
     rect(571, 225, 45, 107, 0x8b574e);
     rect(580, 235, 27, 71, 0x5c4350);
     rect(600, 279, 5, 5, palette.light);
+    // Art Pass 1: foreground objects drawn in their own Phaser layers.
+    // These independent GameObjects can later be replaced with licensed sprite sheets.
+    const prop = (x, y, draw, depth = y) => {
+      const art = this.add.graphics({ x, y }).setDepth(depth);
+      draw(art);
+      return art;
+    };
+    const fill = (g, x, y, w, h, color) => {
+      g.fillStyle(color);
+      g.fillRect(x, y, w, h);
+    };
+    // A low table with a patterned runner, scattered books and a reading lamp.
+    prop(335, 279, (p) => {
+      fill(p, -38, -9, 76, 34, 0x3c2936);
+      fill(p, -42, -17, 84, 32, 0x9f6855);
+      fill(p, -37, -12, 74, 22, 0xc28b65);
+      fill(p, -32, -7, 64, 12, 0x744953);
+      fill(p, -28, -4, 56, 7, 0x9d6d60);
+      fill(p, -23, -11, 18, 10, 0x638c8b);
+      fill(p, -21, -13, 18, 3, 0xf0c38c);
+      fill(p, 3, -9, 21, 10, 0xe0b582);
+      fill(p, 6, -12, 17, 3, 0x9c6862);
+      fill(p, 29, -12, 6, 8, 0xeacba2);
+    });
+    // Upholstered armchair and a small cushion.
+    prop(426, 296, (p) => {
+      fill(p, -19, -25, 38, 38, 0x473442);
+      fill(p, -15, -23, 30, 30, 0x64867c);
+      fill(p, -20, -4, 40, 18, 0x9d6d68);
+      fill(p, -14, -1, 28, 11, 0xb98779);
+      fill(p, -8, -13, 15, 10, 0xd9ae84);
+      fill(p, -18, 13, 5, 6, 0x4e3541);
+      fill(p, 13, 13, 5, 6, 0x4e3541);
+    });
+    // Book crate, its contents, and loose parcels near the entrance.
+    prop(548, 314, (p) => {
+      fill(p, -21, -17, 42, 27, 0x70434b);
+      fill(p, -24, -20, 48, 7, 0xb7825f);
+      fill(p, -18, -15, 36, 20, 0x9d6c55);
+      for (let i = 0; i < 6; i++) {
+        fill(p, -15 + i * 6, -24 - (i % 3) * 3, 5, 15 + (i % 3) * 3, [0x668982, 0xe2ae77, 0xb67870][i % 3]);
+      }
+      fill(p, -19, 1, 38, 3, 0xc3936e);
+    });
+    // Detailed floor clutter makes the room feel lived-in rather than a showroom.
+    prop(54, 292, (p) => {
+      fill(p, -17, -14, 34, 24, 0xa77357);
+      fill(p, -13, -11, 26, 17, 0xc69670);
+      fill(p, -9, -8, 18, 11, 0xe0b98c);
+      fill(p, -5, -6, 10, 2, 0x91675d);
+      fill(p, -5, -2, 8, 2, 0x91675d);
+    });
+    // A second visitor stays near the shelves.
+    const visitor2 = this.add.container(82, 251).setDepth(251);
+    const visitorArt = this.add.graphics();
+    visitor2.add(visitorArt);
+    fill(visitorArt, -8, -17, 16, 15, 0x6e4d70);
+    fill(visitorArt, -6, -30, 12, 15, 0xe2b18c);
+    fill(visitorArt, -8, -33, 16, 9, 0x5b404a);
+    fill(visitorArt, -5, -22, 2, 2, 0x352935);
+    fill(visitorArt, 3, -22, 2, 2, 0x352935);
+    fill(visitorArt, -6, -2, 5, 8, 0x41303d);
+    fill(visitorArt, 2, -2, 5, 8, 0x41303d);
+    this.tweens.add({ targets: visitor2, y: 254, duration: 1200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    // Subtle lamp flicker, without flashing the whole screen.
+    const lampLight = this.add.circle(245, 79, 52, 0xffd29b, 0.035).setBlendMode(Phaser.BlendModes.ADD).setDepth(3);
+    this.tweens.add({ targets: lampLight, alpha: { from: 0.55, to: 0.95 }, duration: 1700, yoyo: true, repeat: -1 });
     // Phaser-native character: animated walk, idle and depth ordering.
-    this.visitor = this.add.container(590, 287).setDepth(8);
+    this.visitor = this.add.container(590, 287).setDepth(290);
     const vg = this.add.graphics();
     this.visitor.add(vg);
     const drawVisitor = (walking) => {
@@ -137,7 +204,7 @@ class Bookshop extends Phaser.Scene {
       y: 260,
       duration: 3500,
       ease: 'Sine.easeInOut',
-      onUpdate: () => drawVisitor(Math.floor(this.time.now / 160) % 2 === 0),
+      onUpdate: () => {\n        this.visitor.setDepth(this.visitor.y);\n        drawVisitor(Math.floor(this.time.now / 160) % 2 === 0);\n      },
       onComplete: () => {
         drawVisitor(false);
         status.textContent = 'Мара завітала до книгарні. «Може, знайдемо щось цікаве для читання?»';
