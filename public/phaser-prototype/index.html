@@ -1,18 +1,87 @@
 <!doctype html>
 <html lang="uk">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Останній розділ — Phaser prototype</title>
-<style>
-:root{font-family:system-ui,sans-serif;color:#f6dec0;background:#19151f}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 10%,#47303d,#17131c 75%)}main{width:min(1100px,100%)}h1{font-family:Georgia,serif;font-size:clamp(24px,4vw,40px);margin:0 0 8px}p{line-height:1.5}#game{width:100%;aspect-ratio:16/9;background:#251b29;border:5px solid #8f624e;box-shadow:0 25px 75px #08060b}#game canvas{display:block;width:100%;height:100%;image-rendering:pixelated}#status{padding:16px 20px;background:#312632;border:1px solid #70565d;min-height:66px}a{color:#edbd84}small{color:#d5b6a5}button{background:#e3a86f;color:#29202b;border:0;border-radius:4px;padding:10px 14px;font-weight:700;cursor:pointer}
-</style>
-</head>
-<body><main>
-<h1>Останній розділ <small>· Phaser prototype</small></h1>
-<p>Перша ігрова кімната: натискайте на предмети, спостерігайте за відвідувачкою та дощем.</p>
-<div id="game" role="group" aria-label="Інтерактивна сцена книгарні"></div>
-<p id="status" role="status" aria-live="polite">Книгарня прокидається. За вікном дощить…</p>
-<p><small>Окремий експеримент: чинна історія та збереження не змінюються. <a href="/">Повернутися до гри</a></small></p>
-<script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
-<script type="module" src="./scene.js"></script>
-</main></body></html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Останній розділ — Phaser prototype</title>
+    <style>
+      :root {
+        font-family: system-ui, sans-serif;
+        color: #f6dec0;
+        background: #19151f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: radial-gradient(ellipse at 50% 10%, #47303d, #17131c 75%);
+      }
+      main {
+        width: min(1100px, 100%);
+      }
+      h1 {
+        font-family: Georgia, serif;
+        font-size: clamp(24px, 4vw, 40px);
+        margin: 0 0 8px;
+      }
+      p {
+        line-height: 1.5;
+      }
+      #game {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #251b29;
+        border: 5px solid #8f624e;
+        box-shadow: 0 25px 75px #08060b;
+      }
+      #game canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        image-rendering: pixelated;
+      }
+      #status {
+        padding: 16px 20px;
+        background: #312632;
+        border: 1px solid #70565d;
+        min-height: 66px;
+      }
+      a {
+        color: #edbd84;
+      }
+      small {
+        color: #d5b6a5;
+      }
+      button {
+        background: #e3a86f;
+        color: #29202b;
+        border: 0;
+        border-radius: 4px;
+        padding: 10px 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Останній розділ <small>· Phaser prototype</small></h1>
+      <p>Перша ігрова кімната: натискайте на предмети, спостерігайте за відвідувачкою та дощем.</p>
+      <div id="game" role="group" aria-label="Інтерактивна сцена книгарні"></div>
+      <p id="status" role="status" aria-live="polite">Книгарня прокидається. За вікном дощить…</p>
+      <p>
+        <small
+          >Окремий експеримент: чинна історія та збереження не змінюються.
+          <a href="/">Повернутися до гри</a></small
+        >
+      </p>
+      <script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
+      <script type="module" src="./scene.js"></script>
+    </main>
+  </body>
+</html>
