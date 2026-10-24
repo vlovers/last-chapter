@@ -31,6 +31,8 @@ const stages: readonly ChapterStage[] = [
   'day4-mara',
   'day4-leo',
   'day4-complete',
+  'day5-reading',
+  'season-complete',
 ];
 
 export function encodeSave(state: ChapterState): string {

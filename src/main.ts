@@ -1,3 +1,4 @@
+import { seasonEnding } from './game/endings';
 import { opening } from './content/intro';
 import { bookForChoice, type Book } from './content/books';
 import { catalogEntries, matchingOrderOptions, type CatalogFilter } from './game/catalog';
@@ -19,6 +20,8 @@ import {
   finishFourthDay,
   advanceToDayFourMara,
   advanceToDayFourLeo,
+  startFifthDay,
+  finishSeason,
 } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
@@ -66,7 +69,9 @@ const stageNames = {
   'day4-iris': 'День четвертий · Айріс',
   'day4-mara': 'День четвертий · Мара',
   'day4-leo': 'День четвертий · Лео',
-  'day4-complete': 'День четвертий · Зустрічі завершені',
+  'day4-complete': 'Кінець четвертого дня',
+  'day5-reading': 'День п’ятий · Вечір історій',
+  'season-complete': 'Перший сезон · Завершено',
 } as const;
 
 function render(): void {
@@ -134,7 +139,8 @@ function render(): void {
     chapter.stage === 'complete' ||
     chapter.stage === 'day2-complete' ||
     chapter.stage === 'day3-complete' ||
-    chapter.stage === 'day4-complete'
+    chapter.stage === 'day4-complete' ||
+    chapter.stage === 'season-complete'
   ) {
     dialogue.textContent =
       chapter.stage === 'complete'
@@ -143,7 +149,9 @@ function render(): void {
           ? 'Другий день завершено. Наступного ранку до книгарні завітає Елеонора.'
           : chapter.stage === 'day3-complete'
             ? 'Книжковий клуб завершився. Наступного ранку Айріс повернеться до книгарні.'
-            : 'Четвертий день завершено. Айріс, Мара й Лео мають право самі вирішити, що робити далі.';
+            : chapter.stage === 'day4-complete'
+              ? 'Четвертий день завершено. Завтра книгарня запросить сусідів на спільне читання.'
+              : seasonEnding(chapter).letter;
     if (chapter.stage === 'complete') {
       const continueButton = document.createElement('button');
       continueButton.type = 'button';
@@ -176,6 +184,30 @@ function render(): void {
         render();
       });
       actions.append(continueButton);
+    }
+    if (chapter.stage === 'day4-complete') {
+      const continueButton = document.createElement('button');
+      continueButton.type = 'button';
+      continueButton.textContent = 'Почати п’ятий день →';
+      continueButton.addEventListener('click', () => {
+        chapter = startFifthDay(chapter);
+        persistChapter();
+        render();
+      });
+      actions.append(continueButton);
+    }
+    if (chapter.stage === 'season-complete') {
+      const ending = seasonEnding(chapter);
+      const epilogue = document.createElement('section');
+      epilogue.className = 'season-epilogue';
+      const title = document.createElement('h2');
+      title.textContent = ending.title;
+      const community = document.createElement('p');
+      community.textContent = ending.community;
+      const future = document.createElement('p');
+      future.textContent = ending.epilogue;
+      epilogue.append(title, community, future);
+      actions.append(epilogue);
     }
     const restart = document.createElement('button');
     restart.type = 'button';
@@ -288,6 +320,8 @@ function render(): void {
                             ? 'Зустріти Лео →'
                             : chapter.stage === 'day4-leo'
                               ? 'Завершити четвертий день →'
+                                : chapter.stage === 'day5-reading'
+                                  ? 'Завершити перший сезон →'
                               : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
@@ -311,6 +345,8 @@ function render(): void {
                             ? advanceToDayFourLeo(chapter)
                             : chapter.stage === 'day4-leo'
                               ? finishFourthDay(chapter)
+                                : chapter.stage === 'day5-reading'
+                                  ? finishSeason(chapter)
                               : advanceChapter(chapter);
         persistChapter();
         render();

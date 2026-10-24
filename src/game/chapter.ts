@@ -1,3 +1,4 @@
+import { finalReading } from '../content/day-five';
 import { leoDecision } from '../content/day-four-leo';
 import { maraDecision } from '../content/day-four-mara';
 import { irisDecision } from '../content/day-four-iris';
@@ -36,7 +37,9 @@ export type ChapterStage =
   | 'day4-iris'
   | 'day4-mara'
   | 'day4-leo'
-  | 'day4-complete';
+  | 'day4-complete'
+  | 'day5-reading'
+  | 'season-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
 export interface ChapterState {
@@ -75,6 +78,9 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
     case 'day4-leo':
     case 'day4-complete':
       return leoDecision;
+    case 'day5-reading':
+    case 'season-complete':
+      return finalReading;
     case 'nora':
     case 'day3-complete':
       return noraVisit;
@@ -92,7 +98,8 @@ export function chooseChapterOption(state: ChapterState, id: string): ChapterSta
     state.stage === 'complete' ||
     state.stage === 'day2-complete' ||
     state.stage === 'day3-complete' ||
-    state.stage === 'day4-complete'
+    state.stage === 'day4-complete' ||
+    state.stage === 'season-complete'
   )
     throw new Error('Chapter segment completed');
   const next = selectOption(stageStory(state.stage), state.dialogue, id);
@@ -239,4 +246,17 @@ export function advanceToDayFourLeo(state: ChapterState): ChapterState {
     stage: 'day4-leo',
     dialogue: { ...startDialogue(leoDecision), flags: state.flags },
   };
+}
+
+/** Start the community reading on Day 5. */
+export function startFifthDay(state: ChapterState): ChapterState {
+  if (state.stage !== 'day4-complete') throw new Error('Finish Day 4 first');
+  return { ...state, stage: 'day5-reading', dialogue: { ...startDialogue(finalReading), flags: state.flags } };
+}
+
+/** End the first season only after the final gathering concludes. */
+export function finishSeason(state: ChapterState): ChapterState {
+  if (state.stage !== 'day5-reading') throw new Error('Finish Day 5 first');
+  if (currentNode(finalReading, state.dialogue).options.length) throw new Error('Finish the final gathering');
+  return { ...state, stage: 'season-complete' };
 }
