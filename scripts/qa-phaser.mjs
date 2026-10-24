@@ -182,7 +182,10 @@ try {
   await checkPresentation(page, true);
   const openingPortrait = await page.locator('#portrait').getAttribute('src');
   assertMaraPortrait(openingPortrait);
-  assert.equal(await page.locator('#portrait').evaluate((image) => image.complete && image.naturalWidth > 0), true);
+  assert.equal(
+    await page.locator('#portrait').evaluate((image) => image.complete && image.naturalWidth > 0),
+    true,
+  );
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('ArrowUp');
   await page.screenshot({ path: `${output}/mara-dialogue.png`, fullPage: true });
