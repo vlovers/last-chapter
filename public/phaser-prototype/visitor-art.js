@@ -2,6 +2,7 @@
 export const VISITOR_IDS = ['mara', 'miller', 'iris', 'anna', 'leo', 'eleanor', 'thomas', 'nora'];
 export const VISITOR_PALETTES = {
   miller: {
+    identity: 'miller',
     hair: '#c9bbc3',
     hairLight: '#e0d1d1',
     coat: '#82738f',
@@ -11,6 +12,7 @@ export const VISITOR_PALETTES = {
     shade: '#bb896f',
   },
   iris: {
+    identity: 'iris',
     hair: '#342f40',
     hairLight: '#655468',
     coat: '#536e87',
@@ -19,6 +21,7 @@ export const VISITOR_PALETTES = {
     skin: '#e9bf9d',
   },
   anna: {
+    identity: 'anna',
     hair: '#644c38',
     hairLight: '#927657',
     coat: '#8b7051',
@@ -26,6 +29,7 @@ export const VISITOR_PALETTES = {
     dark: '#63523e',
   },
   leo: {
+    identity: 'leo',
     hair: '#3c373b',
     hairLight: '#676064',
     coat: '#526c62',
@@ -34,6 +38,7 @@ export const VISITOR_PALETTES = {
     skin: '#d8a585',
   },
   eleanor: {
+    identity: 'eleanor',
     hair: '#adb0ab',
     hairLight: '#d3d4ba',
     coat: '#72627f',
@@ -41,6 +46,7 @@ export const VISITOR_PALETTES = {
     dark: '#4f455c',
   },
   thomas: {
+    identity: 'thomas',
     hair: '#373d3d',
     hairLight: '#6a716b',
     coat: '#667b86',
@@ -49,6 +55,7 @@ export const VISITOR_PALETTES = {
     skin: '#c99d82',
   },
   nora: {
+    identity: 'nora',
     hair: '#67443b',
     hairLight: '#947165',
     coat: '#5d7974',

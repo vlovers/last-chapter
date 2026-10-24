@@ -21,6 +21,39 @@ export function drawPerson(context, ox, direction, frame, mara, palette = {}) {
     gold: '#dfb66e',
     ...palette,
   };
+  const accessory = (back = false) => {
+    if (!palette.identity) return;
+    if (palette.identity === 'miller') {
+      r(8, 5 + bob, 17, 3, c.hairLight);
+      r(12, 2 + bob, 9, 4, c.hair);
+      r(10, 17 + bob, 3, 3, c.hairLight);
+    } else if (palette.identity === 'iris') {
+      r(7, 5 + bob, 19, 4, c.hair);
+      r(7, 8 + bob, 4, 9, c.hair);
+      r(23, 8 + bob, 3, 9, c.hair);
+    } else if (palette.identity === 'anna') {
+      r(9, 5 + bob, 16, 2, c.hairLight);
+      r(7, 7 + bob, 4, 9, c.hair);
+      r(22, 7 + bob, 4, 9, c.hair);
+    } else if (palette.identity === 'leo') {
+      r(9, 4 + bob, 15, 3, c.hair);
+      r(11, 3 + bob, 5, 2, c.hairLight);
+      r(12, by + 1, 9, 2, c.paper);
+    } else if (palette.identity === 'eleanor') {
+      r(7, 7 + bob, 19, 4, c.hairLight);
+      r(6, 11 + bob, 5, 10, c.hair);
+      r(23, 11 + bob, 5, 10, c.hair);
+    } else if (palette.identity === 'thomas') {
+      r(10, 3 + bob, 15, 4, c.hair);
+      r(11, 6 + bob, 12, 2, c.hairLight);
+      r(14, by + 1, 6, 9, c.paper);
+    } else if (palette.identity === 'nora') {
+      r(6, 7 + bob, 5, 12, c.hair);
+      r(23, 7 + bob, 5, 12, c.hair);
+      r(8, 5 + bob, 18, 3, c.hairLight);
+      if (!back) r(13, by + 3, 7, 2, c.paper);
+    }
+  };
   const side = direction === 'left' || direction === 'right';
   const right = direction === 'right';
   const up = direction === 'up';
@@ -63,6 +96,7 @@ export function drawPerson(context, ox, direction, frame, mara, palette = {}) {
       r(12, by + 1, 10, 3, c.gold);
       r(10, by + 4, 3, 8, '#ab814d');
     }
+    accessory(up);
     return;
   }
   // Front/back legs alternate while the planted foot stays close to y=46.
@@ -142,4 +176,5 @@ export function drawPerson(context, ox, direction, frame, mara, palette = {}) {
       r(10, by + 7, 2, 3, '#c9c9a4');
     }
   }
+  accessory(up);
 }

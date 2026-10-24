@@ -40,7 +40,8 @@ class Bookshop extends Phaser.Scene {
     this.lights = drawEnvironment(this);
     this.atmosphere = createAtmosphere(this, this.lights, () => this.reduced);
     this.characters = createCharacters(this, this.story ? ['player', ...VISITOR_IDS] : undefined);
-    this.lastStoryActor = 'mara';
+    this.lastStoryActor = this.story ? null : 'mara';
+    this.lastStoryDay = null;
     this.dialogue = new DialogueUI(
       (id) => this.choose(id),
       () => this.closeDialogue(),
@@ -63,7 +64,9 @@ class Bookshop extends Phaser.Scene {
       this.lastStoryActor = actor;
       if (actor) {
         visitor.name = actor;
-        visitor.sprite.setTexture(actor, 0);
+        visitor.sprite.anims.stop();
+        visitor.direction = 'left';
+        visitor.sprite.setTexture(actor, 12);
         visitor.x = 590;
         visitor.y = 221;
         this.arrival = [{ x: 440, y: 220 }];
@@ -72,6 +75,10 @@ class Bookshop extends Phaser.Scene {
     }
     if (!actor && this.state.mara === 'arriving') {
       this.state = { ...this.state, mara: 'ready' };
+    }
+    if (this.lastStoryDay !== this.story.day) {
+      this.lastStoryDay = this.story.day;
+      this.atmosphere.setDay(this.story.day);
     }
     const visible = Boolean(actor);
     this.characters.mara.sprite.setVisible(visible);
