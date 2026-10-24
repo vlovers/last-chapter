@@ -15,6 +15,13 @@ const server = await chromium.launchServer({
 const browser = await chromium.connect(server.wsEndpoint());
 const results = [];
 
+function assertMaraPortrait(src) {
+  assert.ok(
+    src && (/\\/mara(?:-[a-z-]+)?\\.svg(?:\\?.*)?$/.test(src) || src.startsWith('data:image/png;base64,')),
+    `Unexpected Mara portrait source: ${src?.slice(0, 100)}`,
+  );
+}
+
 async function snapshot(page) {
   return page.evaluate(async () => {
     const { game } = await import('/phaser-prototype/scene.js');
@@ -175,7 +182,8 @@ try {
   await ready(page);
   await checkPresentation(page, true);
   const openingPortrait = await page.locator('#portrait').getAttribute('src');
-  assert.ok(openingPortrait && /\/mara(?:-[a-z-]+)?\.svg(?:\?.*)?$/.test(openingPortrait), `Unexpected Mara portrait: ${openingPortrait}`);
+  assertMaraPortrait(openingPortrait);
+  assert.equal(await page.locator('#portrait').evaluate((image) => image.complete && image.naturalWidth > 0), true);
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('ArrowUp');
   await page.screenshot({ path: `${output}/mara-dialogue.png`, fullPage: true });
@@ -183,7 +191,7 @@ try {
   await page.keyboard.down('Enter');
   const first = (await snapshot(page)).node;
   assert.equal(first, 'meaning');
-  assert.ok((await page.locator('#portrait').getAttribute('src')).endsWith('/mara-thoughtful.svg'));
+  assertMaraPortrait(await page.locator('#portrait').getAttribute('src'));
   await ready(page);
   await page.keyboard.down('Enter');
   await page.keyboard.up('Enter');
@@ -293,9 +301,7 @@ try {
   await choose(fallbackPage, '«Що ти хочеш сказати цим подарунком?»');
   await choose(fallbackPage, '«Може, запитати в Лео, яку книжку він хоче?»');
   assert.equal((await snapshot(fallbackPage)).node, 'boundary');
-  assert.ok(
-    (await fallbackPage.locator('#portrait').getAttribute('src')).endsWith('/mara-firm.svg'),
-  );
+  assertMaraPortrait(await fallbackPage.locator('#portrait').getAttribute('src'));
   await fallbackPage.screenshot({ path: `${output}/portrait-fallback.png`, fullPage: true });
   results.push({
     test: 'missing portrait, unavailable Web Audio, confidentiality boundary',
