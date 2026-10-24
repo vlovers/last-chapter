@@ -12,6 +12,7 @@ import { BookshopAudio } from './audio.js';
 import { VISITOR_IDS } from './visitor-art.js';
 import { visitorEntrance } from './visitor-entrances.js';
 import { browsingRoute, visitorApproach, browsingAction } from './visitor-roaming.js';
+import { pauseVisitor, resumeVisitor, shouldBrowse } from './visitor-lifecycle.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -105,8 +106,7 @@ class Bookshop extends Phaser.Scene {
   }
   openStory() {
     if (!this.story || !this.canExplore()) return;
-    this.roaming.engaged = true;
-    this.roaming.path = [];
+    this.roaming = pauseVisitor(this.roaming);
     this.activeDialogue = { kind: 'story' };
     this.state = transition(this.state, { type: 'open' });
     this.keys.clear();
@@ -262,8 +262,7 @@ class Bookshop extends Phaser.Scene {
     this.keys.clear();
     $('#game').focus();
     if (spot.id === 'mara' && this.story) {
-      this.roaming.engaged = true;
-      this.roaming.path = [];
+      this.roaming = pauseVisitor(this.roaming);
       spot.approach = visitorApproach(this.characters.mara);
     }
     if (eligible(this.characters.player, spot, this.state)) {
@@ -349,7 +348,10 @@ class Bookshop extends Phaser.Scene {
     for (const selector of ['#game', '#hotspots', '.hud', '#context-action'])
       $(selector).inert = false;
     $('#game').focus();
-    if (this.story) this.refreshStory();
+    if (this.story) {
+      this.refreshStory();
+      this.roaming = resumeVisitor(this.roaming);
+    }
     this.toast(
       this.story
         ? 'Книгарня знову тиха. Продовжуйте, коли будете готові.'
@@ -401,7 +403,9 @@ class Bookshop extends Phaser.Scene {
             if (!this.story)
               $('#objective').textContent = 'Допоможіть Марі обрати книжку на подарунок.';
           }
-        } else if (this.story && this.state.mara === 'ready' && !this.roaming.engaged) {
+        } else if (this.story &&
+          this.state.mara === 'ready' &&
+          shouldBrowse(this.roaming, this.state.mode, this.state.visitorVisible !== false, this.reduced)) {
           if (this.reduced) {
             updateCharacter(mara, mara, true);
           } else if (this.roaming.path.length) {
