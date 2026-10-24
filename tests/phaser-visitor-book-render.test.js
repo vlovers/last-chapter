@@ -4,13 +4,32 @@ import { createVisitorBook } from '../public/phaser-prototype/visitor-book.js';
 function fakeScene() {
   const calls = [];
   const graphics = {
-    clear() { calls.push(['clear']); return this; },
-    setVisible(value) { calls.push(['visible', value]); return this; },
-    fillStyle(color) { calls.push(['color', color]); return this; },
-    fillRect(x, y, w, h) { calls.push(['rect', x, y, w, h]); return this; },
-    lineStyle() { return this; },
-    lineBetween() { return this; },
-    setDepth(depth) { calls.push(['depth', depth]); return this; },
+    clear() {
+      calls.push(['clear']);
+      return this;
+    },
+    setVisible(value) {
+      calls.push(['visible', value]);
+      return this;
+    },
+    fillStyle(color) {
+      calls.push(['color', color]);
+      return this;
+    },
+    fillRect(x, y, w, h) {
+      calls.push(['rect', x, y, w, h]);
+      return this;
+    },
+    lineStyle() {
+      return this;
+    },
+    lineBetween() {
+      return this;
+    },
+    setDepth(depth) {
+      calls.push(['depth', depth]);
+      return this;
+    },
     destroy: vi.fn(),
   };
   return { scene: { add: { graphics: () => graphics } }, calls, graphics };
