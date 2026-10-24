@@ -43,6 +43,7 @@ class Bookshop extends Phaser.Scene {
       () => this.closeDialogue(),
     );
     this.interactions = new Interactions(this, (spot) => this.approach(spot));
+    this.interactions.update(this.characters.player, this.characters.mara, this.state);
     this.bindControls();
     this.events.once('shutdown', () => this.cleanup());
     this.events.once('destroy', () => this.cleanup());
@@ -57,6 +58,8 @@ class Bookshop extends Phaser.Scene {
     this.listen($('#enter'), 'click', () => {
       this.started = true;
       $('#loading').hidden = true;
+      for (const selector of ['#game', '#hotspots', '.hud', '#context-action'])
+        $(selector).inert = false;
       $('#game').focus();
       void this.audio.unlock();
       if (!this.reduced) this.cameras.main.fadeIn(500, 32, 27, 39);
@@ -328,6 +331,8 @@ class Bookshop extends Phaser.Scene {
     this.failed = true;
     this.keys?.clear();
     this.audio?.suspend();
+    for (const selector of ['#game', '#hotspots', '.hud', '#context-action'])
+      $(selector).inert = true;
     $('#loading').hidden = false;
     $('#loading-message').textContent =
       'Не вдалося відчинити книгарню. Оновіть сторінку, будь ласка.';

@@ -42,7 +42,10 @@ export function updateCharacter(character, position, reduced, reacting = false) 
   if (walking)
     character.direction =
       Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'down' : 'up';
-  Object.assign(character, position);
+  // Navigation may receive a full actor; copy only position so its previous
+  // direction cannot overwrite the facing direction calculated above.
+  character.x = position.x;
+  character.y = position.y;
   character.sprite
     .setPosition(Math.round(character.x), Math.round(character.y + 1))
     .setDepth(character.y);

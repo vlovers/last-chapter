@@ -1,0 +1,287 @@
+import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+
+// Optional QA dependency, deliberately kept out of the game's dependency tree.
+// Set PLAYWRIGHT_MODULE to a temporary installation's absolute index.mjs path.
+const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
+const output = resolve(process.env.QA_OUTPUT || '/private/tmp/last-chapter-qa');
+await mkdir(output, { recursive: true });
+const browser = await chromium.launch({
+  channel: process.env.BROWSER_CHANNEL || 'chrome',
+  headless: true,
+});
+const results = [];
+
+async function snapshot(page) {
+  return page.evaluate(async () => {
+    const { game } = await import('/phaser-prototype/scene.js');
+    const scene = game.scene.getScene('bookshop');
+    return {
+      state: scene.state,
+      player: {
+        x: scene.characters.player.x,
+        y: scene.characters.player.y,
+        frame: scene.characters.player.sprite.frame.name,
+        direction: scene.characters.player.direction,
+        animation: scene.characters.player.sprite.anims.currentAnim?.key,
+      },
+      mara: {
+        x: scene.characters.mara.x,
+        y: scene.characters.mara.y,
+        frame: scene.characters.mara.sprite.frame.name,
+        direction: scene.characters.mara.direction,
+      },
+      reduced: scene.reduced,
+      audio: {
+        muted: scene.audio.muted,
+        volume: scene.audio.volume,
+        music: scene.audio.music,
+        status: scene.audio.context?.state,
+      },
+      node: scene.activeDialogue?.node,
+      parcel: scene.lights.parcel.visible,
+    };
+  });
+}
+
+async function ready(page) {
+  await waitScene(page, (scene) => performance.now() >= scene.dialogue.readyAt);
+}
+async function waitScene(page, predicate) {
+  const scene = await page.evaluateHandle(async () => {
+    const { game } = await import('/phaser-prototype/scene.js');
+    return game.scene.getScene('bookshop');
+  });
+  try {
+    await page.waitForFunction(predicate, scene);
+  } finally {
+    await scene.dispose();
+  }
+}
+async function choose(page, name) {
+  await ready(page);
+  await page.getByRole('button', { name, exact: true }).click();
+}
+async function inspect(page, name, speaker) {
+  await page.getByRole('button', { name, exact: true }).click();
+  await page.getByRole('heading', { name: speaker, exact: true }).waitFor();
+  await choose(page, 'Продовжити');
+  await page.locator('#dialogue').waitFor({ state: 'hidden' });
+}
+async function start(page) {
+  await page.goto(`${base}/phaser-prototype/`);
+  await page.getByRole('button', { name: 'Відчинити книгарню', exact: true }).click();
+  await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).waitFor();
+  await waitScene(page, (scene) => scene.state.mara === 'ready');
+}
+function captureErrors(page, errors) {
+  page.on('pageerror', (error) => errors.push(String(error)));
+  page.on('console', (message) => {
+    if (message.type() === 'error' && !message.location().url.endsWith('/favicon.ico'))
+      errors.push(message.text());
+  });
+}
+
+try {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
+  const errors = [];
+  captureErrors(page, errors);
+  await page.goto(base);
+  await page.locator('#app h1').waitFor();
+  const saveBefore = await page.evaluate(() => JSON.stringify(localStorage));
+  const headingBefore = await page.locator('#app h1').textContent();
+  await start(page);
+  assert.equal((await snapshot(page)).audio.muted, true);
+  assert.equal((await snapshot(page)).mara.direction, 'left');
+  await page.screenshot({ path: `${output}/bookshop-desktop.png`, fullPage: true });
+
+  // Real key presses exercise movement, bounds, animation, and furniture collision.
+  await page.locator('#game').focus();
+  await page.keyboard.down('ArrowDown');
+  await waitScene(page, (scene) => scene.characters.player.y >= 237);
+  await page.keyboard.up('ArrowDown');
+  const blocked = await snapshot(page);
+  assert.ok(blocked.player.y <= 239.1, 'Counter collision stops the player');
+
+  // Click-to-move routes around furniture to the opposite side of the table.
+  const canvas = await page.locator('canvas').boundingBox();
+  await page.mouse.click(
+    canvas.x + (435 / 640) * canvas.width,
+    canvas.y + (320 / 360) * canvas.height,
+  );
+  await waitScene(
+    page,
+    (scene) =>
+      scene.path.length > 1 &&
+      scene.characters.player.sprite.anims.currentAnim?.key.endsWith('-walk'),
+  );
+  assert.ok(
+    Number((await snapshot(page)).player.frame) % 6 >= 2,
+    'Walking uses the animated directional frames',
+  );
+  await waitScene(
+    page,
+    (scene) => Math.hypot(scene.characters.player.x - 435, scene.characters.player.y - 320) < 1,
+  );
+  for (const [name, speaker] of [
+    ['Книжкові полиці', 'Книжкові полиці'],
+    ['Дощове вікно', 'Дощове вікно'],
+    ['Прилавок', 'Прилавок'],
+    ['Читацький столик', 'Читацький столик'],
+  ])
+    await inspect(page, name, speaker);
+  assert.equal((await snapshot(page)).state.inspected.length, 4);
+
+  await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
+  await page.getByRole('heading', { name: 'Мара', exact: true }).waitFor();
+  await ready(page);
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowUp');
+  await page.screenshot({ path: `${output}/mara-dialogue.png`, fullPage: true });
+  // Holding Enter cannot answer another line, even after the timing guard expires.
+  await page.keyboard.down('Enter');
+  const first = (await snapshot(page)).node;
+  assert.equal(first, 'meaning');
+  await ready(page);
+  await page.keyboard.down('Enter');
+  await page.keyboard.up('Enter');
+  assert.equal((await snapshot(page)).node, first);
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
+  await page.getByRole('heading', { name: 'Мара', exact: true }).waitFor();
+  assert.equal(
+    (await snapshot(page)).node,
+    'meaning',
+    'Closing and reopening resumes the conversation',
+  );
+  await choose(page, '«Ця розмова залишиться між нами»');
+  await choose(page, 'Показати дві книжки');
+  await choose(page, '«Скляна станція» — роман про потяги й повернення');
+  await choose(page, 'Загорнути «Скляну станцію»');
+  assert.equal((await snapshot(page)).state.completed, true);
+  assert.equal((await snapshot(page)).state.privacy, 'respected');
+  assert.equal((await snapshot(page)).parcel, true);
+  await choose(page, 'Повернутися до книгарні');
+
+  await page.getByRole('button', { name: 'Увімкнути звук', exact: true }).click();
+  assert.equal((await snapshot(page)).audio.muted, false);
+  await page.getByRole('button', { name: 'Керування та налаштування', exact: true }).click();
+  await page.getByLabel('Гучність').fill('25');
+  await page.getByLabel('Тиха музика', { exact: true }).check();
+  await page.getByLabel('Менше руху', { exact: true }).check();
+  assert.equal((await snapshot(page)).audio.volume, 0.25);
+  assert.equal((await snapshot(page)).audio.music, true);
+  assert.equal((await snapshot(page)).reduced, true);
+  await page.getByRole('button', { name: 'Повернутися до книгарні', exact: true }).click();
+  await page.getByRole('button', { name: 'Вимкнути звук', exact: true }).click();
+  assert.equal((await snapshot(page)).audio.muted, true);
+  assert.equal(
+    await page.evaluate(() => JSON.stringify(localStorage)),
+    saveBefore,
+    'Slice cannot alter production saves',
+  );
+  assert.deepEqual(errors, []);
+  results.push({
+    test: 'desktop, movement, objects, resume, privacy, station ending, audio, save isolation',
+    status: 'passed',
+  });
+
+  // Tablet + reduced motion + keyboard-only object selection and a different ending.
+  const tablet = await browser.newContext({
+    viewport: { width: 768, height: 1024 },
+    reducedMotion: 'reduce',
+    hasTouch: true,
+  });
+  const tabletPage = await tablet.newPage();
+  const tabletErrors = [];
+  captureErrors(tabletPage, tabletErrors);
+  await start(tabletPage);
+  await tabletPage.locator('#game').focus();
+  for (let i = 0; i < 5; i++) await tabletPage.keyboard.press('KeyR');
+  await tabletPage.keyboard.press('Enter');
+  await tabletPage.getByRole('heading', { name: 'Мара', exact: true }).waitFor();
+  assert.equal((await snapshot(tabletPage)).reduced, true);
+  await ready(tabletPage);
+  await tabletPage.keyboard.press('ArrowDown');
+  await tabletPage.keyboard.press('Enter');
+  assert.equal((await snapshot(tabletPage)).node, 'trains');
+  await choose(tabletPage, '«Тоді знайдемо щось для нього»');
+  await choose(tabletPage, '«Мапи незавершених доріг» — історія про нові початки');
+  await tabletPage.screenshot({ path: `${output}/bookshop-tablet.png`, fullPage: true });
+  const overflow = await tabletPage.evaluate(
+    () => document.documentElement.scrollWidth > innerWidth,
+  );
+  assert.equal(overflow, false);
+  await choose(tabletPage, 'Загорнути «Мапи незавершених доріг»');
+  assert.equal((await snapshot(tabletPage)).state.book, 'roads');
+  assert.equal((await snapshot(tabletPage)).state.completed, true);
+  assert.deepEqual(tabletErrors, []);
+  results.push({
+    test: 'tablet, reduced motion, keyboard-only selection, roads ending, text wrapping',
+    status: 'passed',
+  });
+
+  const fallback = await browser.newContext({
+    viewport: { width: 1024, height: 768 },
+    reducedMotion: 'reduce',
+  });
+  await fallback.route('**/art/portraits/mara.svg', (route) => route.abort());
+  await fallback.addInitScript(() => {
+    window.AudioContext = undefined;
+    window.webkitAudioContext = undefined;
+  });
+  const fallbackPage = await fallback.newPage();
+  await start(fallbackPage);
+  await fallbackPage.getByRole('button', { name: 'Увімкнути звук', exact: true }).click();
+  await fallbackPage.getByRole('button', { name: 'Звук недоступний', exact: true }).waitFor();
+  await fallbackPage.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
+  await fallbackPage.getByRole('heading', { name: 'Мара', exact: true }).waitFor();
+  assert.equal(await fallbackPage.locator('#portrait-fallback').isVisible(), true);
+  await choose(fallbackPage, '«Що ти хочеш сказати цим подарунком?»');
+  await choose(fallbackPage, '«Може, запитати в Лео, яку книжку він хоче?»');
+  assert.equal((await snapshot(fallbackPage)).node, 'boundary');
+  await fallbackPage.screenshot({ path: `${output}/portrait-fallback.png`, fullPage: true });
+  results.push({
+    test: 'missing portrait, unavailable Web Audio, confidentiality boundary',
+    status: 'passed',
+  });
+
+  const broken = await browser.newContext();
+  await broken.route('**/phaser-prototype/scene.js', (route) => route.abort());
+  const brokenPage = await broken.newPage();
+  await brokenPage.goto(`${base}/phaser-prototype/`);
+  await brokenPage
+    .getByText('Не вдалося відчинити книгарню. Оновіть сторінку, будь ласка.', { exact: true })
+    .waitFor();
+  results.push({
+    test: 'missing initialization module produces Ukrainian recovery message',
+    status: 'passed',
+  });
+
+  await page.goto(base);
+  await page.locator('#app h1').waitFor();
+  assert.equal(await page.locator('#app h1').textContent(), headingBefore);
+  assert.equal(await page.evaluate(() => JSON.stringify(localStorage)), saveBefore);
+  results.push({ test: 'production narrative still loads with unchanged save', status: 'passed' });
+  await writeFile(
+    `${output}/results.json`,
+    JSON.stringify({ base, browser: await browser.version(), results }, null, 2),
+  );
+  console.log(JSON.stringify({ output, results }, null, 2));
+} catch (error) {
+  for (const [index, page] of browser
+    .contexts()
+    .flatMap((context) => context.pages())
+    .entries()) {
+    await page
+      .screenshot({ path: `${output}/failure-${index}.png`, fullPage: true })
+      .catch(() => {});
+    console.error(page.url(), await snapshot(page).catch(() => 'Scene unavailable'));
+  }
+  throw error;
+} finally {
+  await browser.close();
+}

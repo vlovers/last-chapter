@@ -65,6 +65,7 @@ export class DialogueUI {
     );
     this.choices.replaceChildren();
     const opened = performance.now();
+    this.readyAt = opened + 220;
     for (const choice of node.choices) {
       const button = document.createElement('button');
       button.type = 'button';

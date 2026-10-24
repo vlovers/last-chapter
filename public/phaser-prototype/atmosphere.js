@@ -7,8 +7,12 @@ export function createAtmosphere(scene, lights, reduced) {
   }));
   const draw = () => {
     rain.clear().lineStyle(1, 0xc5d6dd, 0.42);
-    for (const drop of drops)
-      rain.lineBetween(drop.x, drop.y, drop.x - 1, Math.min(131, drop.y + 5));
+    for (const drop of drops) {
+      // Keep wooden mullions in front of the weather.
+      if (drop.x >= 316 && drop.x <= 325) continue;
+      if (drop.y >= 69 && drop.y <= 80) continue;
+      rain.lineBetween(drop.x, drop.y, drop.x - 1, Math.min(drop.y < 69 ? 73 : 131, drop.y + 5));
+    }
   };
   draw();
   return {

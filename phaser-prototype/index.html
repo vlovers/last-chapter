@@ -19,12 +19,13 @@
       <section id="stage" aria-label="Книгарня в Беллвіку">
         <div
           id="game"
+          inert
           tabindex="0"
           role="group"
           aria-label="Книгарня. Рух: стрілки або WASD. R: обрати предмет. Enter: підійти й оглянути. E: взаємодія поруч."
         ></div>
-        <div id="hotspots" aria-label="Предмети книгарні"></div>
-        <div class="hud">
+        <div id="hotspots" aria-label="Предмети книгарні" inert></div>
+        <div class="hud" inert>
           <p id="objective">Огляньте книгарню. На вас чекає гостя.</p>
           <nav aria-label="Налаштування гри">
             <button id="mute" type="button" aria-pressed="true">Увімкнути звук</button
@@ -39,7 +40,7 @@
             <button id="enter" type="button" disabled>Відчинити книгарню</button>
           </div>
         </div>
-        <button id="context-action" type="button" hidden></button>
+        <button id="context-action" type="button" hidden inert></button>
         <section id="dialogue" role="dialog" aria-modal="true" aria-labelledby="speaker" hidden>
           <div class="portrait-frame">
             <img id="portrait" src="/art/portraits/mara.svg" alt="Мара" /><span

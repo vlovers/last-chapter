@@ -25,6 +25,7 @@ import {
   createCharacterSheets,
 } from '../public/phaser-prototype/assets.js';
 import { BookshopAudio } from '../public/phaser-prototype/audio.js';
+import { updateCharacter } from '../public/phaser-prototype/characters.js';
 import maraPortrait from '../public/art/portraits/mara.svg?raw';
 
 describe('isolated bookshop dialogue', () => {
@@ -238,6 +239,79 @@ describe('movement and spatial interactions', () => {
 });
 
 describe('original asset pipeline and silent fallback', () => {
+  it('preserves facing direction through navigation actor copies and sorts feet above shadows', () => {
+    const display = () => ({
+      setPosition(x, y) {
+        this.x = x;
+        this.y = y;
+        return this;
+      },
+      setDepth(depth) {
+        this.depth = depth;
+        return this;
+      },
+      setTint(tint) {
+        this.tint = tint;
+        return this;
+      },
+      play(key) {
+        this.animation = key;
+        return this;
+      },
+    });
+    const actor = {
+      name: 'player',
+      x: 300,
+      y: 200,
+      direction: 'down',
+      sprite: display(),
+      shadow: display(),
+    };
+    for (const [dx, dy, direction] of [
+      [10, 0, 'right'],
+      [-10, 0, 'left'],
+      [0, -10, 'up'],
+      [0, 10, 'down'],
+    ]) {
+      updateCharacter(actor, { ...actor, x: actor.x + dx, y: actor.y + dy }, false);
+      expect(actor.direction).toBe(direction);
+      expect(actor.sprite.animation).toBe(`player-${direction}-walk`);
+      expect(actor.sprite.depth).toBe(actor.y);
+      expect(actor.shadow.depth).toBeLessThan(actor.sprite.depth);
+    }
+    updateCharacter(actor, actor, false, true);
+    expect(actor.sprite.animation).toBe('player-down-idle');
+    expect(actor.sprite.tint).toBe(0xffe2b2);
+  });
+
+  it('stops animation under reduced motion while retaining the correct facing frame', () => {
+    let stopped = false,
+      frame;
+    const sprite = {
+      setPosition() {
+        return this;
+      },
+      setDepth() {
+        return this;
+      },
+      setTint() {
+        return this;
+      },
+      setFrame(value) {
+        frame = value;
+      },
+      anims: {
+        stop() {
+          stopped = true;
+        },
+      },
+    };
+    const actor = { name: 'mara', x: 440, y: 220, direction: 'down', sprite, shadow: sprite };
+    updateCharacter(actor, { x: 430, y: 220 }, true);
+    expect(stopped).toBe(true);
+    expect(frame).toBe(6);
+    expect(actor.direction).toBe('left');
+  });
   it('validates provenance, local paths, and sheet geometry', () => {
     expect(validateManifest(ASSET_MANIFEST)).toBe(true);
     expect(maraPortrait).toContain('<svg');

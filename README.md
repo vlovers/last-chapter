@@ -2,7 +2,7 @@
 
 A browser-first **pixel-art small-town bookshop narrative game**. Customers arrive to buy books, talk about their lives and pass along rumors. The player can listen, investigate and decide when to keep or share information, with consequences for relationships across the town.
 
-**Status:** engineering bootstrap and disposable interaction spike. This is **not** a finished 40-minute story, polished pixel-art release, or full simulation of NPCs. Current dialogue is a placeholder and graphics are CSS pixel-inspired blocks.
+**Status:** a short playable five-day narrative prototype plus an isolated Phaser bookshop vertical slice. Neither demonstrates a finished episode's target runtime or release-level art. The slice provides exploration, animated characters, contextual interactions and one branching Ukrainian encounter; it preserves the narrative app and saves.
 
 ## Quick start
 
@@ -13,7 +13,7 @@ npm ci
 npm run dev
 ```
 
-Open the localhost URL displayed by Vite. Run `npm run check` for formatting, lint, type checks, unit tests and build. A committed `package-lock.json` pins dependencies. CI uses `npm ci` for reproducible installation.
+Open the localhost URL displayed by Vite for the narrative game, or `/phaser-prototype/` for the playable bookshop. See the [slice guide](docs/art/PHASER-VERTICAL-SLICE.md) for controls and architecture. Run `npm run check` for formatting, lint, type checks, unit tests and build. A committed `package-lock.json` pins dependencies. CI uses `npm ci` for reproducible installation.
 
 ## Intended play loop
 

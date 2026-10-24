@@ -53,3 +53,14 @@
 ## Current honest status
 
 The browser now contains a **first-pass playable path through Days 1–5**, including branching conversations, a book club, letter/rumor choices and composable epilogues. This is a **short narrative prototype**, not the targeted 4–5-hour finished game. Significant dialogue expansion, continuity review, scenario coverage, playtesting and production art remain. CI has not been confirmed green for the latest branch HEAD.
+
+## Isolated bookshop slice V1 (2026-10-24)
+
+A playable Phaser encounter now demonstrates a 640×360 original room, four-direction
+characters, furniture collision and navigation, four contextual object inspections,
+Mara's arrival and branching book-gift request, reduced motion, and gesture-gated audio.
+This completes a separate technical vertical slice, not production narrative integration
+or the runtime targets above. See [V1 guide](art/PHASER-VERTICAL-SLICE.md).
+
+Next: Ukrainian narrative/art review; stronger sprite expressions and audio mix; broader
+hardware/accessibility verification before considering an approved state bridge.

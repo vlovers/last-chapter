@@ -22,6 +22,7 @@ export class Interactions {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'hotspot';
+      button.hidden = spot.id === 'mara';
       button.setAttribute('aria-label', spot.label);
       const label = document.createElement('span');
       label.textContent = spot.label;

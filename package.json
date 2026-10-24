@@ -8,6 +8,7 @@
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:browser": "node scripts/qa-phaser.mjs",
     "lint": "eslint .",
     "format:check": "prettier --check .",
     "format": "prettier --write .",

@@ -57,7 +57,7 @@ export function canStand(point, obstacles = FURNITURE) {
 export function moveWithCollision(position, dx, dy, obstacles = FURNITURE) {
   // Substeps prevent tunnelling even after a delayed frame; slide along walls.
   const steps = Math.ceil(Math.max(Math.abs(dx), Math.abs(dy)) / 3) || 1;
-  const next = { ...position };
+  const next = { x: position.x, y: position.y };
   for (let i = 0; i < steps; i++) {
     if (canStand({ x: next.x + dx / steps, y: next.y }, obstacles)) next.x += dx / steps;
     if (canStand({ x: next.x, y: next.y + dy / steps }, obstacles)) next.y += dy / steps;
