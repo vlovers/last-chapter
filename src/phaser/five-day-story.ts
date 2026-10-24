@@ -196,8 +196,19 @@ export class FiveDayStory {
     else if (id === '__advance') {
       const action = checkpoints[this.stage] ?? sequence[this.stage];
       if (!action) throw new Error('No valid next stage');
+      // A stage can advance only when the actual dialogue graph has no
+      // remaining choices. Checkpoints are already completed stages.
+      if (!checkpoints[this.stage]) {
+        const graph = stageStory(this.stage);
+        if (availableOptions(graph, this.chapter.dialogue).length > 0)
+          throw new Error('Finish the conversation before advancing');
+      }
       this.chapter = action.next(this.chapter);
-    } else this.chapter = chooseChapterOption(this.chapter, id);
+    } else {
+      // Internal control actions are never valid dialogue option IDs.
+      if (id.startsWith('__')) throw new Error('Unknown story action');
+      this.chapter = chooseChapterOption(this.chapter, id);
+    }
     this.persist();
     return this.open();
   }
