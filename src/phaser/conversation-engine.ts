@@ -31,10 +31,12 @@ export function validateTopic(topic: ConversationTopic): string[] {
   if (ids.size !== topic.nodes.length) errors.push('Duplicate node IDs');
   if (!ids.has(topic.entry)) errors.push('Missing entry');
   for (const node of topic.nodes) {
+    if (!node.choices.length) errors.push('Dead end: ' + node.id);
     if (!node.text.trim()) errors.push('Empty text: ' + node.id);
     for (const variant of node.variants ?? []) if (!variant.text.trim()) errors.push('Empty variant: ' + node.id);
     const choices = new Set<string>();
     for (const choice of node.choices) {
+      if (!choice.label.trim()) errors.push('Empty choice label: ' + node.id);
       if (choices.has(choice.id)) errors.push('Duplicate choice: ' + node.id);
       choices.add(choice.id);
       if (choice.next !== '__exit' && !ids.has(choice.next))
@@ -50,6 +52,23 @@ export function validateTopic(topic: ConversationTopic): string[] {
   };
   walk(topic.entry);
   for (const id of ids) if (!reached.has(id)) errors.push('Unreachable node: ' + id);
+  const exitReachable = new Set<string>();
+  const reverse = new Map<string, string[]>();
+  for (const node of topic.nodes) {
+    for (const choice of node.choices) {
+      const parents = reverse.get(choice.next) ?? [];
+      parents.push(node.id);
+      reverse.set(choice.next, parents);
+    }
+  }
+  const pending = [...(reverse.get('__exit') ?? [])];
+  while (pending.length) {
+    const id = pending.pop()!;
+    if (exitReachable.has(id)) continue;
+    exitReachable.add(id);
+    pending.push(...(reverse.get(id) ?? []));
+  }
+  for (const id of ids) if (!exitReachable.has(id)) errors.push('No path to exit: ' + id);
   return errors;
 }
 export function startConversation(topic: ConversationTopic, memories: readonly string[] = []): ConversationSession {
