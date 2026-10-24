@@ -414,7 +414,7 @@ class Bookshop extends Phaser.Scene {
             const next = this.follow(mara, this.roaming.path, amount * this.visitorPace);
             updateCharacter(mara, next, false);
             if (!this.roaming.path.length) {
-              this.roaming.pause = 1700;
+              this.roaming.pause = 4800;
               mara.direction = this.roaming.goal?.facing ?? 'up';
               this.toast(this.story.visitor + ' ' + (this.roaming.goal?.label ?? 'оглядає книгарню') + '.');
             }
@@ -460,7 +460,7 @@ class Bookshop extends Phaser.Scene {
         mara,
         Boolean(this.story && this.state.mode === 'explore' && !this.roaming.engaged &&
           this.state.mara === 'ready' && this.roaming.path.length === 0 &&
-          this.roaming.goal?.prop === 'book'),
+          this.roaming.goal?.prop === 'book' && this.roaming.pause > 0),
         time,
         this.reduced,
       );
