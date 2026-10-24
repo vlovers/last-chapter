@@ -31,6 +31,7 @@ import { completedOrders } from '../game/service';
 import { storyProgress } from '../game/progress';
 import { catalogEntries, type CatalogFilter } from '../game/catalog';
 import { journalFacts } from './journal-facts';
+import { accessibleClues, collectClue } from './clue-board';
 
 const stagePeople: Partial<Record<ChapterStage, { name: string; actor: string | null }>> = {
   miller: { name: 'Пані Міллер', actor: 'miller' },
@@ -119,6 +120,17 @@ export class FiveDayStory {
     return journalFacts
       .filter(([flag]) => this.chapter.flags.includes(flag))
       .map(([, text]) => text);
+  }
+  get evidence() {
+    return accessibleClues(this.chapter.flags).map((clue) => ({
+      ...clue,
+      collected: this.chapter.flags.includes(clue.flag),
+    }));
+  }
+  gatherEvidence(id: string) {
+    this.chapter = collectClue(this.chapter, id);
+    this.persist();
+    return this.evidence.find((clue) => clue.id === id);
   }
   get orders() {
     return completedOrders(this.chapter);
