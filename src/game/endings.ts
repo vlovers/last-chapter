@@ -15,9 +15,10 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
     : flags.has('final_letter_kept_private')
       ? 'Айріс залишила лист у себе. Ніхто не вимагав відповіді раніше, ніж вона буде готова.'
       : 'Старий лист не став публічним видовищем. Його майбутнє залишається відкритим.';
-  const community = flags.has('final_repaired_rumor') || flags.has('final_respected_privacy')
-    ? 'Беллвік вчиться розрізняти цікавість і турботу. Чужі таємниці більше не є темою вечірніх розваг.'
-    : 'Гості розійшлися з новими книжками й запитаннями, які не обов’язково мають негайну відповідь.';
+  const community =
+    flags.has('final_repaired_rumor') || flags.has('final_respected_privacy')
+      ? 'Беллвік вчиться розрізняти цікавість і турботу. Чужі таємниці більше не є темою вечірніх розваг.'
+      : 'Гості розійшлися з новими книжками й запитаннями, які не обов’язково мають негайну відповідь.';
   const epilogue = flags.has('final_iris_exhibition')
     ? 'На стіні біля вікна з’явилася серія малюнків Айріс — «Вікна Беллвіка».'
     : flags.has('mara_future_supported')

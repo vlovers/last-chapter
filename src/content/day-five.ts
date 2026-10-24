@@ -18,7 +18,12 @@ export const finalReading: DialogueStory = {
         { id: 'anna', label: 'Послухати Анну про шкільний книжковий клуб', next: 'anna' },
         { id: 'rumor', label: 'Запропонувати поговорити про силу чуток', next: 'rumor' },
         { id: 'iris', label: 'Запитати Айріс про її малюнки', next: 'iris' },
-        { id: 'letter', label: 'Повернутися до питання старого листа', next: 'letter', requires: ['saw_envelope'] },
+        {
+          id: 'letter',
+          label: 'Повернутися до питання старого листа',
+          next: 'letter',
+          requires: ['saw_envelope'],
+        },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
       ],
     },
@@ -27,8 +32,18 @@ export const finalReading: DialogueStory = {
       speaker: 'Анна',
       text: '«Учні вигадали назву для нашої полиці: “Історії, які не поспішають”. І попросили залишити місце для книжок, які їм не сподобалися. Кажуть, про них теж цікаво сперечатися».',
       options: [
-        { id: 'anna-maps', label: '«Мапи справді допомогли їм шукати власні дороги»', next: 'anna-maps', requires: ['anna_chose_maps'] },
-        { id: 'anna-mystery', label: '«Детектив навчив їх перевіряти здогади»', next: 'anna-mystery', requires: ['anna_chose_mystery'] },
+        {
+          id: 'anna-maps',
+          label: '«Мапи справді допомогли їм шукати власні дороги»',
+          next: 'anna-maps',
+          requires: ['anna_chose_maps'],
+        },
+        {
+          id: 'anna-mystery',
+          label: '«Детектив навчив їх перевіряти здогади»',
+          next: 'anna-mystery',
+          requires: ['anna_chose_mystery'],
+        },
         { id: 'anna-back', label: 'Повернутися до гостей', next: 'gathering' },
       ],
     },
@@ -36,7 +51,9 @@ export const finalReading: DialogueStory = {
       id: 'anna-maps',
       speaker: 'Анна',
       text: '«Так! Один учень намалював маршрут до бібліотеки, а поруч підписав: “Тут можна передумати”. Мені здається, він зрозумів книжку краще за мене».',
-      options: [{ id: 'maps-back', label: 'Посміхнутися й повернутися до гостей', next: 'gathering' }],
+      options: [
+        { id: 'maps-back', label: 'Посміхнутися й повернутися до гостей', next: 'gathering' },
+      ],
     },
     {
       id: 'anna-mystery',
@@ -49,8 +66,18 @@ export const finalReading: DialogueStory = {
       speaker: 'Пані Міллер',
       text: '«Я довго вважала, що добре знаю всіх у Беллвіку. Але історія Томаса й Анни нагадала мені: здогад — це не доказ, а чужий біль — не розвага». Нора тихо киває, нічого не розкриваючи.',
       options: [
-        { id: 'rumor-respect', label: '«Нехай люди самі розповідають те, чим хочуть поділитися»', next: 'gathering', grants: ['final_respected_privacy'] },
-        { id: 'rumor-apology', label: '«Можемо навчитися визнавати помилки»', next: 'gathering', grants: ['final_repaired_rumor'] },
+        {
+          id: 'rumor-respect',
+          label: '«Нехай люди самі розповідають те, чим хочуть поділитися»',
+          next: 'gathering',
+          grants: ['final_respected_privacy'],
+        },
+        {
+          id: 'rumor-apology',
+          label: '«Можемо навчитися визнавати помилки»',
+          next: 'gathering',
+          grants: ['final_repaired_rumor'],
+        },
       ],
     },
     {
@@ -58,22 +85,44 @@ export const finalReading: DialogueStory = {
       speaker: 'Айріс',
       text: '«Я намалювала ці вікна для виставки, але тепер думаю: може, це просто подарунок книгарні. Мені подобається, що світло видно з вулиці, навіть якщо ніхто не знає, хто всередині».',
       options: [
-        { id: 'iris-exhibit', label: '«Влаштуймо маленьку виставку»', next: 'exhibit', requires: ['iris_offered_exhibition'] },
-        { id: 'iris-choice', label: '«Ти можеш вирішити, де будуть твої роботи»', next: 'gathering', grants: ['final_supported_iris'] },
+        {
+          id: 'iris-exhibit',
+          label: '«Влаштуймо маленьку виставку»',
+          next: 'exhibit',
+          requires: ['iris_offered_exhibition'],
+        },
+        {
+          id: 'iris-choice',
+          label: '«Ти можеш вирішити, де будуть твої роботи»',
+          next: 'gathering',
+          grants: ['final_supported_iris'],
+        },
       ],
     },
     {
       id: 'exhibit',
       speaker: 'Айріс',
       text: '«Тоді підпишемо їх просто: “Вікна Беллвіка”. Без пояснень про минуле. Нехай кожен побачить щось своє».',
-      options: [{ id: 'exhibit-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_iris_exhibition'] }],
+      options: [
+        {
+          id: 'exhibit-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_iris_exhibition'],
+        },
+      ],
     },
     {
       id: 'letter',
       speaker: 'Оповідач',
       text: 'Конверт досі запечатаний. Сім років він пролежав між сторінками, але ніхто не має права перетворювати його на публічне видовище. Айріс і Лео стоять біля вікна, Мара розмовляє з Анною.',
       options: [
-        { id: 'mutual', label: 'Запропонувати приватну розмову, якщо обоє згодні', next: 'mutual', requires: ['iris_letter_choice_respected', 'leo_open_to_conversation'] },
+        {
+          id: 'mutual',
+          label: 'Запропонувати приватну розмову, якщо обоє згодні',
+          next: 'mutual',
+          requires: ['iris_letter_choice_respected', 'leo_open_to_conversation'],
+        },
         { id: 'wait', label: 'Залишити конверт Айріс і не квапити нікого', next: 'wait' },
         { id: 'letter-back', label: 'Повернутися до гостей', next: 'gathering' },
       ],
@@ -82,13 +131,27 @@ export const finalReading: DialogueStory = {
       id: 'mutual',
       speaker: 'Оповідач',
       text: 'Айріс і Лео виходять у тихий внутрішній дворик. Мара знає, що вони вирішили поговорити, і не просить переказувати їй чужі слова. Коли вони повертаються, ніхто не ставить запитань. Деякі розмови важливі саме тому, що залишаються приватними.',
-      options: [{ id: 'mutual-back', label: 'Дати їм простір і повернутися до гостей', next: 'gathering', grants: ['final_mutual_conversation'] }],
+      options: [
+        {
+          id: 'mutual-back',
+          label: 'Дати їм простір і повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_mutual_conversation'],
+        },
+      ],
     },
     {
       id: 'wait',
       speaker: 'Айріс',
       text: '«Дякую. Можливо, я прочитаю його вголос Лео колись. А можливо, залишу собі. Тепер я знаю, що можу вирішувати без поспіху».',
-      options: [{ id: 'wait-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_letter_kept_private'] }],
+      options: [
+        {
+          id: 'wait-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_letter_kept_private'],
+        },
+      ],
     },
     {
       id: 'end',

@@ -251,12 +251,17 @@ export function advanceToDayFourLeo(state: ChapterState): ChapterState {
 /** Start the community reading on Day 5. */
 export function startFifthDay(state: ChapterState): ChapterState {
   if (state.stage !== 'day4-complete') throw new Error('Finish Day 4 first');
-  return { ...state, stage: 'day5-reading', dialogue: { ...startDialogue(finalReading), flags: state.flags } };
+  return {
+    ...state,
+    stage: 'day5-reading',
+    dialogue: { ...startDialogue(finalReading), flags: state.flags },
+  };
 }
 
 /** End the first season only after the final gathering concludes. */
 export function finishSeason(state: ChapterState): ChapterState {
   if (state.stage !== 'day5-reading') throw new Error('Finish Day 5 first');
-  if (currentNode(finalReading, state.dialogue).options.length) throw new Error('Finish the final gathering');
+  if (currentNode(finalReading, state.dialogue).options.length)
+    throw new Error('Finish the final gathering');
   return { ...state, stage: 'season-complete' };
 }

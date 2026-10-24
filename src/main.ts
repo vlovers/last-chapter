@@ -320,9 +320,9 @@ function render(): void {
                             ? 'Зустріти Лео →'
                             : chapter.stage === 'day4-leo'
                               ? 'Завершити четвертий день →'
-                                : chapter.stage === 'day5-reading'
-                                  ? 'Завершити перший сезон →'
-                              : 'Наступна сцена →';
+                              : chapter.stage === 'day5-reading'
+                                ? 'Завершити перший сезон →'
+                                : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
           chapter.stage === 'iris'
@@ -345,9 +345,9 @@ function render(): void {
                             ? advanceToDayFourLeo(chapter)
                             : chapter.stage === 'day4-leo'
                               ? finishFourthDay(chapter)
-                                : chapter.stage === 'day5-reading'
-                                  ? finishSeason(chapter)
-                              : advanceChapter(chapter);
+                              : chapter.stage === 'day5-reading'
+                                ? finishSeason(chapter)
+                                : advanceChapter(chapter);
         persistChapter();
         render();
       });
