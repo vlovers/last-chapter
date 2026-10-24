@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { leoDecision } from '../src/content/day-four-leo';
 import { advanceToDayFourLeo, finishFourthDay, type ChapterState } from '../src/game/chapter';
-import { availableOptions, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 describe('Day 4: Leo and mutual consent', () => {

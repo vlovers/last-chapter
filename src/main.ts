@@ -288,7 +288,7 @@ function render(): void {
                             ? 'Зустріти Лео →'
                             : chapter.stage === 'day4-leo'
                               ? 'Завершити четвертий день →'
-                            : 'Наступна сцена →';
+                              : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
           chapter.stage === 'iris'
@@ -311,7 +311,7 @@ function render(): void {
                             ? advanceToDayFourLeo(chapter)
                             : chapter.stage === 'day4-leo'
                               ? finishFourthDay(chapter)
-                            : advanceChapter(chapter);
+                              : advanceChapter(chapter);
         persistChapter();
         render();
       });
@@ -375,11 +375,17 @@ function render(): void {
     ['club_respected_privacy', 'Книжковий клуб домовився не перетворювати чужі історії на плітки.'],
     ['club_chose_evidence', 'Учасники клубу нагадали одне одному перевіряти факти.'],
     ['club_encouraged_children', 'Анна планує принести малюнки учнів на наступну зустріч.'],
-    ['leo_understood_timeline', 'Лео дізнався, що бронювання існувало, але підтвердження дзвінка немає.'],
+    [
+      'leo_understood_timeline',
+      'Лео дізнався, що бронювання існувало, але підтвердження дзвінка немає.',
+    ],
     ['leo_letter_consent_respected', 'Ви не передавали лист Лео без згоди Айріс.'],
     ['leo_open_to_conversation', 'Лео готовий поговорити з Айріс, якщо вона цього захоче.'],
     ['leo_letter_pressured_day4', 'Ви наполягали, щоб Лео негайно прочитав лист.'],
-    ['leo_respected_mara_relationship', 'Ви підтримали стосунки Лео й Мари без нав’язування рішень.'],
+    [
+      'leo_respected_mara_relationship',
+      'Ви підтримали стосунки Лео й Мари без нав’язування рішень.',
+    ],
     ['leo_supported_mutual_consent', 'Ви підтримали право Айріс і Лео самим обрати розмову.'],
     ['mara_supported_independence', 'Ви підтримали право Мари вирішувати за себе.'],
     ['mara_letter_privacy_respected', 'Ви не розголосили Марі приватного листа.'],

@@ -18,8 +18,18 @@ export const leoDecision: DialogueStory = {
         { id: 'mara', label: '«Як ви з Марою?»', next: 'mara' },
         { id: 'trains', label: '«Досі любиш старі станції?»', next: 'trains' },
         { id: 'past', label: '«Ти хотів би поговорити з Айріс?»', next: 'past' },
-        { id: 'evidence', label: '«Знайшлися записи про старе бронювання»', next: 'evidence', requires: ['eleanor_confirmed_reservation'] },
-        { id: 'letter', label: '«Є лист, який може бути адресований тобі»', next: 'letter', requires: ['saw_envelope'] },
+        {
+          id: 'evidence',
+          label: '«Знайшлися записи про старе бронювання»',
+          next: 'evidence',
+          requires: ['eleanor_confirmed_reservation'],
+        },
+        {
+          id: 'letter',
+          label: '«Є лист, який може бути адресований тобі»',
+          next: 'letter',
+          requires: ['saw_envelope'],
+        },
         { id: 'finish', label: 'Побажати Лео спокійного вечора', next: 'end' },
       ],
     },
@@ -28,7 +38,12 @@ export const leoDecision: DialogueStory = {
       speaker: 'Лео',
       text: '«Вона не дає мені забути, що життя відбувається зараз. Ми плануємо поїздку до моря, а я ще жодного разу не вибрав, на який потяг сісти». Він усміхається.',
       options: [
-        { id: 'mara-kind', label: '«Важливо слухати, чого хочете ви обоє»', next: 'welcome', grants: ['leo_respected_mara_relationship'] },
+        {
+          id: 'mara-kind',
+          label: '«Важливо слухати, чого хочете ви обоє»',
+          next: 'welcome',
+          grants: ['leo_respected_mara_relationship'],
+        },
         { id: 'mara-back', label: 'Повернутися до розмови', next: 'welcome' },
       ],
     },
@@ -42,22 +57,51 @@ export const leoDecision: DialogueStory = {
       id: 'past',
       speaker: 'Лео',
       text: '«Можливо. Але не для того, щоб повернути сім років. Я хотів би знати, чи ми обоє можемо згадувати те літо без сорому. Якщо Айріс не захоче — я зрозумію».',
-      options: [{ id: 'past-back', label: '«Це має бути рішення вас обох»', next: 'welcome', grants: ['leo_supported_mutual_consent'] }],
+      options: [
+        {
+          id: 'past-back',
+          label: '«Це має бути рішення вас обох»',
+          next: 'welcome',
+          grants: ['leo_supported_mutual_consent'],
+        },
+      ],
     },
     {
       id: 'evidence',
       speaker: 'Лео',
       text: '«Тобто запис про бронювання був, але ніхто не може підтвердити, що мені подзвонили?» Він довго дивиться на полицю. «Це змінює те, що я думав про той день. Але не дає права вимагати від Айріс відповіді».',
-      options: [{ id: 'evidence-back', label: '«Ми знаємо лише те, що підтверджено»', next: 'welcome', grants: ['leo_understood_timeline'] }],
+      options: [
+        {
+          id: 'evidence-back',
+          label: '«Ми знаємо лише те, що підтверджено»',
+          next: 'welcome',
+          grants: ['leo_understood_timeline'],
+        },
+      ],
     },
     {
       id: 'letter',
       speaker: 'Лео',
       text: 'Він не простягає руку до прилавка. «Якщо це лист від Айріс, я не хочу отримати його через чужу цікавість. Чи вона знає, що він знайшовся?»',
       options: [
-        { id: 'letter-wait', label: '«Я не передаватиму його без згоди Айріс»', next: 'letter-wait', grants: ['leo_letter_consent_respected'] },
-        { id: 'letter-ask', label: '«Можу запитати, чи вона хоче поговорити»', next: 'letter-ask', grants: ['leo_open_to_conversation'] },
-        { id: 'letter-push', label: '«Тобі варто прочитати його негайно»', next: 'letter-push', grants: ['leo_letter_pressured_day4'] },
+        {
+          id: 'letter-wait',
+          label: '«Я не передаватиму його без згоди Айріс»',
+          next: 'letter-wait',
+          grants: ['leo_letter_consent_respected'],
+        },
+        {
+          id: 'letter-ask',
+          label: '«Можу запитати, чи вона хоче поговорити»',
+          next: 'letter-ask',
+          grants: ['leo_open_to_conversation'],
+        },
+        {
+          id: 'letter-push',
+          label: '«Тобі варто прочитати його негайно»',
+          next: 'letter-push',
+          grants: ['leo_letter_pressured_day4'],
+        },
       ],
     },
     {
@@ -70,7 +114,9 @@ export const leoDecision: DialogueStory = {
       id: 'letter-ask',
       speaker: 'Лео',
       text: '«Скажи тільки, що я готовий вислухати. Без обіцянок і без сцени на весь Беллвік. Я теж маю поговорити з Марою — чесно, не ховаючись за минулим».',
-      options: [{ id: 'ask-back', label: '«Передам лише твою готовність говорити»', next: 'welcome' }],
+      options: [
+        { id: 'ask-back', label: '«Передам лише твою готовність говорити»', next: 'welcome' },
+      ],
     },
     {
       id: 'letter-push',

@@ -232,6 +232,11 @@ export function advanceToDayFourMara(state: ChapterState): ChapterState {
 /** Continue Day 4 with Leo after Mara leaves the shop. */
 export function advanceToDayFourLeo(state: ChapterState): ChapterState {
   if (state.stage !== 'day4-mara') throw new Error('Finish Mara first');
-  if (currentNode(maraDecision, state.dialogue).options.length) throw new Error('Finish Mara first');
-  return { ...state, stage: 'day4-leo', dialogue: { ...startDialogue(leoDecision), flags: state.flags } };
+  if (currentNode(maraDecision, state.dialogue).options.length)
+    throw new Error('Finish Mara first');
+  return {
+    ...state,
+    stage: 'day4-leo',
+    dialogue: { ...startDialogue(leoDecision), flags: state.flags },
+  };
 }
