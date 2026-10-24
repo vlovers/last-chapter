@@ -83,20 +83,20 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         topicSelector.append(button);
       }
       panel.append(topicSelector, element('h2', selectedTopic.title));
-      conversation = selectedTopic.id === maraBookClub.id ? conversation : afterHours;
-      if (conversation.finished) {
+      const activeConversation = selectedTopic.id === maraBookClub.id ? conversation : afterHours;
+      if (activeConversation.finished) {
         panel.append(element('p', 'Розмову завершено. Можна почати нову, зберігши попередні думки.'));
         const again = element('button', 'Поговорити знову');
         again.type = 'button';
-        again.addEventListener('click', () => { conversation = startConversation(selectedTopic, conversation.memories); if (selectedTopic.id === maraAfterHours.id) afterHours = conversation; saveConversation(); refresh(); });
+        again.addEventListener('click', () => { const next = startConversation(selectedTopic, activeConversation.memories); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else conversation = next; saveConversation(); refresh(); });
         panel.append(again);
       } else {
-        const node = conversationView(selectedTopic, conversation);
+        const node = conversationView(selectedTopic, activeConversation);
         panel.append(element('h3', node.speaker), element('p', node.text));
         for (const choice of node.choices) {
           const button = element('button', choice.label);
           button.type = 'button';
-          button.addEventListener('click', () => { conversation = answerConversation(selectedTopic, conversation, choice.id); if (selectedTopic.id === maraAfterHours.id) afterHours = conversation; saveConversation(); refresh(); });
+          button.addEventListener('click', () => { const next = answerConversation(selectedTopic, activeConversation, choice.id); if (selectedTopic.id === maraAfterHours.id) afterHours = next; else conversation = next; saveConversation(); refresh(); });
           panel.append(button);
         }
       }
