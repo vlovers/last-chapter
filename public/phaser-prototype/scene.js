@@ -204,7 +204,10 @@ class Bookshop extends Phaser.Scene {
       y: 260,
       duration: 3500,
       ease: 'Sine.easeInOut',
-      onUpdate: () => {\n        this.visitor.setDepth(this.visitor.y);\n        drawVisitor(Math.floor(this.time.now / 160) % 2 === 0);\n      },
+      onUpdate: () => {
+        this.visitor.setDepth(this.visitor.y);
+        drawVisitor(Math.floor(this.time.now / 160) % 2 === 0);
+      },
       onComplete: () => {
         drawVisitor(false);
         status.textContent = 'Мара завітала до книгарні. «Може, знайдемо щось цікаве для читання?»';
