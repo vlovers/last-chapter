@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { BROWSE_SPOTS, browsingRoute, visitorApproach } from '../public/phaser-prototype/visitor-roaming.js';
+import {
+  BROWSE_SPOTS,
+  browsingRoute,
+  visitorApproach,
+} from '../public/phaser-prototype/visitor-roaming.js';
 import { canStand, distance, findPath } from '../public/phaser-prototype/world.js';
 import { VISITOR_IDS } from '../public/phaser-prototype/visitor-art.js';
 import { visitorEntrance } from '../public/phaser-prototype/visitor-entrances.js';
