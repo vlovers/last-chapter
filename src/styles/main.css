@@ -927,3 +927,7 @@ h1 {
     font-size: 12px;
   }
 }
+
+/* Authored 64x80 pixel portraits; image stays decorative because the speaker name is text. */
+.character-portrait { padding: 0; }
+.character-portrait__image { display: block; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
