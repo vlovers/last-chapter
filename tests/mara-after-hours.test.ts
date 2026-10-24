@@ -35,6 +35,16 @@ describe('Mara after-hours conversations', () => {
     expect(restoreConversation(maraAfterHours, JSON.stringify(session))).toEqual(session);
   });
 
+  it('recalls Frank as the shop boss when revisiting', () => {
+    const session = startConversation(maraAfterHours, ['after:frank-boss']);
+    expect(conversationView(maraAfterHours, session).text).toContain('господар книгарні');
+  });
+
+  it('changes personal dialogue after a boundary-respecting response', () => {
+    const session = { ...startConversation(maraAfterHours, ['after:frank-boundary']), node: 'personal' };
+    expect(conversationView(maraAfterHours, session).text).toContain('не тиснеш');
+  });
+
   it('supports ending immediately', () => {
     expect(answerConversation(maraAfterHours, startConversation(maraAfterHours), 'exit').finished).toBe(true);
   });
