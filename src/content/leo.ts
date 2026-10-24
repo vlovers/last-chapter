@@ -100,19 +100,40 @@ export const leoVisit: DialogueStory = {
       id: 'gift-station',
       speaker: 'Лео',
       text: '«Стара станція?» Його очі світлішають. «Мара знає, що я можу годинами говорити про забуті колії. Але я краще не питатиму назви. Хочу, щоб вона сама вручила подарунок».',
-      options: [{ id: 'gift-station-back', label: '«Залишимо сюрприз Марі»', next: 'greet', grants: ['leo_respected_mara_surprise'] }],
+      options: [
+        {
+          id: 'gift-station-back',
+          label: '«Залишимо сюрприз Марі»',
+          next: 'greet',
+          grants: ['leo_respected_mara_surprise'],
+        },
+      ],
     },
     {
       id: 'gift-roads',
       speaker: 'Лео',
       text: '«Мапи?» Він сміється. «Вона постійно каже, що ми повинні хоча б раз поїхати кудись без плану. Може, ця книжка — її спосіб мене підготувати».',
-      options: [{ id: 'gift-roads-back', label: '«Не псуватиму несподіванку»', next: 'greet', grants: ['leo_respected_mara_surprise'] }],
+      options: [
+        {
+          id: 'gift-roads-back',
+          label: '«Не псуватиму несподіванку»',
+          next: 'greet',
+          grants: ['leo_respected_mara_surprise'],
+        },
+      ],
     },
     {
       id: 'gift-letters',
       speaker: 'Лео',
       text: '«Листи...» Він на мить замислюється. «Мара вміє знаходити історії, після яких хочеться говорити чесніше. Сподіваюся, я теж навчився слухати».',
-      options: [{ id: 'gift-letters-back', label: '«Нехай вона сама розповість про книжку»', next: 'greet', grants: ['leo_respected_mara_surprise'] }],
+      options: [
+        {
+          id: 'gift-letters-back',
+          label: '«Нехай вона сама розповість про книжку»',
+          next: 'greet',
+          grants: ['leo_respected_mara_surprise'],
+        },
+      ],
     },
     {
       id: 'town',

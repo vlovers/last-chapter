@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { leoVisit } from '../src/content/leo';
-import { availableOptions, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 import { completedOrders, currentCustomer } from '../src/game/service';
 
 describe('book recommendations echo across days', () => {

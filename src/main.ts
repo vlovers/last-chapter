@@ -354,7 +354,13 @@ function render(): void {
   orders.className = 'orders-list';
   const receipts = completedOrders(chapter);
   const customer = currentCustomer(chapter.stage);
-  if (customer && !receipts.some((receipt) => receipt.customer === customer) && ((chapter.stage === 'miller' || chapter.stage === 'mara') ? chapter.dialogue.node === 'order' : chapter.dialogue.node === 'books')) {
+  if (
+    customer &&
+    !receipts.some((receipt) => receipt.customer === customer) &&
+    (chapter.stage === 'miller' || chapter.stage === 'mara'
+      ? chapter.dialogue.node === 'order'
+      : chapter.dialogue.node === 'books')
+  ) {
     const pending = document.createElement('p');
     pending.className = 'order-pending';
     pending.textContent = `${customer}: очікує на вашу рекомендацію.`;
