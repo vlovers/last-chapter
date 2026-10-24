@@ -5,7 +5,13 @@ import { firstEvening } from '../src/content/evening';
 import { irisVisit } from '../src/content/iris';
 import { annaVisit } from '../src/content/anna';
 import { leoVisit } from '../src/content/leo';
-import { availableOptions, selectOption, startDialogue, validateDialogue, type DialogueStory } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+  type DialogueStory,
+} from '../src/game/dialogue';
 
 /**
  * Explores reachable dialogue states including accumulated flags.
@@ -54,7 +60,9 @@ describe('cross-day narrative integrity', () => {
         for (const option of node.options) {
           if (!option.requires?.length) continue;
           const state = { ...startDialogue(story), node: node.id, flags: [] };
-          expect(availableOptions(story, state).some((entry) => entry.id === option.id)).toBe(false);
+          expect(availableOptions(story, state).some((entry) => entry.id === option.id)).toBe(
+            false,
+          );
         }
       }
     }
