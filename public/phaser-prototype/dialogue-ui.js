@@ -1,4 +1,5 @@
-import { assetFallback, ASSET_MANIFEST } from './assets.js';
+import { assetFallback } from './assets.js';
+import { portraitDataUrl } from './visitor-portraits.js';
 export class DialogueUI {
   constructor(onChoose, onClose) {
     this.lifecycle = new AbortController();
@@ -68,15 +69,16 @@ export class DialogueUI {
     };
     this.element.dataset.visitor = visitorNames[node.speaker] ?? 'narrator';
     this.text.textContent = node.text;
-    this.portrait.hidden = !isMara;
-    this.fallback.hidden = isMara;
-    if (isMara) {
-      const id = ['thoughtful', 'firm'].includes(node.mood) ? `mara-${node.mood}` : 'mara-portrait';
-      const path = node.portrait ?? ASSET_MANIFEST.find((entry) => entry.id === id).path;
-      if (this.portrait.getAttribute('src') !== path) this.portrait.src = path;
-      if (this.portrait.complete && !this.portrait.naturalWidth)
-        this.useFallback('mara-portrait', node.speaker);
-    } else this.useFallback('object');
+    const visitor = this.element.dataset.visitor;
+    const image = isMara ? portraitDataUrl(visitor, node.mood) : null;
+    if (image) {
+      this.portrait.hidden = false;
+      this.fallback.hidden = true;
+      this.portrait.alt = `Піксельний портрет: ${node.speaker}`;
+      if (this.portrait.getAttribute('src') !== image) this.portrait.src = image;
+    } else {
+      this.useFallback('object', node.speaker);
+    }
     this.close.textContent = '×';
     this.close.setAttribute(
       'aria-label',
