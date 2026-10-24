@@ -70,6 +70,9 @@ class Bookshop extends Phaser.Scene {
         this.state = { ...this.state, mara: 'arriving' };
       }
     }
+    if (!actor && this.state.mara === 'arriving') {
+      this.state = { ...this.state, mara: 'ready' };
+    }
     const visible = Boolean(actor);
     this.characters.mara.sprite.setVisible(visible);
     this.characters.mara.shadow.setVisible(visible);

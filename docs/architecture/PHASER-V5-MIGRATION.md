@@ -12,11 +12,11 @@ Status: **first integration pass; requires local verification and further gamepl
 
 ## Known incomplete parts (do not call V5 finished)
 
-- The V4 actor art and arrival animation still depict Mara for **every** visitor. Stage-aware sprites, arrival/departure choreography and a full cast are still needed.
+- Original procedural palettes now distinguish each of the eight named visitors; however they still share one generic silhouette and arrival position. Unique silhouettes, character-specific animations and staging remain needed.
 - The old standalone Phaser fixture remains at `/phaser-prototype/`, by design.
-- The existing catalog browser, journal, exploration flags and detailed book recommendation cards from `src/main.ts` are **not yet** presented in the Phaser route. Book choices are offered using the original graph, but the richer recommendation UI is outstanding.
-- The root narrative currently uses a shared visitor interaction location rather than multiple independently animated characters.
-- The existing root-specific browser QA must be expanded; existing V4 screenshots and checks do not prove the new route.
+- The canonical route now offers the five-day progress bar, searchable-by-category catalog, journal facts, completed orders, and detailed recommendation cards. The remaining task is to improve their visual design and cross-input accessibility; do not claim parity without browser QA.
+- The root narrative still uses a shared visitor interaction point; characters do not yet have independent stage-specific entrances/departures.
+- Root-specific end-to-end browser QA still needs expansion. Existing V4 screenshots and checks do not prove the new route.
 - The old DOM implementation is retained in source as migration reference, not rendered on `/`.
 
 ## Verification before review
