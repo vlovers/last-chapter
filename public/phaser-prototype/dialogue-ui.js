@@ -56,6 +56,11 @@ export class DialogueUI {
     this.mood.textContent =
       { warm: 'Усміхається', thoughtful: 'Замислилася', firm: 'Рішуче' }[node.mood] ?? 'Тиха мить';
     this.name.textContent = node.speaker;
+    const visitorNames = {
+      'Пані Міллер': 'miller', Мара: 'mara', Ірис: 'iris', Анна: 'anna',
+      Лео: 'leo', Елеонора: 'eleanor', Томас: 'thomas', Нора: 'nora',
+    };
+    this.element.dataset.visitor = visitorNames[node.speaker] ?? 'narrator';
     this.text.textContent = node.text;
     this.portrait.hidden = !isMara;
     this.fallback.hidden = isMara;
