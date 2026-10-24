@@ -16,8 +16,10 @@ const browser = await chromium.connect(server.wsEndpoint());
 const results = [];
 
 function assertMaraPortrait(src) {
+  const isMaraSvg = Boolean(src?.split('?')[0].endsWith('/mara.svg'));
+  const isInlinePng = Boolean(src?.startsWith('data:image/png;base64,'));
   assert.ok(
-    src && (/\\/mara(?:-[a-z-]+)?\\.svg(?:\\?.*)?$/.test(src) || src.startsWith('data:image/png;base64,')),
+    isMaraSvg || isInlinePng,
     `Unexpected Mara portrait source: ${src?.slice(0, 100)}`,
   );
 }
