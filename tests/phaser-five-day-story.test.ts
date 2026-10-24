@@ -22,12 +22,31 @@ Object.defineProperty(globalThis, 'localStorage', {
 });
 
 const order: readonly ChapterStage[] = [
-  'miller', 'mara', 'evening', 'complete', 'iris', 'anna', 'leo', 'day2-complete',
-  'eleanor', 'thomas', 'nora', 'book-club', 'day3-complete', 'day4-iris',
-  'day4-mara', 'day4-leo', 'day4-complete', 'day5-reading', 'season-complete',
+  'miller',
+  'mara',
+  'evening',
+  'complete',
+  'iris',
+  'anna',
+  'leo',
+  'day2-complete',
+  'eleanor',
+  'thomas',
+  'nora',
+  'book-club',
+  'day3-complete',
+  'day4-iris',
+  'day4-mara',
+  'day4-leo',
+  'day4-complete',
+  'day5-reading',
+  'season-complete',
 ];
 const checkpoints: readonly ChapterStage[] = [
-  'complete', 'day2-complete', 'day3-complete', 'day4-complete',
+  'complete',
+  'day2-complete',
+  'day3-complete',
+  'day4-complete',
 ];
 function routeToEnd(initial: ChapterState): string[] {
   const queue: { state: ChapterState; route: string[] }[] = [{ state: initial, route: [] }];
