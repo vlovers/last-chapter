@@ -14,6 +14,7 @@ import {
   advanceToThomas,
   advanceToNora,
   finishThirdDay,
+  startBookClub,
 } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
@@ -56,6 +57,7 @@ const stageNames = {
   eleanor: 'День третій · Елеонора',
   thomas: 'День третій · Томас',
   nora: 'День третій · Нора',
+  'book-club': 'День третій · Книжковий клуб',
   'day3-complete': 'Кінець поточного третього дня',
 } as const;
 
@@ -130,7 +132,7 @@ function render(): void {
         ? 'Перший день завершено. Ваші рішення та знахідки залишаться з вами. Наступного ранку до книгарні завітає Айріс.'
         : chapter.stage === 'day2-complete'
           ? 'Другий день завершено. Наступного ранку до книгарні завітає Елеонора.'
-          : 'Розмови з Елеонорою, Томасом і Норою завершені. Книжковий клуб ще готується.';
+          : 'Книжковий клуб завершився. У книгарні знову з’явилося місце для спільних історій.';
     if (chapter.stage === 'complete') {
       const continueButton = document.createElement('button');
       continueButton.type = 'button';
@@ -255,8 +257,10 @@ function render(): void {
                   : chapter.stage === 'thomas'
                     ? 'Зустріти Нору →'
                     : chapter.stage === 'nora'
-                      ? 'Завершити зустріч →'
-                      : 'Наступна сцена →';
+                      ? 'Відкрити книжковий клуб →'
+                      : chapter.stage === 'book-club'
+                        ? 'Завершити третій день →'
+                        : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
           chapter.stage === 'iris'
@@ -270,8 +274,10 @@ function render(): void {
                   : chapter.stage === 'thomas'
                     ? advanceToNora(chapter)
                     : chapter.stage === 'nora'
-                      ? finishThirdDay(chapter)
-                      : advanceChapter(chapter);
+                      ? startBookClub(chapter)
+                      : chapter.stage === 'book-club'
+                        ? finishThirdDay(chapter)
+                        : advanceChapter(chapter);
         persistChapter();
         render();
       });
@@ -331,6 +337,10 @@ function render(): void {
     ['saw_repair_note', 'Журнал ремонту підтверджує, що книгарню закрили через протікання.'],
     ['mara_boundaries_respected', 'Мара вдячна, що ви не наполягали на особистій розмові.'],
     ['mara_listened_about_work', 'Мара зізналася, що їй важко відмовляти в додатковій роботі.'],
+    ['club_made_space', 'На книжковому клубі ви підтримали право кожного говорити у своєму темпі.'],
+    ['club_respected_privacy', 'Книжковий клуб домовився не перетворювати чужі історії на плітки.'],
+    ['club_chose_evidence', 'Учасники клубу нагадали одне одному перевіряти факти.'],
+    ['club_encouraged_children', 'Анна планує принести малюнки учнів на наступну зустріч.'],
     ['saw_envelope', 'У книжці знайдено запечатаний лист від Айріс до Лео.'],
     ['opened_private_letter', 'Ви розкрили приватного листа без дозволу.'],
     ['letter_secured', 'Лист залишився у безпечному місці.'],

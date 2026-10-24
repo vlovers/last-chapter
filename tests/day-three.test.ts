@@ -7,7 +7,9 @@ import {
   advanceToThomas,
   finishThirdDay,
   startThirdDay,
+  startBookClub,
   type ChapterState,
+  stageStory,
 } from '../src/game/chapter';
 import {
   availableOptions,
@@ -52,6 +54,12 @@ describe('Eleanor and Day 3', () => {
     }
     state = { ...state, flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
     expect(state.flags).toContain('nora_interested_in_letters');
+    state = startBookClub(state);
+    for (const id of ['welcome', 'discuss-books', 'books-general', 'stories-back', 'close']) {
+      state = { ...state, dialogue: selectOption(stageStory(state.stage), state.dialogue, id) };
+    }
+    state = { ...state, flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
+    expect(state.flags).toContain('club_made_space');
     state = finishThirdDay(state);
     expect(state.stage).toBe('day3-complete');
     expect(decodeSave(encodeSave(state))).toEqual(state);

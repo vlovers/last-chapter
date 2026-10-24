@@ -1,3 +1,4 @@
+import { bookClub } from '../content/book-club';
 import { noraVisit } from '../content/nora';
 import { thomasVisit } from '../content/thomas';
 import { eleanorVisit } from '../content/eleanor';
@@ -27,6 +28,7 @@ export type ChapterStage =
   | 'eleanor'
   | 'thomas'
   | 'nora'
+  | 'book-club'
   | 'day3-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
@@ -57,6 +59,8 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
       return eleanorVisit;
     case 'thomas':
       return thomasVisit;
+    case 'book-club':
+      return bookClub;
     case 'nora':
     case 'day3-complete':
       return noraVisit;
@@ -143,8 +147,8 @@ export function startThirdDay(state: ChapterState): ChapterState {
 
 /** Finish the current Day 3 sequence after Thomas's visit. */
 export function finishThirdDay(state: ChapterState): ChapterState {
-  if (state.stage !== 'nora') throw new Error('Finish Nora first');
-  if (currentNode(noraVisit, state.dialogue).options.length)
+  if (state.stage !== 'book-club') throw new Error('Finish the book club first');
+  if (currentNode(bookClub, state.dialogue).options.length)
     throw new Error('Finish the conversation');
   return { ...state, stage: 'day3-complete' };
 }
@@ -167,4 +171,11 @@ export function advanceToNora(state: ChapterState): ChapterState {
   if (currentNode(thomasVisit, state.dialogue).options.length)
     throw new Error('Finish Thomas first');
   return { ...state, stage: 'nora', dialogue: { ...startDialogue(noraVisit), flags: state.flags } };
+}
+
+/** Gather the community after Nora's visit, without losing previous choices. */
+export function startBookClub(state: ChapterState): ChapterState {
+  if (state.stage !== 'nora') throw new Error('Finish Nora first');
+  if (currentNode(noraVisit, state.dialogue).options.length) throw new Error('Finish Nora first');
+  return { ...state, stage: 'book-club', dialogue: { ...startDialogue(bookClub), flags: state.flags } };
 }
