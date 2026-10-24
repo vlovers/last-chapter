@@ -1,5 +1,4 @@
 /* Original 2.5D bookstore art study. All pixels are drawn locally; no third-party assets. */
-/* global Phaser */
 const status = document.querySelector('#status');
 const W = 640;
 const H = 360;
