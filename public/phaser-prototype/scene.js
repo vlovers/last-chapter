@@ -132,8 +132,12 @@ class Bookshop extends Phaser.Scene {
     }
     // Scattered leaves near the entrance and the bookshop's worn floorboards.
     for (const [x, y, shade] of [
-      [588, 330, C.gold], [599, 326, C.red], [572, 336, C.woodLight],
-      [48, 331, C.gold], [61, 323, C.red], [242, 329, C.cream],
+      [588, 330, C.gold],
+      [599, 326, C.red],
+      [572, 336, C.woodLight],
+      [48, 331, C.gold],
+      [61, 323, C.red],
+      [242, 329, C.cream],
     ]) {
       r(x, y, 7, 3, shade);
       r(x + 2, y - 2, 3, 2, shade);
@@ -155,7 +159,11 @@ class Bookshop extends Phaser.Scene {
     r(300, 142, 35, 7, C.jade);
     r(342, 142, 35, 7, C.red);
     // Three-dimensional stacks with alternating spine colors.
-    for (const [x, y, count] of [[250, 189, 4], [552, 300, 3], [45, 245, 3]]) {
+    for (const [x, y, count] of [
+      [250, 189, 4],
+      [552, 300, 3],
+      [45, 245, 3],
+    ]) {
       for (let i = 0; i < count; i++) {
         const offset = i % 2 === 0 ? 0 : 3;
         r(x + offset + 2, y - i * 5 + 2, 24, 5, C.dark);
