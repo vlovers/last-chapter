@@ -21,8 +21,10 @@ try {
   await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
   await page.locator('#story-tools').waitFor();
   assert.equal(await page.locator('#day-timeline li').count(), 5);
-  assert.equal(await page.locator('#story-continue').textContent(),
-    'День 1 · Пані Міллер · Продовжити');
+  assert.equal(
+    await page.locator('#story-continue').textContent(),
+    'День 1 · Пані Міллер · Продовжити',
+  );
 
   await page.getByRole('button', { name: 'Каталог книжок' }).click();
   assert.equal(await page.locator('.story-book').count(), 5);

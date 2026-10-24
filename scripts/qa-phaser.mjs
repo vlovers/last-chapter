@@ -317,7 +317,10 @@ try {
   await page.locator('#story-tools').waitFor();
   assert.equal(await page.locator('h1').textContent(), headingBefore);
   assert.equal(await page.evaluate(() => JSON.stringify(localStorage)), saveBefore);
-  results.push({ test: 'canonical root still loads; isolated prototype leaves five-day save unchanged', status: 'passed' });
+  results.push({
+    test: 'canonical root still loads; isolated prototype leaves five-day save unchanged',
+    status: 'passed',
+  });
   await writeFile(
     `${output}/results.json`,
     JSON.stringify({ base, browser: await browser.version(), results }, null, 2),
