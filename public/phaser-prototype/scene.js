@@ -1,5 +1,6 @@
 /* Original 2.5D bookstore art study. All pixels are drawn locally; no third-party assets. */
 const status = document.querySelector('#status');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const W = 640;
 const H = 360;
 const C = {
@@ -66,6 +67,12 @@ class Bookshop extends Phaser.Scene {
       y: 30 + ((i * 47) % 98),
       s: 1 + (i % 3),
     }));
+    if (prefersReducedMotion) {
+      this.rain.lineStyle(1, 0xc5d6dd, 0.5);
+      for (const drop of this.drops) {
+        this.rain.lineBetween(drop.x, drop.y, drop.x - 2, drop.y + 7);
+      }
+    }
     // Detailed wooden shelves, each with a footprint and visible side face.
     const shelf = (x, y, w, h, seed) => {
       r(x + 7, y + 8, w, h, C.dark);
@@ -189,13 +196,15 @@ class Bookshop extends Phaser.Scene {
       .circle(320, 71, 58, 0xffc885, 0.07)
       .setBlendMode(Phaser.BlendModes.ADD)
       .setDepth(3);
-    this.tweens.add({
-      targets: halo,
-      alpha: { from: 0.6, to: 1 },
-      duration: 1800,
-      yoyo: true,
-      repeat: -1,
-    });
+    if (!prefersReducedMotion) {
+      this.tweens.add({
+        targets: halo,
+        alpha: { from: 0.6, to: 1 },
+        duration: 1800,
+        yoyo: true,
+        repeat: -1,
+      });
+    }
     // Two original 16px-style characters with a shared sprite drawing function.
     const character = (x, y, coat, hair) => {
       const container = this.add.container(x, y).setDepth(y);
@@ -222,30 +231,37 @@ class Bookshop extends Phaser.Scene {
       return { container, draw };
     };
     const reader = character(100, 212, 0x81607e, 0x503842);
-    this.tweens.add({
-      targets: reader.container,
-      y: 215,
-      duration: 1400,
-      yoyo: true,
-      repeat: -1,
-      onUpdate: () => reader.container.setDepth(reader.container.y),
-    });
+    if (!prefersReducedMotion) {
+      this.tweens.add({
+        targets: reader.container,
+        y: 215,
+        duration: 1400,
+        yoyo: true,
+        repeat: -1,
+        onUpdate: () => reader.container.setDepth(reader.container.y),
+      });
+    }
     const mara = character(584, 237, 0x688e86, 0x513740);
-    this.tweens.add({
-      targets: mara.container,
-      x: 403,
-      y: 265,
-      duration: 3900,
-      ease: 'Sine.easeInOut',
-      onUpdate: () => {
-        mara.container.setDepth(mara.container.y);
-        mara.draw(Math.floor(this.time.now / 170) % 2 === 0);
-      },
-      onComplete: () => {
-        mara.draw();
-        status.textContent = 'Мара підійшла до столика. «Тут так затишно, коли надворі дощить».';
-      },
-    });
+    if (prefersReducedMotion) {
+      mara.container.setPosition(403, 265).setDepth(265);
+      mara.draw();
+    } else {
+      this.tweens.add({
+        targets: mara.container,
+        x: 403,
+        y: 265,
+        duration: 3900,
+        ease: 'Sine.easeInOut',
+        onUpdate: () => {
+          mara.container.setDepth(mara.container.y);
+          mara.draw(Math.floor(this.time.now / 170) % 2 === 0);
+        },
+        onComplete: () => {
+          mara.draw();
+          status.textContent = 'Мара підійшла до столика. «Тут так затишно, коли надворі дощить».';
+        },
+      });
+    }
     // Native pointer targets plus keyboard-accessible HTML controls below the canvas.
     const spots = [
       {
@@ -318,6 +334,7 @@ class Bookshop extends Phaser.Scene {
       .setDepth(500);
   }
   update(_time, delta) {
+    if (prefersReducedMotion) return;
     this.rain.clear();
     this.rain.lineStyle(1, 0xc5d6dd, 0.5);
     for (const drop of this.drops) {
