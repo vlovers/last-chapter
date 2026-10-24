@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { noraVisit } from '../src/content/nora';
-import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 
 describe('Nora and confidentiality', () => {
   it('has valid references', () => expect(validateDialogue(noraVisit)).toEqual([]));

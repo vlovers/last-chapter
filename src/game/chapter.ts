@@ -164,6 +164,7 @@ export function advanceToThomas(state: ChapterState): ChapterState {
 /** Continue Day 3 from Thomas to Nora, preserving privacy and rumor decisions. */
 export function advanceToNora(state: ChapterState): ChapterState {
   if (state.stage !== 'thomas') throw new Error('Finish Thomas first');
-  if (currentNode(thomasVisit, state.dialogue).options.length) throw new Error('Finish Thomas first');
+  if (currentNode(thomasVisit, state.dialogue).options.length)
+    throw new Error('Finish Thomas first');
   return { ...state, stage: 'nora', dialogue: { ...startDialogue(noraVisit), flags: state.flags } };
 }
