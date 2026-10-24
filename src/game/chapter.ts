@@ -1,3 +1,4 @@
+import { thomasVisit } from '../content/thomas';
 import { eleanorVisit } from '../content/eleanor';
 import { leoVisit } from '../content/leo';
 import { annaVisit } from '../content/anna';
@@ -50,8 +51,10 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
     case 'day2-complete':
       return leoVisit;
     case 'eleanor':
-    case 'day3-complete':
       return eleanorVisit;
+    case 'thomas':
+    case 'day3-complete':
+      return thomasVisit;
   }
 };
 
@@ -130,8 +133,15 @@ export function startThirdDay(state: ChapterState): ChapterState {
 
 /** Day 3 is in progress; currently concludes after Eleanor's visit. */
 export function finishThirdDay(state: ChapterState): ChapterState {
-  if (state.stage !== 'eleanor') throw new Error('Finish Eleanor first');
-  if (currentNode(eleanorVisit, state.dialogue).options.length)
+  if (state.stage !== 'thomas') throw new Error('Finish Thomas first');
+  if (currentNode(thomasVisit, state.dialogue).options.length)
     throw new Error('Finish the conversation');
   return { ...state, stage: 'day3-complete' };
+}
+
+/** Advance Day 3 from Eleanor to Thomas without losing previous discoveries. */
+export function advanceToThomas(state: ChapterState): ChapterState {
+  if (state.stage !== 'eleanor') throw new Error('Finish Eleanor first');
+  if (currentNode(eleanorVisit, state.dialogue).options.length) throw new Error('Finish Eleanor first');
+  return { ...state, stage: 'thomas', dialogue: { ...startDialogue(thomasVisit), flags: state.flags } };
 }

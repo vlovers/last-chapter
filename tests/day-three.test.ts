@@ -1,6 +1,7 @@
+import { thomasVisit } from '../src/content/thomas';
 import { describe, expect, it } from 'vitest';
 import { eleanorVisit } from '../src/content/eleanor';
-import { finishThirdDay, startThirdDay, type ChapterState } from '../src/game/chapter';
+import { advanceToThomas, finishThirdDay, startThirdDay, type ChapterState } from '../src/game/chapter';
 import {
   availableOptions,
   currentNode,
@@ -32,6 +33,12 @@ describe('Eleanor and Day 3', () => {
     state = { ...state, flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
     expect(state.flags).toContain('eleanor_confirmed_missing_notification');
     expect(decodeSave(encodeSave(state))).toEqual(state);
+    state = advanceToThomas(state);
+    for (const id of ['greet', 'repair', 'repair-follow', 'work-back', 'finish']) {
+      state = { ...state, dialogue: selectOption(thomasVisit, state.dialogue, id) };
+    }
+    state = { ...state, flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
+    expect(state.flags).toContain('thomas_shared_work_stress');
     expect(finishThirdDay(state).stage).toBe('day3-complete');
   });
   it('does not start early', () => {
