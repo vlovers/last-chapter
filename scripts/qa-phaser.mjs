@@ -77,6 +77,39 @@ async function start(page) {
   await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).waitFor();
   await waitScene(page, (scene) => scene.state.mara === 'ready');
 }
+async function checkPresentation(page, dialogueVisible = false) {
+  const layout = await page.evaluate(() => {
+    const canvas = document.querySelector('canvas'),
+      targets = document.querySelector('#hotspots');
+    const room = canvas.getBoundingClientRect(),
+      hit = targets.getBoundingClientRect();
+    const dialogue = document.querySelector('#dialogue');
+    return {
+      width: canvas.width,
+      height: canvas.height,
+      sharp: getComputedStyle(canvas).imageRendering,
+      ratio: room.width / room.height,
+      aligned:
+        Math.abs(room.left - hit.left) < 1 &&
+        Math.abs(room.top - hit.top) < 1 &&
+        Math.abs(room.width - hit.width) < 1 &&
+        Math.abs(room.height - hit.height) < 1,
+      belowRoom: dialogue.hidden || dialogue.getBoundingClientRect().top >= room.bottom - 1,
+      overflow: document.documentElement.scrollWidth > innerWidth,
+      textOverflow: dialogue.scrollWidth > dialogue.clientWidth,
+    };
+  });
+  assert.equal(layout.width, 640);
+  assert.equal(layout.height, 360);
+  assert.equal(layout.sharp, 'pixelated');
+  assert.ok(Math.abs(layout.ratio - 16 / 9) < 0.001);
+  assert.equal(layout.aligned, true, 'Hotspots follow the displayed canvas');
+  assert.equal(layout.overflow, false);
+  if (dialogueVisible) {
+    assert.equal(layout.belowRoom, true, 'Dialogue never obscures room pixels');
+    assert.equal(layout.textOverflow, false);
+  }
+}
 function captureErrors(page, errors) {
   page.on('pageerror', (error) => errors.push(String(error)));
   page.on('console', (message) => {
@@ -97,6 +130,7 @@ try {
   await start(page);
   assert.equal((await snapshot(page)).audio.muted, true);
   assert.equal((await snapshot(page)).mara.direction, 'left');
+  await checkPresentation(page);
   await page.screenshot({ path: `${output}/bookshop-desktop.png`, fullPage: true });
 
   // Real key presses exercise movement, bounds, animation, and furniture collision.
@@ -139,6 +173,8 @@ try {
   await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
   await page.getByRole('heading', { name: 'Мара', exact: true }).waitFor();
   await ready(page);
+  await checkPresentation(page, true);
+  assert.ok((await page.locator('#portrait').getAttribute('src')).endsWith('/mara.svg'));
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('ArrowUp');
   await page.screenshot({ path: `${output}/mara-dialogue.png`, fullPage: true });
@@ -146,6 +182,7 @@ try {
   await page.keyboard.down('Enter');
   const first = (await snapshot(page)).node;
   assert.equal(first, 'meaning');
+  assert.ok((await page.locator('#portrait').getAttribute('src')).endsWith('/mara-thoughtful.svg'));
   await ready(page);
   await page.keyboard.down('Enter');
   await page.keyboard.up('Enter');
@@ -179,6 +216,12 @@ try {
   await page.getByRole('button', { name: 'Повернутися до книгарні', exact: true }).click();
   await page.getByRole('button', { name: 'Вимкнути звук', exact: true }).click();
   assert.equal((await snapshot(page)).audio.muted, true);
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await page.locator('#game').focus();
+  await page.getByRole('button', { name: 'Дощове вікно', exact: true }).click();
+  await page.getByRole('heading', { name: 'Дощове вікно', exact: true }).waitFor();
+  await checkPresentation(page, true);
+  await choose(page, 'Продовжити');
   assert.equal(
     await page.evaluate(() => JSON.stringify(localStorage)),
     saveBefore,
@@ -211,6 +254,7 @@ try {
   assert.equal((await snapshot(tabletPage)).node, 'trains');
   await choose(tabletPage, '«Тоді знайдемо щось для нього»');
   await choose(tabletPage, '«Мапи незавершених доріг» — історія про нові початки');
+  await checkPresentation(tabletPage, true);
   await tabletPage.screenshot({ path: `${output}/bookshop-tablet.png`, fullPage: true });
   const overflow = await tabletPage.evaluate(
     () => document.documentElement.scrollWidth > innerWidth,
@@ -219,6 +263,10 @@ try {
   await choose(tabletPage, 'Загорнути «Мапи незавершених доріг»');
   assert.equal((await snapshot(tabletPage)).state.book, 'roads');
   assert.equal((await snapshot(tabletPage)).state.completed, true);
+  await choose(tabletPage, 'Повернутися до книгарні');
+  await tabletPage.getByRole('button', { name: 'Дощове вікно', exact: true }).tap();
+  await tabletPage.getByRole('heading', { name: 'Дощове вікно', exact: true }).waitFor();
+  await choose(tabletPage, 'Продовжити');
   assert.deepEqual(tabletErrors, []);
   results.push({
     test: 'tablet, reduced motion, keyboard-only selection, roads ending, text wrapping',
@@ -229,7 +277,7 @@ try {
     viewport: { width: 1024, height: 768 },
     reducedMotion: 'reduce',
   });
-  await fallback.route('**/art/portraits/mara.svg', (route) => route.abort());
+  await fallback.route('**/art/**/mara*.svg', (route) => route.abort());
   await fallback.addInitScript(() => {
     window.AudioContext = undefined;
     window.webkitAudioContext = undefined;
@@ -244,6 +292,9 @@ try {
   await choose(fallbackPage, '«Що ти хочеш сказати цим подарунком?»');
   await choose(fallbackPage, '«Може, запитати в Лео, яку книжку він хоче?»');
   assert.equal((await snapshot(fallbackPage)).node, 'boundary');
+  assert.ok(
+    (await fallbackPage.locator('#portrait').getAttribute('src')).endsWith('/mara-firm.svg'),
+  );
   await fallbackPage.screenshot({ path: `${output}/portrait-fallback.png`, fullPage: true });
   results.push({
     test: 'missing portrait, unavailable Web Audio, confidentiality boundary',

@@ -91,7 +91,15 @@ export class Interactions {
     ) {
       const rect = highlighted.rect;
       this.outline.lineStyle(1, 0xf0bd7e, eligible(player, highlighted, state) ? 0.9 : 0.45);
-      this.outline.strokeRect(rect.x - 2, rect.y - 2, rect.w + 4, rect.h + 4);
+      for (const [x, y, dx, dy] of [
+        [rect.x - 2, rect.y - 2, 1, 1],
+        [rect.x + rect.w + 2, rect.y - 2, -1, 1],
+        [rect.x - 2, rect.y + rect.h + 2, 1, -1],
+        [rect.x + rect.w + 2, rect.y + rect.h + 2, -1, -1],
+      ]) {
+        this.outline.lineBetween(x, y, x + dx * 5, y);
+        this.outline.lineBetween(x, y, x, y + dy * 5);
+      }
     }
   }
   cycle() {
