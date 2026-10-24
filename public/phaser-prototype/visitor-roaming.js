@@ -40,6 +40,9 @@ export const BROWSE_ACTIONS = Object.freeze([
   { label: 'шукає цікаву історію', facing: 'left' },
 ]);
 export function browsingAction(actor, step = 0) {
-  const seed = Math.max(0, ['mara', 'miller', 'iris', 'anna', 'leo', 'eleanor', 'thomas', 'nora'].indexOf(actor));
+  const seed = Math.max(
+    0,
+    ['mara', 'miller', 'iris', 'anna', 'leo', 'eleanor', 'thomas', 'nora'].indexOf(actor),
+  );
   return BROWSE_ACTIONS[(seed + step) % BROWSE_ACTIONS.length];
 }
