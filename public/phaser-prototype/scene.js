@@ -13,6 +13,7 @@ import { VISITOR_IDS } from './visitor-art.js';
 import { visitorEntrance } from './visitor-entrances.js';
 import { browsingRoute, visitorApproach, browsingAction } from './visitor-roaming.js';
 import { pauseVisitor, resumeVisitor, shouldBrowse } from './visitor-lifecycle.js';
+import { createVisitorBook } from './visitor-book.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -45,6 +46,7 @@ class Bookshop extends Phaser.Scene {
     this.lights = drawEnvironment(this);
     this.atmosphere = createAtmosphere(this, this.lights, () => this.reduced);
     this.characters = createCharacters(this, this.story ? ['player', ...VISITOR_IDS] : undefined);
+    this.visitorBook = createVisitorBook(this);
     this.lastStoryActor = this.story ? null : 'mara';
     this.lastStoryDay = null;
     this.dialogue = new DialogueUI(
@@ -454,6 +456,14 @@ class Bookshop extends Phaser.Scene {
             dialogueNode(this.activeDialogue, this.state)?.mood === 'warm',
         );
       }
+      this.visitorBook.update(
+        mara,
+        Boolean(this.story && this.state.mode === 'explore' && !this.roaming.engaged &&
+          this.state.mara === 'ready' && this.roaming.path.length === 0 &&
+          this.roaming.goal?.prop === 'book'),
+        time,
+        this.reduced,
+      );
       this.interactions.update(player, mara, this.state);
     } catch (error) {
       this.fail(error);
@@ -473,6 +483,7 @@ class Bookshop extends Phaser.Scene {
   }
   cleanup() {
     this.lifecycle?.abort();
+    this.visitorBook?.destroy();
     this.dialogue?.destroy();
     this.interactions?.destroy();
     void this.audio?.dispose();

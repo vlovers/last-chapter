@@ -33,11 +33,11 @@ export function visitorApproach(visitor) {
 }
 
 export const BROWSE_ACTIONS = Object.freeze([
-  { label: 'розглядає книжки на полиці', facing: 'up' },
-  { label: 'переглядає корінці книжок', facing: 'up' },
+  { label: 'розглядає книжки на полиці', facing: 'up', prop: 'book' },
+  { label: 'переглядає корінці книжок', facing: 'up', prop: 'book' },
   { label: 'дивиться на дощ за вікном', facing: 'up' },
   { label: 'затримується біля читального куточка', facing: 'left' },
-  { label: 'шукає цікаву історію', facing: 'left' },
+  { label: 'шукає цікаву історію', facing: 'left', prop: 'book' },
 ]);
 export function browsingAction(actor, step = 0) {
   const seed = Math.max(
