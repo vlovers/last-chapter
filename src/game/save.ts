@@ -70,15 +70,40 @@ export function decodeSave(raw: string): ChapterState | null {
     // the remaining encounters were implemented. Resume at the missing visit.
     if (stage === 'day4-complete' && obj.node === 'end') {
       const flags = obj.flags as string[];
-      const hasLeo = flags.some((flag) => flag.startsWith('leo_') && (
-        flag.includes('day4') || ['leo_understood_timeline', 'leo_open_to_conversation', 'leo_letter_consent_respected', 'leo_respected_mara_relationship', 'leo_supported_mutual_consent'].includes(flag)
-      ));
-      const hasMara = flags.some((flag) => flag.startsWith('mara_') && (
-        ['mara_supported_independence', 'mara_letter_privacy_respected', 'mara_letter_pressured', 'mara_gift_encouraged', 'mara_future_supported'].includes(flag)
-      ));
-      const hasIris = flags.some((flag) => flag.startsWith('iris_') && (
-        ['iris_letter_choice_respected', 'iris_letter_delivery_offered', 'iris_letter_pressured_day4', 'iris_offered_exhibition', 'iris_supported_autonomy'].includes(flag)
-      ));
+      const hasLeo = flags.some(
+        (flag) =>
+          flag.startsWith('leo_') &&
+          (flag.includes('day4') ||
+            [
+              'leo_understood_timeline',
+              'leo_open_to_conversation',
+              'leo_letter_consent_respected',
+              'leo_respected_mara_relationship',
+              'leo_supported_mutual_consent',
+            ].includes(flag)),
+      );
+      const hasMara = flags.some(
+        (flag) =>
+          flag.startsWith('mara_') &&
+          [
+            'mara_supported_independence',
+            'mara_letter_privacy_respected',
+            'mara_letter_pressured',
+            'mara_gift_encouraged',
+            'mara_future_supported',
+          ].includes(flag),
+      );
+      const hasIris = flags.some(
+        (flag) =>
+          flag.startsWith('iris_') &&
+          [
+            'iris_letter_choice_respected',
+            'iris_letter_delivery_offered',
+            'iris_letter_pressured_day4',
+            'iris_offered_exhibition',
+            'iris_supported_autonomy',
+          ].includes(flag),
+      );
       if (!hasLeo && hasMara) {
         stage = 'day4-leo';
         dialogue = { ...startDialogue(stageStory(stage)), flags, history: [] };

@@ -13,12 +13,20 @@ describe('Day 4 evolving prototype save compatibility', () => {
     expect(state?.dialogue.node).toBe('arrival');
   });
   it('resumes at Leo when an old save finished after Mara', () => {
-    const state = decodeSave(legacy(['iris_letter_choice_respected', 'mara_supported_independence']));
+    const state = decodeSave(
+      legacy(['iris_letter_choice_respected', 'mara_supported_independence']),
+    );
     expect(state?.stage).toBe('day4-leo');
     expect(state?.flags).toContain('mara_supported_independence');
   });
   it('keeps completed Day 4 when Leo has spoken', () => {
-    const state = decodeSave(legacy(['iris_letter_choice_respected', 'mara_supported_independence', 'leo_open_to_conversation']));
+    const state = decodeSave(
+      legacy([
+        'iris_letter_choice_respected',
+        'mara_supported_independence',
+        'leo_open_to_conversation',
+      ]),
+    );
     expect(state?.stage).toBe('day4-complete');
     expect(state?.dialogue.node).toBe('end');
   });
