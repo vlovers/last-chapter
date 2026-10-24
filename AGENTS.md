@@ -21,7 +21,7 @@ Use Node 22 and npm. `npm install` (temporary until lockfile), `npm run dev`, `n
 4. Confidentiality, consent, character autonomy and realistic consequences guide sensitive stories.
 5. Avoid padding dialogue merely to hit the target runtime.
 6. A choice's consequences require narrative review and deterministic tests.
-7. EN/UK language support is planned, but not implemented; no fake translation claims.
+7. **Ukrainian-only game**: all player-facing text must be authored in natural Ukrainian (uk-UA). English is allowed in internal code/docs only. Follow `docs/LOCALIZATION.md`.
 
 ## Security and collaboration
 Never add credentials, unlicensed artwork, private personal details or real-world allegations. Validate all imported prose at trust boundaries; render dynamic text safely. Inspect current repo and open PRs before modifying shared files; use separate branches/worktrees for parallel agents. Each PR includes issue, scope, acceptance criteria, tests, risks, and doc updates. Do not modify unrelated repositories. Do not merge, force-push, deploy, publish, delete or change security settings without human approval. Never weaken failed checks to pass CI.

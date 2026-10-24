@@ -21,7 +21,7 @@
 - [ ] Coherent production pixel-art scenes with licensed provenance.
 - [ ] Responsive and accessible dialogue, catalog and evening notebook UI.
 - [ ] Versioned browser saves and seeded variants.
-- [ ] English/Ukrainian localization.
+- [ ] Ukrainian-only (uk-UA) game content and UI; editorial and accessibility QA. English game localization is out of scope.
 - [ ] Browser regression test automation.
 
 ## Later

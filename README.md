@@ -25,3 +25,6 @@ Open the localhost URL displayed by Vite. Run `npm run check` for formatting, li
 [Agent rules](AGENTS.md) · [Architecture](docs/ARCHITECTURE.md) · [Story direction](docs/NARRATIVE.md) · [Development](docs/DEVELOPMENT.md) · [Testing](docs/TESTING.md) · [Roadmap](docs/ROADMAP.md) · [Contribution guide](CONTRIBUTING.md)
 
 Issue → scoped work → implementation → tests → PR → CI → review → merge. Do not merge solely because CI is green.
+
+## Language
+The game is **Ukrainian-only** (`uk-UA`). Engineering documentation and source identifiers may remain English. See [Localization policy](docs/LOCALIZATION.md).

@@ -16,3 +16,6 @@
 **Writing gates:** Story Bible (chronology + true facts) → Character Bible (motives, voices, what each knows) → Dialogue Bible (optional questions, branches, prose) → Puzzle Design (clues and fair solutions) → Consequence Matrix → editorial/playtest review → implementation.
 
 **Content safety and quality:** Treat infidelity and parentage secrets as serious sensitive plot matters, not automatic gossip rewards. A player should never be forced to violate trust to win.
+
+## Player-facing language
+Ukrainian only (`uk-UA`). Author dialogues, book descriptions, clues and menus in Ukrainian from the start; English notes here are internal working material. See [Localization policy](LOCALIZATION.md).

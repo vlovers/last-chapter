@@ -1,7 +1,7 @@
-/** Fixture only: this is not the approved 40-minute story script. */
+/** Тимчасовий текст для прототипу, не фінальний сценарій. */
 export const opening = {
-  town: 'Bellwick',
-  shop: 'Last Chapter',
-  customer: 'Mrs. Miller',
-  line: 'You are new here, dear. Have you heard what happened near the bakery?',
+  town: 'Беллвік',
+  shop: 'Останній розділ',
+  customer: 'пані Міллер',
+  line: 'Ви тут новенькі, любі мої. Уже чули, що сталося біля пекарні?',
 } as const;

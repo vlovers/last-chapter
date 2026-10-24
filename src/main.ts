@@ -13,22 +13,22 @@ function render() {
   container.className = 'scene';
   const scene = document.createElement('div');
   scene.className = 'illustration';
-  scene.setAttribute('aria-label', 'Stylized pixel-bookshop counter under a glowing lamp');
+  scene.setAttribute('aria-label', 'Стилізована піксельна книгарня з прилавком під лампою');
   scene.innerHTML = '<div class="window"><div class="moon"></div></div><div class="shelves"><span>▤ ▥ ▤ ▥</span><span>▥ ▤ ▥ ▤</span><span>▤ ▥ ▤ ▥</span></div><div class="lamp"></div><div class="counter"></div>';
   const heading = document.createElement('h1');
   heading.textContent = `${opening.shop} · ${opening.town}`;
   const subtitle = document.createElement('p');
   subtitle.className = 'subtitle';
-  subtitle.textContent = `Day ${state.day} · ${state.phase === 'day' ? 'Shop hours' : 'After closing'}`;
+  subtitle.textContent = `День ${state.day} · ${state.phase === 'day' ? 'Книгарня відкрита' : 'Після закриття'}`;
   const dialogue = document.createElement('blockquote');
-  dialogue.textContent = state.phase === 'day' ? `Mrs. Miller: “${opening.line}”` : 'The shop falls quiet. You open your notebook and revisit what you heard.';
+  dialogue.textContent = state.phase === 'day' ? `Пані Міллер: “${opening.line}”` : 'У книгарні запанувала тиша. Ви розгортаєте нотатник і пригадуєте почуте.';
   const actions = document.createElement('div');
   actions.className = 'actions';
   if (state.phase === 'day') {
     const options: { label: string; choice: Choice }[] = [
-      { label: 'Ask her to tell the whole story', choice: 'listen' },
-      { label: 'Repeat the rumor to another customer', choice: 'share' },
-      { label: 'Ask for evidence before believing it', choice: 'verify' },
+      { label: 'Розпитати про цю історію', choice: 'listen' },
+      { label: 'Переказати чутку іншому відвідувачу', choice: 'share' },
+      { label: 'Спершу з'ясувати, чи є докази', choice: 'verify' },
     ];
     for (const option of options) {
       const button = document.createElement('button');
@@ -39,15 +39,15 @@ function render() {
   }
   const next = document.createElement('button');
   next.className = 'next';
-  next.textContent = state.phase === 'day' ? 'Close the shop →' : 'Begin next day →';
+  next.textContent = state.phase === 'day' ? 'Зачинити книгарню →' : 'Почати наступний день →';
   next.addEventListener('click', () => { state = advance(state); render(); });
   actions.append(next);
   const notebook = document.createElement('section');
   notebook.className = 'notebook';
   const label = document.createElement('h2');
-  label.textContent = 'Notebook · Prototype state';
+  label.textContent = 'Нотатник · Стан прототипу';
   const details = document.createElement('p');
-  details.textContent = `Knowledge: ${state.knowledge} · Trust: ${state.trust} · Reputation: ${state.reputation}`;
+  details.textContent = `Відомості: ${state.knowledge === 'rumor' ? 'чутка' : 'спостереження'} · Довіра: ${state.trust} · Репутація: ${state.reputation}`;
   const journal = document.createElement('ul');
   for (const entry of state.journal.slice(-3)) {
     const item = document.createElement('li');
