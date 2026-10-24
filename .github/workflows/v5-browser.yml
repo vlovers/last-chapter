@@ -27,7 +27,7 @@ jobs:
           exit 1
       - name: Run V5 root browser smoke
         env:
-          PLAYWRIGHT_MODULE: ./node_modules/playwright/index.mjs
+          PLAYWRIGHT_MODULE: ../node_modules/playwright/index.mjs
           QA_OUTPUT: /tmp/last-chapter-v5-qa
         run: npm run test:browser:v5
       - name: Upload QA screenshots
