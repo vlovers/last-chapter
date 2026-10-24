@@ -211,7 +211,7 @@ function render(): void {
                     ? 'Зустріти Нору →'
                     : chapter.stage === 'nora'
                       ? 'Завершити зустріч →'
-                    : 'Наступна сцена →';
+                      : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
           chapter.stage === 'iris'
@@ -226,7 +226,7 @@ function render(): void {
                     ? advanceToNora(chapter)
                     : chapter.stage === 'nora'
                       ? finishThirdDay(chapter)
-                    : advanceChapter(chapter);
+                      : advanceChapter(chapter);
         persistChapter();
         render();
       });
