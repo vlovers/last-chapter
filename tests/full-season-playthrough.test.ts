@@ -27,11 +27,25 @@ import { decodeSave, encodeSave } from '../src/game/save';
 import { storyProgress } from '../src/game/progress';
 
 const order: readonly ChapterStage[] = [
-  'miller', 'mara', 'evening', 'complete',
-  'iris', 'anna', 'leo', 'day2-complete',
-  'eleanor', 'thomas', 'nora', 'book-club', 'day3-complete',
-  'day4-iris', 'day4-mara', 'day4-leo', 'day4-complete',
-  'day5-reading', 'season-complete',
+  'miller',
+  'mara',
+  'evening',
+  'complete',
+  'iris',
+  'anna',
+  'leo',
+  'day2-complete',
+  'eleanor',
+  'thomas',
+  'nora',
+  'book-club',
+  'day3-complete',
+  'day4-iris',
+  'day4-mara',
+  'day4-leo',
+  'day4-complete',
+  'day5-reading',
+  'season-complete',
 ];
 
 const transitions: Partial<Record<ChapterStage, (state: ChapterState) => ChapterState>> = {
