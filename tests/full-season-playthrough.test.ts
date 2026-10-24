@@ -74,6 +74,7 @@ function finishScene(initial: ChapterState, reverse: boolean): ChapterState {
   const seen = new Set<string>();
   for (let cursor = 0; cursor < queue.length; cursor += 1) {
     const state = queue[cursor];
+    if (!state) throw new Error('Missing queued dialogue state at index ' + cursor);
     const key = state.dialogue.node + '|' + [...state.flags].sort().join(',');
     if (seen.has(key)) continue;
     seen.add(key);
