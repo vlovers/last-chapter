@@ -1,11 +1,28 @@
 import { opening } from './content/intro';
 import { advanceChapter, chooseChapterOption, stageStory, startChapter } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
+import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
 import './styles/main.css';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('Не знайдено контейнер гри');
-let chapter = startChapter();
+let chapter = restoreChapter();
+
+function restoreChapter() {
+  try {
+    return decodeSave(localStorage.getItem(SAVE_KEY) ?? '') ?? startChapter();
+  } catch {
+    return startChapter();
+  }
+}
+
+function persistChapter(): void {
+  try {
+    localStorage.setItem(SAVE_KEY, encodeSave(chapter));
+  } catch {
+    // Private browsing or blocked storage must not prevent playing.
+  }
+}
 
 const stageNames = {
   miller: 'Ранок · Пані Міллер',
@@ -40,7 +57,7 @@ function render(): void {
     const restart = document.createElement('button');
     restart.type = 'button';
     restart.textContent = 'Почати знову';
-    restart.addEventListener('click', () => { chapter = startChapter(); render(); });
+    restart.addEventListener('click', () => { chapter = startChapter(); persistChapter(); render(); });
     actions.append(restart);
   } else {
     const story = stageStory(chapter.stage);
@@ -52,6 +69,7 @@ function render(): void {
       button.textContent = option.label;
       button.addEventListener('click', () => {
         chapter = chooseChapterOption(chapter, option.id);
+        persistChapter();
         render();
       });
       actions.append(button);
@@ -61,7 +79,7 @@ function render(): void {
       next.type = 'button';
       next.className = 'next';
       next.textContent = chapter.stage === 'evening' ? 'Завершити перший день →' : 'Наступна сцена →';
-      next.addEventListener('click', () => { chapter = advanceChapter(chapter); render(); });
+      next.addEventListener('click', () => { chapter = advanceChapter(chapter); persistChapter(); render(); });
       actions.append(next);
     }
   }
