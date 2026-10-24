@@ -17,8 +17,8 @@ describe('interactive book catalog', () => {
   });
 
   it('offers only actual dialogue choices during a book order', () => {
-    const millerOrder = millerVisit.nodes.order.options;
-    const maraOrder = maraVisit.nodes.order.options;
+    const millerOrder = millerVisit.nodes.find((node) => node.id === 'order')?.options ?? [];
+    const maraOrder = maraVisit.nodes.find((node) => node.id === 'order')?.options ?? [];
     expect(matchingOrderOptions('miller', 'order', millerOrder).map((option) => option.id)).toEqual(
       ['orchard', 'witnesses'],
     );
