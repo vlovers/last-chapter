@@ -8,11 +8,36 @@ export interface OrderReceipt {
 }
 
 const orderDefinitions = [
-  { flag: 'sold_orchard', customer: 'Пані Міллер', id: 'orchard', note: 'Тиха загадка з родинними таємницями.' },
-  { flag: 'sold_witnesses', customer: 'Пані Міллер', id: 'witnesses', note: 'Ненадійні свідки й мистецтво сумніватися.' },
-  { flag: 'sold_station', customer: 'Мара', id: 'station', note: 'Подарунок для Лео, який любить потяги.' },
-  { flag: 'sold_roads', customer: 'Мара', id: 'roads', note: 'Можливість прочитати історію разом.' },
-  { flag: 'sold_letters', customer: 'Мара', id: 'letters', note: 'Натяк на важливість невисловлених слів.' },
+  {
+    flag: 'sold_orchard',
+    customer: 'Пані Міллер',
+    id: 'orchard',
+    note: 'Тиха загадка з родинними таємницями.',
+  },
+  {
+    flag: 'sold_witnesses',
+    customer: 'Пані Міллер',
+    id: 'witnesses',
+    note: 'Ненадійні свідки й мистецтво сумніватися.',
+  },
+  {
+    flag: 'sold_station',
+    customer: 'Мара',
+    id: 'station',
+    note: 'Подарунок для Лео, який любить потяги.',
+  },
+  {
+    flag: 'sold_roads',
+    customer: 'Мара',
+    id: 'roads',
+    note: 'Можливість прочитати історію разом.',
+  },
+  {
+    flag: 'sold_letters',
+    customer: 'Мара',
+    id: 'letters',
+    note: 'Натяк на важливість невисловлених слів.',
+  },
 ] as const;
 
 /** A receipt is derived from existing narrative flags: old saves remain compatible. */
