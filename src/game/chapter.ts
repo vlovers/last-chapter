@@ -1,3 +1,4 @@
+import { leoDecision } from '../content/day-four-leo';
 import { maraDecision } from '../content/day-four-mara';
 import { irisDecision } from '../content/day-four-iris';
 import { bookClub } from '../content/book-club';
@@ -34,6 +35,7 @@ export type ChapterStage =
   | 'day3-complete'
   | 'day4-iris'
   | 'day4-mara'
+  | 'day4-leo'
   | 'day4-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
@@ -69,8 +71,10 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
     case 'day4-iris':
       return irisDecision;
     case 'day4-mara':
-    case 'day4-complete':
       return maraDecision;
+    case 'day4-leo':
+    case 'day4-complete':
+      return leoDecision;
     case 'nora':
     case 'day3-complete':
       return noraVisit;
@@ -207,8 +211,8 @@ export function startFourthDay(state: ChapterState): ChapterState {
 
 /** Close the first Day 4 encounter only after the conversation is complete. */
 export function finishFourthDay(state: ChapterState): ChapterState {
-  if (state.stage !== 'day4-mara') throw new Error('Finish Mara first');
-  if (currentNode(maraDecision, state.dialogue).options.length)
+  if (state.stage !== 'day4-leo') throw new Error('Finish Leo first');
+  if (currentNode(leoDecision, state.dialogue).options.length)
     throw new Error('Finish the conversation');
   return { ...state, stage: 'day4-complete' };
 }
@@ -223,4 +227,11 @@ export function advanceToDayFourMara(state: ChapterState): ChapterState {
     stage: 'day4-mara',
     dialogue: { ...startDialogue(maraDecision), flags: state.flags },
   };
+}
+
+/** Continue Day 4 with Leo after Mara leaves the shop. */
+export function advanceToDayFourLeo(state: ChapterState): ChapterState {
+  if (state.stage !== 'day4-mara') throw new Error('Finish Mara first');
+  if (currentNode(maraDecision, state.dialogue).options.length) throw new Error('Finish Mara first');
+  return { ...state, stage: 'day4-leo', dialogue: { ...startDialogue(leoDecision), flags: state.flags } };
 }

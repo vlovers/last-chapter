@@ -18,6 +18,7 @@ import {
   startFourthDay,
   finishFourthDay,
   advanceToDayFourMara,
+  advanceToDayFourLeo,
 } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
@@ -64,6 +65,7 @@ const stageNames = {
   'day3-complete': 'Кінець третього дня',
   'day4-iris': 'День четвертий · Айріс',
   'day4-mara': 'День четвертий · Мара',
+  'day4-leo': 'День четвертий · Лео',
   'day4-complete': 'День четвертий · Зустрічі завершені',
 } as const;
 
@@ -141,7 +143,7 @@ function render(): void {
           ? 'Другий день завершено. Наступного ранку до книгарні завітає Елеонора.'
           : chapter.stage === 'day3-complete'
             ? 'Книжковий клуб завершився. Наступного ранку Айріс повернеться до книгарні.'
-            : 'Розмови з Айріс і Марою завершені. Історія триває.';
+            : 'Четвертий день завершено. Айріс, Мара й Лео мають право самі вирішити, що робити далі.';
     if (chapter.stage === 'complete') {
       const continueButton = document.createElement('button');
       continueButton.type = 'button';
@@ -283,7 +285,9 @@ function render(): void {
                         : chapter.stage === 'day4-iris'
                           ? 'Зустріти Мару →'
                           : chapter.stage === 'day4-mara'
-                            ? 'Завершити зустріч із Марою →'
+                            ? 'Зустріти Лео →'
+                            : chapter.stage === 'day4-leo'
+                              ? 'Завершити четвертий день →'
                             : 'Наступна сцена →';
       next.addEventListener('click', () => {
         chapter =
@@ -304,7 +308,9 @@ function render(): void {
                         : chapter.stage === 'day4-iris'
                           ? advanceToDayFourMara(chapter)
                           : chapter.stage === 'day4-mara'
-                            ? finishFourthDay(chapter)
+                            ? advanceToDayFourLeo(chapter)
+                            : chapter.stage === 'day4-leo'
+                              ? finishFourthDay(chapter)
                             : advanceChapter(chapter);
         persistChapter();
         render();
@@ -369,6 +375,12 @@ function render(): void {
     ['club_respected_privacy', 'Книжковий клуб домовився не перетворювати чужі історії на плітки.'],
     ['club_chose_evidence', 'Учасники клубу нагадали одне одному перевіряти факти.'],
     ['club_encouraged_children', 'Анна планує принести малюнки учнів на наступну зустріч.'],
+    ['leo_understood_timeline', 'Лео дізнався, що бронювання існувало, але підтвердження дзвінка немає.'],
+    ['leo_letter_consent_respected', 'Ви не передавали лист Лео без згоди Айріс.'],
+    ['leo_open_to_conversation', 'Лео готовий поговорити з Айріс, якщо вона цього захоче.'],
+    ['leo_letter_pressured_day4', 'Ви наполягали, щоб Лео негайно прочитав лист.'],
+    ['leo_respected_mara_relationship', 'Ви підтримали стосунки Лео й Мари без нав’язування рішень.'],
+    ['leo_supported_mutual_consent', 'Ви підтримали право Айріс і Лео самим обрати розмову.'],
     ['mara_supported_independence', 'Ви підтримали право Мари вирішувати за себе.'],
     ['mara_letter_privacy_respected', 'Ви не розголосили Марі приватного листа.'],
     ['mara_letter_pressured', 'Ви наполягали, щоб Мара негайно дізналася про лист.'],
