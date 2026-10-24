@@ -17,7 +17,33 @@ export const firstEvening: DialogueStory = {
         },
         { id: 'book', label: 'Оглянути синю книжку', next: 'book', grants: ['saw_blue_book'] },
         { id: 'letter', label: 'Оглянути конверт', next: 'letter', grants: ['saw_envelope'] },
+        { id: 'eleanor-notes', label: 'Прочитати записку Елеонори на коробці', next: 'eleanor-notes' },
       ],
+    },
+    {
+      id: 'eleanor-notes',
+      speaker: 'Оповідач',
+      text: 'На внутрішньому боці кришки Елеонора залишила записку: «Не викидати. Книжки, які не встигли забрати до затоплення». Нижче — маленьке намальоване серце й приписка: «І не забути повернути Беатріс банку».',
+      options: [
+        { id: 'eleanor-history', label: 'Знайти згадку про ремонт у старому журналі', next: 'repair-ledger', grants: ['saw_repair_note'] },
+        { id: 'eleanor-memory', label: 'Занотувати питання для Елеонори', next: 'eleanor-memory', grants: ['ask_eleanor_next_day'] },
+        { id: 'eleanor-back', label: 'Повернутися до коробки', next: 'box' },
+      ],
+    },
+    {
+      id: 'repair-ledger',
+      speaker: 'Оповідач',
+      text: 'Старий журнал відкривається на сторінці з плямами. «Протікання над задньою полицею. Відвідувачів не пускати до завершення ремонту». Дата збігається з тижнем бронювання Лео. Це підтверджує закриття, але не пояснює, хто мав повідомити покупців.',
+      options: [
+        { id: 'repair-back', label: 'Повернутися до коробки', next: 'box' },
+        { id: 'repair-question', label: 'Записати питання для Елеонори', next: 'eleanor-memory', grants: ['ask_eleanor_next_day'] },
+      ],
+    },
+    {
+      id: 'eleanor-memory',
+      speaker: 'Оповідач',
+      text: 'У нотатнику з’являється питання: «Чому бронювання Лео залишилося в коробці після ремонту?» Ви не маєте відповіді, але знаєте, кого можна запитати.',
+      options: [{ id: 'eleanor-memory-back', label: 'Повернутися до коробки', next: 'box' }],
     },
     {
       id: 'receipt',
@@ -75,9 +101,15 @@ export const firstEvening: DialogueStory = {
       options: [
         {
           id: 'keep-safe',
-          label: 'Залишити конверт запечатаним або зберегти його в безпечному місці',
+          label: 'Зберегти лист у безпечному місці',
           next: 'end',
           grants: ['letter_secured'],
+        },
+        {
+          id: 'keep-and-ask',
+          label: 'Зберегти лист і записати питання до Елеонори',
+          next: 'end',
+          grants: ['letter_secured', 'ask_eleanor_next_day'],
         },
         {
           id: 'ask-eleanor',
