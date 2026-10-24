@@ -3,9 +3,7 @@ export function facingToward(from, to, fallback = 'down') {
   const dx = to.x - from.x;
   const dy = to.y - from.y;
   if (Math.hypot(dx, dy) < 2) return fallback;
-  return Math.abs(dx) > Math.abs(dy)
-    ? dx > 0 ? 'right' : 'left'
-    : dy > 0 ? 'down' : 'up';
+  return Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'down' : 'up';
 }
 export function visitorReaction(visitor, player, speaking, elapsed, reduced) {
   const near = Math.hypot(visitor.x - player.x, visitor.y - player.y) < 52;
