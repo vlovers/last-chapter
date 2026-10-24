@@ -39,7 +39,6 @@ Public listing checks show a better-matched candidate than a generic RPG tileset
 
 Prefer **PixelNestStudio.R** for furniture and bookstore props if the $1 purchase is acceptable; otherwise inspect the free Cozy Starter and feyza5 archives before deciding. Do not mix packs just because both are pixel art: compare camera angle, native pixel scale, outline weight and palette first. Characters/animation remain a separate asset decision. No pack has been downloaded or added to the repository in this pass; the source-page terms still need confirmation against the archive's included licence.
 
-
 ## Prototype polish pass — reduced motion and touch accessibility
 
 Commit pass (2026-10-24):
