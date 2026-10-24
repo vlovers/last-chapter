@@ -11,7 +11,7 @@ The first-pass game is playable through the five-day chapter graph. This is **no
 
 ## Known gaps
 
-1. The graph walk is permissive about flags granted in *earlier* chapters. It does not prove that a particular complete five-day choice sequence can obtain every gated option.
+1. The graph walk is permissive about flags granted in _earlier_ chapters. It does not prove that a particular complete five-day choice sequence can obtain every gated option.
 2. A reachable terminal does not prove all intended dialogue branches are reachable or narratively coherent.
 3. The full five-day journey needs browser E2E coverage, save/resume across each stage, and a manual Ukrainian-language editorial review.
 4. The narrative currently has far fewer scenes and books than the desired 4–5-hour main path.
