@@ -90,22 +90,11 @@ function render(): void {
   );
   illustration.classList.add('illustration--pixel');
   illustration.innerHTML = `
-    <img class="pixel-scene" src="/art/bookshop-pixel.svg" alt="" aria-hidden="true" />
-    <div class="scene-wall-art" aria-hidden="true"><span>ОСТАННІЙ РОЗДІЛ</span></div>
-    <div class="scene-window" aria-hidden="true"><div class="scene-sky"></div><div class="scene-roof"></div><div class="scene-leaves">✦ ✧ ✦</div><div class="scene-window-cross"></div></div>
-    <div class="scene-bookshelf scene-bookshelf-left" aria-hidden="true">
-      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="pixel-stage" aria-hidden="true">
+      <img class="pixel-scene" src="/art/bookshop-pixel.svg" alt="" />
+      <div class="pixel-rain"></div>
+      <div class="pixel-lamp-glow"></div>
     </div>
-    <div class="scene-bookshelf scene-bookshelf-right" aria-hidden="true">
-      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="shelf-books"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    </div>
-    <div class="scene-pendant" aria-hidden="true"></div>
-    <div class="scene-plant" aria-hidden="true"><span>❦</span></div>
-    <div class="scene-counter" aria-hidden="true"><div class="counter-books"></div><div class="counter-cup"></div></div>
-    <div class="scene-foreground" aria-hidden="true"></div>
   `;
 
   const hotspots = document.createElement('div');
@@ -126,7 +115,7 @@ function render(): void {
     });
     hotspots.append(button);
   }
-  illustration.append(hotspots);
+  illustration.querySelector('.pixel-stage')?.append(hotspots);
 
   const heading = document.createElement('h1');
   heading.textContent = `${opening.shop} · ${opening.town}`;
