@@ -38,6 +38,7 @@ let chapter = restoreChapter();
 let previewBook: Book | null = null;
 let activeSpot: ShopSpotId | null = null;
 let catalogFilter: CatalogFilter = 'all';
+let journalOpen = false;
 
 function restoreChapter() {
   try {
@@ -119,6 +120,11 @@ function render(): void {
     hotspots.append(button);
   }
   illustration.querySelector('.pixel-stage')?.append(hotspots);
+  // Preserve the immersive scene while letting keyboard users discover the controls.
+  const sceneHint = document.createElement('p');
+  sceneHint.className = 'scene-hint';
+  sceneHint.textContent = 'Огляньте книгарню: полиці, вікно, прилавок і рослину';
+  illustration.append(sceneHint);
 
   const heading = document.createElement('h1');
   heading.textContent = `${opening.shop} · ${opening.town}`;
@@ -211,6 +217,7 @@ function render(): void {
       chapter = startChapter();
       previewBook = null;
       activeSpot = null;
+      journalOpen = false;
       persistChapter();
       render();
     });
@@ -513,6 +520,10 @@ function render(): void {
   const notebookContents = document.createElement('div');
   notebookContents.className = 'notebook-drawer__contents';
   notebookContents.append(label, notes, orderHeading, orders);
+  notebookDrawer.open = journalOpen;
+  notebookDrawer.addEventListener('toggle', () => {
+    journalOpen = notebookDrawer.open;
+  });
   notebookDrawer.append(notebookToggle, notebookContents);
   notebook.append(notebookDrawer);
   const storyPanel = document.createElement('section');
