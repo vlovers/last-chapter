@@ -50,7 +50,6 @@ Commit pass (2026-10-24):
 
 Validation still required in the local checkout: `npm run check`, then inspect `/phaser-prototype/` with normal motion and OS reduced-motion enabled, desktop and mobile widths, and keyboard-only navigation. External Phaser CDN availability remains a prototype dependency.
 
-
 ## Original character sprite-sheet pass
 
 A first local sprite sheet now exists at `public/assets/bookshop/visitors.svg` and is loaded by the Phaser scene instead of drawing the two visitors from Graphics primitives. It contains eight 32×48 frames (four reader poses and four Mara walk poses) at 128×96 total. The scene plays a short walk cycle while Mara approaches the reading table; with reduced motion enabled, Mara is placed directly at the destination and remains static.

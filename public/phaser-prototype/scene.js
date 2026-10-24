@@ -239,10 +239,7 @@ class Bookshop extends Phaser.Scene {
         onUpdate: () => reader.setDepth(reader.y),
       });
     }
-    const mara = this.add
-      .sprite(584, 237, 'bookshop-visitors', 4)
-      .setOrigin(0.5, 1)
-      .setDepth(237);
+    const mara = this.add.sprite(584, 237, 'bookshop-visitors', 4).setOrigin(0.5, 1).setDepth(237);
     if (prefersReducedMotion) {
       mara.setPosition(403, 265).setDepth(265);
       mara.setFrame(4);
