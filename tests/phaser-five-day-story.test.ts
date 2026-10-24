@@ -1,7 +1,14 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { FiveDayStory } from '../src/phaser/five-day-story';
-import { SAVE_KEY, encodeSave } from '../src/game/save';
-import { chooseChapterOption, startChapter } from '../src/game/chapter';
+import { SAVE_KEY, decodeSave, encodeSave } from '../src/game/save';
+import {
+  chooseChapterOption,
+  stageStory,
+  startChapter,
+  type ChapterState,
+  type ChapterStage,
+} from '../src/game/chapter';
+import { availableOptions } from '../src/game/dialogue';
 
 const values = new Map<string, string>();
 Object.defineProperty(globalThis, 'localStorage', {
@@ -13,6 +20,36 @@ Object.defineProperty(globalThis, 'localStorage', {
     },
   },
 });
+
+const order: readonly ChapterStage[] = [
+  'miller', 'mara', 'evening', 'complete', 'iris', 'anna', 'leo', 'day2-complete',
+  'eleanor', 'thomas', 'nora', 'book-club', 'day3-complete', 'day4-iris',
+  'day4-mara', 'day4-leo', 'day4-complete', 'day5-reading', 'season-complete',
+];
+const checkpoints: readonly ChapterStage[] = [
+  'complete', 'day2-complete', 'day3-complete', 'day4-complete',
+];
+function routeToEnd(initial: ChapterState): string[] {
+  const queue: { state: ChapterState; route: string[] }[] = [{ state: initial, route: [] }];
+  const visited = new Set<string>();
+  for (let index = 0; index < queue.length && index < 5000; index++) {
+    const entry = queue[index];
+    if (!entry) throw new Error('Missing dialogue search entry');
+    const key = entry.state.dialogue.node + '|' + [...entry.state.flags].sort().join(',');
+    if (visited.has(key)) continue;
+    visited.add(key);
+    const options = availableOptions(stageStory(initial.stage), entry.state.dialogue);
+    if (!options.length) return entry.route;
+    for (const option of options) {
+      queue.push({
+        state: chooseChapterOption(entry.state, option.id),
+        route: [...entry.route, option.id],
+      });
+    }
+  }
+  throw new Error('No reachable exit from ' + initial.stage);
+}
+
 afterEach(() => values.clear());
 
 describe('canonical Phaser story bridge', () => {
@@ -36,20 +73,20 @@ describe('canonical Phaser story bridge', () => {
     expect(story.stage).toBe('miller');
     expect(values.get(SAVE_KEY)).toBe(encodeSave(state));
   });
-  it('plays through the full five-day story using the shared narrative engine', () => {
+  it('plays all 19 canonical stages through the Phaser bridge', () => {
     const story = new FiveDayStory();
-    const visited = new Set<string>();
-    for (let i = 0; i < 250 && story.stage !== 'season-complete'; i++) {
-      visited.add(story.stage);
-      const node = story.open();
-      expect(node.choices.length).toBeGreaterThan(0);
-      const option = node.choices[0];
-      if (!option) throw new Error('Missing next story option');
-      story.choose(option.id);
+    for (const stage of order) {
+      expect(story.stage).toBe(stage);
+      if (stage === 'season-complete') break;
+      if (!checkpoints.includes(stage)) {
+        const snapshot = decodeSave(values.get(SAVE_KEY) ?? '') ?? startChapter();
+        for (const id of routeToEnd(snapshot)) story.choose(id);
+      }
+      expect(story.open().choices[0]?.id).toBe('__advance');
+      story.choose('__advance');
     }
     expect(story.stage).toBe('season-complete');
     expect(story.day).toBe(5);
-    expect(visited.size).toBeGreaterThanOrEqual(18);
     expect(story.open().choices[0]?.id).toBe('__restart');
   });
   it('uses the correct visitor identity and preserves inspected shop discoveries', () => {
