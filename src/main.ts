@@ -506,7 +506,15 @@ function render(): void {
     row.append(name, title, note);
     orders.append(row);
   }
-  notebook.append(label, notes, orderHeading, orders);
+  const notebookDrawer = document.createElement('details');
+  notebookDrawer.className = 'notebook-drawer';
+  const notebookToggle = document.createElement('summary');
+  notebookToggle.textContent = 'Нотатник і замовлення';
+  const notebookContents = document.createElement('div');
+  notebookContents.className = 'notebook-drawer__contents';
+  notebookContents.append(label, notes, orderHeading, orders);
+  notebookDrawer.append(notebookToggle, notebookContents);
+  notebook.append(notebookDrawer);
   const storyPanel = document.createElement('section');
   storyPanel.className = 'story-panel';
   storyPanel.append(heading, subtitle);

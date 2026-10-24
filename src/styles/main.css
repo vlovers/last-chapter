@@ -939,3 +939,105 @@ h1 {
   object-fit: cover;
   image-rendering: pixelated;
 }
+
+
+/* Game Screen V2: stage-first layout, dialogue beneath the scene, optional journal. */
+body {
+  padding: clamp(10px, 2vw, 28px);
+}
+.scene {
+  width: min(1380px, 100%);
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 320px);
+  grid-template-areas:
+    'art art'
+    'story notebook';
+  align-items: start;
+  gap: clamp(12px, 1.8vw, 24px);
+}
+.illustration.illustration--pixel {
+  position: relative;
+  top: auto;
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-width: 6px;
+  border-radius: 8px;
+}
+.illustration--pixel .pixel-stage {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+}
+.illustration--pixel .pixel-scene {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+.story-panel {
+  min-width: 0;
+  padding: clamp(16px, 2vw, 28px);
+}
+.story-panel h1 { font-size: clamp(24px, 2.7vw, 35px); }
+.story-panel .actions {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  align-items: stretch;
+}
+.story-panel .actions .book-shelf,
+.story-panel .actions .season-epilogue { grid-column: 1 / -1; }
+.notebook {
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.notebook-drawer summary {
+  display: block;
+  position: relative;
+  padding: 19px 46px 19px 20px;
+  font-weight: 800;
+  color: #f2c991;
+  cursor: pointer;
+  list-style: none;
+}
+.notebook-drawer summary::-webkit-details-marker { display: none; }
+.notebook-drawer summary::after {
+  content: '▾';
+  position: absolute;
+  right: 20px;
+  transition: transform .2s;
+}
+.notebook-drawer[open] summary::after { transform: rotate(180deg); }
+.notebook-drawer summary:focus-visible {
+  outline: 3px solid #ffdf9f;
+  outline-offset: -4px;
+}
+.notebook-drawer__contents {
+  padding: 0 20px 22px;
+  max-height: min(65vh, 700px);
+  overflow: auto;
+}
+.illustration--pixel .shop-hotspot {
+  font-size: clamp(10px, 1.05vw, 14px);
+}
+@media (max-width: 850px) {
+  .scene {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'art' 'story' 'notebook';
+  }
+  .illustration.illustration--pixel { min-height: 0; }
+  .notebook-drawer__contents { max-height: none; }
+}
+@media (max-width: 480px) {
+  .illustration--pixel .shop-hotspot {
+    font-size: 9px;
+    padding: 4px 5px;
+    min-height: 28px;
+    max-width: 40%;
+    line-height: 1.15;
+  }
+  .story-panel .actions { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .notebook-drawer summary::after { transition: none; }
+}
