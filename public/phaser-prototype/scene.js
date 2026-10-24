@@ -10,6 +10,7 @@ import { DialogueUI } from './dialogue-ui.js';
 import { Interactions } from './interactions.js';
 import { BookshopAudio } from './audio.js';
 import { VISITOR_IDS } from './visitor-art.js';
+import { visitorEntrance } from './visitor-entrances.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -34,6 +35,7 @@ class Bookshop extends Phaser.Scene {
     this.keys = new Set();
     this.path = [];
     this.arrival = [{ x: 440, y: 220 }];
+    this.visitorPace = 0.7;
     this.reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.lifecycle = new AbortController();
     this.audio = new BookshopAudio();
@@ -69,7 +71,9 @@ class Bookshop extends Phaser.Scene {
         visitor.sprite.setTexture(actor, 12);
         visitor.x = 590;
         visitor.y = 221;
-        this.arrival = [{ x: 440, y: 220 }];
+        const entrance = visitorEntrance(actor);
+        this.arrival = [{ x: entrance.x, y: entrance.y }];
+        this.visitorPace = entrance.pace;
         this.state = { ...this.state, mara: 'arriving' };
       }
     }
@@ -370,11 +374,12 @@ class Bookshop extends Phaser.Scene {
       if (this.canExplore()) {
         if (this.state.mara === 'arriving') {
           const next = this.reduced
-            ? { x: 440, y: 220 }
-            : this.follow(mara, this.arrival, amount * 0.7);
+            ? { ...this.arrival[0] }
+            : this.follow(mara, this.arrival, amount * this.visitorPace);
           updateCharacter(mara, next, this.reduced);
           if (this.reduced || !this.arrival.length) {
             this.state = transition(this.state, { type: 'arrive' });
+            if (this.story) mara.direction = 'left';
             this.toast(
               this.story
                 ? `До книгарні завітала ${this.story.visitor}.`
