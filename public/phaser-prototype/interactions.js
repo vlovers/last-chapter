@@ -1,6 +1,6 @@
 import { HOTSPOTS, nearestSpot, eligible } from './world.js';
 export class Interactions {
-  constructor(scene, onInteract) {
+  constructor(scene, onInteract, includePlant = false) {
     this.scene = scene;
     this.lifecycle = new AbortController();
     this.root = document.querySelector('#hotspots');
@@ -8,6 +8,12 @@ export class Interactions {
     this.outline = scene.add.graphics().setDepth(900);
     this.spots = [
       ...HOTSPOTS,
+      ...(includePlant ? [{
+        id: 'plant',
+        label: 'Рослина біля вікна',
+        rect: { x: 531, y: 168, w: 40, h: 40 },
+        approach: { x: 520, y: 215 },
+      }] : []),
       {
         id: 'mara',
         label: 'Поговорити з Марою',

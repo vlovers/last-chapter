@@ -45,7 +45,7 @@ class Bookshop extends Phaser.Scene {
       (id) => this.choose(id),
       () => this.closeDialogue(),
     );
-    this.interactions = new Interactions(this, (spot) => this.approach(spot));
+    this.interactions = new Interactions(this, (spot) => this.approach(spot), Boolean(this.story));
     this.interactions.update(this.characters.player, this.characters.mara, this.state);
     this.refreshStory();
     this.bindControls();
@@ -84,6 +84,9 @@ class Bookshop extends Phaser.Scene {
     }
     $('#objective').textContent =
       `День ${this.story.day} · ${this.story.visitor}. Ваші рішення зберігаються.`;
+    const eyebrow = document.querySelector('.masthead .eyebrow');
+    if (eyebrow) eyebrow.textContent = `Беллвік · День ${this.story.day}`;
+    $('#stage').dataset.day = String(this.story.day);
     window.__lastChapterRefresh?.();
   }
   openStory() {

@@ -104,6 +104,7 @@ describe('canonical Phaser story bridge', () => {
     const restored = new FiveDayStory();
     expect(restored.notes).toEqual(story.notes);
     expect(restored.inspect('not-a-place')).toBeNull();
+    expect(restored.inspect('plant')?.speaker).toBe('Рослина біля вікна');
   });
   it('rejects premature stage changes and malformed save data', () => {
     values.set(SAVE_KEY, 'not-json');

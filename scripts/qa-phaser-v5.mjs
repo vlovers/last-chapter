@@ -52,16 +52,44 @@ try {
   await page.getByRole('button', { name: 'Нотатник' }).click();
   await page.getByRole('heading', { name: 'Нотатник книгаря' }).waitFor();
 
-  // Check the integration controller across the 19-stage canon.
-  const walk = await page.evaluate(() => {
+  // Walk all 19 stages via reachable terminal routes instead of cycling first options.
+  const walk = await page.evaluate(async () => {
+    const { chooseChapterOption, stageStory, startChapter } = await import('/src/game/chapter.ts');
+    const { availableOptions } = await import('/src/game/dialogue.ts');
+    const { decodeSave, SAVE_KEY } = await import('/src/game/save.ts');
     const story = window.__lastChapterStory;
     if (!story) throw new Error('Missing five-day story');
+    const checkpoints = ['complete', 'day2-complete', 'day3-complete', 'day4-complete'];
     const visited = new Set();
-    for (let i = 0; i < 250 && story.stage !== 'season-complete'; i++) {
-      visited.add(story.stage);
-      const next = story.open().choices[0];
-      if (!next) throw new Error(`No next step: ${story.stage}`);
-      story.choose(next.id);
+    const pathToTerminal = (initial) => {
+      const queue = [{ state: initial, route: [] }];
+      const seen = new Set();
+      for (let index = 0; index < queue.length && index < 5000; index++) {
+        const entry = queue[index];
+        const key = entry.state.dialogue.node + '|' + [...entry.state.flags].sort().join(',');
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const options = availableOptions(stageStory(initial.stage), entry.state.dialogue);
+        if (!options.length) return entry.route;
+        for (const option of options) {
+          queue.push({
+            state: chooseChapterOption(entry.state, option.id),
+            route: [...entry.route, option.id],
+          });
+        }
+      }
+      throw new Error('No reachable terminal for ' + initial.stage);
+    };
+    for (let i = 0; i < 25 && story.stage !== 'season-complete'; i++) {
+      const stage = story.stage;
+      visited.add(stage);
+      if (!checkpoints.includes(stage)) {
+        const state = decodeSave(localStorage.getItem(SAVE_KEY) ?? '') ?? startChapter();
+        for (const choice of pathToTerminal(state)) story.choose(choice);
+      }
+      const button = story.open().choices[0];
+      if (button?.id !== '__advance') throw new Error('Cannot advance ' + stage);
+      story.choose('__advance');
     }
     return { stage: story.stage, visited: [...visited], progress: story.progress };
   });
