@@ -848,10 +848,14 @@ h1 {
   border: 3px solid #d3a276;
   border-radius: 4px;
   background: linear-gradient(145deg, var(--portrait-a), var(--portrait-b));
-  box-shadow: inset 0 0 0 3px #3b2c40, 4px 4px #2a202f;
+  box-shadow:
+    inset 0 0 0 3px #3b2c40,
+    4px 4px #2a202f;
 }
 .character-portrait__monogram {
-  font: 700 40px/1 Georgia, serif;
+  font:
+    700 40px/1 Georgia,
+    serif;
   color: #ffe5bc;
   text-shadow: 2px 3px #34273c;
 }
@@ -862,25 +866,64 @@ h1 {
   color: #ffe2a4;
   font-size: 17px;
 }
-.character-portrait--miller { --portrait-a: #a28dbe; --portrait-b: #584567; }
-.character-portrait--mara { --portrait-a: #c78b64; --portrait-b: #7c4955; }
-.character-portrait--iris { --portrait-a: #7c9e9e; --portrait-b: #435c74; }
-.character-portrait--anna { --portrait-a: #ba9b71; --portrait-b: #6c6059; }
-.character-portrait--leo { --portrait-a: #788ca3; --portrait-b: #414c67; }
-.character-portrait--eleanor { --portrait-a: #a99089; --portrait-b: #66516b; }
-.character-portrait--thomas { --portrait-a: #a17f63; --portrait-b: #555365; }
-.character-portrait--nora { --portrait-a: #819d81; --portrait-b: #4b6564; }
-.dialogue-card__speech { min-width: 0; }
+.character-portrait--miller {
+  --portrait-a: #a28dbe;
+  --portrait-b: #584567;
+}
+.character-portrait--mara {
+  --portrait-a: #c78b64;
+  --portrait-b: #7c4955;
+}
+.character-portrait--iris {
+  --portrait-a: #7c9e9e;
+  --portrait-b: #435c74;
+}
+.character-portrait--anna {
+  --portrait-a: #ba9b71;
+  --portrait-b: #6c6059;
+}
+.character-portrait--leo {
+  --portrait-a: #788ca3;
+  --portrait-b: #414c67;
+}
+.character-portrait--eleanor {
+  --portrait-a: #a99089;
+  --portrait-b: #66516b;
+}
+.character-portrait--thomas {
+  --portrait-a: #a17f63;
+  --portrait-b: #555365;
+}
+.character-portrait--nora {
+  --portrait-a: #819d81;
+  --portrait-b: #4b6564;
+}
+.dialogue-card__speech {
+  min-width: 0;
+}
 .dialogue-card__speaker {
   display: block;
   color: #ffd59a;
   margin-bottom: 7px;
   font-size: 14px;
 }
-.dialogue-card__speech p { margin: 0; overflow-wrap: anywhere; }
+.dialogue-card__speech p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
 @media (max-width: 540px) {
-  .dialogue-card--character { grid-template-columns: 52px minmax(0, 1fr); gap: 12px; }
-  .character-portrait { width: 52px; height: 68px; }
-  .character-portrait__monogram { font-size: 30px; }
-  .character-portrait__motif { font-size: 12px; }
+  .dialogue-card--character {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .character-portrait {
+    width: 52px;
+    height: 68px;
+  }
+  .character-portrait__monogram {
+    font-size: 30px;
+  }
+  .character-portrait__motif {
+    font-size: 12px;
+  }
 }
