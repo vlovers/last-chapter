@@ -15,6 +15,7 @@ import { browsingRoute, visitorApproach, browsingAction } from './visitor-roamin
 import { pauseVisitor, resumeVisitor, shouldBrowse } from './visitor-lifecycle.js';
 import { createVisitorBook } from './visitor-book.js';
 import { visitorReaction } from './visitor-reactions.js';
+import { createFrank } from './frank.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -45,6 +46,7 @@ class Bookshop extends Phaser.Scene {
     this.lifecycle = new AbortController();
     this.audio = new BookshopAudio();
     this.lights = drawEnvironment(this);
+    this.frank = this.story ? createFrank(this) : null;
     this.atmosphere = createAtmosphere(this, this.lights, () => this.reduced);
     this.characters = createCharacters(this, this.story ? ['player', ...VISITOR_IDS] : undefined);
     this.visitorBook = createVisitorBook(this);
