@@ -24,6 +24,7 @@ const stages: readonly ChapterStage[] = [
   'day2-complete',
   'eleanor',
   'thomas',
+  'nora',
   'day3-complete',
 ];
 

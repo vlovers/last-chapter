@@ -11,6 +11,7 @@ import {
   startSecondDay,
   startThirdDay,
   advanceToThomas,
+  advanceToNora,
   finishThirdDay,
 } from './game/chapter';
 import { availableOptions, currentNode } from './game/dialogue';
@@ -49,6 +50,7 @@ const stageNames = {
   'day2-complete': 'Кінець другого дня',
   eleanor: 'День третій · Елеонора',
   thomas: 'День третій · Томас',
+  nora: 'День третій · Нора',
   'day3-complete': 'Кінець поточного третього дня',
 } as const;
 
@@ -84,7 +86,7 @@ function render(): void {
         ? 'Перший день завершено. Ваші рішення та знахідки залишаться з вами. Наступного ранку до книгарні завітає Айріс.'
         : chapter.stage === 'day2-complete'
           ? 'Другий день завершено. Наступного ранку до книгарні завітає Елеонора.'
-          : 'Розмови з Елеонорою та Томасом завершені. Решта третього дня ще створюється.';
+          : 'Розмови з Елеонорою, Томасом і Норою завершені. Книжковий клуб ще готується.';
     if (chapter.stage === 'complete') {
       const continueButton = document.createElement('button');
       continueButton.type = 'button';
@@ -242,6 +244,9 @@ function render(): void {
     ['leo_likes_trains', 'Мара каже, що Лео любить потяги й розклади.'],
     ['mara_talked_about_leo', 'Мара хоче подарувати Лео книжку, яка покаже, що вона його розуміє.'],
     ['saw_receipt', 'Картка бронювання: Лео Марш. Підпису про отримання немає.'],
+    ['nora_interested_in_letters', 'Нора цікавиться книжками про листування й право на відповідь.'],
+    ['nora_confidentiality_respected', 'Ви не наполягали на розголошенні приватних звернень до центру.'],
+    ['nora_confidentiality_pressed', 'Ви наполягали на розмові про чужу приватність.'],
     ['thomas_shared_work_stress', 'Томас розповів про нерівномірні замовлення та втому.'],
     ['thomas_rumor_respected', 'Ви вирішили не поширювати неперевірені чутки про Томаса.'],
     ['thomas_privacy_pressed', 'Ви наполягали на поясненнях щодо особистого життя Томаса.'],

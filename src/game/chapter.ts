@@ -1,3 +1,4 @@
+import { noraVisit } from '../content/nora';
 import { thomasVisit } from '../content/thomas';
 import { eleanorVisit } from '../content/eleanor';
 import { leoVisit } from '../content/leo';
@@ -25,6 +26,7 @@ export type ChapterStage =
   | 'day2-complete'
   | 'eleanor'
   | 'thomas'
+  | 'nora'
   | 'day3-complete';
 const stages: readonly ChapterStage[] = ['miller', 'mara', 'evening', 'complete'];
 
@@ -54,8 +56,10 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
     case 'eleanor':
       return eleanorVisit;
     case 'thomas':
-    case 'day3-complete':
       return thomasVisit;
+    case 'nora':
+    case 'day3-complete':
+      return noraVisit;
   }
 };
 
@@ -139,8 +143,8 @@ export function startThirdDay(state: ChapterState): ChapterState {
 
 /** Finish the current Day 3 sequence after Thomas's visit. */
 export function finishThirdDay(state: ChapterState): ChapterState {
-  if (state.stage !== 'thomas') throw new Error('Finish Thomas first');
-  if (currentNode(thomasVisit, state.dialogue).options.length)
+  if (state.stage !== 'nora') throw new Error('Finish Nora first');
+  if (currentNode(noraVisit, state.dialogue).options.length)
     throw new Error('Finish the conversation');
   return { ...state, stage: 'day3-complete' };
 }
@@ -155,4 +159,11 @@ export function advanceToThomas(state: ChapterState): ChapterState {
     stage: 'thomas',
     dialogue: { ...startDialogue(thomasVisit), flags: state.flags },
   };
+}
+
+/** Continue Day 3 from Thomas to Nora, preserving privacy and rumor decisions. */
+export function advanceToNora(state: ChapterState): ChapterState {
+  if (state.stage !== 'thomas') throw new Error('Finish Thomas first');
+  if (currentNode(thomasVisit, state.dialogue).options.length) throw new Error('Finish Thomas first');
+  return { ...state, stage: 'nora', dialogue: { ...startDialogue(noraVisit), flags: state.flags } };
 }

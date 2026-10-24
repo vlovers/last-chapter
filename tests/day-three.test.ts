@@ -1,7 +1,9 @@
+import { noraVisit } from '../src/content/nora';
 import { thomasVisit } from '../src/content/thomas';
 import { describe, expect, it } from 'vitest';
 import { eleanorVisit } from '../src/content/eleanor';
 import {
+  advanceToNora,
   advanceToThomas,
   finishThirdDay,
   startThirdDay,
@@ -44,6 +46,12 @@ describe('Eleanor and Day 3', () => {
     }
     state = { ...state, flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
     expect(state.flags).toContain('thomas_shared_work_stress');
+    state = advanceToNora(state);
+    for (const id of ['hello', 'books', 'books-ask', 'letters-back', 'end']) {
+      state = { ...state, dialogue: selectOption(noraVisit, state.dialogue, id) };
+    }
+    state = { ...state, flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
+    expect(state.flags).toContain('nora_interested_in_letters');
     state = finishThirdDay(state);
     expect(state.stage).toBe('day3-complete');
     expect(decodeSave(encodeSave(state))).toEqual(state);
