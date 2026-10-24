@@ -79,7 +79,8 @@ three-quarter view. Character sheets use 32×48 frames, 24 frames per character:
 four directions × (two idle + four walk). A 14×8 feet body determines collision;
 character sprites sort by feet Y, furniture by its bottom footprint. Shadows sit
 below the owning sprite, floor light below characters, and foreground trim above.
-The palette uses warm walnut, paper cream, dusty rose, teal and restrained gold.
+V4 uses warm walnut, olive plaster, paper cream, teal and restrained gold. See the
+[V4 before/after report](v4/README.md) for the current artwork and dialogue presentation.
 
 The room includes varied book spines and gilding, plank joints and wear, a patterned
 rug, register, ledger, wrapping supplies, tea, reading chair/lamp, plants, curtains,
@@ -87,8 +88,10 @@ window-seat cushions and rainy town silhouettes. Light and steam remain subtle.
 Rain is restricted to glass and skips wooden mullions.
 
 All active room pixels, character sheets and synthesized sounds are original project
-work, recorded in `assets.js` as `project-original`. The reused original Mara SVG
-portrait is documented in [Pixel portraits](PIXEL-PORTRAITS.md). No artwork or audio
+work, recorded in `assets.js` as `project-original`. V4 adds three original 64×80 Mara SVG expressions under `/art/bookshop/`; their
+[provenance](../../public/art/bookshop/ATTRIBUTION.md) is separate from the unchanged
+production portraits. `character-art.js` and `shelf-art.js` contain the editable
+code-native actor and shelf artwork. No artwork or audio
 from reference games is included. The legacy `public/assets/bookshop/visitors.svg`
 and its manifest remain for provenance/regression compatibility; V1 does not load them.
 Phaser is an MIT-licensed engine dependency, not an art asset.
@@ -105,7 +108,7 @@ and both Vite entries. Prototype runtime modules are JavaScript; TypeScript does
 statically check them. Browser smoke checks exercise their integration.
 
 Known limits: one small room and one encounter; temporary state; no narrative bridge,
-shop economy, multi-NPC scheduling, animated portrait expressions, or authored recorded
+shop economy, multi-NPC scheduling, frame-animated portrait sequences, or authored recorded
 soundtrack. The soundscape is synthesized and needs listening/mixing review. Original
 programmatic sprites still need a dedicated pixel artist's polish. Responsive desktop
 and tablet are targets; very narrow phones use a scrollable dialogue panel. Other browser
@@ -116,3 +119,7 @@ warning. The production narrative does not pay this cost unless the slice is ope
 Next milestones: (1) human Ukrainian narrative and art review, (2) artist-authored
 expressions/sprites and audio mixing, (3) broader device/accessibility testing before an
 explicitly approved bridge to production narrative state.
+
+V4 dialogue uses a compact parchment dock below the canvas, with distinct warm,
+thoughtful and firm portraits. It never covers room pixels; long text scrolls inside
+the dock. Desktop choices share a row when space permits, with stacked tablet choices.

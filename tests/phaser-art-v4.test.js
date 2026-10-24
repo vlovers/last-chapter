@@ -9,7 +9,9 @@ import firm from '../public/art/bookshop/mara-firm.svg?raw';
 describe('V4 authored art boundaries and provenance', () => {
   it('keeps every room paint rectangle on the native pixel grid and inside the canvas', () => {
     const rectangles = [];
+    let layers = 0;
     const graphics = (position = {}) => ({
+      layer: layers++,
       x: position.x ?? 0,
       y: position.y ?? 0,
       setDepth() {
@@ -34,13 +36,13 @@ describe('V4 authored art boundaries and provenance', () => {
         return this;
       },
       fillRect(x, y, w, h) {
-        rectangles.push([x + this.x, y + this.y, w, h]);
+        rectangles.push([x + this.x, y + this.y, w, h, this.layer]);
         return this;
       },
     });
     drawEnvironment({ cameras: { main: { setBackgroundColor() {} } }, add: { graphics } });
     expect(rectangles.length).toBeGreaterThan(1000);
-    for (const [x, y, w, h] of rectangles) {
+    for (const [x, y, w, h, layer] of rectangles) {
       expect([x, y, w, h].every(Number.isInteger)).toBe(true);
       expect(x).toBeGreaterThanOrEqual(0);
       expect(y).toBeGreaterThanOrEqual(0);
@@ -48,6 +50,10 @@ describe('V4 authored art boundaries and provenance', () => {
       expect(h).toBeGreaterThanOrEqual(0);
       expect(x + w).toBeLessThanOrEqual(640);
       expect(y + h).toBeLessThanOrEqual(360);
+      // Background paint other than the void must stop at the room's floor edge;
+      // the separate foreground layer owns the trim below it.
+      if (layer === 0 && !(x === 0 && y === 0 && w === 640 && h === 360))
+        expect(y + h).toBeLessThanOrEqual(343);
     }
   });
 

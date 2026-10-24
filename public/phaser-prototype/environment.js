@@ -44,7 +44,7 @@ export function drawEnvironment(scene) {
         right = Math.min(619, x + 100);
       r(left, y + 1, right - left, Math.min(16, 342 - y), plankColors[(row * 3 + col + 9) % 5]);
       r(left + 1, y + 1, Math.max(0, right - left - 2), 1, 0xb08a62);
-      if (x > 25 && x + 82 < 619) {
+      if (x > 25 && x + 82 < 619 && y + 16 <= 343) {
         r(x + 3, y + 5, 1, 1, 0x5f4939);
         r(x + 3, y + 13, 1, 1, 0x5f4939);
         r(x + 16, y + 7, 29 + (row % 3) * 6, 1, 0x7e593f);
