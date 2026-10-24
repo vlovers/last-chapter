@@ -92,18 +92,31 @@ export function portraitDataUrl(id, mood = 'quiet') {
     r(17, 17, 30, 8, hairLight);
   }
   // Expressions retain a clear silhouette at 64×80.
-  const eyeY = mood === 'thoughtful' ? 37 : 35;
-  r(23, eyeY, 5, 2, '#443e3b');
-  r(37, eyeY, 5, 2, '#443e3b');
+  const eyeY = mood === 'thoughtful' || mood === 'sad' ? 37 : 35;
+  if (mood === 'surprised') {
+    r(22, 33, 7, 5, '#f3e8cf');
+    r(36, 33, 7, 5, '#f3e8cf');
+    r(25, 34, 2, 4, '#443e3b');
+    r(39, 34, 2, 4, '#443e3b');
+    r(29, 46, 7, 5, '#764747');
+  } else {
+    r(23, eyeY, 5, 2, '#443e3b');
+    r(37, eyeY, 5, 2, '#443e3b');
+  }
   r(32, 38, 2, 5, '#b47f68');
   if (mood === 'warm') {
     r(28, 46, 10, 2, '#925d56');
     r(30, 48, 6, 1, '#925d56');
+  } else if (mood === 'sad') {
+    r(28, 47, 10, 1, '#925d56');
+    r(30, 45, 6, 1, '#925d56');
+    r(20, 32, 7, 1, hair);
+    r(38, 32, 7, 1, hair);
   } else if (mood === 'firm') {
     r(27, 46, 11, 2, '#794b48');
     r(21, 32, 7, 2, hair);
     r(37, 32, 7, 2, hair);
-  } else {
+  } else if (mood !== 'surprised') {
     r(29, 46, 8, 1, '#925d56');
   }
   return canvas.toDataURL('image/png');

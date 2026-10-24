@@ -312,10 +312,10 @@ class Bookshop extends Phaser.Scene {
     if (this.story) $('#story-tools').inert = true;
     this.dialogue.show(
       node,
-      this.activeDialogue.kind === 'mara' ||
-        (this.activeDialogue.kind === 'story' && Boolean(node.portrait)),
+      this.activeDialogue.kind === 'mara' || this.activeDialogue.kind === 'story',
       this.state.completed,
       this.reduced,
+      this.activeDialogue.kind === 'story' ? this.story.actor : null,
     );
   }
   choose(id) {

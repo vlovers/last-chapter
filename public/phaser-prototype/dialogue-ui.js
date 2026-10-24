@@ -1,5 +1,6 @@
 import { assetFallback } from './assets.js';
 import { portraitDataUrl } from './visitor-portraits.js';
+import { normalizeEmotion, emotionLabel } from './visitor-emotions.js';
 export class DialogueUI {
   constructor(onChoose, onClose) {
     this.lifecycle = new AbortController();
@@ -49,13 +50,13 @@ export class DialogueUI {
     this.fallback.textContent = speaker.trim().charAt(0) || fallback.initials;
     this.fallback.style.background = fallback.color;
   }
-  show(node, isMara, completed, reduced) {
+  show(node, isMara, completed, reduced, actor = null) {
     this.element.hidden = false;
     this.element.closest('#stage').classList.add('talking');
     this.element.classList.toggle('object-note', !isMara);
-    this.element.dataset.mood = node.mood ?? 'quiet';
-    this.mood.textContent =
-      { warm: 'Усміхається', thoughtful: 'Замислилася', firm: 'Рішуче' }[node.mood] ?? 'Тиха мить';
+    const emotion = normalizeEmotion(node.mood);
+    this.element.dataset.mood = emotion;
+    this.mood.textContent = emotionLabel(emotion);
     this.name.textContent = node.speaker;
     const visitorNames = {
       'Пані Міллер': 'miller',
@@ -67,10 +68,10 @@ export class DialogueUI {
       Томас: 'thomas',
       Нора: 'nora',
     };
-    this.element.dataset.visitor = visitorNames[node.speaker] ?? 'narrator';
+    this.element.dataset.visitor = actor ?? visitorNames[node.speaker] ?? 'narrator';
     this.text.textContent = node.text;
     const visitor = this.element.dataset.visitor;
-    const image = isMara ? portraitDataUrl(visitor, node.mood) : null;
+    const image = isMara ? portraitDataUrl(visitor, emotion) : null;
     if (image) {
       this.portrait.hidden = false;
       this.fallback.hidden = true;
