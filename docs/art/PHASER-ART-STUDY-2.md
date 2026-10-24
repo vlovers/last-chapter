@@ -25,3 +25,17 @@ Shortlist checked on 2026-10-24:
 - Add a small asset manifest and a check that referenced local files exist. Keep this Phaser experiment isolated from the story engine and save data until visual and interaction parity is confirmed.
 
 No external asset files have been imported yet. These are candidates, not a claim that the licenses or archive contents have been independently inspected. Re-check the included license before shipping.
+
+## Source comparison refresh (2026-10-24)
+
+Public listing checks show a better-matched candidate than a generic RPG tileset:
+
+- **PixelNestStudio.R — [Bookshop & Library Pixel Art Props](https://pixelneststudior.itch.io/bookshop-library-pixel-art-props)**: $1 minimum; listing describes 64 static transparent PNG states (48 kinds plus 16 states), a spritesheet atlas, coordinates and manifest, with a front three-quarter view. Commercial/non-commercial use in finished games is allowed per the listing; standalone redistribution, public source hosting, reusable-template distribution and AI-training use are prohibited. AI-assisted disclosure is present. This is the closest perspective/subject match, but it has no character animation or automatic tiling. Inspect the archive's LICENSE.txt before integrating.
+- **GegX — [COZY STARTER](https://gegx.itch.io/cozy-starter)**: free/name-your-price sampler, with a machine-readable `assets.json` and import guide. The listing says commercial use is allowed and prohibits reselling the assets as a pack. AI-assisted disclosure is present. It is a sampler rather than a complete bookstore scene; verify whether the specific needed bookshelf/room props are actually in the archive.
+- **feyza5 — [Cozy Interiors Asset Pack](https://feyza5.itch.io/cozy-library)**: free/name-your-price 32×32 bookstore interiors; the author explicitly permits commercial use and modifications in a finished project and prohibits repackaging/resale. It is an alternative if its top-down layout can be reconciled with the existing 3/4 room.
+- **Kenney — [Roguelike/RPG Pack](https://kenney.nl/assets/roguelike-rpg-pack)**: CC0, 16×16 and broad coverage, but less specifically matched to the warm bookstore style.
+
+### Practical decision
+
+Prefer **PixelNestStudio.R** for furniture and bookstore props if the $1 purchase is acceptable; otherwise inspect the free Cozy Starter and feyza5 archives before deciding. Do not mix packs just because both are pixel art: compare camera angle, native pixel scale, outline weight and palette first. Characters/animation remain a separate asset decision. No pack has been downloaded or added to the repository in this pass; the source-page terms still need confirmation against the archive's included licence.
+
