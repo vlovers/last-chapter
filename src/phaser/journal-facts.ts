@@ -1,5 +1,6 @@
 /** Existing journal copy, shared with the original five-day narrative. */
 export const journalFacts: readonly (readonly [string, string])[] = [
+  ['met_frank', 'Ви познайомилися з Френком, сірим девон-рексом. На закладці під його лапою написано: «Не кожна таємниця просить, щоб її розкрили».'],
   ['explored_shelves', 'Ви оглянули книжкові полиці та знайшли п’ять видань для рекомендацій.'],
   ['explored_window', 'За вікном книгарні — дощовий осінній Беллвік.'],
   ['explored_counter', 'На шухляді прилавка написано: «Спочатку вислухай».'],
