@@ -1,4 +1,5 @@
 import { HOTSPOTS, nearestSpot, eligible } from './world.js';
+import { visitorApproach } from './visitor-roaming.js';
 export class Interactions {
   constructor(scene, onInteract, includePlant = false) {
     this.scene = scene;
@@ -78,7 +79,7 @@ export class Interactions {
   update(player, mara, state) {
     const maraSpot = this.spots.find((spot) => spot.id === 'mara');
     maraSpot.rect = { x: mara.x - 16, y: mara.y - 47, w: 32, h: 48 };
-    maraSpot.approach = { x: mara.x - 25, y: mara.y };
+    maraSpot.approach = visitorApproach(mara);
     this.nearest = nearestSpot(player, this.spots, state);
     for (const spot of this.spots) {
       const button = this.buttons.get(spot.id),

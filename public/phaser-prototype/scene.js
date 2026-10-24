@@ -11,6 +11,7 @@ import { Interactions } from './interactions.js';
 import { BookshopAudio } from './audio.js';
 import { VISITOR_IDS } from './visitor-art.js';
 import { visitorEntrance } from './visitor-entrances.js';
+import { browsingRoute, visitorApproach } from './visitor-roaming.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -36,6 +37,7 @@ class Bookshop extends Phaser.Scene {
     this.path = [];
     this.arrival = [{ x: 440, y: 220 }];
     this.visitorPace = 0.7;
+    this.roaming = { path: [], pause: 1800, step: 0, engaged: false };
     this.reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.lifecycle = new AbortController();
     this.audio = new BookshopAudio();
@@ -75,6 +77,7 @@ class Bookshop extends Phaser.Scene {
         this.arrival = [{ x: entrance.x, y: entrance.y }];
         this.visitorPace = entrance.pace;
         this.state = { ...this.state, mara: 'arriving' };
+        this.roaming = { path: [], pause: 1800, step: 0, engaged: false };
       }
     }
     if (!actor && this.state.mara === 'arriving') {
@@ -102,6 +105,8 @@ class Bookshop extends Phaser.Scene {
   }
   openStory() {
     if (!this.story || !this.canExplore()) return;
+    this.roaming.engaged = true;
+    this.roaming.path = [];
     this.activeDialogue = { kind: 'story' };
     this.state = transition(this.state, { type: 'open' });
     this.keys.clear();
@@ -256,6 +261,11 @@ class Bookshop extends Phaser.Scene {
     if (!this.canExplore() || (spot.id === 'mara' && this.state.mara !== 'ready')) return;
     this.keys.clear();
     $('#game').focus();
+    if (spot.id === 'mara' && this.story) {
+      this.roaming.engaged = true;
+      this.roaming.path = [];
+      spot.approach = visitorApproach(this.characters.mara);
+    }
     if (eligible(this.characters.player, spot, this.state)) {
       this.interact(spot);
       return;
@@ -379,7 +389,10 @@ class Bookshop extends Phaser.Scene {
           updateCharacter(mara, next, this.reduced);
           if (this.reduced || !this.arrival.length) {
             this.state = transition(this.state, { type: 'arrive' });
-            if (this.story) mara.direction = 'left';
+            if (this.story) {
+              mara.direction = 'left';
+              this.roaming.pause = 1200;
+            }
             this.toast(
               this.story
                 ? `До книгарні завітала ${this.story.visitor}.`
@@ -387,6 +400,21 @@ class Bookshop extends Phaser.Scene {
             );
             if (!this.story)
               $('#objective').textContent = 'Допоможіть Марі обрати книжку на подарунок.';
+          }
+        } else if (this.story && this.state.mara === 'ready' && !this.roaming.engaged) {
+          if (this.reduced) {
+            updateCharacter(mara, mara, true);
+          } else if (this.roaming.path.length) {
+            const next = this.follow(mara, this.roaming.path, amount * this.visitorPace);
+            updateCharacter(mara, next, false);
+            if (!this.roaming.path.length) this.roaming.pause = 1700;
+          } else {
+            updateCharacter(mara, mara, false);
+            this.roaming.pause -= Math.min(delta, 50);
+            if (this.roaming.pause <= 0) {
+              this.roaming.path = browsingRoute(mara, this.story.actor, this.roaming.step++);
+              this.roaming.pause = 2000;
+            }
           }
         } else updateCharacter(mara, mara, this.reduced, this.state.completed);
         const axis = (positive, negative) =>
