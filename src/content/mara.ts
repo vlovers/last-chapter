@@ -5,12 +5,14 @@ export const maraVisit: DialogueStory = {
   start: 'arrival',
   nodes: [
     {
-      id: 'arrival', speaker: 'Оповідач',
+      id: 'arrival',
+      speaker: 'Оповідач',
       text: 'Надворі дощ стає густішим. До книгарні заходить дівчина в борошні на рукаві й ставить на прилавок паперовий пакунок. Пахне корицею.',
       options: [{ id: 'hello', label: 'Привітатися', next: 'hello' }],
     },
     {
-      id: 'hello', speaker: 'Мара',
+      id: 'hello',
+      speaker: 'Мара',
       text: 'Я з пекарні навпроти. Махала вам уранці, але ви, здається, саме домовлялися з дверима. Я Мара. Принесла дещо до відкриття.',
       options: [
         { id: 'joke', label: '«Двері поки що перемагають»', next: 'gift' },
@@ -18,7 +20,8 @@ export const maraVisit: DialogueStory = {
       ],
     },
     {
-      id: 'gift', speaker: 'Мара',
+      id: 'gift',
+      speaker: 'Мара',
       text: 'Тільки нікому не кажіть, що я роздаю булочки. Мій начальник переконаний, що щедрість заразна. А мені потрібна книжка на подарунок. Для людини, яка двічі перечитує останню сторінку.',
       options: [
         { id: 'trains', label: '«Що він любить, окрім книжок?»', next: 'trains' },
@@ -27,41 +30,77 @@ export const maraVisit: DialogueStory = {
       ],
     },
     {
-      id: 'trains', speaker: 'Мара',
+      id: 'trains',
+      speaker: 'Мара',
       text: 'Потяги. Розклади. Пересадки. Йому подобається вдавати, ніби надрукований розклад гарантує, що світ поводитиметься чемно. Його звати Лео.',
-      options: [{ id: 'to-order-trains', label: 'Запропонувати книжку', next: 'order', grants: ['leo_likes_trains'] }],
-    },
-    {
-      id: 'meaning', speaker: 'Мара',
-      text: 'Що я його помічаю. Не те, що збираюся його виправляти. Це ж різні речі, правда? Його звати Лео Марш. І не кажіть йому, що я назвала його сентиментальним.',
-      options: [{ id: 'to-order-meaning', label: 'Запропонувати книжку', next: 'order', grants: ['mara_talked_about_leo'] }],
-    },
-    {
-      id: 'order', speaker: 'Оповідач',
-      text: 'На полиці чекають три книжки. Одна — про старі залізничні станції. Друга — про дороги, які ми обираємо. Третя — про листи, які важко надіслати.',
       options: [
-        { id: 'station', label: '«Скляна станція» — історичний роман про потяги', next: 'station', grants: ['sold_station'] },
-        { id: 'roads', label: '«Мапи незавершених доріг» — про нові початки', next: 'roads', grants: ['sold_roads'] },
-        { id: 'letters', label: '«Листи до незнайомця» — про щирі розмови', next: 'letters', grants: ['sold_letters'] },
+        {
+          id: 'to-order-trains',
+          label: 'Запропонувати книжку',
+          next: 'order',
+          grants: ['leo_likes_trains'],
+        },
       ],
     },
     {
-      id: 'station', speaker: 'Мара',
+      id: 'meaning',
+      speaker: 'Мара',
+      text: 'Що я його помічаю. Не те, що збираюся його виправляти. Це ж різні речі, правда? Його звати Лео Марш. І не кажіть йому, що я назвала його сентиментальним.',
+      options: [
+        {
+          id: 'to-order-meaning',
+          label: 'Запропонувати книжку',
+          next: 'order',
+          grants: ['mara_talked_about_leo'],
+        },
+      ],
+    },
+    {
+      id: 'order',
+      speaker: 'Оповідач',
+      text: 'На полиці чекають три книжки. Одна — про старі залізничні станції. Друга — про дороги, які ми обираємо. Третя — про листи, які важко надіслати.',
+      options: [
+        {
+          id: 'station',
+          label: '«Скляна станція» — історичний роман про потяги',
+          next: 'station',
+          grants: ['sold_station'],
+        },
+        {
+          id: 'roads',
+          label: '«Мапи незавершених доріг» — про нові початки',
+          next: 'roads',
+          grants: ['sold_roads'],
+        },
+        {
+          id: 'letters',
+          label: '«Листи до незнайомця» — про щирі розмови',
+          next: 'letters',
+          grants: ['sold_letters'],
+        },
+      ],
+    },
+    {
+      id: 'station',
+      speaker: 'Мара',
       text: 'Йому сподобається. І він скаже, що виключно через історичні подробиці. Звісно, я йому повірю.',
       options: [{ id: 'finish-station', label: 'Загорнути подарунок', next: 'end' }],
     },
     {
-      id: 'roads', speaker: 'Мара',
+      id: 'roads',
+      speaker: 'Мара',
       text: 'Це схоже на книжку, яку ми могли б прочитати разом. Беру. Може, потім навіть не сперечатимемося про кінцівку.',
       options: [{ id: 'finish-roads', label: 'Загорнути подарунок', next: 'end' }],
     },
     {
-      id: 'letters', speaker: 'Мара',
+      id: 'letters',
+      speaker: 'Мара',
       text: 'Трохи надто прозорий натяк, хіба ні? Хоча, мабуть, подарунки для того й існують. Беру.',
       options: [{ id: 'finish-letters', label: 'Загорнути подарунок', next: 'end' }],
     },
     {
-      id: 'end', speaker: 'Оповідач',
+      id: 'end',
+      speaker: 'Оповідач',
       text: 'На порозі Мара озирається: «Я рада, що книгарня знову відкрита. Тепер ця вулиця ніби нарешті видихнула». За нею лишається запах кориці й тепла.',
       options: [],
     },

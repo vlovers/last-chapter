@@ -13,7 +13,10 @@ describe('book recommendations', () => {
     }
   });
   it('covers all book recommendation options without mismatching visitors', () => {
-    for (const [stage, story] of [['miller', millerVisit], ['mara', maraVisit]] as const) {
+    for (const [stage, story] of [
+      ['miller', millerVisit],
+      ['mara', maraVisit],
+    ] as const) {
       const order = story.nodes.find((node) => node.id === 'order');
       expect(order).toBeDefined();
       for (const option of order?.options ?? []) {

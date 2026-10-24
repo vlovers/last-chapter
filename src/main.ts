@@ -43,7 +43,8 @@ function render(): void {
   illustration.className = 'illustration';
   illustration.setAttribute('role', 'img');
   illustration.setAttribute('aria-label', 'Книгарня з книжковими полицями, вікном і теплою лампою');
-  illustration.innerHTML = '<div class="window"><div class="moon"></div></div><div class="shelves"><span>▤ ▥ ▤ ▥</span><span>▥ ▤ ▥ ▤</span><span>▤ ▥ ▤ ▥</span></div><div class="lamp"></div><div class="counter"></div>';
+  illustration.innerHTML =
+    '<div class="window"><div class="moon"></div></div><div class="shelves"><span>▤ ▥ ▤ ▥</span><span>▥ ▤ ▥ ▤</span><span>▤ ▥ ▤ ▥</span></div><div class="lamp"></div><div class="counter"></div>';
 
   const heading = document.createElement('h1');
   heading.textContent = `${opening.shop} · ${opening.town}`;
@@ -55,11 +56,17 @@ function render(): void {
   actions.className = 'actions';
 
   if (chapter.stage === 'complete') {
-    dialogue.textContent = 'Перший день добіг кінця. Це лише короткий сюжетний прототип. Продовження ще створюється.';
+    dialogue.textContent =
+      'Перший день добіг кінця. Це лише короткий сюжетний прототип. Продовження ще створюється.';
     const restart = document.createElement('button');
     restart.type = 'button';
     restart.textContent = 'Почати знову';
-    restart.addEventListener('click', () => { chapter = startChapter(); previewBook = null; persistChapter(); render(); });
+    restart.addEventListener('click', () => {
+      chapter = startChapter();
+      previewBook = null;
+      persistChapter();
+      render();
+    });
     actions.append(restart);
   } else {
     const story = stageStory(chapter.stage);
@@ -86,7 +93,8 @@ function render(): void {
         const inspect = document.createElement('button');
         inspect.type = 'button';
         inspect.className = 'book-inspect';
-        inspect.textContent = previewBook?.id === book.id ? 'Згорнути подробиці' : 'Докладніше про книжку';
+        inspect.textContent =
+          previewBook?.id === book.id ? 'Згорнути подробиці' : 'Докладніше про книжку';
         inspect.setAttribute('aria-expanded', String(previewBook?.id === book.id));
         inspect.addEventListener('click', () => {
           previewBook = previewBook?.id === book.id ? null : book;
@@ -137,8 +145,13 @@ function render(): void {
       const next = document.createElement('button');
       next.type = 'button';
       next.className = 'next';
-      next.textContent = chapter.stage === 'evening' ? 'Завершити перший день →' : 'Наступна сцена →';
-      next.addEventListener('click', () => { chapter = advanceChapter(chapter); persistChapter(); render(); });
+      next.textContent =
+        chapter.stage === 'evening' ? 'Завершити перший день →' : 'Наступна сцена →';
+      next.addEventListener('click', () => {
+        chapter = advanceChapter(chapter);
+        persistChapter();
+        render();
+      });
       actions.append(next);
     }
   }
@@ -150,7 +163,10 @@ function render(): void {
   const notes = document.createElement('ul');
   const facts: readonly [string, string][] = [
     ['heard_about_leak', 'Пані Міллер каже, що сім років тому книгарню затопило.'],
-    ['rumor_heard', 'Чутка: пані Міллер бачила Томаса з жінкою біля громадського центру. Це не доказ зради.'],
+    [
+      'rumor_heard',
+      'Чутка: пані Міллер бачила Томаса з жінкою біля громадського центру. Це не доказ зради.',
+    ],
     ['leo_likes_trains', 'Мара каже, що Лео любить потяги й розклади.'],
     ['mara_talked_about_leo', 'Мара хоче подарувати Лео книжку, яка покаже, що вона його розуміє.'],
     ['saw_receipt', 'Картка бронювання: Лео Марш. Підпису про отримання немає.'],

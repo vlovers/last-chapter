@@ -24,7 +24,14 @@ export const millerVisit: DialogueStory = {
       id: 'eleanor',
       speaker: 'Пані Міллер',
       text: 'Знати Елеонору й розуміти, про що вона думає, — то дві різні професії. Коли тут прорвало трубу, вода залила три полиці поезії. Поезії! Наче їй і без того мало дісталося.',
-      options: [{ id: 'back-eleanor', label: '«Зрозуміло. А щодо книжки?»', next: 'order', grants: ['heard_about_leak'] }],
+      options: [
+        {
+          id: 'back-eleanor',
+          label: '«Зрозуміло. А щодо книжки?»',
+          next: 'order',
+          grants: ['heard_about_leak'],
+        },
+      ],
     },
     {
       id: 'town',
@@ -41,7 +48,11 @@ export const millerVisit: DialogueStory = {
       text: 'А Томаса Гейла ви в середу не бачили? Біля старої пошти? Електрик, високий такий. Ходить, наче спізнюється на власне весілля. У нього дружина чудова, Анна, у школі викладає.',
       options: [
         { id: 'what-saw', label: '«А що саме ви бачили?»', next: 'sighting' },
-        { id: 'no-rumors', label: '«Я не хочу обговорювати людей за їхньої відсутності»', next: 'boundary' },
+        {
+          id: 'no-rumors',
+          label: '«Я не хочу обговорювати людей за їхньої відсутності»',
+          next: 'boundary',
+        },
       ],
     },
     {
@@ -49,8 +60,18 @@ export const millerVisit: DialogueStory = {
       speaker: 'Пані Міллер',
       text: 'Вийшов із громадського центру з якоюсь жінкою. Темне пальто, коротке волосся. Розмовляли так, ніби знайомі сто років. Я нічого не стверджую, але цікаво ж, правда?',
       options: [
-        { id: 'challenge', label: '«Але це нічого не доводить»', next: 'boundary', grants: ['rumor_heard', 'rumor_challenged'] },
-        { id: 'acknowledge', label: '«Зрозуміло. Повернімося до книжок»', next: 'order', grants: ['rumor_heard'] },
+        {
+          id: 'challenge',
+          label: '«Але це нічого не доводить»',
+          next: 'boundary',
+          grants: ['rumor_heard', 'rumor_challenged'],
+        },
+        {
+          id: 'acknowledge',
+          label: '«Зрозуміло. Повернімося до книжок»',
+          next: 'order',
+          grants: ['rumor_heard'],
+        },
       ],
     },
     {
@@ -64,8 +85,18 @@ export const millerVisit: DialogueStory = {
       speaker: 'Пані Міллер',
       text: 'Хочу справжній детектив. Такий, щоб я розгадала загадку раніше за слідчого. Але якщо на першій сторінці вже буде труп, напишу скаргу.',
       options: [
-        { id: 'orchard', label: 'Порадити «Опівнічний сад» — родинна таємниця', next: 'orchard', grants: ['sold_orchard'] },
-        { id: 'witnesses', label: 'Порадити «Ніхто не знає кінцівки» — ненадійні свідки', next: 'witnesses', grants: ['sold_witnesses'] },
+        {
+          id: 'orchard',
+          label: 'Порадити «Опівнічний сад» — родинна таємниця',
+          next: 'orchard',
+          grants: ['sold_orchard'],
+        },
+        {
+          id: 'witnesses',
+          label: 'Порадити «Ніхто не знає кінцівки» — ненадійні свідки',
+          next: 'witnesses',
+          grants: ['sold_witnesses'],
+        },
       ],
     },
     {

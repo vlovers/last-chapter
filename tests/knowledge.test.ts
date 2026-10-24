@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { deliverPrivateLetter, evidenceLevel, grantConsent, initialWorld, knows, observe, share } from '../src/game/knowledge';
+import {
+  deliverPrivateLetter,
+  evidenceLevel,
+  grantConsent,
+  initialWorld,
+  knows,
+  observe,
+  share,
+} from '../src/game/knowledge';
 
 describe('knowledge provenance', () => {
   it('keeps repeated observations as hearsay rather than direct evidence', () => {
@@ -19,10 +27,20 @@ describe('knowledge provenance', () => {
     expect(second.reports.at(-1)?.parentId).toBe('miller-sighting:miller:player:1');
   });
   it('requires consent before sharing private letters', () => {
-    const world = observe(initialWorld(), { id: 'letter-box', factId: 'iris-letter', claim: 'letter-exists', source: 'player', listener: 'player', day: 1, kind: 'document' });
+    const world = observe(initialWorld(), {
+      id: 'letter-box',
+      factId: 'iris-letter',
+      claim: 'letter-exists',
+      source: 'player',
+      listener: 'player',
+      day: 1,
+      kind: 'document',
+    });
     expect(() => deliverPrivateLetter(world, 'player', 'leo')).toThrow(/consent/);
     const allowed = grantConsent(world, 'iris', 'leo', 'iris-letter');
-    expect(knows(deliverPrivateLetter(allowed, 'player', 'leo'), 'leo', 'letter-exists')).toBe(true);
+    expect(knows(deliverPrivateLetter(allowed, 'player', 'leo'), 'leo', 'letter-exists')).toBe(
+      true,
+    );
   });
   it('deduplicates the same disclosure', () => {
     const first = share(initialWorld(), 'miller-sighting', 'miller', 'player');

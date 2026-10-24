@@ -2,8 +2,11 @@ import { millerVisit } from '../content/first-day';
 import { maraVisit } from '../content/mara';
 import { firstEvening } from '../content/evening';
 import {
-  currentNode, selectOption, startDialogue,
-  type DialogueState, type DialogueStory,
+  currentNode,
+  selectOption,
+  startDialogue,
+  type DialogueState,
+  type DialogueStory,
 } from './dialogue';
 
 export type ChapterStage = 'miller' | 'mara' | 'evening' | 'complete';
@@ -17,10 +20,14 @@ export interface ChapterState {
 
 export const stageStory = (stage: ChapterStage): DialogueStory => {
   switch (stage) {
-    case 'miller': return millerVisit;
-    case 'mara': return maraVisit;
-    case 'evening': return firstEvening;
-    case 'complete': return firstEvening;
+    case 'miller':
+      return millerVisit;
+    case 'mara':
+      return maraVisit;
+    case 'evening':
+      return firstEvening;
+    case 'complete':
+      return firstEvening;
   }
 };
 

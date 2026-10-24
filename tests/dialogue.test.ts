@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 import { millerVisit } from '../src/content/first-day';
 
 describe('Ukrainian dialogue slice', () => {

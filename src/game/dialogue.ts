@@ -40,7 +40,10 @@ export function currentNode(story: DialogueStory, state: DialogueState): Dialogu
   return node;
 }
 
-export function availableOptions(story: DialogueStory, state: DialogueState): readonly DialogueOption[] {
+export function availableOptions(
+  story: DialogueStory,
+  state: DialogueState,
+): readonly DialogueOption[] {
   return currentNode(story, state).options.filter((option) =>
     (option.requires ?? []).every((flag) => state.flags.includes(flag)),
   );

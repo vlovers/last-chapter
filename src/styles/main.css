@@ -1,3 +1,215 @@
-:root{font-family:system-ui,-apple-system,sans-serif;background:#211d2a;color:#f6e8cc;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px}.scene{max-width:780px;width:100%;background:#332b3a;border:4px solid #b78c6f;box-shadow:12px 12px #120f18;padding:20px}.illustration{position:relative;overflow:hidden;image-rendering:pixelated;height:220px;background:linear-gradient(#483a55 65%,#594253 65%);border:4px solid #c89970}.window{position:absolute;right:9%;top:18px;width:28%;height:105px;background:#202843;border:7px solid #b88462;box-shadow:inset 0 0 0 5px #5f4a57}.window:before{content:'';position:absolute;left:50%;top:0;height:100%;border-left:6px solid #b88462}.moon{position:absolute;right:20px;top:16px;width:25px;height:25px;background:#ffdf9b}.shelves{position:absolute;left:10%;top:30px;width:44%;height:135px;border:8px solid #8f573f;background:#403346;display:flex;flex-direction:column;justify-content:space-around}.shelves span{font-size:28px;color:#d69f77;border-bottom:5px solid #a8714e;white-space:nowrap}.lamp{position:absolute;top:0;left:65%;height:42px;border-left:7px solid #e8bd75}.lamp:after{content:'';position:absolute;left:-17px;top:36px;width:28px;height:17px;background:#ffd083}.counter{position:absolute;bottom:0;height:48px;width:100%;background:#87513d;border-top:11px solid #c58d5f}h1{font-size:clamp(22px,5vw,34px);margin:24px 0 4px}.subtitle{color:#dac1a9;margin:0 0 16px}blockquote{background:#493b48;border-left:5px solid #ffce90;padding:20px;margin:0 0 16px;line-height:1.6}.actions{display:grid;gap:10px}button{cursor:pointer;background:#e7b67a;color:#291f2c;border:0;padding:13px;text-align:left;font:inherit;font-weight:650}button:focus-visible{outline:3px solid #fff;outline-offset:3px}button:hover{background:#f6c995}.next{background:#b5a7c8}.notebook{margin-top:22px;border-top:1px solid #7b6479;padding-top:10px}.notebook h2{font-size:17px}.notebook p,.notebook li{color:#e0cebf;font-size:14px}@media(max-width:500px){body{padding:12px}.scene{padding:12px}.illustration{height:180px}}
+:root {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background: #211d2a;
+  color: #f6e8cc;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.scene {
+  max-width: 780px;
+  width: 100%;
+  background: #332b3a;
+  border: 4px solid #b78c6f;
+  box-shadow: 12px 12px #120f18;
+  padding: 20px;
+}
+.illustration {
+  position: relative;
+  overflow: hidden;
+  image-rendering: pixelated;
+  height: 220px;
+  background: linear-gradient(#483a55 65%, #594253 65%);
+  border: 4px solid #c89970;
+}
+.window {
+  position: absolute;
+  right: 9%;
+  top: 18px;
+  width: 28%;
+  height: 105px;
+  background: #202843;
+  border: 7px solid #b88462;
+  box-shadow: inset 0 0 0 5px #5f4a57;
+}
+.window:before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  border-left: 6px solid #b88462;
+}
+.moon {
+  position: absolute;
+  right: 20px;
+  top: 16px;
+  width: 25px;
+  height: 25px;
+  background: #ffdf9b;
+}
+.shelves {
+  position: absolute;
+  left: 10%;
+  top: 30px;
+  width: 44%;
+  height: 135px;
+  border: 8px solid #8f573f;
+  background: #403346;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.shelves span {
+  font-size: 28px;
+  color: #d69f77;
+  border-bottom: 5px solid #a8714e;
+  white-space: nowrap;
+}
+.lamp {
+  position: absolute;
+  top: 0;
+  left: 65%;
+  height: 42px;
+  border-left: 7px solid #e8bd75;
+}
+.lamp:after {
+  content: '';
+  position: absolute;
+  left: -17px;
+  top: 36px;
+  width: 28px;
+  height: 17px;
+  background: #ffd083;
+}
+.counter {
+  position: absolute;
+  bottom: 0;
+  height: 48px;
+  width: 100%;
+  background: #87513d;
+  border-top: 11px solid #c58d5f;
+}
+h1 {
+  font-size: clamp(22px, 5vw, 34px);
+  margin: 24px 0 4px;
+}
+.subtitle {
+  color: #dac1a9;
+  margin: 0 0 16px;
+}
+blockquote {
+  background: #493b48;
+  border-left: 5px solid #ffce90;
+  padding: 20px;
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+.actions {
+  display: grid;
+  gap: 10px;
+}
+button {
+  cursor: pointer;
+  background: #e7b67a;
+  color: #291f2c;
+  border: 0;
+  padding: 13px;
+  text-align: left;
+  font: inherit;
+  font-weight: 650;
+}
+button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+button:hover {
+  background: #f6c995;
+}
+.next {
+  background: #b5a7c8;
+}
+.notebook {
+  margin-top: 22px;
+  border-top: 1px solid #7b6479;
+  padding-top: 10px;
+}
+.notebook h2 {
+  font-size: 17px;
+}
+.notebook p,
+.notebook li {
+  color: #e0cebf;
+  font-size: 14px;
+}
+@media (max-width: 500px) {
+  body {
+    padding: 12px;
+  }
+  .scene {
+    padding: 12px;
+  }
+  .illustration {
+    height: 180px;
+  }
+}
 
-.book-shelf{display:grid;gap:14px}.book-shelf h2{font-size:19px;margin:8px 0}.book-card{background:#403444;border:1px solid #8d7282;padding:16px;display:grid;gap:10px}.book-card h3{margin:0;font-size:21px;color:#ffe0a4}.book-card p{margin:0;line-height:1.55}.book-card .book-meta{font-size:13px;color:#e8c39d}.book-inspect{background:transparent;color:#ffe0a4;border:1px solid #c89970}.book-inspect:hover{background:#59465b}.book-details{border-top:1px solid #816a79;padding-top:12px;display:grid;gap:12px}.book-details strong{color:#ffe0a4}.book-details button{margin-top:4px}
+.book-shelf {
+  display: grid;
+  gap: 14px;
+}
+.book-shelf h2 {
+  font-size: 19px;
+  margin: 8px 0;
+}
+.book-card {
+  background: #403444;
+  border: 1px solid #8d7282;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+.book-card h3 {
+  margin: 0;
+  font-size: 21px;
+  color: #ffe0a4;
+}
+.book-card p {
+  margin: 0;
+  line-height: 1.55;
+}
+.book-card .book-meta {
+  font-size: 13px;
+  color: #e8c39d;
+}
+.book-inspect {
+  background: transparent;
+  color: #ffe0a4;
+  border: 1px solid #c89970;
+}
+.book-inspect:hover {
+  background: #59465b;
+}
+.book-details {
+  border-top: 1px solid #816a79;
+  padding-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+.book-details strong {
+  color: #ffe0a4;
+}
+.book-details button {
+  margin-top: 4px;
+}

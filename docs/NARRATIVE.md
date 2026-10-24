@@ -3,6 +3,7 @@
 **Premise:** Bellwick is a small town. You open a bookshop where neighbors ask for reading recommendations, conversation and sometimes discretion. Rumors about relationships, secrets, family histories and affections spread along the town's social ties. Player decisions can help others, strain trust or produce misunderstood consequences.
 
 **Pillars**
+
 1. People before puzzles; important visitors have agency, recognizable voice and goals beyond their purchase.
 2. Listening is optional but valuable; topics may be gated by past interactions and willingness to share.
 3. Separate objective reality, observations, rumors, beliefs, speaker credibility and provenance.
@@ -18,4 +19,5 @@
 **Content safety and quality:** Treat infidelity and parentage secrets as serious sensitive plot matters, not automatic gossip rewards. A player should never be forced to violate trust to win.
 
 ## Player-facing language
+
 Ukrainian only (`uk-UA`). Author dialogues, book descriptions, clues and menus in Ukrainian from the start; English notes here are internal working material. See [Localization policy](LOCALIZATION.md).
