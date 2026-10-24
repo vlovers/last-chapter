@@ -43,12 +43,14 @@ describe('canonical Phaser story bridge', () => {
       visited.add(story.stage);
       const node = story.open();
       expect(node.choices.length).toBeGreaterThan(0);
-      story.choose(node.choices[0].id);
+      const option = node.choices[0];
+      if (!option) throw new Error('Missing next story option');
+      story.choose(option.id);
     }
     expect(story.stage).toBe('season-complete');
     expect(story.day).toBe(5);
     expect(visited.size).toBeGreaterThanOrEqual(18);
-    expect(story.open().choices[0].id).toBe('__restart');
+    expect(story.open().choices[0]?.id).toBe('__restart');
   });
   it('uses the correct visitor identity and preserves inspected shop discoveries', () => {
     const story = new FiveDayStory();
