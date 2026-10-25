@@ -29,6 +29,15 @@ describe('Optional character reflection arcs', () => {
       if (deep) {
         state = selectOption(story, state, `${prefix}-reflect-question`);
         state = selectOption(story, state, `${prefix}-reflect-continue`);
+        const decisions = {
+          leo: ['leo-platform-ask', 'leo-asking-continue', 'leo-boundary-try'],
+          iris: ['iris-memory-art', 'iris-art-continue'],
+          anna: ['anna-classroom-apologize', 'anna-apology-back'],
+          thomas: ['thomas-workshop-ask', 'thomas-ask-back'],
+          nora: ['nora-record-uncertain', 'nora-uncertain-back'],
+          eleanor: ['eleanor-key-memory', 'eleanor-memory-back'],
+        } as const;
+        for (const choice of decisions[prefix]) state = selectOption(story, state, choice);
       } else {
         state = selectOption(story, state, `${prefix}-reflect-return`);
       }
