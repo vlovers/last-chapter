@@ -20,7 +20,7 @@ describe('Mara return visit', () => {
     const letter = answerConversation(maraReturnVisit, session, 'listen');
     const boundary = answerConversation(maraReturnVisit, letter, 'choice');
     const truth = answerConversation(maraReturnVisit, boundary, 'share');
-    expect(conversationView(maraReturnVisit, truth).text).toContain('У книжках');
+    expect(conversationView(maraReturnVisit, truth).text).toContain('у книжках');
     expect(conversationView(maraReturnVisit, truth).text).not.toContain('ми годинами');
   });
   it('recalls Frank from an earlier conversation', () => {
