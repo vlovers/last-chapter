@@ -189,6 +189,10 @@ export const thomasVisit: DialogueStory = {
       id: 'thomas-reflection-end',
       speaker: 'Томас',
       text: '«Можливо, іноді краще запитати, що потрібно іншому, ніж одразу братися ремонтувати».',
+      textWhen: [
+        { requires: ['thomas_will_ask_before_helping'], text: '«Завтра спитаю Анну, що їй потрібно. І прийму відповідь, навіть якщо мої інструменти цього разу не знадобляться».' },
+        { requires: ['thomas_admitted_fear_of_rejection'], text: '«Я скажу їй, що боюся стати зайвим. Це страшніше за будь-яку поломку, але мовчання вже нічого не лагодить».' },
+      ],
       options: [
         {
           id: 'thomas-reflect-finish',
