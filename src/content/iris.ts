@@ -9,7 +9,6 @@ export const irisVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Вранці до книгарні заходить жінка з тубусом для малюнків. На рукаві її пальта — краплини дощу, на пальцях — синя фарба. Вона довго дивиться на вивіску.',
       options: [
-        { id: 'iris-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'iris-reflection' },
         { id: 'welcome', label: '«Доброго ранку. Шукаєте щось?»', next: 'welcome' }],
     },
     {
@@ -17,6 +16,7 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Не знаю. Колись я тут проводила майже кожну суботу. А потім сім років не могла змусити себе зайти». Вона усміхається. «Я Айріс. Малюю книжки, які іноді ніхто не друкує».',
       options: [
+        { id: 'iris-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'iris-reflection' },
         { id: 'ask-art', label: '«Розкажете про ілюстрації?»', next: 'art' },
         { id: 'ask-return', label: '«Що привело вас назад?»', next: 'return' },
         { id: 'ask-old', label: '«Ви знали колишню власницю?»', next: 'eleanor' },
@@ -156,7 +156,7 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Можна повернутися до місця й не повертатися до себе колишньої».',
       options: [
-        { id: 'iris-reflect-finish', label: 'Повернутися до розмови', next: 'arrival', grants: ['iris_reflected_on_identity'] },
+        { id: 'iris-reflect-finish', label: 'Повернутися до розмови', next: 'welcome', grants: ['iris_reflected_on_identity'] },
       ],
     },
   ],
