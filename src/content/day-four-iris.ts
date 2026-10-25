@@ -61,7 +61,22 @@ export const irisDecision: DialogueStory = {
           id: 'respect',
           label: '«Лист залишиться запечатаним, доки ти не вирішиш»',
           next: 'respect',
+          unless: ['opened_private_letter'],
           grants: ['iris_letter_choice_respected'],
+        },
+        {
+          id: 'respect-opened',
+          label: '«Ти вирішуєш, що буде з листом. Я не передаватиму його без згоди»',
+          next: 'respect',
+          requires: ['opened_private_letter'],
+          grants: ['iris_letter_choice_respected'],
+        },
+        {
+          id: 'admit-opened',
+          label: '«Я порушив печатку без дозволу. Мені шкода»',
+          next: 'breach',
+          requires: ['opened_private_letter'],
+          grants: ['iris_letter_breach_admitted'],
         },
         {
           id: 'offer',
@@ -82,6 +97,12 @@ export const irisDecision: DialogueStory = {
       id: 'respect',
       speaker: 'Айріс',
       text: '«Дякую. Я звикла, що люди називають поспіх сміливістю. А ти дозволив мені подумати». Вона знову відкриває альбом.',
+      textWhen: [
+        {
+          requires: ['opened_private_letter'],
+          text: '«Я сама вирішу, що буде далі», — каже Айріс і знову відкриває альбом. Ви згадуєте порушену печатку: теперішня повага не скасовує того, що вже сталося.',
+        },
+      ],
       options: [{ id: 'respect-back', label: 'Повернутися до розмови', next: 'welcome' }],
     },
     {
@@ -96,6 +117,12 @@ export const irisDecision: DialogueStory = {
           grants: ['iris_letter_choice_respected'],
         },
       ],
+    },
+    {
+      id: 'breach',
+      speaker: 'Айріс',
+      text: 'Айріс довго мовчить. «Ти мав запитати. Я не знаю, чи готова зараз про це говорити. І не хочу, щоб вибачення вимагало від мене негайної відповіді». Вона притискає альбом до себе.',
+      options: [{ id: 'breach-back', label: '«Я почув. Не квапитиму тебе»', next: 'welcome' }],
     },
     {
       id: 'pressure',
