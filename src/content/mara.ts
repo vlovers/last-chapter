@@ -107,6 +107,7 @@ export const maraVisit: DialogueStory = {
         { id: 'fiction', label: 'Про книжкових героїв, яких важко любити', next: 'fiction' },
         { id: 'bakery', label: 'Про пекарню й маленькі катастрофи', next: 'bakery' },
         { id: 'town-life', label: 'Про життя, де всі всіх знають', next: 'town-life' },
+        { id: 'trust', label: 'Про довіру та другі шанси', next: 'trust-question' },
         { id: 'gift-now', label: '«Дякую за розмову. Повернімося до подарунка»', next: 'order' },
       ],
     },
@@ -279,6 +280,52 @@ export const maraVisit: DialogueStory = {
       options: [
         { id: 'warmth-return', label: '«Розкажи ще щось»', next: 'topics' },
         { id: 'warmth-order', label: '«Підберемо подарунок?»', next: 'order' },
+      ],
+    },
+    {
+      id: 'trust-question',
+      speaker: 'Мара',
+      text: 'У книжках мені подобаються другі шанси. Але часом автор так поспішає до щасливого кінця, що забуває: інша людина ще навіть не встигла сказати, чи хоче вона цього шансу.',
+      options: [
+        { id: 'trust-forgive', label: '«Можна пробачити й не повертатися»', next: 'trust-forgive', grants: ['mara_discussed_forgiveness'] },
+        { id: 'trust-change', label: '«А якщо людина справді змінилася?»', next: 'trust-change', grants: ['mara_discussed_change'] },
+        { id: 'trust-quiet', label: '«Можемо не говорити про це»', next: 'trust-respect', grants: ['mara_boundaries_respected'] },
+      ],
+    },
+    {
+      id: 'trust-forgive',
+      speaker: 'Мара',
+      text: 'Саме так. Пробачення — не квиток назад у чиєсь життя. Я довго думала, що якщо історія закінчилася без примирення, значить, хтось програв. Тепер не певна.',
+      options: [
+        { id: 'trust-forgive-deeper', label: '«А що тоді означає щасливий кінець?»', next: 'trust-ending' },
+        { id: 'trust-forgive-back', label: '«Повернімося до книжок»', next: 'topics' },
+      ],
+    },
+    {
+      id: 'trust-change',
+      speaker: 'Мара',
+      text: 'Тоді це чудово для неї. Але зміни не створюють боргу в того, кому колись завдали болю. Можна порадіти за людину й усе одно тримати двері зачиненими.',
+      options: [
+        { id: 'trust-change-deeper', label: '«Значить, кожен має право на власний фінал?»', next: 'trust-ending' },
+        { id: 'trust-change-back', label: '«Змінимо тему»', next: 'topics' },
+      ],
+    },
+    {
+      id: 'trust-respect',
+      speaker: 'Мара',
+      text: 'Дякую. Дивна річ: коли тобі дозволяють мовчати, іноді хочеться сказати більше. Але сьогодні я краще розкажу про булочки.',
+      options: [
+        { id: 'trust-respect-bakery', label: '«Домовилися. Що нового в пекарні?»', next: 'bakery' },
+        { id: 'trust-respect-order', label: '«Тоді оберімо подарунок»', next: 'order' },
+      ],
+    },
+    {
+      id: 'trust-ending',
+      speaker: 'Мара',
+      text: 'Можливо, щасливий кінець — це коли персонаж нарешті може обирати сам. Навіть якщо читач хотів для нього зовсім іншого. Смішно: я прийшла по подарунок, а знайшла запитання.',
+      options: [
+        { id: 'trust-ending-more', label: '«Хочеш поговорити ще?»', next: 'topics', grants: ['mara_autonomy_discussed'] },
+        { id: 'trust-ending-order', label: '«Давай виберемо книжку Лео»', next: 'order', grants: ['mara_autonomy_discussed'] },
       ],
     },
     {
