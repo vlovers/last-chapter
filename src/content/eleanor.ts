@@ -8,8 +8,9 @@ export const eleanorVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Елеонора приходить до книгарні з полотняною сумкою та старим ключем на синій стрічці. Вона не відразу проходить усередину: спершу торкається дверної рами, ніби перевіряє, чи та ще пам’ятає її.',
-      options: [{        { id: 'eleanor-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'eleanor-reflection' },
- id: 'greet', label: 'Запросити Елеонору на чай', next: 'greet' }],
+      options: [
+        { id: 'eleanor-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'eleanor-reflection' },
+        { id: 'greet', label: 'Запросити Елеонору на чай', next: 'greet' }],
     },
     {
       id: 'greet',
