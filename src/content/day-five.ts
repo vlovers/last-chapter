@@ -266,30 +266,50 @@ export const finalReading: DialogueStory = {
       id: 'iris-reflection-callback',
       speaker: 'Айріс',
       text: '«Я принесла нові малюнки. Не для того, щоб пояснити минуле, а щоб показати, ким стала».',
+      textWhen: [
+        { requires: ['iris_chose_open_art'], text: '«Я залишила на виставці незакінчений малюнок. Не тому, що забула його домалювати, а тому, що не кожна історія мусить мати пояснення».' },
+        { requires: ['iris_chose_private_art'], text: '«Мої малюнки сьогодні тут, а моя біографія — ні. Дивно приємно, коли люди питають про колір, а не про причини від’їзду».' },
+      ],
       options: [{ id: 'iris-reflection-back', label: 'Повернутися до спільного читання', next: 'gathering', grants: ['final_iris_reflection_heard'] }],
     },
     {
       id: 'anna-reflection-callback',
       speaker: 'Анна',
       text: '«Сьогодні книжки для клубу розклали без мене. Виявляється, іншим теж можна довіряти».',
+      textWhen: [
+        { requires: ['anna_will_apologize_to_student'], text: '«Я вибачилася перед ученицею. Вона сказала, що їй досі не подобається фінал. І це була наша перша по-справжньому чесна розмова про книжку».' },
+        { requires: ['anna_will_invite_disagreement'], text: '«Сьогодні діти сперечалися зі мною про героїню. Я не стала шукати правильну відповідь. Натомість попросила їх пояснити власну».' },
+      ],
       options: [{ id: 'anna-reflection-back', label: 'Повернутися до спільного читання', next: 'gathering', grants: ['final_anna_reflection_heard'] }],
     },
     {
       id: 'thomas-reflection-callback',
       speaker: 'Томас',
       text: '«Я запитав, чи потрібна допомога, замість того щоб одразу щось лагодити. Це виявилося складніше».',
+      textWhen: [
+        { requires: ['thomas_will_ask_before_helping'], text: '«Я запитав Анну, чого вона хоче. Вона попросила мене просто посидіти поруч. Я вперше нічого не лагодив — і не відчув, що підвів її».' },
+        { requires: ['thomas_admitted_fear_of_rejection'], text: '«Я сказав Анні, що іноді боюся стати непотрібним. Вона не пообіцяла, що все буде легко. Але ми нарешті говорили не про зламані речі».' },
+      ],
       options: [{ id: 'thomas-reflection-back', label: 'Повернутися до спільного читання', next: 'gathering', grants: ['final_thomas_reflection_heard'] }],
     },
     {
       id: 'nora-reflection-callback',
       speaker: 'Нора',
       text: '«Не все, що лишилося без відповіді, є таємницею, яку треба розкрити».',
+      textWhen: [
+        { requires: ['nora_will_preserve_uncertainty'], text: '«В архіві тепер три свідчення замість однієї красивої версії. Люди сперечаються, зате ніхто не видає здогад за факт».' },
+        { requires: ['nora_will_seek_consent'], text: '«Я запитала, чи можна виставити старі записи. Дехто відмовив. І знаєш, після цього архів не став біднішим — він став чеснішим».' },
+      ],
       options: [{ id: 'nora-reflection-back', label: 'Повернутися до спільного читання', next: 'gathering', grants: ['final_nora_reflection_heard'] }],
     },
     {
       id: 'eleanor-reflection-callback',
       speaker: 'Елеонора',
       text: '«Полицю переставили без мене. І знаєш, світ не завалився. Навіть стало затишніше».',
+      textWhen: [
+        { requires: ['eleanor_will_keep_shared_memory'], text: '«Ми зробили одну полицю пам’яті. На ній стоять книжки, яких я ніколи не читала. Мені подобається, що вона вже не тільки моя».' },
+        { requires: ['eleanor_will_allow_change'], text: '«Я допомогла переставити улюблений куточок. Тепер там сидять люди, які не знали мене молодою. Мабуть, це і є майбутнє книгарні».' },
+      ],
       options: [{ id: 'eleanor-reflection-back', label: 'Повернутися до спільного читання', next: 'gathering', grants: ['final_eleanor_reflection_heard'] }],
     },
     {
