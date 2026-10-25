@@ -17,7 +17,12 @@ describe('Day one narrative consequences', () => {
 
   it('lets Mara discuss forgiveness and return to buying a gift', () => {
     const state = follow(maraVisit, [
-      'hello', 'talk', 'trust', 'trust-forgive', 'trust-forgive-deeper', 'trust-ending-order',
+      'hello',
+      'talk',
+      'trust',
+      'trust-forgive',
+      'trust-forgive-deeper',
+      'trust-ending-order',
     ]);
     expect(state.node).toBe('order');
     expect(state.flags).toContain('mara_discussed_forgiveness');
@@ -25,13 +30,23 @@ describe('Day one narrative consequences', () => {
   });
 
   it('respects Mara choosing silence without blocking the day', () => {
-    const state = follow(maraVisit, ['hello', 'talk', 'trust', 'trust-quiet', 'trust-respect-order']);
+    const state = follow(maraVisit, [
+      'hello',
+      'talk',
+      'trust',
+      'trust-quiet',
+      'trust-respect-order',
+    ]);
     expect(state.node).toBe('order');
     expect(state.flags).toContain('mara_boundaries_respected');
   });
 
   it('changes evening interpretation without changing evidence', () => {
-    const state = { ...startDialogue(firstEvening), node: 'deduction', flags: ['miller_observation_distinguished'] };
+    const state = {
+      ...startDialogue(firstEvening),
+      node: 'deduction',
+      flags: ['miller_observation_distinguished'],
+    };
     expect(currentNode(firstEvening, state).text).toContain('пані Міллер');
     const ordinary = { ...state, flags: [] };
     expect(currentNode(firstEvening, ordinary).text).not.toContain('пані Міллер');
