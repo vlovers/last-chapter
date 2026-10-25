@@ -9,7 +9,6 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Після обіду світло над прилавком миготить. За кілька хвилин приходить Томас із ящиком інструментів. Він витирає черевики об килимок, хоча надворі вже сухо.',
       options: [
-        { id: 'thomas-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'thomas-reflection' },
         { id: 'greet', label: 'Привітатися й показати лампу', next: 'greet' }],
     },
     {
@@ -17,6 +16,7 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Томас Гейл. Якщо лампа тріщить, не треба її вмовляти. Вона від цього не стає чемнішою». Він ставить ящик на підлогу. «Можна глянути?»',
       options: [
+        { id: 'thomas-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'thomas-reflection' },
         { id: 'repair', label: '«Так, покажу вимикач»', next: 'repair' },
         { id: 'books', label: '«Ви любите читати?»', next: 'books' },
         { id: 'anna', label: '«Анна заходила до нас»', next: 'anna' },
@@ -139,7 +139,7 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Можливо, іноді краще запитати, що потрібно іншому, ніж одразу братися ремонтувати».',
       options: [
-        { id: 'thomas-reflect-finish', label: 'Повернутися до розмови', next: 'arrival', grants: ['thomas_reflected_on_responsibility'] },
+        { id: 'thomas-reflect-finish', label: 'Повернутися до розмови', next: 'greet', grants: ['thomas_reflected_on_responsibility'] },
       ],
     },
   ],
