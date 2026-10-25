@@ -147,9 +147,30 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Не кожне питання потребує відповіді саме зараз. І не кожна відповідь належить тому, хто питає».',
       options: [
-        { id: 'iris-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'iris-reflection-end' },
-        { id: 'iris-reflect-listen', label: '«Можна просто побути з цим»', next: 'iris-reflection-end' },
+        { id: 'iris-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'iris-reflection-memory' },
+        { id: 'iris-reflect-listen', label: '«Можна просто побути з цим»', next: 'iris-reflection-memory' },
       ],
+    },
+    {
+      id: 'iris-reflection-memory',
+      speaker: 'Айріс',
+      text: '«Я знайшла ескіз із датою, яку сім років не наважувалася підписати. Боюся, що люди побачать малюнок і вирішать, ніби тепер знають усе про мій від’їзд. Наче мистецтво — це пояснювальна записка до життя».',
+      options: [
+        { id: 'iris-memory-art', label: '«Твоя робота не зобов’язана пояснювати тебе»', next: 'iris-reflection-art', grants: ['iris_chose_open_art'] },
+        { id: 'iris-memory-private', label: '«Можеш показати малюнки без власної біографії»', next: 'iris-reflection-private', grants: ['iris_chose_private_art'] },
+      ],
+    },
+    {
+      id: 'iris-reflection-art',
+      speaker: 'Айріс',
+      text: '«Тоді залишу незакінчене вікно. Раніше соромилася, що не знаю, що за ним. Тепер думаю: незнання теж частина картини».',
+      options: [{ id: 'iris-art-continue', label: 'Послухати далі', next: 'iris-reflection-end' }],
+    },
+    {
+      id: 'iris-reflection-private',
+      speaker: 'Айріс',
+      text: '«Так. Без підпису про моє повернення дрібним шрифтом. Нехай люди говорять про кольори, а не про те, чи я вже все пробачила».',
+      options: [{ id: 'iris-private-continue', label: 'Послухати далі', next: 'iris-reflection-end' }],
     },
     {
       id: 'iris-reflection-end',
