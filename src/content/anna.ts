@@ -8,8 +8,9 @@ export const annaVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Після обіду до книгарні заходить жінка з полотняною торбою, повною зошитів. Вона обережно струшує дощ із парасольки й усміхається, побачивши дитячі книжки.',
-      options: [{        { id: 'anna-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'anna-reflection' },
- id: 'hello', label: 'Привітатися', next: 'hello' }],
+      options: [
+        { id: 'anna-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'anna-reflection' },
+        { id: 'hello', label: 'Привітатися', next: 'hello' }],
     },
     {
       id: 'hello',
