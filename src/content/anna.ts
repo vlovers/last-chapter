@@ -16,7 +16,7 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Я Анна Гейл, викладаю в місцевій школі. У нас завтра читання, а бібліотечні примірники вирішили одночасно зникнути. Діти, звісно, називають це змовою».',
       options: [
-        { id: 'anna-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'anna-reflection' },
+        { id: 'anna-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'anna-reflection', unless: ['anna_reflected_on_care'] },
         { id: 'school', label: '«Що люблять читати ваші учні?»', next: 'school' },
         { id: 'teacher', label: '«Вам подобається викладати?»', next: 'teacher' },
         { id: 'town', label: '«Як вам живеться в Беллвіку?»', next: 'town' },
