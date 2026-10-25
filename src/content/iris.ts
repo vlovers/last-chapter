@@ -208,6 +208,10 @@ export const irisVisit: DialogueStory = {
       id: 'iris-reflection-end',
       speaker: 'Айріс',
       text: '«Можна повернутися до місця й не повертатися до себе колишньої».',
+      textWhen: [
+        { requires: ['iris_chose_open_art'], text: '«Я залишу малюнок незавершеним. Не кожна відкрита робота — запрошення розпитувати про моє минуле».' },
+        { requires: ['iris_chose_private_art'], text: '«Я покажу малюнки, але залишу деякі спогади при собі. Це не втеча, а межа, яку я сама обрала».' },
+      ],
       options: [
         {
           id: 'iris-reflect-finish',
