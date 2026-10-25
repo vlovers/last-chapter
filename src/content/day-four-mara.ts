@@ -116,7 +116,12 @@ export const maraDecision: DialogueStory = {
       speaker: 'Мара',
       text: 'Пам’ятаю. Пробачення не означає повернення. Іноді найважче — дозволити іншій людині самій обрати, чи готова вона говорити.',
       options: [
-        { id: 'remember-trust-back', label: '«Ти маєш право на власний вибір»', next: 'greet', grants: ['mara_day_four_reflected'] },
+        {
+          id: 'remember-trust-back',
+          label: '«Ти маєш право на власний вибір»',
+          next: 'greet',
+          grants: ['mara_day_four_reflected'],
+        },
       ],
     },
     {

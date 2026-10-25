@@ -17,7 +17,12 @@ export const leoVisit: DialogueStory = {
       speaker: 'Лео',
       text: '«Я Лео. Працюю на залізниці. Іноді заходжу в книгарні, щоб нагадати собі: у світі існують історії без розкладу». Він усміхається. «Хоча це трохи лякає».',
       options: [
-        { id: 'leo-reflection', label: '«Чому тобі так важливо все передбачити?»', next: 'leo-reflection', unless: ['leo_reflected_on_uncertainty'] },
+        {
+          id: 'leo-reflection',
+          label: '«Чому тобі так важливо все передбачити?»',
+          next: 'leo-reflection',
+          unless: ['leo_reflected_on_uncertainty'],
+        },
         { id: 'trains', label: '«Що вам подобається в потягах?»', next: 'trains' },
         { id: 'mara', label: '«Ви знайомі з Марою з пекарні?»', next: 'mara' },
         { id: 'town', label: '«Давно живете в Беллвіку?»', next: 'town' },
@@ -206,8 +211,16 @@ export const leoVisit: DialogueStory = {
       speaker: 'Лео',
       text: '«Я вмію чекати на потяг, але не завжди вмію чекати на відповідь людини».',
       options: [
-        { id: 'leo-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'leo-reflection-deep' },
-        { id: 'leo-reflect-return', label: '«Дякую, що поділився цим»', next: 'leo-reflection-end' },
+        {
+          id: 'leo-reflect-question',
+          label: '«А що для тебе в цьому найважче?»',
+          next: 'leo-reflection-deep',
+        },
+        {
+          id: 'leo-reflect-return',
+          label: '«Дякую, що поділився цим»',
+          next: 'leo-reflection-end',
+        },
       ],
     },
     {
@@ -215,29 +228,61 @@ export const leoVisit: DialogueStory = {
       speaker: 'Лео',
       text: '«Одного разу я пропустив потяг, бо чекав, доки людина скаже мені, що все гаразд. Потяг пішов, а вона так нічого й не сказала. Я досі пам’ятаю не запізнення, а те, що подумав: якщо я не можу все виправити, то я їй не потрібен».',
       options: [
-        { id: 'leo-platform-ask', label: '«Ти питав, чого вона насправді хотіла?»', next: 'leo-reflection-asking' },
-        { id: 'leo-platform-silence', label: '«Можливо, мовчання теж було відповіддю»', next: 'leo-reflection-silence' },
+        {
+          id: 'leo-platform-ask',
+          label: '«Ти питав, чого вона насправді хотіла?»',
+          next: 'leo-reflection-asking',
+        },
+        {
+          id: 'leo-platform-silence',
+          label: '«Можливо, мовчання теж було відповіддю»',
+          next: 'leo-reflection-silence',
+        },
       ],
     },
     {
       id: 'leo-reflection-asking',
       speaker: 'Лео',
       text: '«Ні. Я складав план, як урятувати нашу розмову, замість того щоб її слухати. Мабуть, це найгірша звичка диспетчера: вважати, що кожна затримка має бути чиєюсь провиною».',
-      options: [{ id: 'leo-asking-continue', label: '«А якщо не шукати винного?»', next: 'leo-reflection-boundary', grants: ['leo_chose_listening'] }],
+      options: [
+        {
+          id: 'leo-asking-continue',
+          label: '«А якщо не шукати винного?»',
+          next: 'leo-reflection-boundary',
+          grants: ['leo_chose_listening'],
+        },
+      ],
     },
     {
       id: 'leo-reflection-silence',
       speaker: 'Лео',
       text: '«Я так боявся тиші, що говорив за двох. Може, вона просто хотіла, щоб я залишився поруч. А може, щоб пішов. Не запитавши, я ніколи цього не дізнаюся».',
-      options: [{ id: 'leo-silence-continue', label: '«Тепер ти можеш залишити іншій людині вибір»', next: 'leo-reflection-boundary', grants: ['leo_accepted_silence'] }],
+      options: [
+        {
+          id: 'leo-silence-continue',
+          label: '«Тепер ти можеш залишити іншій людині вибір»',
+          next: 'leo-reflection-boundary',
+          grants: ['leo_accepted_silence'],
+        },
+      ],
     },
     {
       id: 'leo-reflection-boundary',
       speaker: 'Лео',
       text: '«Я хочу навчитися говорити: я поруч, але рішення твоє. Не так урочисто, як звучить у книжках. Просто без прихованого прохання негайно заспокоїти мене».',
       options: [
-        { id: 'leo-boundary-try', label: '«Можеш спробувати вже сьогодні»', next: 'leo-reflection-end', grants: ['leo_will_offer_choice'] },
-        { id: 'leo-boundary-wait', label: '«І можеш дати собі час»', next: 'leo-reflection-end', grants: ['leo_will_take_time'] },
+        {
+          id: 'leo-boundary-try',
+          label: '«Можеш спробувати вже сьогодні»',
+          next: 'leo-reflection-end',
+          grants: ['leo_will_offer_choice'],
+        },
+        {
+          id: 'leo-boundary-wait',
+          label: '«І можеш дати собі час»',
+          next: 'leo-reflection-end',
+          grants: ['leo_will_take_time'],
+        },
       ],
     },
     {
@@ -245,8 +290,16 @@ export const leoVisit: DialogueStory = {
       speaker: 'Лео',
       text: '«Можна бути уважним і все одно не вгадати, що іншому потрібно».',
       options: [
-        { id: 'leo-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'leo-reflection-platform' },
-        { id: 'leo-reflect-listen', label: '«Можна просто побути з цим»', next: 'leo-reflection-platform' },
+        {
+          id: 'leo-reflect-continue',
+          label: '«І що ти хочеш змінити?»',
+          next: 'leo-reflection-platform',
+        },
+        {
+          id: 'leo-reflect-listen',
+          label: '«Можна просто побути з цим»',
+          next: 'leo-reflection-platform',
+        },
       ],
     },
     {
@@ -254,7 +307,12 @@ export const leoVisit: DialogueStory = {
       speaker: 'Лео',
       text: '«Мабуть, план — це спосіб не визнавати, що я боюся помилитися».',
       options: [
-        { id: 'leo-reflect-finish', label: 'Повернутися до розмови', next: 'greet', grants: ['leo_reflected_on_uncertainty'] },
+        {
+          id: 'leo-reflect-finish',
+          label: 'Повернутися до розмови',
+          next: 'greet',
+          grants: ['leo_reflected_on_uncertainty'],
+        },
       ],
     },
   ],

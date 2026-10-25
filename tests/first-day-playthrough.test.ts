@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { advanceChapter, chooseChapterOption, stageStory, startChapter, type ChapterState } from '../src/game/chapter';
+import {
+  advanceChapter,
+  chooseChapterOption,
+  stageStory,
+  startChapter,
+  type ChapterState,
+} from '../src/game/chapter';
 import { availableOptions, currentNode } from '../src/game/dialogue';
 
 function reachEnd(start: ChapterState, avoid: readonly string[] = []): ChapterState {

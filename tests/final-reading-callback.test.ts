@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 
 describe('Final reading callbacks', () => {
   it('has valid dialogue references', () => {
@@ -11,9 +16,16 @@ describe('Final reading callbacks', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
     state = { ...state, flags: ['saw_envelope'] };
     state = selectOption(finalReading, state, 'letter');
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'mutual')).toBe(false);
-    state = { ...state, flags: ['saw_envelope', 'iris_letter_choice_respected', 'leo_open_to_conversation'] };
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'mutual')).toBe(true);
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'mutual')).toBe(
+      false,
+    );
+    state = {
+      ...state,
+      flags: ['saw_envelope', 'iris_letter_choice_respected', 'leo_open_to_conversation'],
+    };
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'mutual')).toBe(
+      true,
+    );
     state = selectOption(finalReading, state, 'mutual');
     state = selectOption(finalReading, state, 'mutual-back');
     expect(state.flags).toContain('final_mutual_conversation');
@@ -23,7 +35,9 @@ describe('Final reading callbacks', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
     state = { ...state, flags: ['saw_envelope', 'iris_letter_breach_admitted'] };
     state = selectOption(finalReading, state, 'letter');
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'repair-trust')).toBe(true);
+    expect(
+      availableOptions(finalReading, state).some((option) => option.id === 'repair-trust'),
+    ).toBe(true);
     state = selectOption(finalReading, state, 'repair-trust');
     state = selectOption(finalReading, state, 'repair-trust-back');
     expect(state.flags).toContain('final_accepted_consequences');
@@ -31,9 +45,13 @@ describe('Final reading callbacks', () => {
 
   it('shows Miller callback only after separating facts from assumptions', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'miller-memory')).toBe(false);
+    expect(
+      availableOptions(finalReading, state).some((option) => option.id === 'miller-memory'),
+    ).toBe(false);
     state = { ...state, flags: ['miller_observation_distinguished'] };
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'miller-memory')).toBe(true);
+    expect(
+      availableOptions(finalReading, state).some((option) => option.id === 'miller-memory'),
+    ).toBe(true);
     state = selectOption(finalReading, state, 'miller-memory');
     state = selectOption(finalReading, state, 'miller-memory-back');
     expect(state.flags).toContain('final_miller_heard');
@@ -41,9 +59,13 @@ describe('Final reading callbacks', () => {
 
   it('shows Leo callback only after his future plans', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'leo-memory')).toBe(false);
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'leo-memory')).toBe(
+      false,
+    );
     state = { ...state, flags: ['leo_shared_future_plan'] };
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'leo-memory')).toBe(true);
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'leo-memory')).toBe(
+      true,
+    );
     state = selectOption(finalReading, state, 'leo-memory');
     state = selectOption(finalReading, state, 'leo-memory-back');
     expect(state.flags).toContain('final_leo_heard');
@@ -51,9 +73,13 @@ describe('Final reading callbacks', () => {
 
   it('shows Eleanor callback only after her shop memory', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'eleanor-memory')).toBe(false);
+    expect(
+      availableOptions(finalReading, state).some((option) => option.id === 'eleanor-memory'),
+    ).toBe(false);
     state = { ...state, flags: ['eleanor_shared_shop_memory'] };
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'eleanor-memory')).toBe(true);
+    expect(
+      availableOptions(finalReading, state).some((option) => option.id === 'eleanor-memory'),
+    ).toBe(true);
     state = selectOption(finalReading, state, 'eleanor-memory');
     state = selectOption(finalReading, state, 'eleanor-memory-back');
     expect(state.flags).toContain('final_eleanor_heard');
@@ -61,9 +87,13 @@ describe('Final reading callbacks', () => {
 
   it('shows Mara callback only after her earlier reflection', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'mara-callback')).toBe(false);
+    expect(
+      availableOptions(finalReading, state).some((option) => option.id === 'mara-callback'),
+    ).toBe(false);
     state = { ...state, flags: ['mara_day_four_reflected'] };
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'mara-callback')).toBe(true);
+    expect(
+      availableOptions(finalReading, state).some((option) => option.id === 'mara-callback'),
+    ).toBe(true);
     state = selectOption(finalReading, state, 'mara-callback');
     state = selectOption(finalReading, state, 'mara-callback-back');
     expect(state.flags).toContain('final_mara_heard');

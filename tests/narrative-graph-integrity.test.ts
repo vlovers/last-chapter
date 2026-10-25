@@ -7,12 +7,29 @@ import {
   startChapter,
   type ChapterStage,
 } from '../src/game/chapter';
-import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 
 const activeStages: readonly ChapterStage[] = [
-  'miller', 'mara', 'evening', 'iris', 'anna', 'leo', 'eleanor',
-  'thomas', 'nora', 'book-club', 'day4-iris', 'day4-mara',
-  'day4-leo', 'day5-reading',
+  'miller',
+  'mara',
+  'evening',
+  'iris',
+  'anna',
+  'leo',
+  'eleanor',
+  'thomas',
+  'nora',
+  'book-club',
+  'day4-iris',
+  'day4-mara',
+  'day4-leo',
+  'day5-reading',
 ];
 
 describe('Narrative graph integrity', () => {

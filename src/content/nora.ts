@@ -8,15 +8,19 @@ export const noraVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Під вечір до книгарні заходить Нора Рід. Вона складає мокру парасолю так акуратно, наче це частина важливого ритуалу. На плечі — торба з книжками, які давно пора повернути.',
-      options: [
-        { id: 'hello', label: 'Запропонувати чай', next: 'hello' }],
+      options: [{ id: 'hello', label: 'Запропонувати чай', next: 'hello' }],
     },
     {
       id: 'hello',
       speaker: 'Нора',
       text: '«Якщо у вас є чай без поспіху, я залишуся на десять хвилин». Вона оглядає полиці. «Хочу знайти історію, де люди не зобов’язані бути сильними щосекунди».',
       options: [
-        { id: 'nora-reflection', label: '«Чи можна залишити історію без остаточної відповіді?»', next: 'nora-reflection', unless: ['nora_reflected_on_uncertainty'] },
+        {
+          id: 'nora-reflection',
+          label: '«Чи можна залишити історію без остаточної відповіді?»',
+          next: 'nora-reflection',
+          unless: ['nora_reflected_on_uncertainty'],
+        },
         { id: 'books', label: '«Які історії вам подобаються?»', next: 'books' },
         { id: 'work', label: '«Як вам працюється в громадському центрі?»', next: 'work' },
         { id: 'bellwick', label: '«Що вам подобається в Беллвіку?»', next: 'bellwick' },
@@ -128,8 +132,16 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«У записах мене найбільше лякає не помилка, а порожнє місце».',
       options: [
-        { id: 'nora-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'nora-reflection-deep' },
-        { id: 'nora-reflect-return', label: '«Дякую, що поділився цим»', next: 'nora-reflection-end' },
+        {
+          id: 'nora-reflect-question',
+          label: '«А що для тебе в цьому найважче?»',
+          next: 'nora-reflection-deep',
+        },
+        {
+          id: 'nora-reflect-return',
+          label: '«Дякую, що поділився цим»',
+          next: 'nora-reflection-end',
+        },
       ],
     },
     {
@@ -137,8 +149,16 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«Я можу знайти дату. Але не можу довести, що людина тоді відчувала».',
       options: [
-        { id: 'nora-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'nora-reflection-record' },
-        { id: 'nora-reflect-listen', label: '«Можна просто побути з цим»', next: 'nora-reflection-record' },
+        {
+          id: 'nora-reflect-continue',
+          label: '«І що ти хочеш змінити?»',
+          next: 'nora-reflection-record',
+        },
+        {
+          id: 'nora-reflect-listen',
+          label: '«Можна просто побути з цим»',
+          next: 'nora-reflection-record',
+        },
       ],
     },
     {
@@ -146,15 +166,27 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«У мене є запис без дати. Троє людей пам’ятають різне. Якщо виберу найгарнішу версію, вийде не архів, а казка. Але порожнє місце всіх дратує».',
       options: [
-        { id: 'nora-record-uncertain', label: '«Залиш усі свідчення з позначкою про сумнів»', next: 'nora-reflection-uncertain', grants: ['nora_will_preserve_uncertainty'] },
-        { id: 'nora-record-consent', label: '«Запитай людей, чи хочуть вони цього запису»', next: 'nora-reflection-consent', grants: ['nora_will_seek_consent'] },
+        {
+          id: 'nora-record-uncertain',
+          label: '«Залиш усі свідчення з позначкою про сумнів»',
+          next: 'nora-reflection-uncertain',
+          grants: ['nora_will_preserve_uncertainty'],
+        },
+        {
+          id: 'nora-record-consent',
+          label: '«Запитай людей, чи хочуть вони цього запису»',
+          next: 'nora-reflection-consent',
+          grants: ['nora_will_seek_consent'],
+        },
       ],
     },
     {
       id: 'nora-reflection-uncertain',
       speaker: 'Нора',
       text: '«Три голоси, три різні дати і чесне «не підтверджено». Можливо, негарно виглядатиме на виставці. Зате ніхто не стане декорацією для чужої впевненості».',
-      options: [{ id: 'nora-uncertain-back', label: 'Послухати далі', next: 'nora-reflection-end' }],
+      options: [
+        { id: 'nora-uncertain-back', label: 'Послухати далі', next: 'nora-reflection-end' },
+      ],
     },
     {
       id: 'nora-reflection-consent',
@@ -167,7 +199,12 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«Можливо, чесна відповідь іноді звучить просто: ми поки не знаємо».',
       options: [
-        { id: 'nora-reflect-finish', label: 'Повернутися до розмови', next: 'hello', grants: ['nora_reflected_on_uncertainty'] },
+        {
+          id: 'nora-reflect-finish',
+          label: 'Повернутися до розмови',
+          next: 'hello',
+          grants: ['nora_reflected_on_uncertainty'],
+        },
       ],
     },
   ],

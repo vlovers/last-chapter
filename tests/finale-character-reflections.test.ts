@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 
 const reflections = [
   ['leo', 'leo_reflected_on_uncertainty'],
@@ -18,14 +24,26 @@ describe('Day five reflection payoffs', () => {
 
   it.each(reflections)('%s callback requires a previous personal conversation', (person, flag) => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
-    expect(availableOptions(finalReading, state).some((option) => option.id === `${person}-reflection-callback`)).toBe(false);
+    expect(
+      availableOptions(finalReading, state).some(
+        (option) => option.id === `${person}-reflection-callback`,
+      ),
+    ).toBe(false);
     state = { ...state, flags: [flag] };
-    expect(availableOptions(finalReading, state).some((option) => option.id === `${person}-reflection-callback`)).toBe(true);
+    expect(
+      availableOptions(finalReading, state).some(
+        (option) => option.id === `${person}-reflection-callback`,
+      ),
+    ).toBe(true);
     state = selectOption(finalReading, state, `${person}-reflection-callback`);
     state = selectOption(finalReading, state, `${person}-reflection-back`);
     expect(state.node).toBe('gathering');
     expect(state.flags).toContain(`final_${person}_reflection_heard`);
-    expect(availableOptions(finalReading, state).some((option) => option.id === `${person}-reflection-callback`)).toBe(false);
+    expect(
+      availableOptions(finalReading, state).some(
+        (option) => option.id === `${person}-reflection-callback`,
+      ),
+    ).toBe(false);
   });
   it.each([
     ['iris', 'iris_chose_open_art', 'iris_chose_private_art'],
@@ -37,16 +55,16 @@ describe('Day five reflection payoffs', () => {
     const start = selectOption(finalReading, startDialogue(finalReading), 'open');
     const story = finalReading.nodes.find((node) => node.id === `${person}-reflection-callback`);
     expect(story?.textWhen?.length).toBe(2);
-    const texts = [first, second].map((flag) =>
-      currentNode(finalReading, {
-        ...start,
-        node: `${person}-reflection-callback`,
-        flags: [flag],
-      }).text,
+    const texts = [first, second].map(
+      (flag) =>
+        currentNode(finalReading, {
+          ...start,
+          node: `${person}-reflection-callback`,
+          flags: [flag],
+        }).text,
     );
     expect(texts[0]).not.toBe(texts[1]);
     expect(texts[0]).not.toBe(story?.text);
     expect(texts[1]).not.toBe(story?.text);
   });
-
 });

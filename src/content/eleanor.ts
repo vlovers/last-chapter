@@ -8,15 +8,19 @@ export const eleanorVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Елеонора приходить до книгарні з полотняною сумкою та старим ключем на синій стрічці. Вона не відразу проходить усередину: спершу торкається дверної рами, ніби перевіряє, чи та ще пам’ятає її.',
-      options: [
-        { id: 'greet', label: 'Запросити Елеонору на чай', next: 'greet' }],
+      options: [{ id: 'greet', label: 'Запросити Елеонору на чай', next: 'greet' }],
     },
     {
       id: 'greet',
       speaker: 'Елеонора',
       text: '«Тут пахне так само. Папір, дощ і чай, який хтось знову забув допити». Вона усміхається. «Я обіцяла не командувати. Але ту полицю я б переставила».',
       options: [
-        { id: 'eleanor-reflection', label: '«Що для тебе означає передати книгарню?»', next: 'eleanor-reflection', unless: ['eleanor_reflected_on_legacy'] },
+        {
+          id: 'eleanor-reflection',
+          label: '«Що для тебе означає передати книгарню?»',
+          next: 'eleanor-reflection',
+          unless: ['eleanor_reflected_on_legacy'],
+        },
         { id: 'shop', label: '«Якою була книгарня раніше?»', next: 'shop' },
         { id: 'flood', label: '«Розкажіть про затоплення»', next: 'flood' },
         {
@@ -171,8 +175,16 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Я стільки років знала, де стоїть кожна книжка. А тепер вчуся не переставляти їх у чужому домі».',
       options: [
-        { id: 'eleanor-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'eleanor-reflection-deep' },
-        { id: 'eleanor-reflect-return', label: '«Дякую, що поділився цим»', next: 'eleanor-reflection-end' },
+        {
+          id: 'eleanor-reflect-question',
+          label: '«А що для тебе в цьому найважче?»',
+          next: 'eleanor-reflection-deep',
+        },
+        {
+          id: 'eleanor-reflect-return',
+          label: '«Дякую, що поділився цим»',
+          next: 'eleanor-reflection-end',
+        },
       ],
     },
     {
@@ -180,8 +192,16 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Зберегти місце — не означає замкнути його в минулому».',
       options: [
-        { id: 'eleanor-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'eleanor-reflection-key' },
-        { id: 'eleanor-reflect-listen', label: '«Можна просто побути з цим»', next: 'eleanor-reflection-key' },
+        {
+          id: 'eleanor-reflect-continue',
+          label: '«І що ти хочеш змінити?»',
+          next: 'eleanor-reflection-key',
+        },
+        {
+          id: 'eleanor-reflect-listen',
+          label: '«Можна просто побути з цим»',
+          next: 'eleanor-reflection-key',
+        },
       ],
     },
     {
@@ -189,28 +209,47 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Я знаю кожну подряпину на прилавку. Боюся прийти сюди одного дня й не впізнати книгарню. А ще більше боюся, що через мій страх вона так і не стане вашою».',
       options: [
-        { id: 'eleanor-key-memory', label: '«Залишимо полицю для спільної пам’яті»', next: 'eleanor-reflection-memory', grants: ['eleanor_will_keep_shared_memory'] },
-        { id: 'eleanor-key-change', label: '«Дозволь нам змінити навіть улюблений куточок»', next: 'eleanor-reflection-change', grants: ['eleanor_will_allow_change'] },
+        {
+          id: 'eleanor-key-memory',
+          label: '«Залишимо полицю для спільної пам’яті»',
+          next: 'eleanor-reflection-memory',
+          grants: ['eleanor_will_keep_shared_memory'],
+        },
+        {
+          id: 'eleanor-key-change',
+          label: '«Дозволь нам змінити навіть улюблений куточок»',
+          next: 'eleanor-reflection-change',
+          grants: ['eleanor_will_allow_change'],
+        },
       ],
     },
     {
       id: 'eleanor-reflection-memory',
       speaker: 'Елеонора',
       text: '«Одну полицю, не весь магазин. І нехай там будуть не тільки мої книжки. Історія місця почалася раніше за мене й триватиме після».',
-      options: [{ id: 'eleanor-memory-back', label: 'Послухати далі', next: 'eleanor-reflection-end' }],
+      options: [
+        { id: 'eleanor-memory-back', label: 'Послухати далі', next: 'eleanor-reflection-end' },
+      ],
     },
     {
       id: 'eleanor-reflection-change',
       speaker: 'Елеонора',
       text: '«Може, я навіть допоможу переставити її. Тільки якщо почну командувати, налийте мені чаю й скажіть сісти».',
-      options: [{ id: 'eleanor-change-back', label: 'Послухати далі', next: 'eleanor-reflection-end' }],
+      options: [
+        { id: 'eleanor-change-back', label: 'Послухати далі', next: 'eleanor-reflection-end' },
+      ],
     },
     {
       id: 'eleanor-reflection-end',
       speaker: 'Елеонора',
       text: '«Мабуть, передати ключі — це теж спосіб подбати про книгарню».',
       options: [
-        { id: 'eleanor-reflect-finish', label: 'Повернутися до розмови', next: 'greet', grants: ['eleanor_reflected_on_legacy'] },
+        {
+          id: 'eleanor-reflect-finish',
+          label: 'Повернутися до розмови',
+          next: 'greet',
+          grants: ['eleanor_reflected_on_legacy'],
+        },
       ],
     },
   ],

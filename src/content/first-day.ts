@@ -233,7 +233,12 @@ export const millerVisit: DialogueStory = {
       speaker: 'Пані Міллер',
       text: 'Я колись думала, що сусідка мене навмисне не привітала. А вона просто загубила окуляри. Я пам’ятала подію правильно, але причину вигадала сама.',
       options: [
-        { id: 'memory-fact', label: '«Тобто факт і пояснення — не те саме?»', next: 'memory-answer', grants: ['miller_observation_distinguished'] },
+        {
+          id: 'memory-fact',
+          label: '«Тобто факт і пояснення — не те саме?»',
+          next: 'memory-answer',
+          grants: ['miller_observation_distinguished'],
+        },
         { id: 'memory-return', label: '«Дякую. Повернімося до книжок»', next: 'order' },
       ],
     },

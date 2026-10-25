@@ -11,7 +11,9 @@
 **Evidence discipline:** observed / reported / inferred / unknown. Do not conflate who wrote the letter, who saw it, who knew about it, and who was entitled to read it.
 
 ## 01 — Беатріс Міллер · The storyteller who fears being forgotten
+
 **Canon:** Day 1 visit; town rumors; Day 5 callback. Older regular customer, collector of detective novels, jam jars, and stories.
+
 - **Outer desire:** buy a clever detective novel and keep the neighborhood connected.
 - **Hidden need:** to matter to people without being the person who knows everybody's secrets.
 - **Wound:** growing older made her feel less consulted; she fills silence with narratives. This is a proposed motivation, not yet revealed in dialogue.
@@ -30,7 +32,9 @@
 - **Avoid:** reducing an older woman to comic gossip or treating age as cognitive incompetence.
 
 ## 02 — Мара · The person who refuses to become someone else's lesson
+
 **Canon:** baker, Leo's partner, Day 1 book gift, Day 4 autonomy and boundaries, Day 5 callback.
+
 - **Outer desire:** choose a meaningful gift for Leo and keep her work and relationship afloat.
 - **Hidden need:** to want something for herself without feeling selfish.
 - **Wound:** accustomed to being reliable and available; specific family backstory remains intentionally open.
@@ -48,7 +52,9 @@
 - **Avoid:** love triangle as spectacle; equating forgiveness with reconciliation.
 
 ## 03 — Лео Марш · The man who mistakes planning for certainty
+
 **Canon:** train schedules, book from Mara, old reservation, Iris's undelivered letter, Day 4 decision, Day 5 callback.
+
 - **Outer desire:** understand what happened to an old reservation without losing the life he has now.
 - **Hidden need:** admit uncertainty and speak directly rather than hide behind a timetable.
 - **Wound:** a missed encounter seven years ago; no claim that he knowingly rejected Iris.
@@ -67,7 +73,9 @@
 - **Avoid:** presenting Leo as owing Iris a relationship or Mara an explanation of Iris's private letter.
 
 ## 04 — Айріс Белл · The artist who wants ownership of her own story
+
 **Canon:** author of sealed letter, artist of windows, Day 2 and Day 4 visits, Day 5 exhibition possibility.
+
 - **Outer desire:** reclaim a connection to the shop without being reduced to the seven-year-old letter.
 - **Hidden need:** let the past matter without allowing it to decide her future.
 - **Wound:** the letter did not reach its intended destination; its consequences belong to her, not the player.
@@ -86,7 +94,9 @@
 - **Avoid:** public reading of the private letter, romantic “reunion” as default success, compulsory absolution.
 
 ## 05 — Анна Гейл · The teacher who has forgotten how to ask
+
 **Canon:** teacher, reading club, Thomas's wife, Day 2 visit and Day 5 gathering.
+
 - **Outer desire:** choose a book that gets her students talking honestly.
 - **Hidden need:** accept that care is reciprocal and she does not need to anticipate every question.
 - **Wound:** years of organizing other people's lives; do not invent an affair or marital crisis from Miller's rumor.
@@ -105,7 +115,9 @@
 - **Avoid:** using her solely to validate Thomas or as a passive victim of gossip.
 
 ## 06 — Томас Гейл · The fixer who cannot repair time
+
 **Canon:** electrician, Anna's husband, Day 3 visit, subject of town speculation.
+
 - **Outer desire:** sort out a practical matter tied to the shop and old records.
 - **Hidden need:** recognize that fixing a thing does not settle how people felt about its loss.
 - **Wound:** an unresolved past obligation; specifics must remain anchored to existing scene evidence.
@@ -124,7 +136,9 @@
 - **Avoid:** making his marriage a puzzle for the player to solve.
 
 ## 07 — Нора · The archivist who wants every question answered
+
 **Canon:** Day 3 visit and book-club arc; exact profession and age should be confirmed against existing dialogue before being fixed as canon.
+
 - **Outer desire:** reconcile conflicting details in records and stories.
 - **Hidden need:** learn that a correct question does not confer a right to the answer.
 - **Wound:** uncertainty once cost her something important; the specific event is proposed, not established.
@@ -142,7 +156,9 @@
 - **Avoid:** omniscient detective exposition.
 
 ## 08 — Елеонора · The former keeper of the shop
+
 **Canon:** old keys, flood, reservation ledger, Day 3 visit, Day 5 closure; established, not a proposed extra.
+
 - **Outer desire:** know the bookshop will survive in new hands.
 - **Hidden need:** stop confusing responsibility for the place with control over everyone in it.
 - **Wound:** the flood and lost continuity; exact responsibility for an undelivered letter must remain evidentially uncertain.
@@ -161,7 +177,9 @@
 - **Avoid:** making her a secret villain or conveniently omniscient keeper of all answers.
 
 ## 09 — Гравець / новий книгар · The listener with a choice
+
 **Canon:** player-controlled shopkeeper; deliberately avoid imposing a fixed biography or gendered identity in player-facing Ukrainian.
+
 - **Outer desire:** keep the shop functioning and serve visitors.
 - **Internal question:** when is helping an invitation, and when is it intrusion?
 - **Agency:** may listen briefly, explore deeply, ask for evidence, make mistakes, acknowledge harm, or leave questions unresolved.
@@ -174,7 +192,9 @@
 - **Sample narration:** «Ти не знаєш, чим закінчиться ця розмова. Але можеш вирішити, як її почати».
 
 ## 10 — Френк · The gray Devon Rex who makes the shop feel inhabited
+
 **Canon:** small gray Devon Rex; shop companion. No supernatural insight or human speech.
+
 - **Outer desire:** warmth, safe places, food, and attention on his terms.
 - **Dramatic role:** relief after heavy conversations; a reminder that care can be quiet and nonverbal.
 - **Behavior:** climbs onto the returns tray, curls near the warm lamp, bats at a loose card, chooses whom to approach.
@@ -201,18 +221,18 @@
 
 ## Production matrix: conversations worth writing
 
-| Character | Short route (2–4 min) | Optional deep route (10–20 min) | Consequence |
-|---|---|---|---|
-| Miller | Book recommendation | Memory, loneliness, gossip, evidence | Distinguish fact and assumption |
-| Mara | Choose Leo's gift | Redemption, boundaries, work, autonomy | Day 4 and 5 callbacks |
-| Leo | Old reservation | Regret, planning, speaking plainly | Consent for private talk |
-| Iris | Ask about her art | Home, identity, the sealed letter | Exhibition, distance, conversation |
-| Anna | Pick book-club novel | Teaching, care, asking for help | Club tone and book choice |
-| Thomas | Ask about old records | Repair, shame, responsibility | Rumor context, no forced disclosure |
-| Nora | Discuss discrepancy | Ethics of archives and uncertainty | Respect limits of knowledge |
-| Eleanor | Ask about the shop | Stewardship, flood, leaving a legacy | Shop memory callback |
-| Player | Serve customers | Reflect through choices, not monologues | Accumulated flags |
-| Frank | Offer attention | Quiet ambient interactions | Atmosphere only |
+| Character | Short route (2–4 min) | Optional deep route (10–20 min)         | Consequence                         |
+| --------- | --------------------- | --------------------------------------- | ----------------------------------- |
+| Miller    | Book recommendation   | Memory, loneliness, gossip, evidence    | Distinguish fact and assumption     |
+| Mara      | Choose Leo's gift     | Redemption, boundaries, work, autonomy  | Day 4 and 5 callbacks               |
+| Leo       | Old reservation       | Regret, planning, speaking plainly      | Consent for private talk            |
+| Iris      | Ask about her art     | Home, identity, the sealed letter       | Exhibition, distance, conversation  |
+| Anna      | Pick book-club novel  | Teaching, care, asking for help         | Club tone and book choice           |
+| Thomas    | Ask about old records | Repair, shame, responsibility           | Rumor context, no forced disclosure |
+| Nora      | Discuss discrepancy   | Ethics of archives and uncertainty      | Respect limits of knowledge         |
+| Eleanor   | Ask about the shop    | Stewardship, flood, leaving a legacy    | Shop memory callback                |
+| Player    | Serve customers       | Reflect through choices, not monologues | Accumulated flags                   |
+| Frank     | Offer attention       | Quiet ambient interactions              | Atmosphere only                     |
 
 ## Five-day delivery gates
 

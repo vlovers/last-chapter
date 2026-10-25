@@ -8,15 +8,19 @@ export const annaVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Після обіду до книгарні заходить жінка з полотняною торбою, повною зошитів. Вона обережно струшує дощ із парасольки й усміхається, побачивши дитячі книжки.',
-      options: [
-        { id: 'hello', label: 'Привітатися', next: 'hello' }],
+      options: [{ id: 'hello', label: 'Привітатися', next: 'hello' }],
     },
     {
       id: 'hello',
       speaker: 'Анна',
       text: '«Я Анна Гейл, викладаю в місцевій школі. У нас завтра читання, а бібліотечні примірники вирішили одночасно зникнути. Діти, звісно, називають це змовою».',
       options: [
-        { id: 'anna-reflection', label: '«А як навчити дітей не боятися власної думки?»', next: 'anna-reflection', unless: ['anna_reflected_on_care'] },
+        {
+          id: 'anna-reflection',
+          label: '«А як навчити дітей не боятися власної думки?»',
+          next: 'anna-reflection',
+          unless: ['anna_reflected_on_care'],
+        },
         { id: 'school', label: '«Що люблять читати ваші учні?»', next: 'school' },
         { id: 'teacher', label: '«Вам подобається викладати?»', next: 'teacher' },
         { id: 'town', label: '«Як вам живеться в Беллвіку?»', next: 'town' },
@@ -153,8 +157,16 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Я вчу дітей ставити запитання. А сама іноді боюся попросити про допомогу».',
       options: [
-        { id: 'anna-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'anna-reflection-deep' },
-        { id: 'anna-reflect-return', label: '«Дякую, що поділився цим»', next: 'anna-reflection-end' },
+        {
+          id: 'anna-reflect-question',
+          label: '«А що для тебе в цьому найважче?»',
+          next: 'anna-reflection-deep',
+        },
+        {
+          id: 'anna-reflect-return',
+          label: '«Дякую, що поділився цим»',
+          next: 'anna-reflection-end',
+        },
       ],
     },
     {
@@ -162,8 +174,16 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Не хочу, щоб учні читали книжку лише заради правильної відповіді».',
       options: [
-        { id: 'anna-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'anna-reflection-classroom' },
-        { id: 'anna-reflect-listen', label: '«Можна просто побути з цим»', next: 'anna-reflection-classroom' },
+        {
+          id: 'anna-reflect-continue',
+          label: '«І що ти хочеш змінити?»',
+          next: 'anna-reflection-classroom',
+        },
+        {
+          id: 'anna-reflect-listen',
+          label: '«Можна просто побути з цим»',
+          next: 'anna-reflection-classroom',
+        },
       ],
     },
     {
@@ -171,8 +191,18 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Учениця написала, що їй не сподобався фінал книжки. Я поставила схвальний знак, але вона переписала відповідь. Вирішила, що я чекала від неї іншого. Мені стало соромно».',
       options: [
-        { id: 'anna-classroom-apologize', label: '«Поговори з нею про це»', next: 'anna-reflection-apology', grants: ['anna_will_apologize_to_student'] },
-        { id: 'anna-classroom-discuss', label: '«Запропонуй класу посперечатися»', next: 'anna-reflection-discussion', grants: ['anna_will_invite_disagreement'] },
+        {
+          id: 'anna-classroom-apologize',
+          label: '«Поговори з нею про це»',
+          next: 'anna-reflection-apology',
+          grants: ['anna_will_apologize_to_student'],
+        },
+        {
+          id: 'anna-classroom-discuss',
+          label: '«Запропонуй класу посперечатися»',
+          next: 'anna-reflection-discussion',
+          grants: ['anna_will_invite_disagreement'],
+        },
       ],
     },
     {
@@ -185,14 +215,21 @@ export const annaVisit: DialogueStory = {
       id: 'anna-reflection-discussion',
       speaker: 'Анна',
       text: '«Можемо почати з питання, чому героїня вчинила так, а не інакше. І я першою визнаю, що сама не впевнена у відповіді».',
-      options: [{ id: 'anna-discussion-back', label: 'Послухати далі', next: 'anna-reflection-end' }],
+      options: [
+        { id: 'anna-discussion-back', label: 'Послухати далі', next: 'anna-reflection-end' },
+      ],
     },
     {
       id: 'anna-reflection-end',
       speaker: 'Анна',
       text: '«Турбота — не іспит. Можна втомитися й усе одно залишитися доброю людиною».',
       options: [
-        { id: 'anna-reflect-finish', label: 'Повернутися до розмови', next: 'hello', grants: ['anna_reflected_on_care'] },
+        {
+          id: 'anna-reflect-finish',
+          label: 'Повернутися до розмови',
+          next: 'hello',
+          grants: ['anna_reflected_on_care'],
+        },
       ],
     },
   ],

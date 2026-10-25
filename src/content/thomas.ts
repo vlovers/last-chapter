@@ -8,15 +8,19 @@ export const thomasVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Після обіду світло над прилавком миготить. За кілька хвилин приходить Томас із ящиком інструментів. Він витирає черевики об килимок, хоча надворі вже сухо.',
-      options: [
-        { id: 'greet', label: 'Привітатися й показати лампу', next: 'greet' }],
+      options: [{ id: 'greet', label: 'Привітатися й показати лампу', next: 'greet' }],
     },
     {
       id: 'greet',
       speaker: 'Томас',
       text: '«Томас Гейл. Якщо лампа тріщить, не треба її вмовляти. Вона від цього не стає чемнішою». Він ставить ящик на підлогу. «Можна глянути?»',
       options: [
-        { id: 'thomas-reflection', label: '«Чому тобі легше лагодити речі, ніж говорити?»', next: 'thomas-reflection', unless: ['thomas_reflected_on_responsibility'] },
+        {
+          id: 'thomas-reflection',
+          label: '«Чому тобі легше лагодити речі, ніж говорити?»',
+          next: 'thomas-reflection',
+          unless: ['thomas_reflected_on_responsibility'],
+        },
         { id: 'repair', label: '«Так, покажу вимикач»', next: 'repair' },
         { id: 'books', label: '«Ви любите читати?»', next: 'books' },
         { id: 'anna', label: '«Анна заходила до нас»', next: 'anna' },
@@ -121,8 +125,16 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Лампочку замінити просто. А от виправити те, що хтось про тебе подумав, — ні».',
       options: [
-        { id: 'thomas-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'thomas-reflection-deep' },
-        { id: 'thomas-reflect-return', label: '«Дякую, що поділився цим»', next: 'thomas-reflection-end' },
+        {
+          id: 'thomas-reflect-question',
+          label: '«А що для тебе в цьому найважче?»',
+          next: 'thomas-reflection-deep',
+        },
+        {
+          id: 'thomas-reflect-return',
+          label: '«Дякую, що поділився цим»',
+          next: 'thomas-reflection-end',
+        },
       ],
     },
     {
@@ -130,8 +142,16 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Якщо я зробив щось корисне, це не означає, що мені пробачили».',
       options: [
-        { id: 'thomas-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'thomas-reflection-workshop' },
-        { id: 'thomas-reflect-listen', label: '«Можна просто побути з цим»', next: 'thomas-reflection-workshop' },
+        {
+          id: 'thomas-reflect-continue',
+          label: '«І що ти хочеш змінити?»',
+          next: 'thomas-reflection-workshop',
+        },
+        {
+          id: 'thomas-reflect-listen',
+          label: '«Можна просто побути з цим»',
+          next: 'thomas-reflection-workshop',
+        },
       ],
     },
     {
@@ -139,8 +159,18 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Я полагодив удома шафу, хоча Анна просила мене просто послухати. Я думав, що зробив добру справу. А вона сказала: ти знову не почув, чого я потребую».',
       options: [
-        { id: 'thomas-workshop-ask', label: '«Спробуй спочатку запитати»', next: 'thomas-reflection-ask', grants: ['thomas_will_ask_before_helping'] },
-        { id: 'thomas-workshop-fear', label: '«Чому тобі так важливо все виправити?»', next: 'thomas-reflection-fear', grants: ['thomas_admitted_fear_of_rejection'] },
+        {
+          id: 'thomas-workshop-ask',
+          label: '«Спробуй спочатку запитати»',
+          next: 'thomas-reflection-ask',
+          grants: ['thomas_will_ask_before_helping'],
+        },
+        {
+          id: 'thomas-workshop-fear',
+          label: '«Чому тобі так важливо все виправити?»',
+          next: 'thomas-reflection-fear',
+          grants: ['thomas_admitted_fear_of_rejection'],
+        },
       ],
     },
     {
@@ -160,7 +190,12 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Можливо, іноді краще запитати, що потрібно іншому, ніж одразу братися ремонтувати».',
       options: [
-        { id: 'thomas-reflect-finish', label: 'Повернутися до розмови', next: 'greet', grants: ['thomas_reflected_on_responsibility'] },
+        {
+          id: 'thomas-reflect-finish',
+          label: 'Повернутися до розмови',
+          next: 'greet',
+          grants: ['thomas_reflected_on_responsibility'],
+        },
       ],
     },
   ],

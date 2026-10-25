@@ -8,15 +8,19 @@ export const irisVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Вранці до книгарні заходить жінка з тубусом для малюнків. На рукаві її пальта — краплини дощу, на пальцях — синя фарба. Вона довго дивиться на вивіску.',
-      options: [
-        { id: 'welcome', label: '«Доброго ранку. Шукаєте щось?»', next: 'welcome' }],
+      options: [{ id: 'welcome', label: '«Доброго ранку. Шукаєте щось?»', next: 'welcome' }],
     },
     {
       id: 'welcome',
       speaker: 'Айріс',
       text: '«Не знаю. Колись я тут проводила майже кожну суботу. А потім сім років не могла змусити себе зайти». Вона усміхається. «Я Айріс. Малюю книжки, які іноді ніхто не друкує».',
       options: [
-        { id: 'iris-reflection', label: '«Чи обов’язково пояснювати свої малюнки?»', next: 'iris-reflection', unless: ['iris_reflected_on_identity'] },
+        {
+          id: 'iris-reflection',
+          label: '«Чи обов’язково пояснювати свої малюнки?»',
+          next: 'iris-reflection',
+          unless: ['iris_reflected_on_identity'],
+        },
         { id: 'ask-art', label: '«Розкажете про ілюстрації?»', next: 'art' },
         { id: 'ask-return', label: '«Що привело вас назад?»', next: 'return' },
         { id: 'ask-old', label: '«Ви знали колишню власницю?»', next: 'eleanor' },
@@ -138,8 +142,16 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Колись я малювала вікна, щоб уявляти життя по той бік скла».',
       options: [
-        { id: 'iris-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'iris-reflection-deep' },
-        { id: 'iris-reflect-return', label: '«Дякую, що поділився цим»', next: 'iris-reflection-end' },
+        {
+          id: 'iris-reflect-question',
+          label: '«А що для тебе в цьому найважче?»',
+          next: 'iris-reflection-deep',
+        },
+        {
+          id: 'iris-reflect-return',
+          label: '«Дякую, що поділився цим»',
+          next: 'iris-reflection-end',
+        },
       ],
     },
     {
@@ -147,8 +159,16 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Не кожне питання потребує відповіді саме зараз. І не кожна відповідь належить тому, хто питає».',
       options: [
-        { id: 'iris-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'iris-reflection-memory' },
-        { id: 'iris-reflect-listen', label: '«Можна просто побути з цим»', next: 'iris-reflection-memory' },
+        {
+          id: 'iris-reflect-continue',
+          label: '«І що ти хочеш змінити?»',
+          next: 'iris-reflection-memory',
+        },
+        {
+          id: 'iris-reflect-listen',
+          label: '«Можна просто побути з цим»',
+          next: 'iris-reflection-memory',
+        },
       ],
     },
     {
@@ -156,8 +176,18 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Я знайшла ескіз із датою, яку сім років не наважувалася підписати. Боюся, що люди побачать малюнок і вирішать, ніби тепер знають усе про мій від’їзд. Наче мистецтво — це пояснювальна записка до життя».',
       options: [
-        { id: 'iris-memory-art', label: '«Твоя робота не зобов’язана пояснювати тебе»', next: 'iris-reflection-art', grants: ['iris_chose_open_art'] },
-        { id: 'iris-memory-private', label: '«Можеш показати малюнки без власної біографії»', next: 'iris-reflection-private', grants: ['iris_chose_private_art'] },
+        {
+          id: 'iris-memory-art',
+          label: '«Твоя робота не зобов’язана пояснювати тебе»',
+          next: 'iris-reflection-art',
+          grants: ['iris_chose_open_art'],
+        },
+        {
+          id: 'iris-memory-private',
+          label: '«Можеш показати малюнки без власної біографії»',
+          next: 'iris-reflection-private',
+          grants: ['iris_chose_private_art'],
+        },
       ],
     },
     {
@@ -170,14 +200,21 @@ export const irisVisit: DialogueStory = {
       id: 'iris-reflection-private',
       speaker: 'Айріс',
       text: '«Так. Без підпису про моє повернення дрібним шрифтом. Нехай люди говорять про кольори, а не про те, чи я вже все пробачила».',
-      options: [{ id: 'iris-private-continue', label: 'Послухати далі', next: 'iris-reflection-end' }],
+      options: [
+        { id: 'iris-private-continue', label: 'Послухати далі', next: 'iris-reflection-end' },
+      ],
     },
     {
       id: 'iris-reflection-end',
       speaker: 'Айріс',
       text: '«Можна повернутися до місця й не повертатися до себе колишньої».',
       options: [
-        { id: 'iris-reflect-finish', label: 'Повернутися до розмови', next: 'welcome', grants: ['iris_reflected_on_identity'] },
+        {
+          id: 'iris-reflect-finish',
+          label: 'Повернутися до розмови',
+          next: 'welcome',
+          grants: ['iris_reflected_on_identity'],
+        },
       ],
     },
   ],
