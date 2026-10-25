@@ -7,6 +7,16 @@ describe('Final reading callbacks', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
   });
 
+  it('shows Leo callback only after his future plans', () => {
+    let state = selectOption(finalReading, startDialogue(finalReading), 'open');
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'leo-memory')).toBe(false);
+    state = { ...state, flags: ['leo_shared_future_plan'] };
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'leo-memory')).toBe(true);
+    state = selectOption(finalReading, state, 'leo-memory');
+    state = selectOption(finalReading, state, 'leo-memory-back');
+    expect(state.flags).toContain('final_leo_heard');
+  });
+
   it('shows Eleanor callback only after her shop memory', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
     expect(availableOptions(finalReading, state).some((option) => option.id === 'eleanor-memory')).toBe(false);
