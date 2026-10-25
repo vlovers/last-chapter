@@ -41,6 +41,18 @@ describe('Day 5 and first-season epilogues', () => {
     expect(seasonEnding(state).letter).toContain('наодинці');
     expect(decodeSave(encodeSave(state))).toEqual(state);
   });
+  it('does not erase earlier privacy pressure with a final respectful answer', () => {
+    const community = seasonEnding({
+      flags: ['anna_rumor_pressed', 'final_respected_privacy'],
+    }).community;
+    expect(community).toContain('не стирає');
+    expect(community).not.toContain('таємниці більше не є');
+  });
+  it('keeps an earned privacy ending specific rather than claiming the town changed', () => {
+    const community = seasonEnding({ flags: ['final_repaired_rumor'] }).community;
+    expect(community).toContain('сьогодні');
+    expect(community).not.toContain('більше не є');
+  });
   it('has a separate epilogue for choosing to wait', () => {
     expect(
       seasonEnding({ flags: ['final_letter_kept_private', 'mara_future_supported'] }).epilogue,
