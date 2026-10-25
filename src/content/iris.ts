@@ -8,8 +8,9 @@ export const irisVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Вранці до книгарні заходить жінка з тубусом для малюнків. На рукаві її пальта — краплини дощу, на пальцях — синя фарба. Вона довго дивиться на вивіску.',
-      options: [{        { id: 'iris-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'iris-reflection' },
- id: 'welcome', label: '«Доброго ранку. Шукаєте щось?»', next: 'welcome' }],
+      options: [
+        { id: 'iris-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'iris-reflection' },
+        { id: 'welcome', label: '«Доброго ранку. Шукаєте щось?»', next: 'welcome' }],
     },
     {
       id: 'welcome',
