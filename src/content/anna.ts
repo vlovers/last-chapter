@@ -223,6 +223,10 @@ export const annaVisit: DialogueStory = {
       id: 'anna-reflection-end',
       speaker: 'Анна',
       text: '«Турбота — не іспит. Можна втомитися й усе одно залишитися доброю людиною».',
+      textWhen: [
+        { requires: ['anna_will_apologize_to_student'], text: '«Мабуть, перше, чого я маю навчити дітей, — дорослі теж можуть вибачатися. Особливо коли ненароком змушують мовчати».' },
+        { requires: ['anna_will_invite_disagreement'], text: '«На наступному занятті я попрошу дітей заперечити мені. І не поспішатиму вирішувати, хто з нас правий».' },
+      ],
       options: [
         {
           id: 'anna-reflect-finish',
