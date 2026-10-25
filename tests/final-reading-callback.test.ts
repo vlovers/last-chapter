@@ -19,6 +19,16 @@ describe('Final reading callbacks', () => {
     expect(state.flags).toContain('final_mutual_conversation');
   });
 
+  it('offers accountability after admitting the opened letter', () => {
+    let state = selectOption(finalReading, startDialogue(finalReading), 'open');
+    state = { ...state, flags: ['saw_envelope', 'iris_letter_breach_admitted'] };
+    state = selectOption(finalReading, state, 'letter');
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'repair-trust')).toBe(true);
+    state = selectOption(finalReading, state, 'repair-trust');
+    state = selectOption(finalReading, state, 'repair-trust-back');
+    expect(state.flags).toContain('final_accepted_consequences');
+  });
+
   it('shows Miller callback only after separating facts from assumptions', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
     expect(availableOptions(finalReading, state).some((option) => option.id === 'miller-memory')).toBe(false);
