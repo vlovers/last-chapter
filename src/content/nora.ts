@@ -8,8 +8,9 @@ export const noraVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Під вечір до книгарні заходить Нора Рід. Вона складає мокру парасолю так акуратно, наче це частина важливого ритуалу. На плечі — торба з книжками, які давно пора повернути.',
-      options: [{        { id: 'nora-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'nora-reflection' },
- id: 'hello', label: 'Запропонувати чай', next: 'hello' }],
+      options: [
+        { id: 'nora-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'nora-reflection' },
+        { id: 'hello', label: 'Запропонувати чай', next: 'hello' }],
     },
     {
       id: 'hello',
