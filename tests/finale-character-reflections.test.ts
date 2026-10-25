@@ -25,5 +25,6 @@ describe('Day five reflection payoffs', () => {
     state = selectOption(finalReading, state, `${person}-reflection-back`);
     expect(state.node).toBe('gathering');
     expect(state.flags).toContain(`final_${person}_reflection_heard`);
+    expect(availableOptions(finalReading, state).some((option) => option.id === `${person}-reflection-callback`)).toBe(false);
   });
 });
