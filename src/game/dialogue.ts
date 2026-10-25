@@ -6,6 +6,8 @@ export interface DialogueOption {
   readonly label: string;
   readonly next: SceneId;
   readonly requires?: readonly string[];
+  /** Hide an option if any of these facts is already true. */
+  readonly unless?: readonly string[];
   readonly grants?: readonly string[];
 }
 
@@ -13,6 +15,8 @@ export interface DialogueNode {
   readonly id: SceneId;
   readonly speaker: string;
   readonly text: string;
+  /** First matching flag-dependent narration replaces the default text. */
+  readonly textWhen?: readonly { readonly requires: readonly string[]; readonly text: string }[];
   readonly options: readonly DialogueOption[];
 }
 
@@ -37,15 +41,20 @@ export function startDialogue(story: DialogueStory): DialogueState {
 export function currentNode(story: DialogueStory, state: DialogueState): DialogueNode {
   const node = story.nodes.find((entry) => entry.id === state.node);
   if (!node) throw new Error('Missing dialogue node');
-  return node;
+  const variant = node.textWhen?.find((entry) =>
+    entry.requires.every((flag) => state.flags.includes(flag)),
+  );
+  return variant ? { ...node, text: variant.text } : node;
 }
 
 export function availableOptions(
   story: DialogueStory,
   state: DialogueState,
 ): readonly DialogueOption[] {
-  return currentNode(story, state).options.filter((option) =>
-    (option.requires ?? []).every((flag) => state.flags.includes(flag)),
+  return currentNode(story, state).options.filter(
+    (option) =>
+      (option.requires ?? []).every((flag) => state.flags.includes(flag)) &&
+      !(option.unless ?? []).some((flag) => state.flags.includes(flag)),
   );
 }
 
