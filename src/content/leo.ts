@@ -9,7 +9,6 @@ export const leoVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Надвечір дзвіночок над дверима дзенькає вдруге. Чоловік у темному пальті зупиняється біля полиці з дорожніми книжками. На його рукаві — маленька латка у формі потяга.',
       options: [
-        { id: 'leo-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'leo-reflection' },
         { id: 'greet', label: '«Добрий вечір. Шукаєте щось про подорожі?»', next: 'greet' },
       ],
     },
@@ -18,6 +17,7 @@ export const leoVisit: DialogueStory = {
       speaker: 'Лео',
       text: '«Я Лео. Працюю на залізниці. Іноді заходжу в книгарні, щоб нагадати собі: у світі існують історії без розкладу». Він усміхається. «Хоча це трохи лякає».',
       options: [
+        { id: 'leo-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'leo-reflection' },
         { id: 'trains', label: '«Що вам подобається в потягах?»', next: 'trains' },
         { id: 'mara', label: '«Ви знайомі з Марою з пекарні?»', next: 'mara' },
         { id: 'town', label: '«Давно живете в Беллвіку?»', next: 'town' },
@@ -224,7 +224,7 @@ export const leoVisit: DialogueStory = {
       speaker: 'Лео',
       text: '«Мабуть, план — це спосіб не визнавати, що я боюся помилитися».',
       options: [
-        { id: 'leo-reflect-finish', label: 'Повернутися до розмови', next: 'arrival', grants: ['leo_reflected_on_uncertainty'] },
+        { id: 'leo-reflect-finish', label: 'Повернутися до розмови', next: 'greet', grants: ['leo_reflected_on_uncertainty'] },
       ],
     },
   ],
