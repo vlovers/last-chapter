@@ -205,18 +205,21 @@ describe('Optional character reflection arcs', () => {
     ['thomas', thomasVisit, 'thomas_will_ask_before_helping', 'thomas_admitted_fear_of_rejection'],
     ['nora', noraVisit, 'nora_will_preserve_uncertainty', 'nora_will_seek_consent'],
     ['eleanor', eleanorVisit, 'eleanor_will_keep_shared_memory', 'eleanor_will_allow_change'],
-  ] as const)('%s has different closing words for different decisions', (prefix, story, first, second) => {
-    const node = story.nodes.find((entry) => entry.id === `${prefix}-reflection-end`);
-    expect(node?.textWhen).toHaveLength(2);
-    const texts = [first, second].map((flag) =>
-      currentNode(story, {
-        node: `${prefix}-reflection-end`,
-        flags: [flag],
-        history: [],
-      }).text,
-    );
-    expect(texts[0]).not.toBe(texts[1]);
-    expect(texts).not.toContain(node?.text);
-  });
-
+  ] as const)(
+    '%s has different closing words for different decisions',
+    (prefix, story, first, second) => {
+      const node = story.nodes.find((entry) => entry.id === `${prefix}-reflection-end`);
+      expect(node?.textWhen).toHaveLength(2);
+      const texts = [first, second].map(
+        (flag) =>
+          currentNode(story, {
+            node: `${prefix}-reflection-end`,
+            flags: [flag],
+            history: [],
+          }).text,
+      );
+      expect(texts[0]).not.toBe(texts[1]);
+      expect(texts).not.toContain(node?.text);
+    },
+  );
 });
