@@ -16,7 +16,7 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«Якщо у вас є чай без поспіху, я залишуся на десять хвилин». Вона оглядає полиці. «Хочу знайти історію, де люди не зобов’язані бути сильними щосекунди».',
       options: [
-        { id: 'nora-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'nora-reflection', unless: ['nora_reflected_on_uncertainty'] },
+        { id: 'nora-reflection', label: '«Чи можна залишити історію без остаточної відповіді?»', next: 'nora-reflection', unless: ['nora_reflected_on_uncertainty'] },
         { id: 'books', label: '«Які історії вам подобаються?»', next: 'books' },
         { id: 'work', label: '«Як вам працюється в громадському центрі?»', next: 'work' },
         { id: 'bellwick', label: '«Що вам подобається в Беллвіку?»', next: 'bellwick' },
