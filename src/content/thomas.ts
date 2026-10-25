@@ -16,7 +16,7 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Томас Гейл. Якщо лампа тріщить, не треба її вмовляти. Вона від цього не стає чемнішою». Він ставить ящик на підлогу. «Можна глянути?»',
       options: [
-        { id: 'thomas-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'thomas-reflection', unless: ['thomas_reflected_on_responsibility'] },
+        { id: 'thomas-reflection', label: '«Чому тобі легше лагодити речі, ніж говорити?»', next: 'thomas-reflection', unless: ['thomas_reflected_on_responsibility'] },
         { id: 'repair', label: '«Так, покажу вимикач»', next: 'repair' },
         { id: 'books', label: '«Ви любите читати?»', next: 'books' },
         { id: 'anna', label: '«Анна заходила до нас»', next: 'anna' },
