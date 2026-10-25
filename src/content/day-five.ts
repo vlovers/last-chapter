@@ -197,6 +197,12 @@ export const finalReading: DialogueStory = {
           next: 'mutual',
           requires: ['iris_letter_choice_respected', 'leo_open_to_conversation'],
         },
+        {
+          id: 'repair-trust',
+          label: 'Визнати порушення довіри й залишити рішення Айріс',
+          next: 'repair-trust',
+          requires: ['iris_letter_breach_admitted'],
+        },
         { id: 'wait', label: 'Залишити конверт Айріс і не квапити нікого', next: 'wait' },
         { id: 'letter-back', label: 'Повернутися до гостей', next: 'gathering' },
       ],
@@ -211,6 +217,19 @@ export const finalReading: DialogueStory = {
           label: 'Дати їм простір і повернутися до гостей',
           next: 'gathering',
           grants: ['final_mutual_conversation'],
+        },
+      ],
+    },
+    {
+      id: 'repair-trust',
+      speaker: 'Айріс',
+      text: 'Ти визнав помилку. Це важливо. Але я не обіцяю, що тепер довірятиму тобі так само. Мені потрібен час, і я сама вирішу, що буде з листом.',
+      options: [
+        {
+          id: 'repair-trust-back',
+          label: '«Я розумію. Не вимагатиму відповіді»',
+          next: 'gathering',
+          grants: ['final_accepted_consequences'],
         },
       ],
     },
