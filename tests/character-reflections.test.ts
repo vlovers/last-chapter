@@ -121,4 +121,22 @@ describe('Optional character reflection arcs', () => {
       expect(state.flags).toContain(flag);
     },
   );
+  it.each([
+    ['leo', leoVisit, 'greet', 'leo-platform-silence', 'leo-silence-continue', 'leo-boundary-wait', 'leo_accepted_silence'],
+    ['iris', irisVisit, 'welcome', 'iris-memory-private', 'iris-private-continue', '', 'iris_chose_private_art'],
+    ['anna', annaVisit, 'hello', 'anna-classroom-discuss', 'anna-discussion-back', '', 'anna_will_invite_disagreement'],
+    ['thomas', thomasVisit, 'greet', 'thomas-workshop-fear', 'thomas-fear-back', '', 'thomas_admitted_fear_of_rejection'],
+    ['nora', noraVisit, 'hello', 'nora-record-consent', 'nora-consent-back', '', 'nora_will_seek_consent'],
+    ['eleanor', eleanorVisit, 'greet', 'eleanor-key-change', 'eleanor-change-back', '', 'eleanor_will_allow_change'],
+  ] as const)('%s alternate branch returns safely and records its choice', (prefix, story, intro, decision, followup, extra, flag) => {
+    let state = startDialogue(story);
+    const choices = [intro, `${prefix}-reflection`, `${prefix}-reflect-question`, `${prefix}-reflect-continue`, decision, followup];
+    if (extra) choices.push(extra);
+    choices.push(`${prefix}-reflect-finish`);
+    for (const option of choices) state = selectOption(story, state, option);
+    expect(state.node).toBe(intro);
+    expect(state.flags).toContain(flag);
+    expect(availableOptions(story, state).some((option) => option.id === `${prefix}-reflection`)).toBe(false);
+  });
+
 });
