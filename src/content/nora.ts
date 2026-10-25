@@ -8,7 +8,8 @@ export const noraVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Під вечір до книгарні заходить Нора Рід. Вона складає мокру парасолю так акуратно, наче це частина важливого ритуалу. На плечі — торба з книжками, які давно пора повернути.',
-      options: [{ id: 'hello', label: 'Запропонувати чай', next: 'hello' }],
+      options: [{        { id: 'nora-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'nora-reflection' },
+ id: 'hello', label: 'Запропонувати чай', next: 'hello' }],
     },
     {
       id: 'hello',
@@ -120,6 +121,32 @@ export const noraVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Нора виходить із книжкою, яку ще не вирішила купувати. Дощ майже припинився. У книгарні залишається запах м’яти та розмова, яка не стала чужою таємницею.',
       options: [],
+    },
+    {
+      id: 'nora-reflection',
+      speaker: 'Нора',
+      text: '«У записах мене найбільше лякає не помилка, а порожнє місце».',
+      options: [
+        { id: 'nora-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'nora-reflection-deep' },
+        { id: 'nora-reflect-return', label: '«Дякую, що поділився цим»', next: 'nora-reflection-end' },
+      ],
+    },
+    {
+      id: 'nora-reflection-deep',
+      speaker: 'Нора',
+      text: '«Я можу знайти дату. Але не можу довести, що людина тоді відчувала».',
+      options: [
+        { id: 'nora-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'nora-reflection-end' },
+        { id: 'nora-reflect-listen', label: '«Можна просто побути з цим»', next: 'nora-reflection-end' },
+      ],
+    },
+    {
+      id: 'nora-reflection-end',
+      speaker: 'Нора',
+      text: '«Можливо, чесна відповідь іноді звучить просто: ми поки не знаємо».',
+      options: [
+        { id: 'nora-reflect-finish', label: 'Повернутися до розмови', next: 'arrival', grants: ['nora_reflected_on_uncertainty'] },
+      ],
     },
   ],
 };
