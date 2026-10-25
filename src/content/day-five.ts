@@ -25,6 +25,12 @@ export const finalReading: DialogueStory = {
           requires: ['saw_envelope'],
         },
         { id: 'mara-callback', label: 'Згадати розмову з Марою', next: 'mara-callback', requires: ['mara_day_four_reflected'] },
+        {
+          id: 'eleanor-memory',
+          label: 'Подякувати Елеонорі за історію книгарні',
+          next: 'eleanor-memory',
+          requires: ['eleanor_shared_shop_memory'],
+        },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
       ],
     },
@@ -33,6 +39,19 @@ export const finalReading: DialogueStory = {
       speaker: 'Мара',
       text: 'Я тепер думаю, що щасливий фінал — це можливість обирати самій, навіть якщо читач сподівався на інше.',
       options: [{ id: 'mara-callback-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_mara_heard'] }],
+    },
+    {
+      id: 'eleanor-memory',
+      speaker: 'Елеонора',
+      text: 'Я боялася, що тут залишаться самі полиці. А сьогодні бачу людей, які можуть просто побути поруч. Значить, книгарня знову жива.',
+      options: [
+        {
+          id: 'eleanor-memory-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_eleanor_heard'],
+        },
+      ],
     },
     {
       id: 'anna',
