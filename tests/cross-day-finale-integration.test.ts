@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chooseChapterOption, startFifthDay, type ChapterState } from '../src/game/chapter';
+import { chooseChapterOption, finishSeason, startFifthDay, type ChapterState } from '../src/game/chapter';
 import { availableOptions, currentNode, startDialogue } from '../src/game/dialogue';
 import { finalReading } from '../src/content/day-five';
 
@@ -22,5 +22,8 @@ describe('Cross-day finale integration', () => {
     expect(chapter.flags).toContain('final_mara_heard');
     chapter = chooseChapterOption(chapter, 'close');
     expect(currentNode(finalReading, chapter.dialogue).id).toBe('end');
+    chapter = finishSeason(chapter);
+    expect(chapter.stage).toBe('season-complete');
+    expect(chapter.flags).toContain('final_mara_heard');
   });
 });
