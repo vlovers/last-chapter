@@ -180,9 +180,30 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Зберегти місце — не означає замкнути його в минулому».',
       options: [
-        { id: 'eleanor-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'eleanor-reflection-end' },
-        { id: 'eleanor-reflect-listen', label: '«Можна просто побути з цим»', next: 'eleanor-reflection-end' },
+        { id: 'eleanor-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'eleanor-reflection-key' },
+        { id: 'eleanor-reflect-listen', label: '«Можна просто побути з цим»', next: 'eleanor-reflection-key' },
       ],
+    },
+    {
+      id: 'eleanor-reflection-key',
+      speaker: 'Елеонора',
+      text: '«Я знаю кожну подряпину на прилавку. Боюся прийти сюди одного дня й не впізнати книгарню. А ще більше боюся, що через мій страх вона так і не стане вашою».',
+      options: [
+        { id: 'eleanor-key-memory', label: '«Залишимо полицю для спільної пам’яті»', next: 'eleanor-reflection-memory', grants: ['eleanor_will_keep_shared_memory'] },
+        { id: 'eleanor-key-change', label: '«Дозволь нам змінити навіть улюблений куточок»', next: 'eleanor-reflection-change', grants: ['eleanor_will_allow_change'] },
+      ],
+    },
+    {
+      id: 'eleanor-reflection-memory',
+      speaker: 'Елеонора',
+      text: '«Одну полицю, не весь магазин. І нехай там будуть не тільки мої книжки. Історія місця почалася раніше за мене й триватиме після».',
+      options: [{ id: 'eleanor-memory-back', label: 'Послухати далі', next: 'eleanor-reflection-end' }],
+    },
+    {
+      id: 'eleanor-reflection-change',
+      speaker: 'Елеонора',
+      text: '«Може, я навіть допоможу переставити її. Тільки якщо почну командувати, налийте мені чаю й скажіть сісти».',
+      options: [{ id: 'eleanor-change-back', label: 'Послухати далі', next: 'eleanor-reflection-end' }],
     },
     {
       id: 'eleanor-reflection-end',
