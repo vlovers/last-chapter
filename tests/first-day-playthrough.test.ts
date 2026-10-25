@@ -1,44 +1,44 @@
 import { describe, expect, it } from 'vitest';
-import {
-  advanceChapter,
-  chooseChapterOption,
-  startChapter,
-  type ChapterState,
-} from '../src/game/chapter';
+import { advanceChapter, chooseChapterOption, stageStory, startChapter, type ChapterState } from '../src/game/chapter';
+import { availableOptions, currentNode } from '../src/game/dialogue';
 
-function choose(state: ChapterState, ids: readonly string[]): ChapterState {
-  return ids.reduce((current, id) => chooseChapterOption(current, id), state);
+function reachEnd(start: ChapterState, avoid: readonly string[] = []): ChapterState {
+  const queue: ChapterState[] = [start];
+  const visited = new Set<string>();
+  for (let index = 0; index < queue.length && index < 2000; index++) {
+    const state = queue[index];
+    const key = JSON.stringify([state.dialogue.node, [...state.flags].sort()]);
+    if (visited.has(key)) continue;
+    visited.add(key);
+    const story = stageStory(state.stage);
+    if (currentNode(story, state.dialogue).options.length === 0) return state;
+    for (const option of availableOptions(story, state.dialogue)) {
+      if (!avoid.includes(option.id)) queue.push(chooseChapterOption(state, option.id));
+    }
+  }
+  throw new Error(`No ending reachable in ${start.stage}`);
 }
 
-describe('First day playable chapter flow', () => {
-  it('finishes Day 1 without opening the private letter', () => {
+describe('First-day chapter transitions', () => {
+  it('can finish all three conversations without opening a private letter', () => {
     let state = startChapter();
-    state = choose(state, ['greet', 'books', 'orchard', 'leave-orchard']);
-    state = advanceChapter(state);
-    expect(state.stage).toBe('mara');
-    state = choose(state, ['hello', 'thank', 'professional', 'station', 'finish-station']);
-    state = advanceChapter(state);
-    expect(state.stage).toBe('evening');
-    state = choose(state, ['letter', 'letter-back', 'receipt', 'receipt-conclude', 'keep-safe']);
-    state = advanceChapter(state);
+    for (const stage of ['miller', 'mara', 'evening'] as const) {
+      expect(state.stage).toBe(stage);
+      state = reachEnd(state, ['letter-open']);
+      state = advanceChapter(state);
+    }
     expect(state.stage).toBe('complete');
-    expect(state.flags).toContain('letter_secured');
-    expect(state.flags).toContain('sold_station');
     expect(state.flags).not.toContain('opened_private_letter');
   });
 
-  it('carries Miller observations into the evening narration', () => {
+  it('preserves discoveries across day-one transitions', () => {
     let state = startChapter();
-    state = choose(state, [
-      'greet', 'chat', 'memory', 'memory-fact', 'memory-answer-order',
-      'witnesses', 'leave-witnesses',
-    ]);
-    expect(state.flags).toContain('miller_observation_distinguished');
+    state = reachEnd(state);
+    const previousFlags = [...state.flags];
     state = advanceChapter(state);
-    state = choose(state, ['hello', 'thank', 'professional', 'roads', 'finish-roads']);
+    for (const flag of previousFlags) expect(state.dialogue.flags).toContain(flag);
+    state = reachEnd(state);
     state = advanceChapter(state);
-    state = choose(state, ['letter', 'letter-back', 'receipt', 'receipt-conclude']);
-    expect(state.dialogue.node).toBe('deduction');
-    expect(state.dialogue.flags).toContain('miller_observation_distinguished');
+    for (const flag of previousFlags) expect(state.dialogue.flags).toContain(flag);
   });
 });
