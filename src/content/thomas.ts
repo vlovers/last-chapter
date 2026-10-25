@@ -130,9 +130,30 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Якщо я зробив щось корисне, це не означає, що мені пробачили».',
       options: [
-        { id: 'thomas-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'thomas-reflection-end' },
-        { id: 'thomas-reflect-listen', label: '«Можна просто побути з цим»', next: 'thomas-reflection-end' },
+        { id: 'thomas-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'thomas-reflection-workshop' },
+        { id: 'thomas-reflect-listen', label: '«Можна просто побути з цим»', next: 'thomas-reflection-workshop' },
       ],
+    },
+    {
+      id: 'thomas-reflection-workshop',
+      speaker: 'Томас',
+      text: '«Я полагодив удома шафу, хоча Анна просила мене просто послухати. Я думав, що зробив добру справу. А вона сказала: ти знову не почув, чого я потребую».',
+      options: [
+        { id: 'thomas-workshop-ask', label: '«Спробуй спочатку запитати»', next: 'thomas-reflection-ask', grants: ['thomas_will_ask_before_helping'] },
+        { id: 'thomas-workshop-fear', label: '«Чому тобі так важливо все виправити?»', next: 'thomas-reflection-fear', grants: ['thomas_admitted_fear_of_rejection'] },
+      ],
+    },
+    {
+      id: 'thomas-reflection-ask',
+      speaker: 'Томас',
+      text: '«Можу запитати: тобі потрібна порада, допомога чи щоб я просто побув поруч? Тільки доведеться прийняти будь-яку відповідь».',
+      options: [{ id: 'thomas-ask-back', label: 'Послухати далі', next: 'thomas-reflection-end' }],
+    },
+    {
+      id: 'thomas-reflection-fear',
+      speaker: 'Томас',
+      text: '«Коли я корисний, мені здається, що мене не залишать. Неприємно визнавати, що іноді я допомагаю й потай чекаю за це любові».',
+      options: [{ id: 'thomas-fear-back', label: 'Послухати далі', next: 'thomas-reflection-end' }],
     },
     {
       id: 'thomas-reflection-end',
