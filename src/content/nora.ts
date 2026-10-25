@@ -198,6 +198,10 @@ export const noraVisit: DialogueStory = {
       id: 'nora-reflection-end',
       speaker: 'Нора',
       text: '«Можливо, чесна відповідь іноді звучить просто: ми поки не знаємо».',
+      textWhen: [
+        { requires: ['nora_will_preserve_uncertainty'], text: '«Я залишу в архіві всі три версії. Прогалини не роблять історію слабкою, якщо ми чесно визнаємо, де вони є».' },
+        { requires: ['nora_will_seek_consent'], text: '«Перш ніж показувати чужі листи, я спитаю дозволу. Навіть правдива історія не стає моєю власністю».' },
+      ],
       options: [
         {
           id: 'nora-reflect-finish',
