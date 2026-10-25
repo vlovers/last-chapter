@@ -16,7 +16,7 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Не знаю. Колись я тут проводила майже кожну суботу. А потім сім років не могла змусити себе зайти». Вона усміхається. «Я Айріс. Малюю книжки, які іноді ніхто не друкує».',
       options: [
-        { id: 'iris-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'iris-reflection' },
+        { id: 'iris-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'iris-reflection', unless: ['iris_reflected_on_identity'] },
         { id: 'ask-art', label: '«Розкажете про ілюстрації?»', next: 'art' },
         { id: 'ask-return', label: '«Що привело вас назад?»', next: 'return' },
         { id: 'ask-old', label: '«Ви знали колишню власницю?»', next: 'eleanor' },
