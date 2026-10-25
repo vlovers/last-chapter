@@ -198,4 +198,25 @@ describe('Optional character reflection arcs', () => {
       ).toBe(false);
     },
   );
+  it.each([
+    ['leo', leoVisit, 'leo_chose_listening', 'leo_accepted_silence'],
+    ['iris', irisVisit, 'iris_chose_open_art', 'iris_chose_private_art'],
+    ['anna', annaVisit, 'anna_will_apologize_to_student', 'anna_will_invite_disagreement'],
+    ['thomas', thomasVisit, 'thomas_will_ask_before_helping', 'thomas_admitted_fear_of_rejection'],
+    ['nora', noraVisit, 'nora_will_preserve_uncertainty', 'nora_will_seek_consent'],
+    ['eleanor', eleanorVisit, 'eleanor_will_keep_shared_memory', 'eleanor_will_allow_change'],
+  ] as const)('%s has different closing words for different decisions', (prefix, story, first, second) => {
+    const node = story.nodes.find((entry) => entry.id === `${prefix}-reflection-end`);
+    expect(node?.textWhen).toHaveLength(2);
+    const texts = [first, second].map((flag) =>
+      currentNode(story, {
+        node: `${prefix}-reflection-end`,
+        flags: [flag],
+        history: [],
+      }).text,
+    );
+    expect(texts[0]).not.toBe(texts[1]);
+    expect(texts).not.toContain(node?.text);
+  });
+
 });
