@@ -8,7 +8,8 @@ export const eleanorVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Елеонора приходить до книгарні з полотняною сумкою та старим ключем на синій стрічці. Вона не відразу проходить усередину: спершу торкається дверної рами, ніби перевіряє, чи та ще пам’ятає її.',
-      options: [{ id: 'greet', label: 'Запросити Елеонору на чай', next: 'greet' }],
+      options: [{        { id: 'eleanor-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'eleanor-reflection' },
+ id: 'greet', label: 'Запросити Елеонору на чай', next: 'greet' }],
     },
     {
       id: 'greet',
@@ -163,6 +164,32 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Елеонора залишає ключ від старої шафи з каталогом, але забирає свою синю стрічку. «Шафу можна відчинити, коли знадобиться. А от людські історії — лише з дозволу».',
       options: [],
+    },
+    {
+      id: 'eleanor-reflection',
+      speaker: 'Елеонора',
+      text: '«Я стільки років знала, де стоїть кожна книжка. А тепер вчуся не переставляти їх у чужому домі».',
+      options: [
+        { id: 'eleanor-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'eleanor-reflection-deep' },
+        { id: 'eleanor-reflect-return', label: '«Дякую, що поділився цим»', next: 'eleanor-reflection-end' },
+      ],
+    },
+    {
+      id: 'eleanor-reflection-deep',
+      speaker: 'Елеонора',
+      text: '«Зберегти місце — не означає замкнути його в минулому».',
+      options: [
+        { id: 'eleanor-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'eleanor-reflection-end' },
+        { id: 'eleanor-reflect-listen', label: '«Можна просто побути з цим»', next: 'eleanor-reflection-end' },
+      ],
+    },
+    {
+      id: 'eleanor-reflection-end',
+      speaker: 'Елеонора',
+      text: '«Мабуть, передати ключі — це теж спосіб подбати про книгарню».',
+      options: [
+        { id: 'eleanor-reflect-finish', label: 'Повернутися до розмови', next: 'arrival', grants: ['eleanor_reflected_on_legacy'] },
+      ],
     },
   ],
 };
