@@ -7,6 +7,16 @@ describe('Final reading callbacks', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
   });
 
+  it('shows Miller callback only after separating facts from assumptions', () => {
+    let state = selectOption(finalReading, startDialogue(finalReading), 'open');
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'miller-memory')).toBe(false);
+    state = { ...state, flags: ['miller_observation_distinguished'] };
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'miller-memory')).toBe(true);
+    state = selectOption(finalReading, state, 'miller-memory');
+    state = selectOption(finalReading, state, 'miller-memory-back');
+    expect(state.flags).toContain('final_miller_heard');
+  });
+
   it('shows Leo callback only after his future plans', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
     expect(availableOptions(finalReading, state).some((option) => option.id === 'leo-memory')).toBe(false);
