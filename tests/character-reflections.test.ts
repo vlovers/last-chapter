@@ -35,6 +35,7 @@ describe('Optional character reflection arcs', () => {
       state = selectOption(story, state, `${prefix}-reflect-finish`);
       expect(state.node).toBe(introduction);
       expect(state.flags).toContain(flag);
+      expect(availableOptions(story, state).some((option) => option.id === `${prefix}-reflection`)).toBe(false);
     }
   });
 });
