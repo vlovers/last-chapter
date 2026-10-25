@@ -23,6 +23,12 @@ export const maraDecision: DialogueStory = {
           next: 'letter',
           requires: ['saw_envelope'],
         },
+        {
+          id: 'remember-trust',
+          label: '«Пам’ятаєш нашу розмову про прощення?»',
+          next: 'remember-trust',
+          requires: ['mara_discussed_forgiveness'],
+        },
         { id: 'future', label: '«Чого ти сама хочеш цього року?»', next: 'future' },
         { id: 'finish', label: 'Побажати Марі гарного вечора', next: 'end' },
       ],
@@ -103,6 +109,14 @@ export const maraDecision: DialogueStory = {
           next: 'greet',
           grants: ['mara_gift_encouraged'],
         },
+      ],
+    },
+    {
+      id: 'remember-trust',
+      speaker: 'Мара',
+      text: 'Пам’ятаю. Пробачення не означає повернення. Іноді найважче — дозволити іншій людині самій обрати, чи готова вона говорити.',
+      options: [
+        { id: 'remember-trust-back', label: '«Ти маєш право на власний вибір»', next: 'greet', grants: ['mara_day_four_reflected'] },
       ],
     },
     {
