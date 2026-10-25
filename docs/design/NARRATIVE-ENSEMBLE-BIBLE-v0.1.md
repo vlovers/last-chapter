@@ -1,5 +1,7 @@
 # LAST CHAPTER — Narrative Design Bible: Ensemble & Meaning v0.1
 
+> **CANON AUDIT OVERRIDE (2026-10-25):** This early proposal contains character-role assumptions that conflict with the implemented story (notably Miller, Thomas, Nora, Anna and Eleanor). Read [CANON-AUDIT-CHARACTER-LOCK-v0.1.md](./CANON-AUDIT-CHARACTER-LOCK-v0.1.md) before drafting scenes. Existing source files are authoritative; this document is ideation, not locked canon.
+
 **Created:** 2026-10-25  
 **Status:** Editorial proposal. NOT implemented, not approved canon, not playtested.  
 **Scope:** Ten human characters (eight existing cast members + two proposed future additions); Frank is a recurring non-human character.  
