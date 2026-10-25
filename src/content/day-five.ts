@@ -37,6 +37,12 @@ export const finalReading: DialogueStory = {
           next: 'leo-memory',
           requires: ['leo_shared_future_plan'],
         },
+        {
+          id: 'miller-memory',
+          label: 'Поговорити з пані Міллер про припущення',
+          next: 'miller-memory',
+          requires: ['miller_observation_distinguished'],
+        },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
       ],
     },
@@ -69,6 +75,19 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до гостей',
           next: 'gathering',
           grants: ['final_leo_heard'],
+        },
+      ],
+    },
+    {
+      id: 'miller-memory',
+      speaker: 'Пані Міллер',
+      text: 'Я все життя читала детективи, а найважчою загадкою виявилося навчитися не робити висновків про сусідів завчасно.',
+      options: [
+        {
+          id: 'miller-memory-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_miller_heard'],
         },
       ],
     },
