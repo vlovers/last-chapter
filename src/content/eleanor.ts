@@ -9,7 +9,6 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Елеонора приходить до книгарні з полотняною сумкою та старим ключем на синій стрічці. Вона не відразу проходить усередину: спершу торкається дверної рами, ніби перевіряє, чи та ще пам’ятає її.',
       options: [
-        { id: 'eleanor-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'eleanor-reflection' },
         { id: 'greet', label: 'Запросити Елеонору на чай', next: 'greet' }],
     },
     {
@@ -17,6 +16,7 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Тут пахне так само. Папір, дощ і чай, який хтось знову забув допити». Вона усміхається. «Я обіцяла не командувати. Але ту полицю я б переставила».',
       options: [
+        { id: 'eleanor-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'eleanor-reflection' },
         { id: 'shop', label: '«Якою була книгарня раніше?»', next: 'shop' },
         { id: 'flood', label: '«Розкажіть про затоплення»', next: 'flood' },
         {
@@ -189,7 +189,7 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Мабуть, передати ключі — це теж спосіб подбати про книгарню».',
       options: [
-        { id: 'eleanor-reflect-finish', label: 'Повернутися до розмови', next: 'arrival', grants: ['eleanor_reflected_on_legacy'] },
+        { id: 'eleanor-reflect-finish', label: 'Повернутися до розмови', next: 'greet', grants: ['eleanor_reflected_on_legacy'] },
       ],
     },
   ],
