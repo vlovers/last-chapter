@@ -28,7 +28,7 @@ function finishConversation(initial: ChapterState): ChapterState {
   const queue: ChapterState[] = [initial];
   const seen = new Set<string>();
   for (let index = 0; index < queue.length && index < 2500; index++) {
-    const state = queue[index];
+    const state = queue[index]!;
     const story = stageStory(state.stage);
     const node = currentNode(story, state.dialogue);
     if (node.options.length === 0) return state;
