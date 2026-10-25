@@ -26,7 +26,9 @@ describe('Mara letter resolution', () => {
     let session = startConversation(maraLetterDecision, ['after:tamlin']);
     session = answerConversation(maraLetterDecision, session, 'ask');
     session = answerConversation(maraLetterDecision, session, 'support');
-    expect(conversationView(maraLetterDecision, session).text).toContain('Пам’ятаєш нашу суперечку');
+    expect(conversationView(maraLetterDecision, session).text).toContain(
+      'Пам’ятаєш нашу суперечку',
+    );
   });
   it('acknowledges the earlier choice to give Mara autonomy', () => {
     const session = startConversation(maraLetterDecision, ['return:autonomy']);
