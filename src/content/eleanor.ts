@@ -16,7 +16,7 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Тут пахне так само. Папір, дощ і чай, який хтось знову забув допити». Вона усміхається. «Я обіцяла не командувати. Але ту полицю я б переставила».',
       options: [
-        { id: 'eleanor-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'eleanor-reflection', unless: ['eleanor_reflected_on_legacy'] },
+        { id: 'eleanor-reflection', label: '«Що для тебе означає передати книгарню?»', next: 'eleanor-reflection', unless: ['eleanor_reflected_on_legacy'] },
         { id: 'shop', label: '«Якою була книгарня раніше?»', next: 'shop' },
         { id: 'flood', label: '«Розкажіть про затоплення»', next: 'flood' },
         {
