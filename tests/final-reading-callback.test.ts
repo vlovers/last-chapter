@@ -7,6 +7,18 @@ describe('Final reading callbacks', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
   });
 
+  it('keeps the letter private unless both people agree to talk', () => {
+    let state = selectOption(finalReading, startDialogue(finalReading), 'open');
+    state = { ...state, flags: ['saw_envelope'] };
+    state = selectOption(finalReading, state, 'letter');
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'mutual')).toBe(false);
+    state = { ...state, flags: ['saw_envelope', 'iris_letter_choice_respected', 'leo_open_to_conversation'] };
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'mutual')).toBe(true);
+    state = selectOption(finalReading, state, 'mutual');
+    state = selectOption(finalReading, state, 'mutual-back');
+    expect(state.flags).toContain('final_mutual_conversation');
+  });
+
   it('shows Miller callback only after separating facts from assumptions', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
     expect(availableOptions(finalReading, state).some((option) => option.id === 'miller-memory')).toBe(false);
