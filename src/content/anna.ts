@@ -162,9 +162,30 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Не хочу, щоб учні читали книжку лише заради правильної відповіді».',
       options: [
-        { id: 'anna-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'anna-reflection-end' },
-        { id: 'anna-reflect-listen', label: '«Можна просто побути з цим»', next: 'anna-reflection-end' },
+        { id: 'anna-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'anna-reflection-classroom' },
+        { id: 'anna-reflect-listen', label: '«Можна просто побути з цим»', next: 'anna-reflection-classroom' },
       ],
+    },
+    {
+      id: 'anna-reflection-classroom',
+      speaker: 'Анна',
+      text: '«Учениця написала, що їй не сподобався фінал книжки. Я поставила схвальний знак, але вона переписала відповідь. Вирішила, що я чекала від неї іншого. Мені стало соромно».',
+      options: [
+        { id: 'anna-classroom-apologize', label: '«Поговори з нею про це»', next: 'anna-reflection-apology', grants: ['anna_will_apologize_to_student'] },
+        { id: 'anna-classroom-discuss', label: '«Запропонуй класу посперечатися»', next: 'anna-reflection-discussion', grants: ['anna_will_invite_disagreement'] },
+      ],
+    },
+    {
+      id: 'anna-reflection-apology',
+      speaker: 'Анна',
+      text: '«Я скажу їй, що навіть учителі помиляються. Вона не мусить погоджуватися зі мною, щоб я поважала її думку».',
+      options: [{ id: 'anna-apology-back', label: 'Послухати далі', next: 'anna-reflection-end' }],
+    },
+    {
+      id: 'anna-reflection-discussion',
+      speaker: 'Анна',
+      text: '«Можемо почати з питання, чому героїня вчинила так, а не інакше. І я першою визнаю, що сама не впевнена у відповіді».',
+      options: [{ id: 'anna-discussion-back', label: 'Послухати далі', next: 'anna-reflection-end' }],
     },
     {
       id: 'anna-reflection-end',
