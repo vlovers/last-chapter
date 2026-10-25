@@ -306,6 +306,10 @@ export const leoVisit: DialogueStory = {
       id: 'leo-reflection-end',
       speaker: 'Лео',
       text: '«Мабуть, план — це спосіб не визнавати, що я боюся помилитися».',
+      textWhen: [
+        { requires: ['leo_chose_listening'], text: '«Тепер я спробую спершу запитати, чого людина хоче, а вже потім будувати маршрут. Навіть якщо відповідь буде незручною».' },
+        { requires: ['leo_accepted_silence'], text: '«Може, найскладніше — не заповнювати паузу своїм страхом. Дати іншій людині час сказати своє».' },
+      ],
       options: [
         {
           id: 'leo-reflect-finish',
