@@ -24,8 +24,15 @@ export const finalReading: DialogueStory = {
           next: 'letter',
           requires: ['saw_envelope'],
         },
+        { id: 'mara-callback', label: 'Згадати розмову з Марою', next: 'mara-callback', requires: ['mara_day_four_reflected'] },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
       ],
+    },
+    {
+      id: 'mara-callback',
+      speaker: 'Мара',
+      text: 'Я тепер думаю, що щасливий фінал — це можливість обирати самій, навіть якщо читач сподівався на інше.',
+      options: [{ id: 'mara-callback-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_mara_heard'] }],
     },
     {
       id: 'anna',
