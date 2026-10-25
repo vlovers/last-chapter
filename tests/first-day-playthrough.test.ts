@@ -12,7 +12,7 @@ function reachEnd(start: ChapterState, avoid: readonly string[] = []): ChapterSt
   const queue: ChapterState[] = [start];
   const visited = new Set<string>();
   for (let index = 0; index < queue.length && index < 2000; index++) {
-    const state = queue[index];
+    const state = queue[index]!;
     const key = JSON.stringify([state.dialogue.node, [...state.flags].sort()]);
     if (visited.has(key)) continue;
     visited.add(key);
