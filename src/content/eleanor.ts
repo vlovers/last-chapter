@@ -243,6 +243,10 @@ export const eleanorVisit: DialogueStory = {
       id: 'eleanor-reflection-end',
       speaker: 'Елеонора',
       text: '«Мабуть, передати ключі — це теж спосіб подбати про книгарню».',
+      textWhen: [
+        { requires: ['eleanor_will_keep_shared_memory'], text: '«Нехай у книгарні буде місце для пам’яті кожного, хто сюди приходив. Я не маю права залишити лише свою».' },
+        { requires: ['eleanor_will_allow_change'], text: '«Я дозволю переставити полиці. Якщо книгарня має жити після мене, вона мусить змінюватися вже зараз».' },
+      ],
       options: [
         {
           id: 'eleanor-reflect-finish',
