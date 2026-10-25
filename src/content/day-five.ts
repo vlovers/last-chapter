@@ -256,6 +256,10 @@ export const finalReading: DialogueStory = {
       id: 'leo-reflection-callback',
       speaker: 'Лео',
       text: '«Розклад не відповідає на всі питання. Але сьогодні я хоча б не боюся запитати».',
+      textWhen: [
+        { requires: ['leo_chose_listening'], text: '«Я нарешті запитав, що потрібно іншій людині, а не склав за неї план. Відповідь була несподівана: просто послухати». Лео ніяково усміхається.' },
+        { requires: ['leo_accepted_silence'], text: '«Учора ми мовчали поруч майже годину. І вперше я не сприйняв це як запізнення, яке треба надолужити». Лео дивиться на вікно.' },
+      ],
       options: [{ id: 'leo-reflection-back', label: 'Повернутися до спільного читання', next: 'gathering', grants: ['final_leo_reflection_heard'] }],
     },
     {
