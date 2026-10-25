@@ -31,6 +31,12 @@ export const finalReading: DialogueStory = {
           next: 'eleanor-memory',
           requires: ['eleanor_shared_shop_memory'],
         },
+        {
+          id: 'leo-memory',
+          label: 'Поговорити з Лео про життя без розкладу',
+          next: 'leo-memory',
+          requires: ['leo_shared_future_plan'],
+        },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
       ],
     },
@@ -50,6 +56,19 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до гостей',
           next: 'gathering',
           grants: ['final_eleanor_heard'],
+        },
+      ],
+    },
+    {
+      id: 'leo-memory',
+      speaker: 'Лео',
+      text: 'Пам’ятаєш, я хотів побачити зимове море? Квитків ще не купив. Але вперше це не здається поразкою. Можна мріяти й не поспішати.',
+      options: [
+        {
+          id: 'leo-memory-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_leo_heard'],
         },
       ],
     },
