@@ -8,6 +8,7 @@ import {
   selectOption,
   startDialogue,
   validateDialogue,
+  type DialogueState,
 } from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
@@ -38,7 +39,7 @@ describe('Iris letter continuity across five days', () => {
   });
 
   it('does not let the player promise Iris an intact seal after opening it', () => {
-    let state = {
+    let state: DialogueState = {
       ...startDialogue(irisDecision),
       flags: ['saw_envelope', 'opened_private_letter'],
     };
@@ -60,7 +61,7 @@ describe('Iris letter continuity across five days', () => {
   });
 
   it('preserves the original respect option when the envelope is untouched', () => {
-    let state = { ...startDialogue(irisDecision), flags: ['saw_envelope'] };
+    let state: DialogueState = { ...startDialogue(irisDecision), flags: ['saw_envelope'] };
     state = selectOption(irisDecision, state, 'welcome');
     state = selectOption(irisDecision, state, 'letter');
     const choices = availableOptions(irisDecision, state).map((option) => option.id);
@@ -91,8 +92,8 @@ describe('Iris letter continuity across five days', () => {
       flags: [...admitted.flags, 'iris_letter_choice_respected', 'leo_open_to_conversation'],
     };
     expect(availableOptions(finalReading, ready).map((option) => option.id)).toContain('mutual');
-    expect(decodeSave(encodeSave({ stage: 'day5-reading', dialogue: ready, flags: ready.flags })))
-      .toEqual({ stage: 'day5-reading', dialogue: ready, flags: ready.flags });
+    const saved = { stage: 'day5-reading' as const, dialogue: ready, flags: ready.flags };
+    expect(decodeSave(encodeSave(saved))).toEqual(saved);
   });
 
   it('keeps all three dialogue graphs structurally valid', () => {
