@@ -9,7 +9,6 @@ export const annaVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Після обіду до книгарні заходить жінка з полотняною торбою, повною зошитів. Вона обережно струшує дощ із парасольки й усміхається, побачивши дитячі книжки.',
       options: [
-        { id: 'anna-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'anna-reflection' },
         { id: 'hello', label: 'Привітатися', next: 'hello' }],
     },
     {
@@ -17,6 +16,7 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Я Анна Гейл, викладаю в місцевій школі. У нас завтра читання, а бібліотечні примірники вирішили одночасно зникнути. Діти, звісно, називають це змовою».',
       options: [
+        { id: 'anna-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'anna-reflection' },
         { id: 'school', label: '«Що люблять читати ваші учні?»', next: 'school' },
         { id: 'teacher', label: '«Вам подобається викладати?»', next: 'teacher' },
         { id: 'town', label: '«Як вам живеться в Беллвіку?»', next: 'town' },
@@ -171,7 +171,7 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Турбота — не іспит. Можна втомитися й усе одно залишитися доброю людиною».',
       options: [
-        { id: 'anna-reflect-finish', label: 'Повернутися до розмови', next: 'arrival', grants: ['anna_reflected_on_care'] },
+        { id: 'anna-reflect-finish', label: 'Повернутися до розмови', next: 'hello', grants: ['anna_reflected_on_care'] },
       ],
     },
   ],
