@@ -7,6 +7,7 @@ import { noraVisit } from '../src/content/nora';
 import { eleanorVisit } from '../src/content/eleanor';
 import {
   availableOptions,
+  currentNode,
   selectOption,
   startDialogue,
   validateDialogue,
