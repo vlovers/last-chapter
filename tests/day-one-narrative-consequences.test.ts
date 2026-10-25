@@ -18,6 +18,7 @@ describe('Day one narrative consequences', () => {
   it('lets Mara discuss forgiveness and return to buying a gift', () => {
     const state = follow(maraVisit, [
       'hello',
+      'thank',
       'talk',
       'trust',
       'trust-forgive',
@@ -32,6 +33,7 @@ describe('Day one narrative consequences', () => {
   it('respects Mara choosing silence without blocking the day', () => {
     const state = follow(maraVisit, [
       'hello',
+      'thank',
       'talk',
       'trust',
       'trust-quiet',
