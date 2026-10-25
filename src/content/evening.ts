@@ -82,6 +82,12 @@ export const firstEvening: DialogueStory = {
       id: 'book',
       speaker: 'Оповідач',
       text: '«Зимове вікно». Синя обкладинка, малюнок освітленого вікна й трохи зім’ятий корінець. Між сторінками лежить запечатаний конверт.',
+      textWhen: [
+        {
+          requires: ['opened_private_letter'],
+          text: '«Зимове вікно». Синя обкладинка, малюнок освітленого вікна й трохи зім’ятий корінець. Між сторінками лежить конверт із порушеною печаткою. Ви пам’ятаєте, хто її зламав.',
+        },
+      ],
       options: [
         { id: 'book-back', label: 'Повернутися до коробки', next: 'box' },
         { id: 'book-letter', label: 'Оглянути конверт', next: 'letter', grants: ['saw_envelope'] },
@@ -91,11 +97,18 @@ export const firstEvening: DialogueStory = {
       id: 'letter',
       speaker: 'Оповідач',
       text: 'На конверті написано: «Лео. Від Айріс Белл». Дата збігається з карткою бронювання. Печатка ціла. Що всередині, ви не знаєте.',
+      textWhen: [
+        {
+          requires: ['opened_private_letter'],
+          text: 'На конверті написано: «Лео. Від Айріс Белл». Дата збігається з карткою бронювання. Печатка вже порушена. Ви прочитали чужі слова, але не знаєте, як їх сприйняв би адресат.',
+        },
+      ],
       options: [
         { id: 'letter-back', label: 'Покласти лист назад', next: 'box' },
         {
           id: 'letter-open',
           label: 'Порушити печатку й прочитати лист',
+          unless: ['opened_private_letter'],
           next: 'opened',
           grants: ['opened_private_letter'],
         },
