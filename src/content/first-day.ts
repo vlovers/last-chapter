@@ -120,6 +120,7 @@ export const millerVisit: DialogueStory = {
         { id: 'detectives', label: 'Чому ви любите детективи?', next: 'detectives' },
         { id: 'jam', label: 'Навіщо вам порожня банка?', next: 'jam' },
         { id: 'loneliness', label: 'Як вам живеться в Беллвіку?', next: 'loneliness' },
+        { id: 'memory', label: 'Чи завжди можна довіряти спогадам?', next: 'memory' },
         { id: 'miller-order', label: 'Повернутися до вибору книжки', next: 'order' },
       ],
     },
@@ -226,6 +227,21 @@ export const millerVisit: DialogueStory = {
         { id: 'flowers-return', label: 'Схоже на комплімент', next: 'topics' },
         { id: 'flowers-order', label: 'Покажу вам детективи', next: 'order' },
       ],
+    },
+    {
+      id: 'memory',
+      speaker: 'Пані Міллер',
+      text: 'Я колись думала, що сусідка мене навмисне не привітала. А вона просто загубила окуляри. Я пам’ятала подію правильно, але причину вигадала сама.',
+      options: [
+        { id: 'memory-fact', label: '«Тобто факт і пояснення — не те саме?»', next: 'memory-answer', grants: ['miller_observation_distinguished'] },
+        { id: 'memory-return', label: '«Дякую. Повернімося до книжок»', next: 'order' },
+      ],
+    },
+    {
+      id: 'memory-answer',
+      speaker: 'Пані Міллер',
+      text: 'Саме так. Іноді ми настільки віримо у власну версію, що забуваємо запитати іншу людину. Ну що, покажете мені детективи?',
+      options: [{ id: 'memory-answer-order', label: 'Показати детективи', next: 'order' }],
     },
     {
       id: 'end',
