@@ -8,7 +8,8 @@ export const thomasVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Після обіду світло над прилавком миготить. За кілька хвилин приходить Томас із ящиком інструментів. Він витирає черевики об килимок, хоча надворі вже сухо.',
-      options: [{ id: 'greet', label: 'Привітатися й показати лампу', next: 'greet' }],
+      options: [{        { id: 'thomas-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'thomas-reflection' },
+ id: 'greet', label: 'Привітатися й показати лампу', next: 'greet' }],
     },
     {
       id: 'greet',
@@ -113,6 +114,32 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Томас закручує кришку вимикача. Світло більше не миготить. За дверима книгарні знову чути голоси перехожих, але тепер ви знаєте, що чутки — не те саме, що факти.',
       options: [],
+    },
+    {
+      id: 'thomas-reflection',
+      speaker: 'Томас',
+      text: '«Лампочку замінити просто. А от виправити те, що хтось про тебе подумав, — ні».',
+      options: [
+        { id: 'thomas-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'thomas-reflection-deep' },
+        { id: 'thomas-reflect-return', label: '«Дякую, що поділився цим»', next: 'thomas-reflection-end' },
+      ],
+    },
+    {
+      id: 'thomas-reflection-deep',
+      speaker: 'Томас',
+      text: '«Якщо я зробив щось корисне, це не означає, що мені пробачили».',
+      options: [
+        { id: 'thomas-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'thomas-reflection-end' },
+        { id: 'thomas-reflect-listen', label: '«Можна просто побути з цим»', next: 'thomas-reflection-end' },
+      ],
+    },
+    {
+      id: 'thomas-reflection-end',
+      speaker: 'Томас',
+      text: '«Можливо, іноді краще запитати, що потрібно іншому, ніж одразу братися ремонтувати».',
+      options: [
+        { id: 'thomas-reflect-finish', label: 'Повернутися до розмови', next: 'arrival', grants: ['thomas_reflected_on_responsibility'] },
+      ],
     },
   ],
 };
