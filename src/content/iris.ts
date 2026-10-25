@@ -8,7 +8,8 @@ export const irisVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Вранці до книгарні заходить жінка з тубусом для малюнків. На рукаві її пальта — краплини дощу, на пальцях — синя фарба. Вона довго дивиться на вивіску.',
-      options: [{ id: 'welcome', label: '«Доброго ранку. Шукаєте щось?»', next: 'welcome' }],
+      options: [{        { id: 'iris-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'iris-reflection' },
+ id: 'welcome', label: '«Доброго ранку. Шукаєте щось?»', next: 'welcome' }],
     },
     {
       id: 'welcome',
@@ -130,6 +131,32 @@ export const irisVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Айріс залишає на прилавку маленьку закладку з намальованим вікном. На звороті — адреса майстерні. Це не обіцянка, лише можливість продовжити розмову.',
       options: [],
+    },
+    {
+      id: 'iris-reflection',
+      speaker: 'Айріс',
+      text: '«Колись я малювала вікна, щоб уявляти життя по той бік скла».',
+      options: [
+        { id: 'iris-reflect-question', label: '«А що для тебе в цьому найважче?»', next: 'iris-reflection-deep' },
+        { id: 'iris-reflect-return', label: '«Дякую, що поділився цим»', next: 'iris-reflection-end' },
+      ],
+    },
+    {
+      id: 'iris-reflection-deep',
+      speaker: 'Айріс',
+      text: '«Не кожне питання потребує відповіді саме зараз. І не кожна відповідь належить тому, хто питає».',
+      options: [
+        { id: 'iris-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'iris-reflection-end' },
+        { id: 'iris-reflect-listen', label: '«Можна просто побути з цим»', next: 'iris-reflection-end' },
+      ],
+    },
+    {
+      id: 'iris-reflection-end',
+      speaker: 'Айріс',
+      text: '«Можна повернутися до місця й не повертатися до себе колишньої».',
+      options: [
+        { id: 'iris-reflect-finish', label: 'Повернутися до розмови', next: 'arrival', grants: ['iris_reflected_on_identity'] },
+      ],
     },
   ],
 };
