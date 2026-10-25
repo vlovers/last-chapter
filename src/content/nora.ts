@@ -137,9 +137,30 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«Я можу знайти дату. Але не можу довести, що людина тоді відчувала».',
       options: [
-        { id: 'nora-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'nora-reflection-end' },
-        { id: 'nora-reflect-listen', label: '«Можна просто побути з цим»', next: 'nora-reflection-end' },
+        { id: 'nora-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'nora-reflection-record' },
+        { id: 'nora-reflect-listen', label: '«Можна просто побути з цим»', next: 'nora-reflection-record' },
       ],
+    },
+    {
+      id: 'nora-reflection-record',
+      speaker: 'Нора',
+      text: '«У мене є запис без дати. Троє людей пам’ятають різне. Якщо виберу найгарнішу версію, вийде не архів, а казка. Але порожнє місце всіх дратує».',
+      options: [
+        { id: 'nora-record-uncertain', label: '«Залиш усі свідчення з позначкою про сумнів»', next: 'nora-reflection-uncertain', grants: ['nora_will_preserve_uncertainty'] },
+        { id: 'nora-record-consent', label: '«Запитай людей, чи хочуть вони цього запису»', next: 'nora-reflection-consent', grants: ['nora_will_seek_consent'] },
+      ],
+    },
+    {
+      id: 'nora-reflection-uncertain',
+      speaker: 'Нора',
+      text: '«Три голоси, три різні дати і чесне «не підтверджено». Можливо, негарно виглядатиме на виставці. Зате ніхто не стане декорацією для чужої впевненості».',
+      options: [{ id: 'nora-uncertain-back', label: 'Послухати далі', next: 'nora-reflection-end' }],
+    },
+    {
+      id: 'nora-reflection-consent',
+      speaker: 'Нора',
+      text: '«Я так захопилася відновленням історії, що не спитала, чи люди взагалі хочуть знову бачити свої імена на стіні».',
+      options: [{ id: 'nora-consent-back', label: 'Послухати далі', next: 'nora-reflection-end' }],
     },
     {
       id: 'nora-reflection-end',
