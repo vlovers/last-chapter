@@ -8,8 +8,9 @@ export const thomasVisit: DialogueStory = {
       id: 'arrival',
       speaker: 'Оповідач',
       text: 'Після обіду світло над прилавком миготить. За кілька хвилин приходить Томас із ящиком інструментів. Він витирає черевики об килимок, хоча надворі вже сухо.',
-      options: [{        { id: 'thomas-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'thomas-reflection' },
- id: 'greet', label: 'Привітатися й показати лампу', next: 'greet' }],
+      options: [
+        { id: 'thomas-reflection', label: 'Поговорити про те, що складно сказати вголос', next: 'thomas-reflection' },
+        { id: 'greet', label: 'Привітатися й показати лампу', next: 'greet' }],
     },
     {
       id: 'greet',
