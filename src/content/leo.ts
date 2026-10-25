@@ -211,12 +211,42 @@ export const leoVisit: DialogueStory = {
       ],
     },
     {
+      id: 'leo-reflection-platform',
+      speaker: 'Лео',
+      text: '«Одного разу я пропустив потяг, бо чекав, доки людина скаже мені, що все гаразд. Потяг пішов, а вона так нічого й не сказала. Я досі пам’ятаю не запізнення, а те, що подумав: якщо я не можу все виправити, то я їй не потрібен».',
+      options: [
+        { id: 'leo-platform-ask', label: '«Ти питав, чого вона насправді хотіла?»', next: 'leo-reflection-asking' },
+        { id: 'leo-platform-silence', label: '«Можливо, мовчання теж було відповіддю»', next: 'leo-reflection-silence' },
+      ],
+    },
+    {
+      id: 'leo-reflection-asking',
+      speaker: 'Лео',
+      text: '«Ні. Я складав план, як урятувати нашу розмову, замість того щоб її слухати. Мабуть, це найгірша звичка диспетчера: вважати, що кожна затримка має бути чиєюсь провиною».',
+      options: [{ id: 'leo-asking-continue', label: '«А якщо не шукати винного?»', next: 'leo-reflection-boundary', grants: ['leo_chose_listening'] }],
+    },
+    {
+      id: 'leo-reflection-silence',
+      speaker: 'Лео',
+      text: '«Я так боявся тиші, що говорив за двох. Може, вона просто хотіла, щоб я залишився поруч. А може, щоб пішов. Не запитавши, я ніколи цього не дізнаюся».',
+      options: [{ id: 'leo-silence-continue', label: '«Тепер ти можеш залишити іншій людині вибір»', next: 'leo-reflection-boundary', grants: ['leo_accepted_silence'] }],
+    },
+    {
+      id: 'leo-reflection-boundary',
+      speaker: 'Лео',
+      text: '«Я хочу навчитися говорити: я поруч, але рішення твоє. Не так урочисто, як звучить у книжках. Просто без прихованого прохання негайно заспокоїти мене».',
+      options: [
+        { id: 'leo-boundary-try', label: '«Можеш спробувати вже сьогодні»', next: 'leo-reflection-end', grants: ['leo_will_offer_choice'] },
+        { id: 'leo-boundary-wait', label: '«І можеш дати собі час»', next: 'leo-reflection-end', grants: ['leo_will_take_time'] },
+      ],
+    },
+    {
       id: 'leo-reflection-deep',
       speaker: 'Лео',
       text: '«Можна бути уважним і все одно не вгадати, що іншому потрібно».',
       options: [
-        { id: 'leo-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'leo-reflection-end' },
-        { id: 'leo-reflect-listen', label: '«Можна просто побути з цим»', next: 'leo-reflection-end' },
+        { id: 'leo-reflect-continue', label: '«І що ти хочеш змінити?»', next: 'leo-reflection-platform' },
+        { id: 'leo-reflect-listen', label: '«Можна просто побути з цим»', next: 'leo-reflection-platform' },
       ],
     },
     {
