@@ -40,7 +40,7 @@ describe('Narrative graph integrity', () => {
     const visited = new Set<string>();
     let foundEnding = false;
     for (let index = 0; index < queue.length && index < 1000; index++) {
-      const state = queue[index];
+      const state = queue[index]!;
       if (visited.has(state.node)) continue;
       visited.add(state.node);
       if (currentNode(story, state).options.length === 0) {
