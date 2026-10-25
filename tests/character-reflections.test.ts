@@ -47,4 +47,19 @@ describe('Optional character reflection arcs', () => {
       expect(availableOptions(story, state).some((option) => option.id === `${prefix}-reflection`)).toBe(false);
     }
   });
+  it.each([
+    ['iris', irisVisit, 'welcome', 'iris-memory-private', 'iris-private-continue', 'iris_chose_private_art'],
+    ['anna', annaVisit, 'hello', 'anna-classroom-discuss', 'anna-discussion-back', 'anna_will_invite_disagreement'],
+    ['thomas', thomasVisit, 'greet', 'thomas-workshop-fear', 'thomas-fear-back', 'thomas_admitted_fear_of_rejection'],
+    ['nora', noraVisit, 'hello', 'nora-record-consent', 'nora-consent-back', 'nora_will_seek_consent'],
+    ['eleanor', eleanorVisit, 'greet', 'eleanor-key-change', 'eleanor-change-back', 'eleanor_will_allow_change'],
+  ] as const)('%s has a playable alternate decision', (prefix, story, introduction, choice, back, flag) => {
+    let state = startDialogue(story);
+    for (const option of [introduction, `${prefix}-reflection`, `${prefix}-reflect-question`, `${prefix}-reflect-continue`, choice, back, `${prefix}-reflect-finish`]) {
+      state = selectOption(story, state, option);
+    }
+    expect(state.node).toBe(introduction);
+    expect(state.flags).toContain(flag);
+  });
+
 });
