@@ -7,9 +7,15 @@ function play(route: 'first' | 'last') {
   const values = new Map<string, string>();
   vi.stubGlobal('localStorage', {
     getItem: (key: string) => values.get(key) ?? null,
-    setItem: (key: string, value: string) => { values.set(key, value); },
-    removeItem: (key: string) => { values.delete(key); },
-    clear: () => { values.clear(); },
+    setItem: (key: string, value: string) => {
+      values.set(key, value);
+    },
+    removeItem: (key: string) => {
+      values.delete(key);
+    },
+    clear: () => {
+      values.clear();
+    },
   });
   try {
     let story = new FiveDayStory();
@@ -19,7 +25,8 @@ function play(route: 'first' | 'last') {
       const advance = view.choices.find((choice) => choice.id === '__advance');
       const finish = view.choices.find((choice) => choice.id === 'finish');
       const dialogue = view.choices.filter((choice) => !choice.id.startsWith('__'));
-      const choice = advance ?? finish ?? (route === 'first' ? dialogue[0] : dialogue[dialogue.length - 1]);
+      const choice =
+        advance ?? finish ?? (route === 'first' ? dialogue[0] : dialogue[dialogue.length - 1]);
       if (!choice) throw new Error(`Route ${route} stuck at ${story.stage} after ${step} steps`);
       const previous = story.stage;
       story.choose(choice.id);
@@ -33,7 +40,9 @@ function play(route: 'first' | 'last') {
     const saved = decodeSave(values.get(SAVE_KEY) ?? '');
     expect(saved).not.toBeNull();
     const ending = seasonEnding(saved!);
-    expect(story.open().text).toBe([ending.letter, ending.community, ending.epilogue].join('\n\n'));
+    expect(story.open().text).toBe(
+      [ending.letter, ending.community, ending.epilogue].join('\n\n'),
+    );
     return { visited, flags: saved!.flags, ending };
   } finally {
     vi.unstubAllGlobals();
