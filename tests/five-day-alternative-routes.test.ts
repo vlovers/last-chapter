@@ -3,7 +3,29 @@ import { FiveDayStory } from '../src/phaser/five-day-story';
 import { decodeSave, SAVE_KEY } from '../src/game/save';
 import { seasonEnding } from '../src/game/endings';
 
-function play(route: 'first' | 'last') {
+const expectedStages = [
+  'miller',
+  'mara',
+  'evening',
+  'complete',
+  'iris',
+  'anna',
+  'leo',
+  'day2-complete',
+  'eleanor',
+  'thomas',
+  'nora',
+  'book-club',
+  'day3-complete',
+  'day4-iris',
+  'day4-mara',
+  'day4-leo',
+  'day4-complete',
+  'day5-reading',
+  'season-complete',
+];
+
+function play(route: 'first' | 'last' | 'alternating') {
   const values = new Map<string, string>();
   vi.stubGlobal('localStorage', {
     getItem: (key: string) => values.get(key) ?? null,
@@ -21,26 +43,61 @@ function play(route: 'first' | 'last') {
     let story = new FiveDayStory();
     const visited = [story.stage];
     for (let step = 0; step < 1000 && story.stage !== 'season-complete'; step++) {
+      const before = decodeSave(values.get(SAVE_KEY) ?? '');
       const view = story.open();
       const advance = view.choices.find((choice) => choice.id === '__advance');
       const finish = view.choices.find((choice) => choice.id === 'finish');
       const dialogue = view.choices.filter((choice) => !choice.id.startsWith('__'));
       const choice =
-        advance ?? finish ?? (route === 'first' ? dialogue[0] : dialogue[dialogue.length - 1]);
+        advance ??
+        finish ??
+        (route === 'first'
+          ? dialogue[0]
+          : route === 'last'
+            ? dialogue[dialogue.length - 1]
+            : dialogue[step % 2 === 0 ? 0 : dialogue.length - 1]);
       if (!choice) throw new Error(`Route ${route} stuck at ${story.stage} after ${step} steps`);
       const previous = story.stage;
       story.choose(choice.id);
       const saved = decodeSave(values.get(SAVE_KEY) ?? '');
+      expect(saved).not.toBeNull();
       expect(saved?.stage).toBe(story.stage);
+      expect(saved?.flags).toEqual(expect.arrayContaining(before?.flags ?? []));
+      expect(new Set(saved?.flags).size).toBe(saved?.flags.length);
       if (story.stage !== previous) visited.push(story.stage);
+
+      // Compare the actual player-visible state, not just the stage identifier:
+      // a save can restore the correct day but lose available choices or clues.
+      const expectedView = story.open();
+      const expectedNotes = story.notes;
+      const expectedEvidence = story.evidence;
+      const expectedOrders = story.orders;
+      const expectedDay = story.day;
       story = new FiveDayStory();
       expect(story.stage).toBe(saved?.stage);
+      expect(story.open()).toEqual(expectedView);
+      expect(story.notes).toEqual(expectedNotes);
+      expect(story.evidence).toEqual(expectedEvidence);
+      expect(story.orders).toEqual(expectedOrders);
+      expect(story.day).toBe(expectedDay);
     }
+    expect(visited).toEqual(expectedStages);
     expect(story.stage).toBe('season-complete');
     const saved = decodeSave(values.get(SAVE_KEY) ?? '');
     expect(saved).not.toBeNull();
     const ending = seasonEnding(saved!);
     expect(story.open().text).toBe([ending.letter, ending.community, ending.epilogue].join('\n\n'));
+
+    // Starting over must not carry the previous season's decisions or receipts.
+    const firstScene = story.choose('__restart');
+    const fresh = new FiveDayStory();
+    expect(fresh.stage).toBe('miller');
+    expect(fresh.day).toBe(1);
+    expect(fresh.open()).toEqual(firstScene);
+    expect(fresh.orders).toEqual([]);
+    const reset = decodeSave(values.get(SAVE_KEY) ?? '');
+    expect(reset?.flags).toEqual([]);
+    expect(reset?.dialogue.history).toEqual([]);
     return { visited, flags: saved!.flags, ending };
   } finally {
     vi.unstubAllGlobals();
@@ -48,13 +105,15 @@ function play(route: 'first' | 'last') {
 }
 
 describe('five-day alternative dialogue routes', () => {
-  it('reaches the finale and restores every step using the earliest available option', () => {
-    const result = play('first');
-    expect(result.visited).toHaveLength(19);
+  it('restores every choice and reaches the finale using the earliest option', () => {
+    play('first');
   });
 
-  it('reaches the finale and restores every step using the latest available option', () => {
-    const result = play('last');
-    expect(result.visited).toHaveLength(19);
+  it('restores every choice and reaches the finale using the latest option', () => {
+    play('last');
+  });
+
+  it('restores every choice and reaches the finale when alternating options', () => {
+    play('alternating');
   });
 });
