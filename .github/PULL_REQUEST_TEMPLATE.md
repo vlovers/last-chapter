@@ -4,6 +4,12 @@
 - Changes made:
 - Out of scope:
 
+## Project-specific checks
+- [ ] Record exact commands for format/lint/typecheck/tests/build and relevant browser smoke tests.
+- [ ] Player-facing text is natural Ukrainian (`uk-UA`); update localization/docs when canon changes.
+- [ ] Narrative changes cover knowledge boundaries, deterministic flags, event ordering, trust and consequence regressions.
+- [ ] Asset rights/provenance and safe rendering of imported prose are addressed where applicable.
+
 ## Verification evidence
 Record commands and results (do not check a box for an unrun command).
 - [ ] Formatting / lint
