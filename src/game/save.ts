@@ -44,9 +44,16 @@ const stages: readonly ChapterStage[] = [
 
 export function encodeSave(state: ChapterState): string {
   // Reconstruct legacy completion progress before trimming the choice history.
-  const dialogue = state.dialogue.completed === undefined
-    ? restoreDialogueProgress(stageStory(state.stage), state.dialogue)
-    : state.dialogue;
+  let dialogue = state.dialogue;
+  if (dialogue.completed === undefined) {
+    try {
+      dialogue = restoreDialogueProgress(stageStory(state.stage), dialogue);
+    } catch {
+      // An old Day 3 checkpoint may still point into Nora's earlier story.
+      if (state.stage !== 'day3-complete') throw new Error('Invalid dialogue save state');
+      dialogue = restoreDialogueProgress(noraVisit, dialogue);
+    }
+  }
   const save: SavedChapter = {
     version: VERSION,
     stage: state.stage,
