@@ -94,6 +94,15 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
       if (options.has(option.id)) errors.push(`Duplicate option: ${node.id}/${option.id}`);
       options.add(option.id);
       if (!option.label.trim()) errors.push(`Empty option label: ${node.id}/${option.id}`);
+      if (new Set(option.requires ?? []).size !== (option.requires ?? []).length) {
+        errors.push(`Duplicate required flag: ${node.id}/${option.id}`);
+      }
+      if (new Set(option.unless ?? []).size !== (option.unless ?? []).length) {
+        errors.push(`Duplicate excluded flag: ${node.id}/${option.id}`);
+      }
+      if (new Set(option.grants ?? []).size !== (option.grants ?? []).length) {
+        errors.push(`Duplicate granted flag: ${node.id}/${option.id}`);
+      }
       if ((option.requires ?? []).some((flag) => (option.unless ?? []).includes(flag))) {
         errors.push(`Impossible option condition: ${node.id}/${option.id}`);
       }
