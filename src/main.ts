@@ -482,17 +482,24 @@ function render(): void {
       const line = document.createElement('p');
       line.textContent = node.speaker + ': «' + node.text + '»';
       section.append(line);
-      for (const option of availableOptions(oliverUnreadBook, oliverDialogue)) {
+      const oliverOptions = availableOptions(oliverUnreadBook, oliverDialogue);
+      for (const option of oliverOptions) {
         const button = document.createElement('button');
         button.type = 'button';
         button.textContent = option.label;
         button.addEventListener('click', () => {
           if (!oliverDialogue) return;
           oliverDialogue = selectOption(oliverUnreadBook, oliverDialogue, option.id);
-          if (availableOptions(oliverUnreadBook, oliverDialogue).length === 0) finishOliver();
           render();
         });
         section.append(button);
+      }
+      if (oliverOptions.length === 0) {
+        const done = document.createElement('button');
+        done.type = 'button';
+        done.textContent = 'Завершити розмову';
+        done.addEventListener('click', () => { finishOliver(); oliverDialogue = null; render(); });
+        section.append(done);
       }
       const leave = document.createElement('button');
       leave.type = 'button';
