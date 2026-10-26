@@ -143,6 +143,28 @@ describe('Private letter: consent and trust across days four and five', () => {
     expect(text).not.toContain('порушену печатку');
   });
 
+  it('allows a late confession on day five without inventing forgiveness', () => {
+    const state = play(
+      finalReading,
+      ['open', 'letter', 'admit-breach-now', 'admit-breach-now-back'],
+      ['saw_envelope', 'opened_private_letter'],
+    );
+    expect(state.flags).toContain('final_letter_breach_disclosed');
+    expect(state.flags).toContain('final_accepted_consequences');
+    expect(state.flags).not.toContain('final_mutual_conversation');
+    expect(choices(finalReading, state)).toContain('close');
+  });
+
+  it('does not offer the same late confession after Iris already heard it', () => {
+    const state = play(
+      finalReading,
+      ['open', 'letter'],
+      ['saw_envelope', 'opened_private_letter', 'iris_letter_breach_admitted'],
+    );
+    expect(choices(finalReading, state)).not.toContain('admit-breach-now');
+    expect(choices(finalReading, state)).toContain('repair-trust');
+  });
+
   it('keeps both day-four dialogue graphs valid', () => {
     expect(validateDialogue(irisDecision)).toEqual([]);
     expect(validateDialogue(leoDecision)).toEqual([]);
