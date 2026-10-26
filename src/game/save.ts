@@ -41,7 +41,8 @@ export function encodeSave(state: ChapterState): string {
     version: VERSION,
     stage: state.stage,
     node: state.dialogue.node,
-    flags: [...state.flags],
+    // Preserve both world-level discoveries and flags produced in the active dialogue.
+    flags: [...new Set([...state.flags, ...state.dialogue.flags])],
     history: [...state.dialogue.history],
   };
   return JSON.stringify(save);
