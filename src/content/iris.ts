@@ -15,6 +15,7 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Не знаю. Колись я тут проводила майже кожну суботу. А потім сім років не могла змусити себе зайти». Вона усміхається. «Я Айріс. Малюю книжки, які іноді ніхто не друкує».',
       options: [
+        { id: 'iris-v3-conversation', label: '«Чи має художниця пояснювати кожну свою роботу?»', next: 'iris-v3-conversation', unless: ['iris_art_boundaries_discussed'] },
         {
           id: 'iris-reflection',
           label: '«Чи обов’язково пояснювати свої малюнки?»',
@@ -226,6 +227,45 @@ export const irisVisit: DialogueStory = {
           grants: ['iris_reflected_on_identity'],
         },
       ],
+    },
+    {
+      id: 'iris-v3-conversation',
+      speaker: 'Айріс',
+      text: '«Я малюю вікна. Люди бачать світло й відразу питають, хто живе за склом. Але я не знаю. І не хочу вигадувати чуже життя».',
+      options: [
+        { id: 'iris-v3-ask', label: '«Тоді чому саме вікна?»', next: 'iris-v3-question' },
+        { id: 'iris-v3-short', label: '«Можемо не говорити про це»', next: 'iris-v3-end' },
+      ],
+    },
+    {
+      id: 'iris-v3-question',
+      speaker: 'Айріс',
+      text: '«Бо світло справжнє. Але моє право його намалювати не дає мені права розповідати, що відчуває людина всередині».',
+      options: [
+        { id: 'iris-v3-challenge', label: '«А якщо глядач упізнає власний дім?»', next: 'iris-v3-counter' },
+        { id: 'iris-v3-listen', label: '«Не кожна картина потребує пояснення»', next: 'iris-v3-end' },
+      ],
+    },
+    {
+      id: 'iris-v3-counter',
+      speaker: 'Айріс',
+      text: '«Тоді я вислухаю його. Не обов’язково знищу малюнок, але точно не назву його реакцію помилкою. Я теж хочу, щоб мене слухали».',
+      options: [
+        { id: 'iris-v3-follow', label: '«Що ти хочеш показати зараз?»', next: 'iris-v3-choice' },
+        { id: 'iris-v3-pause', label: '«Можемо залишити це питання відкритим»', next: 'iris-v3-end' },
+      ],
+    },
+    {
+      id: 'iris-v3-choice',
+      speaker: 'Айріс',
+      text: '«Нову роботу. Без підпису, який пояснює моє минуле. Нехай люди сперечаються про світло, а не про те, чому я колись поїхала».',
+      options: [{ id: 'iris-v3-accept', label: '«Це твоя історія»', next: 'iris-v3-end' }],
+    },
+    {
+      id: 'iris-v3-end',
+      speaker: 'Айріс',
+      text: '«Дякую. Тут можна говорити про мистецтво й не перетворювати художницю на загадку».',
+      options: [{ id: 'iris-v3-return', label: 'Повернутися до інших тем', next: 'welcome', grants: ['iris_art_boundaries_discussed'] }],
     },
   ],
 };
