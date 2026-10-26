@@ -96,6 +96,15 @@ describe('V4 authored art boundaries and provenance', () => {
         lines.length = 0;
         return this;
       },
+      fillStyle() {
+        return this;
+      },
+      fillRect() {
+        return this;
+      },
+      setAlpha() {
+        return this;
+      },
       lineStyle() {
         return this;
       },
@@ -116,8 +125,21 @@ describe('V4 authored art boundaries and provenance', () => {
       },
     };
     let reduced = false;
+    let layers = 0;
     const atmosphere = createAtmosphere(
-      { add: { graphics: () => rain } },
+      {
+        add: {
+          graphics: () =>
+            layers++ === 0
+              ? rain
+              : {
+                  ...rain,
+                  clear() {
+                    return this;
+                  },
+                },
+        },
+      },
       { halo: light, readingGlow: light, steam: light },
       () => reduced,
     );

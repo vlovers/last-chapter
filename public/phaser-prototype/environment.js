@@ -177,9 +177,9 @@ export function drawEnvironment(scene) {
   }
   // Contact occlusion is below sprites and furniture. Short, dark foot contact + soft apron.
   for (const [x, y, w, h] of [
-    [70, 309, 180, 8],
-    [313, 283, 104, 10],
-    [457, 297, 54, 10],
+    [92, 291, 128, 6],
+    [329, 281, 72, 6],
+    [466, 299, 36, 5],
     [541, 199, 30, 8],
     [546, 314, 58, 7],
     [33, 303, 44, 5],
@@ -199,116 +199,81 @@ export function drawEnvironment(scene) {
     draw(painter(object));
     return object;
   };
-  // Counter: thick bevelled top, glazed panels, moulding and worn brass handles.
-  piece(160, 261, 316, (f) => {
-    f(-90, -18, 180, 19, 0x543d30);
-    f(-90, -18, 180, 3, paper);
-    f(-88, -15, 176, 13, 0xb68b5b);
-    f(-85, -12, 170, 8, 0xc99e6c);
-    f(-90, -2, 180, 3, 0x61432f);
-    f(-86, 1, 172, 48, wood);
-    for (const x of [-79, -24, 31]) {
-      f(x, 7, 48, 34, 0x533c30);
-      f(x + 2, 9, 44, 29, 0xa0754c);
-      f(x + 5, 12, 38, 24, 0x80573c);
-      f(x + 5, 12, 1, 24, 0xba8a55);
-      f(x + 19, 16, 8, 2, 0x332d29);
-      f(x + 20, 16, 6, 1, honey);
+  // Native 1px geometry: a 40px person, 42px counter, 36px chair.
+  piece(156, 253, 295, (f) => {
+    f(-64, 0, 128, 11, ink);
+    f(-64, -2, 128, 3, paper);
+    f(-62, 1, 124, 8, honey);
+    f(-59, 11, 118, 28, wood);
+    for (const x of [-54, -17, 20]) {
+      f(x, 14, 33, 22, 0x533c30);
+      f(x + 2, 16, 29, 18, 0xa0754c);
+      f(x + 12, 19, 7, 2, honey);
     }
-    f(-86, 45, 172, 5, honey);
-    f(-86, 50, 172, 5, 0x3d302b);
-    f(-79, -11, 28, 1, 0x8e6847);
-    f(44, -7, 29, 1, 0xab7d50);
-    book(f, -67, -23, 32, 0x426563, 5);
-    book(f, -63, -29, 31, 0x996354, 5);
-    book(f, -68, -34, 34, 0xb59b71, 4);
-    // A paper roll, order ledger, fountain pen, register, mug and bell.
-    f(-21, -23, 25, 8, 0xc7ad82);
-    f(-19, -25, 23, 4, paper);
-    f(-18, -24, 2, 1, 0x977455);
-    f(6, -24, 26, 9, paper);
-    f(18, -24, 1, 9, 0xac8d68);
-    for (let i = 0; i < 3; i++) {
-      f(9, -22 + i * 2, 6, 1, 0xb39b76);
-      f(22, -22 + i * 2, 7, 1, 0xb39b76);
-    }
-    f(35, -23, 1, 8, ink);
-    f(35, -24, 1, 2, honey);
-    f(45, -24, 19, 9, 0x364a45);
-    f(47, -29, 15, 7, 0x60756a);
-    f(49, -27, 10, 3, 0xc3c19b);
-    f(48, -20, 2, 1, paper);
-    f(52, -20, 2, 1, paper);
-    f(56, -20, 2, 1, paper);
-    f(67, -23, 10, 8, 0x527878);
-    f(68, -25, 8, 2, paper);
-    f(77, -22, 3, 5, honey);
-    f(78, -21, 1, 3, 0x544331);
-    f(-33, -20, 9, 4, honey);
-    f(-31, -22, 5, 2, honey);
-    f(-29, -24, 1, 2, paper);
+    f(-59, 39, 118, 3, ink);
+    book(f, -48, -7, 24, 0x426563);
+    book(f, -46, -12, 23, 0x996354);
+    f(-10, -8, 24, 9, paper);
+    f(1, -8, 1, 9, 0xac8d68);
+    for (let i = 0; i < 3; i++) f(-7, -6 + i * 2, 6, 1, 0xb39b76);
+    f(23, -10, 17, 11, 0x364a45);
+    f(25, -14, 13, 6, 0x60756a);
+    f(27, -13, 8, 3, paper);
+    f(47, -6, 8, 7, 0x6e8880);
   });
-  // Reading table, open book with bookmark, pencil, saucer and a small dried flower.
-  piece(365, 261, 291, (f) => {
-    f(-43, 2, 8, 28, 0x4b382d);
-    f(35, 2, 8, 28, 0x4b382d);
-    f(-42, 10, 2, 18, 0xb18a55);
-    f(36, 10, 2, 18, 0xb18a55);
-    f(-37, 18, 74, 4, 0x654831);
-    f(-52, -17, 104, 23, 0x593e30);
-    f(-50, -17, 100, 3, paper);
-    f(-50, -14, 100, 16, honey);
-    f(-47, -11, 94, 11, 0xb18352);
-    f(-49, 3, 98, 3, 0x745035);
-    // Small easel carries the day's featured book, with a brass bookmark tab.
-    f(1, -32, 18, 18, 0x3d514a);
-    f(3, -34, 14, 19, 0x69758c);
-    f(4, -33, 2, 17, 0x9aa4ad);
-    f(8, -30, 6, 1, paper);
-    f(9, -27, 4, 6, 0xd0b88a);
-    f(12, -34, 2, 5, honey);
-    f(0, -15, 20, 2, wood);
-    f(2, -13, 2, 3, wood);
-    f(16, -13, 2, 3, wood);
-    f(-37, -15, 33, 13, 0x475f58);
-    f(-35, -16, 29, 12, paper);
-    f(-21, -16, 1, 12, 0xa28a65);
+  piece(365, 254, 286, (f) => {
+    f(-30, 7, 5, 24, ink);
+    f(25, 7, 5, 24, ink);
+    f(-36, 0, 72, 12, 0x593e30);
+    f(-35, 0, 70, 2, paper);
+    f(-34, 2, 68, 7, honey);
+    f(-33, 10, 66, 2, wood);
+    f(-22, -8, 26, 9, paper);
+    f(-9, -8, 1, 9, 0xa28a65);
     for (let i = 0; i < 3; i++) {
-      f(-32, -13 + i * 3, 8, 1, 0xbca582);
-      f(-17, -13 + i * 3, 8, 1, 0xbca582);
+      f(-19, -6 + i * 2, 7, 1, 0xbca582);
+      f(-5, -6 + i * 2, 6, 1, 0xbca582);
     }
-    f(-12, -5, 2, 6, 0xa95f4e);
-    f(2, -9, 1, 9, 0x635239);
-    f(13, -6, 13, 3, 0xe4c994);
-    f(16, -11, 7, 6, 0x6e8880);
-    f(17, -12, 5, 1, paper);
-    f(35, -10, 6, 8, 0x76856e);
-    f(37, -20, 1, 10, 0x84986c);
-    f(34, -22, 6, 3, 0xc6a877);
+    f(15, -13, 13, 14, 0x69758c);
+    f(17, -11, 1, 10, paper);
+    f(21, -9, 4, 1, honey);
   });
-  // Upholstered armchair: rounded stepped silhouette, piping and a knitted throw.
-  piece(484, 286, 305, (f) => {
-    f(-23, -43, 46, 3, ink);
-    f(-26, -40, 52, 39, ink);
-    f(-22, -40, 44, 34, 0x355e5b);
-    f(-19, -38, 38, 29, 0x56847a);
-    f(-17, -36, 1, 23, 0x8ca58c);
-    f(17, -36, 1, 23, 0x294c4b);
-    f(-28, -14, 10, 21, 0x9c6e53);
-    f(18, -14, 10, 21, 0x9c6e53);
-    f(-27, -16, 8, 3, 0xd1a57a);
-    f(19, -16, 8, 3, 0xd1a57a);
-    f(-19, -9, 38, 14, 0x6e9482);
-    f(-17, -8, 34, 2, 0x9eb095);
-    f(-18, 5, 36, 3, 0x3b5c50);
-    f(-23, 8, 7, 11, 0x4e382d);
-    f(16, 8, 7, 11, 0x4e382d);
-    f(-11, -31, 24, 20, 0xd9be87);
-    f(-9, -29, 20, 16, 0xead5a4);
-    f(-7, -26, 16, 1, 0xb79b70);
-    // Throw hangs over the right arm, within the chair's solid footprint.
-    for (let i = 0; i < 5; i++) f(12 + i * 2, -34 + i * 3, 6, 25, i % 2 ? 0xa57964 : 0xc09b76);
-    for (let i = 0; i < 4; i++) f(16 + i * 3, 6, 1, 4, paper);
+  piece(484, 282, 303, (f) => {
+    f(-16, -15, 32, 27, ink);
+    f(-14, -14, 28, 22, 0x56847a);
+    f(-12, -12, 24, 15, 0x6e9482);
+    f(-11, -11, 1, 12, 0x9eb095);
+    f(-18, 2, 6, 16, 0x9c6e53);
+    f(12, 2, 6, 16, 0x9c6e53);
+    f(-17, 1, 5, 2, honey);
+    f(12, 1, 5, 2, honey);
+    f(-12, 8, 24, 9, 0x6e9482);
+    f(-13, 18, 4, 3, ink);
+    f(9, 18, 4, 3, ink);
+    f(-8, -6, 15, 12, 0xd9be87);
+    f(-6, -4, 11, 8, 0xead5a4);
+    for (let i = 0; i < 3; i++) f(9 + i * 2, -4 + i * 2, 3, 17, i % 2 ? paper : 0xa57964);
+  });
+  // Original Devon Rex tree: cubby, scratching post, three staggered platforms.
+  piece(439, 192, 201, (f) => {
+    f(-17, -4, 34, 12, 0x58483d);
+    f(-16, -5, 32, 3, honey);
+    f(-13, -27, 26, 23, 0x9b815f);
+    f(-11, -25, 22, 19, 0xb39c77);
+    f(-6, -21, 12, 15, 0x3c3c3b);
+    f(-4, -9, 8, 3, 0x7b8e80);
+    f(6, -62, 5, 36, 0xc0a47b);
+    for (let y = -61; y < -27; y += 3) f(6, y, 5, 1, 0x8c7255);
+    f(-16, -43, 25, 4, wood);
+    f(-15, -44, 23, 2, 0xc3b294);
+    f(-4, -63, 24, 4, wood);
+    f(-3, -66, 22, 4, 0x799082);
+    f(-10, -42, 3, 15, 0x8c7255);
+  });
+  piece(513, 194, 198, (f) => {
+    f(-10, -3, 20, 4, 0x697d82);
+    f(-8, -5, 16, 3, paper);
+    f(-6, -5, 12, 2, 0x9c7856);
   });
   piece(575, 314, 322, (f) => {
     f(-29, -25, 58, 30, ink);
@@ -446,7 +411,7 @@ export function drawEnvironment(scene) {
     f(276 - i * 2, y, 34 + i * 3, 4, 0x86a3ab, 0.06 - i * 0.008);
     f(326, y, 42 + i * 3, 4, 0x86a3ab, 0.06 - i * 0.008);
   }
-  const parcel = piece(113, 229, 318, (f) => {
+  const parcel = piece(170, 246, 296, (f) => {
     f(0, -2, 29, 9, 0x96744b);
     f(0, -2, 29, 5, 0xddc395);
     f(1, -2, 27, 1, paper);
@@ -456,9 +421,9 @@ export function drawEnvironment(scene) {
   }).setVisible(false);
   const steam = scene.add.graphics().setDepth(318).setAlpha(0.2);
   steam.lineStyle(1, paper, 1);
-  steam.lineBetween(230, 234, 228, 229);
-  steam.lineBetween(228, 229, 230, 225);
-  steam.lineBetween(235, 231, 233, 226);
+  steam.lineBetween(205, 247, 203, 242);
+  steam.lineBetween(203, 242, 205, 238);
+  steam.lineBetween(210, 244, 208, 239);
   // Architectural foreground frames the room without obstructing the walkable aisle.
   const front = scene.add.graphics().setDepth(350);
   const f = painter(front);

@@ -1,4 +1,11 @@
-import { initialFrank, tickFrank, reactFrank } from './frank-behavior.js';
+import {
+  initialFrank,
+  tickFrank,
+  reactFrank,
+  FRANK_SAVE_KEY,
+  frankMemory,
+  restoreFrankMemory,
+} from './frank-behavior.js';
 
 // Original native-resolution pixel art, drawn at the same density as the room.
 // Devon Rex silhouette: slender body, wedge-shaped face, oversized ears, wavy coat.
@@ -7,10 +14,18 @@ export function drawFrank(r, activity, phase, facing) {
     coat = 0x898a96,
     light = 0xb3afb9,
     pink = 0xc8959f;
-  const rect = (x, y, w, h, c) => r(facing < 0 ? -x - w : x, y, w, h, c);
-  const sleeping = activity === 'sleeping';
+  // Author compact native cat geometry; the renderer still paints only whole pixels.
+  const rect = (x, y, w, h, c) =>
+    r(
+      Math.round((facing < 0 ? -x - w : x) * 0.7),
+      Math.round(y * 0.7),
+      Math.max(1, Math.round(w * 0.7)),
+      Math.max(1, Math.round(h * 0.7)),
+      c,
+    );
+  const sleeping = activity === 'sleeping' || activity === 'resting';
   const stretch = activity === 'stretching';
-  const walk = ['walking', 'approaching', 'returning'].includes(activity);
+  const walk = ['walking', 'approaching', 'returning', 'climbing', 'descending'].includes(activity);
   const breath = phase === 1 && !walk ? 1 : 0;
   // Tail has a stepped curve and its own quiet swish.
   rect(-17, -7, 8, 3, ink);
@@ -60,6 +75,14 @@ export function drawFrank(r, activity, phase, facing) {
   rect(5, hy + 4, 3, 2, phase === 3 ? ink : 0xdfc17c);
   rect(12, hy + 4, 3, 2, phase === 3 ? ink : 0xdfc17c);
   rect(9, hy + 7, 2, 1, pink);
+  if (activity === 'eating') {
+    rect(12, -7, 6, 4, coat);
+    rect(13, -4, 4, 2, pink);
+  }
+  if (activity === 'playing') {
+    rect(12, -6, 7 + phase, 3, light);
+    rect(18 + phase, -3, 9, 1, 0xb17c67);
+  }
   if (activity === 'grooming') {
     rect(11, -13 - (phase % 2), 3, 7, light);
     rect(9, -17, 3, 2, pink);
@@ -71,13 +94,37 @@ export function drawFrank(r, activity, phase, facing) {
 }
 export function createFrank(scene) {
   const state = initialFrank();
+  try {
+    Object.assign(state, restoreFrankMemory(localStorage.getItem(FRANK_SAVE_KEY)));
+  } catch {
+    /* optional storage */
+  }
+  let disposed = false;
+  const persist = () => {
+    try {
+      localStorage.setItem(FRANK_SAVE_KEY, frankMemory(state));
+    } catch {
+      /* optional */
+    }
+  };
+  const reset = () => {
+    Object.assign(state, initialFrank());
+    persist();
+  };
+  const saveOnHide = () => {
+    if (document.hidden) persist();
+  };
+  window.addEventListener('last-chapter:new-game', reset);
+  document.addEventListener('visibilitychange', saveOnHide);
   const shadow = scene.add.ellipse(state.x, state.y - 1, 28, 7, 0x25232d, 0.25);
   const sprite = scene.add.graphics();
   let lastFrame = '';
   const render = (reduced) => {
     const phase = reduced ? 0 : Math.floor(state.elapsed / (state.path.length ? 160 : 850)) % 4;
     const frame = `${state.activity}:${phase}:${state.facing}`;
-    sprite.setPosition(Math.round(state.x), Math.round(state.y)).setDepth(state.y);
+    sprite
+      .setPosition(Math.round(state.x), Math.round(state.y - state.elevation))
+      .setDepth(state.elevation ? 202 : state.y);
     shadow.setPosition(Math.round(state.x), Math.round(state.y - 1)).setDepth(state.y - 0.5);
     if (lastFrame === frame) return;
     lastFrame = frame;
@@ -97,13 +144,21 @@ export function createFrank(scene) {
     state,
     sprite,
     update(delta, player, options) {
+      if (disposed) return;
       tickFrank(state, delta, player, options);
       render(options.reduced);
     },
     react(action, player) {
-      return reactFrank(state, action, player);
+      const result = reactFrank(state, action, player);
+      persist();
+      return result;
     },
     destroy() {
+      if (disposed) return;
+      disposed = true;
+      persist();
+      window.removeEventListener('last-chapter:new-game', reset);
+      document.removeEventListener('visibilitychange', saveOnHide);
       sprite.destroy();
       shadow.destroy();
     },

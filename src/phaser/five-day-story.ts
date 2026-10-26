@@ -1,4 +1,10 @@
 import {
+  assessRecommendation,
+  requestContext,
+  restoreService,
+  SERVICE_KEY,
+} from '../game/recommendation';
+import {
   advanceChapter,
   advanceSecondDay,
   advanceToLeo,
@@ -89,6 +95,7 @@ const dayOf = (stage: ChapterStage): number =>
 
 export class FiveDayStory {
   private chapter: ChapterState;
+  private service = restoreService('');
   constructor() {
     let saved: ChapterState | null = null;
     try {
@@ -97,6 +104,11 @@ export class FiveDayStory {
       /* Storage may be blocked. */
     }
     this.chapter = saved ?? startChapter();
+    try {
+      this.service = restoreService(localStorage.getItem(SERVICE_KEY) ?? '');
+    } catch {
+      /* optional */
+    }
   }
   get stage(): ChapterStage {
     return this.chapter.stage;
@@ -136,6 +148,58 @@ export class FiveDayStory {
     this.chapter = collectClue(this.chapter, id);
     this.persist();
     return this.evidence.find((clue) => clue.id === id);
+  }
+  get recommendationChoices() {
+    const node = currentNode(stageStory(this.stage), this.chapter.dialogue);
+    if (!(
+      (['miller', 'mara'].includes(this.stage) && node.id === 'order') ||
+      (this.stage === 'anna' && node.id === 'books')
+    ))
+      return [];
+    return availableOptions(stageStory(this.stage), this.chapter.dialogue).flatMap((option) => {
+      const bookId =
+        this.stage === 'anna'
+          ? ({ maps: 'roads', mystery: 'witnesses' } as Record<string, string>)[option.id]
+          : option.id;
+      return this.catalog().some((book) => book.id === bookId) ? [{ id: option.id, bookId }] : [];
+    });
+  }
+  get request() {
+    if (!this.recommendationChoices.length) return null;
+    const context = requestContext(this.stage);
+    return context
+      ? { ...context, asked: this.service.asked.includes(this.stage), customer: this.visitor }
+      : null;
+  }
+  clarifyRequest() {
+    if (!this.request) return;
+    this.service.asked = [...new Set([...this.service.asked, this.stage])];
+    this.persistService();
+  }
+  recommend(bookId: string) {
+    if (!this.request) return null;
+    const reaction = assessRecommendation(this.stage, bookId);
+    if (!reaction) return null;
+    const choice = this.recommendationChoices.find((option) => option.bookId === bookId);
+    this.service.attempts = [...this.service.attempts, { stage: this.stage, book: bookId }].slice(
+      -30,
+    );
+    this.persistService();
+    if (choice) this.choose(choice.id);
+    if (typeof window !== 'undefined')
+      window.dispatchEvent(
+        new CustomEvent('last-chapter:recommendation', {
+          detail: { bookId, accepted: Boolean(choice), text: reaction.text },
+        }),
+      );
+    return { ...reaction, accepted: Boolean(choice) };
+  }
+  private persistService() {
+    try {
+      localStorage.setItem(SERVICE_KEY, JSON.stringify(this.service));
+    } catch {
+      /* optional */
+    }
   }
   get orders() {
     return completedOrders(this.chapter);
@@ -178,9 +242,16 @@ export class FiveDayStory {
     const story = stageStory(this.stage);
     const node = currentNode(story, this.chapter.dialogue);
     const choices = availableOptions(story, this.chapter.dialogue).map((option) => {
-      const book = ['miller', 'mara'].includes(this.stage)
-        ? bookForChoice(this.stage as 'miller' | 'mara', node.id, option.id)
-        : undefined;
+      const book =
+        this.stage === 'anna' && node.id === 'books'
+          ? this.catalog().find(
+              (b) =>
+                b.id ===
+                ({ maps: 'roads', mystery: 'witnesses' } as Record<string, string>)[option.id],
+            )
+          : ['miller', 'mara'].includes(this.stage)
+            ? bookForChoice(this.stage as 'miller' | 'mara', node.id, option.id)
+            : undefined;
       return {
         id: option.id,
         label: option.label,
@@ -205,6 +276,7 @@ export class FiveDayStory {
       speaker: node.speaker,
       text: node.text,
       choices,
+      canRecommend: this.recommendationChoices.length > 0,
       portrait: member?.id === 'mara' ? '/art/bookshop/mara.svg' : (member?.portrait ?? ''),
     };
   }
@@ -228,6 +300,10 @@ export class FiveDayStory {
       this.chapter = chooseChapterOption(this.chapter, id);
     }
     this.persist();
+    if (restarting) {
+      this.service = restoreService('');
+      this.persistService();
+    }
     if (restarting && typeof window !== 'undefined')
       window.dispatchEvent(new Event('last-chapter:new-game'));
     return this.open();
