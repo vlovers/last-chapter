@@ -22,10 +22,10 @@ describe('five-day Bellwick encounter orchestration', () => {
 
   it('does not reveal a future encounter or reopen a completed one', () => {
     for (const scene of bellwickSchedule) {
-      expect(bellwickAvailable(scene.day - 1, []).some((item) => item.id === scene.id)).toBe(false);
-      expect(bellwickAvailable(scene.day, [scene.id]).some((item) => item.id === scene.id)).toBe(
-        false,
-      );
+      const earlier = bellwickAvailable(scene.day - 1, []);
+      expect(earlier.some((item) => item.id === scene.id)).toBe(false);
+      const completed = bellwickAvailable(scene.day, [scene.id]);
+      expect(completed.some((item) => item.id === scene.id)).toBe(false);
     }
   });
 
