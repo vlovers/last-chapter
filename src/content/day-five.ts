@@ -42,6 +42,13 @@ export const finalReading: DialogueStory = {
       ],
       options: [
         {
+          id: 'final-iris-eleanor-option',
+          label: 'Подивитися, як Айріс та Елеонора облаштовують виставку',
+          next: 'final-iris-eleanor',
+          requires: ['iris_art_boundaries_discussed', 'eleanor_change_discussed'],
+          unless: ['final_iris_eleanor_heard'],
+        },
+        {
           id: 'final-couple-anna-thomas-option',
           label: 'Побачити, як Анна й Томас обирають книжку',
           next: 'final-couple-anna-thomas',
@@ -1026,6 +1033,33 @@ export const finalReading: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Вони залишаються біля полиці, сперечаючись про обкладинку. Цього разу ніхто не поспішає перемогти в суперечці.',
       options: [{ id: 'final-at-close-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_anna_thomas_heard'] }],
+    },
+    {
+      id: 'final-iris-eleanor',
+      speaker: 'Елеонора',
+      text: '«Раніше тут висіли портрети засновників. Я знала кожне ім’я. Тепер Айріс принесла малюнки вікон, і я не знаю, кому вони належать». Вона трохи відступає, щоб побачити всю стіну.',
+      options: [
+        { id: 'final-ie-ask', label: '«Вам бракує старих портретів?»', next: 'final-iris-eleanor-answer' },
+        { id: 'final-ie-space', label: 'Залишити їх облаштовувати виставку', next: 'final-ie-close' },
+      ],
+    },
+    {
+      id: 'final-iris-eleanor-answer',
+      speaker: 'Елеонора',
+      text: '«Так. І водночас мені подобається ця стіна. Дивно, правда? Можна сумувати за минулим і не вимагати його повернення».',
+      options: [{ id: 'final-ie-iris', label: 'Послухати Айріс', next: 'final-iris-eleanor-iris' }],
+    },
+    {
+      id: 'final-iris-eleanor-iris',
+      speaker: 'Айріс',
+      text: '«Я можу підписати назви картин, але не хочу підписувати чужі життя. Якщо хтось упізнає своє вікно, він сам вирішить, чи говорити про це». Елеонора киває: «Тоді залишимо місце і для тиші».',
+      options: [{ id: 'final-ie-done', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_iris_eleanor_heard'] }],
+    },
+    {
+      id: 'final-ie-close',
+      speaker: 'Оповідач',
+      text: 'Ти відходиш. На стіні поруч із новими малюнками залишається одна стара фотографія книгарні. Ніхто не мусить обирати між пам’яттю та майбутнім.',
+      options: [{ id: 'final-ie-close-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_iris_eleanor_heard'] }],
     },
     {
       id: 'end',
