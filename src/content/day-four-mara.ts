@@ -30,7 +30,55 @@ export const maraDecision: DialogueStory = {
           requires: ['mara_discussed_forgiveness'],
         },
         { id: 'future', label: '«Чого ти сама хочеш цього року?»', next: 'future' },
+        {
+          id: 'mara-own-story',
+          label: '«А як виглядав би фінал історії, написаний тобою?»',
+          next: 'mara-own-story',
+          unless: ['mara_day_four_own_story_heard'],
+        },
         { id: 'finish', label: 'Побажати Марі гарного вечора', next: 'end' },
+      ],
+    },
+    {
+      id: 'mara-own-story',
+      speaker: 'Мара',
+      text: '«У дитинстві я думала, що щасливий кінець — це коли тебе нарешті обирають. Тепер мене лякає інше: раптом я так старанно чекаю чужого вибору, що забуваю про свій?»',
+      options: [
+        {
+          id: 'mara-own-story-work',
+          label: '«Що ти зробила б, якби не мусила всім подобатися?»',
+          next: 'mara-own-story-choice',
+          grants: ['mara_day_four_chose_own_time'],
+        },
+        {
+          id: 'mara-own-story-love',
+          label: '«Чого ти хочеш від стосунків, окрім певності?»',
+          next: 'mara-own-story-choice',
+          grants: ['mara_day_four_named_own_needs'],
+        },
+      ],
+    },
+    {
+      id: 'mara-own-story-choice',
+      speaker: 'Мара',
+      text: '«Я хочу навчитися казати це вголос, навіть якщо голос тремтить».',
+      textWhen: [
+        {
+          requires: ['mara_day_four_chose_own_time'],
+          text: '«Я б закрила пекарню вчасно й пішла дивитися на річку. Без провини, що хтось залишився без круасана. Звучить смішно, але я справді цього хочу».',
+        },
+        {
+          requires: ['mara_day_four_named_own_needs'],
+          text: '«Я хочу, щоб мене слухали, коли я кажу “ні”. І щоб моє “так” не було нагородою за терпіння. Мабуть, із цього й починається любов».',
+        },
+      ],
+      options: [
+        {
+          id: 'mara-own-story-back',
+          label: 'Повернутися до розмови',
+          next: 'greet',
+          grants: ['mara_day_four_own_story_heard'],
+        },
       ],
     },
     {
