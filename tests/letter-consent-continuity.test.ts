@@ -102,6 +102,47 @@ describe('Private letter: consent and trust across days four and five', () => {
     expect(choices(finalReading, state)).toContain('close');
   });
 
+  it('narrates an admitted opened letter even when Leo and Mara have their own callback', () => {
+    const state = play(
+      finalReading,
+      ['open', 'letter'],
+      [
+        'saw_envelope',
+        'opened_private_letter',
+        'iris_letter_breach_admitted',
+        'leo_day_four_chose_honesty',
+        'mara_day_four_named_own_needs',
+      ],
+    );
+    const text = currentNode(finalReading, state).text;
+    expect(text).toContain('порушену печатку');
+    expect(text).toContain('Айріс знає');
+    expect(text).not.toContain('непорушен');
+  });
+
+  it('does not invent an unopened envelope after a concealed breach', () => {
+    const state = play(
+      finalReading,
+      ['open', 'letter'],
+      ['saw_envelope', 'opened_private_letter', 'leo_day_four_chose_honesty', 'mara_day_four_named_own_needs'],
+    );
+    const text = currentNode(finalReading, state).text;
+    expect(text).toContain('Печатка');
+    expect(text).toContain('порушена');
+    expect(text).not.toContain('досі запечатаний');
+  });
+
+  it('keeps an untouched envelope private even when Leo and Mara discuss the future', () => {
+    const state = play(
+      finalReading,
+      ['open', 'letter'],
+      ['saw_envelope', 'leo_day_four_chose_honesty', 'mara_day_four_named_own_needs'],
+    );
+    const text = currentNode(finalReading, state).text;
+    expect(text).toContain('Старий конверт');
+    expect(text).not.toContain('порушену печатку');
+  });
+
   it('keeps both day-four dialogue graphs valid', () => {
     expect(validateDialogue(irisDecision)).toEqual([]);
     expect(validateDialogue(leoDecision)).toEqual([]);
