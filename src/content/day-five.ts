@@ -42,6 +42,13 @@ export const finalReading: DialogueStory = {
       ],
       options: [
         {
+          id: 'chapter-reckoning',
+          label: 'Поговорити з гостями про знайдену сторінку',
+          next: 'chapter-reckoning',
+          requires: ['missing_chapter_discussed'],
+          unless: ['chapter_reckoning_done'],
+        },
+        {
           id: 'final-iris-eleanor-option',
           label: 'Подивитися, як Айріс та Елеонора облаштовують виставку',
           next: 'final-iris-eleanor',
@@ -1155,6 +1162,72 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до гостей',
           next: 'gathering',
           grants: ['final_anna_thomas_heard'],
+        },
+      ],
+    },
+    {
+      id: 'chapter-reckoning',
+      speaker: 'Пані Міллер',
+      text: '«То це правда, що знайшли новий розділ?» Міллер ставить чашку на блюдце. «Я не вимагаю читати. Просто питаю». Елеонора з іншого кінця столу бурчить: «Ти ніколи не просто питаєш».',
+      textWhen: [
+        {
+          requires: ['missing_chapter_false_claim'],
+          text: '«Ти ж казав, що це зізнання Генрі!» Міллер підвищує голос. Айріс закриває альбом. «Він цього не знає. Там один аркуш без підпису». У книгарні стає незручно тихо.',
+        },
+        {
+          requires: ['missing_chapter_hidden'],
+          text: '«Кажуть, ти щось знайшов і сховав». Міллер нахиляється ближче. «Не дивись так. У Беллвіку шухляди мають вуха».',
+        },
+        {
+          requires: ['missing_chapter_copied'],
+          text: 'Елеонора кладе на стіл копію аркуша. «Папір старий. А от чи написав це Генрі — поки не знаємо». Міллер уже дістала окуляри, але Елеонора накриває текст долонею.',
+        },
+      ],
+      options: [
+        {
+          id: 'chapter-public',
+          label: 'Прочитати уривок уголос',
+          next: 'chapter-reckoning-result',
+          grants: ['chapter_publicly_read'],
+        },
+        {
+          id: 'chapter-private',
+          label: 'Залишити сторінку для окремого розслідування',
+          next: 'chapter-reckoning-result',
+          grants: ['chapter_kept_private'],
+        },
+        {
+          id: 'chapter-blame',
+          label: 'Заявити, що Елеонора приховувала рукопис',
+          next: 'chapter-reckoning-result',
+          grants: ['chapter_accused_eleanor'],
+        },
+      ],
+    },
+    {
+      id: 'chapter-reckoning-result',
+      speaker: 'Оповідач',
+      text: 'У сусідній кімнаті хтось сміється з історії про невдале побачення. Френк стрибає на порожній стілець. Беллвік не зупиняється через одну сторінку.',
+      textWhen: [
+        {
+          requires: ['chapter_accused_eleanor'],
+          text: '«Ти можеш підозрювати мене, — каже Елеонора, — але при всіх називати винною без доказів — інша справа». Вона знімає пальто зі спинки стільця й іде раніше. Міллер проводить її поглядом.',
+        },
+        {
+          requires: ['chapter_publicly_read'],
+          text: 'Ви читаєте уривок. Біля вікна хтось тихо питає, хто такий Генрі. Міллер каже: «Тут усе не так було». Айріс просить не вписувати її ім’я в жодну версію історії.',
+        },
+        {
+          requires: ['chapter_kept_private'],
+          text: '«Шкода», — каже Міллер, але бере ще одну булочку. Елеонора киває й не розпитує. Айріс повертається до своїх малюнків. Після читання ви все ще можете розбиратися з рукописом.',
+        },
+      ],
+      options: [
+        {
+          id: 'chapter-reckoning-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['chapter_reckoning_done'],
         },
       ],
     },
