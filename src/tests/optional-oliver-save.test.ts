@@ -23,6 +23,22 @@ describe('optional Oliver save compatibility', () => {
     expect(restored.dialogue.history).toEqual(['oliver-unread-play']);
   });
 
+  it('rejects an invented dialogue path even if the destination node exists', () => {
+    const forged = JSON.stringify({
+      finished: false,
+      dialogue: { node: 'oliver-unread-end', flags: [], history: ['not-a-choice'] },
+    });
+    expect(decodeOliverProgress(forged)).toEqual(freshOliverProgress());
+  });
+
+  it('rejects an inconsistent destination with a valid choice history', () => {
+    const forged = JSON.stringify({
+      finished: false,
+      dialogue: { node: 'oliver-unread-end', flags: [], history: ['oliver-unread-play'] },
+    });
+    expect(decodeOliverProgress(forged)).toEqual(freshOliverProgress());
+  });
+
   it('reads the original completion marker', () => {
     expect(decodeOliverProgress('done').finished).toBe(true);
   });
