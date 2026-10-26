@@ -15,10 +15,69 @@ export const bookClub: DialogueStory = {
       speaker: 'Анна',
       text: '«Я попросила учнів придумати запитання до історії. Найкраще було таке: якщо герой помиляється, чи мусимо ми перестати його любити?» Мара ставить тарілку посеред столу. «Сподіваюся, ні. Інакше мої булочки залишаться без друзів».',
       options: [
+        {
+          id: 'cinema-discussion',
+          label: '«Хтось пам’ятає останній сеанс у старому кінотеатрі?»',
+          next: 'cinema-discussion',
+          requires: ['cabinet_photo_seen'],
+          unless: ['cinema_club_discussed'],
+        },
         { id: 'discuss-books', label: '«Поговорімо про книжки»', next: 'books' },
         { id: 'ask-mara', label: '«Марo, що для тебе добра кінцівка?»', next: 'mara' },
         { id: 'ask-miller', label: '«Пані Міллер, ви знайшли нову загадку?»', next: 'miller' },
         { id: 'close', label: 'Подякувати всім і завершити зустріч', next: 'end' },
+      ],
+    },
+    {
+      id: 'cinema-discussion',
+      speaker: 'Пані Міллер',
+      text: '«Звісно, пам’ятаю. У Генрі були жахливі крісла. Після другого акту всі вставали не через драму, а через спину». Мара сміється. «А останній показ? Я тоді ще була мала. Здається, кінотеатр закрили після пожежної перевірки». Міллер хмикає: «А я чула зовсім інше».',
+      options: [
+        {
+          id: 'cinema-club-rumor',
+          label: '«І що саме ви чули?»',
+          next: 'cinema-club-result',
+          grants: ['cinema_rumor_requested'],
+        },
+        {
+          id: 'cinema-club-facts',
+          label: '«Може, хтось зберіг афішу чи квиток?»',
+          next: 'cinema-club-result',
+          grants: ['cinema_club_asked_for_records'],
+        },
+        {
+          id: 'cinema-club-deflect',
+          label: '«Повернімося до книжок»',
+          next: 'cinema-club-result',
+          grants: ['cinema_club_deflected'],
+        },
+      ],
+    },
+    {
+      id: 'cinema-club-result',
+      speaker: 'Пані Міллер',
+      text: '«Генрі поїхав раптово. Більше я нічого не знаю». Вона бере другу булочку, хоча першу ще не доїла.',
+      textWhen: [
+        {
+          requires: ['cinema_rumor_requested'],
+          text: '«Кажуть, після останнього сеансу Генрі посварився з кимось біля службового входу. Але я там не була». Міллер робить паузу. «Може, була Сільвія. Вона тоді продавала квитки».',
+        },
+        {
+          requires: ['cinema_club_asked_for_records'],
+          text: '«Афіші? Сільвія з квиткової каси забрала цілу тубу, коли кінотеатр закрився». Міллер насуплюється. «Не знаю, чи вони в неї досі».',
+        },
+        {
+          requires: ['cinema_club_deflected'],
+          text: '«Ну й добре. А то знову хтось скаже, що я пліткую». Міллер відсуває чашку. «То хто дочитав наш детектив? Тільки не кажіть, що всі».',
+        },
+      ],
+      options: [
+        {
+          id: 'cinema-club-back',
+          label: 'Повернутися до книжкового клубу',
+          next: 'welcome',
+          grants: ['cinema_club_discussed'],
+        },
       ],
     },
     {
