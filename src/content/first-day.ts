@@ -68,11 +68,26 @@ export const millerVisit: DialogueStory = {
           grants: ['rumor_heard', 'rumor_challenged'],
         },
         {
+          id: 'speculate',
+          label: '«Напевно, Томас щось приховує від Анни»',
+          next: 'speculation',
+          grants: ['rumor_heard', 'rumor_amplified'],
+        },
+        {
           id: 'acknowledge',
           label: '«Зрозуміло. Повернімося до книжок»',
           next: 'order',
           grants: ['rumor_heard'],
         },
+      ],
+    },
+    {
+      id: 'speculation',
+      speaker: 'Пані Міллер',
+      text: '«От бачите, я й сама не хотіла цього казати». Вона на мить замовкає. «Хоча ні. Хотіла. Але ж ми не знаємо, хто та жінка і про що вони говорили. А Анна потім почує вже зовсім іншу історію».',
+      options: [
+        { id: 'speculation-reconsider', label: '«Я поквапився з висновком. Це лише здогад»', next: 'order', grants: ['rumor_amplification_reconsidered'] },
+        { id: 'speculation-move-on', label: '«Повернімося до книжок»', next: 'order' },
       ],
     },
     {
