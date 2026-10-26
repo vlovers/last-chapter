@@ -27,6 +27,12 @@ export const annaVisit: DialogueStory = {
           next: 'anna-reflection',
           unless: ['anna_reflected_on_care'],
         },
+        {
+          id: 'anna-book-disagreement',
+          label: '«А якщо двоє дітей ненавидять улюблену книжку одне одного?»',
+          next: 'anna-book-disagreement',
+          unless: ['anna_book_disagreement_discussed'],
+        },
         { id: 'school', label: '«Що люблять читати ваші учні?»', next: 'school' },
         { id: 'teacher', label: '«Вам подобається викладати?»', next: 'teacher' },
         { id: 'town', label: '«Як вам живеться в Беллвіку?»', next: 'town' },
@@ -37,6 +43,48 @@ export const annaVisit: DialogueStory = {
           requires: ['rumor_heard'],
         },
         { id: 'books', label: '«Пошукаємо книжки для читання»', next: 'books' },
+      ],
+    },
+    {
+      id: 'anna-book-disagreement',
+      speaker: 'Анна',
+      text: '«У мене в класі двоє таких. Емма вважає, що герой мав утекти з острова, а Джуліан — що залишитися. Минулого тижня вони навіть пересунули парти. Я хотіла помирити їх, а потім зрозуміла: вони вперше прочитали одну книжку так уважно».',
+      options: [
+        {
+          id: 'anna-disagreement-debate',
+          label: '«Нехай сперечаються. Тільки без образ»',
+          next: 'anna-book-disagreement-result',
+          grants: ['anna_classroom_debate_encouraged'],
+        },
+        {
+          id: 'anna-disagreement-quiet',
+          label: '«А може, кожен напише свою версію кінцівки?»',
+          next: 'anna-book-disagreement-result',
+          grants: ['anna_classroom_alternate_endings'],
+        },
+      ],
+    },
+    {
+      id: 'anna-book-disagreement-result',
+      speaker: 'Анна',
+      text: '«Головне, щоб вони не почали кидатися книжками. Паперові обкладинки цього не заслужили».',
+      textWhen: [
+        {
+          requires: ['anna_classroom_debate_encouraged'],
+          text: '«Тоді влаштую дебати. Джуліан отримає три хвилини, Емма — три. І ніхто не муситиме вдавати, що передумав. Мені самій іноді не вистачає такого правила».',
+        },
+        {
+          requires: ['anna_classroom_alternate_endings'],
+          text: '«О, це їм сподобається. Емма намалює корабель, Джуліан побудує новий маяк. А я нарешті дізнаюся, що вони люблять у цій історії, замість вирішувати, хто правий».',
+        },
+      ],
+      options: [
+        {
+          id: 'anna-disagreement-back',
+          label: 'Повернутися до вибору книжок',
+          next: 'hello',
+          grants: ['anna_book_disagreement_discussed'],
+        },
       ],
     },
     {
