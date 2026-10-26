@@ -1,0 +1,98 @@
+import { describe, expect, it } from 'vitest';
+import {
+  advanceToDayFourMara,
+  chooseChapterOption,
+  finishSeason,
+  stageStory,
+  startFifthDay,
+  type ChapterState,
+} from '../src/game/chapter';
+import { currentNode, startDialogue } from '../src/game/dialogue';
+import { decodeSave, encodeSave } from '../src/game/save';
+
+function at(stage: ChapterState['stage'], flags: readonly string[]): ChapterState {
+  return { stage, flags, dialogue: { ...startDialogue(stageStory(stage)), flags } };
+}
+
+function choose(state: ChapterState, ...options: readonly string[]) {
+  return options.reduce((current, option) => chooseChapterOption(current, option), state);
+}
+
+describe('Narrative decisions survive chapter transitions and save/load', () => {
+  it('keeps Iris privacy decisions after a save and when advancing to Mara', () => {
+    const iris = choose(
+      at('day4-iris', ['saw_envelope', 'opened_private_letter']),
+      'welcome',
+      'letter',
+      'admit-opened',
+      'breach-back',
+      'leave',
+    );
+    const loaded = decodeSave(encodeSave(iris));
+    expect(loaded).not.toBeNull();
+    expect(loaded?.flags).toContain('iris_letter_breach_admitted');
+    expect(loaded?.flags).toContain('opened_private_letter');
+    const mara = advanceToDayFourMara(loaded!);
+    expect(mara.dialogue.flags).toContain('iris_letter_breach_admitted');
+    expect(mara.flags).toContain('opened_private_letter');
+  });
+
+  it('preserves the late confession and its unique ending through a saved Day 5', () => {
+    const dayFive = startFifthDay(at('day4-complete', ['saw_envelope', 'opened_private_letter']));
+    const confessed = choose(
+      dayFive,
+      'open',
+      'letter',
+      'admit-breach-now',
+      'admit-breach-now-back',
+    );
+    const restored = decodeSave(encodeSave(confessed));
+    expect(restored?.flags).toContain('final_letter_breach_disclosed');
+    expect(restored?.dialogue.node).toBe('gathering');
+    const completed = choose(restored!, 'close');
+    expect(currentNode(stageStory(completed.stage), completed.dialogue).text).toContain(
+      'Вона почула правду',
+    );
+    expect(finishSeason(completed).stage).toBe('season-complete');
+  });
+
+  it('does not turn hearing a rumor into amplification after saving', () => {
+    const heard = choose(at('miller', []), 'greet', 'town', 'gossip', 'what-saw', 'acknowledge');
+    const loaded = decodeSave(encodeSave(heard));
+    expect(loaded?.flags).toContain('rumor_heard');
+    expect(loaded?.flags).not.toContain('rumor_amplified');
+    const anna = at('anna', loaded!.flags);
+    const talk = choose(anna, 'hello', 'rumor');
+    const options = currentNode(stageStory(talk.stage), talk.dialogue).options;
+    expect(options.find((option) => option.id === 'rumor-own-amplification')?.requires).toEqual([
+      'rumor_amplified',
+    ]);
+  });
+
+  it('persists amplification and allows a Day 2 admission without losing a book sale', () => {
+    const miller = choose(
+      at('miller', []),
+      'greet',
+      'town',
+      'gossip',
+      'what-saw',
+      'speculate',
+      'speculation-reconsider',
+    );
+    const anna = at('anna', decodeSave(encodeSave(miller))!.flags);
+    const admitted = choose(
+      anna,
+      'hello',
+      'rumor',
+      'rumor-own-amplification',
+      'rumor-own-amplification-books',
+      'maps',
+      'purchase-end',
+    );
+    const loaded = decodeSave(encodeSave(admitted));
+    expect(loaded?.flags).toContain('rumor_amplified');
+    expect(loaded?.flags).toContain('rumor_amplification_reconsidered');
+    expect(loaded?.flags).toContain('anna_heard_rumor_admission');
+    expect(loaded?.flags).toContain('anna_chose_maps');
+  });
+});
