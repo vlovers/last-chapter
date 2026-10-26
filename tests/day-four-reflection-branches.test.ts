@@ -6,17 +6,41 @@ import { currentNode, selectOption, startDialogue, validateDialogue } from '../s
 
 describe('Day four character choices', () => {
   it.each([
-    [irisDecision, 'welcome', 'iris-boundaries', 'iris-boundaries-stay', 'iris_day_four_respected_freedom', 'iris-boundaries-back'],
-    [maraDecision, 'greet', 'mara-own-story', 'mara-own-story-work', 'mara_day_four_chose_own_time', 'mara-own-story-back'],
-    [leoDecision, 'welcome', 'leo-future', 'leo-future-honest', 'leo_day_four_chose_honesty', 'leo-future-back'],
-  ] as const)('returns to conversation with a recorded choice', (story, entry, choice, decision, flag, back) => {
-    expect(validateDialogue(story)).toEqual([]);
-    let state = selectOption(story, startDialogue(story), entry);
-    state = selectOption(story, state, choice);
-    state = selectOption(story, state, decision);
-    expect(state.flags).toContain(flag);
-    expect(currentNode(story, state).text.length).toBeGreaterThan(20);
-    state = selectOption(story, state, back);
-    expect(state.node).toBe(entry);
-  });
+    [
+      irisDecision,
+      'welcome',
+      'iris-boundaries',
+      'iris-boundaries-stay',
+      'iris_day_four_respected_freedom',
+      'iris-boundaries-back',
+    ],
+    [
+      maraDecision,
+      'greet',
+      'mara-own-story',
+      'mara-own-story-work',
+      'mara_day_four_chose_own_time',
+      'mara-own-story-back',
+    ],
+    [
+      leoDecision,
+      'welcome',
+      'leo-future',
+      'leo-future-honest',
+      'leo_day_four_chose_honesty',
+      'leo-future-back',
+    ],
+  ] as const)(
+    'returns to conversation with a recorded choice',
+    (story, entry, choice, decision, flag, back) => {
+      expect(validateDialogue(story)).toEqual([]);
+      let state = selectOption(story, startDialogue(story), entry);
+      state = selectOption(story, state, choice);
+      state = selectOption(story, state, decision);
+      expect(state.flags).toContain(flag);
+      expect(currentNode(story, state).text.length).toBeGreaterThan(20);
+      state = selectOption(story, state, back);
+      expect(state.node).toBe(entry);
+    },
+  );
 });

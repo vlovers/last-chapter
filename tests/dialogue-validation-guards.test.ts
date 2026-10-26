@@ -26,9 +26,7 @@ describe('Dialogue authoring validation', () => {
   });
 
   it('rejects unconditional narration overrides', () => {
-    const errors = validateDialogue(
-      storyWith({ textWhen: [{ requires: [], text: 'Без умов.' }] }),
-    );
+    const errors = validateDialogue(storyWith({ textWhen: [{ requires: [], text: 'Без умов.' }] }));
     expect(errors).toContain('Unconditional text variant: begin');
   });
 

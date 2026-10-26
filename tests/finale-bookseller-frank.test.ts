@@ -27,7 +27,9 @@ describe('Frank and bookseller finale reflections', () => {
     expect(state.node).toBe('gathering');
     expect(state.flags).toContain(flag);
     expect(state.flags).toContain('final_frank_evening_heard');
-    expect(availableOptions(finalReading, state).some((item) => item.id === 'frank-evening')).toBe(false);
+    expect(availableOptions(finalReading, state).some((item) => item.id === 'frank-evening')).toBe(
+      false,
+    );
   });
 
   it.each([
@@ -42,7 +44,9 @@ describe('Frank and bookseller finale reflections', () => {
     expect(state.node).toBe('gathering');
     expect(state.flags).toContain(flag);
     expect(state.flags).toContain('final_bookseller_reflection_heard');
-    expect(availableOptions(finalReading, state).some((item) => item.id === 'bookseller-reflection')).toBe(false);
+    expect(
+      availableOptions(finalReading, state).some((item) => item.id === 'bookseller-reflection'),
+    ).toBe(false);
   });
 
   it('allows a direct ending without optional scenes', () => {
