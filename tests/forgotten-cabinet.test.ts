@@ -112,7 +112,7 @@ describe('Forgotten cabinet playable slice', () => {
       'chapter-blame',
     );
     expect(blame.flags).toContain('chapter_accused_eleanor');
-    expect(currentNode(finalReading, blame).text).toContain('йде раніше');
+    expect(currentNode(finalReading, blame).text).toContain('іде раніше');
   });
 
   it('lets a careful player discover the manuscript dating contradiction', () => {
