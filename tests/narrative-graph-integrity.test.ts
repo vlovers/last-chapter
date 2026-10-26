@@ -41,8 +41,9 @@ describe('Narrative graph integrity', () => {
     let foundEnding = false;
     for (let index = 0; index < queue.length && index < 1000; index++) {
       const state = queue[index]!;
-      if (visited.has(state.node)) continue;
-      visited.add(state.node);
+      const key = JSON.stringify([state.node, [...state.flags].sort()]);
+      if (visited.has(key)) continue;
+      visited.add(key);
       if (currentNode(story, state).options.length === 0) {
         foundEnding = true;
         break;
