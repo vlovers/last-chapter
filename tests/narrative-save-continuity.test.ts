@@ -132,6 +132,50 @@ describe('Narrative decisions survive chapter transitions and save/load', () => 
     expect(options).toContain('rumor-boundary');
   });
 
+  it.each([
+    ['challenged', 'challenge', false],
+    ['amplified', 'speculate', true],
+  ] as const)(
+    'preserves %s rumor choices and their actual Thomas dialogue permissions',
+    (_name, decision, apologyAvailable) => {
+      const miller = choose(
+        at('miller', []),
+        'greet',
+        'town',
+        'gossip',
+        'what-saw',
+        decision,
+      );
+      const loaded = decodeSave(encodeSave(miller))!;
+      const thomas = choose(at('thomas', loaded.flags), 'greet', 'rumor');
+      const options = availableOptions(
+        stageStory(thomas.stage),
+        thomas.dialogue,
+      ).map((option) => option.id);
+      expect(options.includes('rumor-own-words')).toBe(apologyAvailable);
+      expect(options).toContain('rumor-boundary');
+      expect(loaded.flags).toContain('rumor_heard');
+      expect(loaded.flags.includes('rumor_amplified')).toBe(apologyAvailable);
+    },
+  );
+
+  it('keeps Iris decision to defer delivery distinct from consent after reload', () => {
+    const iris = choose(
+      at('day4-iris', ['saw_envelope']),
+      'welcome',
+      'letter',
+      'offer',
+      'offer-back',
+      'leave',
+    );
+    const loaded = decodeSave(encodeSave(iris))!;
+    expect(loaded.flags).toContain('iris_letter_delivery_offered');
+    expect(loaded.flags).toContain('iris_letter_choice_respected');
+    expect(loaded.flags).not.toContain('iris_letter_delivery_consented');
+    const mara = advanceToDayFourMara(loaded);
+    expect(mara.flags).not.toContain('iris_letter_delivery_consented');
+  });
+
   it('persists amplification and allows a Day 2 admission without losing a book sale', () => {
     const miller = choose(
       at('miller', []),
