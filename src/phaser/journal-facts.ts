@@ -78,3 +78,44 @@ export const journalFacts: readonly (readonly [string, string])[] = [
   ['letter_secured', 'Лист залишився у безпечному місці.'],
   ['ask_eleanor_next_day', 'Завтра слід запитати Елеонору про закриття книгарні.'],
 ];
+
+/** Provenance for already-authored, already-heard journal facts. No new discoveries. */
+export const journalEvidence = [
+  {
+    flag: 'saw_receipt',
+    title: 'Картка бронювання',
+    kind: 'record',
+    source: 'Старі записи книгарні',
+  },
+  { flag: 'saw_repair_note', title: 'Журнал ремонту', kind: 'record', source: 'Журнал книгарні' },
+  {
+    flag: 'saw_envelope',
+    title: 'Запечатаний лист',
+    kind: 'observation',
+    source: 'Знайдено в книгарні',
+  },
+  {
+    flag: 'heard_about_leak',
+    title: 'Спогад про затоплення',
+    kind: 'testimony',
+    source: 'Пані Міллер',
+  },
+  {
+    flag: 'eleanor_confirmed_reservation',
+    title: 'Спогад про бронювання',
+    kind: 'testimony',
+    source: 'Елеонора',
+  },
+  {
+    flag: 'eleanor_confirmed_missing_notification',
+    title: 'Непідтверджене повідомлення',
+    kind: 'testimony',
+    source: 'Елеонора',
+  },
+] as const;
+export const evidenceKindLabels = {
+  observation: 'Спостереження',
+  record: 'Документ',
+  testimony: 'Свідчення · слова співрозмовника',
+  inference: 'Припущення · потребує перевірки',
+} as const;

@@ -1,4 +1,4 @@
-export function createAtmosphere(scene, lights, reduced) {
+export function createAtmosphere(scene, lights, reduced, lowQuality = () => false) {
   const rain = scene.add.graphics().setDepth(1);
   const drops = Array.from({ length: 42 }, (_, i) => ({
     x: 258 + ((i * 31) % 126),
@@ -6,9 +6,13 @@ export function createAtmosphere(scene, lights, reduced) {
     speed: 1 + (i % 3),
   }));
   let mood;
+  let lastDraw = -Infinity;
+  const dust = scene.add.graphics().setDepth(2);
+  const reflection = scene.add.graphics().setDepth(1.1);
+  reflection.fillStyle(0xc5d6dd, 0.08).fillRect(273, 36, 2, 24).fillRect(275, 38, 1, 8);
   const draw = () => {
     rain.clear().lineStyle(1, 0xc5d6dd, mood?.rain ?? 0.42);
-    for (const drop of drops) {
+    for (const drop of lowQuality() ? drops.slice(0, 14) : drops) {
       // Keep wooden mullions in front of the weather.
       if (drop.x >= 316 && drop.x <= 325) continue;
       if (drop.y >= 69 && drop.y <= 80) continue;
@@ -34,9 +38,24 @@ export function createAtmosphere(scene, lights, reduced) {
   return {
     setDay: applyDay,
     update(time, delta) {
-      if (reduced()) return;
+      if (reduced()) {
+        dust.clear();
+        return;
+      }
+      // Weather needs only 30 updates/s; a degraded budget uses 15 and no dust.
+      if (time - lastDraw < (lowQuality() ? 66 : 33)) return;
+      const step = Math.min(100, time - lastDraw || delta);
+      lastDraw = time;
+      dust.clear();
+      if (!lowQuality())
+        for (let i = 0; i < 9; i++) {
+          const x = 292 + ((i * 17 + Math.floor(time / 220)) % 58);
+          const y = 78 + ((i * 23 + Math.floor(time / 500)) % 78);
+          dust.fillStyle(0xffe3af, 0.14).fillRect(x, y, 1, 1);
+        }
+      reflection.setAlpha(0.7 + Math.sin(time / 3900) * 0.15);
       for (const drop of drops) {
-        drop.y += delta * 0.025 * drop.speed;
+        drop.y += step * 0.025 * drop.speed;
         if (drop.y > 130) drop.y = 30;
       }
       draw();
@@ -47,6 +66,8 @@ export function createAtmosphere(scene, lights, reduced) {
         .setAlpha(0.12 + Math.sin(time / 1200) * 0.07);
     },
     reset() {
+      dust.clear();
+      reflection.setAlpha(1);
       lights.halo.setAlpha(1);
       lights.readingGlow.setAlpha(1);
       lights.steam.setY(0).setAlpha(0.15);

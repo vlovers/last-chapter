@@ -1,3 +1,4 @@
+import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -8,11 +9,8 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
 const output = resolve(process.env.QA_OUTPUT || '/private/tmp/last-chapter-qa');
 await mkdir(output, { recursive: true });
-const server = await chromium.launchServer({
-  channel: process.env.BROWSER_CHANNEL || 'chrome',
-  headless: true,
-});
-const browser = await chromium.connect(server.wsEndpoint());
+const fixture = await launchQaBrowser(chromium);
+const browser = fixture.browser;
 const results = [];
 
 function assertMaraPortrait(src) {
@@ -80,17 +78,24 @@ async function inspect(page, name, speaker) {
 async function start(page) {
   await page.goto(`${base}/phaser-prototype/`);
   await page.getByRole('button', { name: 'Відчинити книгарню', exact: true }).click();
-  await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).waitFor();
   await waitScene(page, (scene) => scene.state.mara === 'ready');
 }
+const viewports = new WeakMap();
 async function checkPresentation(page, dialogueVisible = false) {
-  const layout = await page.evaluate(() => {
+  const layout = await page.evaluate(async () => {
     const canvas = document.querySelector('canvas'),
       targets = document.querySelector('#hotspots');
     const room = canvas.getBoundingClientRect(),
       hit = targets.getBoundingClientRect();
     const dialogue = document.querySelector('#dialogue');
+    const host = document.querySelector('#game');
+    const { game } = await import('/phaser-prototype/scene.js');
+    const camera = game.scene.getScene('bookshop').cameras.main;
     return {
+      viewport: `${innerWidth}x${innerHeight}`,
+      hostWidth: host.clientWidth,
+      hostHeight: host.clientHeight,
+      zoom: camera.zoom,
       width: canvas.width,
       height: canvas.height,
       sharp: getComputedStyle(canvas).imageRendering,
@@ -100,22 +105,33 @@ async function checkPresentation(page, dialogueVisible = false) {
         Math.abs(room.top - hit.top) < 1 &&
         Math.abs(room.width - hit.width) < 1 &&
         Math.abs(room.height - hit.height) < 1,
-      separateFromRoom:
+      overlay: getComputedStyle(dialogue).position === 'absolute',
+      inViewport:
         dialogue.hidden ||
-        dialogue.getBoundingClientRect().top >= room.bottom - 1 ||
-        dialogue.getBoundingClientRect().left >= room.right - 1,
+        (dialogue.getBoundingClientRect().bottom <= innerHeight &&
+          dialogue.getBoundingClientRect().left >= 0),
       overflow: document.documentElement.scrollWidth > innerWidth,
       textOverflow: dialogue.scrollWidth > dialogue.clientWidth,
     };
   });
-  assert.equal(layout.width, 640);
-  assert.equal(layout.height, 360);
+  assert.equal(layout.width, layout.hostWidth);
+  assert.equal(layout.height, layout.hostHeight);
   assert.equal(layout.sharp, 'pixelated');
-  assert.ok(Math.abs(layout.ratio - 16 / 9) < 0.001);
+  assert.ok(Number.isInteger(layout.zoom));
+  const previous = viewports.get(page);
+  if (previous?.viewport === layout.viewport) {
+    assert.deepEqual(
+      [layout.width, layout.height, layout.zoom],
+      [previous.width, previous.height, previous.zoom],
+      'Reading never resizes the viewport or world scale',
+    );
+  }
+  viewports.set(page, layout);
   assert.equal(layout.aligned, true, 'Hotspots follow the displayed canvas');
   assert.equal(layout.overflow, false);
   if (dialogueVisible) {
-    assert.equal(layout.separateFromRoom, true, 'Dialogue never obscures room pixels');
+    assert.equal(layout.overlay, true, 'Dialogue is an overlay above the room');
+    assert.equal(layout.inViewport, true);
     assert.equal(layout.textOverflow, false);
   }
 }
@@ -134,9 +150,9 @@ try {
   captureErrors(page, errors);
   await page.goto(base);
   await page.locator('#story-tools').waitFor();
-  const saveBefore = await page.evaluate(() => JSON.stringify(localStorage));
   const headingBefore = await page.locator('h1').textContent();
   await start(page);
+  const saveBefore = await page.evaluate(() => JSON.stringify(localStorage));
   assert.equal((await snapshot(page)).audio.muted, true);
   assert.equal((await snapshot(page)).mara.direction, 'left');
   await checkPresentation(page);
@@ -145,17 +161,22 @@ try {
   // Real key presses exercise movement, bounds, animation, and furniture collision.
   await page.locator('#game').focus();
   await page.keyboard.down('ArrowDown');
-  await waitScene(page, (scene) => scene.characters.player.y >= 237);
+  await waitScene(page, (scene) => scene.characters.player.y >= 247);
   await page.keyboard.up('ArrowDown');
   const blocked = await snapshot(page);
-  assert.ok(blocked.player.y <= 239.1, 'Counter collision stops the player');
+  assert.ok(blocked.player.y <= 249.1, 'Counter collision stops the player');
 
   // Click-to-move routes around furniture to the opposite side of the table.
-  const canvas = await page.locator('canvas').boundingBox();
-  await page.mouse.click(
-    canvas.x + (435 / 640) * canvas.width,
-    canvas.y + (320 / 360) * canvas.height,
-  );
+  const destination = await page.evaluate(async () => {
+    const { game } = await import('/phaser-prototype/scene.js');
+    const camera = game.scene.getScene('bookshop').cameras.main;
+    const rect = game.canvas.getBoundingClientRect();
+    return {
+      x: rect.x + (435 - camera.scrollX) * camera.zoom,
+      y: rect.y + (320 - camera.scrollY) * camera.zoom,
+    };
+  });
+  await page.mouse.click(destination.x, destination.y);
   await waitScene(
     page,
     (scene) =>
@@ -360,16 +381,5 @@ try {
   }
   throw error;
 } finally {
-  // Bound graceful shutdown: this host sometimes stalls during Chrome cleanup.
-  // The fallback can terminate only the browser server owned by this run.
-  const cleanup = setTimeout(() => {
-    console.warn('Chrome fixture did not close promptly; terminating the owned browser server.');
-    void server.kill();
-  }, 5000);
-  try {
-    await browser.close();
-    await server.close();
-  } finally {
-    clearTimeout(cleanup);
-  }
+  await fixture.close();
 }

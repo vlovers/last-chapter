@@ -1,3 +1,4 @@
+import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -6,10 +7,8 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
 const output = resolve(process.env.QA_OUTPUT || '/private/tmp/last-chapter-v5-qa');
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({
-  channel: process.env.BROWSER_CHANNEL || 'chrome',
-  headless: true,
-});
+const fixture = await launchQaBrowser(chromium);
+const browser = fixture.browser;
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const errors = [];
 page.on('pageerror', (error) => errors.push(String(error)));
@@ -21,17 +20,18 @@ try {
   await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
   await page.locator('#story-tools').waitFor();
   assert.equal(await page.locator('#day-timeline li').count(), 5);
-  assert.equal(
-    await page.locator('#story-continue').textContent(),
-    'День 1 · Пані Міллер · Продовжити',
-  );
+  assert.equal(await page.locator('#story-continue').textContent(), 'День 1 · Пані Міллер');
 
   await page.getByRole('button', { name: 'Каталог книжок' }).click();
   assert.equal(await page.locator('.story-book').count(), 5);
   await page.getByRole('button', { name: 'Детективи' }).click();
   assert.ok((await page.locator('.story-book').count()) > 0);
+  await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Нотатник' }).click();
-  await page.getByText('Поки що тут немає записів.').waitFor();
+  await page.getByRole('heading', { name: 'Нотатник книгаря' }).waitFor();
+  await page.getByRole('button', { name: 'Знахідки', exact: true }).click();
+  await page.getByText('Огляньте книгарню. Тут з’являться лише досліджені знахідки.').waitFor();
+  await page.keyboard.press('Escape');
 
   await page.locator('#story-continue').click();
   await page.getByText('Дзвіночок над дверима озвався двічі.', { exact: false }).waitFor();
@@ -109,5 +109,5 @@ try {
   await page.screenshot({ path: `${output}/failure.png`, fullPage: true }).catch(() => {});
   throw error;
 } finally {
-  await browser.close();
+  await fixture.close();
 }

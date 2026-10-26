@@ -1,0 +1,53 @@
+{
+  "walk": {
+    "stage": "season-complete",
+    "visited": [
+      "miller",
+      "mara",
+      "evening",
+      "complete",
+      "iris",
+      "anna",
+      "leo",
+      "day2-complete",
+      "eleanor",
+      "thomas",
+      "nora",
+      "book-club",
+      "day3-complete",
+      "day4-iris",
+      "day4-mara",
+      "day4-leo",
+      "day4-complete",
+      "day5-reading"
+    ],
+    "progress": [
+      {
+        "day": 1,
+        "label": "Перший день",
+        "status": "completed"
+      },
+      {
+        "day": 2,
+        "label": "Другий день",
+        "status": "completed"
+      },
+      {
+        "day": 3,
+        "label": "Третій день",
+        "status": "completed"
+      },
+      {
+        "day": 4,
+        "label": "Четвертий день",
+        "status": "completed"
+      },
+      {
+        "day": 5,
+        "label": "П’ятий день",
+        "status": "completed"
+      }
+    ]
+  },
+  "errors": []
+}

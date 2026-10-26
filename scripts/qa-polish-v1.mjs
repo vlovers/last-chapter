@@ -1,3 +1,4 @@
+import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -6,10 +7,8 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
 const output = resolve(process.env.QA_OUTPUT || '/private/tmp/last-chapter-polish-v1');
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({
-  channel: process.env.BROWSER_CHANNEL || 'chrome',
-  headless: true,
-});
+const fixture = await launchQaBrowser(chromium);
+const browser = fixture.browser;
 const results = [];
 const errors = [];
 let currentPage;
@@ -20,12 +19,26 @@ async function sceneSnapshot(page) {
     const { canStand } = await import('/phaser-prototype/world.js');
     return {
       frank: { x: s.frank.state.x, y: s.frank.state.y, activity: s.frank.state.activity },
+      simulationMs: s.frank.state.elapsed,
       valid: canStand(s.frank.state),
       mode: s.state.mode,
       failed: s.failed,
       fps: game.loop.actualFps,
     };
   });
+}
+async function openMara(page) {
+  const toolbar = page
+    .locator('.story-toolbar-actions')
+    .getByRole('button', { name: 'Поговорити з Марою', exact: true });
+  if (await toolbar.isVisible()) await toolbar.click();
+  else {
+    await page.locator('#journal-toggle').click();
+    await page
+      .locator('#story-panel')
+      .getByRole('button', { name: 'Поговорити з Марою', exact: true })
+      .click();
+  }
 }
 async function choose(page, id) {
   await page.waitForTimeout(250);
@@ -85,13 +98,23 @@ try {
     if (device === 'desktop') {
       const initial = await sceneSnapshot(page);
       const samples = [];
-      for (let i = 0; i < 12; i++) {
+      // Safe simulation substeps are capped at 50ms. Slow software-rendered CI
+      // must get the same amount of game time, rather than a fixed wall-clock race.
+      const deadline = Date.now() + 45000;
+      while (
+        (samples.at(-1)?.simulationMs ?? initial.simulationMs) - initial.simulationMs < 7000 &&
+        Date.now() < deadline
+      ) {
         await page.waitForTimeout(700);
         const sample = await sceneSnapshot(page);
         samples.push(sample);
         assert.ok(sample.valid);
         assert.equal(sample.failed, false);
       }
+      assert.ok(
+        (samples.at(-1)?.simulationMs ?? 0) - initial.simulationMs >= 7000,
+        'The running scene must advance seven simulated seconds within 45s',
+      );
       assert.ok(
         samples.some(
           (s) => Math.hypot(s.frank.x - initial.frank.x, s.frank.y - initial.frank.y) > 10,
@@ -139,8 +162,19 @@ try {
     await page.locator('#story-continue').click();
     assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), save);
     await page.keyboard.press('Escape');
+    // Optional conversations require Mara to be physically in this visit.
+    assert.equal(
+      await page
+        .locator('.story-toolbar-actions')
+        .getByRole('button', { name: 'Поговорити з Марою', exact: true })
+        .isVisible(),
+      false,
+    );
+    await page.locator('#story-continue').click();
+    for (const id of ['books', 'orchard', 'leave-orchard', '__advance']) await choose(page, id);
+    await page.keyboard.press('Escape');
     // Optional topic finishes once; the day-unlocked next topic replaces it.
-    await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
+    await openMara(page);
     await page.getByRole('heading', { name: 'Книжкові суперечки з Марою', exact: true }).waitFor();
     await page.getByRole('button', { name: 'Повернімося до роботи', exact: true }).click();
     assert.equal(
@@ -154,7 +188,7 @@ try {
     await page.keyboard.press('Escape');
     await page.reload();
     await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
-    await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
+    await openMara(page);
     assert.equal(
       await page.getByRole('button', { name: 'Книжкові суперечки з Марою', exact: true }).count(),
       0,
@@ -162,7 +196,7 @@ try {
     await page.keyboard.press('Escape');
     // A shortest valid narrative route is computed in the pure engine; every
     // choice is then made through the real UI and persisted by the running game.
-    const visited = [];
+    const visited = ['miller']; // Completed through the real UI before Mara's optional scene.
     for (let step = 0; step < 19; step++) {
       const plan = await page.evaluate(async () => {
         const { stageStory, chooseChapterOption } = await import('/src/game/chapter.ts');
@@ -261,5 +295,5 @@ try {
     await currentPage.screenshot({ path: `${output}/failure.png`, fullPage: true }).catch(() => {});
   throw error;
 } finally {
-  await browser.close();
+  await fixture.close();
 }
