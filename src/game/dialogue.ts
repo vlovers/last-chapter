@@ -15,7 +15,7 @@ export interface DialogueNode {
   readonly id: SceneId;
   readonly speaker: string;
   readonly text: string;
-  /** First matching flag-dependent narration replaces the default text. */
+  /** Most specific matching flag-dependent narration replaces the default text. */
   readonly textWhen?: readonly { readonly requires: readonly string[]; readonly text: string }[];
   readonly options: readonly DialogueOption[];
 }
@@ -43,9 +43,13 @@ export function currentNode(story: DialogueStory, state: DialogueState): Dialogu
   if (!node) throw new Error('Missing dialogue node');
   // Prefer the most specific matching narration. A generic one-flag variant
   // must not hide a later two-flag variant when both conditions are true.
-  const variant = node.textWhen
-    ?.filter((entry) => entry.requires.every((flag) => state.flags.includes(flag)))
-    .sort((left, right) => right.requires.length - left.requires.length)[0];
+  const variant = node.textWhen?.reduce<(typeof node.textWhen)[number] | undefined>(
+    (best, entry) => {
+      if (!entry.requires.every((flag) => state.flags.includes(flag))) return best;
+      return !best || entry.requires.length > best.requires.length ? entry : best;
+    },
+    undefined,
+  );
   return variant ? { ...node, text: variant.text } : node;
 }
 
