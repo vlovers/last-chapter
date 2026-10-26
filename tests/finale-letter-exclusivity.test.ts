@@ -14,29 +14,41 @@ const endings = [
 ] as const;
 
 describe('Private letter finale', () => {
-  it.each(endings)('%s permanently resolves the letter without other outcomes', (choice, back, expected) => {
-    let state: DialogueState = selectOption(finalReading, startDialogue(finalReading), 'open');
-    state = {
-      ...state,
-      flags: ['saw_envelope', 'iris_letter_choice_respected', 'leo_open_to_conversation', 'iris_letter_breach_admitted'],
-    };
-    state = selectOption(finalReading, state, 'letter');
-    state = selectOption(finalReading, state, choice);
-    state = selectOption(finalReading, state, back);
-    expect(state.node).toBe('gathering');
-    expect(state.flags).toContain(expected);
-    for (const [, , outcome] of endings) {
-      if (outcome !== expected) expect(state.flags).not.toContain(outcome);
-    }
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'letter')).toBe(false);
-    expect(() => selectOption(finalReading, state, 'letter')).toThrow();
-  });
+  it.each(endings)(
+    '%s permanently resolves the letter without other outcomes',
+    (choice, back, expected) => {
+      let state: DialogueState = selectOption(finalReading, startDialogue(finalReading), 'open');
+      state = {
+        ...state,
+        flags: [
+          'saw_envelope',
+          'iris_letter_choice_respected',
+          'leo_open_to_conversation',
+          'iris_letter_breach_admitted',
+        ],
+      };
+      state = selectOption(finalReading, state, 'letter');
+      state = selectOption(finalReading, state, choice);
+      state = selectOption(finalReading, state, back);
+      expect(state.node).toBe('gathering');
+      expect(state.flags).toContain(expected);
+      for (const [, , outcome] of endings) {
+        if (outcome !== expected) expect(state.flags).not.toContain(outcome);
+      }
+      expect(availableOptions(finalReading, state).some((option) => option.id === 'letter')).toBe(
+        false,
+      );
+      expect(() => selectOption(finalReading, state, 'letter')).toThrow();
+    },
+  );
 
   it('lets the player return later when no resolution was chosen', () => {
     let state: DialogueState = selectOption(finalReading, startDialogue(finalReading), 'open');
     state = { ...state, flags: ['saw_envelope'] };
     state = selectOption(finalReading, state, 'letter');
     state = selectOption(finalReading, state, 'letter-back');
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'letter')).toBe(true);
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'letter')).toBe(
+      true,
+    );
   });
 });
