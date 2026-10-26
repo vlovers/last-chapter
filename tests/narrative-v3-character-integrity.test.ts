@@ -22,10 +22,12 @@ describe('Narrative V3 character conversation integrity', () => {
   for (const [name, story, completion] of visits) {
     it(`${name} has a valid graph and a one-time completion route`, () => {
       expect(validateDialogue(story)).toEqual([]);
-      const completed = story.nodes.flatMap((node) => node.options)
+      const completed = story.nodes
+        .flatMap((node) => node.options)
         .filter((option) => option.grants?.includes(completion));
       expect(completed.length).toBeGreaterThan(0);
-      const gated = story.nodes.flatMap((node) => node.options)
+      const gated = story.nodes
+        .flatMap((node) => node.options)
         .filter((option) => option.unless?.includes(completion));
       expect(gated.length).toBeGreaterThan(0);
     });
