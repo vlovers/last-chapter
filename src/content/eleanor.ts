@@ -34,6 +34,13 @@ export const eleanorVisit: DialogueStory = {
           requires: ['saw_receipt', 'saw_repair_note'],
           unless: ['eleanor_timeline_checked'],
         },
+        {
+          id: 'cabinet-question',
+          label: '«Хто такий Генрі на старій фотографії?»',
+          next: 'cabinet-question',
+          requires: ['cabinet_photo_seen'],
+          unless: ['cabinet_henry_questioned'],
+        },
         { id: 'shop', label: '«Якою була книгарня раніше?»', next: 'shop' },
         { id: 'flood', label: '«Розкажіть про затоплення»', next: 'flood' },
         {
@@ -96,6 +103,54 @@ export const eleanorVisit: DialogueStory = {
           label: 'Повернутися до розмови',
           next: 'greet',
           grants: ['eleanor_timeline_checked'],
+        },
+      ],
+    },
+    {
+      id: 'cabinet-question',
+      speaker: 'Елеонора',
+      text: 'Елеонора спершу питає, чи ви знайшли синю рукавичку. Потім бачить напис на фотографії й перестає усміхатися. «Генрі Вітмор тримав кінотеатр. Якщо хтось написав, що він повернувся, значить, не хотів, щоб про це знали». Вона відсуває чашку. «А хто дав вам право ритися в тій шухляді?»',
+      textWhen: [
+        {
+          requires: ['cabinet_photo_hidden'],
+          text: '«Ти знайшов фотографію — і сховав її?» Елеонора дивиться не на вас, а на шухляду за прилавком. «Я не знаю, що сталося того вечора. Але якщо прийде власник, пояснювати будеш сам».',
+        },
+        {
+          requires: ['cabinet_photo_copied'],
+          text: '«Ти зробив копію?» Елеонора бере телефон, але не торкається екрана. «Генрі Вітмор тримав кінотеатр. Хтось подряпав обличчя на фото. А хто написав про повернення — я не знаю. Не показуй це всьому місту, доки не з’ясуєш, що воно означає».',
+        },
+      ],
+      options: [
+        {
+          id: 'cabinet-question-press',
+          label: '«Ви точно не знаєте, хто стоїть п’ятим?»',
+          next: 'cabinet-answer',
+          grants: ['cabinet_eleanor_pressed'],
+        },
+        {
+          id: 'cabinet-question-stop',
+          label: '«Гаразд. Я поки залишу фото в спокої»',
+          next: 'cabinet-answer',
+          grants: ['cabinet_eleanor_given_space'],
+        },
+      ],
+    },
+    {
+      id: 'cabinet-answer',
+      speaker: 'Елеонора',
+      text: '«Пам’ятаю кінотеатр. Пам’ятаю, що він закрився. А людей на фотографії — не всіх». Вона бере свою сумку. «І так, рукавичку теж знайди».',
+      textWhen: [
+        {
+          requires: ['cabinet_eleanor_pressed'],
+          text: '«Я сказала, що не знаю». Елеонора застібає сумку. «Можеш питати ще десять разів. Від цього я не згадаю обличчя, якого на фото вже немає».',
+        },
+      ],
+      options: [
+        {
+          id: 'cabinet-answer-back',
+          label: 'Повернутися до розмови',
+          next: 'greet',
+          grants: ['cabinet_henry_questioned'],
         },
       ],
     },
