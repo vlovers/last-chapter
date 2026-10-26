@@ -4,14 +4,8 @@ import { currentNode, selectOption, startDialogue, type DialogueState } from '..
 
 describe('Combined final consequences', () => {
   it.each([
-    [
-      ['final_repaired_rumor', 'final_iris_exhibition'],
-      'Пані Міллер першою вибачається',
-    ],
-    [
-      ['final_respected_privacy', 'final_supported_iris'],
-      'Айріс забирає малюнки додому',
-    ],
+    [['final_repaired_rumor', 'final_iris_exhibition'], 'Пані Міллер першою вибачається'],
+    [['final_respected_privacy', 'final_supported_iris'], 'Айріс забирає малюнки додому'],
   ] as const)('reflects both decisions when the player closes the shop', (flags, phrase) => {
     let state: DialogueState = selectOption(finalReading, startDialogue(finalReading), 'open');
     state = { ...state, flags };
