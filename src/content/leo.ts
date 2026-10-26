@@ -23,6 +23,7 @@ export const leoVisit: DialogueStory = {
           next: 'leo-reflection',
           unless: ['leo_reflected_on_uncertainty'],
         },
+        { id: 'leo-honest-talk', label: '«Коли обережність стає мовчанням?»', next: 'leo-honest-talk', unless: ['leo_honesty_discussed'] },
         { id: 'trains', label: '«Що вам подобається в потягах?»', next: 'trains' },
         { id: 'mara', label: '«Ви знайомі з Марою з пекарні?»', next: 'mara' },
         { id: 'town', label: '«Давно живете в Беллвіку?»', next: 'town' },
@@ -205,6 +206,59 @@ export const leoVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Лео виходить на вулицю. Дзвіночок над дверима стихає, а ви помічаєте, що він акуратно повернув усі книжки на свої місця.',
       options: [],
+    },
+    {
+      id: 'leo-honest-talk',
+      speaker: 'Лео',
+      text: "«Коли відкладаєш розмову, щоб не зробити гірше, це обережність. А коли відкладаєш її десятий раз — вже не впевнений».",
+      options: [
+        { id: 'leo-honest-ask', label: "«Що саме ти відкладаєш?»", next: 'leo-honest-specific' },
+        { id: 'leo-honest-respect', label: "«Можемо не говорити про особисте»", next: 'leo-honest-end' },
+      ],
+    },
+    {
+      id: 'leo-honest-specific',
+      speaker: 'Лео',
+      text: "«Мара вміє запитати прямо: ти сьогодні зі мною чи знову складаєш план? А я відповідаю, що втомився. Це правда. Тільки не вся. Іноді боюся, що моя розгубленість її образить».",
+      options: [
+        { id: 'leo-specific-care', label: "«Може, вона хоче почути тебе, а не план?»", next: 'leo-honest-objection' },
+        { id: 'leo-specific-privacy', label: "«Не все потрібно розповідати відразу»", next: 'leo-honest-objection' },
+      ],
+    },
+    {
+      id: 'leo-honest-objection',
+      speaker: 'Лео',
+      text: "«А якщо щирість — просто спосіб перекласти тривогу на іншу людину? Сказати “мені важко”, а потім чекати, що вона мене заспокоїть? Я так теж не хочу».",
+      options: [
+        { id: 'leo-objection-boundary', label: "«Можна говорити без вимоги негайної відповіді»", next: 'leo-honest-attempt' },
+        { id: 'leo-objection-delay', label: "«Можна спершу зрозуміти, чого хочеш від розмови»", next: 'leo-honest-attempt' },
+      ],
+    },
+    {
+      id: 'leo-honest-attempt',
+      speaker: 'Лео',
+      text: "«Тоді я сказав би: я зараз не знаю, як пояснити деякі речі. Але не хочу вдавати, що все просто. І не прошу тебе розв’язати це за мене». Він пробує вимовити фразу ще раз, тихіше.",
+      options: [
+        { id: 'leo-attempt-real', label: "«Це чесніше за готову промову»", next: 'leo-honest-choice' },
+        { id: 'leo-attempt-ask', label: "«А якщо вона не захоче слухати?»", next: 'leo-honest-choice' },
+      ],
+    },
+    {
+      id: 'leo-honest-choice',
+      speaker: 'Лео',
+      text: "«Тоді я маю почути і це. Раніше думав, що правильні слова гарантують правильний результат. Тепер підозрюю, що вони лише дають людині право відповісти по-своєму».",
+      options: [
+        { id: 'leo-choice-finish', label: "«Можна почати з цього»", next: 'leo-honest-end' },
+        { id: 'leo-choice-time', label: "«І можна не поспішати»", next: 'leo-honest-end' },
+      ],
+    },
+    {
+      id: 'leo-honest-end',
+      speaker: 'Лео',
+      text: "«Дякую. Не обіцяю, що сьогодні стану найвідвертішим у місті. Але наступного разу спробую не ховатися за розкладом».",
+      options: [
+        { id: 'leo-honest-return', label: "«Повернімося до книжок»", next: 'greet', grants: ['leo_honesty_discussed'] },
+      ],
     },
     {
       id: 'leo-reflection',
