@@ -57,6 +57,11 @@ export function decodeSave(raw: string): ChapterState | null {
       return null;
     if (!obj.flags.every((value: unknown) => typeof value === 'string')) return null;
     if (!obj.history.every((value: unknown) => typeof value === 'string')) return null;
+    if (obj.flags.length > 128 || obj.history.length > 256) return null;
+    // Save data is untrusted: validate flag and history limits before loading dialogue content.
+    if (new Set(obj.flags).size !== obj.flags.length) return null;
+    if (obj.flags.some((flag: string) => !flag || flag.length > 120)) return null;
+    if (obj.history.some((id: string) => !id || id.length > 120)) return null;
     const stage = obj.stage as ChapterStage;
     const dialogue = {
       node: obj.node,
@@ -78,9 +83,6 @@ export function decodeSave(raw: string): ChapterState | null {
     if (obj.flags.length > 128 || obj.history.length > 256) return null;
     // Save data is untrusted: a malformed payload must never bypass a dialogue gate.
     if (new Set(obj.flags).size !== obj.flags.length) return null;
-    // The chapter's world flags and the dialogue's flags must share one source of truth.
-    // A restored state must never acquire flags that its dialogue does not carry.
-    if (new Set(dialogue.flags).size !== dialogue.flags.length) return null;
     if (obj.flags.some((flag: string) => !flag || flag.length > 120)) return null;
     if (obj.history.some((id: string) => !id || id.length > 120)) return null;
     return { stage, dialogue, flags: obj.flags as string[] };
