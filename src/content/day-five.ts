@@ -33,6 +33,13 @@ export const finalReading: DialogueStory = {
         },
       ],
       options: [
+        { id: 'final-v3-mara-option', label: '«Як минув ранок, який ти хотіла залишити собі?»', next: 'final-v3-mara', requires: ['mara_own_morning_heard'], unless: ['final_v3_mara_heard'] },
+        { id: 'final-v3-leo-option', label: '«Чи вдалося поговорити без готового плану?»', next: 'final-v3-leo', requires: ['leo_honesty_discussed'], unless: ['final_v3_leo_heard'] },
+        { id: 'final-v3-iris-option', label: '«Чи показала ти малюнки без пояснень?»', next: 'final-v3-iris', requires: ['iris_art_boundaries_discussed'], unless: ['final_v3_iris_heard'] },
+        { id: 'final-v3-anna-option', label: '«Як діти сприйняли питання без відповіді?»', next: 'final-v3-anna', requires: ['anna_uncertainty_discussed'], unless: ['final_v3_anna_heard'] },
+        { id: 'final-v3-thomas-option', label: '«Чи вдалося побути поруч без інструментів?»', next: 'final-v3-thomas', requires: ['thomas_listening_discussed'], unless: ['final_v3_thomas_heard'] },
+        { id: 'final-v3-nora-option', label: '«Що ти вирішила залишити в архіві?»', next: 'final-v3-nora', requires: ['nora_archive_ethics_discussed'], unless: ['final_v3_nora_heard'] },
+        { id: 'final-v3-eleanor-option', label: '«Ти звикла до нового місця столу?»', next: 'final-v3-eleanor', requires: ['eleanor_change_discussed'], unless: ['final_v3_eleanor_heard'] },
         {
           id: 'anna',
           label: 'Послухати Анну про шкільний книжковий клуб',
@@ -702,6 +709,48 @@ export const finalReading: DialogueStory = {
           grants: ['final_day_four_leo_heard'],
         },
       ],
+    },
+    {
+      id: 'final-v3-mara',
+      speaker: 'Мара',
+      text: '«Я сказала, що не беру додаткового замовлення. Потім пів години думала, чи не образила когось. Але книжку все-таки відкрила. І це був мій ранок».',
+      options: [{ id: 'final-v3-mara-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_v3_mara_heard'] }],
+    },
+    {
+      id: 'final-v3-leo',
+      speaker: 'Лео',
+      text: '«Я сказав Марі, що іноді гублюся в словах. Вона не стала виправляти мою розгубленість. Ми просто домовилися не вгадувати думки одне одного».',
+      options: [{ id: 'final-v3-leo-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_v3_leo_heard'] }],
+    },
+    {
+      id: 'final-v3-iris',
+      speaker: 'Айріс',
+      text: '«Так. Один відвідувач питав, чий це будинок. Я відповіла: не знаю. Він довго дивився на світло у вікні. І цього виявилося досить».',
+      options: [{ id: 'final-v3-iris-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_v3_iris_heard'] }],
+    },
+    {
+      id: 'final-v3-anna',
+      speaker: 'Анна',
+      text: '«Спочатку обурилися. Потім принесли три різні книжки й почали сперечатися. Я не підсумувала за них. Здається, це був найкращий урок за місяць».',
+      options: [{ id: 'final-v3-anna-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_v3_anna_heard'] }],
+    },
+    {
+      id: 'final-v3-thomas',
+      speaker: 'Томас',
+      text: '«Я запитав Анну, чи потрібна допомога. Вона сказала: посиди зі мною. Я сидів. Незвично важка робота. Але вперше за довгий час не поспішав її закінчити».',
+      options: [{ id: 'final-v3-thomas-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_v3_thomas_heard'] }],
+    },
+    {
+      id: 'final-v3-nora',
+      speaker: 'Нора',
+      text: '«Три різні свідчення й чесну примітку, що ми не знаємо всього. Приватний лист не став експонатом. Архів від цього не збіднів».',
+      options: [{ id: 'final-v3-nora-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_v3_nora_heard'] }],
+    },
+    {
+      id: 'final-v3-eleanor',
+      speaker: 'Елеонора',
+      text: '«Ні. Щоразу хочу пересунути його назад. Але сьогодні побачила, як біля вікна читає дитина. Мабуть, не кожна добра зміна має бути моєю ідеєю».',
+      options: [{ id: 'final-v3-eleanor-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_v3_eleanor_heard'] }],
     },
     {
       id: 'end',
