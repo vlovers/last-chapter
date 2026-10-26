@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, selectOption, startDialogue, type DialogueState } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  type DialogueState,
+} from '../src/game/dialogue';
 
 const exclusiveOutcomes = [
   ['final_respected_privacy', 'final_repaired_rumor'],
@@ -21,7 +26,9 @@ describe('Final gathering narrative invariants', () => {
     ] as const) {
       let state: DialogueState = selectOption(finalReading, startDialogue(finalReading), 'open');
       state = { ...state, flags };
-      expect(availableOptions(finalReading, state).some((option) => option.id === hidden)).toBe(false);
+      expect(availableOptions(finalReading, state).some((option) => option.id === hidden)).toBe(
+        false,
+      );
     }
   });
 
