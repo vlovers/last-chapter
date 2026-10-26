@@ -276,7 +276,7 @@ export const thomasVisit: DialogueStory = {
     {
       id: 'thomas-v3-conversation-end',
       speaker: 'Томас',
-      text: '«Дякую за розмову. Не все треба вирішувати одразу».',
+      text: '«Гаразд. Піду перевірю ту лампу, поки вона знову не почала сваритися зі мною». Він підхоплює ящик, але цього разу не поспішає до дверей.
       options: [
         {
           id: 'thomas-v3-return',
