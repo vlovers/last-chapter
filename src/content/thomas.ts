@@ -143,6 +143,14 @@ export const thomasVisit: DialogueStory = {
       text: 'Він кладе викрутку. «Я чув. Мені неприємно, що люди вирішили: вони знають усе, побачивши мене на вулиці».',
       options: [
         {
+          id: 'rumor-own-words',
+          label: '«Я теж зробив висновок без доказів. Вибач»',
+          next: 'rumor-own-words',
+          requires: ['rumor_amplified'],
+          unless: ['thomas_heard_rumor_apology'],
+          grants: ['thomas_heard_rumor_apology'],
+        },
+        {
           id: 'rumor-boundary',
           label: '«Я не буду поширювати неперевірене»',
           next: 'boundary',
@@ -155,6 +163,12 @@ export const thomasVisit: DialogueStory = {
           grants: ['thomas_privacy_pressed'],
         },
       ],
+    },
+    {
+      id: 'rumor-own-words',
+      speaker: 'Томас',
+      text: '«Дякую, що сказали це мені, а не комусь за моєю спиною». Він обережно кладе викрутку. «Але Анна могла почути вашу першу версію. Я не можу зробити вигляд, що її не було».',
+      options: [{ id: 'rumor-own-words-back', label: '«Розумію. Більше не повторюватиму цього»', next: 'greet' }],
     },
     {
       id: 'boundary',
