@@ -36,14 +36,23 @@ function walk(story: DialogueStory): { visited: Set<string>; endings: number } {
       story.nodes.flatMap((node) => node.options.flatMap((option) => option.requires ?? [])),
     ),
   ];
+  // Only flags referenced by option gates can affect future graph traversal.
+  // Narrative memory grants that never gate a choice must not multiply states.
+  const gateFlags = new Set(
+    story.nodes.flatMap((node) =>
+      node.options.flatMap((option) => [...(option.requires ?? []), ...(option.unless ?? [])]),
+    ),
+  );
   const initial: DialogueState = { ...startDialogue(story), flags: prerequisiteFlags };
   const pending: DialogueState[] = [initial];
+  let head = 0;
   const seen = new Set<string>();
   const visited = new Set<string>();
   let endings = 0;
-  while (pending.length) {
-    const state = pending.shift()!;
-    const signature = state.node + '|' + [...state.flags].sort().join(',');
+  while (head < pending.length) {
+    const state = pending[head++]!;
+    const signature =
+      state.node + '|' + state.flags.filter((flag) => gateFlags.has(flag)).sort().join(',');
     if (seen.has(signature)) continue;
     seen.add(signature);
     visited.add(state.node);
