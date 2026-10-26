@@ -73,6 +73,23 @@ describe('Private letter: consent and trust across days four and five', () => {
     expect(choices(finalReading, state)).toContain('wait');
   });
 
+  it('does not unlock the mutual ending by apologizing after reading the letter', () => {
+    const state = play(
+      finalReading,
+      ['open', 'letter'],
+      [
+        'saw_envelope',
+        'opened_private_letter',
+        'iris_letter_breach_admitted',
+        'iris_letter_choice_respected',
+        'leo_open_to_conversation',
+      ],
+    );
+    expect(choices(finalReading, state)).not.toContain('mutual');
+    expect(choices(finalReading, state)).toContain('repair-trust');
+    expect(choices(finalReading, state)).toContain('wait');
+  });
+
   it('does not automatically deliver the private letter when a conversation happens', () => {
     const state = play(
       finalReading,
