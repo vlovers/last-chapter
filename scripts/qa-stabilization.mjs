@@ -64,6 +64,12 @@ try {
   assert.ok(
     (await page.locator('#story-continue').getAttribute('data-action')).includes('Розмова'),
   );
+  assert.equal(
+    await page
+      .locator('.story-toolbar-actions button[aria-label="Поговорити з Марою"]')
+      .isVisible(),
+    false,
+  );
   const before = await state(page);
   await screenshot(page, 'first-visit');
   await page.locator('#story-continue').click();
@@ -171,6 +177,20 @@ try {
         }
         await choose(page, '__advance');
         assert.notEqual((await state(page)).stage, stage);
+        if (stage === 'miller')
+          assert.equal(
+            await page
+              .locator('.story-toolbar-actions button[aria-label="Поговорити з Марою"]')
+              .getAttribute('disabled'),
+            null,
+          );
+        if (stage === 'mara')
+          assert.equal(
+            await page
+              .locator('.story-toolbar-actions button[aria-label="Поговорити з Марою"]')
+              .getAttribute('disabled'),
+            '',
+          );
         assert.equal((await state(page)).orders, 1);
       } else {
         await page.getByRole('button', { name: `Запропонувати «${title}»`, exact: true }).tap();

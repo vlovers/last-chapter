@@ -194,10 +194,25 @@ export function drawEnvironment(scene) {
     f(x + 2, y + 1, w - 4, Math.max(1, h - 2), paper);
     f(x + 1, y + h - 1, w - 1, 1, color);
   };
+  // Rasterize immutable paint once at native density. Reuse textures on scene restart.
+  const cache = (graphics, key, w, h, depth) => {
+    if (!scene.textures.exists(key)) graphics.generateTexture(key, w, h);
+    const image = scene.add.image(graphics.x, graphics.y, key).setOrigin(0, 0).setDepth(depth);
+    graphics.destroy();
+    return image;
+  };
   const piece = (x, y, depth, draw) => {
-    const object = scene.add.graphics({ x, y }).setDepth(depth);
-    draw(painter(object));
-    return object;
+    const commands = [];
+    draw((...rect) => commands.push(rect));
+    const left = Math.min(...commands.map(([x]) => x));
+    const top = Math.min(...commands.map(([, y]) => y));
+    const w = Math.max(...commands.map(([x, , w]) => x + w)) - left;
+    const h = Math.max(...commands.map(([, y, , h]) => y + h)) - top;
+    const object = scene.add.graphics({ x: x + left, y: y + top });
+    const paint = painter(object);
+    for (const [rx, ry, rw, rh, color, alpha] of commands)
+      paint(rx - left, ry - top, rw, rh, color, alpha);
+    return cache(object, `bookshop-piece-${x}-${y}`, w, h, depth);
   };
   // Native 1px geometry: a 40px person, 42px counter, 36px chair.
   piece(156, 253, 295, (f) => {
@@ -384,12 +399,12 @@ export function drawEnvironment(scene) {
   r(296, 52, 48, 2, 0x614431);
   r(301, 54, 38, 2, 0xffdfa1);
   const pool = (x, y, w, h, depth) => {
-    const glow = scene.add.graphics().setDepth(depth);
+    const glow = scene.add.graphics({ x: x - w / 2, y: y - h / 2 });
     for (let i = 0; i < 6; i++) {
       glow.fillStyle(0xffcf87, 0.018 + i * 0.005);
-      glow.fillEllipse(x, y, w - i * 12, h - i * 10);
+      glow.fillEllipse(w / 2, h / 2, w - i * 12, h - i * 10);
     }
-    return glow;
+    return cache(glow, `bookshop-glow-${x}-${y}`, w, h, depth);
   };
   const halo = pool(320, 78, 146, 138, 2);
   const readingGlow = pool(492, 267, 106, 94, 310);
@@ -436,5 +451,6 @@ export function drawEnvironment(scene) {
   f(12, 342, 616, 7, 0x332c29);
   f(17, 341, 606, 2, honey);
   f(21, 337, 598, 4, ink, 0.2);
+  cache(g, 'bookshop-native-background', WIDTH, HEIGHT, 0);
   return { halo, readingGlow, parcel, steam };
 }

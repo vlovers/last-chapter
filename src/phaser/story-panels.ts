@@ -172,8 +172,16 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     const count = availableMaraTopics(story.day).filter((t) =>
       conversationAvailable(t, sessionFor(t.id)),
     ).length;
-    conversationButton.dataset.new = count ? String(count) : '✓';
-    conversationButton.title = count ? `Доступно тем: ${count}` : 'Доступні розмови завершено';
+    const maraKnown = discoveredPeople().some(([id]) => id === 'mara');
+    const maraPresent = story.actor === 'mara';
+    conversationButton.hidden = !maraKnown;
+    conversationButton.disabled = !maraPresent;
+    conversationButton.dataset.new = maraPresent ? (count ? String(count) : '✓') : '';
+    conversationButton.title = !maraPresent
+      ? 'Мари зараз немає у книгарні.'
+      : count
+        ? `Доступно тем: ${count}`
+        : 'Доступні розмови завершено';
     conversationButton.setAttribute('aria-expanded', String(mode === 'conversation'));
     panel.hidden = mode === null;
     document.body.classList.toggle('reading', mode !== null);
@@ -327,7 +335,17 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
           refresh();
           panel.querySelector<HTMLButtonElement>('button')?.focus();
         });
-        panel.append(talk);
+        talk.disabled = story.actor !== 'mara';
+        if (discoveredPeople().some(([id]) => id === 'mara')) {
+          panel.append(talk);
+          if (talk.disabled)
+            panel.append(
+              element(
+                'p',
+                'Мари зараз немає у книгарні. Додаткові розмови можна продовжити під час її візиту.',
+              ),
+            );
+        }
         const decisions = story.notes.filter((note) => !note.startsWith('Чутка:'));
         if (decisions.length) {
           panel.append(element('h3', 'Почуте й важливі рішення'));
@@ -536,6 +554,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     }
   };
   const toggle = (next: 'journal' | 'catalog' | 'conversation') => {
+    if (next === 'conversation' && story.actor !== 'mara') return;
     returnFocus = document.activeElement as HTMLElement;
     reaction = next === 'catalog' ? story.lastRecommendation : null;
     mode = mode === next ? null : next;

@@ -124,7 +124,7 @@ export class DialogueUI {
     } else {
       this.useFallback('object', node.speaker);
     }
-    this.close.textContent = '×';
+    this.close.textContent = node.choices.length ? 'Пізніше' : '×';
     this.close.setAttribute(
       'aria-label',
       node.choices.length ? 'Продовжити пізніше' : 'Закрити розмову',

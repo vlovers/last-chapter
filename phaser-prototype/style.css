@@ -1276,3 +1276,9 @@ body.reduced * {
   font-size: 13px;
   line-height: 1.5;
 }
+
+#close-dialogue[aria-label='Продовжити пізніше'] {
+  font-size: 14px;
+  padding: 6px 8px;
+  min-width: 70px;
+}

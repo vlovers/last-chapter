@@ -162,6 +162,17 @@ try {
     await page.locator('#story-continue').click();
     assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), save);
     await page.keyboard.press('Escape');
+    // Optional conversations require Mara to be physically in this visit.
+    assert.equal(
+      await page
+        .locator('.story-toolbar-actions')
+        .getByRole('button', { name: 'Поговорити з Марою', exact: true })
+        .isVisible(),
+      false,
+    );
+    await page.locator('#story-continue').click();
+    for (const id of ['books', 'orchard', 'leave-orchard', '__advance']) await choose(page, id);
+    await page.keyboard.press('Escape');
     // Optional topic finishes once; the day-unlocked next topic replaces it.
     await openMara(page);
     await page.getByRole('heading', { name: 'Книжкові суперечки з Марою', exact: true }).waitFor();
@@ -185,7 +196,7 @@ try {
     await page.keyboard.press('Escape');
     // A shortest valid narrative route is computed in the pure engine; every
     // choice is then made through the real UI and persisted by the running game.
-    const visited = [];
+    const visited = ['miller']; // Completed through the real UI before Mara's optional scene.
     for (let step = 0; step < 19; step++) {
       const plan = await page.evaluate(async () => {
         const { stageStory, chooseChapterOption } = await import('/src/game/chapter.ts');
