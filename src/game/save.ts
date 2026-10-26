@@ -81,11 +81,6 @@ export function decodeSave(raw: string): ChapterState | null {
         return null;
       }
     }
-    if (obj.flags.length > 128 || obj.history.length > 256) return null;
-    // Save data is untrusted: a malformed payload must never bypass a dialogue gate.
-    if (new Set(obj.flags).size !== obj.flags.length) return null;
-    if (obj.flags.some((flag: string) => !flag || flag.length > 120)) return null;
-    if (obj.history.some((id: string) => !id || id.length > 120)) return null;
     return { stage, dialogue, flags: obj.flags as string[] };
   } catch {
     return null;
