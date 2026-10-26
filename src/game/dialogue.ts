@@ -85,6 +85,9 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
     for (const variant of node.textWhen ?? []) {
       if (!variant.text.trim()) errors.push(`Empty conditional text: ${node.id}`);
       if (variant.requires.length === 0) errors.push(`Unconditional text variant: ${node.id}`);
+      if (variant.requires.some((flag) => !flag.trim())) {
+        errors.push(`Blank conditional flag: ${node.id}`);
+      }
       if (new Set(variant.requires).size !== variant.requires.length) {
         errors.push(`Duplicate conditional flag: ${node.id}`);
       }
@@ -94,6 +97,11 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
       if (options.has(option.id)) errors.push(`Duplicate option: ${node.id}/${option.id}`);
       options.add(option.id);
       if (!option.label.trim()) errors.push(`Empty option label: ${node.id}/${option.id}`);
+      for (const field of ['requires', 'unless', 'grants'] as const) {
+        if ((option[field] ?? []).some((flag) => !flag.trim())) {
+          errors.push(`Blank ${field} flag: ${node.id}/${option.id}`);
+        }
+      }
       if (new Set(option.requires ?? []).size !== (option.requires ?? []).length) {
         errors.push(`Duplicate required flag: ${node.id}/${option.id}`);
       }
