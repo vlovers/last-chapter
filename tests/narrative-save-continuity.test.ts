@@ -176,6 +176,46 @@ describe('Narrative decisions survive chapter transitions and save/load', () => 
     expect(mara.flags).not.toContain('iris_letter_delivery_consented');
   });
 
+  it.each([
+    [
+      'Anna',
+      'anna_book_disagreement_discussed',
+      'anna_classroom_debate_encouraged',
+      'anna-classroom-callback',
+      'anna-classroom-callback-back',
+      'final_anna_classroom_heard',
+    ],
+    [
+      'Thomas',
+      'thomas_reading_challenge_discussed',
+      'thomas_book_ending_disputed',
+      'thomas-book-callback',
+      'thomas-book-callback-back',
+      'final_thomas_book_heard',
+    ],
+  ] as const)(
+    'preserves %s independent book-story callback through save/load and season ending',
+    (_name, discussed, choice, callback, back, result) => {
+      const dayFive = startFifthDay(at('day4-complete', [discussed, choice]));
+      const loaded = decodeSave(encodeSave(choose(dayFive, 'open')))!;
+      const options = availableOptions(
+        stageStory(loaded.stage),
+        loaded.dialogue,
+      ).map((option) => option.id);
+      expect(options).toContain(callback);
+      const visited = choose(loaded, callback, back);
+      const restored = decodeSave(encodeSave(visited))!;
+      expect(restored.flags).toContain(result);
+      expect(
+        availableOptions(stageStory(restored.stage), restored.dialogue).map(
+          (option) => option.id,
+        ),
+      ).not.toContain(callback);
+      const completed = choose(restored, 'close');
+      expect(finishSeason(completed).stage).toBe('season-complete');
+    },
+  );
+
   it('persists amplification and allows a Day 2 admission without losing a book sale', () => {
     const miller = choose(
       at('miller', []),
