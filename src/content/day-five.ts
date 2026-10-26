@@ -90,6 +90,18 @@ export const finalReading: DialogueStory = {
           requires: ['eleanor_reflected_on_legacy'],
           unless: ['final_eleanor_reflection_heard'],
         },
+        {
+          id: 'frank-evening',
+          label: 'Побути з Френком біля вікна',
+          next: 'frank-evening',
+          unless: ['final_frank_evening_heard'],
+        },
+        {
+          id: 'bookseller-reflection',
+          label: 'Записати, чого навчила книгарня за ці п’ять днів',
+          next: 'bookseller-reflection',
+          unless: ['final_bookseller_reflection_heard'],
+        },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
       ],
     },
@@ -435,6 +447,110 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до спільного читання',
           next: 'gathering',
           grants: ['final_eleanor_reflection_heard'],
+        },
+      ],
+    },
+    {
+      id: 'frank-evening',
+      speaker: 'Оповідач',
+      text: 'Френк, маленький сірий девон-рекс, сидить на підвіконні й стежить за краплями. Він не знає, чому люди сперечаються про листи, прощення та правду. Зате знає, що сьогодні всі говорять тихіше, коли хтось інший шукає слова.',
+      options: [
+        {
+          id: 'frank-sit',
+          label: 'Сісти поруч і нічого не пояснювати',
+          next: 'frank-silence',
+        },
+        {
+          id: 'frank-pet',
+          label: 'Почухати Френка за вухом',
+          next: 'frank-trust',
+        },
+      ],
+    },
+    {
+      id: 'frank-silence',
+      speaker: 'Оповідач',
+      text: 'Френк вмощується ближче. За вікном дощ, у кімнаті голоси. Уперше за день тобі не потрібно добирати правильну відповідь. Достатньо бути тут.',
+      options: [
+        {
+          id: 'frank-silence-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_frank_evening_heard', 'bookseller_chose_silence'],
+        },
+      ],
+    },
+    {
+      id: 'frank-trust',
+      speaker: 'Оповідач',
+      text: 'Кіт мружиться й довірливо підставляє голову. Йому не потрібні обіцянки назавжди — лише тепла долоня зараз. Ти згадуєш, скільки разів за ці дні люди просили саме цього: не рішення, а присутності.',
+      options: [
+        {
+          id: 'frank-trust-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_frank_evening_heard', 'bookseller_chose_presence'],
+        },
+      ],
+    },
+    {
+      id: 'bookseller-reflection',
+      speaker: 'Оповідач',
+      text: 'У старому зошиті для замовлень залишилася чиста сторінка. П’ять днів тому ти записував сюди назви книжок. Тепер хочеться записати питання, на яке немає готової відповіді.',
+      options: [
+        {
+          id: 'bookseller-truth',
+          label: '«Як говорити правду, не забираючи чужого права мовчати?»',
+          next: 'bookseller-truth',
+        },
+        {
+          id: 'bookseller-care',
+          label: '«Як бути поруч і не вирішувати за інших?»',
+          next: 'bookseller-care',
+        },
+        {
+          id: 'bookseller-change',
+          label: '«Як зберегти важливе, не боячись змін?»',
+          next: 'bookseller-change',
+        },
+      ],
+    },
+    {
+      id: 'bookseller-truth',
+      speaker: 'Оповідач',
+      text: 'Ти пишеш: «Не кожна історія, яку я можу розповісти, належить мені». Поруч залишаєш порожній рядок — для відповіді, яку поки не знаєш.',
+      options: [
+        {
+          id: 'bookseller-truth-back',
+          label: 'Закрити зошит',
+          next: 'gathering',
+          grants: ['final_bookseller_reflection_heard', 'bookseller_values_consent'],
+        },
+      ],
+    },
+    {
+      id: 'bookseller-care',
+      speaker: 'Оповідач',
+      text: 'Ти пишеш: «Турбота починається із запитання, а не з готового плану». Це не обіцянка ніколи не помилятися. Лише нагадування слухати, перш ніж допомагати.',
+      options: [
+        {
+          id: 'bookseller-care-back',
+          label: 'Закрити зошит',
+          next: 'gathering',
+          grants: ['final_bookseller_reflection_heard', 'bookseller_values_agency'],
+        },
+      ],
+    },
+    {
+      id: 'bookseller-change',
+      speaker: 'Оповідач',
+      text: 'Ти пишеш: «Місце залишається живим, доки в ньому є місце для нових людей». І раптом розумієш, що це стосується не тільки книгарні.',
+      options: [
+        {
+          id: 'bookseller-change-back',
+          label: 'Закрити зошит',
+          next: 'gathering',
+          grants: ['final_bookseller_reflection_heard', 'bookseller_values_change'],
         },
       ],
     },
