@@ -15,7 +15,12 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Тут пахне так само. Папір, дощ і чай, який хтось знову забув допити». Вона усміхається. «Я обіцяла не командувати. Але ту полицю я б переставила».',
       options: [
-        { id: 'eleanor-v3-conversation', label: '«Кому належить книгарня після передачі ключів?»', next: 'eleanor-v3-conversation', unless: ['eleanor_change_discussed'] },
+        {
+          id: 'eleanor-v3-conversation',
+          label: '«Кому належить книгарня після передачі ключів?»',
+          next: 'eleanor-v3-conversation',
+          unless: ['eleanor_change_discussed'],
+        },
         {
           id: 'eleanor-reflection',
           label: '«Що для тебе означає передати книгарню?»',
@@ -266,44 +271,73 @@ export const eleanorVisit: DialogueStory = {
     {
       id: 'eleanor-v3-conversation',
       speaker: 'Елеонора',
-      text: "«Я роками знала, де скрипить кожна дошка. А тепер приходжу — стіл стоїть біля іншого вікна. Перша думка — повернути його назад».",
+      text: '«Я роками знала, де скрипить кожна дошка. А тепер приходжу — стіл стоїть біля іншого вікна. Перша думка — повернути його назад».',
       options: [
-        { id: 'eleanor-v3-ask', label: "«Що тобі заважає?»", next: 'eleanor-v3-conversation-question' },
-        { id: 'eleanor-v3-short', label: "«Можемо не продовжувати»", next: 'eleanor-v3-conversation-end' },
+        {
+          id: 'eleanor-v3-ask',
+          label: '«Що тобі заважає?»',
+          next: 'eleanor-v3-conversation-question',
+        },
+        {
+          id: 'eleanor-v3-short',
+          label: '«Можемо не продовжувати»',
+          next: 'eleanor-v3-conversation-end',
+        },
       ],
     },
     {
       id: 'eleanor-v3-conversation-question',
       speaker: 'Елеонора',
-      text: "«Те, що це вже не мій стіл. Точніше, стіл той самий. А право вирішувати — інше. До цього важче звикнути».",
+      text: '«Те, що це вже не мій стіл. Точніше, стіл той самий. А право вирішувати — інше. До цього важче звикнути».',
       options: [
-        { id: 'eleanor-v3-challenge', label: "«А якщо новий порядок не подобається?»", next: 'eleanor-v3-conversation-counter' },
-        { id: 'eleanor-v3-listen', label: "«Залишимо питання відкритим»", next: 'eleanor-v3-conversation-end' },
+        {
+          id: 'eleanor-v3-challenge',
+          label: '«А якщо новий порядок не подобається?»',
+          next: 'eleanor-v3-conversation-counter',
+        },
+        {
+          id: 'eleanor-v3-listen',
+          label: '«Залишимо питання відкритим»',
+          next: 'eleanor-v3-conversation-end',
+        },
       ],
     },
     {
       id: 'eleanor-v3-conversation-counter',
       speaker: 'Елеонора',
-      text: "«Можу сказати про це. Але не наказати. Інакше передала тільки ключі, а не книгарню».",
+      text: '«Можу сказати про це. Але не наказати. Інакше передала тільки ключі, а не книгарню».',
       options: [
-        { id: 'eleanor-v3-follow', label: "«І що ти хочеш зробити?»", next: 'eleanor-v3-conversation-choice' },
-        { id: 'eleanor-v3-pause', label: "«Не обов’язково вирішувати сьогодні»", next: 'eleanor-v3-conversation-end' },
+        {
+          id: 'eleanor-v3-follow',
+          label: '«І що ти хочеш зробити?»',
+          next: 'eleanor-v3-conversation-choice',
+        },
+        {
+          id: 'eleanor-v3-pause',
+          label: '«Не обов’язково вирішувати сьогодні»',
+          next: 'eleanor-v3-conversation-end',
+        },
       ],
     },
     {
       id: 'eleanor-v3-conversation-choice',
       speaker: 'Елеонора',
-      text: "«Залишу собі пам’ять про старе місце. А вам — можливість зробити нове. Обидві речі помістяться тут».",
+      text: '«Залишу собі пам’ять про старе місце. А вам — можливість зробити нове. Обидві речі помістяться тут».',
       options: [
-        { id: 'eleanor-v3-accept', label: "«Це твій вибір»", next: 'eleanor-v3-conversation-end' },
+        { id: 'eleanor-v3-accept', label: '«Це твій вибір»', next: 'eleanor-v3-conversation-end' },
       ],
     },
     {
       id: 'eleanor-v3-conversation-end',
       speaker: 'Елеонора',
-      text: "«Дякую за розмову. Не все треба вирішувати одразу».",
+      text: '«Дякую за розмову. Не все треба вирішувати одразу».',
       options: [
-        { id: 'eleanor-v3-return', label: "Повернутися до інших тем", next: 'greet', grants: ['eleanor_change_discussed'] },
+        {
+          id: 'eleanor-v3-return',
+          label: 'Повернутися до інших тем',
+          next: 'greet',
+          grants: ['eleanor_change_discussed'],
+        },
       ],
     },
   ],

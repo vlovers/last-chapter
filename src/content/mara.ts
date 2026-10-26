@@ -108,7 +108,12 @@ export const maraVisit: DialogueStory = {
         { id: 'bakery', label: 'Про пекарню й маленькі катастрофи', next: 'bakery' },
         { id: 'town-life', label: 'Про життя, де всі всіх знають', next: 'town-life' },
         { id: 'trust', label: 'Про довіру та другі шанси', next: 'trust-question' },
-        { id: 'mara-own-morning', label: '«А коли ти востаннє робила щось тільки для себе?»', next: 'mara-own-morning', unless: ['mara_own_morning_heard'] },
+        {
+          id: 'mara-own-morning',
+          label: '«А коли ти востаннє робила щось тільки для себе?»',
+          next: 'mara-own-morning',
+          unless: ['mara_own_morning_heard'],
+        },
         { id: 'gift-now', label: '«Дякую за розмову. Повернімося до подарунка»', next: 'order' },
       ],
     },
@@ -365,63 +370,108 @@ export const maraVisit: DialogueStory = {
     {
       id: 'mara-own-morning',
       speaker: 'Мара',
-      text: "«Сьогодні я з’їла край булки, поки ніхто не бачив. Не смійтеся. Це був єдиний шматочок дня, який нікому не обіцяла».",
+      text: '«Сьогодні я з’їла край булки, поки ніхто не бачив. Не смійтеся. Це був єдиний шматочок дня, який нікому не обіцяла».',
       options: [
-        { id: 'mara-morning-question', label: "«А як виглядав би ранок без обіцянок?»", next: 'mara-own-dream' },
-        { id: 'mara-morning-exit', label: "«Можемо повернутися до книжок»", next: 'mara-own-finish' },
+        {
+          id: 'mara-morning-question',
+          label: '«А як виглядав би ранок без обіцянок?»',
+          next: 'mara-own-dream',
+        },
+        {
+          id: 'mara-morning-exit',
+          label: '«Можемо повернутися до книжок»',
+          next: 'mara-own-finish',
+        },
       ],
     },
     {
       id: 'mara-own-dream',
       speaker: 'Мара',
-      text: "«Я б поставила біля вікна маленький стіл. Дві книжки, чайник, тепле світло. Не для продажу. Щоб люди могли почитати, поки місто ще не вимагає від них нічого».",
+      text: '«Я б поставила біля вікна маленький стіл. Дві книжки, чайник, тепле світло. Не для продажу. Щоб люди могли почитати, поки місто ще не вимагає від них нічого».',
       options: [
-        { id: 'mara-dream-ask', label: "«Чому ти досі не зробила цього?»", next: 'mara-own-obstacle' },
-        { id: 'mara-dream-doubt', label: "«Може, мрія не мусить ставати справою?»", next: 'mara-own-doubt' },
+        {
+          id: 'mara-dream-ask',
+          label: '«Чому ти досі не зробила цього?»',
+          next: 'mara-own-obstacle',
+        },
+        {
+          id: 'mara-dream-doubt',
+          label: '«Може, мрія не мусить ставати справою?»',
+          next: 'mara-own-doubt',
+        },
       ],
     },
     {
       id: 'mara-own-obstacle',
       speaker: 'Мара',
-      text: "«Бо хтось має відкрити пекарню, підмінити колегу, забрати замовлення. І якщо я відмовлю — раптом виявиться, що без мене впоралися? Я боюся не тільки підвести людей. Я боюся стати непотрібною».",
+      text: '«Бо хтось має відкрити пекарню, підмінити колегу, забрати замовлення. І якщо я відмовлю — раптом виявиться, що без мене впоралися? Я боюся не тільки підвести людей. Я боюся стати непотрібною».',
       options: [
-        { id: 'mara-obstacle-support', label: "«Бути потрібною й бути виснаженою — не те саме»", next: 'mara-own-counter' },
-        { id: 'mara-obstacle-push', label: "«Може, варто ризикнути чужим невдоволенням»", next: 'mara-own-counter' },
+        {
+          id: 'mara-obstacle-support',
+          label: '«Бути потрібною й бути виснаженою — не те саме»',
+          next: 'mara-own-counter',
+        },
+        {
+          id: 'mara-obstacle-push',
+          label: '«Може, варто ризикнути чужим невдоволенням»',
+          next: 'mara-own-counter',
+        },
       ],
     },
     {
       id: 'mara-own-doubt',
       speaker: 'Мара',
-      text: "«Коли уявляю цей стіл, то вперше за день не думаю, скільки всього не встигла. Не хочу перетворити навіть це на черговий обов’язок».",
+      text: '«Коли уявляю цей стіл, то вперше за день не думаю, скільки всього не встигла. Не хочу перетворити навіть це на черговий обов’язок».',
       options: [
-        { id: 'mara-doubt-continue', label: "«Ти можеш спробувати й передумати»", next: 'mara-own-counter' },
-        { id: 'mara-doubt-leave', label: "«Нехай це поки буде тільки твоє»", next: 'mara-own-finish' },
+        {
+          id: 'mara-doubt-continue',
+          label: '«Ти можеш спробувати й передумати»',
+          next: 'mara-own-counter',
+        },
+        {
+          id: 'mara-doubt-leave',
+          label: '«Нехай це поки буде тільки твоє»',
+          next: 'mara-own-finish',
+        },
       ],
     },
     {
       id: 'mara-own-counter',
       speaker: 'Мара',
-      text: "«Ви говорите так, ніби сказати “ні” легко. А коли сусідка просить торт на ранок і каже, що тільки мені довіряє? Її довіра теж справжня. Не хочу вдавати, що чужі потреби — дрібниці».",
+      text: '«Ви говорите так, ніби сказати “ні” легко. А коли сусідка просить торт на ранок і каже, що тільки мені довіряє? Її довіра теж справжня. Не хочу вдавати, що чужі потреби — дрібниці».',
       options: [
-        { id: 'mara-counter-care', label: "«Можна цінувати довіру й чесно назвати свої сили»", next: 'mara-own-choice' },
-        { id: 'mara-counter-boundary', label: "«А хто питає, скільки сил залишилося в тебе?»", next: 'mara-own-choice' },
+        {
+          id: 'mara-counter-care',
+          label: '«Можна цінувати довіру й чесно назвати свої сили»',
+          next: 'mara-own-choice',
+        },
+        {
+          id: 'mara-counter-boundary',
+          label: '«А хто питає, скільки сил залишилося в тебе?»',
+          next: 'mara-own-choice',
+        },
       ],
     },
     {
       id: 'mara-own-choice',
       speaker: 'Мара',
-      text: "«Тоді почну з одного ранку. Просто скажу, що наступного четверга не беру додаткових замовлень. Якщо запитають чому — скажу, що хочу почитати».",
+      text: '«Тоді почну з одного ранку. Просто скажу, що наступного четверга не беру додаткових замовлень. Якщо запитають чому — скажу, що хочу почитати».',
       options: [
-        { id: 'mara-choice-try', label: "«Це звучить як твій вибір»", next: 'mara-own-finish' },
-        { id: 'mara-choice-wait', label: "«І ти можеш змінити план»", next: 'mara-own-finish' },
+        { id: 'mara-choice-try', label: '«Це звучить як твій вибір»', next: 'mara-own-finish' },
+        { id: 'mara-choice-wait', label: '«І ти можеш змінити план»', next: 'mara-own-finish' },
       ],
     },
     {
       id: 'mara-own-finish',
       speaker: 'Мара',
-      text: "«Дякую, що не перетворили мій ранок на урок сміливості. Ще не знаю, чи вистачить духу. Але тепер знаю, що хочу спробувати».",
+      text: '«Дякую, що не перетворили мій ранок на урок сміливості. Ще не знаю, чи вистачить духу. Але тепер знаю, що хочу спробувати».',
       options: [
-        { id: 'mara-own-return', label: "«Тепер виберімо книжку Лео»", next: 'order', grants: ['mara_own_morning_heard'] },
+        {
+          id: 'mara-own-return',
+          label: '«Тепер виберімо книжку Лео»',
+          next: 'order',
+          grants: ['mara_own_morning_heard'],
+        },
       ],
     },
     {

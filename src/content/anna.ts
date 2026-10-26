@@ -15,7 +15,12 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Я Анна Гейл, викладаю в місцевій школі. У нас завтра читання, а бібліотечні примірники вирішили одночасно зникнути. Діти, звісно, називають це змовою».',
       options: [
-        { id: 'anna-v3-conversation', label: '«Чи повинна вчителька завжди знати відповідь?»', next: 'anna-v3-conversation', unless: ['anna_uncertainty_discussed'] },
+        {
+          id: 'anna-v3-conversation',
+          label: '«Чи повинна вчителька завжди знати відповідь?»',
+          next: 'anna-v3-conversation',
+          unless: ['anna_uncertainty_discussed'],
+        },
         {
           id: 'anna-reflection',
           label: '«А як навчити дітей не боятися власної думки?»',
@@ -246,44 +251,69 @@ export const annaVisit: DialogueStory = {
     {
       id: 'anna-v3-conversation',
       speaker: 'Анна',
-      text: "«Учениця запитала, чи можна бути доброю людиною й не пробачити. Я не знайшла готової відповіді. Мене налякало не питання, а власна тиша».",
+      text: '«Учениця запитала, чи можна бути доброю людиною й не пробачити. Я не знайшла готової відповіді. Мене налякало не питання, а власна тиша».',
       options: [
-        { id: 'anna-v3-ask', label: "«Що ти сказала?»", next: 'anna-v3-conversation-question' },
-        { id: 'anna-v3-short', label: "«Можемо не продовжувати»", next: 'anna-v3-conversation-end' },
+        { id: 'anna-v3-ask', label: '«Що ти сказала?»', next: 'anna-v3-conversation-question' },
+        {
+          id: 'anna-v3-short',
+          label: '«Можемо не продовжувати»',
+          next: 'anna-v3-conversation-end',
+        },
       ],
     },
     {
       id: 'anna-v3-conversation-question',
       speaker: 'Анна',
-      text: "«Що повернемося до цього завтра. Але весь вечір думала, чи не підвела її. Дорослі звикли вдавати, що все знають».",
+      text: '«Що повернемося до цього завтра. Але весь вечір думала, чи не підвела її. Дорослі звикли вдавати, що все знають».',
       options: [
-        { id: 'anna-v3-challenge', label: "«А якщо невпевненість теж навчає?»", next: 'anna-v3-conversation-counter' },
-        { id: 'anna-v3-listen', label: "«Залишимо питання відкритим»", next: 'anna-v3-conversation-end' },
+        {
+          id: 'anna-v3-challenge',
+          label: '«А якщо невпевненість теж навчає?»',
+          next: 'anna-v3-conversation-counter',
+        },
+        {
+          id: 'anna-v3-listen',
+          label: '«Залишимо питання відкритим»',
+          next: 'anna-v3-conversation-end',
+        },
       ],
     },
     {
       id: 'anna-v3-conversation-counter',
       speaker: 'Анна',
-      text: "«Дитина прийшла по опору. Я боюся підмінити її власною розгубленістю. Та й удавати впевненість — теж нечесно».",
+      text: '«Дитина прийшла по опору. Я боюся підмінити її власною розгубленістю. Та й удавати впевненість — теж нечесно».',
       options: [
-        { id: 'anna-v3-follow', label: "«І що ти хочеш зробити?»", next: 'anna-v3-conversation-choice' },
-        { id: 'anna-v3-pause', label: "«Не обов’язково вирішувати сьогодні»", next: 'anna-v3-conversation-end' },
+        {
+          id: 'anna-v3-follow',
+          label: '«І що ти хочеш зробити?»',
+          next: 'anna-v3-conversation-choice',
+        },
+        {
+          id: 'anna-v3-pause',
+          label: '«Не обов’язково вирішувати сьогодні»',
+          next: 'anna-v3-conversation-end',
+        },
       ],
     },
     {
       id: 'anna-v3-conversation-choice',
       speaker: 'Анна',
-      text: "«Спробую сказати їм, що ми можемо шукати відповідь разом. І незгода не означає неповагу».",
+      text: '«Спробую сказати їм, що ми можемо шукати відповідь разом. І незгода не означає неповагу».',
       options: [
-        { id: 'anna-v3-accept', label: "«Це твій вибір»", next: 'anna-v3-conversation-end' },
+        { id: 'anna-v3-accept', label: '«Це твій вибір»', next: 'anna-v3-conversation-end' },
       ],
     },
     {
       id: 'anna-v3-conversation-end',
       speaker: 'Анна',
-      text: "«Дякую за розмову. Не все треба вирішувати одразу».",
+      text: '«Дякую за розмову. Не все треба вирішувати одразу».',
       options: [
-        { id: 'anna-v3-return', label: "Повернутися до інших тем", next: 'hello', grants: ['anna_uncertainty_discussed'] },
+        {
+          id: 'anna-v3-return',
+          label: 'Повернутися до інших тем',
+          next: 'hello',
+          grants: ['anna_uncertainty_discussed'],
+        },
       ],
     },
   ],

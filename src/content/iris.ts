@@ -15,7 +15,12 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Не знаю. Колись я тут проводила майже кожну суботу. А потім сім років не могла змусити себе зайти». Вона усміхається. «Я Айріс. Малюю книжки, які іноді ніхто не друкує».',
       options: [
-        { id: 'iris-v3-conversation', label: '«Чи має художниця пояснювати кожну свою роботу?»', next: 'iris-v3-conversation', unless: ['iris_art_boundaries_discussed'] },
+        {
+          id: 'iris-v3-conversation',
+          label: '«Чи має художниця пояснювати кожну свою роботу?»',
+          next: 'iris-v3-conversation',
+          unless: ['iris_art_boundaries_discussed'],
+        },
         {
           id: 'iris-reflection',
           label: '«Чи обов’язково пояснювати свої малюнки?»',
@@ -242,8 +247,16 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Бо світло справжнє. Але моє право його намалювати не дає мені права розповідати, що відчуває людина всередині».',
       options: [
-        { id: 'iris-v3-challenge', label: '«А якщо глядач упізнає власний дім?»', next: 'iris-v3-counter' },
-        { id: 'iris-v3-listen', label: '«Не кожна картина потребує пояснення»', next: 'iris-v3-end' },
+        {
+          id: 'iris-v3-challenge',
+          label: '«А якщо глядач упізнає власний дім?»',
+          next: 'iris-v3-counter',
+        },
+        {
+          id: 'iris-v3-listen',
+          label: '«Не кожна картина потребує пояснення»',
+          next: 'iris-v3-end',
+        },
       ],
     },
     {
@@ -252,7 +265,11 @@ export const irisVisit: DialogueStory = {
       text: '«Тоді я вислухаю його. Не обов’язково знищу малюнок, але точно не назву його реакцію помилкою. Я теж хочу, щоб мене слухали».',
       options: [
         { id: 'iris-v3-follow', label: '«Що ти хочеш показати зараз?»', next: 'iris-v3-choice' },
-        { id: 'iris-v3-pause', label: '«Можемо залишити це питання відкритим»', next: 'iris-v3-end' },
+        {
+          id: 'iris-v3-pause',
+          label: '«Можемо залишити це питання відкритим»',
+          next: 'iris-v3-end',
+        },
       ],
     },
     {
@@ -265,7 +282,14 @@ export const irisVisit: DialogueStory = {
       id: 'iris-v3-end',
       speaker: 'Айріс',
       text: '«Дякую. Тут можна говорити про мистецтво й не перетворювати художницю на загадку».',
-      options: [{ id: 'iris-v3-return', label: 'Повернутися до інших тем', next: 'welcome', grants: ['iris_art_boundaries_discussed'] }],
+      options: [
+        {
+          id: 'iris-v3-return',
+          label: 'Повернутися до інших тем',
+          next: 'welcome',
+          grants: ['iris_art_boundaries_discussed'],
+        },
+      ],
     },
   ],
 };

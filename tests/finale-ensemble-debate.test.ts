@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import {
-  availableOptions,
-  currentNode,
-  selectOption,
-  startDialogue,
-} from '../src/game/dialogue';
+import { availableOptions, currentNode, selectOption, startDialogue } from '../src/game/dialogue';
 
 describe('Optional fifth-day ensemble debate', () => {
   it.each([
@@ -21,7 +16,11 @@ describe('Optional fifth-day ensemble debate', () => {
     expect(currentNode(finalReading, answer).text).toContain(fragment);
     const returned = selectOption(finalReading, answer, 'shared-table-return');
     expect(returned.flags).toContain('final_shared_table_heard');
-    expect(availableOptions(finalReading, returned).some((option) => option.id === 'shared-table')).toBe(false);
-    expect(availableOptions(finalReading, returned).some((option) => option.id === 'close')).toBe(true);
+    expect(
+      availableOptions(finalReading, returned).some((option) => option.id === 'shared-table'),
+    ).toBe(false);
+    expect(availableOptions(finalReading, returned).some((option) => option.id === 'close')).toBe(
+      true,
+    );
   });
 });
