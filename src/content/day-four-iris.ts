@@ -23,7 +23,55 @@ export const irisDecision: DialogueStory = {
           requires: ['saw_envelope'],
         },
         { id: 'past', label: '«Що для тебе змінилося після повернення?»', next: 'past' },
+        {
+          id: 'iris-boundaries',
+          label: '«Що означає повернутися, але не бути зобов’язаною залишитися?»',
+          next: 'iris-boundaries',
+          unless: ['iris_day_four_boundary_heard'],
+        },
         { id: 'leave', label: '«Не поспішай із рішенням»', next: 'end' },
+      ],
+    },
+    {
+      id: 'iris-boundaries',
+      speaker: 'Айріс',
+      text: '«Усі кажуть: нарешті ти вдома. Наче це зобов’язання. А я сьогодні вперше зайшла сюди без думки, що мушу комусь довести, чому повернулася».',
+      options: [
+        {
+          id: 'iris-boundaries-stay',
+          label: '«Можна любити місто й не обіцяти залишитися назавжди»',
+          next: 'iris-boundaries-choice',
+          grants: ['iris_day_four_respected_freedom'],
+        },
+        {
+          id: 'iris-boundaries-belong',
+          label: '«Можна бути вдома, навіть коли ще не знаєш, де твоє місце»',
+          next: 'iris-boundaries-choice',
+          grants: ['iris_day_four_supported_belonging'],
+        },
+      ],
+    },
+    {
+      id: 'iris-boundaries-choice',
+      speaker: 'Айріс',
+      text: '«Мені бракувало саме цього: розмови, після якої не потрібно одразу ухвалювати рішення». Вона відкриває альбом на чистій сторінці.',
+      textWhen: [
+        {
+          requires: ['iris_day_four_respected_freedom'],
+          text: '«Я можу поїхати ще раз. І це не зробить моє повернення неправдою. Дякую, що не називаєш свободу зрадою».',
+        },
+        {
+          requires: ['iris_day_four_supported_belonging'],
+          text: '«Мабуть, дім — це місце, де мені дозволено сумніватися. Дякую, що не вимагаєш від мене певності».',
+        },
+      ],
+      options: [
+        {
+          id: 'iris-boundaries-back',
+          label: 'Повернутися до розмови',
+          next: 'welcome',
+          grants: ['iris_day_four_boundary_heard'],
+        },
       ],
     },
     {
