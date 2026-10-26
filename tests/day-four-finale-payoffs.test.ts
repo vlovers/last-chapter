@@ -6,6 +6,7 @@ import {
   selectOption,
   startDialogue,
   validateDialogue,
+  type DialogueState,
 } from '../src/game/dialogue';
 
 const payoffs = [
@@ -44,7 +45,7 @@ describe('Day four decisions return in the finale', () => {
       );
       const texts: string[] = [];
       for (const decision of [first, second]) {
-        let state = { ...initial, flags: [completion, decision] };
+        let state: DialogueState = { ...initial, flags: [completion, decision] };
         expect(availableOptions(finalReading, state).some((item) => item.id === optionId)).toBe(
           true,
         );
