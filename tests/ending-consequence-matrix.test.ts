@@ -41,14 +41,20 @@ describe('finale consequence matrix', () => {
     expect(ending('final_repaired_rumor').community).toBe(respectful.community);
   });
 
-  it('keeps unrelated artistic and bookstore plans independent of the letter', () => {
+  it('preserves every independent future when Iris and Mara are both supported', () => {
     const exhibition = ending('final_iris_exhibition');
     const mara = ending('mara_future_supported');
     const bookClub = ending();
+    const both = ending('final_iris_exhibition', 'mara_future_supported');
     expect(new Set([exhibition.epilogue, mara.epilogue, bookClub.epilogue]).size).toBe(3);
-    expect(ending('final_iris_exhibition', 'mara_future_supported').epilogue).toBe(
-      exhibition.epilogue,
-    );
+    expect(exhibition.epilogue).toContain('Вікна Беллвіка');
+    expect(mara.epilogue).toContain('Мара почала');
+    for (const future of [bookClub, exhibition, mara, both]) {
+      expect(future.epilogue).toContain('книжковий клуб');
+    }
+    expect(both.epilogue).toContain('Вікна Беллвіка');
+    expect(both.epilogue).toContain('Мара почала');
+    expect(both.epilogue).toBe(ending('mara_future_supported', 'final_iris_exhibition').epilogue);
     expect(ending('final_letter_kept_private', 'final_iris_exhibition').epilogue).toBe(
       exhibition.epilogue,
     );
@@ -57,7 +63,12 @@ describe('finale consequence matrix', () => {
   it('preserves unrelated ending dimensions across every combination of decisions', () => {
     const letters = [[], ['final_mutual_conversation'], ['final_letter_kept_private']];
     const communities = [[], ['final_respected_privacy'], ['final_repaired_rumor']];
-    const futures = [[], ['final_iris_exhibition'], ['mara_future_supported']];
+    const futures = [
+      [],
+      ['final_iris_exhibition'],
+      ['mara_future_supported'],
+      ['final_iris_exhibition', 'mara_future_supported'],
+    ];
     for (const letterFlags of letters) {
       for (const communityFlags of communities) {
         for (const futureFlags of futures) {
