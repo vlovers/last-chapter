@@ -187,19 +187,35 @@ describe('Five-day rumor continuity: route matrix', () => {
   });
 
   it.each([
-    ['debate', ['anna_book_disagreement_discussed', 'anna_classroom_debate_encouraged'], 'final_anna_classroom_heard'],
-    ['alternate ending', ['anna_book_disagreement_discussed', 'anna_classroom_alternate_endings'], 'final_anna_classroom_heard'],
-    ['ambiguous novel', ['thomas_reading_challenge_discussed', 'thomas_book_ambiguity_accepted'], 'final_thomas_book_heard'],
-    ['disputed novel', ['thomas_reading_challenge_discussed', 'thomas_book_ending_disputed'], 'final_thomas_book_heard'],
+    [
+      'debate',
+      ['anna_book_disagreement_discussed', 'anna_classroom_debate_encouraged'],
+      'final_anna_classroom_heard',
+    ],
+    [
+      'alternate ending',
+      ['anna_book_disagreement_discussed', 'anna_classroom_alternate_endings'],
+      'final_anna_classroom_heard',
+    ],
+    [
+      'ambiguous novel',
+      ['thomas_reading_challenge_discussed', 'thomas_book_ambiguity_accepted'],
+      'final_thomas_book_heard',
+    ],
+    [
+      'disputed novel',
+      ['thomas_reading_challenge_discussed', 'thomas_book_ending_disputed'],
+      'final_thomas_book_heard',
+    ],
   ] as const)('%s: Day 5 remembers a non-mystery book conversation', (_name, flags, result) => {
     const story = finalReading;
     const initial = walk(story, ['open'], flags);
-    const option = result === 'final_anna_classroom_heard'
-      ? 'anna-classroom-callback'
-      : 'thomas-book-callback';
-    const back = result === 'final_anna_classroom_heard'
-      ? 'anna-classroom-callback-back'
-      : 'thomas-book-callback-back';
+    const option =
+      result === 'final_anna_classroom_heard' ? 'anna-classroom-callback' : 'thomas-book-callback';
+    const back =
+      result === 'final_anna_classroom_heard'
+        ? 'anna-classroom-callback-back'
+        : 'thomas-book-callback-back';
     expect(ids(story, initial)).toContain(option);
     const scene = selectOption(story, initial, option);
     expect(currentNode(story, scene).text.length).toBeGreaterThan(80);

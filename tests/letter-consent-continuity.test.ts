@@ -76,7 +76,11 @@ describe('Private letter: consent and trust across days four and five', () => {
     ['no permissions', ['saw_envelope'], false],
     ['only Iris respected', ['saw_envelope', 'iris_letter_choice_respected'], false],
     ['only Leo open', ['saw_envelope', 'leo_open_to_conversation'], false],
-    ['both ready', ['saw_envelope', 'iris_letter_choice_respected', 'leo_open_to_conversation'], true],
+    [
+      'both ready',
+      ['saw_envelope', 'iris_letter_choice_respected', 'leo_open_to_conversation'],
+      true,
+    ],
   ] as const)('%s: private conversation requires both routes', (_name, flags, allowed) => {
     const state = play(finalReading, ['open', 'letter'], flags);
     expect(choices(finalReading, state).includes('mutual')).toBe(allowed);
@@ -151,7 +155,12 @@ describe('Private letter: consent and trust across days four and five', () => {
     const state = play(
       finalReading,
       ['open', 'letter'],
-      ['saw_envelope', 'opened_private_letter', 'leo_day_four_chose_honesty', 'mara_day_four_named_own_needs'],
+      [
+        'saw_envelope',
+        'opened_private_letter',
+        'leo_day_four_chose_honesty',
+        'mara_day_four_named_own_needs',
+      ],
     );
     const text = currentNode(finalReading, state).text;
     expect(text).toContain('Печатка');

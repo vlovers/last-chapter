@@ -61,7 +61,10 @@ describe('Ukrainian dialogue slice', () => {
       'rumor-own-words',
     );
 
-    let amplified: DialogueState = { ...startDialogue(thomasVisit), flags: ['rumor_heard', 'rumor_amplified'] };
+    let amplified: DialogueState = {
+      ...startDialogue(thomasVisit),
+      flags: ['rumor_heard', 'rumor_amplified'],
+    };
     for (const choice of ['greet', 'rumor'])
       amplified = selectOption(thomasVisit, amplified, choice);
     expect(availableOptions(thomasVisit, amplified).map((option) => option.id)).toContain(
@@ -72,7 +75,10 @@ describe('Ukrainian dialogue slice', () => {
   });
 
   it('lets Anna respond to an admission without blocking her book order', () => {
-    let state: DialogueState = { ...startDialogue(annaVisit), flags: ['rumor_heard', 'rumor_amplified'] };
+    let state: DialogueState = {
+      ...startDialogue(annaVisit),
+      flags: ['rumor_heard', 'rumor_amplified'],
+    };
     for (const choice of [
       'hello',
       'rumor',
@@ -96,7 +102,10 @@ describe('Ukrainian dialogue slice', () => {
     expect(neutralChoices).not.toContain('rumor-player-accountability');
     expect(neutralChoices).toContain('close');
 
-    let amplified: DialogueState = { ...startDialogue(finalReading), flags: ['rumor_heard', 'rumor_amplified'] };
+    let amplified: DialogueState = {
+      ...startDialogue(finalReading),
+      flags: ['rumor_heard', 'rumor_amplified'],
+    };
     amplified = selectOption(finalReading, amplified, 'open');
     const choices = availableOptions(finalReading, amplified).map((o) => o.id);
     expect(choices).toContain('rumor-player-accountability');
@@ -105,7 +114,10 @@ describe('Ukrainian dialogue slice', () => {
   });
 
   it('supports day-five accountability without forced forgiveness or a blocked ending', () => {
-    let state: DialogueState = { ...startDialogue(finalReading), flags: ['rumor_heard', 'rumor_amplified'] };
+    let state: DialogueState = {
+      ...startDialogue(finalReading),
+      flags: ['rumor_heard', 'rumor_amplified'],
+    };
     for (const choice of [
       'open',
       'rumor-player-accountability',
@@ -120,7 +132,10 @@ describe('Ukrainian dialogue slice', () => {
   });
 
   it('lets Miller discuss an unidentified sighting without involving the couple', () => {
-    let state: DialogueState = { ...startDialogue(finalReading), flags: ['rumor_heard', 'rumor_challenged'] };
+    let state: DialogueState = {
+      ...startDialogue(finalReading),
+      flags: ['rumor_heard', 'rumor_challenged'],
+    };
     for (const choice of [
       'open',
       'rumor-miller-followup',

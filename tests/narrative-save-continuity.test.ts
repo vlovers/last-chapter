@@ -114,20 +114,12 @@ describe('Narrative decisions survive chapter transitions and save/load', () => 
   });
 
   it('does not offer Thomas a false apology for a rumor the player only heard', () => {
-    const miller = choose(
-      at('miller', []),
-      'greet',
-      'town',
-      'gossip',
-      'what-saw',
-      'acknowledge',
-    );
+    const miller = choose(at('miller', []), 'greet', 'town', 'gossip', 'what-saw', 'acknowledge');
     const thomas = at('thomas', decodeSave(encodeSave(miller))!.flags);
     const conversation = choose(thomas, 'greet', 'rumor');
-    const options = availableOptions(
-      stageStory(conversation.stage),
-      conversation.dialogue,
-    ).map((option) => option.id);
+    const options = availableOptions(stageStory(conversation.stage), conversation.dialogue).map(
+      (option) => option.id,
+    );
     expect(options).not.toContain('rumor-own-words');
     expect(options).toContain('rumor-boundary');
   });
@@ -138,20 +130,12 @@ describe('Narrative decisions survive chapter transitions and save/load', () => 
   ] as const)(
     'preserves %s rumor choices and their actual Thomas dialogue permissions',
     (_name, decision, apologyAvailable) => {
-      const miller = choose(
-        at('miller', []),
-        'greet',
-        'town',
-        'gossip',
-        'what-saw',
-        decision,
-      );
+      const miller = choose(at('miller', []), 'greet', 'town', 'gossip', 'what-saw', decision);
       const loaded = decodeSave(encodeSave(miller))!;
       const thomas = choose(at('thomas', loaded.flags), 'greet', 'rumor');
-      const options = availableOptions(
-        stageStory(thomas.stage),
-        thomas.dialogue,
-      ).map((option) => option.id);
+      const options = availableOptions(stageStory(thomas.stage), thomas.dialogue).map(
+        (option) => option.id,
+      );
       expect(options.includes('rumor-own-words')).toBe(apologyAvailable);
       expect(options).toContain('rumor-boundary');
       expect(loaded.flags).toContain('rumor_heard');
@@ -198,18 +182,15 @@ describe('Narrative decisions survive chapter transitions and save/load', () => 
     (_name, discussed, choice, callback, back, result) => {
       const dayFive = startFifthDay(at('day4-complete', [discussed, choice]));
       const loaded = decodeSave(encodeSave(choose(dayFive, 'open')))!;
-      const options = availableOptions(
-        stageStory(loaded.stage),
-        loaded.dialogue,
-      ).map((option) => option.id);
+      const options = availableOptions(stageStory(loaded.stage), loaded.dialogue).map(
+        (option) => option.id,
+      );
       expect(options).toContain(callback);
       const visited = choose(loaded, callback, back);
       const restored = decodeSave(encodeSave(visited))!;
       expect(restored.flags).toContain(result);
       expect(
-        availableOptions(stageStory(restored.stage), restored.dialogue).map(
-          (option) => option.id,
-        ),
+        availableOptions(stageStory(restored.stage), restored.dialogue).map((option) => option.id),
       ).not.toContain(callback);
       const completed = choose(restored, 'close');
       expect(finishSeason(completed).stage).toBe('season-complete');
