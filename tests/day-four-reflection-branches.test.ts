@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { irisDecision } from '../src/content/day-four-iris';
 import { maraDecision } from '../src/content/day-four-mara';
 import { leoDecision } from '../src/content/day-four-leo';
-import { currentNode, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
 
 describe('Day four character choices', () => {
   it.each([
@@ -41,6 +41,7 @@ describe('Day four character choices', () => {
       expect(currentNode(story, state).text.length).toBeGreaterThan(20);
       state = selectOption(story, state, back);
       expect(state.node).toBe(entry);
+      expect(availableOptions(story, state).some((option) => option.id === choice)).toBe(false);
     },
   );
 });
