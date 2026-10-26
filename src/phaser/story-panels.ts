@@ -1,4 +1,10 @@
-import { bellwickAvailable, bellwickSchedule, bellwickStorageKey, bellwickStory, type BellwickEncounterId } from './bellwick-schedule';
+import {
+  bellwickAvailable,
+  bellwickSchedule,
+  bellwickStorageKey,
+  bellwickStory,
+  type BellwickEncounterId,
+} from './bellwick-schedule';
 import {
   decodeOliverProgress,
   encodeOliverProgress,
@@ -51,8 +57,31 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   let selectedBellwick: BellwickEncounterId = 'mara';
   let bellwickFinished: string[] = [];
   const bellwickSessions: Partial<Record<BellwickEncounterId, DialogueState>> = {};
-  try { const raw = localStorage.getItem(bellwickStorageKey); if (raw) { const parsed: unknown = JSON.parse(raw); if (parsed && typeof parsed === 'object' && 'finished' in parsed && Array.isArray(parsed.finished)) bellwickFinished = parsed.finished.filter((id: unknown): id is string => typeof id === 'string' && bellwickSchedule.some((scene) => scene.id === id)); } } catch { /* optional */ }
-  const saveBellwick = () => { try { localStorage.setItem(bellwickStorageKey, JSON.stringify({ finished: bellwickFinished })); } catch { /* optional */ } };
+  try {
+    const raw = localStorage.getItem(bellwickStorageKey);
+    if (raw) {
+      const parsed: unknown = JSON.parse(raw);
+      if (
+        parsed &&
+        typeof parsed === 'object' &&
+        'finished' in parsed &&
+        Array.isArray(parsed.finished)
+      )
+        bellwickFinished = parsed.finished.filter(
+          (id: unknown): id is string =>
+            typeof id === 'string' && bellwickSchedule.some((scene) => scene.id === id),
+        );
+    }
+  } catch {
+    /* optional */
+  }
+  const saveBellwick = () => {
+    try {
+      localStorage.setItem(bellwickStorageKey, JSON.stringify({ finished: bellwickFinished }));
+    } catch {
+      /* optional */
+    }
+  };
   const oliverKey = 'last-chapter:optional:oliver:v1';
   let oliverProgress = freshOliverProgress();
   try {
@@ -195,13 +224,17 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     }
     if (mode === 'bellwick') {
       const available = bellwickAvailable(story.day, bellwickFinished);
-      if (!available.some((entry) => entry.id === selectedBellwick)) selectedBellwick = available[0]?.id ?? 'mara';
+      if (!available.some((entry) => entry.id === selectedBellwick))
+        selectedBellwick = available[0]?.id ?? 'mara';
       const selector = element('div', '', 'story-filters');
       for (const scene of available) {
         const button = element('button', scene.title);
         button.type = 'button';
         button.setAttribute('aria-pressed', String(selectedBellwick === scene.id));
-        button.addEventListener('click', () => { selectedBellwick = scene.id; refresh(); });
+        button.addEventListener('click', () => {
+          selectedBellwick = scene.id;
+          refresh();
+        });
         selector.append(button);
       }
       panel.append(selector);
@@ -210,18 +243,30 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         const script = bellwickStory(selectedBellwick);
         const session = bellwickSessions[selectedBellwick] ?? startDialogue(script);
         const node = currentNode(script, session);
-        panel.append(element('h2', scene.title), element('h3', node.speaker), element('p', node.text));
+        panel.append(
+          element('h2', scene.title),
+          element('h3', node.speaker),
+          element('p', node.text),
+        );
         const options = availableOptions(script, session);
         for (const option of options) {
           const button = element('button', option.label);
           button.type = 'button';
-          button.addEventListener('click', () => { bellwickSessions[selectedBellwick] = selectOption(script, session, option.id); refresh(); });
+          button.addEventListener('click', () => {
+            bellwickSessions[selectedBellwick] = selectOption(script, session, option.id);
+            refresh();
+          });
           panel.append(button);
         }
         if (!options.length) {
           const finish = element('button', 'Завершити розмову');
           finish.type = 'button';
-          finish.addEventListener('click', () => { bellwickFinished = [...new Set([...bellwickFinished, selectedBellwick])]; delete bellwickSessions[selectedBellwick]; saveBellwick(); refresh(); });
+          finish.addEventListener('click', () => {
+            bellwickFinished = [...new Set([...bellwickFinished, selectedBellwick])];
+            delete bellwickSessions[selectedBellwick];
+            saveBellwick();
+            refresh();
+          });
           panel.append(finish);
         }
       }
