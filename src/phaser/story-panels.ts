@@ -1,3 +1,4 @@
+import { decodeOliverProgress, encodeOliverProgress, freshOliverProgress } from './optional-oliver-state';
 import { availableOptions, currentNode, selectOption, startDialogue, type DialogueState } from '../game/dialogue';
 import { oliverUnreadBook } from '../content/optional/oliver';
 import type { FiveDayStory } from './five-day-story';
@@ -37,10 +38,18 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const controls = { journal, catalog };
   let mode: 'journal' | 'catalog' | 'conversation' | 'oliver' | null = null;
   const oliverKey = 'last-chapter:optional:oliver:v1';
-  let oliverSession: DialogueState | null = null;
-  let oliverFinished = false;
-  try { oliverFinished = localStorage.getItem(oliverKey) === 'done'; } catch { /* optional */ }
-  const saveOliver = () => { try { localStorage.setItem(oliverKey, 'done'); } catch { /* optional */ } };
+  let oliverProgress = freshOliverProgress();
+  try { oliverProgress = decodeOliverProgress(localStorage.getItem(oliverKey)); } catch { /* optional */ }
+  let oliverSession: DialogueState | null = oliverProgress.dialogue;
+  let oliverFinished = oliverProgress.finished;
+  const saveOliver = () => {
+    try {
+      localStorage.setItem(oliverKey, encodeOliverProgress({
+        finished: oliverFinished,
+        dialogue: oliverSession ?? startDialogue(oliverUnreadBook),
+      }));
+    } catch { /* optional */ }
+  };
   const conversationKey = 'last-chapter:conversation:mara:v1';
   let selectedTopic = maraBookClub;
   const letterKey = 'last-chapter:conversation:mara:letter:v1';
@@ -162,6 +171,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         button.addEventListener('click', () => {
           if (!oliverSession) return;
           oliverSession = selectOption(oliverUnreadBook, oliverSession, option.id);
+          saveOliver();
           refresh();
         });
         panel.append(button);
