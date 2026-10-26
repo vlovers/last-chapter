@@ -10,9 +10,14 @@ describe('Finale prerequisites and scene completion contracts', () => {
       if (!entry.requires?.length) continue;
       const destination = finalReading.nodes.find((node) => node.id === entry.next);
       expect(destination, `Missing destination for ${entry.id}`).toBeDefined();
-      const ownGrants = new Set((destination?.options ?? []).flatMap((option) => option.grants ?? []));
+      const ownGrants = new Set(
+        (destination?.options ?? []).flatMap((option) => option.grants ?? []),
+      );
       for (const required of entry.requires) {
-        expect(ownGrants.has(required), `${entry.id} requires a flag granted inside its own entry scene: ${required}`).toBe(false);
+        expect(
+          ownGrants.has(required),
+          `${entry.id} requires a flag granted inside its own entry scene: ${required}`,
+        ).toBe(false);
       }
     }
   });
@@ -20,7 +25,10 @@ describe('Finale prerequisites and scene completion contracts', () => {
   it('requires distinct prerequisites for each shared relationship scene', () => {
     const expected: Record<string, readonly string[]> = {
       'final-couple-conversation-option': ['mara_own_morning_heard', 'leo_honesty_discussed'],
-      'final-couple-anna-thomas-option': ['anna_uncertainty_discussed', 'thomas_listening_discussed'],
+      'final-couple-anna-thomas-option': [
+        'anna_uncertainty_discussed',
+        'thomas_listening_discussed',
+      ],
       'final-iris-eleanor-option': ['iris_art_boundaries_discussed', 'eleanor_change_discussed'],
     };
     for (const [id, required] of Object.entries(expected)) {

@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, currentNode, selectOption, type DialogueState } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  type DialogueState,
+} from '../src/game/dialogue';
 
 const decisions = [
   ['final_shared_table_consent', 'shared-table-consent'],
@@ -15,13 +20,16 @@ describe('Final evening shared-table decision', () => {
       const selected = selectOption(finalReading, initial, option);
       expect(selected.node).toBe('shared-table-answer');
       expect(selected.flags).toContain(flag);
-      const variant = finalReading.nodes.find((node) => node.id === 'shared-table-answer')
+      const variant = finalReading.nodes
+        .find((node) => node.id === 'shared-table-answer')
         ?.textWhen?.find((entry) => entry.requires.includes(flag));
       expect(variant).toBeDefined();
       expect(currentNode(finalReading, selected).text).toBe(variant?.text);
       const returned = selectOption(finalReading, selected, 'shared-table-return');
       expect(returned.flags).toContain('final_shared_table_heard');
-      expect(availableOptions(finalReading, returned).some((entry) => entry.id === 'shared-table')).toBe(false);
+      expect(
+        availableOptions(finalReading, returned).some((entry) => entry.id === 'shared-table'),
+      ).toBe(false);
     });
   }
 
@@ -31,6 +39,8 @@ describe('Final evening shared-table decision', () => {
       flags: ['final_shared_table_heard'],
       history: ['shared-table-consent', 'shared-table-return'],
     };
-    expect(availableOptions(finalReading, state).some((entry) => entry.next === 'shared-table')).toBe(false);
+    expect(
+      availableOptions(finalReading, state).some((entry) => entry.next === 'shared-table'),
+    ).toBe(false);
   });
 });

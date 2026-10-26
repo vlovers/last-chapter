@@ -8,7 +8,9 @@ describe('Finale conditional narration integrity', () => {
       const signatures = (node.textWhen ?? []).map((variant) =>
         [...variant.requires].sort().join('|'),
       );
-      expect(new Set(signatures).size, `duplicate requirements in ${node.id}`).toBe(signatures.length);
+      expect(new Set(signatures).size, `duplicate requirements in ${node.id}`).toBe(
+        signatures.length,
+      );
     }
   });
 
@@ -16,9 +18,10 @@ describe('Finale conditional narration integrity', () => {
     const node = finalReading.nodes.find((entry) => entry.id === 'letter');
     expect(node).toBeDefined();
     const both = ['leo_day_four_chose_honesty', 'mara_day_four_named_own_needs'];
-    const match = node!.textWhen?.find((entry) =>
-      entry.requires.length === both.length &&
-      both.every((flag) => entry.requires.includes(flag)),
+    const match = node!.textWhen?.find(
+      (entry) =>
+        entry.requires.length === both.length &&
+        both.every((flag) => entry.requires.includes(flag)),
     );
     expect(match).toBeDefined();
     const state: DialogueState = { node: 'letter', flags: both, history: [] };

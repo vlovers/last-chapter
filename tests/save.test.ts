@@ -60,5 +60,4 @@ describe('local narrative save', () => {
     expect(restored?.flags).toContain('active_dialogue_decision');
     expect(restored?.dialogue.flags).toContain('active_dialogue_decision');
   });
-
 });

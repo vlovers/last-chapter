@@ -13,7 +13,10 @@ describe('Finale optional scene lifecycle', () => {
     for (const option of gathering.options) {
       if (!option.unless?.length) continue;
       for (const flag of option.unless) {
-        expect(grants.has(flag), `${option.id} is hidden by a flag no choice can grant: ${flag}`).toBe(true);
+        expect(
+          grants.has(flag),
+          `${option.id} is hidden by a flag no choice can grant: ${flag}`,
+        ).toBe(true);
       }
     }
   });

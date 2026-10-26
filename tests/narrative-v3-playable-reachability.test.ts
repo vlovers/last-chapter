@@ -6,7 +6,13 @@ import { annaVisit } from '../src/content/anna';
 import { thomasVisit } from '../src/content/thomas';
 import { noraVisit } from '../src/content/nora';
 import { eleanorVisit } from '../src/content/eleanor';
-import { availableOptions, selectOption, startDialogue, type DialogueState, type DialogueStory } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  type DialogueState,
+  type DialogueStory,
+} from '../src/game/dialogue';
 
 const cases: readonly [string, DialogueStory, string][] = [
   ['Mara', maraVisit, 'mara_own_morning_heard'],

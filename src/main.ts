@@ -318,28 +318,49 @@ function render(): void {
       actions.append(shelf);
     } else {
       const available = availableOptions(story, chapter.dialogue);
-      const groups = node.id === 'gathering'
-        ? [
-            {
-              title: 'Люди та стосунки',
-              matches: (id: string) =>
-                id.includes('couple') || ['final-v3-mara-option', 'final-v3-leo-option', 'final-v3-anna-option', 'final-v3-thomas-option'].includes(id),
-            },
-            {
-              title: 'Довіра, таємниці й мистецтво',
-              matches: (id: string) =>
-                id.includes('iris') || id.includes('letter') || id.includes('rumor') || id.includes('privacy') || id.includes('trust'),
-            },
-            {
-              title: 'Історії книгарні та спільноти',
-              matches: (id: string) => id !== 'close' &&
-                !id.includes('couple') &&
-                !['final-v3-mara-option', 'final-v3-leo-option', 'final-v3-anna-option', 'final-v3-thomas-option'].includes(id) &&
-                !id.includes('iris') && !id.includes('letter') && !id.includes('rumor') && !id.includes('privacy') && !id.includes('trust'),
-            },
-            { title: 'Завершення вечора', matches: (id: string) => id === 'close' },
-          ]
-        : [{ title: '', matches: (_id: string) => true }];
+      const groups =
+        node.id === 'gathering'
+          ? [
+              {
+                title: 'Люди та стосунки',
+                matches: (id: string) =>
+                  id.includes('couple') ||
+                  [
+                    'final-v3-mara-option',
+                    'final-v3-leo-option',
+                    'final-v3-anna-option',
+                    'final-v3-thomas-option',
+                  ].includes(id),
+              },
+              {
+                title: 'Довіра, таємниці й мистецтво',
+                matches: (id: string) =>
+                  id.includes('iris') ||
+                  id.includes('letter') ||
+                  id.includes('rumor') ||
+                  id.includes('privacy') ||
+                  id.includes('trust'),
+              },
+              {
+                title: 'Історії книгарні та спільноти',
+                matches: (id: string) =>
+                  id !== 'close' &&
+                  !id.includes('couple') &&
+                  ![
+                    'final-v3-mara-option',
+                    'final-v3-leo-option',
+                    'final-v3-anna-option',
+                    'final-v3-thomas-option',
+                  ].includes(id) &&
+                  !id.includes('iris') &&
+                  !id.includes('letter') &&
+                  !id.includes('rumor') &&
+                  !id.includes('privacy') &&
+                  !id.includes('trust'),
+              },
+              { title: 'Завершення вечора', matches: (id: string) => id === 'close' },
+            ]
+          : [{ title: '', matches: (_id: string) => true }];
       for (const group of groups) {
         const options = available.filter((option) => group.matches(option.id));
         if (options.length === 0) continue;

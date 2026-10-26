@@ -71,5 +71,4 @@ describe('Cross-day narrative flag continuity', () => {
       expect(restored?.dialogue.node).toBe(state.dialogue.node);
     }
   });
-
 });
