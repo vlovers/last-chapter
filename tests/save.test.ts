@@ -50,4 +50,15 @@ describe('local narrative save', () => {
     expect(restored?.dialogue.history).toEqual(state.dialogue.history);
   });
 
+  it('preserves flags present only in the active dialogue snapshot', () => {
+    const state = startChapter();
+    const divergent = {
+      ...state,
+      dialogue: { ...state.dialogue, flags: ['active_dialogue_decision'] },
+    };
+    const restored = decodeSave(encodeSave(divergent));
+    expect(restored?.flags).toContain('active_dialogue_decision');
+    expect(restored?.dialogue.flags).toContain('active_dialogue_decision');
+  });
+
 });
