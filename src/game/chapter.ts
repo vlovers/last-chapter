@@ -14,7 +14,6 @@ import { maraVisit } from '../content/mara';
 import { firstEvening } from '../content/evening';
 import {
   availableOptions,
-  currentNode,
   selectOption,
   startDialogue,
   type DialogueState,
