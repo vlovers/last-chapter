@@ -52,7 +52,12 @@ function walk(story: DialogueStory): { visited: Set<string>; endings: number } {
   while (head < pending.length) {
     const state = pending[head++]!;
     const signature =
-      state.node + '|' + state.flags.filter((flag) => gateFlags.has(flag)).sort().join(',');
+      state.node +
+      '|' +
+      state.flags
+        .filter((flag) => gateFlags.has(flag))
+        .sort()
+        .join(',');
     if (seen.has(signature)) continue;
     seen.add(signature);
     visited.add(state.node);
