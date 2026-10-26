@@ -9,8 +9,9 @@ if (!gathering) throw new Error('Missing gathering');
 function findReturn(initial: DialogueState, completionFlags: readonly string[]): DialogueState | undefined {
   const queue = [initial];
   const visited = new Set<string>();
-  while (queue.length > 0) {
-    const state = queue.shift()!;
+  let cursor = 0;
+  while (cursor < queue.length) {
+    const state = queue[cursor++]!;
     if (
       state.node === 'gathering' &&
       (completionFlags.length === 0 || completionFlags.some((flag) => state.flags.includes(flag)))
