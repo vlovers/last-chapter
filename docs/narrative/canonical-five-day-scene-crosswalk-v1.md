@@ -1,6 +1,6 @@
 # Last Chapter — Canonical five-day scene routing and state crosswalk
 
-**Status:** integration specification only, not game code or tested runtime. **Date:** 2026-10-26. **Priority:** replaces the *plot routing* of `five-day-playable-story-map-v1.md`, which was written for an alternate missing-page/archive mystery. **Canonical source:** `docs/story/07-FIVE-DAY-DRAMATIC-MAP.md`. All identifiers below are **proposed aliases**, not verified engine IDs. Codex PR #23 already has three playable orders; preserve their actual state schema.
+**Status:** integration specification only, not game code or tested runtime. **Date:** 2026-10-26. **Priority:** replaces the _plot routing_ of `five-day-playable-story-map-v1.md`, which was written for an alternate missing-page/archive mystery. **Canonical source:** `docs/story/07-FIVE-DAY-DRAMATIC-MAP.md`. All identifiers below are **proposed aliases**, not verified engine IDs. Codex PR #23 already has three playable orders; preserve their actual state schema.
 
 ## Global design constraints
 
@@ -14,35 +14,35 @@
 
 ## Scene registry — proposed IDs
 
-| ID (proposed) | Day | Priority | Entry | Preconditions | State / result | Safe fallback |
-|---|---:|---|---|---|---|---|
-| `shop_open_d1` | 1 | Core | start day | none | shop initialized | default existing opening |
-| `reservation_card_inspect` | 1–4 | Core | old reserved book | object available | reservation observed | retry at shelf |
-| `sealed_letter_discover` | 1–4 | Core | inspect book | object available | sealed letter found | retry at shelf |
-| `sealed_letter_privacy_choice` | 1–4 | Core choice | envelope action | letter found | open / keep sealed / postpone | default postpone, no auto-open |
-| `order_miller_day1` | 1 | Existing PR #23 | customer | existing schedule | order receipt | order can be skipped |
-| `order_mara_day1` | 1 | Existing PR #23 | customer | existing schedule | order receipt | order can be skipped |
-| `town_departure_rumor` | 2 | Core | ordinary visitor | day 2 | Leo/Iris story heard as rumor | shop-counter fallback |
-| `thomas_nora_rumor_intro` | 2 | Optional/social | Miller visit | day 2 | heard / challenged / amplified / declined | no player-blame if skipped |
-| `order_anna_day2` | 2 | Existing PR #23 | customer | existing schedule | order receipt | order can be skipped |
-| `iris_return_visit` | 2–4 | Character | ordinary shop visit | day >=2 | Iris encountered | optional short shop dialogue |
-| `closing_log_inspect` | 3–5 | Core | shop ledger | day >=3 | leak log observed | retry from counter |
-| `shelf_location_match` | 3–5 | Core investigation | compare card/log | both available | plausible displacement inference | text comparison if no UI |
-| `eleanor_leak_account` | 3–5 | Core support | Eleanor short talk | day >=3 | testimony about moved books | log remains available |
-| `anna_private_worry` | 3–4 | Optional/social | Anna visit | rumor state optional | branch-dependent tone | neutral opening |
-| `nora_privacy_boundary` | 3–4 | Optional/social | Nora visit | none | no client disclosure | generic book talk |
-| `thomas_work_account` | 4–5 | Optional/social | Thomas visit | none | self-disclosed stress only | never infer from Nora |
-| `iris_letter_consent` | 4–5 | Core choice | Iris short encounter | letter known | return / consider / private delivery consent / refuse | consent never implied |
-| `leo_letter_account` | 4–5 | Core support | Leo short encounter | day >=4 | testimony he didn't know letter | no forced contents reveal |
-| `letter_transfer` | 4–5 | Conditional | direct exchange | Iris consent + recipient acceptance + possession | exactly one delivery event | deferred/declined without loss |
-| `miller_public_retraction` | 4–5 | Optional/social | town conversation | player previously amplified | apology heard if present | no fake acknowledgment |
-| `anna_thomas_private_talk` | 5 | Optional/social | shop window | both present | interpersonal afterbeat | offscreen life continues |
-| `anna_bookclub_day5_callback` | 5 | Optional/cozy | Anna visit | none | receipt-dependent story | no-order branch |
-| `reading_evening_d5` | 5 | Core | scheduled shop event | day 5 | event starts | default book reading |
-| `public_record_statement` | 5 | Conditional core choice | reading evening | inspected facts | factual/uncertain statement | no invented records |
-| `iris_public_speech` | 5 | Conditional | reading evening | explicit Iris consent + present | Iris speaks on her terms | no speech if absent |
-| `private_letter_ending` | 5 | Core choice | reading evening | none | letter content withheld publicly | available even if player opened privately |
-| `closing_epilogue` | 5 | Core | end of reading | event completed | ending persisted | neutral shop epilogue |
+| ID (proposed)                  | Day | Priority                | Entry                | Preconditions                                    | State / result                                        | Safe fallback                             |
+| ------------------------------ | --: | ----------------------- | -------------------- | ------------------------------------------------ | ----------------------------------------------------- | ----------------------------------------- |
+| `shop_open_d1`                 |   1 | Core                    | start day            | none                                             | shop initialized                                      | default existing opening                  |
+| `reservation_card_inspect`     | 1–4 | Core                    | old reserved book    | object available                                 | reservation observed                                  | retry at shelf                            |
+| `sealed_letter_discover`       | 1–4 | Core                    | inspect book         | object available                                 | sealed letter found                                   | retry at shelf                            |
+| `sealed_letter_privacy_choice` | 1–4 | Core choice             | envelope action      | letter found                                     | open / keep sealed / postpone                         | default postpone, no auto-open            |
+| `order_miller_day1`            |   1 | Existing PR #23         | customer             | existing schedule                                | order receipt                                         | order can be skipped                      |
+| `order_mara_day1`              |   1 | Existing PR #23         | customer             | existing schedule                                | order receipt                                         | order can be skipped                      |
+| `town_departure_rumor`         |   2 | Core                    | ordinary visitor     | day 2                                            | Leo/Iris story heard as rumor                         | shop-counter fallback                     |
+| `thomas_nora_rumor_intro`      |   2 | Optional/social         | Miller visit         | day 2                                            | heard / challenged / amplified / declined             | no player-blame if skipped                |
+| `order_anna_day2`              |   2 | Existing PR #23         | customer             | existing schedule                                | order receipt                                         | order can be skipped                      |
+| `iris_return_visit`            | 2–4 | Character               | ordinary shop visit  | day >=2                                          | Iris encountered                                      | optional short shop dialogue              |
+| `closing_log_inspect`          | 3–5 | Core                    | shop ledger          | day >=3                                          | leak log observed                                     | retry from counter                        |
+| `shelf_location_match`         | 3–5 | Core investigation      | compare card/log     | both available                                   | plausible displacement inference                      | text comparison if no UI                  |
+| `eleanor_leak_account`         | 3–5 | Core support            | Eleanor short talk   | day >=3                                          | testimony about moved books                           | log remains available                     |
+| `anna_private_worry`           | 3–4 | Optional/social         | Anna visit           | rumor state optional                             | branch-dependent tone                                 | neutral opening                           |
+| `nora_privacy_boundary`        | 3–4 | Optional/social         | Nora visit           | none                                             | no client disclosure                                  | generic book talk                         |
+| `thomas_work_account`          | 4–5 | Optional/social         | Thomas visit         | none                                             | self-disclosed stress only                            | never infer from Nora                     |
+| `iris_letter_consent`          | 4–5 | Core choice             | Iris short encounter | letter known                                     | return / consider / private delivery consent / refuse | consent never implied                     |
+| `leo_letter_account`           | 4–5 | Core support            | Leo short encounter  | day >=4                                          | testimony he didn't know letter                       | no forced contents reveal                 |
+| `letter_transfer`              | 4–5 | Conditional             | direct exchange      | Iris consent + recipient acceptance + possession | exactly one delivery event                            | deferred/declined without loss            |
+| `miller_public_retraction`     | 4–5 | Optional/social         | town conversation    | player previously amplified                      | apology heard if present                              | no fake acknowledgment                    |
+| `anna_thomas_private_talk`     |   5 | Optional/social         | shop window          | both present                                     | interpersonal afterbeat                               | offscreen life continues                  |
+| `anna_bookclub_day5_callback`  |   5 | Optional/cozy           | Anna visit           | none                                             | receipt-dependent story                               | no-order branch                           |
+| `reading_evening_d5`           |   5 | Core                    | scheduled shop event | day 5                                            | event starts                                          | default book reading                      |
+| `public_record_statement`      |   5 | Conditional core choice | reading evening      | inspected facts                                  | factual/uncertain statement                           | no invented records                       |
+| `iris_public_speech`           |   5 | Conditional             | reading evening      | explicit Iris consent + present                  | Iris speaks on her terms                              | no speech if absent                       |
+| `private_letter_ending`        |   5 | Core choice             | reading evening      | none                                             | letter content withheld publicly                      | available even if player opened privately |
+| `closing_epilogue`             |   5 | Core                    | end of reading       | event completed                                  | ending persisted                                      | neutral shop epilogue                     |
 
 **Core** means the interaction route must exist; it does not mean the player must click it to advance every day. Avoid accidental softlocks if a user never inspects the book.
 
@@ -135,23 +135,23 @@
 
 ## Acceptance matrix
 
-| Scenario | Required outcome |
-|---|---|
-| Skip all optional orders | Five days finish, letter remains discoverable |
-| Leave letter sealed | Contents never shown, investigation can still progress |
-| Open letter secretly | Breach saved, Iris unaware until explicit disclosure |
-| Inspect only log | No proven link to specific reserved book |
-| Inspect card+log+shelf | Plausible displacement inference, not motive |
-| Iris refuses transfer | Leo never receives letter |
-| Leo refuses transfer | Delivery flag remains false |
-| Amplify Miller rumor | Later social consequences, never an affair proof |
-| Challenge Miller rumor | No false confession option |
-| Ask Nora about Thomas | No client confirmation |
-| Anna order completed | Day 5 callback matches actual selected book |
-| Anna order skipped | Day 5 no-order callback |
-| Iris not consenting to public speech | No public speech option |
-| Reload after transfer | No duplicate letter or receipt |
-| End without investigating | Cozy reading and ending still reachable |
+| Scenario                             | Required outcome                                       |
+| ------------------------------------ | ------------------------------------------------------ |
+| Skip all optional orders             | Five days finish, letter remains discoverable          |
+| Leave letter sealed                  | Contents never shown, investigation can still progress |
+| Open letter secretly                 | Breach saved, Iris unaware until explicit disclosure   |
+| Inspect only log                     | No proven link to specific reserved book               |
+| Inspect card+log+shelf               | Plausible displacement inference, not motive           |
+| Iris refuses transfer                | Leo never receives letter                              |
+| Leo refuses transfer                 | Delivery flag remains false                            |
+| Amplify Miller rumor                 | Later social consequences, never an affair proof       |
+| Challenge Miller rumor               | No false confession option                             |
+| Ask Nora about Thomas                | No client confirmation                                 |
+| Anna order completed                 | Day 5 callback matches actual selected book            |
+| Anna order skipped                   | Day 5 no-order callback                                |
+| Iris not consenting to public speech | No public speech option                                |
+| Reload after transfer                | No duplicate letter or receipt                         |
+| End without investigating            | Cozy reading and ending still reachable                |
 
 ## Editorial handoff
 
