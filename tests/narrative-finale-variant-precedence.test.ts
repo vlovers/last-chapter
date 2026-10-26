@@ -26,6 +26,7 @@ describe('Finale choice-dependent narration', () => {
       const [a, b] = original!.textWhen ?? [];
       expect(a).toBeDefined();
       expect(b).toBeDefined();
+      if (!a || !b) throw new Error('Missing conditional variants: ' + id);
       expect(rendered(id, [])).toBe(original!.text);
       expect(rendered(id, [first])).toBe(a.text);
       expect(rendered(id, [second])).toBe(b.text);

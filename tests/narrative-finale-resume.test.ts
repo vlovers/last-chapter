@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, currentNode, selectOption, type DialogueState } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  type DialogueState,
+} from '../src/game/dialogue';
 
 function roundTrip(state: DialogueState): DialogueState {
   return JSON.parse(JSON.stringify(state)) as DialogueState;
@@ -21,9 +26,11 @@ describe('Final evening dialogue state serialization', () => {
     const back = selectOption(finalReading, respected, 'final-couple-close-back');
     expect(back.flags).toContain('final_couple_conversation_heard');
     expect(back.flags).toContain('mara_discussed_change');
-    expect(availableOptions(finalReading, roundTrip(back)).some(
-      (option) => option.id === 'final-couple-conversation-option',
-    )).toBe(false);
+    expect(
+      availableOptions(finalReading, roundTrip(back)).some(
+        (option) => option.id === 'final-couple-conversation-option',
+      ),
+    ).toBe(false);
   });
 
   it('restores a selected shared-table answer and preserves its unique narration', () => {
@@ -38,9 +45,11 @@ describe('Final evening dialogue state serialization', () => {
     expect(currentNode(finalReading, saved).text).toBe(expected?.text);
     const finished = selectOption(finalReading, saved, 'shared-table-return');
     expect(finished.flags).toContain('final_shared_table_heard');
-    expect(availableOptions(finalReading, roundTrip(finished)).some(
-      (option) => option.id === 'shared-table',
-    )).toBe(false);
+    expect(
+      availableOptions(finalReading, roundTrip(finished)).some(
+        (option) => option.id === 'shared-table',
+      ),
+    ).toBe(false);
   });
 
   it('keeps optional finale callbacks hidden after a state round-trip', () => {
@@ -50,11 +59,13 @@ describe('Final evening dialogue state serialization', () => {
       history: ['final-v3-mara-option'],
     };
     const restored = roundTrip(completed);
-    expect(availableOptions(finalReading, restored).some(
-      (option) => option.id === 'final-v3-mara-option',
-    )).toBe(false);
-    expect(availableOptions(finalReading, restored).some(
-      (option) => option.id === 'close',
-    )).toBe(true);
+    expect(
+      availableOptions(finalReading, restored).some(
+        (option) => option.id === 'final-v3-mara-option',
+      ),
+    ).toBe(false);
+    expect(availableOptions(finalReading, restored).some((option) => option.id === 'close')).toBe(
+      true,
+    );
   });
 });

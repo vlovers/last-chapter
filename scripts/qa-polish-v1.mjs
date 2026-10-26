@@ -204,6 +204,26 @@ try {
         await layout(page);
         await page.screenshot({ path: `${output}/${device}-day-${plan.day}.png`, fullPage: true });
       }
+      if (plan.stage === 'mara' && device === 'desktop') {
+        for (const id of ['hello', 'thank', 'talk', 'bakery']) await choose(page, id);
+        // Suspending the actual story dialogue and reloading retains its node.
+        await page.reload();
+        await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+        await page.locator('#story-continue').click();
+        assert.equal(await page.locator('#choices button[data-choice="bakery-tired"]').count(), 1);
+        for (const id of ['bakery-tired', 'tired-ask', 'silence-return']) await choose(page, id);
+        assert.equal(await page.locator('#choices button[data-choice="bakery"]').count(), 0);
+        await page.reload();
+        await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+        await page.locator('#story-continue').click();
+        assert.equal(await page.locator('#choices button[data-choice="bakery"]').count(), 0);
+        await layout(page);
+        await page.screenshot({
+          path: `${output}/desktop-mara-completed-topic.png`,
+          fullPage: true,
+        });
+        plan.route = ['gift-now', 'station', 'finish-station'];
+      }
       for (const id of plan.route) await choose(page, id);
       if (plan.stage === 'season-complete') {
         await page.keyboard.press('Escape');

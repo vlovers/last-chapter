@@ -57,7 +57,7 @@ describe('Final evening structural audit', () => {
     ] as const;
     for (const [entry, completion] of scenes) {
       const visited = new Set<string>();
-      const queue = [entry];
+      const queue: string[] = [entry];
       let completed = false;
       while (queue.length > 0) {
         const id = queue.shift()!;

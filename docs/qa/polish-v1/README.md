@@ -14,7 +14,9 @@ rewrite or Phaser major-version upgrade. The installed engine is Phaser 3.90.0;
   Eleanor, Thomas and Nora's gated callbacks; Day 3 club, the three Day 4 visits,
   and the Day 5 gathering. Optional callbacks retain their authored conditions.
   The Day 4 and Day 5 unresolved letter returns explicitly suspend: players can
-  return without prematurely settling a consent decision.
+  return without prematurely settling a consent decision. The ending explicitly
+  retains authored variant priority so combined community callbacks cannot hide
+  private-letter consequences; other scenes retain upstream specificity selection.
 - Optional Mara topics no longer offer an unconditional restart. Completed topics
   disappear, interrupted topics retain their current node, later-day topics still
   unlock, and new-game resets are explicit. Main story facts and old saves persist.

@@ -25,6 +25,8 @@ export interface DialogueNode {
   readonly textWhen?: readonly { readonly requires: readonly string[]; readonly text: string }[];
   readonly options: readonly DialogueOption[];
   readonly hub?: boolean;
+  /** Some endings have an authored ethical priority independent of flag count. */
+  readonly variantSelection?: 'specific' | 'authored';
 }
 
 export interface DialogueStory {
@@ -55,6 +57,7 @@ export function currentNode(story: DialogueStory, state: DialogueState): Dialogu
   const variant = node.textWhen?.reduce<NonNullable<DialogueNode['textWhen']>[number] | undefined>(
     (best, entry) => {
       if (!entry.requires.every((flag) => state.flags.includes(flag))) return best;
+      if (node.variantSelection === 'authored') return best ?? entry;
       return !best || entry.requires.length > best.requires.length ? entry : best;
     },
     undefined,

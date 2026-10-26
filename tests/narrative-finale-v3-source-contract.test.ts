@@ -48,7 +48,9 @@ describe('Finale V3 callbacks are backed by earlier character conversations', ()
       for (const flag of option?.requires ?? []) {
         expect(
           characters.some(([, story]) =>
-            story.nodes.some((node) => node.options.some((choice) => choice.grants?.includes(flag))),
+            story.nodes.some((node) =>
+              node.options.some((choice) => choice.grants?.includes(flag)),
+            ),
           ),
           `No earlier character source for ${id}: ${flag}`,
         ).toBe(true);
