@@ -36,12 +36,7 @@ describe('five-day Bellwick encounter orchestration', () => {
     expect(currentNode(script, leave).id).toBe('exit');
     for (const suffix of ['a', 'b', 'c']) {
       let state = startDialogue(script);
-      for (const choice of [
-        'talk',
-        `choice-${suffix}`,
-        `follow-${suffix}`,
-        'afterthought-end',
-      ]) {
+      for (const choice of ['talk', `choice-${suffix}`, `follow-${suffix}`, 'afterthought-end']) {
         expect(availableOptions(script, state).some((option) => option.id === choice)).toBe(true);
         state = selectOption(script, state, choice);
       }
