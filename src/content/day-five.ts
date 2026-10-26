@@ -42,6 +42,13 @@ export const finalReading: DialogueStory = {
       ],
       options: [
         {
+          id: 'final-couple-anna-thomas-option',
+          label: 'Побачити, як Анна й Томас обирають книжку',
+          next: 'final-couple-anna-thomas',
+          requires: ['anna_uncertainty_discussed', 'thomas_listening_discussed'],
+          unless: ['final_anna_thomas_heard'],
+        },
+        {
           id: 'final-couple-conversation-option',
           label: 'Почути розмову Мари й Лео біля вікна',
           next: 'final-couple-conversation',
@@ -989,6 +996,36 @@ export const finalReading: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Ти відходиш до книжкових полиць. Не кожна важлива розмова потребує третього слухача. За вікном дощ стихає.',
       options: [{ id: 'final-couple-close-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_couple_conversation_heard'] }],
+    },
+    {
+      id: 'final-couple-anna-thomas',
+      speaker: 'Анна',
+      text: '«У школі сьогодні мене запитали, чому дорослі так бояться помилитися. Я хотіла відповісти відразу. А потім згадала, як ми з Томасом сперечалися про те, хто має все виправляти».',
+      options: [
+        { id: 'final-at-listen', label: '«А що сказав Томас?»', next: 'final-couple-thomas' },
+        { id: 'final-at-leave', label: 'Дати їм поговорити наодинці', next: 'final-couple-at-close' },
+      ],
+    },
+    {
+      id: 'final-couple-thomas',
+      speaker: 'Томас',
+      text: '«Що я теж боюся. Іноді приношу інструменти, коли потрібна розмова. Сьогодні просто запитав, яку книжку вона хоче взяти». Анна усміхається: «І не сперечався з відповіддю».',
+      options: [
+        { id: 'final-at-more', label: '«І яку книжку ви обрали?»', next: 'final-couple-at-book' },
+        { id: 'final-at-done', label: 'Повернутися до гостей', next: 'final-couple-at-close' },
+      ],
+    },
+    {
+      id: 'final-couple-at-book',
+      speaker: 'Анна',
+      text: '«Ту, де герої сперечаються і все одно залишаються друзями. Я не знаю, чи ми погодимося з фіналом». Томас знизує плечима: «Зате прочитаємо разом».',
+      options: [{ id: 'final-at-book-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_anna_thomas_heard'] }],
+    },
+    {
+      id: 'final-couple-at-close',
+      speaker: 'Оповідач',
+      text: 'Вони залишаються біля полиці, сперечаючись про обкладинку. Цього разу ніхто не поспішає перемогти в суперечці.',
+      options: [{ id: 'final-at-close-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_anna_thomas_heard'] }],
     },
     {
       id: 'end',
