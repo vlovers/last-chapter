@@ -79,5 +79,4 @@ describe('finale consequence matrix', () => {
     expect(afterPressure.letter).toBe(baseline.letter);
     expect(afterPressure.epilogue).toBe(baseline.epilogue);
   });
-
 });
