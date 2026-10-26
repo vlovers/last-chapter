@@ -54,6 +54,7 @@ describe('Narrative graph integrity', () => {
     }
     expect(foundEnding).toBe(true);
     expect(visited.size).toBeGreaterThan(0);
+    expect(queue.length).toBeLessThan(1000);
   });
 
   it('rejects advancing an unfinished dialogue', () => {
