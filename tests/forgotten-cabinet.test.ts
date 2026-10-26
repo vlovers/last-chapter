@@ -5,7 +5,13 @@ import { irisVisit } from '../src/content/iris';
 import { bookClub } from '../src/content/book-club';
 import { irisDecision } from '../src/content/day-four-iris';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, currentNode, selectOption, validateDialogue, type DialogueState } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  validateDialogue,
+  type DialogueState,
+} from '../src/game/dialogue';
 
 function at(node: string, flags: string[] = []): DialogueState {
   return { node, flags, history: [] };
@@ -13,7 +19,9 @@ function at(node: string, flags: string[] = []): DialogueState {
 
 describe('Forgotten cabinet playable slice', () => {
   it('opens from the existing first-evening hub', () => {
-    expect(availableOptions(firstEvening, at('box')).some((option) => option.id === 'forgotten-cabinet')).toBe(true);
+    expect(
+      availableOptions(firstEvening, at('box')).some((option) => option.id === 'forgotten-cabinet'),
+    ).toBe(true);
   });
 
   it('offers three different dispositions of the photograph', () => {
@@ -27,21 +35,43 @@ describe('Forgotten cabinet playable slice', () => {
   });
 
   it('unlocks an Eleanor callback and distinguishes secrecy from a copy', () => {
-    expect(availableOptions(eleanorVisit, at('greet')).some((option) => option.id === 'cabinet-question')).toBe(false);
-    expect(availableOptions(eleanorVisit, at('greet', ['cabinet_photo_seen'])).some((option) => option.id === 'cabinet-question')).toBe(true);
-    expect(currentNode(eleanorVisit, at('cabinet-question', ['cabinet_photo_hidden'])).text).toContain('сховав');
-    expect(currentNode(eleanorVisit, at('cabinet-question', ['cabinet_photo_copied'])).text).toContain('копію');
+    expect(
+      availableOptions(eleanorVisit, at('greet')).some(
+        (option) => option.id === 'cabinet-question',
+      ),
+    ).toBe(false);
+    expect(
+      availableOptions(eleanorVisit, at('greet', ['cabinet_photo_seen'])).some(
+        (option) => option.id === 'cabinet-question',
+      ),
+    ).toBe(true);
+    expect(
+      currentNode(eleanorVisit, at('cabinet-question', ['cabinet_photo_hidden'])).text,
+    ).toContain('сховав');
+    expect(
+      currentNode(eleanorVisit, at('cabinet-question', ['cabinet_photo_copied'])).text,
+    ).toContain('копію');
   });
 
   it('makes the cinema conversation available only after the photograph', () => {
-    expect(availableOptions(irisVisit, at('welcome')).some((option) => option.id === 'cinema')).toBe(false);
-    expect(availableOptions(irisVisit, at('welcome', ['cabinet_photo_seen'])).some((option) => option.id === 'cinema')).toBe(true);
+    expect(
+      availableOptions(irisVisit, at('welcome')).some((option) => option.id === 'cinema'),
+    ).toBe(false);
+    expect(
+      availableOptions(irisVisit, at('welcome', ['cabinet_photo_seen'])).some(
+        (option) => option.id === 'cinema',
+      ),
+    ).toBe(true);
     const next = selectOption(irisVisit, at('cinema'), 'cinema-poster');
     expect(next.flags).toContain('cinema_poster_lead');
   });
 
   it('lets book-club guests choose rumors, records, or another subject', () => {
-    expect(availableOptions(bookClub, at('welcome', ['cabinet_photo_seen'])).some((option) => option.id === 'cinema-discussion')).toBe(true);
+    expect(
+      availableOptions(bookClub, at('welcome', ['cabinet_photo_seen'])).some(
+        (option) => option.id === 'cinema-discussion',
+      ),
+    ).toBe(true);
     const rumor = selectOption(bookClub, at('cinema-discussion'), 'cinema-club-rumor');
     const records = selectOption(bookClub, at('cinema-discussion'), 'cinema-club-facts');
     expect(currentNode(bookClub, rumor).text).toContain('службового входу');
@@ -50,42 +80,90 @@ describe('Forgotten cabinet playable slice', () => {
 
   it('unlocks the missing chapter only after converging cinema leads', () => {
     const flags = ['cabinet_photo_seen', 'cinema_poster_lead', 'cinema_club_asked_for_records'];
-    expect(availableOptions(irisDecision, at('welcome', flags)).some((option) => option.id === 'missing-chapter')).toBe(true);
-    expect(availableOptions(irisDecision, at('welcome', flags.slice(0, 1))).some((option) => option.id === 'missing-chapter')).toBe(true);
-    expect(availableOptions(irisDecision, at('welcome')).some((option) => option.id === 'missing-chapter')).toBe(false);
+    expect(
+      availableOptions(irisDecision, at('welcome', flags)).some(
+        (option) => option.id === 'missing-chapter',
+      ),
+    ).toBe(true);
+    expect(
+      availableOptions(irisDecision, at('welcome', flags.slice(0, 1))).some(
+        (option) => option.id === 'missing-chapter',
+      ),
+    ).toBe(true);
+    expect(
+      availableOptions(irisDecision, at('welcome')).some(
+        (option) => option.id === 'missing-chapter',
+      ),
+    ).toBe(false);
     const falseClaim = selectOption(irisDecision, at('missing-chapter', flags), 'chapter-rumor');
     expect(falseClaim.flags).toContain('missing_chapter_false_claim');
     expect(currentNode(irisDecision, falseClaim).text).toContain('вигадав');
   });
 
   it('carries manuscript choices into the final reading', () => {
-    expect(availableOptions(finalReading, at('gathering', ['missing_chapter_discussed'])).some((option) => option.id === 'chapter-reckoning')).toBe(true);
-    const blame = selectOption(finalReading, at('chapter-reckoning', ['missing_chapter_discussed']), 'chapter-blame');
+    expect(
+      availableOptions(finalReading, at('gathering', ['missing_chapter_discussed'])).some(
+        (option) => option.id === 'chapter-reckoning',
+      ),
+    ).toBe(true);
+    const blame = selectOption(
+      finalReading,
+      at('chapter-reckoning', ['missing_chapter_discussed']),
+      'chapter-blame',
+    );
     expect(blame.flags).toContain('chapter_accused_eleanor');
     expect(currentNode(finalReading, blame).text).toContain('йде раніше');
   });
 
   it('lets a careful player discover the manuscript dating contradiction', () => {
     const flags = ['missing_chapter_discussed', 'missing_chapter_copied'];
-    expect(availableOptions(finalReading, at('chapter-reckoning', flags)).some((option) => option.id === 'chapter-check-provenance')).toBe(true);
-    const verified = selectOption(finalReading, at('chapter-provenance', flags), 'chapter-provenance-back');
+    expect(
+      availableOptions(finalReading, at('chapter-reckoning', flags)).some(
+        (option) => option.id === 'chapter-check-provenance',
+      ),
+    ).toBe(true);
+    const verified = selectOption(
+      finalReading,
+      at('chapter-provenance', flags),
+      'chapter-provenance-back',
+    );
     expect(verified.flags).toContain('chapter_provenance_checked');
-    expect(availableOptions(finalReading, at('chapter-reckoning', verified.flags)).some((option) => option.id === 'chapter-check-provenance')).toBe(false);
+    expect(
+      availableOptions(finalReading, at('chapter-reckoning', verified.flags)).some(
+        (option) => option.id === 'chapter-check-provenance',
+      ),
+    ).toBe(false);
   });
 
   it('lets a liar confess or shift blame and keeps those outcomes distinct', () => {
     const flags = ['missing_chapter_discussed', 'missing_chapter_false_claim'];
-    expect(availableOptions(finalReading, at('chapter-reckoning', flags)).some((option) => option.id === 'chapter-confront-lie')).toBe(true);
-    const admitted = selectOption(finalReading, at('chapter-confession', flags), 'chapter-confession-own');
-    const shifted = selectOption(finalReading, at('chapter-confession', flags), 'chapter-confession-deflect');
+    expect(
+      availableOptions(finalReading, at('chapter-reckoning', flags)).some(
+        (option) => option.id === 'chapter-confront-lie',
+      ),
+    ).toBe(true);
+    const admitted = selectOption(
+      finalReading,
+      at('chapter-confession', flags),
+      'chapter-confession-own',
+    );
+    const shifted = selectOption(
+      finalReading,
+      at('chapter-confession', flags),
+      'chapter-confession-deflect',
+    );
     expect(admitted.flags).toContain('chapter_apology_promised');
     expect(shifted.flags).toContain('chapter_blame_shifted');
     expect(currentNode(finalReading, at('end', shifted.flags)).text).toContain('винна тільки я');
   });
 
   it('makes public accusations change the closing scene', () => {
-    expect(currentNode(finalReading, at('end', ['chapter_accused_eleanor'])).text).toContain('не повернулася');
-    expect(currentNode(finalReading, at('end', ['chapter_publicly_read'])).text).toContain('прочитаний уривок');
+    expect(currentNode(finalReading, at('end', ['chapter_accused_eleanor'])).text).toContain(
+      'не повернулася',
+    );
+    expect(currentNode(finalReading, at('end', ['chapter_publicly_read'])).text).toContain(
+      'прочитаний уривок',
+    );
   });
 
   it('keeps the existing story graphs valid', () => {

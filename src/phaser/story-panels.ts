@@ -1,5 +1,15 @@
-import { decodeOliverProgress, encodeOliverProgress, freshOliverProgress } from './optional-oliver-state';
-import { availableOptions, currentNode, selectOption, startDialogue, type DialogueState } from '../game/dialogue';
+import {
+  decodeOliverProgress,
+  encodeOliverProgress,
+  freshOliverProgress,
+} from './optional-oliver-state';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  type DialogueState,
+} from '../game/dialogue';
 import { oliverUnreadBook } from '../content/optional/oliver';
 import type { FiveDayStory } from './five-day-story';
 import {
@@ -39,16 +49,25 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   let mode: 'journal' | 'catalog' | 'conversation' | 'oliver' | null = null;
   const oliverKey = 'last-chapter:optional:oliver:v1';
   let oliverProgress = freshOliverProgress();
-  try { oliverProgress = decodeOliverProgress(localStorage.getItem(oliverKey)); } catch { /* optional */ }
+  try {
+    oliverProgress = decodeOliverProgress(localStorage.getItem(oliverKey));
+  } catch {
+    /* optional */
+  }
   let oliverSession: DialogueState | null = oliverProgress.dialogue;
   let oliverFinished = oliverProgress.finished;
   const saveOliver = () => {
     try {
-      localStorage.setItem(oliverKey, encodeOliverProgress({
-        finished: oliverFinished,
-        dialogue: oliverSession ?? startDialogue(oliverUnreadBook),
-      }));
-    } catch { /* optional */ }
+      localStorage.setItem(
+        oliverKey,
+        encodeOliverProgress({
+          finished: oliverFinished,
+          dialogue: oliverSession ?? startDialogue(oliverUnreadBook),
+        }),
+      );
+    } catch {
+      /* optional */
+    }
   };
   const conversationKey = 'last-chapter:conversation:mara:v1';
   let selectedTopic = maraBookClub;
@@ -380,7 +399,11 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     selectedTopic = maraBookClub;
     oliverSession = null;
     oliverFinished = false;
-    try { localStorage.removeItem(oliverKey); } catch { /* optional */ }
+    try {
+      localStorage.removeItem(oliverKey);
+    } catch {
+      /* optional */
+    }
     mode = null;
     saveConversation();
     refresh();

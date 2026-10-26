@@ -26,7 +26,13 @@ import {
   startFifthDay,
   finishSeason,
 } from './game/chapter';
-import { availableOptions, currentNode, selectOption, startDialogue, type DialogueState } from './game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  type DialogueState,
+} from './game/dialogue';
 import { oliverUnreadBook } from './content/optional/oliver';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
 import { inspectShopSpot, shopSpots, type ShopSpotId } from './game/exploration';
@@ -44,10 +50,18 @@ let journalOpen = false;
 const OLIVER_KEY = 'last-chapter:optional:oliver:v1';
 let oliverDialogue: DialogueState | null = null;
 let oliverFinished = false;
-try { oliverFinished = localStorage.getItem(OLIVER_KEY) === 'done'; } catch { /* Optional storage. */ }
+try {
+  oliverFinished = localStorage.getItem(OLIVER_KEY) === 'done';
+} catch {
+  /* Optional storage. */
+}
 function finishOliver(): void {
   oliverFinished = true;
-  try { localStorage.setItem(OLIVER_KEY, 'done'); } catch { /* Optional storage. */ }
+  try {
+    localStorage.setItem(OLIVER_KEY, 'done');
+  } catch {
+    /* Optional storage. */
+  }
 }
 
 function restoreChapter() {
@@ -236,7 +250,11 @@ function render(): void {
       chapter = startChapter();
       oliverDialogue = null;
       oliverFinished = false;
-      try { localStorage.removeItem(OLIVER_KEY); } catch { /* Optional storage. */ }
+      try {
+        localStorage.removeItem(OLIVER_KEY);
+      } catch {
+        /* Optional storage. */
+      }
       previewBook = null;
       activeSpot = null;
       journalOpen = false;
@@ -498,13 +516,20 @@ function render(): void {
         const done = document.createElement('button');
         done.type = 'button';
         done.textContent = 'Завершити розмову';
-        done.addEventListener('click', () => { finishOliver(); oliverDialogue = null; render(); });
+        done.addEventListener('click', () => {
+          finishOliver();
+          oliverDialogue = null;
+          render();
+        });
         section.append(done);
       }
       const leave = document.createElement('button');
       leave.type = 'button';
       leave.textContent = 'Повернутися до справ книгарні';
-      leave.addEventListener('click', () => { oliverDialogue = null; render(); });
+      leave.addEventListener('click', () => {
+        oliverDialogue = null;
+        render();
+      });
       section.append(leave);
     }
     actions.append(section);

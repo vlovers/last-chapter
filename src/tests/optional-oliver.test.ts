@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from '../game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../game/dialogue';
 import { oliverUnreadBook } from '../content/optional/oliver';
 
 function play(...choices: string[]) {

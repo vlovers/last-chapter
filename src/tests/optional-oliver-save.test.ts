@@ -43,10 +43,12 @@ describe('optional Oliver save compatibility', () => {
     expect(decodeOliverProgress('done').finished).toBe(true);
   });
 
-  it.each(['{', 'null', '{}', '{"finished":false,"dialogue":{"node":"missing","flags":[],"history":[]}}'])(
-    'rejects corrupt optional progress: %s',
-    (raw) => {
-      expect(decodeOliverProgress(raw)).toEqual(freshOliverProgress());
-    },
-  );
+  it.each([
+    '{',
+    'null',
+    '{}',
+    '{"finished":false,"dialogue":{"node":"missing","flags":[],"history":[]}}',
+  ])('rejects corrupt optional progress: %s', (raw) => {
+    expect(decodeOliverProgress(raw)).toEqual(freshOliverProgress());
+  });
 });

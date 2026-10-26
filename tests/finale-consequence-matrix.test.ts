@@ -22,7 +22,11 @@ describe('Finale consequence matrix', () => {
 
   it('keeps a concealed breach distinct from confession and consent', () => {
     const hidden = ending('opened_private_letter');
-    const admitted = ending('opened_private_letter', 'iris_letter_breach_admitted', 'final_accepted_consequences');
+    const admitted = ending(
+      'opened_private_letter',
+      'iris_letter_breach_admitted',
+      'final_accepted_consequences',
+    );
     const mutual = ending('final_mutual_conversation');
     expect(new Set([hidden.letter, admitted.letter, mutual.letter]).size).toBe(3);
     expect(hidden.letter).toContain('не знає');

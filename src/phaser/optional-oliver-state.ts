@@ -28,7 +28,8 @@ export function decodeOliverProgress(raw: string | null): OliverProgress {
       !state.flags.every((flag) => typeof flag === 'string') ||
       !Array.isArray(state.history) ||
       !state.history.every((id) => typeof id === 'string')
-    ) return freshOliverProgress();
+    )
+      return freshOliverProgress();
     if (
       (state.completed !== undefined &&
         (!Array.isArray(state.completed) ||
@@ -42,7 +43,8 @@ export function decodeOliverProgress(raw: string | null): OliverProgress {
               typeof (entry as Record<string, unknown>).hub === 'string' &&
               typeof (entry as Record<string, unknown>).key === 'string',
           )))
-    ) return freshOliverProgress();
+    )
+      return freshOliverProgress();
     // A valid node name alone is insufficient: never restore an impossible path.
     let replay = startDialogue(oliverUnreadBook);
     for (const optionId of state.history) {

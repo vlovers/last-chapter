@@ -72,7 +72,9 @@ describe('All five days agree on available choices at transitions', () => {
     for (const [stage, transition] of transitions) {
       const story = stageStory(stage);
       const node = story.nodes.find((item) =>
-        item.options.some((option) => option.repeatability !== 'repeatable' && !(option.requires?.length)),
+        item.options.some(
+          (option) => option.repeatability !== 'repeatable' && !option.requires?.length,
+        ),
       );
       if (!node) continue;
       const state: ChapterState = {

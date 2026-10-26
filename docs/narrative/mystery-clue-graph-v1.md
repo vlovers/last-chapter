@@ -69,6 +69,7 @@ Leo remembers borrowing a route map but cannot remember the exact date. The play
 Eleanor considers stocking unfamiliar authors. If previously accused, she may refuse to discuss archive access.
 
 The player can:
+
 1. Publicly accuse someone based on incomplete evidence.
 2. Read a fragment aloud while admitting uncertainty.
 3. Keep the fragment private and pursue verification.
@@ -78,15 +79,15 @@ The ending must acknowledge the difference between **truth**, **privacy**, and *
 
 ## Contradiction matrix
 
-| Claim | Source | What is established | What is not established | How to verify |
-| --- | --- | --- | --- | --- |
-| Someone carried an old envelope | Miller | Miller says she saw an envelope | Identity, contents, destination | Another witness or physical envelope |
-| Thomas was near the archive | Anna | Anna reports seeing him move chairs | That he entered or had a key | Access log and Thomas's account |
-| Thomas did not enter | Thomas | Thomas denies entry | That the denial is true | Access log or direct evidence |
-| Leo borrowed a route map | Leo | Leo reports borrowing it | Date or connection to missing page | Loan register |
-| Leo liked old maps | Mara | Mara recalls his interest | That he took a document | No direct inference; seek records |
-| Inventory date differs from event date | Nora | Nora recalls a discrepancy | Error versus manipulation | Inspect both original documents |
-| Iris saw a damaged envelope | Iris | Iris remembers a damaged corner | Who damaged it | Physical inspection if available |
+| Claim                                  | Source | What is established                 | What is not established            | How to verify                        |
+| -------------------------------------- | ------ | ----------------------------------- | ---------------------------------- | ------------------------------------ |
+| Someone carried an old envelope        | Miller | Miller says she saw an envelope     | Identity, contents, destination    | Another witness or physical envelope |
+| Thomas was near the archive            | Anna   | Anna reports seeing him move chairs | That he entered or had a key       | Access log and Thomas's account      |
+| Thomas did not enter                   | Thomas | Thomas denies entry                 | That the denial is true            | Access log or direct evidence        |
+| Leo borrowed a route map               | Leo    | Leo reports borrowing it            | Date or connection to missing page | Loan register                        |
+| Leo liked old maps                     | Mara   | Mara recalls his interest           | That he took a document            | No direct inference; seek records    |
+| Inventory date differs from event date | Nora   | Nora recalls a discrepancy          | Error versus manipulation          | Inspect both original documents      |
+| Iris saw a damaged envelope            | Iris   | Iris remembers a damaged corner     | Who damaged it                     | Physical inspection if available     |
 
 ## Branching scenes to implement later
 
@@ -95,6 +96,7 @@ The ending must acknowledge the difference between **truth**, **privacy**, and *
 Міллер: «Кажуть, Томас крутився біля архіву. Звідти й зникли папери, хіба ні?»
 
 Player choices:
+
 - «Анна бачила стільці, не ключі». Miller: «Ви завжди так псуєте хороші історії?» [rumor challenged]
 - «Може, Томас щось приховує». Miller: «От бачите! Я теж так думаю». [rumor amplified]
 - «Спитайте в нього самі». Miller: «А потім він розповість усьому місту, що я пліткарка». [confrontation deferred]
@@ -106,6 +108,7 @@ None of these choices proves guilt.
 Нора: «На афіші одна дата, у каталозі інша. Це все, що я можу сказати, поки не побачу оригінал».
 
 Player choices:
+
 - «Покажіть, де перевірити». Nora offers the archive location. [verification lead]
 - «То хто підробив запис?» Nora: «Ви вже назвали це підробкою. Я — ні». [trust reduced]
 - «Залишмо це до завтра». Nora: «Папери нікуди не підуть. Люди — можуть». [lead deferred]
@@ -117,6 +120,7 @@ If letter privacy was breached:
 Айріс: «Книжка гарна. Я її куплю. Але ми з вами не закінчили розмову про лист».
 
 Player choices:
+
 - «Я знаю. І не прошу забути». Iris nods, keeps distance. [acknowledgment]
 - «Я ж допоміг вам із подарунком». Iris: «Подарунок — не вибачення». [pressure]
 - «Не говоритимемо про це зараз». Iris: «Добре. Не зараз». [deferred]

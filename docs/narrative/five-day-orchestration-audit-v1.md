@@ -10,13 +10,13 @@ The total is **30 content units**, not 30 independent mandatory quests. Several 
 
 ## Five-day beat sheet
 
-| Day | Required store rhythm | Main mystery beat | Optional social content | Evening mood |
-| --- | --- | --- | --- | --- |
-| 1 — Arrival | Miller order; Mara order; establish shelf, cash desk, Frank and book recommendations | Found pages / first unresolved question from existing canon; do not invent a forced reveal | Sophie flowers, short Frank interaction | Quiet discovery, no accusation |
-| 2 — Routine with a crack | Anna's class book order; light stock/order follow-up | Rumor about Thomas and archive; player can distinguish testimony from guess | Mara lemonade, Thomas chair, Oliver unread-book game | Warmth survives gossip |
-| 3 — Competing versions | Thomas order; Nora order | Nora–Eleanor disagreement about archive dates; optional document verification | Anna bookmarks; Nora's bad novel -> deep Nora; deep Thomas; Sophie card game | Player may choose books over investigation |
-| 4 — Personal boundaries | Iris order; Leo order | Optional Mara–Leo conflict and Iris–Miller art conflict; physical letter privacy remains separate | Iris's painting -> deep Iris; Mara's cake -> deep Mara; Oliver board-game banter | Tension with ordinary life still present |
-| 5 — Reading evening | Eleanor order; book club / reading event payoff | Public decision: disclose verified facts, make accusation, or keep private details private; preserve existing ending flags | Eleanor shelf -> deep Eleanor; Sophie return-to-town; Oliver normal-day visit | Community continues, no forced universal reconciliation |
+| Day                      | Required store rhythm                                                                | Main mystery beat                                                                                                          | Optional social content                                                          | Evening mood                                            |
+| ------------------------ | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| 1 — Arrival              | Miller order; Mara order; establish shelf, cash desk, Frank and book recommendations | Found pages / first unresolved question from existing canon; do not invent a forced reveal                                 | Sophie flowers, short Frank interaction                                          | Quiet discovery, no accusation                          |
+| 2 — Routine with a crack | Anna's class book order; light stock/order follow-up                                 | Rumor about Thomas and archive; player can distinguish testimony from guess                                                | Mara lemonade, Thomas chair, Oliver unread-book game                             | Warmth survives gossip                                  |
+| 3 — Competing versions   | Thomas order; Nora order                                                             | Nora–Eleanor disagreement about archive dates; optional document verification                                              | Anna bookmarks; Nora's bad novel -> deep Nora; deep Thomas; Sophie card game     | Player may choose books over investigation              |
+| 4 — Personal boundaries  | Iris order; Leo order                                                                | Optional Mara–Leo conflict and Iris–Miller art conflict; physical letter privacy remains separate                          | Iris's painting -> deep Iris; Mara's cake -> deep Mara; Oliver board-game banter | Tension with ordinary life still present                |
+| 5 — Reading evening      | Eleanor order; book club / reading event payoff                                      | Public decision: disclose verified facts, make accusation, or keep private details private; preserve existing ending flags | Eleanor shelf -> deep Eleanor; Sophie return-to-town; Oliver normal-day visit    | Community continues, no forced universal reconciliation |
 
 ### Mandatory narrative budget
 
@@ -33,6 +33,7 @@ Every required scene must have a short path; no long dialogue required to finish
 **Target per day:** at most 2–3 **surfaced** optional invitations (a visitor appears, a conversation prompt appears, or a small event is signaled). A player may intentionally seek additional conversations through an existing interaction UI if available; do not auto-chain them.
 
 **At most one extended dialogue invitation per day.** Suggested first-playthrough distribution:
+
 - Day 1: none. Let the player learn store interactions.
 - Day 2: Oliver or Sophie; a light, short social beat.
 - Day 3: Nora **or** Thomas, based on whom the player engages.
@@ -53,36 +54,38 @@ This is a **soft invitation cap**, not a hard content lock. If the player active
 
 ## Overlap and continuity audit
 
-| Overlap | Risk | Editorial resolution |
-| --- | --- | --- |
-| Nora ordinary scene «Поганий роман» and deep Nora opening | Identical memory-loss count / same paperback joke | Use ordinary scene as entry node; deep scene starts at the branch choice, not from the beginning |
-| Thomas chair + shelf repair + restoration order | Three repairs in adjacent days; repetitive metaphor | Keep Day 2 chair comic; Day 3 order functional; deep dialogue optional with a distinct emotional turn |
-| Mara seaside wish in Day 1 order, Day 2 lemonade, Day 4 deep scene | Repeated “I want to escape” exposition | Day 1 hint only; Day 2 carefree walk; Day 4 new specifics about responsibility and daily work |
-| Iris three/four windows in order, conflict and deep scene | Drawing becomes an implausible universal mystery object | Keep art as everyday expression; vary prop or location; NEVER make windows an evidence clue |
-| Eleanor shelf in ordinary scene, order and deep scene | Three versions of same small change | Treat shelf change as one evolving mini-arc: Day 5 order -> optional conversation -> cosmetic shelf state |
-| Miller envelope rumor and Anna/Thomas archive-chair rumor | Two hearsay threads conflated into certainty | Separate notebook categories, timestamp each heard statement, require direct inspection for document evidence |
-| Oliver's invented book title | Could create duplicate/nonexistent catalog ID | Resolve to real catalog item or make it a fictional cover-only joke; do not persist nonexistent SKU |
-| Sophie flowers and Frank | Possible pet-toxic décor | Use cat-safe verified non-toxic flowers or inaccessible props; no plant asset requirement |
-| Deep dialogue estimated 10–15 minutes | Branches may actually be far shorter | Do not promise duration; measure word count and real playtest time before marketing |
-| All optional conversations at once | Visual clutter, pacing collapse | Schedule prompts based on visitor presence and cooldown; preserve ability to decline |
+| Overlap                                                            | Risk                                                    | Editorial resolution                                                                                          |
+| ------------------------------------------------------------------ | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Nora ordinary scene «Поганий роман» and deep Nora opening          | Identical memory-loss count / same paperback joke       | Use ordinary scene as entry node; deep scene starts at the branch choice, not from the beginning              |
+| Thomas chair + shelf repair + restoration order                    | Three repairs in adjacent days; repetitive metaphor     | Keep Day 2 chair comic; Day 3 order functional; deep dialogue optional with a distinct emotional turn         |
+| Mara seaside wish in Day 1 order, Day 2 lemonade, Day 4 deep scene | Repeated “I want to escape” exposition                  | Day 1 hint only; Day 2 carefree walk; Day 4 new specifics about responsibility and daily work                 |
+| Iris three/four windows in order, conflict and deep scene          | Drawing becomes an implausible universal mystery object | Keep art as everyday expression; vary prop or location; NEVER make windows an evidence clue                   |
+| Eleanor shelf in ordinary scene, order and deep scene              | Three versions of same small change                     | Treat shelf change as one evolving mini-arc: Day 5 order -> optional conversation -> cosmetic shelf state     |
+| Miller envelope rumor and Anna/Thomas archive-chair rumor          | Two hearsay threads conflated into certainty            | Separate notebook categories, timestamp each heard statement, require direct inspection for document evidence |
+| Oliver's invented book title                                       | Could create duplicate/nonexistent catalog ID           | Resolve to real catalog item or make it a fictional cover-only joke; do not persist nonexistent SKU           |
+| Sophie flowers and Frank                                           | Possible pet-toxic décor                                | Use cat-safe verified non-toxic flowers or inaccessible props; no plant asset requirement                     |
+| Deep dialogue estimated 10–15 minutes                              | Branches may actually be far shorter                    | Do not promise duration; measure word count and real playtest time before marketing                           |
+| All optional conversations at once                                 | Visual clutter, pacing collapse                         | Schedule prompts based on visitor presence and cooldown; preserve ability to decline                          |
 
 ## Estimated playtime — planning assumptions, not tested results
 
-**Short required route:** 8 orders × 2–4 min = 16–32 min; 5 primary mystery beats × 4–8 min = 20–40 min; daily setup, browsing, walking, reading and closing × 10–20 min = 50–100 min; finale and epilogue = 15–30 min. **Subtotal: ~1h40m–3h20m**. This is a *rough design estimate*, not a measurement of the current build.
+**Short required route:** 8 orders × 2–4 min = 16–32 min; 5 primary mystery beats × 4–8 min = 20–40 min; daily setup, browsing, walking, reading and closing × 10–20 min = 50–100 min; finale and epilogue = 15–30 min. **Subtotal: ~1h40m–3h20m**. This is a _rough design estimate_, not a measurement of the current build.
 
 **Long optional route:** 5 deep dialogues × 8–15 min = 40–75 min if all accessed; 11 shorter ordinary/cozy scenes × 2–7 min = 22–77 min; conflicts and deeper order questions can add ~20–50 min. **Potential additional 1h20m–3h20m**, highly dependent on reading speed and selection.
 
-**Critical finding:** these authored texts alone **do not demonstrate** the originally intended 4–5h main route or 7–9h completionist route. Achieving those targets requires meaningful store gameplay, exploration, branching consequences, day transitions, and more *interactive* content, not artificially long dialogue. Avoid padding text to reach a duration number.
+**Critical finding:** these authored texts alone **do not demonstrate** the originally intended 4–5h main route or 7–9h completionist route. Achieving those targets requires meaningful store gameplay, exploration, branching consequences, day transitions, and more _interactive_ content, not artificially long dialogue. Avoid padding text to reach a duration number.
 
 ## State and save design (proposal only)
 
 Minimal new scene state:
+
 - scene_id, availability predicate, visited, finished, last_entered_day
 - optional branch_local_state (do not serialize temporary banter unless needed)
 - character_presence and trust conditions should use existing canonical flags
 - journal entries require explicit observation / testimony / document type, source, day, and question actually asked
 
 Never:
+
 - award hidden morality scores for “kind” replies;
 - repair privacy breaches by completing a purchase;
 - make optional social scenes prerequisites for evidence;

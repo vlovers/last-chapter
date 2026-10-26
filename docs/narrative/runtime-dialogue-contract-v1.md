@@ -17,40 +17,40 @@
 
 ## Suggested TypeScript model (illustrative)
 
-~~~ts
+```ts
 type Day = 1 | 2 | 3 | 4 | 5;
-type EvidenceKind = "observation" | "testimony" | "record" | "inference" | "rumor";
+type EvidenceKind = 'observation' | 'testimony' | 'record' | 'inference' | 'rumor';
 type Condition =
-  | { kind: "day"; value: Day }
-  | { kind: "flag"; id: string; equals: boolean }
-  | { kind: "character_present"; id: string }
-  | { kind: "scene_completed"; id: string; equals: boolean };
+  | { kind: 'day'; value: Day }
+  | { kind: 'flag'; id: string; equals: boolean }
+  | { kind: 'character_present'; id: string }
+  | { kind: 'scene_completed'; id: string; equals: boolean };
 type Effect =
-  | { kind: "set_flag"; id: string; value: boolean }
-  | { kind: "journal"; entryId: string; evidenceKind: EvidenceKind; sourceId: string }
-  | { kind: "complete_scene"; sceneId: string };
+  | { kind: 'set_flag'; id: string; value: boolean }
+  | { kind: 'journal'; entryId: string; evidenceKind: EvidenceKind; sourceId: string }
+  | { kind: 'complete_scene'; sceneId: string };
 type Choice = { id: string; text: string; next: string; when?: Condition[]; effects?: Effect[] };
 type Node =
-  | { id: string; type: "line"; speaker: string; text: string; next: string }
-  | { id: string; type: "choice"; choices: Choice[] }
-  | { id: string; type: "end"; effects?: Effect[] };
+  | { id: string; type: 'line'; speaker: string; text: string; next: string }
+  | { id: string; type: 'choice'; choices: Choice[] }
+  | { id: string; type: 'end'; effects?: Effect[] };
 type DialogueScene = {
   id: string;
   day: Day;
   characterIds: string[];
-  priority: "required" | "optional";
+  priority: 'required' | 'optional';
   when: Condition[];
   start: string;
   nodes: Node[];
   canExit: boolean;
 };
-~~~
+```
 
 All identifiers are examples until reconciled with existing code. A node's next must reference a node in the same scene; no implicit cross-scene jumps.
 
 ## Complete small example — Oliver's unread book
 
-~~~json
+```json
 {
   "id": "cozy_oliver_unread_day2",
   "day": 2,
@@ -64,33 +64,80 @@ All identifiers are examples until reconciled with existing code. A node's next 
   "start": "opening",
   "canExit": true,
   "nodes": [
-    { "id": "opening", "type": "line", "speaker": "oliver", "text": "Пропоную посперечатися про книжку, якої ми обоє не читали.", "next": "choice_open" },
-    { "id": "choice_open", "type": "choice", "choices": [
-      { "id": "play", "text": "Спробуймо.", "next": "game" },
-      { "id": "decline", "text": "Не сьогодні.", "next": "bye" }
-    ] },
-    { "id": "game", "type": "line", "speaker": "oliver", "text": "Судячи з обкладинки, це історія про людину, яка не вміє паркувати човен.", "next": "guess" },
-    { "id": "guess", "type": "choice", "choices": [
-      { "id": "sun", "text": "Маяк ревнує до сонця.", "next": "sun_reaction" },
-      { "id": "mail", "text": "Море вкрало всі листи.", "next": "mail_reaction" },
-      { "id": "accountant", "text": "Бухгалтер боїться води.", "next": "accountant_reaction" }
-    ] },
-    { "id": "sun_reaction", "type": "line", "speaker": "oliver", "text": "Мені вже шкода сонце.", "next": "done" },
-    { "id": "mail_reaction", "type": "line", "speaker": "oliver", "text": "І пошта нарешті знайшла винного.", "next": "done" },
-    { "id": "accountant_reaction", "type": "line", "speaker": "oliver", "text": "Це найкраща книжка, яку я не читав.", "next": "done" },
-    { "id": "bye", "type": "line", "speaker": "oliver", "text": "Тоді я програю сам собі. Це вже традиція.", "next": "done" },
-    { "id": "done", "type": "end", "effects": [
-      { "kind": "complete_scene", "sceneId": "cozy_oliver_unread_day2" }
-    ] }
+    {
+      "id": "opening",
+      "type": "line",
+      "speaker": "oliver",
+      "text": "Пропоную посперечатися про книжку, якої ми обоє не читали.",
+      "next": "choice_open"
+    },
+    {
+      "id": "choice_open",
+      "type": "choice",
+      "choices": [
+        { "id": "play", "text": "Спробуймо.", "next": "game" },
+        { "id": "decline", "text": "Не сьогодні.", "next": "bye" }
+      ]
+    },
+    {
+      "id": "game",
+      "type": "line",
+      "speaker": "oliver",
+      "text": "Судячи з обкладинки, це історія про людину, яка не вміє паркувати човен.",
+      "next": "guess"
+    },
+    {
+      "id": "guess",
+      "type": "choice",
+      "choices": [
+        { "id": "sun", "text": "Маяк ревнує до сонця.", "next": "sun_reaction" },
+        { "id": "mail", "text": "Море вкрало всі листи.", "next": "mail_reaction" },
+        { "id": "accountant", "text": "Бухгалтер боїться води.", "next": "accountant_reaction" }
+      ]
+    },
+    {
+      "id": "sun_reaction",
+      "type": "line",
+      "speaker": "oliver",
+      "text": "Мені вже шкода сонце.",
+      "next": "done"
+    },
+    {
+      "id": "mail_reaction",
+      "type": "line",
+      "speaker": "oliver",
+      "text": "І пошта нарешті знайшла винного.",
+      "next": "done"
+    },
+    {
+      "id": "accountant_reaction",
+      "type": "line",
+      "speaker": "oliver",
+      "text": "Це найкраща книжка, яку я не читав.",
+      "next": "done"
+    },
+    {
+      "id": "bye",
+      "type": "line",
+      "speaker": "oliver",
+      "text": "Тоді я програю сам собі. Це вже традиція.",
+      "next": "done"
+    },
+    {
+      "id": "done",
+      "type": "end",
+      "effects": [{ "kind": "complete_scene", "sceneId": "cozy_oliver_unread_day2" }]
+    }
   ]
 }
-~~~
+```
 
 This example deliberately has **no mystery flags** and **no book sale**. If Oliver's actual NPC ID differs, adapt it. If the game lacks Oliver sprites, do not silently substitute another character.
 
 ## Journal provenance and gate example
 
 A question asked during Anna's order may record testimony:
+
 - entryId: anna_saw_thomas_chairs
 - evidenceKind: testimony
 - sourceId: anna
@@ -98,6 +145,7 @@ A question asked during Anna's order may record testimony:
 - wording: «Анна бачила Томаса зі стільцями біля архіву; не знає, чи він заходив усередину».
 
 A direct inspection of an original document may record:
+
 - entryId: archive_inventory_date
 - evidenceKind: record
 - sourceId: archive_inventory_original
@@ -119,6 +167,7 @@ A direct inspection of an original document may record:
 ## Safe save strategy
 
 Persist only durable state:
+
 - completed scene IDs (unique set)
 - per-order chosen catalog ID and completed stage (reuse current engine)
 - canonical relationship/letter-privacy flags (reuse current engine)
@@ -129,6 +178,7 @@ Avoid persisting entire node trees or arbitrary effect scripts. For old saves, d
 ## Static content validation
 
 A pre-integration validator should reject:
+
 - duplicate scene IDs or node IDs
 - missing start or broken next references
 - unreachable end nodes

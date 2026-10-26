@@ -21,6 +21,7 @@ Optional questions:
 3. «А що робите, коли річ не хоче повертатися до колишнього вигляду?» — «Річ нічого не хоче». He turns the hinge over. «Люди — інша справа».
 
 Recommendation directions (select existing catalog entries by theme):
+
 - **Restoration handbook:** useful and expected. «Оце діло. Схеми є?»
 - **Novel about rebuilding a home:** he initially objects, then reads the first paragraph. «Я ж просив інструкцію. ...Але покажіть».
 - **Detective about missing objects:** wrong literal genre, but he enjoys arguing about its solution. «Ви або жартуєте, або дуже добре мене знаєте».
@@ -46,6 +47,7 @@ Optional questions:
 3. «А якщо правду ніколи не вдасться встановити?» — «Тоді це й треба написати. Не вигадувати останню сторінку».
 
 Recommendation directions:
+
 - **Local-history collection:** she checks citations before buying. «Бібліографія є? Уже краще».
 - **Historical novel:** she likes the prose but asks for a visible fiction label. «Вигадка — не злочин. Плутанина — проблема».
 - **Epistolary novel:** she chooses it for pleasure, not research. «Мені іноді теж хочеться просто читати».
@@ -71,6 +73,7 @@ Optional questions:
 3. «Ви боїтеся показувати малюнки?» — «Ні. Я боюся пояснювати їх тим, хто вже все вирішив».
 
 Recommendation directions:
+
 - **Quiet illustrated prose:** she likes that pictures are not decoded for the reader. «Оце можна покласти поруч».
 - **Letters novel:** she hesitates because of the sealed letter; she may decline without revealing why. «Не сьогодні».
 - **Mystery with an explicit solution:** she smiles at the contrast. «Може, їй сподобається. Мені — ні».
@@ -96,6 +99,7 @@ Optional questions:
 3. «Що, як вам не сподобається дорога?» — «Тоді я хоча б не зможу звинуватити розклад».
 
 Recommendation directions:
+
 - **Railway novel:** familiar entry point; Leo smiles at the station diagrams.
 - **Road novel with uncertain destination:** challenges his taste, but he is curious.
 - **Letters novel:** he refuses to use it as a substitute for talking to Mara.
@@ -121,6 +125,7 @@ Optional questions:
 3. «А якщо нова книжка вам не сподобається?» — «Поставлю поруч іншу. Це ж книгарня, не суд».
 
 Recommendation directions:
+
 - **Experimental contemporary novel:** she takes a risk and asks for a second copy for display.
 - **Historical novel from a different viewpoint:** she debates its framing but is interested.
 - **Familiar classic:** comfortable but does not satisfy her stated goal; she may buy it anyway.
@@ -132,6 +137,7 @@ Relationship response: Eleanor's change is small, not a redemption monologue. Sh
 ## Cross-order mystery logic
 
 Use explicit lead categories:
+
 - **Observation:** Anna saw Thomas carrying chairs near the archive.
 - **Testimony:** Thomas says he did not enter.
 - **Memory:** Nora recalls conflicting dates.
@@ -148,4 +154,4 @@ Never turn an inference into a record. Conflicting testimony should remain visib
 - Each customer has at least three distinct book-reaction paths, and one optional lead.
 - The customer may refuse to answer a personal question without blocking a sale.
 - Avoid assigning unique new book IDs until existing catalog data has been audited.
-- No UI changes in this branch. 
+- No UI changes in this branch.

@@ -47,21 +47,13 @@ describe('Final evening player-facing save and decision audit', () => {
   });
 
   it('carries an admitted letter breach through save and a player decision', () => {
-    let state = initial([
-      'saw_envelope',
-      'opened_private_letter',
-      'iris_letter_breach_admitted',
-    ]);
+    let state = initial(['saw_envelope', 'opened_private_letter', 'iris_letter_breach_admitted']);
     state = playableAfterSave(selectOption(finalReading, state, 'letter'));
-    expect(availableOptions(finalReading, state).map((item) => item.id)).toContain(
-      'repair-trust',
-    );
+    expect(availableOptions(finalReading, state).map((item) => item.id)).toContain('repair-trust');
     state = playableAfterSave(selectOption(finalReading, state, 'repair-trust'));
     state = playableAfterSave(selectOption(finalReading, state, 'repair-trust-back'));
     expect(state.flags).toContain('final_accepted_consequences');
-    expect(availableOptions(finalReading, state).map((item) => item.id)).not.toContain(
-      'letter',
-    );
+    expect(availableOptions(finalReading, state).map((item) => item.id)).not.toContain('letter');
     expect(selectOption(finalReading, state, 'close').node).toBe('end');
   });
 
@@ -70,9 +62,7 @@ describe('Final evening player-facing save and decision audit', () => {
     state = playableAfterSave(selectOption(finalReading, state, 'rumor-apology'));
     state = playableAfterSave(selectOption(finalReading, state, 'rumor-apology-back'));
     expect(state.flags).toContain('final_repaired_rumor');
-    expect(availableOptions(finalReading, state).map((item) => item.id)).not.toContain(
-      'rumor',
-    );
+    expect(availableOptions(finalReading, state).map((item) => item.id)).not.toContain('rumor');
     expect(selectOption(finalReading, state, 'close').node).toBe('end');
   });
 });
