@@ -18,7 +18,27 @@ page.on('console', (message) => {
 });
 try {
   await page.goto(base);
-  await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+  const enter = page.getByRole('button', { name: 'Відчинити книгарню' });
+  try {
+    await enter.waitFor({ state: 'visible', timeout: 12000 });
+    await page.waitForFunction(() => {
+      const button = document.querySelector('#enter');
+      return button && (!button.disabled || button.hidden);
+    }, { timeout: 12000 });
+    if (await enter.isDisabled()) {
+      throw new Error('Bookshop initialization did not enable the entrance');
+    }
+  } catch (error) {
+    const details = await page.evaluate(() => ({
+      message: document.querySelector('#loading-message')?.textContent,
+      enterDisabled: document.querySelector('#enter')?.disabled,
+      enterHidden: document.querySelector('#enter')?.hidden,
+      gameCanvas: Boolean(document.querySelector('#game canvas')),
+      storyReady: Boolean(window.__lastChapterStory),
+    }));
+    throw new Error('Phaser startup diagnostic: ' + JSON.stringify({ details, errors }), { cause: error });
+  }
+  await enter.click();
   await page.locator('#story-tools').waitFor();
   assert.equal(await page.locator('#day-timeline li').count(), 5);
   assert.equal(
