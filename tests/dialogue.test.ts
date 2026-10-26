@@ -54,11 +54,11 @@ describe('Ukrainian dialogue slice', () => {
   });
 
   it('only offers Thomas a personal apology after the player amplified gossip', () => {
-    let neutral = startDialogue(thomasVisit, ['rumor_heard']);
+    let neutral = { ...startDialogue(thomasVisit), flags: ['rumor_heard'] };
     for (const choice of ['greet', 'rumor']) neutral = selectOption(thomasVisit, neutral, choice);
     expect(availableOptions(thomasVisit, neutral).map((option) => option.id)).not.toContain('rumor-own-words');
 
-    let amplified = startDialogue(thomasVisit, ['rumor_heard', 'rumor_amplified']);
+    let amplified = { ...startDialogue(thomasVisit), flags: ['rumor_heard', 'rumor_amplified'] };
     for (const choice of ['greet', 'rumor']) amplified = selectOption(thomasVisit, amplified, choice);
     expect(availableOptions(thomasVisit, amplified).map((option) => option.id)).toContain('rumor-own-words');
     amplified = selectOption(thomasVisit, amplified, 'rumor-own-words');
@@ -66,7 +66,7 @@ describe('Ukrainian dialogue slice', () => {
   });
 
   it('lets Anna respond to an admission without blocking her book order', () => {
-    let state = startDialogue(annaVisit, ['rumor_heard', 'rumor_amplified']);
+    let state = { ...startDialogue(annaVisit), flags: ['rumor_heard', 'rumor_amplified'] };
     for (const choice of ['hello', 'rumor', 'rumor-own-amplification', 'rumor-own-amplification-books', 'maps', 'purchase-end']) {
       state = selectOption(annaVisit, state, choice);
     }
