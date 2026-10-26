@@ -26,7 +26,8 @@ import {
   startFifthDay,
   finishSeason,
 } from './game/chapter';
-import { availableOptions, currentNode } from './game/dialogue';
+import { availableOptions, currentNode, selectOption, startDialogue, type DialogueState } from './game/dialogue';
+import { oliverUnreadBook } from './content/optional/oliver';
 import { decodeSave, encodeSave, SAVE_KEY } from './game/save';
 import { inspectShopSpot, shopSpots, type ShopSpotId } from './game/exploration';
 import { completedOrders, currentCustomer } from './game/service';
@@ -40,6 +41,14 @@ let previewBook: Book | null = null;
 let activeSpot: ShopSpotId | null = null;
 let catalogFilter: CatalogFilter = 'all';
 let journalOpen = false;
+const OLIVER_KEY = 'last-chapter:optional:oliver:v1';
+let oliverDialogue: DialogueState | null = null;
+let oliverFinished = false;
+try { oliverFinished = localStorage.getItem(OLIVER_KEY) === 'done'; } catch { /* Optional storage. */ }
+function finishOliver(): void {
+  oliverFinished = true;
+  try { localStorage.setItem(OLIVER_KEY, 'done'); } catch { /* Optional storage. */ }
+}
 
 function restoreChapter() {
   try {
@@ -225,6 +234,9 @@ function render(): void {
     restart.textContent = 'Почати знову';
     restart.addEventListener('click', () => {
       chapter = startChapter();
+      oliverDialogue = null;
+      oliverFinished = false;
+      try { localStorage.removeItem(OLIVER_KEY); } catch { /* Optional storage. */ }
       previewBook = null;
       activeSpot = null;
       journalOpen = false;
@@ -447,6 +459,48 @@ function render(): void {
       });
       actions.append(next);
     }
+  }
+
+  // Optional Day 2 dialogue: does not mutate chapter flags or stages.
+  if (['iris', 'anna', 'leo'].includes(chapter.stage) && !oliverFinished) {
+    const section = document.createElement('section');
+    section.className = 'dialogue-options-group';
+    const title = document.createElement('h3');
+    title.textContent = '☕ Олівер · необов’язкова розмова';
+    section.append(title);
+    if (!oliverDialogue) {
+      const start = document.createElement('button');
+      start.type = 'button';
+      start.textContent = 'Поговорити з Олівером';
+      start.addEventListener('click', () => {
+        oliverDialogue = startDialogue(oliverUnreadBook);
+        render();
+      });
+      section.append(start);
+    } else {
+      const node = currentNode(oliverUnreadBook, oliverDialogue);
+      const line = document.createElement('p');
+      line.textContent = node.speaker + ': «' + node.text + '»';
+      section.append(line);
+      for (const option of availableOptions(oliverUnreadBook, oliverDialogue)) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = option.label;
+        button.addEventListener('click', () => {
+          if (!oliverDialogue) return;
+          oliverDialogue = selectOption(oliverUnreadBook, oliverDialogue, option.id);
+          if (availableOptions(oliverUnreadBook, oliverDialogue).length === 0) finishOliver();
+          render();
+        });
+        section.append(button);
+      }
+      const leave = document.createElement('button');
+      leave.type = 'button';
+      leave.textContent = 'Повернутися до справ книгарні';
+      leave.addEventListener('click', () => { oliverDialogue = null; render(); });
+      section.append(leave);
+    }
+    actions.append(section);
   }
 
   const notebook = document.createElement('section');
