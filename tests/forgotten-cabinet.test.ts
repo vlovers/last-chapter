@@ -51,7 +51,8 @@ describe('Forgotten cabinet playable slice', () => {
   it('unlocks the missing chapter only after converging cinema leads', () => {
     const flags = ['cabinet_photo_seen', 'cinema_poster_lead', 'cinema_club_asked_for_records'];
     expect(availableOptions(irisDecision, at('welcome', flags)).some((option) => option.id === 'missing-chapter')).toBe(true);
-    expect(availableOptions(irisDecision, at('welcome', flags.slice(0, 2))).some((option) => option.id === 'missing-chapter')).toBe(false);
+    expect(availableOptions(irisDecision, at('welcome', flags.slice(0, 1))).some((option) => option.id === 'missing-chapter')).toBe(true);
+    expect(availableOptions(irisDecision, at('welcome')).some((option) => option.id === 'missing-chapter')).toBe(false);
     const falseClaim = selectOption(irisDecision, at('missing-chapter', flags), 'chapter-rumor');
     expect(falseClaim.flags).toContain('missing_chapter_false_claim');
     expect(currentNode(irisDecision, falseClaim).text).toContain('вигадав');
