@@ -180,7 +180,65 @@ export const finalReading: DialogueStory = {
           requires: ['leo_day_four_future_heard'],
           unless: ['final_day_four_leo_heard'],
         },
+        {
+          id: 'shared-table',
+          label: 'Запросити гостей поговорити про те, кому належать історії',
+          next: 'shared-table',
+          unless: ['final_shared_table_heard'],
+        },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
+      ],
+    },
+    {
+      id: 'shared-table',
+      speaker: 'Анна',
+      text: 'Анна кладе на стіл книжку без обкладинки. «Мої учні сперечалися, чи можна розповідати історію друга, якщо вона здається повчальною. Один сказав: якщо історія правдива, значить, можна. Інша відповіла: правда не робить її твоєю». Мара відсуває чашку. «А якщо мовчання теж когось ранить?»',
+      options: [
+        {
+          id: 'shared-table-consent',
+          label: '«Спершу запитати людину, чи хоче вона цієї розмови»',
+          next: 'shared-table-answer',
+          grants: ['final_shared_table_consent'],
+        },
+        {
+          id: 'shared-table-accountability',
+          label: '«Визнати власну помилку, не розкриваючи чужої таємниці»',
+          next: 'shared-table-answer',
+          grants: ['final_shared_table_accountability'],
+        },
+        {
+          id: 'shared-table-uncertainty',
+          label: '«Іноді чесно сказати, що ми знаємо не все»',
+          next: 'shared-table-answer',
+          grants: ['final_shared_table_uncertainty'],
+        },
+      ],
+    },
+    {
+      id: 'shared-table-answer',
+      speaker: 'Нора',
+      text: '«Я працюю з архівами, але жоден документ не дає мені права вирішувати за живу людину», — каже Нора. Елеонора підсуває до столу ще один стілець. Ніхто не оголошує переможця суперечки.',
+      textWhen: [
+        {
+          requires: ['final_shared_table_consent'],
+          text: '«Запитання — не формальність», — каже Айріс. «Людина може відповісти “ні”, навіть якщо нам здається, що розмова допоможе». Лео киває, не намагаючись говорити замість неї. Мара додає: «І “не зараз” теж відповідь».',
+        },
+        {
+          requires: ['final_shared_table_accountability'],
+          text: 'Пані Міллер повільно закриває книжку. «Я можу сказати, що помилилася, не називаючи тих, про кого пліткувала». Томас відповідає: «Вибачення не стирає наслідків. Але принаймні не створює нових».',
+        },
+        {
+          requires: ['final_shared_table_uncertainty'],
+          text: '«В архіві завжди лишаються прогалини», — каже Нора. Анна усміхається: «Тоді я навчу дітей не заповнювати їх чужими здогадами». Елеонора ставить порожню чашку на стіл: «Можна залишити місце для того, чого ще не знаємо».',
+        },
+      ],
+      options: [
+        {
+          id: 'shared-table-return',
+          label: 'Повернутися до спільного читання',
+          next: 'gathering',
+          grants: ['final_shared_table_heard'],
+        },
       ],
     },
     {
