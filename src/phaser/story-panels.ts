@@ -1,6 +1,7 @@
 import type { FiveDayStory } from './five-day-story';
 import {
   answerConversation,
+  conversationAvailable,
   conversationView,
   normalizeMemories,
   restoreConversation,
@@ -76,8 +77,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const conversationButton = document.createElement('button');
   conversationButton.type = 'button';
   conversationButton.textContent = 'Поговорити з Марою';
+  conversationButton.setAttribute('aria-label', 'Поговорити з Марою');
   conversationButton.setAttribute('aria-expanded', 'false');
-  root.append(conversationButton);
+  root.querySelector('.story-toolbar-actions')?.append(conversationButton);
   let filter: CatalogFilter = 'all';
   const element = <K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -89,6 +91,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     if (className) node.className = className;
     return node;
   };
+  const sessionFor = (id: string) =>
+    id === maraBookClub.id
+      ? conversation
+      : id === maraAfterHours.id
+        ? afterHours
+        : id === maraReturnVisit.id
+          ? returnVisit
+          : letterDecision;
   const refresh = () => {
     timeline.replaceChildren();
     for (const day of story.progress) {
@@ -105,13 +115,41 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     for (const [name, button] of Object.entries(controls)) {
       button.setAttribute('aria-expanded', String(mode === name));
     }
+    const count = availableMaraTopics(story.day).filter((t) =>
+      conversationAvailable(t, sessionFor(t.id)),
+    ).length;
+    conversationButton.dataset.new = count ? String(count) : '✓';
+    conversationButton.title = count ? `Доступно тем: ${count}` : 'Доступні розмови завершено';
     conversationButton.setAttribute('aria-expanded', String(mode === 'conversation'));
     panel.hidden = mode === null;
+    document.body.classList.toggle('reading', mode !== null);
+    panel.setAttribute('aria-label', 'Сторінки книгарні');
     panel.replaceChildren();
+    if (mode !== null) {
+      const close = element('button', '×', 'panel-close');
+      close.type = 'button';
+      close.setAttribute('aria-label', 'Повернутися до книгарні');
+      close.addEventListener('click', () => {
+        mode = null;
+        refresh();
+        conversationButton.focus({ preventScroll: true });
+      });
+      panel.append(close);
+    }
     if (mode === 'conversation') {
-      selectedTopic = allowedMaraTopic(story.day, selectedTopic);
+      const topics = availableMaraTopics(story.day).filter((t) =>
+        conversationAvailable(t, sessionFor(t.id)),
+      );
+      selectedTopic =
+        topics.find((t) => t.id === selectedTopic.id) ??
+        topics[0] ??
+        allowedMaraTopic(story.day, selectedTopic);
+      if (!topics.length) {
+        panel.append(element('p', 'Усі доступні розмови завершено. Нові теми з’являться згодом.'));
+        return;
+      }
       const topicSelector = element('div', '', 'story-filters');
-      for (const topic of availableMaraTopics(story.day)) {
+      for (const topic of topics) {
         const button = element('button', topic.title);
         button.type = 'button';
         button.setAttribute('aria-pressed', String(selectedTopic.id === topic.id));
@@ -131,21 +169,20 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
               ? returnVisit
               : letterDecision;
       if (activeConversation.finished) {
-        panel.append(
-          element('p', 'Розмову завершено. Можна почати нову, зберігши попередні думки.'),
-        );
-        const again = element('button', 'Поговорити знову');
-        again.type = 'button';
-        again.addEventListener('click', () => {
-          const next = startConversation(selectedTopic, sharedMemories());
-          if (selectedTopic.id === maraAfterHours.id) afterHours = next;
-          else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next;
-          else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next;
-          else conversation = next;
-          saveConversation();
-          refresh();
-        });
-        panel.append(again);
+        panel.append(element('p', 'Розмову завершено.'));
+        if (selectedTopic.repeatability === 'repeatable') {
+          const again = element('button', 'Почати ще одну розмову');
+          again.addEventListener('click', () => {
+            const next = startConversation(selectedTopic, sharedMemories());
+            if (selectedTopic.id === maraAfterHours.id) afterHours = next;
+            else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next;
+            else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next;
+            else conversation = next;
+            saveConversation();
+            refresh();
+          });
+          panel.append(again);
+        }
       } else {
         const node = conversationView(selectedTopic, {
           ...activeConversation,
@@ -166,7 +203,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
             else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next;
             else conversation = next;
             saveConversation();
+            if (next.suspended) mode = null;
             refresh();
+            (panel.querySelector('button') ?? conversationButton).focus({ preventScroll: true });
           });
           panel.append(button);
         }
@@ -192,7 +231,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         evidence.append(card);
       }
       if (!story.evidence.length)
-        evidence.append(element('p', 'Огляньте кота, полиці й прилавок, щоб знайти зачіпки.'));
+        evidence.append(
+          element('p', 'Огляньте полиці, прилавок і підставку біля вікна, щоб поповнити нотатник.'),
+        );
       panel.append(evidence);
       const notes = element('ul', '', 'story-notes');
       for (const note of story.notes) notes.append(element('li', note));
@@ -247,17 +288,47 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const toggle = (next: 'journal' | 'catalog' | 'conversation') => {
     mode = mode === next ? null : next;
     refresh();
+    if (mode) (panel.querySelector('button') ?? panel).focus({ preventScroll: true });
   };
   const conversationClick = () => toggle('conversation');
   const journalClick = () => toggle('journal');
   const catalogClick = () => toggle('catalog');
   const continueClick = () => {
+    mode = null;
+    refresh();
     window.dispatchEvent(new CustomEvent('last-chapter:continue'));
   };
   conversationButton.addEventListener('click', conversationClick);
   journal.addEventListener('click', journalClick);
   catalog.addEventListener('click', catalogClick);
   continueButton.addEventListener('click', continueClick);
+  const panelKeys = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      mode = null;
+      refresh();
+      conversationButton.focus({ preventScroll: true });
+    }
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      const buttons = Array.from(panel.querySelectorAll<HTMLButtonElement>('button'));
+      const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+      event.preventDefault();
+      buttons[
+        (index + (event.key === 'ArrowDown' ? 1 : -1) + buttons.length) % buttons.length
+      ]?.focus({ preventScroll: true });
+    }
+  };
+  panel.addEventListener('keydown', panelKeys);
+  const newGame = () => {
+    conversation = startConversation(maraBookClub);
+    afterHours = startConversation(maraAfterHours);
+    returnVisit = startConversation(maraReturnVisit);
+    letterDecision = startConversation(maraLetterDecision);
+    selectedTopic = maraBookClub;
+    mode = null;
+    saveConversation();
+    refresh();
+  };
+  window.addEventListener('last-chapter:new-game', newGame);
   window.__lastChapterRefresh = refresh;
   refresh();
   return () => {
@@ -266,6 +337,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     journal.removeEventListener('click', journalClick);
     catalog.removeEventListener('click', catalogClick);
     continueButton.removeEventListener('click', continueClick);
+    panel.removeEventListener('keydown', panelKeys);
+    window.removeEventListener('last-chapter:new-game', newGame);
     window.__lastChapterRefresh = undefined;
   };
 }

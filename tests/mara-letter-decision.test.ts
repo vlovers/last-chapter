@@ -42,7 +42,8 @@ describe('Mara letter resolution', () => {
       startConversation(maraLetterDecision),
       'later',
     );
-    expect(session.finished).toBe(true);
+    expect(session.finished).toBe(false);
+    expect(session.suspended).toBe(true);
   });
   it('remembers a supportive answer', () => {
     let session = startConversation(maraLetterDecision);

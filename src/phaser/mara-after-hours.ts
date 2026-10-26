@@ -1,6 +1,6 @@
 import type { ConversationTopic } from './conversation-engine';
 
-/** Optional, spoiler-light conversation that can be revisited without story gates. */
+/** Optional conversation; incomplete sessions can be resumed without story gates. */
 export const maraAfterHours: ConversationTopic = {
   id: 'mara.after-hours.v1',
   title: 'Після закриття: книги, люди й Френк',
@@ -85,7 +85,7 @@ export const maraAfterHours: ConversationTopic = {
           remember: 'after:limits',
         },
         { id: 'personal', label: 'Ти говориш так, ніби пережила щось подібне', next: 'personal' },
-        { id: 'exit', label: 'Давай продовжимо пізніше', next: '__exit' },
+        { id: 'exit', label: 'Давай продовжимо пізніше', next: '__exit', suspend: true },
       ],
     },
     {
@@ -231,7 +231,7 @@ export const maraAfterHours: ConversationTopic = {
           remember: 'after:nesta',
         },
         { id: 'xaden', label: 'Порівняймо з героями «Четвертого крила»', next: 'xaden' },
-        { id: 'exit', label: 'Продовжимо пізніше', next: '__exit' },
+        { id: 'exit', label: 'Продовжимо пізніше', next: '__exit', suspend: true },
       ],
     },
     {

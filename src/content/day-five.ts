@@ -490,7 +490,13 @@ export const finalReading: DialogueStory = {
           requires: ['iris_letter_breach_admitted'],
         },
         { id: 'wait', label: 'Залишити конверт Айріс і не квапити нікого', next: 'wait' },
-        { id: 'letter-back', label: 'Повернутися до гостей', next: 'gathering' },
+        {
+          suspend: true,
+          repeatability: 'repeatable',
+          id: 'letter-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+        },
       ],
     },
     {

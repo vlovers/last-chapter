@@ -12,6 +12,8 @@ interface SavedChapter {
   node: string;
   flags: string[];
   history: string[];
+  completed?: readonly string[];
+  pending?: readonly { hub: string; key: string }[];
 }
 
 const stages: readonly ChapterStage[] = [
@@ -43,6 +45,9 @@ export function encodeSave(state: ChapterState): string {
     node: state.dialogue.node,
     flags: [...state.flags],
     history: [...state.dialogue.history],
+    ...(state.dialogue.completed !== undefined
+      ? { completed: state.dialogue.completed, pending: state.dialogue.pending ?? [] }
+      : {}),
   };
   return JSON.stringify(save);
 }
@@ -58,10 +63,34 @@ export function decodeSave(raw: string): ChapterState | null {
     if (!obj.flags.every((value: unknown) => typeof value === 'string')) return null;
     if (!obj.history.every((value: unknown) => typeof value === 'string')) return null;
     const stage = obj.stage as ChapterStage;
+    if (
+      obj.completed !== undefined &&
+      (!Array.isArray(obj.completed) ||
+        obj.completed.length > 256 ||
+        !obj.completed.every((v: unknown) => typeof v === 'string' && v.length <= 1000) ||
+        new Set(obj.completed).size !== obj.completed.length ||
+        !Array.isArray(obj.pending) ||
+        obj.pending.length > 256 ||
+        !obj.pending.every(
+          (v: unknown) =>
+            !!v &&
+            typeof v === 'object' &&
+            typeof (v as Record<string, unknown>).hub === 'string' &&
+            typeof (v as Record<string, unknown>).key === 'string' &&
+            String((v as Record<string, unknown>).key).length <= 1000,
+        ))
+    )
+      return null;
     const dialogue = {
       node: obj.node,
       flags: obj.flags as string[],
       history: obj.history as string[],
+      ...(obj.completed !== undefined
+        ? {
+            completed: obj.completed as string[],
+            pending: obj.pending as { hub: string; key: string }[],
+          }
+        : {}),
     };
     try {
       currentNode(stageStory(stage), dialogue);
@@ -80,6 +109,8 @@ export function decodeSave(raw: string): ChapterState | null {
     if (new Set(obj.flags).size !== obj.flags.length) return null;
     if (obj.flags.some((flag: string) => !flag || flag.length > 120)) return null;
     if (obj.history.some((id: string) => !id || id.length > 120)) return null;
+    // Keep the original shape for untouched saves; availability lazily migrates
+    // old histories. Encoding their next choice writes the explicit ledger.
     return { stage, dialogue, flags: obj.flags as string[] };
   } catch {
     return null;

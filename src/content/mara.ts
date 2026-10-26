@@ -101,6 +101,7 @@ export const maraVisit: DialogueStory = {
     },
     {
       id: 'topics',
+      hub: true,
       speaker: 'Мара',
       text: '«Якщо не рахувати булочки, які треба врятувати від мого начальника, — маю. Про що хочете поговорити?»',
       options: [
@@ -114,7 +115,12 @@ export const maraVisit: DialogueStory = {
           next: 'mara-own-morning',
           unless: ['mara_own_morning_heard'],
         },
-        { id: 'gift-now', label: '«Дякую за розмову. Повернімося до подарунка»', next: 'order' },
+        {
+          repeatability: 'repeatable',
+          id: 'gift-now',
+          label: '«Дякую за розмову. Повернімося до подарунка»',
+          next: 'order',
+        },
       ],
     },
     {

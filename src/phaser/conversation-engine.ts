@@ -5,6 +5,9 @@ export interface ConversationChoice {
   remember?: string;
   requires?: string;
   excludes?: string;
+  repeatability?: 'once' | 'repeatable';
+  /** An interruption preserves the current node instead of finishing the topic. */
+  suspend?: boolean;
 }
 export interface ConversationNode {
   id: string;
@@ -17,6 +20,7 @@ export interface ConversationTopic {
   id: string;
   title: string;
   entry: string;
+  repeatability?: 'once' | 'repeatable';
   nodes: readonly ConversationNode[];
 }
 export interface ConversationSession {
@@ -24,6 +28,9 @@ export interface ConversationSession {
   node: string;
   memories: string[];
   finished: boolean;
+  completed?: string[];
+  pending?: { node: string; key: string }[];
+  suspended?: boolean;
 }
 export function validateTopic(topic: ConversationTopic): string[] {
   const errors: string[] = [];
@@ -101,7 +108,9 @@ export function conversationView(topic: ConversationTopic, session: Conversation
     choices: node.choices.filter(
       (c) =>
         (!c.requires || session.memories.includes(c.requires)) &&
-        (!c.excludes || !session.memories.includes(c.excludes)),
+        (!c.excludes || !session.memories.includes(c.excludes)) &&
+        (c.repeatability === 'repeatable' ||
+          !session.completed?.includes(JSON.stringify([node.id, c.id]))),
     ),
   };
 }
@@ -112,7 +121,25 @@ export function answerConversation(
 ): ConversationSession {
   const choice = conversationView(topic, session).choices.find((c) => c.id === choiceId);
   if (!choice) throw new Error('Unavailable conversation choice');
+  if (choice.suspend) return { ...session, suspended: true };
+  const completed = new Set(session.completed ?? []);
+  const key = JSON.stringify([session.node, choice.id]);
+  const pending = [...(session.pending ?? [])];
+  if (
+    choice.repeatability !== 'repeatable' &&
+    !pending.some((p) => p.node === choice.next || p.key === key)
+  )
+    pending.push({ node: session.node, key });
+  const remaining = pending.filter((p) => {
+    if (choice.next === '__exit' || p.node === choice.next) {
+      completed.add(p.key);
+      return false;
+    }
+    return true;
+  });
   return {
+    completed: [...completed],
+    pending: remaining,
     topic: topic.id,
     node: choice.next === '__exit' ? session.node : choice.next,
     memories: normalizeMemories(
@@ -140,8 +167,43 @@ export function restoreConversation(
       !topic.nodes.some((n) => n.id === s.node)
     )
       return null;
-    return { topic: topic.id, node: s.node, finished: s.finished, memories: [...s.memories] };
+    if (
+      s.completed !== undefined &&
+      (!Array.isArray(s.completed) ||
+        s.completed.length > 256 ||
+        !s.completed.every((v: unknown) => typeof v === 'string' && v.length <= 300) ||
+        !Array.isArray(s.pending) ||
+        s.pending.length > 128 ||
+        !s.pending.every(
+          (v: unknown) =>
+            !!v &&
+            typeof v === 'object' &&
+            typeof (v as Record<string, unknown>).node === 'string' &&
+            typeof (v as Record<string, unknown>).key === 'string' &&
+            String((v as Record<string, unknown>).key).length <= 300,
+        ))
+    )
+      return null;
+    return {
+      topic: topic.id,
+      node: s.node,
+      finished: s.finished,
+      memories: [...s.memories],
+      ...(s.completed !== undefined
+        ? {
+            completed: [...(s.completed as string[])],
+            pending: s.pending as { node: string; key: string }[],
+          }
+        : {}),
+    };
   } catch {
     return null;
   }
+}
+
+export function conversationAvailable(
+  topic: ConversationTopic,
+  session: ConversationSession,
+): boolean {
+  return session.topic === topic.id && (!session.finished || topic.repeatability === 'repeatable');
 }

@@ -138,7 +138,13 @@ export const irisDecision: DialogueStory = {
           next: 'pressure',
           grants: ['iris_letter_pressured_day4'],
         },
-        { id: 'letter-back', label: '«Можемо повернутися до цього пізніше»', next: 'welcome' },
+        {
+          suspend: true,
+          repeatability: 'repeatable',
+          id: 'letter-back',
+          label: '«Можемо повернутися до цього пізніше»',
+          next: 'welcome',
+        },
       ],
     },
     {

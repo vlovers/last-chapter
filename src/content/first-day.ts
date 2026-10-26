@@ -114,6 +114,7 @@ export const millerVisit: DialogueStory = {
     },
     {
       id: 'topics',
+      hub: true,
       speaker: 'Пані Міллер',
       text: '«Час? Люба, я маю цілий список справ, які чудово почекають. Чай у вас є? Бо в Елеонори завжди був. Що цікавить?»',
       options: [
@@ -121,7 +122,12 @@ export const millerVisit: DialogueStory = {
         { id: 'jam', label: 'Навіщо вам порожня банка?', next: 'jam' },
         { id: 'loneliness', label: 'Як вам живеться в Беллвіку?', next: 'loneliness' },
         { id: 'memory', label: 'Чи завжди можна довіряти спогадам?', next: 'memory' },
-        { id: 'miller-order', label: 'Повернутися до вибору книжки', next: 'order' },
+        {
+          repeatability: 'repeatable',
+          id: 'miller-order',
+          label: 'Повернутися до вибору книжки',
+          next: 'order',
+        },
       ],
     },
     {
