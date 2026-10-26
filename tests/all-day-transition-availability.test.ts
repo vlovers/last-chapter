@@ -12,11 +12,10 @@ import {
   finishFourthDay,
   finishSeason,
   startBookClub,
-  type ChapterStage,
+  stageStory,
   type ChapterState,
 } from '../src/game/chapter';
 import { availableOptions, type DialogueStory } from '../src/game/dialogue';
-import { stageStory } from '../src/game/chapter';
 
 const transitions = [
   ['miller', advanceChapter],
@@ -38,11 +37,11 @@ const transitions = [
 function blockedOptions(story: DialogueStory) {
   const target = story.nodes.find((node) => node.options.length > 0);
   if (!target) throw new Error('Story has no selectable node');
-  // Every option on this node is already completed in this snapshot.
+  // One-shot options on this node are already completed in this snapshot.
   // The player-facing menu is empty even though authored edges remain.
-  const completed = target.options.map((option) =>
-    JSON.stringify([target.id, option.id, []]),
-  );
+  const completed = target.options
+    .filter((option) => option.repeatability !== 'repeatable')
+    .map((option) => JSON.stringify([target.id, option.id, []]));
   return { target, completed };
 }
 
@@ -77,7 +76,7 @@ describe('All five days agree on available choices at transitions', () => {
       );
       if (!node) continue;
       const state: ChapterState = {
-        stage: stage as ChapterStage,
+        stage,
         flags: [],
         dialogue: { node: node.id, flags: [], history: [] },
       };
