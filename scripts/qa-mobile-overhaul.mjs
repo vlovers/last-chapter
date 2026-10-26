@@ -62,7 +62,15 @@ try {
     if (width < 900)
       await page.touchscreen.tap(before.canvas.x + target.x, before.canvas.y + target.y);
     else await page.mouse.click(before.canvas.x + target.x, before.canvas.y + target.y);
-    await page.waitForTimeout(700);
+    await page.waitForFunction(
+      async (initialX) => {
+        const { game } = await import('/phaser-prototype/scene.js');
+        const scene = game.scene.getScene('bookshop');
+        return scene.characters.player.x > initialX + 10;
+      },
+      before.player.x,
+      { timeout: 2500 },
+    );
     assert.ok((await snapshot(page)).player.x > before.player.x + 10);
     await page.locator('#game').focus();
     const x = (await snapshot(page)).player.x;
