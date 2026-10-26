@@ -43,7 +43,8 @@ export function encodeSave(state: ChapterState): string {
     version: VERSION,
     stage: state.stage,
     node: state.dialogue.node,
-    flags: [...state.flags],
+    // Preserve world discoveries and flags produced in the active dialogue.
+    flags: [...new Set([...state.flags, ...state.dialogue.flags])],
     history: [...state.dialogue.history],
     ...(state.dialogue.completed !== undefined
       ? { completed: state.dialogue.completed, pending: state.dialogue.pending ?? [] }
@@ -62,6 +63,11 @@ export function decodeSave(raw: string): ChapterState | null {
       return null;
     if (!obj.flags.every((value: unknown) => typeof value === 'string')) return null;
     if (!obj.history.every((value: unknown) => typeof value === 'string')) return null;
+    if (obj.flags.length > 128 || obj.history.length > 256) return null;
+    // Save data is untrusted: validate it before loading dialogue content.
+    if (new Set(obj.flags).size !== obj.flags.length) return null;
+    if (obj.flags.some((flag: string) => !flag || flag.length > 120)) return null;
+    if (obj.history.some((id: string) => !id || id.length > 120)) return null;
     const stage = obj.stage as ChapterStage;
     if (
       obj.completed !== undefined &&
@@ -104,11 +110,6 @@ export function decodeSave(raw: string): ChapterState | null {
         return null;
       }
     }
-    if (obj.flags.length > 128 || obj.history.length > 256) return null;
-    // Save data is untrusted: a malformed payload must never bypass a dialogue gate.
-    if (new Set(obj.flags).size !== obj.flags.length) return null;
-    if (obj.flags.some((flag: string) => !flag || flag.length > 120)) return null;
-    if (obj.history.some((id: string) => !id || id.length > 120)) return null;
     // Keep the original shape for untouched saves; availability lazily migrates
     // old histories. Encoding their next choice writes the explicit ledger.
     return { stage, dialogue, flags: obj.flags as string[] };

@@ -317,17 +317,74 @@ function render(): void {
       }
       actions.append(shelf);
     } else {
-      for (const option of availableOptions(story, chapter.dialogue)) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = option.label;
-        button.addEventListener('click', () => {
-          chapter = chooseChapterOption(chapter, option.id);
-          previewBook = null;
-          persistChapter();
-          render();
-        });
-        actions.append(button);
+      const available = availableOptions(story, chapter.dialogue);
+      const groups =
+        node.id === 'gathering'
+          ? [
+              {
+                title: 'Люди та стосунки',
+                matches: (id: string) =>
+                  id.includes('couple') ||
+                  [
+                    'final-v3-mara-option',
+                    'final-v3-leo-option',
+                    'final-v3-anna-option',
+                    'final-v3-thomas-option',
+                  ].includes(id),
+              },
+              {
+                title: 'Довіра, таємниці й мистецтво',
+                matches: (id: string) =>
+                  id.includes('iris') ||
+                  id.includes('letter') ||
+                  id.includes('rumor') ||
+                  id.includes('privacy') ||
+                  id.includes('trust'),
+              },
+              {
+                title: 'Історії книгарні та спільноти',
+                matches: (id: string) =>
+                  id !== 'close' &&
+                  !id.includes('couple') &&
+                  ![
+                    'final-v3-mara-option',
+                    'final-v3-leo-option',
+                    'final-v3-anna-option',
+                    'final-v3-thomas-option',
+                  ].includes(id) &&
+                  !id.includes('iris') &&
+                  !id.includes('letter') &&
+                  !id.includes('rumor') &&
+                  !id.includes('privacy') &&
+                  !id.includes('trust'),
+              },
+              { title: 'Завершення вечора', matches: (id: string) => id === 'close' },
+            ]
+          : [{ title: '', matches: () => true }];
+      for (const group of groups) {
+        const options = available.filter((option) => group.matches(option.id));
+        if (options.length === 0) continue;
+        const section = document.createElement('section');
+        section.className = 'dialogue-options-group';
+        if (group.title) {
+          const heading = document.createElement('h3');
+          heading.className = 'dialogue-options-group__title';
+          heading.textContent = group.title;
+          section.append(heading);
+        }
+        for (const option of options) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = option.label;
+          button.addEventListener('click', () => {
+            chapter = chooseChapterOption(chapter, option.id);
+            previewBook = null;
+            persistChapter();
+            render();
+          });
+          section.append(button);
+        }
+        actions.append(section);
       }
     }
     if (node.options.length === 0) {

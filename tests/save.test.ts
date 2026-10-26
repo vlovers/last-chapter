@@ -27,4 +27,37 @@ describe('local narrative save', () => {
       ),
     ).toBeNull();
   });
+  it('rejects oversized histories, duplicate flags and invalid flag values before scene resolution', () => {
+    const base = {
+      version: 1,
+      stage: 'miller',
+      node: 'arrival',
+      flags: [],
+      history: [],
+    };
+    expect(decodeSave(JSON.stringify({ ...base, history: Array(300).fill('greet') }))).toBeNull();
+    expect(decodeSave(JSON.stringify({ ...base, flags: ['same', 'same'] }))).toBeNull();
+    expect(decodeSave(JSON.stringify({ ...base, flags: [''] }))).toBeNull();
+    expect(decodeSave(JSON.stringify({ ...base, flags: ['x'.repeat(121)] }))).toBeNull();
+    expect(decodeSave(JSON.stringify({ ...base, history: ['x'.repeat(121)] }))).toBeNull();
+  });
+
+  it('preserves valid state when resuming at a non-start node', () => {
+    const state = chooseChapterOption(startChapter(), 'greet');
+    const restored = decodeSave(encodeSave(state));
+    expect(restored).toEqual(state);
+    expect(restored?.dialogue.node).toBe(state.dialogue.node);
+    expect(restored?.dialogue.history).toEqual(state.dialogue.history);
+  });
+
+  it('preserves flags present only in the active dialogue snapshot', () => {
+    const state = startChapter();
+    const divergent = {
+      ...state,
+      dialogue: { ...state.dialogue, flags: ['active_dialogue_decision'] },
+    };
+    const restored = decodeSave(encodeSave(divergent));
+    expect(restored?.flags).toContain('active_dialogue_decision');
+    expect(restored?.dialogue.flags).toContain('active_dialogue_decision');
+  });
 });
