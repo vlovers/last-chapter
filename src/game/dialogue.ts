@@ -85,6 +85,9 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
     for (const variant of node.textWhen ?? []) {
       if (!variant.text.trim()) errors.push(`Empty conditional text: ${node.id}`);
       if (variant.requires.length === 0) errors.push(`Unconditional text variant: ${node.id}`);
+      if (new Set(variant.requires).size !== variant.requires.length) {
+        errors.push(`Duplicate conditional flag: ${node.id}`);
+      }
     }
     const options = new Set<string>();
     for (const option of node.options) {
