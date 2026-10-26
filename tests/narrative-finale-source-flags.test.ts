@@ -22,7 +22,9 @@ const links: readonly [string, DialogueStory, string, string][] = [
 describe('Finale narrative choices are backed by real player decisions', () => {
   for (const [character, visit, first, second] of links) {
     it(`${character}: both finale variants are earned through dialogue options`, () => {
-      const grants = visit.nodes.flatMap((node) => node.options.flatMap((option) => option.grants ?? []));
+      const grants = visit.nodes.flatMap((node) =>
+        node.options.flatMap((option) => option.grants ?? []),
+      );
       expect(grants).toContain(first);
       expect(grants).toContain(second);
       expect(first).not.toBe(second);
@@ -36,17 +38,35 @@ describe('Finale narrative choices are backed by real player decisions', () => {
 
   it('does not use an unavailable source conversation for shared scenes', () => {
     const shared: readonly [string, DialogueStory, string, DialogueStory, string][] = [
-      ['final-couple-conversation', maraVisit, 'mara_own_morning_heard', leoVisit, 'leo_honesty_discussed'],
-      ['final-couple-anna-thomas', annaVisit, 'anna_uncertainty_discussed', thomasVisit, 'thomas_listening_discussed'],
-      ['final-iris-eleanor', irisVisit, 'iris_art_boundaries_discussed', eleanorVisit, 'eleanor_change_discussed'],
+      [
+        'final-couple-conversation',
+        maraVisit,
+        'mara_own_morning_heard',
+        leoVisit,
+        'leo_honesty_discussed',
+      ],
+      [
+        'final-couple-anna-thomas',
+        annaVisit,
+        'anna_uncertainty_discussed',
+        thomasVisit,
+        'thomas_listening_discussed',
+      ],
+      [
+        'final-iris-eleanor',
+        irisVisit,
+        'iris_art_boundaries_discussed',
+        eleanorVisit,
+        'eleanor_change_discussed',
+      ],
     ];
     for (const [scene, firstStory, firstFlag, secondStory, secondFlag] of shared) {
-      const grants = (story: DialogueStory) => story.nodes.flatMap((node) =>
-        node.options.flatMap((option) => option.grants ?? []),
-      );
+      const grants = (story: DialogueStory) =>
+        story.nodes.flatMap((node) => node.options.flatMap((option) => option.grants ?? []));
       expect(grants(firstStory)).toContain(firstFlag);
       expect(grants(secondStory)).toContain(secondFlag);
-      const entry = finalReading.nodes.find((node) => node.id === 'gathering')
+      const entry = finalReading.nodes
+        .find((node) => node.id === 'gathering')
         ?.options.find((option) => option.next === scene);
       expect(entry?.requires).toEqual([firstFlag, secondFlag]);
     }
