@@ -7,6 +7,7 @@ Date: 2026-10-26. Scope: authored narrative branch and PR #23. **Document audit 
 PR #23 reports playable Miller, Mara and Anna customer orders, catalog, journal, mobile overlays and interactive Frank. It is open and stacked on feat/gameplay-visual-polish-v1. At last check Browser QA failed while CI was running; do not merge without checking latest runs.
 
 Authored on this narrative branch but **not verified playable**:
+
 - customer-orders-v2: Thomas, Nora, Iris, Leo and Eleanor orders.
 - mystery-clue-graph-v1: testimony/document/inference/rumor separation.
 - character-conflicts-v1: five confrontation sketches.
@@ -17,18 +18,18 @@ Authored on this narrative branch but **not verified playable**:
 
 ## Character audit
 
-| Person | Authored | Gap to close |
-|---|---|---|
-| Miller | Order, rumor, conflict | Ordinary non-gossip beat and rumor retraction consequence |
-| Mara | Order, long talk, cozy scene | Bakery timetable and independent identity |
-| Anna | Order, conflict, cozy scene | Day 5 book-club payoff for chosen book |
-| Thomas | Order, testimony, long talk | Distinguish carrying chairs from archive access |
-| Nora | Order, date hint, long talk | Require inspection of original documents |
-| Iris | Order, privacy reaction, long talk | Guarded alternative if letter was opened |
-| Leo | Order, map recollection, conflict | Standalone non-mystery conversation |
-| Eleanor | Order, long talk, conflict | Alternate entrance after public accusation |
-| Frank | Ambient moments | Never a mandatory clue detector |
-| Oliver/Sophie | Six warm optional drafts | Canon approval, schedule, assets, cat-safe décor |
+| Person        | Authored                           | Gap to close                                              |
+| ------------- | ---------------------------------- | --------------------------------------------------------- |
+| Miller        | Order, rumor, conflict             | Ordinary non-gossip beat and rumor retraction consequence |
+| Mara          | Order, long talk, cozy scene       | Bakery timetable and independent identity                 |
+| Anna          | Order, conflict, cozy scene        | Day 5 book-club payoff for chosen book                    |
+| Thomas        | Order, testimony, long talk        | Distinguish carrying chairs from archive access           |
+| Nora          | Order, date hint, long talk        | Require inspection of original documents                  |
+| Iris          | Order, privacy reaction, long talk | Guarded alternative if letter was opened                  |
+| Leo           | Order, map recollection, conflict  | Standalone non-mystery conversation                       |
+| Eleanor       | Order, long talk, conflict         | Alternate entrance after public accusation                |
+| Frank         | Ambient moments                    | Never a mandatory clue detector                           |
+| Oliver/Sophie | Six warm optional drafts           | Canon approval, schedule, assets, cat-safe décor          |
 
 ## Contradiction prevention
 
@@ -45,18 +46,18 @@ Authored on this narrative branch but **not verified playable**:
 
 ## QA scenarios
 
-| Path | Expected |
-|---|---|
-| Skip all optional talks | Five-day spine remains playable |
-| Decline to open letter | Its contents remain unknown |
-| Inspect only one dated record | Discrepancy remains unverified |
-| Spread Miller's rumor | Social consequences, no guilt proof |
-| Reject first recommendation | Another suggestion possible |
-| Reload after purchase | No duplicated receipt or reward |
-| Breach Iris privacy | Guarded dialogue persists |
-| Publicly accuse Eleanor | Later greeting acknowledges conflict |
-| Skip proposed residents | No ending references to them |
-| Never pet Frank | Story completion unaffected |
+| Path                          | Expected                             |
+| ----------------------------- | ------------------------------------ |
+| Skip all optional talks       | Five-day spine remains playable      |
+| Decline to open letter        | Its contents remain unknown          |
+| Inspect only one dated record | Discrepancy remains unverified       |
+| Spread Miller's rumor         | Social consequences, no guilt proof  |
+| Reject first recommendation   | Another suggestion possible          |
+| Reload after purchase         | No duplicated receipt or reward      |
+| Breach Iris privacy           | Guarded dialogue persists            |
+| Publicly accuse Eleanor       | Later greeting acknowledges conflict |
+| Skip proposed residents       | No ending references to them         |
+| Never pet Frank               | Story completion unaffected          |
 
 ## Implementation order
 
