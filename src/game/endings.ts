@@ -10,7 +10,11 @@ export interface SeasonEnding {
 /** Deterministic, spoiler-safe epilogue computed from the player's actual choices. */
 export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   const flags = new Set(state.flags);
-  const letter = flags.has('final_mutual_conversation')
+  const letter = flags.has('opened_private_letter') && !flags.has('iris_letter_breach_admitted')
+    ? 'Печатку на листі зламано. Айріс не знає всієї правди про те, хто його читав, і це мовчання залишається між вами.'
+    : flags.has('final_accepted_consequences')
+      ? 'Айріс почула зізнання про відкритий без дозволу лист. Вона не дала обіцянки пробачити — і цього вечора ви не вимагали її.'
+      : flags.has('final_mutual_conversation')
     ? 'Айріс і Лео поговорили наодинці. Що саме вони сказали, залишається їхньою історією.'
     : flags.has('final_letter_kept_private')
       ? 'Айріс залишила лист у себе. Ніхто не вимагав відповіді раніше, ніж вона буде готова.'
