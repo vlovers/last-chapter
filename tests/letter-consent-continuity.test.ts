@@ -153,6 +153,9 @@ describe('Private letter: consent and trust across days four and five', () => {
     expect(state.flags).toContain('final_accepted_consequences');
     expect(state.flags).not.toContain('final_mutual_conversation');
     expect(choices(finalReading, state)).toContain('close');
+    const ending = selectOption(finalReading, state, 'close');
+    expect(currentNode(finalReading, ending).text).toContain('Вона почула правду');
+    expect(currentNode(finalReading, ending).text).toContain('Френк');
   });
 
   it('does not offer the same late confession after Iris already heard it', () => {
