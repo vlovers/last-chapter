@@ -70,6 +70,9 @@ describe('Cross-day finale integration', () => {
     chapter = finishSeason(chapter);
     expect(chapter.stage).toBe('season-complete');
     for (const flag of flags) expect(chapter.flags).toContain(flag);
+    for (const person of ['iris', 'mara', 'leo']) {
+      expect(chapter.flags).toContain(`final_day_four_${person}_heard`);
+    }
   });
 
 });
