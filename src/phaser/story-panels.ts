@@ -1,3 +1,4 @@
+import { decodeBellwickProgress, encodeBellwickProgress } from './bellwick-progress';
 import {
   bellwickAvailable,
   bellwickSchedule,
@@ -55,32 +56,13 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const controls = { journal, catalog };
   let mode: 'journal' | 'catalog' | 'conversation' | 'oliver' | 'bellwick' | null = null;
   let selectedBellwick: BellwickEncounterId = 'mara';
-  let bellwickFinished: string[] = [];
-  const bellwickSessions: Partial<Record<BellwickEncounterId, DialogueState>> = {};
-  try {
-    const raw = localStorage.getItem(bellwickStorageKey);
-    if (raw) {
-      const parsed: unknown = JSON.parse(raw);
-      if (
-        parsed &&
-        typeof parsed === 'object' &&
-        'finished' in parsed &&
-        Array.isArray(parsed.finished)
-      )
-        bellwickFinished = parsed.finished.filter(
-          (id: unknown): id is string =>
-            typeof id === 'string' && bellwickSchedule.some((scene) => scene.id === id),
-        );
-    }
-  } catch {
-    /* optional */
-  }
+  let bellwickProgress = decodeBellwickProgress((() => { try { return localStorage.getItem(bellwickStorageKey); } catch { return null; } })());
+  let bellwickFinished: BellwickEncounterId[] = [...bellwickProgress.finished];
+  let bellwickSessions: Partial<Record<BellwickEncounterId, DialogueState>> = { ...bellwickProgress.sessions };
   const saveBellwick = () => {
     try {
-      localStorage.setItem(bellwickStorageKey, JSON.stringify({ finished: bellwickFinished }));
-    } catch {
-      /* optional */
-    }
+      localStorage.setItem(bellwickStorageKey, encodeBellwickProgress({ finished: bellwickFinished, sessions: bellwickSessions }));
+    } catch { /* optional */ }
   };
   const oliverKey = 'last-chapter:optional:oliver:v1';
   let oliverProgress = freshOliverProgress();
@@ -254,6 +236,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
           button.type = 'button';
           button.addEventListener('click', () => {
             bellwickSessions[selectedBellwick] = selectOption(script, session, option.id);
+            saveBellwick();
             refresh();
           });
           panel.append(button);
@@ -493,6 +476,10 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     selectedTopic = maraBookClub;
     oliverSession = null;
     oliverFinished = false;
+    bellwickProgress = decodeBellwickProgress(null);
+    bellwickFinished = [];
+    bellwickSessions = {};
+    try { localStorage.removeItem(bellwickStorageKey); } catch { /* optional */ }
     try {
       localStorage.removeItem(oliverKey);
     } catch {
