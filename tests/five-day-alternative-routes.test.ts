@@ -40,9 +40,7 @@ function play(route: 'first' | 'last') {
     const saved = decodeSave(values.get(SAVE_KEY) ?? '');
     expect(saved).not.toBeNull();
     const ending = seasonEnding(saved!);
-    expect(story.open().text).toBe(
-      [ending.letter, ending.community, ending.epilogue].join('\n\n'),
-    );
+    expect(story.open().text).toBe([ending.letter, ending.community, ending.epilogue].join('\n\n'));
     return { visited, flags: saved!.flags, ending };
   } finally {
     vi.unstubAllGlobals();
