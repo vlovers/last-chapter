@@ -30,6 +30,25 @@ describe('Narrative V3 finale variants', () => {
     }
   });
 
+  it('shared scenes are gated by both characters and can be viewed once', () => {
+    const scenes = [
+      ['final-couple-conversation', 'mara_own_morning_heard', 'leo_honesty_discussed', 'final_couple_conversation_heard'],
+      ['final-couple-anna-thomas', 'anna_uncertainty_discussed', 'thomas_listening_discussed', 'final_anna_thomas_heard'],
+      ['final-iris-eleanor', 'iris_art_boundaries_discussed', 'eleanor_change_discussed', 'final_iris_eleanor_heard'],
+    ] as const;
+    const gathering = finalReading.nodes.find((node) => node.id === 'gathering');
+    expect(gathering).toBeDefined();
+    for (const [destination, first, second, done] of scenes) {
+      const option = gathering!.options.find((entry) => entry.next === destination);
+      expect(option?.requires).toEqual([first, second]);
+      expect(option?.unless).toContain(done);
+      expect(finalReading.nodes.some((node) => node.id === destination)).toBe(true);
+      expect(finalReading.nodes.some((node) =>
+        node.options.some((entry) => entry.next === 'gathering' && entry.grants?.includes(done)),
+      )).toBe(true);
+    }
+  });
+
   for (const [name, first, second] of cases) {
     it(`${name} reflects both earlier choices`, () => {
       const node = finalReading.nodes.find((entry) => entry.id === `final-v3-${name}`);
