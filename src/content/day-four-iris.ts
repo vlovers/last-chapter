@@ -21,6 +21,13 @@ export const irisDecision: DialogueStory = {
           next: 'iris-exhibition-plan',
           unless: ['iris_exhibition_plan_heard'],
         },
+        {
+          id: 'missing-chapter',
+          label: '«Поглянь на сторінку, яку знайшли в старій книзі»',
+          next: 'missing-chapter',
+          requires: ['cabinet_photo_seen', 'cinema_poster_lead', 'cinema_club_asked_for_records'],
+          unless: ['missing_chapter_discussed'],
+        },
         { id: 'art', label: '«Розкажи про свої малюнки»', next: 'art' },
         {
           id: 'letter',
@@ -119,6 +126,58 @@ export const irisDecision: DialogueStory = {
           label: 'Повернутися до розмови',
           next: 'welcome',
           grants: ['iris_exhibition_plan_heard'],
+        },
+      ],
+    },
+    {
+      id: 'missing-chapter',
+      speaker: 'Айріс',
+      text: 'Ви знаходите у старій книжці складений аркуш. На ньому машинописний заголовок: «Розділ, який не надрукували». Уривок починається так: «Після останнього сеансу Генрі не вимкнув світло. Він чекав на людину, яка пообіцяла більше ніколи не повертатися до Беллвіка». Айріс читає вдруге. «Це ж рядки з роману Вітмора. Тільки в моєму примірнику після сеансу одразу йде ранок».',
+      options: [
+        {
+          id: 'chapter-keep',
+          label: '«Сховаю сторінку, доки не дізнаюся більше»',
+          next: 'missing-chapter-result',
+          grants: ['missing_chapter_hidden'],
+        },
+        {
+          id: 'chapter-copy',
+          label: '«Зроблю копію й покажу оригінал Елеонорі»',
+          next: 'missing-chapter-result',
+          grants: ['missing_chapter_copied'],
+        },
+        {
+          id: 'chapter-rumor',
+          label: '«Скажу Міллер, що це зізнання Генрі»',
+          next: 'missing-chapter-result',
+          grants: ['missing_chapter_false_claim'],
+        },
+      ],
+    },
+    {
+      id: 'missing-chapter-result',
+      speaker: 'Айріс',
+      text: '«Можливо, це чернетка. Або чужа вигадка. На аркуші немає навіть номера сторінки». Вона знову бере альбом. «Мені треба доробити три малюнки до завтра. Якщо знайдеш інші сторінки, тоді й поговоримо».',
+      textWhen: [
+        {
+          requires: ['missing_chapter_hidden'],
+          text: 'Айріс бачить, як ви складаєте аркуш. «Гаразд. Тільки не загуби його серед чеків. І не кажи потім, що нічого не знайшов».',
+        },
+        {
+          requires: ['missing_chapter_copied'],
+          text: '«Копію залиш собі. Елеонора впізнає машинку, якщо це справді її старі папери». Айріс витирає пляму фарби з пальця. «А я піду по новий папір. Цей закінчився».',
+        },
+        {
+          requires: ['missing_chapter_false_claim'],
+          text: '«Зізнання?» Айріс забирає руку від сторінки. «Ти щойно це вигадав. Я не збираюся підтверджувати твою історію, навіть якщо Міллер у неї повірить».',
+        },
+      ],
+      options: [
+        {
+          id: 'missing-chapter-back',
+          label: 'Повернутися до розмови',
+          next: 'welcome',
+          grants: ['missing_chapter_discussed'],
         },
       ],
     },
