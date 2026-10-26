@@ -209,7 +209,12 @@ export const finalReading: DialogueStory = {
           next: 'anna-mystery',
           requires: ['anna_chose_mystery'],
         },
-        { id: 'anna-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_anna_club_heard'] },
+        {
+          id: 'anna-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_anna_club_heard'],
+        },
       ],
     },
     {
@@ -217,14 +222,26 @@ export const finalReading: DialogueStory = {
       speaker: 'Анна',
       text: '«Так! Один учень намалював маршрут до бібліотеки, а поруч підписав: “Тут можна передумати”. Мені здається, він зрозумів книжку краще за мене».',
       options: [
-        { id: 'maps-back', label: 'Посміхнутися й повернутися до гостей', next: 'gathering', grants: ['final_anna_club_heard'] },
+        {
+          id: 'maps-back',
+          label: 'Посміхнутися й повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_anna_club_heard'],
+        },
       ],
     },
     {
       id: 'anna-mystery',
       speaker: 'Анна',
       text: '«Вони навіть склали правила: не називати людину винною, доки не вислухали її. Пані Міллер запропонувала додати це до правил клубу».',
-      options: [{ id: 'mystery-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_anna_club_heard'] }],
+      options: [
+        {
+          id: 'mystery-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_anna_club_heard'],
+        },
+      ],
     },
     {
       id: 'rumor',

@@ -10,18 +10,27 @@ const callbacks = [
 ] as const;
 
 describe('Once-only finale memories', () => {
-  it.each(callbacks)('%s is available once and remembers completion', (optionId, backId, prerequisite, completion) => {
-    const morning = startDialogue(finalReading);
-    const gathering = selectOption(finalReading, morning, 'open');
-    expect(availableOptions(finalReading, gathering).some((option) => option.id === optionId)).toBe(false);
-    let state = { ...gathering, flags: [prerequisite] as readonly string[] };
-    expect(availableOptions(finalReading, state).some((option) => option.id === optionId)).toBe(true);
-    state = selectOption(finalReading, state, optionId);
-    state = selectOption(finalReading, state, backId);
-    expect(state.node).toBe('gathering');
-    expect(state.flags).toContain(completion);
-    expect(availableOptions(finalReading, state).some((option) => option.id === optionId)).toBe(false);
-    const before = state;
-    expect(() => selectOption(finalReading, before, optionId)).toThrow();
-  });
+  it.each(callbacks)(
+    '%s is available once and remembers completion',
+    (optionId, backId, prerequisite, completion) => {
+      const morning = startDialogue(finalReading);
+      const gathering = selectOption(finalReading, morning, 'open');
+      expect(
+        availableOptions(finalReading, gathering).some((option) => option.id === optionId),
+      ).toBe(false);
+      let state = { ...gathering, flags: [prerequisite] as readonly string[] };
+      expect(availableOptions(finalReading, state).some((option) => option.id === optionId)).toBe(
+        true,
+      );
+      state = selectOption(finalReading, state, optionId);
+      state = selectOption(finalReading, state, backId);
+      expect(state.node).toBe('gathering');
+      expect(state.flags).toContain(completion);
+      expect(availableOptions(finalReading, state).some((option) => option.id === optionId)).toBe(
+        false,
+      );
+      const before = state;
+      expect(() => selectOption(finalReading, before, optionId)).toThrow();
+    },
+  );
 });

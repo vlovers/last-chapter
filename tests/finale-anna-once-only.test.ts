@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, selectOption, startDialogue, type DialogueState } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  type DialogueState,
+} from '../src/game/dialogue';
 
 describe('Anna final book club', () => {
   it.each([
@@ -15,7 +20,9 @@ describe('Anna final book club', () => {
     if (back) state = selectOption(finalReading, state, back);
     expect(state.node).toBe('gathering');
     expect(state.flags).toContain('final_anna_club_heard');
-    expect(availableOptions(finalReading, state).some((option) => option.id === 'anna')).toBe(false);
+    expect(availableOptions(finalReading, state).some((option) => option.id === 'anna')).toBe(
+      false,
+    );
     expect(() => selectOption(finalReading, state, 'anna')).toThrow();
   });
 });
