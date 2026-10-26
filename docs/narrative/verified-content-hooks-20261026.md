@@ -5,6 +5,7 @@
 ## Important discovery: the letter already exists in gameplay
 
 `src/content/evening.ts` contains a real first-evening dialogue:
+
 - `box` is the exploration hub;
 - `letter` option grants **`saw_envelope`**;
 - `letter-open` grants **`opened_private_letter`**;
@@ -17,14 +18,14 @@
 
 `src/content/day-four-iris.ts` has a `letter` topic requiring `saw_envelope`, with these actual outcomes:
 
-| Existing option | Flag(s) | Meaning |
-|---|---|---|
-| `respect` | `iris_letter_choice_respected` | Player promises to leave letter sealed; only available if not opened |
-| `respect-opened` | `iris_letter_choice_respected` | Player respects Iris's future decision despite earlier opening |
-| `admit-opened` | `iris_letter_breach_admitted` | Player explicitly admits opening without permission |
-| `offer` | `iris_letter_delivery_offered` | **Offer only**, not consent |
-| `pressure` | `iris_letter_pressured_day4` | Player pressures Iris |
-| `letter-back` | suspend/repeatable | Defers the discussion |
+| Existing option  | Flag(s)                        | Meaning                                                              |
+| ---------------- | ------------------------------ | -------------------------------------------------------------------- |
+| `respect`        | `iris_letter_choice_respected` | Player promises to leave letter sealed; only available if not opened |
+| `respect-opened` | `iris_letter_choice_respected` | Player respects Iris's future decision despite earlier opening       |
+| `admit-opened`   | `iris_letter_breach_admitted`  | Player explicitly admits opening without permission                  |
+| `offer`          | `iris_letter_delivery_offered` | **Offer only**, not consent                                          |
+| `pressure`       | `iris_letter_pressured_day4`   | Player pressures Iris                                                |
+| `letter-back`    | suspend/repeatable             | Defers the discussion                                                |
 
 **Critical:** Iris replies to the offer: “Можливо, колись я попрошу тебе. Але не сьогодні.” There is **no delivery consent in this inspected scene**. Do not map `iris_letter_delivery_offered` to `iris_private_delivery_consent`, and do not invent a successful Leo delivery.
 
@@ -43,13 +44,13 @@
 
 ## Actual catalog title mappings
 
-| ID | Exact current title |
-|---|---|
-| `orchard` | «Опівнічний сад» |
-| `witnesses` | «Ніхто не знає кінцівки» |
-| `station` | «Скляна станція» |
-| `roads` | «Мапи незавершених доріг» |
-| `letters` | «Листи до незнайомця» |
+| ID          | Exact current title       |
+| ----------- | ------------------------- |
+| `orchard`   | «Опівнічний сад»          |
+| `witnesses` | «Ніхто не знає кінцівки»  |
+| `station`   | «Скляна станція»          |
+| `roads`     | «Мапи незавершених доріг» |
+| `letters`   | «Листи до незнайомця»     |
 
 Anna can receive `roads` or `witnesses` through the existing receipt flags. A third `orchard` Anna branch in `anna-bookclub-day5-v1.md` is **non-playable** until a new explicit sale route exists. A no-order fallback remains necessary.
 
