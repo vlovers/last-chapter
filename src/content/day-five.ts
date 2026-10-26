@@ -633,6 +633,7 @@ export const finalReading: DialogueStory = {
     },
     {
       id: 'letter',
+      variantSelection: 'authored',
       speaker: 'Оповідач',
       text: 'На прилавку лежить старий конверт. Айріс і Лео стоять біля вікна, Мара розмовляє з Анною. Ніхто не має права перетворювати приватні слова на виставу для гостей.',
       textWhen: [
