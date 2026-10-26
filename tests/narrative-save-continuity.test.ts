@@ -7,7 +7,7 @@ import {
   startFifthDay,
   type ChapterState,
 } from '../src/game/chapter';
-import { currentNode, startDialogue } from '../src/game/dialogue';
+import { availableOptions, currentNode, startDialogue } from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 function at(stage: ChapterState['stage'], flags: readonly string[]): ChapterState {
@@ -107,10 +107,8 @@ describe('Narrative decisions survive chapter transitions and save/load', () => 
     const atLetter = choose(state, 'open', 'letter');
     const loaded = decodeSave(encodeSave(atLetter))!;
     expect(
-      currentNode(stageStory(loaded.stage), loaded.dialogue).options.find(
-        (option) => option.id === 'mutual',
-      )?.unless,
-    ).toContain('opened_private_letter');
+      availableOptions(stageStory(loaded.stage), loaded.dialogue).map((option) => option.id),
+    ).not.toContain('mutual');
     const confessed = choose(loaded, 'admit-breach-now', 'admit-breach-now-back', 'close');
     expect(currentNode(stageStory(confessed.stage), confessed.dialogue).text).toContain(
       'Вона почула правду',
