@@ -15,6 +15,7 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Томас Гейл. Якщо лампа тріщить, не треба її вмовляти. Вона від цього не стає чемнішою». Він ставить ящик на підлогу. «Можна глянути?»',
       options: [
+        { id: 'thomas-v3-conversation', label: '«Чи можна полагодити образу, як лампу?»', next: 'thomas-v3-conversation', unless: ['thomas_listening_discussed'] },
         {
           id: 'thomas-reflection',
           label: '«Чому тобі легше лагодити речі, ніж говорити?»',
@@ -206,6 +207,49 @@ export const thomasVisit: DialogueStory = {
           next: 'greet',
           grants: ['thomas_reflected_on_responsibility'],
         },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation',
+      speaker: 'Томас',
+      text: "«Коли Анна мовчить, я починаю шукати, що ще полагодити вдома. Так легше, ніж спитати, що сталося».",
+      options: [
+        { id: 'thomas-v3-ask', label: "«Ти запитував, чого вона хоче?»", next: 'thomas-v3-conversation-question' },
+        { id: 'thomas-v3-short', label: "«Можемо не продовжувати»", next: 'thomas-v3-conversation-end' },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation-question',
+      speaker: 'Томас',
+      text: "«Ні. Боюся почути: нічого. І тоді мені доведеться просто сидіти поруч, не будучи корисним».",
+      options: [
+        { id: 'thomas-v3-challenge', label: "«А хіба присутність — не дія?»", next: 'thomas-v3-conversation-counter' },
+        { id: 'thomas-v3-listen', label: "«Залишимо питання відкритим»", next: 'thomas-v3-conversation-end' },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation-counter',
+      speaker: 'Томас',
+      text: "«Найскладніша. З інструментом я знаю, куди подіти руки. Без нього доводиться слухати».",
+      options: [
+        { id: 'thomas-v3-follow', label: "«І що ти хочеш зробити?»", next: 'thomas-v3-conversation-choice' },
+        { id: 'thomas-v3-pause', label: "«Не обов’язково вирішувати сьогодні»", next: 'thomas-v3-conversation-end' },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation-choice',
+      speaker: 'Томас',
+      text: "«Спробую не виправляти її настрій. Просто запитаю, чи можна побути поряд».",
+      options: [
+        { id: 'thomas-v3-accept', label: "«Це твій вибір»", next: 'thomas-v3-conversation-end' },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation-end',
+      speaker: 'Томас',
+      text: "«Дякую за розмову. Не все треба вирішувати одразу».",
+      options: [
+        { id: 'thomas-v3-return', label: "Повернутися до інших тем", next: 'greet', grants: ['thomas_listening_discussed'] },
       ],
     },
   ],
