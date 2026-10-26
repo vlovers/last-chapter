@@ -4,7 +4,9 @@ import { validateDialogue } from '../src/game/dialogue';
 
 describe('Final evening structural audit', () => {
   const nodes = finalReading.nodes;
-  const options = nodes.flatMap((node) => node.options.map((option) => ({ node: node.id, option })));
+  const options = nodes.flatMap((node) =>
+    node.options.map((option) => ({ node: node.id, option })),
+  );
 
   it('has unique node IDs and option IDs', () => {
     const nodeIds = nodes.map((node) => node.id);
@@ -28,7 +30,10 @@ describe('Final evening structural audit', () => {
     for (const option of gathering!.options) {
       for (const flag of option.unless ?? []) {
         if (!flag.startsWith('final_')) continue;
-        expect(allGranted.has(flag), `${option.id}: completion flag ${flag} cannot be granted`).toBe(true);
+        expect(
+          allGranted.has(flag),
+          `${option.id}: completion flag ${flag} cannot be granted`,
+        ).toBe(true);
       }
     }
   });
