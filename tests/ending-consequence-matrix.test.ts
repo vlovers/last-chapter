@@ -53,4 +53,30 @@ describe('finale consequence matrix', () => {
       exhibition.epilogue,
     );
   });
+  it('preserves unrelated ending dimensions across every combination of decisions', () => {
+    const letters = [[], ['final_mutual_conversation'], ['final_letter_kept_private']];
+    const communities = [[], ['final_respected_privacy'], ['final_repaired_rumor']];
+    const futures = [[], ['final_iris_exhibition'], ['mara_future_supported']];
+    for (const letterFlags of letters) {
+      for (const communityFlags of communities) {
+        for (const futureFlags of futures) {
+          const flags = [...letterFlags, ...communityFlags, ...futureFlags];
+          const result = ending(...flags);
+          expect(result.letter).toBe(ending(...letterFlags).letter);
+          expect(result.community).toBe(ending(...communityFlags).community);
+          expect(result.epilogue).toBe(ending(...futureFlags).epilogue);
+          expect(ending(...flags)).toEqual(result);
+        }
+      }
+    }
+  });
+
+  it('does not erase earlier pressure when the player later repairs a rumor', () => {
+    const baseline = ending('final_repaired_rumor');
+    const afterPressure = ending('final_repaired_rumor', 'anna_rumor_pressed');
+    expect(afterPressure.community).not.toBe(baseline.community);
+    expect(afterPressure.letter).toBe(baseline.letter);
+    expect(afterPressure.epilogue).toBe(baseline.epilogue);
+  });
+
 });
