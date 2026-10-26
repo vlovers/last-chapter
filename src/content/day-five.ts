@@ -38,6 +38,11 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до питання старого листа',
           next: 'letter',
           requires: ['saw_envelope'],
+          unless: [
+            'final_mutual_conversation',
+            'final_accepted_consequences',
+            'final_letter_kept_private',
+          ],
         },
         {
           id: 'mara-callback',
