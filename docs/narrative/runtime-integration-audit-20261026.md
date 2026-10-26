@@ -28,15 +28,15 @@ Day 5: `day5-reading → season-complete`.
 
 ## Verified order flags and book IDs
 
-| Customer | Existing flags | Existing catalog book ID |
-|---|---|---|
-| Miller | `sold_orchard` | `orchard` |
-| Miller | `sold_witnesses` | `witnesses` |
-| Mara | `sold_station` | `station` |
-| Mara | `sold_roads` | `roads` |
-| Mara | `sold_letters` | `letters` |
-| Anna | `anna_chose_maps` | `roads` |
-| Anna | `anna_chose_mystery` | `witnesses` |
+| Customer | Existing flags       | Existing catalog book ID |
+| -------- | -------------------- | ------------------------ |
+| Miller   | `sold_orchard`       | `orchard`                |
+| Miller   | `sold_witnesses`     | `witnesses`              |
+| Mara     | `sold_station`       | `station`                |
+| Mara     | `sold_roads`         | `roads`                  |
+| Mara     | `sold_letters`       | `letters`                |
+| Anna     | `anna_chose_maps`    | `roads`                  |
+| Anna     | `anna_chose_mystery` | `witnesses`              |
 
 **Editorial correction:** `anna-bookclub-day5-v1.md` has three conceptual book branches. Current receipts expose **two Anna selections**, `roads` and `witnesses`; the third must not be implemented as an actual available purchase until confirmed in live dialogue/catalog. Map `roads` to maps/adventure and `witnesses` to mystery/unreliable narrator only after reading actual `src/content/anna.ts` and `src/content/books.ts`.
 
