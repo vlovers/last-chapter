@@ -1185,6 +1185,13 @@ export const finalReading: DialogueStory = {
       ],
       options: [
         {
+          id: 'chapter-check-provenance',
+          label: '«Спершу порівняймо дати й почерк»',
+          next: 'chapter-provenance',
+          requires: ['missing_chapter_copied'],
+          unless: ['chapter_provenance_checked'],
+        },
+        {
           id: 'chapter-public',
           label: 'Прочитати уривок уголос',
           next: 'chapter-reckoning-result',
@@ -1201,6 +1208,19 @@ export const finalReading: DialogueStory = {
           label: 'Заявити, що Елеонора приховувала рукопис',
           next: 'chapter-reckoning-result',
           grants: ['chapter_accused_eleanor'],
+        },
+      ],
+    },
+    {
+      id: 'chapter-provenance',
+      speaker: 'Елеонора',
+      text: 'Елеонора дістає з кишені стару афішу. «Це оголошення про останній показ. Дата збігається з фотографією. Але в рукописі Генрі називає кінотеатр уже за новою назвою. Її придумали лише через два роки». Міллер обурено фиркає: «То хтось переписав спогади?» — «Або автор редагував текст пізніше, — відповідає Елеонора. — Не роби з одного слова вирок».',
+      options: [
+        {
+          id: 'chapter-provenance-back',
+          label: 'Повернутися до гостей із новою зачіпкою',
+          next: 'chapter-reckoning',
+          grants: ['chapter_provenance_checked'],
         },
       ],
     },
