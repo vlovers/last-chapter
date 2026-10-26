@@ -38,3 +38,12 @@ The runner owns its Chrome server and allows five seconds for graceful shutdown,
 then terminates only that fixture if the installed browser stalls during cleanup.
 
 See [V1 QA record](qa/PHASER-VERTICAL-SLICE-V1.md) for the checks actually executed.
+
+## Gameplay polish V1
+
+`npm run test:browser:polish` runs the canonical five-day UI at desktop, compact
+desktop, tablet and mobile sizes. It verifies optional completion across reload,
+Frank's real movement and petting, pause behavior, no document scrolling, canvas
+alignment and all 19 story stages. See [the QA record](qa/polish-v1/README.md).
+Unit regressions cover nested completion, legacy saves, suspended letter returns,
+conditional reopening and ten minutes of collision-checked cat movement.

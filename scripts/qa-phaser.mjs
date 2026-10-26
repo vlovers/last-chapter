@@ -100,7 +100,10 @@ async function checkPresentation(page, dialogueVisible = false) {
         Math.abs(room.top - hit.top) < 1 &&
         Math.abs(room.width - hit.width) < 1 &&
         Math.abs(room.height - hit.height) < 1,
-      belowRoom: dialogue.hidden || dialogue.getBoundingClientRect().top >= room.bottom - 1,
+      separateFromRoom:
+        dialogue.hidden ||
+        dialogue.getBoundingClientRect().top >= room.bottom - 1 ||
+        dialogue.getBoundingClientRect().left >= room.right - 1,
       overflow: document.documentElement.scrollWidth > innerWidth,
       textOverflow: dialogue.scrollWidth > dialogue.clientWidth,
     };
@@ -112,7 +115,7 @@ async function checkPresentation(page, dialogueVisible = false) {
   assert.equal(layout.aligned, true, 'Hotspots follow the displayed canvas');
   assert.equal(layout.overflow, false);
   if (dialogueVisible) {
-    assert.equal(layout.belowRoom, true, 'Dialogue never obscures room pixels');
+    assert.equal(layout.separateFromRoom, true, 'Dialogue never obscures room pixels');
     assert.equal(layout.textOverflow, false);
   }
 }
