@@ -43,7 +43,7 @@ export function currentNode(story: DialogueStory, state: DialogueState): Dialogu
   if (!node) throw new Error('Missing dialogue node');
   // Prefer the most specific matching narration. A generic one-flag variant
   // must not hide a later two-flag variant when both conditions are true.
-  const variant = node.textWhen?.reduce<(typeof node.textWhen)[number] | undefined>(
+  const variant = node.textWhen?.reduce<NonNullable<DialogueNode['textWhen']>[number] | undefined>(
     (best, entry) => {
       if (!entry.requires.every((flag) => state.flags.includes(flag))) return best;
       return !best || entry.requires.length > best.requires.length ? entry : best;
