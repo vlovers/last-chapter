@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#201b27" />
+    <link rel="icon" href="data:," />
+    <title>Останній розділ — Між рядками</title>
+  </head>
+  <body>
+    <main>
+      <header class="masthead">
+        <div>
+          <span class="eyebrow">Беллвік · осінній вечір</span>
+          <h1>Останній розділ <span>Між рядками</span></h1>
+        </div>
+        <a href="/">До історії міста ↗</a>
+      </header>
+      <section id="stage" aria-label="Книгарня в Беллвіку">
+        <div
+          id="game"
+          inert
+          tabindex="0"
+          role="group"
+          aria-label="Книгарня. Рух: стрілки або WASD. R: обрати предмет. Enter: підійти й оглянути. E: взаємодія поруч."
+        ></div>
+        <div id="hotspots" aria-label="Предмети книгарні" inert></div>
+        <div class="hud" inert>
+          <p id="objective">Огляньте книгарню. На вас чекає гостя.</p>
+          <nav aria-label="Налаштування гри">
+            <button id="mute" type="button" aria-pressed="true">Увімкнути звук</button
+            ><button id="help" type="button" aria-label="Керування та налаштування">?</button>
+          </nav>
+        </div>
+        <div id="loading" class="veil">
+          <div class="welcome">
+            <span class="eyebrow">Тепло між сторінками</span>
+            <h2>Заходьте. Ми відчинені.</h2>
+            <p id="loading-message">Запалюємо лампи…</p>
+            <button id="enter" type="button" disabled>Відчинити книгарню</button>
+          </div>
+        </div>
+        <button id="context-action" type="button" hidden inert></button>
+        <section
+          id="dialogue"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="speaker"
+          aria-describedby="dialogue-text"
+          hidden
+        >
+          <div class="portrait-frame">
+            <img id="portrait" src="/art/bookshop/mara.svg" alt="Мара" /><span
+              id="portrait-fallback"
+              hidden
+              >М</span
+            ><span id="mood"></span>
+          </div>
+          <div class="dialogue-body">
+            <div class="dialogue-title">
+              <h2 id="speaker"></h2>
+              <button id="close-dialogue" type="button" aria-label="Закрити розмову">×</button>
+            </div>
+            <p id="dialogue-text" aria-live="polite"></p>
+            <div id="choices"></div>
+            <small>↑ ↓ — обрати · Enter — відповісти · Esc — повернутися</small>
+          </div>
+        </section>
+        <p id="toast" role="status" aria-live="polite">Книгарня прокидається. За вікном дощить…</p>
+      </section>
+      <footer>
+        <span>Клацніть на підлогу, щоб підійти. На предмет — щоб оглянути.</span
+        ><span>Стрілки / WASD · E — взаємодія · R — обрати предмет</span>
+      </footer>
+      <dialog id="settings" aria-labelledby="settings-title">
+        <h2 id="settings-title">Трохи затишку</h2>
+        <p>
+          Рухайтеся стрілками або WASD. Клацніть на вільну підлогу, щоб підійти. Натисніть на
+          предмет або Мару, щоб підійти й почати розмову.
+        </p>
+        <p>
+          <kbd>E</kbd> — взаємодія поруч. <kbd>R</kbd> — наступний предмет, <kbd>Enter</kbd> —
+          підійти й оглянути. У розмові: ↑ ↓ та Enter, або Tab. <kbd>Esc</kbd> — закрити;
+          незавершену розмову можна продовжити.
+        </p>
+        <label for="volume">Гучність <output id="volume-value">40%</output></label
+        ><input id="volume" type="range" min="0" max="100" value="40" />
+        <label class="check"><input id="music" type="checkbox" />Тиха музика</label>
+        <label class="check"><input id="reduced" type="checkbox" />Менше руху</label>
+        <p id="audio-status">Звук вимкнено. Увімкніть його кнопкою над книгарнею.</p>
+        <form method="dialog"><button type="submit">Повернутися до книгарні</button></form>
+      </dialog>
+    </main>
+    <script type="module" src="/phaser-prototype/main.js"></script>
+  </body>
+</html>

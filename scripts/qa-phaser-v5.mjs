@@ -1,0 +1,138 @@
+import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+
+const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
+const output = resolve(process.env.QA_OUTPUT || '/private/tmp/last-chapter-v5-qa');
+await mkdir(output, { recursive: true });
+const browser = await chromium.launch({
+  channel: process.env.BROWSER_CHANNEL || 'chrome',
+  headless: true,
+});
+const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+const errors = [];
+page.on('pageerror', (error) => errors.push(String(error)));
+page.on('console', (message) => {
+  if (message.type() === 'error') errors.push(message.text());
+});
+try {
+  await page.goto(base);
+  const enter = page.getByRole('button', { name: 'Відчинити книгарню' });
+  try {
+    await enter.waitFor({ state: 'visible', timeout: 12000 });
+    await page.waitForFunction(
+      () => {
+        const button = document.querySelector('#enter');
+        return button && (!button.disabled || button.hidden);
+      },
+      { timeout: 12000 },
+    );
+    if (await enter.isDisabled()) {
+      throw new Error('Bookshop initialization did not enable the entrance');
+    }
+  } catch (error) {
+    const details = await page.evaluate(() => ({
+      message: document.querySelector('#loading-message')?.textContent,
+      enterDisabled: document.querySelector('#enter')?.disabled,
+      enterHidden: document.querySelector('#enter')?.hidden,
+      gameCanvas: Boolean(document.querySelector('#game canvas')),
+      storyReady: Boolean(window.__lastChapterStory),
+    }));
+    throw new Error('Phaser startup diagnostic: ' + JSON.stringify({ details, errors }), {
+      cause: error,
+    });
+  }
+  await enter.click();
+  await page.locator('#story-tools').waitFor();
+  assert.equal(await page.locator('#day-timeline li').count(), 5);
+  assert.equal(
+    await page.locator('#story-continue').textContent(),
+    'День 1 · Пані Міллер · Продовжити',
+  );
+
+  await page.getByRole('button', { name: 'Каталог книжок' }).click();
+  assert.equal(await page.locator('.story-book').count(), 5);
+  await page.getByRole('button', { name: 'Детективи' }).click();
+  assert.ok((await page.locator('.story-book').count()) > 0);
+  await page.getByRole('button', { name: 'Нотатник' }).click();
+  await page.getByText('Поки що тут немає записів.').waitFor();
+
+  await page.locator('#story-continue').click();
+  await page.getByText('Дзвіночок над дверима озвався двічі.', { exact: false }).waitFor();
+  const firstChoice = page.locator('#choices button').first();
+  await page.waitForTimeout(260);
+  await firstChoice.click();
+  await page.getByRole('heading', { name: 'Пані Міллер', exact: true }).waitFor();
+  const save = await page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
+  assert.ok(save?.includes('"stage":"miller"'));
+  await page.screenshot({ path: `${output}/first-visit.png`, fullPage: true });
+
+  await page.reload();
+  await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+  await page.locator('#story-continue').click();
+  await page.getByRole('heading', { name: 'Пані Міллер', exact: true }).waitFor();
+  assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), save);
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Нотатник' }).click();
+  await page.getByRole('heading', { name: 'Нотатник книгаря' }).waitFor();
+
+  // Walk all 19 stages via reachable terminal routes instead of cycling first options.
+  const walk = await page.evaluate(async () => {
+    const { chooseChapterOption, stageStory, startChapter } = await import('/src/game/chapter.ts');
+    const { availableOptions } = await import('/src/game/dialogue.ts');
+    const { decodeSave, SAVE_KEY } = await import('/src/game/save.ts');
+    const story = window.__lastChapterStory;
+    if (!story) throw new Error('Missing five-day story');
+    const checkpoints = ['complete', 'day2-complete', 'day3-complete', 'day4-complete'];
+    const visited = new Set();
+    const pathToTerminal = (initial) => {
+      const queue = [{ state: initial, route: [] }];
+      const seen = new Set();
+      for (let index = 0; index < queue.length && index < 5000; index++) {
+        const entry = queue[index];
+        const key = entry.state.dialogue.node + '|' + [...entry.state.flags].sort().join(',');
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const options = availableOptions(stageStory(initial.stage), entry.state.dialogue);
+        if (!options.length) return entry.route;
+        for (const option of options) {
+          queue.push({
+            state: chooseChapterOption(entry.state, option.id),
+            route: [...entry.route, option.id],
+          });
+        }
+      }
+      throw new Error('No reachable terminal for ' + initial.stage);
+    };
+    for (let i = 0; i < 25 && story.stage !== 'season-complete'; i++) {
+      const stage = story.stage;
+      visited.add(stage);
+      if (!checkpoints.includes(stage)) {
+        const state = decodeSave(localStorage.getItem(SAVE_KEY) ?? '') ?? startChapter();
+        for (const choice of pathToTerminal(state)) story.choose(choice);
+      }
+      const button = story.open().choices[0];
+      if (button?.id !== '__advance') throw new Error('Cannot advance ' + stage);
+      story.choose('__advance');
+    }
+    return { stage: story.stage, visited: [...visited], progress: story.progress };
+  });
+  assert.equal(walk.stage, 'season-complete');
+  assert.equal(walk.visited.length, 18);
+  assert.ok(walk.progress.every((day) => day.status === 'completed'));
+  await page.reload();
+  await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+  await page.locator('#story-continue').click();
+  await page.getByRole('heading', { name: 'Останній розділ · Перший сезон' }).waitFor();
+  await page.screenshot({ path: `${output}/season-finale.png`, fullPage: true });
+  assert.equal(await page.locator('#day-timeline .day-step--completed').count(), 5);
+  assert.deepEqual(errors, []);
+  await writeFile(`${output}/results.json`, JSON.stringify({ walk, errors }, null, 2));
+  console.log(JSON.stringify({ walk, errors, output }, null, 2));
+} catch (error) {
+  await page.screenshot({ path: `${output}/failure.png`, fullPage: true }).catch(() => {});
+  throw error;
+} finally {
+  await browser.close();
+}

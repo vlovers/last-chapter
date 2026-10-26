@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" shape-rendering="crispEdges">
+<title>Затишна книгарня Беллвіка: осінній дощ, книги, лампи, листівки та прилавок</title>
+<defs>
+<pattern id="wallpaper" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#534050"/><path d="M12 4v16M4 12h16" stroke="#624858" stroke-width="1" opacity=".45"/><rect x="11" y="11" width="2" height="2" fill="#9d6b66" opacity=".35"/></pattern>
+<pattern id="wood" width="80" height="30" patternUnits="userSpaceOnUse"><rect width="80" height="30" fill="#634450"/><path d="M0 1H80M0 29H80" stroke="#9d6463" stroke-width="3"/><path d="M15 3V28M52 3V28" stroke="#523646" stroke-width="2"/><path d="M20 13h16M58 20h14" stroke="#785056" stroke-width="1"/></pattern>
+<pattern id="sky" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#526477"/><rect y="6" width="8" height="2" fill="#617185" opacity=".5"/></pattern>
+</defs>
+<!-- ROOM: framing and layered wall -->
+<rect width="640" height="360" fill="#241c29"/><rect x="5" y="5" width="630" height="350" fill="#79524f"/>
+<rect x="11" y="11" width="618" height="338" fill="#392b3d"/><rect x="20" y="20" width="600" height="246" fill="url(#wallpaper)"/>
+<rect x="19" y="258" width="602" height="9" fill="#95695b"/><rect x="20" y="267" width="600" height="81" fill="url(#wood)"/>
+<rect x="20" y="26" width="600" height="4" fill="#a27d70" opacity=".5"/>
+<rect x="20" y="337" width="600" height="9" fill="#362a3a"/>
+<!-- left display: deep shelving, many irregular volumes -->
+<rect x="29" y="52" width="237" height="228" fill="#2d2433"/><rect x="33" y="48" width="237" height="233" fill="#885448"/>
+<rect x="42" y="56" width="219" height="214" fill="#282435"/>
+<g fill="#ad7656"><rect x="41" y="113" width="221" height="9"/><rect x="41" y="178" width="221" height="9"/><rect x="41" y="252" width="221" height="10"/></g>
+<g fill="#68454b"><rect x="45" y="62" width="211" height="6"/><rect x="45" y="129" width="211" height="4"/><rect x="45" y="194" width="211" height="4"/></g>
+<!-- grouped books, hand-arranged -->
+<g fill="#b5796a"><path d="M49 76h11v37H49zM83 67h12v46H83zM126 75h11v38h-11zM171 65h13v48h-13zM202 73h11v40h-11zM232 69h13v44h-13zM55 138h15v40H55zM101 135h12v43h-12zM145 141h13v37h-13zM190 132h14v46h-14zM228 136h10v42h-10zM46 196h12v56H46zM96 197h16v55H96zM145 206h11v46h-11zM184 193h14v59h-14zM229 202h12v50h-12z"/></g>
+<g fill="#8da69a"><path d="M63 72h17v41H63zM98 79h14v34H98zM140 69h13v44h-13zM187 76h12v37h-12zM216 65h13v48h-13zM74 137h14v41H74zM117 132h15v46h-15zM159 134h13v44h-13zM206 141h18v37h-18zM61 204h16v48H61zM116 197h14v55h-14zM163 196h16v56h-16zM203 201h19v51h-19z"/></g>
+<g fill="#d9a66f"><path d="M114 82h10v31h-10zM157 81h11v32h-11zM247 84h9v29h-9zM91 145h8v33h-8zM135 146h7v32h-7zM176 144h11v34h-11zM242 142h12v36h-12zM80 211h13v41H80zM133 215h9v37h-9zM224 214h5v38h-5z"/></g>
+<g stroke="#f5d1a3" stroke-width="2" opacity=".65"><path d="M55 84v20M87 74v26M143 75v29M192 81v23M236 73v25M107 139v25M207 147v23M65 210v32M190 202v29"/></g>
+<!-- jars, postcards and lower shelf collectibles -->
+<rect x="43" y="260" width="218" height="11" fill="#60434a"/><rect x="45" y="265" width="34" height="6" fill="#d49c70"/><rect x="206" y="264" width="40" height="6" fill="#9b7f80"/>
+<rect x="52" y="41" width="70" height="15" fill="#9b6c54"/><rect x="58" y="45" width="58" height="7" fill="#332e3a"/><path d="M67 48h40" stroke="#e4bf89" stroke-width="2"/>
+<!-- window frame, layered city -->
+<rect x="399" y="48" width="199" height="181" fill="#443342"/><rect x="406" y="40" width="196" height="184" fill="#a16b52"/>
+<rect x="416" y="51" width="176" height="163" fill="url(#sky)"/>
+<path d="M416 135h176v79H416z" fill="#917080"/><path d="M416 163h176v51H416z" fill="#b77d78"/>
+<path d="M417 178l19-12 21 10 13-24 25 13 18-21 15 13 18-12 27 20 18-10v59H416" fill="#5d526a"/>
+<path d="M418 193l22-10 23 6 17-17 22 13 17-12 22 12 24-10 25 12v27H416" fill="#46455d"/>
+<g fill="#e9b379"><rect x="432" y="180" width="4" height="8"/><rect x="463" y="177" width="4" height="10"/><rect x="493" y="189" width="5" height="8"/><rect x="538" y="172" width="5" height="10"/><rect x="561" y="183" width="5" height="7"/><rect x="582" y="175" width="4" height="8"/></g>
+<path d="M505 51v163M416 135h176" stroke="#ae7653" stroke-width="9"/><path d="M510 51v163M416 140h176" stroke="#d4a071" stroke-width="2"/>
+<g opacity=".65" stroke="#a8bed2" stroke-width="2"><path d="M428 67l-7 25M455 53l-9 31M489 75l-8 32M533 57l-8 27M566 72l-7 28M590 98l-6 26M438 146l-6 22M473 170l-6 24M550 148l-7 26M580 174l-6 20"/></g>
+<rect x="410" y="220" width="188" height="8" fill="#633c41"/><rect x="398" y="227" width="208" height="6" fill="#c18b5e"/>
+<!-- pinboard with handwritten notes -->
+<rect x="278" y="74" width="99" height="110" fill="#342b3a"/><rect x="284" y="80" width="87" height="98" fill="#a47a62"/>
+<rect x="291" y="88" width="34" height="42" fill="#efcf9f" transform="rotate(-5 308 109)"/><rect x="330" y="95" width="32" height="27" fill="#ca9e84" transform="rotate(4 346 109)"/><rect x="302" y="134" width="51" height="30" fill="#d4b18f" transform="rotate(3 327 150)"/>
+<path d="M297 99h18m-19 6h21m-18 6h11M336 102h17m-16 6h13M309 143h33m-33 6h27m-27 6h19" stroke="#8b716e" stroke-width="2"/>
+<g fill="#cc6f60"><rect x="305" y="89" width="4" height="4"/><rect x="347" y="94" width="4" height="4"/><rect x="324" y="132" width="4" height="4"/></g>
+<!-- timber ceiling beams and pendant lighting -->
+<rect x="17" y="20" width="606" height="11" fill="#594254"/><rect x="313" y="27" width="6" height="35" fill="#966d61"/>
+<path d="M292 62h48l15 22h-79z" fill="#e9b578"/><rect x="287" y="83" width="57" height="5" fill="#ffdea4"/><rect x="298" y="89" width="34" height="4" fill="#ffd69a" opacity=".7"/>
+<!-- hanging ivy and paper garland -->
+<path d="M20 40c18 6 29 8 48 7M580 30c11 25 27 28 40 33" fill="none" stroke="#7a926c" stroke-width="4"/>
+<g fill="#91a77a"><rect x="30" y="43" width="9" height="11"/><rect x="52" y="45" width="8" height="11"/><rect x="601" y="46" width="10" height="12"/><rect x="613" y="65" width="7" height="13"/></g>
+<!-- counter, angled face and inset panels -->
+<rect x="123" y="257" width="373" height="66" fill="#382b37"/><rect x="132" y="267" width="357" height="54" fill="#835150"/>
+<rect x="148" y="275" width="119" height="39" fill="#a46a58"/><rect x="156" y="282" width="103" height="28" fill="#714650"/>
+<rect x="283" y="275" width="192" height="39" fill="#a46a58"/><rect x="292" y="282" width="174" height="28" fill="#714650"/>
+<rect x="117" y="250" width="383" height="20" fill="#9a6755"/><rect x="111" y="243" width="396" height="14" fill="#d3a16e"/><rect x="114" y="242" width="390" height="4" fill="#efc290"/>
+<g fill="#e5af7d"><rect x="128" y="266" width="5" height="56"/><rect x="488" y="266" width="6" height="56"/></g>
+<!-- book stacks and cash register -->
+<rect x="156" y="220" width="81" height="23" fill="#694759"/><rect x="158" y="212" width="75" height="8" fill="#bd8469"/><rect x="165" y="205" width="81" height="7" fill="#d3a472"/><rect x="173" y="198" width="67" height="7" fill="#6a8790"/><path d="M165 217h61" stroke="#f3d2a1" stroke-width="2"/>
+<rect x="279" y="210" width="60" height="30" fill="#5b4d57"/><rect x="284" y="213" width="50" height="12" fill="#b3a3a0"/><rect x="287" y="229" width="44" height="7" fill="#d1ae8c"/><path d="M293 218h32" stroke="#514951" stroke-width="3"/>
+<!-- letter, mug and cookies -->
+<rect x="359" y="229" width="46" height="13" fill="#ead0a7"/><path d="M360 229l22 9 22-9" stroke="#ad8a7c" stroke-width="2"/>
+<rect x="425" y="217" width="23" height="26" fill="#ebc99f"/><rect x="447" y="223" width="8" height="13" fill="none" stroke="#ebc99f" stroke-width="4"/><rect x="428" y="214" width="17" height="4" fill="#ffecba"/>
+<rect x="467" y="235" width="25" height="6" fill="#936b54"/><rect x="474" y="231" width="12" height="5" fill="#dcb17b"/>
+<!-- plant on stand -->
+<rect x="575" y="265" width="6" height="46" fill="#996e57"/><rect x="555" y="307" width="46" height="6" fill="#d2a16f"/>
+<rect x="564" y="231" width="29" height="37" fill="#bf8260"/><rect x="568" y="234" width="20" height="6" fill="#e5a97e"/>
+<path d="M577 235v-55M578 211l-21-23M578 205l22-29" stroke="#68866c" stroke-width="5" fill="none"/>
+<g fill="#829f78"><rect x="547" y="176" width="22" height="12"/><rect x="558" y="163" width="17" height="16"/><rect x="582" y="162" width="20" height="12"/><rect x="591" y="184" width="19" height="13"/><rect x="565" y="193" width="15" height="14"/><rect x="541" y="199" width="16" height="12"/></g>
+<!-- foreground warm rug and scattered leaf -->
+<rect x="23" y="329" width="592" height="8" fill="#81525a" opacity=".65"/><path d="M49 320l8-4 5 5-8 3zM531 326l7-5 8 5-5 5z" fill="#b98160"/>
+</svg>
