@@ -34,4 +34,6 @@ Preserve the richer contract on the active game integration branch `feat/dialogu
 ## Definition of Done
 Acceptance criteria met; regression tests and applicable checks green; docs updated; security and operational impact recorded; independent review obtained; no unresolved blocking findings.
 
+See also: [independent review policy](docs/engineering/REVIEW_POLICY.md) and [release checklist](docs/engineering/RELEASE_CHECKLIST.md). These documents supplement this contract and `CONTRIBUTING.md`; they do not replace stricter project-specific requirements.
+
 Cross-repository governance tracking: vlovers/ai-office#87. These instructions apply only to this repository.
