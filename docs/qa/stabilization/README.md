@@ -109,7 +109,9 @@ The native paint cache removes repeated static vector drawing without adding
 large imported art. Scene objects remain constant at 31. Initial local concurrent
 measurements recorded **31–46 FPS**, medians around **35 FPS**, at normal and 4×
 CPU throttling; the effect budget reduced decoration automatically. A later
-stabilization soak ended around **60.5 FPS**. These are headless desktop observations,
+stabilization soak ended around **60.5 FPS**. A final sequential run without other
+browser suites measured medians **59.94 FPS** normally and **60.19 FPS** at simulated
+4× CPU, with 31 objects throughout. These are headless desktop observations,
 not a guaranteed phone FPS target. The raw samples are included below.
 
 The production bundle remains about 1.52 MB minified / 410 KB gzip and Vite reports
@@ -129,6 +131,7 @@ multi-hour real-time play. Keyboard semantics/focus tests are not a full WCAG au
 - [Frank results](frank-results.json)
 - [V5 results](v5-results.json)
 - [Performance samples](performance.json)
+- [Final sequential performance samples](performance-sequential.json)
 - [Technical integration plan and actual-versus-proposed inventory](../../integration/NARRATIVE-READINESS.md)
 
 Concrete content blockers: incompatible proposed order outcomes and nonexistent
