@@ -138,16 +138,14 @@ export function startSecondDay(state: ChapterState): ChapterState {
 /** Finish the current Day 2 sequence after Leo's visit. */
 export function finishSecondDay(state: ChapterState): ChapterState {
   if (state.stage !== 'leo') throw new Error('Finish all Day 2 visits first');
-  if (availableOptions(leoVisit, state.dialogue).length)
-    throw new Error('Finish the conversation');
+  if (availableOptions(leoVisit, state.dialogue).length) throw new Error('Finish the conversation');
   return { ...state, stage: 'day2-complete' };
 }
 
 /** Move from the Iris encounter to Anna, retaining Day 1 and Day 2 flags. */
 export function advanceSecondDay(state: ChapterState): ChapterState {
   if (state.stage !== 'iris') throw new Error('Finish Day 1 before meeting Anna');
-  if (availableOptions(irisVisit, state.dialogue).length)
-    throw new Error('Finish the Iris conversation');
+  if (availableOptions(irisVisit, state.dialogue).length) throw new Error('Finish the Iris conversation');
   return { ...state, stage: 'anna', dialogue: { ...startDialogue(annaVisit), flags: state.flags } };
 }
 
@@ -171,16 +169,14 @@ export function startThirdDay(state: ChapterState): ChapterState {
 /** Finish the current Day 3 sequence after Thomas's visit. */
 export function finishThirdDay(state: ChapterState): ChapterState {
   if (state.stage !== 'book-club') throw new Error('Finish the book club first');
-  if (availableOptions(bookClub, state.dialogue).length)
-    throw new Error('Finish the conversation');
+  if (availableOptions(bookClub, state.dialogue).length) throw new Error('Finish the conversation');
   return { ...state, stage: 'day3-complete' };
 }
 
 /** Advance Day 3 from Eleanor to Thomas without losing previous discoveries. */
 export function advanceToThomas(state: ChapterState): ChapterState {
   if (state.stage !== 'eleanor') throw new Error('Finish Eleanor first');
-  if (availableOptions(eleanorVisit, state.dialogue).length)
-    throw new Error('Finish Eleanor first');
+  if (availableOptions(eleanorVisit, state.dialogue).length) throw new Error('Finish Eleanor first');
   return {
     ...state,
     stage: 'thomas',
@@ -191,8 +187,7 @@ export function advanceToThomas(state: ChapterState): ChapterState {
 /** Continue Day 3 from Thomas to Nora, preserving privacy and rumor decisions. */
 export function advanceToNora(state: ChapterState): ChapterState {
   if (state.stage !== 'thomas') throw new Error('Finish Thomas first');
-  if (availableOptions(thomasVisit, state.dialogue).length)
-    throw new Error('Finish Thomas first');
+  if (availableOptions(thomasVisit, state.dialogue).length) throw new Error('Finish Thomas first');
   return { ...state, stage: 'nora', dialogue: { ...startDialogue(noraVisit), flags: state.flags } };
 }
 
@@ -220,16 +215,14 @@ export function startFourthDay(state: ChapterState): ChapterState {
 /** Close the first Day 4 encounter only after the conversation is complete. */
 export function finishFourthDay(state: ChapterState): ChapterState {
   if (state.stage !== 'day4-leo') throw new Error('Finish Leo first');
-  if (availableOptions(leoDecision, state.dialogue).length)
-    throw new Error('Finish the conversation');
+  if (availableOptions(leoDecision, state.dialogue).length) throw new Error('Finish the conversation');
   return { ...state, stage: 'day4-complete' };
 }
 
 /** Meet Mara after Iris has finished, carrying forward every previous decision. */
 export function advanceToDayFourMara(state: ChapterState): ChapterState {
   if (state.stage !== 'day4-iris') throw new Error('Finish Iris first');
-  if (availableOptions(irisDecision, state.dialogue).length)
-    throw new Error('Finish Iris first');
+  if (availableOptions(irisDecision, state.dialogue).length) throw new Error('Finish Iris first');
   return {
     ...state,
     stage: 'day4-mara',
@@ -240,8 +233,7 @@ export function advanceToDayFourMara(state: ChapterState): ChapterState {
 /** Continue Day 4 with Leo after Mara leaves the shop. */
 export function advanceToDayFourLeo(state: ChapterState): ChapterState {
   if (state.stage !== 'day4-mara') throw new Error('Finish Mara first');
-  if (availableOptions(maraDecision, state.dialogue).length)
-    throw new Error('Finish Mara first');
+  if (availableOptions(maraDecision, state.dialogue).length) throw new Error('Finish Mara first');
   return {
     ...state,
     stage: 'day4-leo',
@@ -262,7 +254,6 @@ export function startFifthDay(state: ChapterState): ChapterState {
 /** End the first season only after the final gathering concludes. */
 export function finishSeason(state: ChapterState): ChapterState {
   if (state.stage !== 'day5-reading') throw new Error('Finish Day 5 first');
-  if (availableOptions(finalReading, state.dialogue).length)
-    throw new Error('Finish the final gathering');
+  if (availableOptions(finalReading, state.dialogue).length) throw new Error('Finish the final gathering');
   return { ...state, stage: 'season-complete' };
 }
