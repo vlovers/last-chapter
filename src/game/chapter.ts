@@ -13,6 +13,7 @@ import { millerVisit } from '../content/first-day';
 import { maraVisit } from '../content/mara';
 import { firstEvening } from '../content/evening';
 import {
+  availableOptions,
   currentNode,
   selectOption,
   startDialogue,
@@ -116,7 +117,7 @@ export function advanceChapter(state: ChapterState): ChapterState {
   if (!['miller', 'mara', 'evening'].includes(state.stage)) {
     throw new Error('Use the explicit Day 2 transitions');
   }
-  if (currentNode(stageStory(state.stage), state.dialogue).options.length > 0) {
+  if (availableOptions(stageStory(state.stage), state.dialogue).length > 0) {
     throw new Error('Finish the conversation before continuing');
   }
   const nextStage = stages[stages.indexOf(state.stage) + 1];
