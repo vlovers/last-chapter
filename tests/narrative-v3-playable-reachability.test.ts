@@ -24,8 +24,9 @@ function shortestPathToFlag(story: DialogueStory, target: string): string[] | un
     { state: startDialogue(story), path: [] },
   ];
   const visited = new Set<string>();
-  while (queue.length > 0) {
-    const current = queue.shift()!;
+  let cursor = 0;
+  while (cursor < queue.length) {
+    const current = queue[cursor++]!;
     if (current.state.flags.includes(target)) return current.path;
     const key = `${current.state.node}:${[...current.state.flags].sort().join(',')}`;
     if (visited.has(key)) continue;
