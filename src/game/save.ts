@@ -43,9 +43,9 @@ const stages: readonly ChapterStage[] = [
 ];
 
 export function encodeSave(state: ChapterState): string {
-  // Reconstruct legacy completion progress before trimming the choice history.
+  // Preserve the shape of short legacy saves. Reconstruct their completion ledger\n  // only when trimming would otherwise erase the history needed for migration.
   let dialogue = state.dialogue;
-  if (dialogue.completed === undefined) {
+  if (dialogue.completed === undefined && dialogue.history.length > MAX_HISTORY) {
     try {
       dialogue = restoreDialogueProgress(stageStory(state.stage), dialogue);
     } catch {
