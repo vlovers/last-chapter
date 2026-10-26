@@ -33,6 +33,12 @@ export const thomasVisit: DialogueStory = {
           next: 'thomas-chairs',
           unless: ['thomas_chairs_discussed'],
         },
+        {
+          id: 'thomas-reading-challenge',
+          label: '«Ти коли-небудь сперечався з кінцівкою книжки?»',
+          next: 'thomas-reading-challenge',
+          unless: ['thomas_reading_challenge_discussed'],
+        },
         { id: 'repair', label: '«Так, покажу вимикач»', next: 'repair' },
         { id: 'books', label: '«Ви любите читати?»', next: 'books' },
         { id: 'anna', label: '«Анна заходила до нас»', next: 'anna' },
@@ -84,6 +90,48 @@ export const thomasVisit: DialogueStory = {
           label: 'Повернутися до розмови',
           next: 'greet',
           grants: ['thomas_chairs_discussed'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-reading-challenge',
+      speaker: 'Томас',
+      text: '«Анна дала мені роман про чоловіка, який двадцять років ремонтував човен, замість вийти в море. Я дочитав і розлютився. Не на нього навіть — на автора. Навіщо писати стільки сторінок про людину, яка нічого не робить?» Він перевіряє контакт у лампі. «А потім подумав, що я сам третій місяць відкладаю одну розмову».',
+      options: [
+        {
+          id: 'thomas-reading-defend',
+          label: '«Можливо, книжка й не зобов’язана показувати героя сміливим»',
+          next: 'thomas-reading-result',
+          grants: ['thomas_book_ambiguity_accepted'],
+        },
+        {
+          id: 'thomas-reading-argue',
+          label: '«Я теж розлютився б. Читачеві хочеться дії»',
+          next: 'thomas-reading-result',
+          grants: ['thomas_book_ending_disputed'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-reading-result',
+      speaker: 'Томас',
+      text: '«Може, Анна мала рацію: книжки часом корисніші за інструкції. Хоча інструкція хоча б не закінчується на найцікавішому місці».',
+      textWhen: [
+        {
+          requires: ['thomas_book_ambiguity_accepted'],
+          text: '«Знаєш, я хотів, щоб він нарешті поплив. А може, він і не мусив. Просто я не люблю впізнавати себе в героях, які стоять на березі». Томас усміхається без особливої радості.',
+        },
+        {
+          requires: ['thomas_book_ending_disputed'],
+          text: '«От! Я дочитав двісті сторінок, щоб побачити, як він знову фарбує борт. Але тепер мені цікаво, чи Анна захищатиме таку кінцівку. Схоже, у нас буде про що посперечатися за вечерею».',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-reading-back',
+          label: 'Повернутися до розмови про лампу',
+          next: 'greet',
+          grants: ['thomas_reading_challenge_discussed'],
         },
       ],
     },
