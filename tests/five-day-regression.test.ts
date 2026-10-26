@@ -6,9 +6,15 @@ function storage() {
   const values = new Map<string, string>();
   return {
     getItem: (key: string) => values.get(key) ?? null,
-    setItem: (key: string, value: string) => { values.set(key, value); },
-    removeItem: (key: string) => { values.delete(key); },
-    clear: () => { values.clear(); },
+    setItem: (key: string, value: string) => {
+      values.set(key, value);
+    },
+    removeItem: (key: string) => {
+      values.delete(key);
+    },
+    clear: () => {
+      values.clear();
+    },
   };
 }
 
@@ -39,11 +45,25 @@ describe('five-day story stage progression', () => {
         visited.add(key);
       }
       expect(stages).toEqual([
-        'miller', 'mara', 'evening', 'complete',
-        'iris', 'anna', 'leo', 'day2-complete',
-        'eleanor', 'thomas', 'nora', 'book-club', 'day3-complete',
-        'day4-iris', 'day4-mara', 'day4-leo', 'day4-complete',
-        'day5-reading', 'season-complete',
+        'miller',
+        'mara',
+        'evening',
+        'complete',
+        'iris',
+        'anna',
+        'leo',
+        'day2-complete',
+        'eleanor',
+        'thomas',
+        'nora',
+        'book-club',
+        'day3-complete',
+        'day4-iris',
+        'day4-mara',
+        'day4-leo',
+        'day4-complete',
+        'day5-reading',
+        'season-complete',
       ]);
     } finally {
       vi.unstubAllGlobals();
