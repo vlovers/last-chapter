@@ -42,6 +42,13 @@ export const finalReading: DialogueStory = {
       ],
       options: [
         {
+          id: 'final-couple-conversation-option',
+          label: 'Почути розмову Мари й Лео біля вікна',
+          next: 'final-couple-conversation',
+          requires: ['mara_own_morning_heard', 'leo_honesty_discussed'],
+          unless: ['final_couple_conversation_heard'],
+        },
+        {
           id: 'final-v3-mara-option',
           label: '«Як минув ранок, який ти хотіла залишити собі?»',
           next: 'final-v3-mara',
@@ -952,6 +959,36 @@ export const finalReading: DialogueStory = {
           grants: ['final_v3_eleanor_heard'],
         },
       ],
+    },
+    {
+      id: 'final-couple-conversation',
+      speaker: 'Мара',
+      text: '«Я сказала, що завтра хочу побути сама. І майже додала: якщо ти не проти. Наче для мого ранку потрібен дозвіл». Лео стоїть біля вікна, не перебиваючи.',
+      options: [
+        { id: 'final-couple-ask', label: '«І що ти відповів, Лео?»', next: 'final-couple-leo' },
+        { id: 'final-couple-respect', label: 'Залишити їм простір', next: 'final-couple-close' },
+      ],
+    },
+    {
+      id: 'final-couple-leo',
+      speaker: 'Лео',
+      text: '«Що я почув її. Спершу хотів запропонувати розклад, як усе встигнути. Але вона не просила плану». Він дивиться на Мару: «Можемо просто домовитися, коли побачимося після?»',
+      options: [
+        { id: 'final-couple-mara', label: 'Послухати Мару', next: 'final-couple-mara' },
+        { id: 'final-couple-pause', label: 'Не втручатися далі', next: 'final-couple-close' },
+      ],
+    },
+    {
+      id: 'final-couple-mara',
+      speaker: 'Мара',
+      text: '«Так. І якщо я передумаю, скажу сама. Мені подобається, що сьогодні ніхто не назвав це сваркою». Лео киває. Вони не обіцяють одне одному ідеального майбутнього.',
+      options: [{ id: 'final-couple-finish', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_couple_conversation_heard'] }],
+    },
+    {
+      id: 'final-couple-close',
+      speaker: 'Оповідач',
+      text: 'Ти відходиш до книжкових полиць. Не кожна важлива розмова потребує третього слухача. За вікном дощ стихає.',
+      options: [{ id: 'final-couple-close-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_couple_conversation_heard'] }],
     },
     {
       id: 'end',
