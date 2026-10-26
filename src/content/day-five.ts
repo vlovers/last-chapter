@@ -15,7 +15,12 @@ export const finalReading: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Колись я боялася, що книгарня назавжди залишиться порожньою. А сьогодні тут знову сперечаються, яку книжку читати наступною». Вона усміхається, помітивши Міллер із трьома закладками.',
       options: [
-        { id: 'anna', label: 'Послухати Анну про шкільний книжковий клуб', next: 'anna' },
+        {
+          id: 'anna',
+          label: 'Послухати Анну про шкільний книжковий клуб',
+          next: 'anna',
+          unless: ['final_anna_club_heard'],
+        },
         {
           id: 'rumor',
           label: 'Запропонувати поговорити про силу чуток',
@@ -204,7 +209,7 @@ export const finalReading: DialogueStory = {
           next: 'anna-mystery',
           requires: ['anna_chose_mystery'],
         },
-        { id: 'anna-back', label: 'Повернутися до гостей', next: 'gathering' },
+        { id: 'anna-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_anna_club_heard'] },
       ],
     },
     {
@@ -212,14 +217,14 @@ export const finalReading: DialogueStory = {
       speaker: 'Анна',
       text: '«Так! Один учень намалював маршрут до бібліотеки, а поруч підписав: “Тут можна передумати”. Мені здається, він зрозумів книжку краще за мене».',
       options: [
-        { id: 'maps-back', label: 'Посміхнутися й повернутися до гостей', next: 'gathering' },
+        { id: 'maps-back', label: 'Посміхнутися й повернутися до гостей', next: 'gathering', grants: ['final_anna_club_heard'] },
       ],
     },
     {
       id: 'anna-mystery',
       speaker: 'Анна',
       text: '«Вони навіть склали правила: не називати людину винною, доки не вислухали її. Пані Міллер запропонувала додати це до правил клубу».',
-      options: [{ id: 'mystery-back', label: 'Повернутися до гостей', next: 'gathering' }],
+      options: [{ id: 'mystery-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_anna_club_heard'] }],
     },
     {
       id: 'rumor',
