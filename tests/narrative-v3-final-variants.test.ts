@@ -32,9 +32,24 @@ describe('Narrative V3 finale variants', () => {
 
   it('shared scenes are gated by both characters and can be viewed once', () => {
     const scenes = [
-      ['final-couple-conversation', 'mara_own_morning_heard', 'leo_honesty_discussed', 'final_couple_conversation_heard'],
-      ['final-couple-anna-thomas', 'anna_uncertainty_discussed', 'thomas_listening_discussed', 'final_anna_thomas_heard'],
-      ['final-iris-eleanor', 'iris_art_boundaries_discussed', 'eleanor_change_discussed', 'final_iris_eleanor_heard'],
+      [
+        'final-couple-conversation',
+        'mara_own_morning_heard',
+        'leo_honesty_discussed',
+        'final_couple_conversation_heard',
+      ],
+      [
+        'final-couple-anna-thomas',
+        'anna_uncertainty_discussed',
+        'thomas_listening_discussed',
+        'final_anna_thomas_heard',
+      ],
+      [
+        'final-iris-eleanor',
+        'iris_art_boundaries_discussed',
+        'eleanor_change_discussed',
+        'final_iris_eleanor_heard',
+      ],
     ] as const;
     const gathering = finalReading.nodes.find((node) => node.id === 'gathering');
     expect(gathering).toBeDefined();
@@ -43,9 +58,11 @@ describe('Narrative V3 finale variants', () => {
       expect(option?.requires).toEqual([first, second]);
       expect(option?.unless).toContain(done);
       expect(finalReading.nodes.some((node) => node.id === destination)).toBe(true);
-      expect(finalReading.nodes.some((node) =>
-        node.options.some((entry) => entry.next === 'gathering' && entry.grants?.includes(done)),
-      )).toBe(true);
+      expect(
+        finalReading.nodes.some((node) =>
+          node.options.some((entry) => entry.next === 'gathering' && entry.grants?.includes(done)),
+        ),
+      ).toBe(true);
     }
   });
 
@@ -57,7 +74,9 @@ describe('Narrative V3 finale variants', () => {
       expect(variants.some((variant) => variant.requires?.includes(first))).toBe(true);
       expect(variants.some((variant) => variant.requires?.includes(second))).toBe(true);
       expect(variants.every((variant) => variant.text.trim().length > 0)).toBe(true);
-      const callback = finalReading.nodes.find((entry) => entry.id === 'gathering')?.options.find((option) => option.next === `final-v3-${name}`);
+      const callback = finalReading.nodes
+        .find((entry) => entry.id === 'gathering')
+        ?.options.find((option) => option.next === `final-v3-${name}`);
       expect(callback?.unless).toContain(`final_v3_${name}_heard`);
     });
   }

@@ -860,8 +860,14 @@ export const finalReading: DialogueStory = {
       speaker: 'Мара',
       text: '«Я сказала, що не беру додаткового замовлення. Потім пів години думала, чи не образила когось. Але книжку все-таки відкрила. І це був мій ранок».',
       textWhen: [
-        { requires: ['mara_discussed_forgiveness'], text: '«Я залишила ранок собі. І згадала: пробачення не означає, що я мушу віддавати комусь увесь свій час».', },
-        { requires: ['mara_discussed_change'], text: '«Я взяла вільний ранок і не стала доводити, що змінилася назавжди. Іноді досить одного маленького рішення».', },
+        {
+          requires: ['mara_discussed_forgiveness'],
+          text: '«Я залишила ранок собі. І згадала: пробачення не означає, що я мушу віддавати комусь увесь свій час».',
+        },
+        {
+          requires: ['mara_discussed_change'],
+          text: '«Я взяла вільний ранок і не стала доводити, що змінилася назавжди. Іноді досить одного маленького рішення».',
+        },
       ],
       options: [
         {
@@ -877,8 +883,14 @@ export const finalReading: DialogueStory = {
       speaker: 'Лео',
       text: '«Я сказав Марі, що іноді гублюся в словах. Вона не стала виправляти мою розгубленість. Ми просто домовилися не вгадувати думки одне одного».',
       textWhen: [
-        { requires: ['leo_chose_listening'], text: '«Я спершу запитав Мару, чого вона хоче від розмови. Їй не потрібен був мій ідеальний план — тільки щоб я почув відповідь».' },
-        { requires: ['leo_accepted_silence'], text: '«Я не заповнював паузу словами. Мара сама вирішила, коли говорити. Ми досі не все з’ясували, але тиша більше не здається мені поразкою».' },
+        {
+          requires: ['leo_chose_listening'],
+          text: '«Я спершу запитав Мару, чого вона хоче від розмови. Їй не потрібен був мій ідеальний план — тільки щоб я почув відповідь».',
+        },
+        {
+          requires: ['leo_accepted_silence'],
+          text: '«Я не заповнював паузу словами. Мара сама вирішила, коли говорити. Ми досі не все з’ясували, але тиша більше не здається мені поразкою».',
+        },
       ],
       options: [
         {
@@ -894,8 +906,14 @@ export const finalReading: DialogueStory = {
       speaker: 'Айріс',
       text: '«Так. Один відвідувач питав, чий це будинок. Я відповіла: не знаю. Він довго дивився на світло у вікні. І цього виявилося досить».',
       textWhen: [
-        { requires: ['iris_chose_open_art'], text: '«Я залишила одну роботу без підпису. Люди бачать у ній різне, і вперше мені не потрібно захищати єдине правильне тлумачення».' },
-        { requires: ['iris_chose_private_art'], text: '«Я показала кілька малюнків, але деякі залишила в папці. Не все, що створюю, зобов’язане ставати публічним».' },
+        {
+          requires: ['iris_chose_open_art'],
+          text: '«Я залишила одну роботу без підпису. Люди бачать у ній різне, і вперше мені не потрібно захищати єдине правильне тлумачення».',
+        },
+        {
+          requires: ['iris_chose_private_art'],
+          text: '«Я показала кілька малюнків, але деякі залишила в папці. Не все, що створюю, зобов’язане ставати публічним».',
+        },
       ],
       options: [
         {
@@ -911,8 +929,14 @@ export const finalReading: DialogueStory = {
       speaker: 'Анна',
       text: '«Спочатку обурилися. Потім принесли три різні книжки й почали сперечатися. Я не підсумувала за них. Здається, це був найкращий урок за місяць».',
       textWhen: [
-        { requires: ['anna_will_apologize_to_student'], text: '«Я вибачилася перед ученицею, що поспішила відповісти замість неї. Вона сказала, що теж іноді боїться помилитися».' },
-        { requires: ['anna_will_invite_disagreement'], text: '«Я попросила клас не погодитися зі мною. Спочатку всі мовчали, а потім ми ледве встигли до дзвінка».' },
+        {
+          requires: ['anna_will_apologize_to_student'],
+          text: '«Я вибачилася перед ученицею, що поспішила відповісти замість неї. Вона сказала, що теж іноді боїться помилитися».',
+        },
+        {
+          requires: ['anna_will_invite_disagreement'],
+          text: '«Я попросила клас не погодитися зі мною. Спочатку всі мовчали, а потім ми ледве встигли до дзвінка».',
+        },
       ],
       options: [
         {
@@ -928,8 +952,14 @@ export const finalReading: DialogueStory = {
       speaker: 'Томас',
       text: '«Я запитав Анну, чи потрібна допомога. Вона сказала: посиди зі мною. Я сидів. Незвично важка робота. Але вперше за довгий час не поспішав її закінчити».',
       textWhen: [
-        { requires: ['thomas_will_ask_before_helping'], text: '«Я запитав Анну, чи потрібна їй допомога. Вона попросила просто побути поруч. Я не шукав іншого завдання».' },
-        { requires: ['thomas_admitted_fear_of_rejection'], text: '«Я сказав Анні, що боюся бути зайвим. Вона не обіцяла, що все буде просто. Але ми нарешті говорили про нас».' },
+        {
+          requires: ['thomas_will_ask_before_helping'],
+          text: '«Я запитав Анну, чи потрібна їй допомога. Вона попросила просто побути поруч. Я не шукав іншого завдання».',
+        },
+        {
+          requires: ['thomas_admitted_fear_of_rejection'],
+          text: '«Я сказав Анні, що боюся бути зайвим. Вона не обіцяла, що все буде просто. Але ми нарешті говорили про нас».',
+        },
       ],
       options: [
         {
@@ -945,8 +975,14 @@ export const finalReading: DialogueStory = {
       speaker: 'Нора',
       text: '«Три різні свідчення й чесну примітку, що ми не знаємо всього. Приватний лист не став експонатом. Архів від цього не збіднів».',
       textWhen: [
-        { requires: ['nora_will_preserve_uncertainty'], text: '«Я залишила три версії події з приміткою, що доказів замало. Хтось назвав це нерішучістю. А я перестала соромитися точності».' },
-        { requires: ['nora_will_seek_consent'], text: '«Я запитала дозволу, перш ніж показувати чужі записи. Відповідь була “ні”. Архів не став біднішим від того, що я це поважаю».' },
+        {
+          requires: ['nora_will_preserve_uncertainty'],
+          text: '«Я залишила три версії події з приміткою, що доказів замало. Хтось назвав це нерішучістю. А я перестала соромитися точності».',
+        },
+        {
+          requires: ['nora_will_seek_consent'],
+          text: '«Я запитала дозволу, перш ніж показувати чужі записи. Відповідь була “ні”. Архів не став біднішим від того, що я це поважаю».',
+        },
       ],
       options: [
         {
@@ -962,8 +998,14 @@ export const finalReading: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Ні. Щоразу хочу пересунути його назад. Але сьогодні побачила, як біля вікна читає дитина. Мабуть, не кожна добра зміна має бути моєю ідеєю».',
       textWhen: [
-        { requires: ['eleanor_will_keep_shared_memory'], text: '«Ми залишили полицю для історій відвідувачів. Тепер книгарня пам’ятає не тільки те, що пам’ятаю я».' },
-        { requires: ['eleanor_will_allow_change'], text: '«Я сама запропонувала пересунути ще один стіл. Нові люди мають право облаштовувати свій простір».' },
+        {
+          requires: ['eleanor_will_keep_shared_memory'],
+          text: '«Ми залишили полицю для історій відвідувачів. Тепер книгарня пам’ятає не тільки те, що пам’ятаю я».',
+        },
+        {
+          requires: ['eleanor_will_allow_change'],
+          text: '«Я сама запропонувала пересунути ще один стіл. Нові люди мають право облаштовувати свій простір».',
+        },
       ],
       options: [
         {
@@ -996,13 +1038,27 @@ export const finalReading: DialogueStory = {
       id: 'final-couple-mara',
       speaker: 'Мара',
       text: '«Так. І якщо я передумаю, скажу сама. Мені подобається, що сьогодні ніхто не назвав це сваркою». Лео киває. Вони не обіцяють одне одному ідеального майбутнього.',
-      options: [{ id: 'final-couple-finish', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_couple_conversation_heard'] }],
+      options: [
+        {
+          id: 'final-couple-finish',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_couple_conversation_heard'],
+        },
+      ],
     },
     {
       id: 'final-couple-close',
       speaker: 'Оповідач',
       text: 'Ти відходиш до книжкових полиць. Не кожна важлива розмова потребує третього слухача. За вікном дощ стихає.',
-      options: [{ id: 'final-couple-close-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_couple_conversation_heard'] }],
+      options: [
+        {
+          id: 'final-couple-close-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_couple_conversation_heard'],
+        },
+      ],
     },
     {
       id: 'final-couple-anna-thomas',
@@ -1010,7 +1066,11 @@ export const finalReading: DialogueStory = {
       text: '«У школі сьогодні мене запитали, чому дорослі так бояться помилитися. Я хотіла відповісти відразу. А потім згадала, як ми з Томасом сперечалися про те, хто має все виправляти».',
       options: [
         { id: 'final-at-listen', label: '«А що сказав Томас?»', next: 'final-couple-thomas' },
-        { id: 'final-at-leave', label: 'Дати їм поговорити наодинці', next: 'final-couple-at-close' },
+        {
+          id: 'final-at-leave',
+          label: 'Дати їм поговорити наодинці',
+          next: 'final-couple-at-close',
+        },
       ],
     },
     {
@@ -1026,21 +1086,43 @@ export const finalReading: DialogueStory = {
       id: 'final-couple-at-book',
       speaker: 'Анна',
       text: '«Ту, де герої сперечаються і все одно залишаються друзями. Я не знаю, чи ми погодимося з фіналом». Томас знизує плечима: «Зате прочитаємо разом».',
-      options: [{ id: 'final-at-book-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_anna_thomas_heard'] }],
+      options: [
+        {
+          id: 'final-at-book-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_anna_thomas_heard'],
+        },
+      ],
     },
     {
       id: 'final-couple-at-close',
       speaker: 'Оповідач',
       text: 'Вони залишаються біля полиці, сперечаючись про обкладинку. Цього разу ніхто не поспішає перемогти в суперечці.',
-      options: [{ id: 'final-at-close-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_anna_thomas_heard'] }],
+      options: [
+        {
+          id: 'final-at-close-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_anna_thomas_heard'],
+        },
+      ],
     },
     {
       id: 'final-iris-eleanor',
       speaker: 'Елеонора',
       text: '«Раніше тут висіли портрети засновників. Я знала кожне ім’я. Тепер Айріс принесла малюнки вікон, і я не знаю, кому вони належать». Вона трохи відступає, щоб побачити всю стіну.',
       options: [
-        { id: 'final-ie-ask', label: '«Вам бракує старих портретів?»', next: 'final-iris-eleanor-answer' },
-        { id: 'final-ie-space', label: 'Залишити їх облаштовувати виставку', next: 'final-ie-close' },
+        {
+          id: 'final-ie-ask',
+          label: '«Вам бракує старих портретів?»',
+          next: 'final-iris-eleanor-answer',
+        },
+        {
+          id: 'final-ie-space',
+          label: 'Залишити їх облаштовувати виставку',
+          next: 'final-ie-close',
+        },
       ],
     },
     {
@@ -1053,13 +1135,27 @@ export const finalReading: DialogueStory = {
       id: 'final-iris-eleanor-iris',
       speaker: 'Айріс',
       text: '«Я можу підписати назви картин, але не хочу підписувати чужі життя. Якщо хтось упізнає своє вікно, він сам вирішить, чи говорити про це». Елеонора киває: «Тоді залишимо місце і для тиші».',
-      options: [{ id: 'final-ie-done', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_iris_eleanor_heard'] }],
+      options: [
+        {
+          id: 'final-ie-done',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_iris_eleanor_heard'],
+        },
+      ],
     },
     {
       id: 'final-ie-close',
       speaker: 'Оповідач',
       text: 'Ти відходиш. На стіні поруч із новими малюнками залишається одна стара фотографія книгарні. Ніхто не мусить обирати між пам’яттю та майбутнім.',
-      options: [{ id: 'final-ie-close-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_iris_eleanor_heard'] }],
+      options: [
+        {
+          id: 'final-ie-close-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_iris_eleanor_heard'],
+        },
+      ],
     },
     {
       id: 'end',
