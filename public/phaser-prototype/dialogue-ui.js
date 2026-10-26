@@ -189,7 +189,12 @@ export class DialogueUI {
     window.clearInterval(this.typing);
     this.typing = null;
     if (this.visualText) this.visualText.textContent = this.fullText;
-    if (this.skip) this.skip.hidden = true;
+    if (this.skip) {
+      const focused = document.activeElement === this.skip;
+      this.skip.hidden = true;
+      if (focused)
+        (this.choices.querySelector('button') ?? this.close).focus({ preventScroll: true });
+    }
   }
   hide() {
     this.finishTyping();

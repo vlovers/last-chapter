@@ -30,6 +30,12 @@ This remains a short five-day prototype, not a verified finished forty-minute ep
    Child-process tests deliberately hang both calls and verify success exits zero
    while an original assertion still exits one with its original error. No test
    failure is swallowed by cleanup.
+5. [A repeated mobile CI run](https://github.com/vlovers/last-chapter/actions/runs/40391525117)
+   exposed a genuine focus race: finishing the typewriter hid its focused skip
+   button and focus fell out of the dialog. Completion now transfers that focus
+   to an answer (or close control); ordinary completion does not steal focus.
+   Three unit cases and an immediate browser assertion after clicking skip cover
+   the repair. The original mobile focus assertion is retained.
 
 These were reproducible timing/rendering/runner defects, not evidence that GitHub
 infrastructure alone was broken. No check was disabled and no behavioral assertion
@@ -67,7 +73,7 @@ the fallback. No optional browser package was added to production dependencies.
 
 | Check                            | Result and practical coverage                                                                                                                                                                              |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run check`                  | Passed: Prettier, ESLint, TypeScript, **582 tests / 113 files**, production build                                                                                                                          |
+| `npm run check`                  | Passed: Prettier, ESLint, TypeScript, **585 tests / 114 files**, production build                                                                                                                          |
 | `npm audit --audit-level=high`   | Passed, zero reported vulnerabilities                                                                                                                                                                      |
 | `test:browser`                   | Passed: isolated slice branches, movement/collision, settings/audio state, confidentiality, both gift endings, fallback and save isolation                                                                 |
 | `test:browser:v5`                | Passed: canonical story, clue board, diary/counter, five-day route and no browser errors                                                                                                                   |

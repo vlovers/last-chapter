@@ -235,6 +235,10 @@ try {
     );
   });
   await page.locator('#typewriter-skip').click();
+  assert.ok(
+    await page.locator('#dialogue :focus').count(),
+    'Skipping text preserves dialogue focus',
+  );
   const long = await page.locator('#dialogue-text').evaluate((node) => ({
     scroll: node.scrollHeight,
     height: node.clientHeight,
