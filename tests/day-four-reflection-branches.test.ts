@@ -30,6 +30,30 @@ describe('Day four character choices', () => {
       'leo_day_four_chose_honesty',
       'leo-future-back',
     ],
+    [
+      irisDecision,
+      'welcome',
+      'iris-boundaries',
+      'iris-boundaries-belong',
+      'iris_day_four_supported_belonging',
+      'iris-boundaries-back',
+    ],
+    [
+      maraDecision,
+      'greet',
+      'mara-own-story',
+      'mara-own-story-love',
+      'mara_day_four_named_own_needs',
+      'mara-own-story-back',
+    ],
+    [
+      leoDecision,
+      'welcome',
+      'leo-future',
+      'leo-future-private',
+      'leo_day_four_respected_privacy',
+      'leo-future-back',
+    ],
   ] as const)(
     'returns to conversation with a recorded choice',
     (story, entry, choice, decision, flag, back) => {
