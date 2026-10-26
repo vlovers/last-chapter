@@ -116,7 +116,13 @@ export const annaVisit: DialogueStory = {
       id: 'rumor-own-amplification',
       speaker: 'Анна',
       text: '«Дякую, що не приховали цього. Але я тепер маю розбиратися не лише з Томасом, а й з тим, що говорять інші». Вона поправляє ремінець торби. «Мені потрібен час. І книжки для дітей — вони не зачекають, поки дорослі порозумнішають».',
-      options: [{ id: 'rumor-own-amplification-books', label: '«Звісно. Погляньмо на книжки»', next: 'books' }],
+      options: [
+        {
+          id: 'rumor-own-amplification-books',
+          label: '«Звісно. Погляньмо на книжки»',
+          next: 'books',
+        },
+      ],
     },
     {
       id: 'push',

@@ -168,7 +168,13 @@ export const thomasVisit: DialogueStory = {
       id: 'rumor-own-words',
       speaker: 'Томас',
       text: '«Дякую, що сказали це мені, а не комусь за моєю спиною». Він обережно кладе викрутку. «Але Анна могла почути вашу першу версію. Я не можу зробити вигляд, що її не було».',
-      options: [{ id: 'rumor-own-words-back', label: '«Розумію. Більше не повторюватиму цього»', next: 'greet' }],
+      options: [
+        {
+          id: 'rumor-own-words-back',
+          label: '«Розумію. Більше не повторюватиму цього»',
+          next: 'greet',
+        },
+      ],
     },
     {
       id: 'boundary',

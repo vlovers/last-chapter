@@ -36,7 +36,6 @@ describe('Ukrainian dialogue slice', () => {
     expect(currentNode(millerVisit, state).id).toBe('boundary');
   });
 
-
   it('distinguishes listening from amplifying a rumor', () => {
     let heard = startDialogue(millerVisit);
     for (const choice of ['greet', 'town', 'gossip', 'what-saw', 'acknowledge']) {
@@ -57,25 +56,36 @@ describe('Ukrainian dialogue slice', () => {
   it('only offers Thomas a personal apology after the player amplified gossip', () => {
     let neutral = { ...startDialogue(thomasVisit), flags: ['rumor_heard'] };
     for (const choice of ['greet', 'rumor']) neutral = selectOption(thomasVisit, neutral, choice);
-    expect(availableOptions(thomasVisit, neutral).map((option) => option.id)).not.toContain('rumor-own-words');
+    expect(availableOptions(thomasVisit, neutral).map((option) => option.id)).not.toContain(
+      'rumor-own-words',
+    );
 
     let amplified = { ...startDialogue(thomasVisit), flags: ['rumor_heard', 'rumor_amplified'] };
-    for (const choice of ['greet', 'rumor']) amplified = selectOption(thomasVisit, amplified, choice);
-    expect(availableOptions(thomasVisit, amplified).map((option) => option.id)).toContain('rumor-own-words');
+    for (const choice of ['greet', 'rumor'])
+      amplified = selectOption(thomasVisit, amplified, choice);
+    expect(availableOptions(thomasVisit, amplified).map((option) => option.id)).toContain(
+      'rumor-own-words',
+    );
     amplified = selectOption(thomasVisit, amplified, 'rumor-own-words');
     expect(amplified.flags).toContain('thomas_heard_rumor_apology');
   });
 
   it('lets Anna respond to an admission without blocking her book order', () => {
     let state = { ...startDialogue(annaVisit), flags: ['rumor_heard', 'rumor_amplified'] };
-    for (const choice of ['hello', 'rumor', 'rumor-own-amplification', 'rumor-own-amplification-books', 'maps', 'purchase-end']) {
+    for (const choice of [
+      'hello',
+      'rumor',
+      'rumor-own-amplification',
+      'rumor-own-amplification-books',
+      'maps',
+      'purchase-end',
+    ]) {
       state = selectOption(annaVisit, state, choice);
     }
     expect(state.flags).toContain('anna_heard_rumor_admission');
     expect(state.flags).toContain('anna_chose_maps');
     expect(currentNode(annaVisit, state).id).toBe('end');
   });
-
 
   it('keeps the final gathering valid and closable with or without rumors', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
@@ -95,7 +105,12 @@ describe('Ukrainian dialogue slice', () => {
 
   it('supports day-five accountability without forced forgiveness or a blocked ending', () => {
     let state = { ...startDialogue(finalReading), flags: ['rumor_heard', 'rumor_amplified'] };
-    for (const choice of ['open', 'rumor-player-accountability', 'rumor-own-public', 'rumor-player-own-return']) {
+    for (const choice of [
+      'open',
+      'rumor-player-accountability',
+      'rumor-own-public',
+      'rumor-player-own-return',
+    ]) {
       state = selectOption(finalReading, state, choice);
     }
     expect(state.flags).toContain('final_player_rumor_owned');
@@ -105,7 +120,12 @@ describe('Ukrainian dialogue slice', () => {
 
   it('lets Miller discuss an unidentified sighting without involving the couple', () => {
     let state = { ...startDialogue(finalReading), flags: ['rumor_heard', 'rumor_challenged'] };
-    for (const choice of ['open', 'rumor-miller-followup', 'rumor-miller-listen', 'rumor-miller-answer-return']) {
+    for (const choice of [
+      'open',
+      'rumor-miller-followup',
+      'rumor-miller-listen',
+      'rumor-miller-answer-return',
+    ]) {
       state = selectOption(finalReading, state, choice);
     }
     expect(state.flags).toContain('final_miller_private_followup');

@@ -30,7 +30,12 @@ describe('Five-day rumor continuity: route matrix', () => {
     ['only heard', ['greet', 'town', 'gossip', 'what-saw', 'acknowledge'], true, false],
     ['challenged', ['greet', 'town', 'gossip', 'what-saw', 'challenge'], true, false],
     ['amplified', ['greet', 'town', 'gossip', 'what-saw', 'speculate'], true, true],
-    ['reconsidered', ['greet', 'town', 'gossip', 'what-saw', 'speculate', 'speculation-reconsider'], true, true],
+    [
+      'reconsidered',
+      ['greet', 'town', 'gossip', 'what-saw', 'speculate', 'speculation-reconsider'],
+      true,
+      true,
+    ],
   ] as const)('%s: does not confuse hearing and amplification', (_name, path, heard, amplified) => {
     const state = walk(millerVisit, path);
     expect(state.flags.includes('rumor_heard')).toBe(heard);
@@ -42,10 +47,13 @@ describe('Five-day rumor continuity: route matrix', () => {
     ['challenged', ['rumor_heard', 'rumor_challenged'], false],
     ['amplified', ['rumor_heard', 'rumor_amplified'], true],
     ['reconsidered', ['rumor_heard', 'rumor_amplified', 'rumor_amplification_reconsidered'], true],
-  ] as const)('%s: Anna only receives the personal admission choice when appropriate', (_name, flags, enabled) => {
-    const state = walk(annaVisit, ['hello', 'rumor'], flags);
-    expect(ids(annaVisit, state).includes('rumor-own-amplification')).toBe(enabled);
-  });
+  ] as const)(
+    '%s: Anna only receives the personal admission choice when appropriate',
+    (_name, flags, enabled) => {
+      const state = walk(annaVisit, ['hello', 'rumor'], flags);
+      expect(ids(annaVisit, state).includes('rumor-own-amplification')).toBe(enabled);
+    },
+  );
 
   it('Anna still sells either book after the player owns their rumor', () => {
     for (const [book, flag] of [
@@ -54,7 +62,14 @@ describe('Five-day rumor continuity: route matrix', () => {
     ] as const) {
       const state = walk(
         annaVisit,
-        ['hello', 'rumor', 'rumor-own-amplification', 'rumor-own-amplification-books', book, 'purchase-end'],
+        [
+          'hello',
+          'rumor',
+          'rumor-own-amplification',
+          'rumor-own-amplification-books',
+          book,
+          'purchase-end',
+        ],
         ['rumor_heard', 'rumor_amplified'],
       );
       expect(state.flags).toContain('anna_heard_rumor_admission');
@@ -74,7 +89,11 @@ describe('Five-day rumor continuity: route matrix', () => {
   });
 
   it('Nora never grants an identity or a letter delivery by discussing gossip', () => {
-    const state = walk(noraVisit, ['hello', 'rumor', 'rumor-respect'], ['rumor_heard', 'rumor_amplified']);
+    const state = walk(
+      noraVisit,
+      ['hello', 'rumor', 'rumor-respect'],
+      ['rumor_heard', 'rumor_amplified'],
+    );
     expect(state.flags).toContain('nora_confidentiality_respected');
     expect(state.flags).not.toContain('iris_private_delivery_consent');
     expect(state.flags).not.toContain('thomas_nora_affair_proven');
@@ -93,8 +112,14 @@ describe('Five-day rumor continuity: route matrix', () => {
   });
 
   it.each([
-    ['admit publicly', ['rumor-player-accountability', 'rumor-own-public', 'rumor-player-own-return']],
-    ['respect their boundary', ['rumor-player-accountability', 'rumor-ask-boundary', 'rumor-player-boundary-return']],
+    [
+      'admit publicly',
+      ['rumor-player-accountability', 'rumor-own-public', 'rumor-player-own-return'],
+    ],
+    [
+      'respect their boundary',
+      ['rumor-player-accountability', 'rumor-ask-boundary', 'rumor-player-boundary-return'],
+    ],
     ['do not interrupt', ['rumor-player-accountability', 'rumor-player-step-away']],
   ] as const)('%s: every accountability path returns to the final gathering', (_name, route) => {
     const state = walk(finalReading, ['open', ...route], ['rumor_heard', 'rumor_amplified']);
@@ -104,8 +129,14 @@ describe('Five-day rumor continuity: route matrix', () => {
   });
 
   it.each([
-    ['ask what happens next', ['rumor-miller-followup', 'rumor-miller-listen', 'rumor-miller-answer-return']],
-    ['discuss books instead', ['rumor-miller-followup', 'rumor-miller-candy', 'rumor-miller-books-return']],
+    [
+      'ask what happens next',
+      ['rumor-miller-followup', 'rumor-miller-listen', 'rumor-miller-answer-return'],
+    ],
+    [
+      'discuss books instead',
+      ['rumor-miller-followup', 'rumor-miller-candy', 'rumor-miller-books-return'],
+    ],
   ] as const)('%s: Miller follow-up returns to the final gathering', (_name, route) => {
     const state = walk(finalReading, ['open', ...route], ['rumor_heard']);
     expect(state.flags).toContain('final_miller_private_followup');
