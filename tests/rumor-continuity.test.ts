@@ -152,6 +152,40 @@ describe('Five-day rumor continuity: route matrix', () => {
     expect(ids(finalReading, state)).not.toContain('rumor-player-accountability');
   });
 
+  it.each([
+    ['debate', 'anna-disagreement-debate', 'anna_classroom_debate_encouraged'],
+    ['alternate endings', 'anna-disagreement-quiet', 'anna_classroom_alternate_endings'],
+  ] as const)('Anna can choose %s without involving the rumor', (_name, decision, flag) => {
+    const state = walk(annaVisit, [
+      'hello',
+      'anna-book-disagreement',
+      decision,
+      'anna-disagreement-back',
+    ]);
+    expect(state.flags).toContain(flag);
+    expect(state.flags).toContain('anna_book_disagreement_discussed');
+    expect(state.flags).not.toContain('rumor_heard');
+    expect(ids(annaVisit, state)).toContain('books');
+    expect(ids(annaVisit, state)).not.toContain('anna-book-disagreement');
+  });
+
+  it.each([
+    ['defend ambiguity', 'thomas-reading-defend', 'thomas_book_ambiguity_accepted'],
+    ['argue with ending', 'thomas-reading-argue', 'thomas_book_ending_disputed'],
+  ] as const)('Thomas can %s and return to repairing the lamp', (_name, decision, flag) => {
+    const state = walk(thomasVisit, [
+      'greet',
+      'thomas-reading-challenge',
+      decision,
+      'thomas-reading-back',
+    ]);
+    expect(state.flags).toContain(flag);
+    expect(state.flags).toContain('thomas_reading_challenge_discussed');
+    expect(state.flags).not.toContain('rumor_heard');
+    expect(ids(thomasVisit, state)).toContain('repair');
+    expect(ids(thomasVisit, state)).not.toContain('thomas-reading-challenge');
+  });
+
   it('keeps every modified dialogue graph structurally valid', () => {
     for (const story of [millerVisit, annaVisit, thomasVisit, noraVisit, finalReading]) {
       expect(validateDialogue(story)).toEqual([]);
