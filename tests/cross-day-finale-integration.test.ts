@@ -31,6 +31,9 @@ describe('Cross-day finale integration', () => {
     chapter = chooseChapterOption(chapter, 'mara-callback');
     chapter = chooseChapterOption(chapter, 'mara-callback-back');
     expect(chapter.flags).toContain('final_mara_heard');
+    expect(
+      availableOptions(finalReading, chapter.dialogue).some((option) => option.id === 'mara-callback'),
+    ).toBe(false);
     chapter = chooseChapterOption(chapter, 'close');
     expect(currentNode(finalReading, chapter.dialogue).id).toBe('end');
     chapter = finishSeason(chapter);
