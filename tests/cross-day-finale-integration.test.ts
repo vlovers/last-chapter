@@ -55,12 +55,16 @@ describe('Cross-day finale integration', () => {
     chapter = chooseChapterOption(chapter, 'open');
     for (const person of ['iris', 'mara', 'leo']) {
       const optionId = `day-four-${person}-callback`;
-      expect(availableOptions(finalReading, chapter.dialogue).some((option) => option.id === optionId)).toBe(true);
+      expect(
+        availableOptions(finalReading, chapter.dialogue).some((option) => option.id === optionId),
+      ).toBe(true);
       chapter = chooseChapterOption(chapter, optionId);
       expect(currentNode(finalReading, chapter.dialogue).text.length).toBeGreaterThan(40);
       chapter = chooseChapterOption(chapter, `day-four-${person}-back`);
       expect(chapter.flags).toContain(`final_day_four_${person}_heard`);
-      expect(availableOptions(finalReading, chapter.dialogue).some((option) => option.id === optionId)).toBe(false);
+      expect(
+        availableOptions(finalReading, chapter.dialogue).some((option) => option.id === optionId),
+      ).toBe(false);
     }
     chapter = chooseChapterOption(chapter, 'close');
     chapter = finishSeason(chapter);
