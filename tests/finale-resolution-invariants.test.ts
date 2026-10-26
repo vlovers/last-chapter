@@ -58,6 +58,9 @@ describe('Final gathering narrative invariants', () => {
       if (state.node === 'rumor-respect' || state.node === 'rumor-apology') {
         state = selectOption(finalReading, state, `${state.node}-back`);
       }
+      if (state.node === 'rumor-respect' || state.node === 'rumor-apology') {
+        state = selectOption(finalReading, state, `${state.node}-back`);
+      }
       expect(state.node).toBe('gathering');
       for (const group of exclusiveOutcomes) {
         expect(group.filter((flag) => state.flags.includes(flag)).length).toBeLessThanOrEqual(1);
