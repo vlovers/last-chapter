@@ -56,13 +56,28 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const controls = { journal, catalog };
   let mode: 'journal' | 'catalog' | 'conversation' | 'oliver' | 'bellwick' | null = null;
   let selectedBellwick: BellwickEncounterId = 'mara';
-  let bellwickProgress = decodeBellwickProgress((() => { try { return localStorage.getItem(bellwickStorageKey); } catch { return null; } })());
+  let bellwickProgress = decodeBellwickProgress(
+    (() => {
+      try {
+        return localStorage.getItem(bellwickStorageKey);
+      } catch {
+        return null;
+      }
+    })(),
+  );
   let bellwickFinished: BellwickEncounterId[] = [...bellwickProgress.finished];
-  let bellwickSessions: Partial<Record<BellwickEncounterId, DialogueState>> = { ...bellwickProgress.sessions };
+  let bellwickSessions: Partial<Record<BellwickEncounterId, DialogueState>> = {
+    ...bellwickProgress.sessions,
+  };
   const saveBellwick = () => {
     try {
-      localStorage.setItem(bellwickStorageKey, encodeBellwickProgress({ finished: bellwickFinished, sessions: bellwickSessions }));
-    } catch { /* optional */ }
+      localStorage.setItem(
+        bellwickStorageKey,
+        encodeBellwickProgress({ finished: bellwickFinished, sessions: bellwickSessions }),
+      );
+    } catch {
+      /* optional */
+    }
   };
   const oliverKey = 'last-chapter:optional:oliver:v1';
   let oliverProgress = freshOliverProgress();
@@ -479,7 +494,11 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     bellwickProgress = decodeBellwickProgress(null);
     bellwickFinished = [];
     bellwickSessions = {};
-    try { localStorage.removeItem(bellwickStorageKey); } catch { /* optional */ }
+    try {
+      localStorage.removeItem(bellwickStorageKey);
+    } catch {
+      /* optional */
+    }
     try {
       localStorage.removeItem(oliverKey);
     } catch {

@@ -20,19 +20,34 @@ export function decodeBellwickProgress(raw: string | null): BellwickProgress {
     if (!parsed || typeof parsed !== 'object') return freshBellwickProgress();
     const record = parsed as Record<string, unknown>;
     if (!Array.isArray(record.finished)) return freshBellwickProgress();
-    const finished = [...new Set(record.finished.filter((id): id is BellwickEncounterId => typeof id === 'string' && validId(id)))];
+    const finished = [
+      ...new Set(
+        record.finished.filter(
+          (id): id is BellwickEncounterId => typeof id === 'string' && validId(id),
+        ),
+      ),
+    ];
     const sessions: Partial<Record<BellwickEncounterId, DialogueState>> = {};
     if (record.sessions && typeof record.sessions === 'object' && !Array.isArray(record.sessions)) {
       for (const [id, value] of Object.entries(record.sessions)) {
         if (!validId(id) || finished.includes(id) || !value || typeof value !== 'object') continue;
         const candidate = value as Record<string, unknown>;
-        if (typeof candidate.node !== 'string' || !Array.isArray(candidate.history) || candidate.history.length > 100 || !candidate.history.every((choice) => typeof choice === 'string')) continue;
+        if (
+          typeof candidate.node !== 'string' ||
+          !Array.isArray(candidate.history) ||
+          candidate.history.length > 100 ||
+          !candidate.history.every((choice) => typeof choice === 'string')
+        )
+          continue;
         try {
           const story = bellwickStory(id);
           let replay = startDialogue(story);
-          for (const choice of candidate.history) replay = selectOption(story, replay, choice as string);
+          for (const choice of candidate.history)
+            replay = selectOption(story, replay, choice as string);
           if (replay.node === candidate.node) sessions[id] = replay;
-        } catch { /* ignore corrupt scene, keep others */ }
+        } catch {
+          /* ignore corrupt scene, keep others */
+        }
       }
     }
     return { finished, sessions };
