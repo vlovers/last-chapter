@@ -16,7 +16,12 @@ export const finalReading: DialogueStory = {
       text: '«Колись я боялася, що книгарня назавжди залишиться порожньою. А сьогодні тут знову сперечаються, яку книжку читати наступною». Вона усміхається, помітивши Міллер із трьома закладками.',
       options: [
         { id: 'anna', label: 'Послухати Анну про шкільний книжковий клуб', next: 'anna' },
-        { id: 'rumor', label: 'Запропонувати поговорити про силу чуток', next: 'rumor' },
+        {
+          id: 'rumor',
+          label: 'Запропонувати поговорити про силу чуток',
+          next: 'rumor',
+          unless: ['final_respected_privacy', 'final_repaired_rumor'],
+        },
         { id: 'iris', label: 'Запитати Айріс про її малюнки', next: 'iris' },
         {
           id: 'letter',
