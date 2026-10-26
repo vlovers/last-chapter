@@ -87,7 +87,9 @@ function finishScene(initial: ChapterState, reverse: boolean): ChapterState {
       state.dialogue.node,
       [...state.flags].sort(),
       [...(state.dialogue.completed ?? [])].sort(),
-      state.dialogue.pending ?? [],
+      [...(state.dialogue.pending ?? [])].sort((a, b) =>
+        (a.hub + a.key).localeCompare(b.hub + b.key),
+      ),
     ]);
     if (seen.has(key)) continue;
     seen.add(key);
