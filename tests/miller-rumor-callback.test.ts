@@ -30,6 +30,22 @@ describe('Miller rumor accountability callback', () => {
     expect(callback).not.toBe(baseline);
   });
 
+  it('makes privacy and accountability separate scenes with visible consequences', () => {
+    const rumor = finalReading.nodes.find((entry) => entry.id === 'rumor');
+    const respect = rumor?.options.find((option) => option.id === 'rumor-respect');
+    const apology = rumor?.options.find((option) => option.id === 'rumor-apology');
+    const respectScene = finalReading.nodes.find((entry) => entry.id === 'rumor-respect');
+    const apologyScene = finalReading.nodes.find((entry) => entry.id === 'rumor-apology');
+
+    expect(respect?.next).toBe('rumor-respect');
+    expect(apology?.next).toBe('rumor-apology');
+    expect(respectScene?.text).toContain('не буду знову переказувати');
+    expect(apologyScene?.text).toContain('двом сусідам');
+    expect(apologyScene?.text).toContain('одразу пробачили');
+    expect(respectScene?.options[0]?.grants).toContain('final_respected_privacy');
+    expect(apologyScene?.options[0]?.grants).toContain('final_repaired_rumor');
+  });
+
   it('preserves valid dialogue graphs after the callback was added', () => {
     expect(validateDialogue(millerVisit)).toEqual([]);
     expect(validateDialogue(finalReading)).toEqual([]);
