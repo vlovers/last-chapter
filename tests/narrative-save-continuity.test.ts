@@ -63,10 +63,8 @@ describe('Narrative decisions survive chapter transitions and save/load', () => 
     expect(loaded?.flags).not.toContain('rumor_amplified');
     const anna = at('anna', loaded!.flags);
     const talk = choose(anna, 'hello', 'rumor');
-    const options = currentNode(stageStory(talk.stage), talk.dialogue).options;
-    expect(options.find((option) => option.id === 'rumor-own-amplification')?.requires).toEqual([
-      'rumor_amplified',
-    ]);
+    const options = availableOptions(stageStory(talk.stage), talk.dialogue);
+    expect(options.map((option) => option.id)).not.toContain('rumor-own-amplification');
   });
 
   it('carries a Day 1 rumor into a Day 3 apology to Thomas after reload', () => {
