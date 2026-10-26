@@ -6,12 +6,15 @@ const gathering = finalReading.nodes.find((node) => node.id === 'gathering');
 if (!gathering) throw new Error('Missing gathering');
 
 /** Find a playable return path using actual flag and option conditions. */
-function findReturn(initial: DialogueState): DialogueState | undefined {
+function findReturn(initial: DialogueState, completionFlags: readonly string[]): DialogueState | undefined {
   const queue = [initial];
   const visited = new Set<string>();
   while (queue.length > 0) {
     const state = queue.shift()!;
-    if (state.node === 'gathering') return state;
+    if (
+      state.node === 'gathering' &&
+      (completionFlags.length === 0 || completionFlags.some((flag) => state.flags.includes(flag)))
+    ) return state;
     const key = `${state.node}:${[...state.flags].sort().join(',')}`;
     if (visited.has(key)) continue;
     visited.add(key);
@@ -35,8 +38,8 @@ describe('Every optional finale scene has a playable return route', () => {
       const available = availableOptions(finalReading, initial);
       expect(available.some((option) => option.id === entry.id)).toBe(true);
       const entered = selectOption(finalReading, initial, entry.id);
-      const returned = findReturn(entered);
-      expect(returned, `No playable return path from ${entry.id}`).toBeDefined();
+      const returned = findReturn(entered, entry.unless ?? []);
+      expect(returned, `No playable completed return path from ${entry.id}`).toBeDefined();
       expect(returned?.node).toBe('gathering');
       if (entry.unless?.length) {
         expect(
