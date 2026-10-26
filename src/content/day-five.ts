@@ -118,6 +118,20 @@ export const finalReading: DialogueStory = {
           unless: ['final_anna_club_heard'],
         },
         {
+          id: 'rumor-player-accountability',
+          label: 'Поговорити з Анною й Томасом про власні слова',
+          next: 'rumor-player-accountability',
+          requires: ['rumor_amplified'],
+          unless: ['final_player_rumor_accountability'],
+        },
+        {
+          id: 'rumor-miller-followup',
+          label: 'Послухати, що пані Міллер скаже без сторонніх',
+          next: 'rumor-miller-followup',
+          requires: ['rumor_heard'],
+          unless: ['final_miller_private_followup'],
+        },
+        {
           id: 'rumor',
           label: 'Запропонувати поговорити про силу чуток',
           next: 'rumor',
@@ -453,6 +467,135 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до гостей',
           next: 'gathering',
           grants: ['final_repaired_rumor'],
+        },
+      ],
+    },
+    {
+      id: 'rumor-player-accountability',
+      speaker: 'Оповідач',
+      text: 'Анна ставить на стіл коробку із закладками. Томас допомагає їй, але не намагається говорити за неї. Ви підходите, коли поруч немає інших гостей.',
+      textWhen: [
+        {
+          requires: ['anna_heard_rumor_admission', 'thomas_heard_rumor_apology'],
+          text: 'Анна й Томас уже чули ваші вибачення окремо. Тепер ви зустрічаєтеся біля столу з дитячими закладками. Ніхто не пропонує почати все з чистого аркуша.',
+        },
+        {
+          requires: ['anna_heard_rumor_admission'],
+          text: 'Анна вже знає, що ви підтримали плітку. Томас мовчки допомагає їй розкладати закладки. Він не знає, про що ви говорили з Анною.',
+        },
+        {
+          requires: ['thomas_heard_rumor_apology'],
+          text: 'Томас уже почув ваше вибачення. Анна розкладає дитячі закладки й не знає, що саме ви йому сказали.',
+        },
+      ],
+      options: [
+        {
+          id: 'rumor-own-public',
+          label: '«Я підтримав чутку. Не прошу вас мене заспокоювати»',
+          next: 'rumor-player-own-public',
+          unless: ['final_player_rumor_owned'],
+          grants: ['final_player_rumor_owned'],
+        },
+        {
+          id: 'rumor-ask-boundary',
+          label: '«Не хочу знову говорити за вас. Чи варто мені піти?»',
+          next: 'rumor-player-boundary',
+          grants: ['final_player_rumor_respected_distance'],
+        },
+        {
+          id: 'rumor-player-step-away',
+          label: 'Не переривати їхню розмову',
+          next: 'gathering',
+          grants: ['final_player_rumor_accountability'],
+        },
+      ],
+    },
+    {
+      id: 'rumor-player-own-public',
+      speaker: 'Анна',
+      text: '«Я чула, що ви сказали. Мені не потрібна нова історія про те, як гарно хтось вибачився». Томас кладе останню закладку на стіл. «І не треба доводити, що ми щасливі, — додає він. — Ми самі розберемося, як нам бути».',
+      textWhen: [
+        {
+          requires: ['anna_heard_rumor_admission', 'thomas_heard_rumor_apology'],
+          text: '«Ви вже вибачилися перед нами обома, — каже Анна. — Це не робить вас нашим посередником». Томас киває. «Ми можемо поговорити без свідків. Це все, чого я зараз хочу».',
+        },
+        {
+          requires: ['anna_rumor_pressed'],
+          text: '«Ви вже наполягали, що знаєте, що мені потрібно, — каже Анна. — Будь ласка, не робіть цього знову». Томас мовчить; його мовчання не означає згоди з жодною версією чутки.',
+        },
+      ],
+      options: [
+        {
+          id: 'rumor-player-own-return',
+          label: 'Відійти й залишити їм право на власну розмову',
+          next: 'gathering',
+          grants: ['final_player_rumor_accountability'],
+        },
+      ],
+    },
+    {
+      id: 'rumor-player-boundary',
+      speaker: 'Анна',
+      text: '«Так, зараз краще дати нам трохи місця». Вона говорить без злості. Томас запитує, чи принести ще чаю; Анна відповідає, що спершу хоче закінчити розкладати книжки. Невелика, звичайна розмова, яка належить тільки їм.',
+      options: [
+        {
+          id: 'rumor-player-boundary-return',
+          label: 'Повернутися до інших гостей',
+          next: 'gathering',
+          grants: ['final_player_rumor_accountability'],
+        },
+      ],
+    },
+    {
+      id: 'rumor-miller-followup',
+      speaker: 'Пані Міллер',
+      text: '«Знаєте, що найдурніше? Я ж справді бачила Томаса з жінкою. Тільки от я не знаю ні її імені, ні про що вони говорили. А переповідала так, ніби сиділа між ними». Вона розгортає загорнуту в серветку цукерку. «Хочете? Не купувала їх для спокути. Просто люблю м’ятні».',
+      textWhen: [
+        {
+          requires: ['rumor_amplified'],
+          text: '«Ми тоді обоє добре попрацювали язиками, правда?» — пані Міллер простягає м’ятну цукерку. «Я бачила Томаса з жінкою. Не знаю, хто вона. А тепер половина міста має власну версію. І не кожен слухатиме, коли я скажу, що помилилася».',
+        },
+        {
+          requires: ['rumor_challenged'],
+          text: '«Ви ще тоді сказали, що я нічого не довела. Я злилася, бо думала, що ви називаєте мене брехухою». Міллер відгортає край серветки. «А я ж справді бачила двох людей. Просто не знала, що відбувалося між ними».',
+        },
+      ],
+      options: [
+        {
+          id: 'rumor-miller-listen',
+          label: '«А що ви робитимете, коли знову почуєте цю історію?»',
+          next: 'rumor-miller-answer',
+        },
+        {
+          id: 'rumor-miller-candy',
+          label: 'Взяти цукерку й поговорити про книжки',
+          next: 'rumor-miller-books',
+        },
+      ],
+    },
+    {
+      id: 'rumor-miller-answer',
+      speaker: 'Пані Міллер',
+      text: '«Скажу: я бачила, як вони вийшли з будівлі. Решта — мої здогади». Вона зітхає. «А якщо мене не послухають, то принаймні не підкидатиму їм нових подробиць. До речі, ви вже читали той детектив, де вбивця виявився бібліотекарем? Ні? Тоді я мовчу».',
+      options: [
+        {
+          id: 'rumor-miller-answer-return',
+          label: 'Повернутися до вечора читань',
+          next: 'gathering',
+          grants: ['final_miller_private_followup'],
+        },
+      ],
+    },
+    {
+      id: 'rumor-miller-books',
+      speaker: 'Пані Міллер',
+      text: '«От бачите, книжки — безпечніші. Хоча я б посперечалася». Вона дістає з торби «Ніхто не знає кінцівки» й постукує пальцем по обкладинці. «Тут кожен свідок певен, що має рацію. Я сміялася, доки не впізнала себе».',
+      options: [
+        {
+          id: 'rumor-miller-books-return',
+          label: 'Запропонувати їй місце біля столу',
+          next: 'gathering',
+          grants: ['final_miller_private_followup'],
         },
       ],
     },
