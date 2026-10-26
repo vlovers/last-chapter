@@ -1185,6 +1185,13 @@ export const finalReading: DialogueStory = {
       ],
       options: [
         {
+          id: 'chapter-confront-lie',
+          label: 'Визнати перед усіма, що ви назвали здогад зізнанням',
+          next: 'chapter-confession',
+          requires: ['missing_chapter_false_claim'],
+          unless: ['chapter_lie_admitted'],
+        },
+        {
           id: 'chapter-check-provenance',
           label: '«Спершу порівняймо дати й почерк»',
           next: 'chapter-provenance',
@@ -1208,6 +1215,25 @@ export const finalReading: DialogueStory = {
           label: 'Заявити, що Елеонора приховувала рукопис',
           next: 'chapter-reckoning-result',
           grants: ['chapter_accused_eleanor'],
+        },
+      ],
+    },
+    {
+      id: 'chapter-confession',
+      speaker: 'Пані Міллер',
+      text: '«Тобто ти сам це придумав?» Міллер відсуває чашку. «А я вже переказала Сільвії». Айріс не дивиться на вас. Елеонора каже: «Добре, що сказав. Але тепер сам поясниш Сільвії, чому вона почула про батька таке».',
+      options: [
+        {
+          id: 'chapter-confession-own',
+          label: '«Я поговорю із Сільвією після читання»',
+          next: 'chapter-reckoning',
+          grants: ['chapter_lie_admitted', 'chapter_apology_promised'],
+        },
+        {
+          id: 'chapter-confession-deflect',
+          label: '«Міллер сама вирішила повірити»',
+          next: 'chapter-reckoning',
+          grants: ['chapter_lie_admitted', 'chapter_blame_shifted'],
         },
       ],
     },
