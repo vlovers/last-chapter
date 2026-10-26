@@ -9,6 +9,7 @@ import {
 import { millerVisit } from '../src/content/first-day';
 import { annaVisit } from '../src/content/anna';
 import { thomasVisit } from '../src/content/thomas';
+import { finalReading } from '../src/content/day-five';
 
 describe('Ukrainian dialogue slice', () => {
   it('has a valid, fully linked authored graph', () => {
@@ -73,6 +74,42 @@ describe('Ukrainian dialogue slice', () => {
     expect(state.flags).toContain('anna_heard_rumor_admission');
     expect(state.flags).toContain('anna_chose_maps');
     expect(currentNode(annaVisit, state).id).toBe('end');
+  });
+
+
+  it('keeps the final gathering valid and closable with or without rumors', () => {
+    expect(validateDialogue(finalReading)).toEqual([]);
+    let neutral = startDialogue(finalReading);
+    neutral = selectOption(finalReading, neutral, 'open');
+    const neutralChoices = availableOptions(finalReading, neutral).map((o) => o.id);
+    expect(neutralChoices).not.toContain('rumor-player-accountability');
+    expect(neutralChoices).toContain('close');
+
+    let amplified = { ...startDialogue(finalReading), flags: ['rumor_heard', 'rumor_amplified'] };
+    amplified = selectOption(finalReading, amplified, 'open');
+    const choices = availableOptions(finalReading, amplified).map((o) => o.id);
+    expect(choices).toContain('rumor-player-accountability');
+    expect(choices).toContain('rumor-miller-followup');
+    expect(choices).toContain('close');
+  });
+
+  it('supports day-five accountability without forced forgiveness or a blocked ending', () => {
+    let state = { ...startDialogue(finalReading), flags: ['rumor_heard', 'rumor_amplified'] };
+    for (const choice of ['open', 'rumor-player-accountability', 'rumor-own-public', 'rumor-player-own-return']) {
+      state = selectOption(finalReading, state, choice);
+    }
+    expect(state.flags).toContain('final_player_rumor_owned');
+    expect(state.flags).toContain('final_player_rumor_accountability');
+    expect(availableOptions(finalReading, state).map((o) => o.id)).toContain('close');
+  });
+
+  it('lets Miller discuss an unidentified sighting without involving the couple', () => {
+    let state = { ...startDialogue(finalReading), flags: ['rumor_heard', 'rumor_challenged'] };
+    for (const choice of ['open', 'rumor-miller-followup', 'rumor-miller-listen', 'rumor-miller-answer-return']) {
+      state = selectOption(finalReading, state, choice);
+    }
+    expect(state.flags).toContain('final_miller_private_followup');
+    expect(availableOptions(finalReading, state).map((o) => o.id)).toContain('close');
   });
 
   it('rejects options that are unavailable at the current node', () => {
