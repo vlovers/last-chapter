@@ -1,3 +1,4 @@
+import { bellwickAvailable, bellwickSchedule, bellwickStorageKey, bellwickStory, type BellwickEncounterId } from './bellwick-schedule';
 import {
   decodeOliverProgress,
   encodeOliverProgress,
@@ -46,7 +47,12 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     throw new Error('Не знайдено панель історії');
   }
   const controls = { journal, catalog };
-  let mode: 'journal' | 'catalog' | 'conversation' | 'oliver' | null = null;
+  let mode: 'journal' | 'catalog' | 'conversation' | 'oliver' | 'bellwick' | null = null;
+  let selectedBellwick: BellwickEncounterId = 'mara';
+  let bellwickFinished: string[] = [];
+  const bellwickSessions: Partial<Record<BellwickEncounterId, DialogueState>> = {};
+  try { const raw = localStorage.getItem(bellwickStorageKey); if (raw) { const parsed: unknown = JSON.parse(raw); if (parsed && typeof parsed === 'object' && 'finished' in parsed && Array.isArray(parsed.finished)) bellwickFinished = parsed.finished.filter((id: unknown): id is string => typeof id === 'string' && bellwickSchedule.some((scene) => scene.id === id)); } } catch { /* optional */ }
+  const saveBellwick = () => { try { localStorage.setItem(bellwickStorageKey, JSON.stringify({ finished: bellwickFinished })); } catch { /* optional */ } };
   const oliverKey = 'last-chapter:optional:oliver:v1';
   let oliverProgress = freshOliverProgress();
   try {
@@ -119,6 +125,10 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   oliverButton.type = 'button';
   oliverButton.textContent = 'Поговорити з Олівером';
   root.querySelector('.story-toolbar-actions')?.append(oliverButton);
+  const bellwickButton = document.createElement('button');
+  bellwickButton.type = 'button';
+  bellwickButton.textContent = 'Розмови в Беллвіку';
+  root.querySelector('.story-toolbar-actions')?.append(bellwickButton);
   let filter: CatalogFilter = 'all';
   const element = <K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -161,6 +171,11 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     conversationButton.title = count ? `Доступно тем: ${count}` : 'Доступні розмови завершено';
     conversationButton.setAttribute('aria-expanded', String(mode === 'conversation'));
     oliverButton.hidden = story.day !== 2 || oliverFinished;
+    const availableBellwick = bellwickAvailable(story.day, bellwickFinished);
+    bellwickButton.hidden = availableBellwick.length === 0;
+    bellwickButton.dataset.new = String(availableBellwick.length);
+    bellwickButton.setAttribute('aria-expanded', String(mode === 'bellwick'));
+    if (mode === 'bellwick' && bellwickButton.hidden) mode = null;
     oliverButton.setAttribute('aria-expanded', String(mode === 'oliver'));
     if (mode === 'oliver' && oliverButton.hidden) mode = null;
     panel.hidden = mode === null;
@@ -178,7 +193,39 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       });
       panel.append(close);
     }
-    if (mode === 'oliver') {
+    if (mode === 'bellwick') {
+      const available = bellwickAvailable(story.day, bellwickFinished);
+      if (!available.some((entry) => entry.id === selectedBellwick)) selectedBellwick = available[0]?.id ?? 'mara';
+      const selector = element('div', '', 'story-filters');
+      for (const scene of available) {
+        const button = element('button', scene.title);
+        button.type = 'button';
+        button.setAttribute('aria-pressed', String(selectedBellwick === scene.id));
+        button.addEventListener('click', () => { selectedBellwick = scene.id; refresh(); });
+        selector.append(button);
+      }
+      panel.append(selector);
+      const scene = bellwickSchedule.find((entry) => entry.id === selectedBellwick);
+      if (scene && available.length) {
+        const script = bellwickStory(selectedBellwick);
+        const session = bellwickSessions[selectedBellwick] ?? startDialogue(script);
+        const node = currentNode(script, session);
+        panel.append(element('h2', scene.title), element('h3', node.speaker), element('p', node.text));
+        const options = availableOptions(script, session);
+        for (const option of options) {
+          const button = element('button', option.label);
+          button.type = 'button';
+          button.addEventListener('click', () => { bellwickSessions[selectedBellwick] = selectOption(script, session, option.id); refresh(); });
+          panel.append(button);
+        }
+        if (!options.length) {
+          const finish = element('button', 'Завершити розмову');
+          finish.type = 'button';
+          finish.addEventListener('click', () => { bellwickFinished = [...new Set([...bellwickFinished, selectedBellwick])]; delete bellwickSessions[selectedBellwick]; saveBellwick(); refresh(); });
+          panel.append(finish);
+        }
+      }
+    } else if (mode === 'oliver') {
       if (!oliverSession) oliverSession = startDialogue(oliverUnreadBook);
       const node = currentNode(oliverUnreadBook, oliverSession);
       panel.append(element('h2', 'Олівер · Книжка, якої ми не читали'));
@@ -363,6 +410,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   };
   const conversationClick = () => toggle('conversation');
   const oliverClick = () => toggle('oliver');
+  const bellwickClick = () => toggle('bellwick');
   const journalClick = () => toggle('journal');
   const catalogClick = () => toggle('catalog');
   const continueClick = () => {
@@ -372,6 +420,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   };
   conversationButton.addEventListener('click', conversationClick);
   oliverButton.addEventListener('click', oliverClick);
+  bellwickButton.addEventListener('click', bellwickClick);
   journal.addEventListener('click', journalClick);
   catalog.addEventListener('click', catalogClick);
   continueButton.addEventListener('click', continueClick);
@@ -412,6 +461,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   window.__lastChapterRefresh = refresh;
   refresh();
   return () => {
+    bellwickButton.removeEventListener('click', bellwickClick);
+    bellwickButton.remove();
     oliverButton.removeEventListener('click', oliverClick);
     oliverButton.remove();
     conversationButton.removeEventListener('click', conversationClick);
