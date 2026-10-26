@@ -102,6 +102,27 @@ export const finalReading: DialogueStory = {
           next: 'bookseller-reflection',
           unless: ['final_bookseller_reflection_heard'],
         },
+        {
+          id: 'day-four-iris-callback',
+          label: 'Поговорити з Айріс про право обирати, де бути вдома',
+          next: 'day-four-iris-callback',
+          requires: ['iris_day_four_boundary_heard'],
+          unless: ['final_day_four_iris_heard'],
+        },
+        {
+          id: 'day-four-mara-callback',
+          label: 'Запитати Мару про її власні плани',
+          next: 'day-four-mara-callback',
+          requires: ['mara_day_four_own_story_heard'],
+          unless: ['final_day_four_mara_heard'],
+        },
+        {
+          id: 'day-four-leo-callback',
+          label: 'Повернутися до розмови з Лео про минуле',
+          next: 'day-four-leo-callback',
+          requires: ['leo_day_four_future_heard'],
+          unless: ['final_day_four_leo_heard'],
+        },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
       ],
     },
@@ -551,6 +572,75 @@ export const finalReading: DialogueStory = {
           label: 'Закрити зошит',
           next: 'gathering',
           grants: ['final_bookseller_reflection_heard', 'bookseller_values_change'],
+        },
+      ],
+    },
+    {
+      id: 'day-four-iris-callback',
+      speaker: 'Айріс',
+      text: '«Я залишила чисту сторінку в альбомі. Не знаю, де намалюю наступне вікно, але більше не соромлюся цього».',
+      textWhen: [
+        {
+          requires: ['iris_day_four_respected_freedom'],
+          text: '«Я подала заявку на виставку в іншому місті. Можливо, поїду. І цього разу не називатиму від’їзд втечею».',
+        },
+        {
+          requires: ['iris_day_four_supported_belonging'],
+          text: '«Я залишила тут свої малюнки, а собі — право передумати. Виявляється, належати до місця не означає належати йому».',
+        },
+      ],
+      options: [
+        {
+          id: 'day-four-iris-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_day_four_iris_heard'],
+        },
+      ],
+    },
+    {
+      id: 'day-four-mara-callback',
+      speaker: 'Мара',
+      text: '«Сьогодні я вперше прийшла не тому, що мене попросили. Просто хотіла бути тут».',
+      textWhen: [
+        {
+          requires: ['mara_day_four_chose_own_time'],
+          text: '«Завтра пекарня працюватиме без мене. Я взяла вихідний і купила книжку для себе. Можеш уявити?»',
+        },
+        {
+          requires: ['mara_day_four_named_own_needs'],
+          text: '«Я сказала Лео, що мені потрібна не обіцянка ідеального майбутнього, а чесна розмова зараз. Він вислухав. Це вже багато».',
+        },
+      ],
+      options: [
+        {
+          id: 'day-four-mara-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_day_four_mara_heard'],
+        },
+      ],
+    },
+    {
+      id: 'day-four-leo-callback',
+      speaker: 'Лео',
+      text: '«Я більше не хочу перетворювати кожен спогад на виправдання. Минуле було справжнім. І сьогоднішній день теж».',
+      textWhen: [
+        {
+          requires: ['leo_day_four_chose_honesty'],
+          text: '«Ми з Марою поговорили. Я сказав, що іноді боюся власних спогадів. Вона не вимагала звіту. Ми просто залишилися поруч».',
+        },
+        {
+          requires: ['leo_day_four_respected_privacy'],
+          text: '«Я залишив старий квиток у книжці. Не як таємницю і не як обіцянку повернутися. Просто як частину свого життя».',
+        },
+      ],
+      options: [
+        {
+          id: 'day-four-leo-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_day_four_leo_heard'],
         },
       ],
     },
