@@ -1,12 +1,11 @@
+import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const output = process.env.QA_OUTPUT || 'docs/qa/mobile-overhaul';
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({
-  channel: process.env.BROWSER_CHANNEL || 'chrome',
-  headless: true,
-});
+const fixture = await launchQaBrowser(chromium);
+const browser = fixture.browser;
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } }),
   errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));
@@ -105,5 +104,5 @@ try {
   await page.screenshot({ path: `${output}/frank-failure.png` });
   throw e;
 } finally {
-  await browser.close();
+  await fixture.close();
 }

@@ -1262,3 +1262,17 @@ body.reduced * {
 #dialogue.compact #choices {
   max-height: 20svh;
 }
+
+/* The day control states its action; optional conversations remain secondary. */
+#story-continue::after {
+  content: attr(data-action);
+  display: block;
+  font-size: 11px;
+  color: #e5c99d;
+  line-height: 1.3;
+}
+.optional-hint {
+  color: #685c48;
+  font-size: 13px;
+  line-height: 1.5;
+}

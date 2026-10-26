@@ -7,11 +7,13 @@ export interface Clue {
   readonly detail: string;
   readonly flag: string;
   readonly required: readonly string[];
+  readonly kind: 'observation' | 'inference';
 }
 
 export const CLUES: readonly Clue[] = [
   {
     id: 'bookmark',
+    kind: 'observation',
     label: 'Закладка біля вікна',
     detail:
       'Між книжками на підставці біля вікна лежить закладка з нерівним відбитком старого штампа книгарні.',
@@ -20,6 +22,7 @@ export const CLUES: readonly Clue[] = [
   },
   {
     id: 'stamp',
+    kind: 'observation',
     label: 'Старий штамп',
     detail:
       'У прилавку — штамп з таким самим надщербленим краєм. Його використовували ще до затоплення.',
@@ -28,6 +31,7 @@ export const CLUES: readonly Clue[] = [
   },
   {
     id: 'shelf',
+    kind: 'observation',
     label: 'Нотатка на форзаці',
     detail: 'За книжками є короткий запис: «Не плутати дату бронювання з датою отримання».',
     flag: 'clue_shelf',
@@ -35,6 +39,7 @@ export const CLUES: readonly Clue[] = [
   },
   {
     id: 'timeline',
+    kind: 'inference',
     label: 'Зіставити три знахідки',
     detail:
       'Закладка, штамп і нотатка вказують на старі записи замовлень. Це привід перевірити хронологію, а не звинувачувати когось.',

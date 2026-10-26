@@ -1,13 +1,12 @@
+import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
 const output = process.env.QA_OUTPUT || 'docs/qa/mobile-overhaul';
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({
-  channel: process.env.BROWSER_CHANNEL || 'chrome',
-  headless: true,
-});
+const fixture = await launchQaBrowser(chromium);
+const browser = fixture.browser;
 const errors = [],
   results = [];
 const snapshot = (page) =>
@@ -269,5 +268,5 @@ try {
   if (page && !page.isClosed()) await shot(page, 'failure');
   throw e;
 } finally {
-  await browser.close();
+  await fixture.close();
 }

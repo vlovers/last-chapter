@@ -1,3 +1,4 @@
+import { evidenceKindLabels } from './journal-facts';
 import type { FiveDayStory } from './five-day-story';
 import {
   answerConversation,
@@ -160,8 +161,11 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     continueButton.textContent = `День ${story.day} · ${story.visitor}`;
     continueButton.setAttribute(
       'aria-label',
-      `День ${story.day} · ${story.visitor} · Продовжити історію`,
+      `День ${story.day} · ${story.visitor} · ${story.guidance.action}`,
     );
+    continueButton.dataset.action = story.guidance.action;
+    continueButton.title = story.guidance.text;
+    continueButton.setAttribute('data-stage', story.stage);
     for (const [name, button] of Object.entries(controls)) {
       button.setAttribute('aria-expanded', String(mode === name));
     }
@@ -221,7 +225,15 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         });
         topicSelector.append(button);
       }
-      panel.append(topicSelector, element('h2', selectedTopic.title));
+      panel.append(
+        topicSelector,
+        element('h2', selectedTopic.title),
+        element(
+          'p',
+          'Додаткова розмова. Її можна відкласти й продовжити пізніше.',
+          'optional-hint',
+        ),
+      );
       const activeConversation =
         selectedTopic.id === maraBookClub.id
           ? conversation
@@ -325,10 +337,19 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         }
       } else if (journalTab === 'clues') {
         const collected = story.evidence.filter((clue) => clue.collected);
+        for (const entry of story.knownEvidence) {
+          const card = element('article', '', 'evidence-card');
+          card.append(
+            element('small', `${evidenceKindLabels[entry.kind]} · ${entry.source}`),
+            element('h3', entry.title),
+            element('p', entry.detail),
+          );
+          panel.append(card);
+        }
         for (const clue of collected) {
           const card = element('article', '', 'evidence-card');
           card.append(
-            element('small', 'Знахідка · спостереження'),
+            element('small', evidenceKindLabels[clue.kind]),
             element('h3', clue.label),
             element('p', clue.detail),
           );
@@ -338,7 +359,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         panel.append(
           element(
             'p',
-            collected.length
+            collected.length || story.knownEvidence.length
               ? 'Що ці знахідки підтверджують? Про що варто запитати, не роблячи висновків за інших?'
               : 'Огляньте книгарню. Тут з’являться лише досліджені знахідки.',
           ),
@@ -417,6 +438,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       if (request) {
         const brief = element('div', '', 'evidence-card');
         brief.append(element('strong', `Підбираємо книжку · ${request.customer}`));
+        brief.append(element('p', request.prompt));
         if (request.asked) brief.append(element('p', request.answer));
         else {
           const clarify = element('button', request.question);
@@ -515,7 +537,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   };
   const toggle = (next: 'journal' | 'catalog' | 'conversation') => {
     returnFocus = document.activeElement as HTMLElement;
-    reaction = null;
+    reaction = next === 'catalog' ? story.lastRecommendation : null;
     mode = mode === next ? null : next;
     refresh();
     if (mode) (panel.querySelector('button') ?? panel).focus({ preventScroll: true });
@@ -526,7 +548,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const continueClick = () => {
     mode = null;
     refresh();
-    window.dispatchEvent(new CustomEvent('last-chapter:continue'));
+    window.dispatchEvent(
+      new CustomEvent(story.request ? 'last-chapter:catalog-open' : 'last-chapter:continue'),
+    );
   };
   conversationButton.addEventListener('click', conversationClick);
   journal.addEventListener('click', journalClick);
@@ -583,7 +607,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   };
   const openOrderCatalog = () => {
     mode = 'catalog';
-    reaction = null;
+    reaction = story.lastRecommendation;
     refresh();
     panel.querySelector<HTMLButtonElement>('button')?.focus();
   };
@@ -600,6 +624,12 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     panel.removeEventListener('keydown', panelKeys);
     window.removeEventListener('last-chapter:catalog-open', openOrderCatalog);
     window.removeEventListener('last-chapter:new-game', newGame);
-    window.__lastChapterRefresh = undefined;
+    if (window.__lastChapterRefresh === refresh) window.__lastChapterRefresh = undefined;
+    mode = null;
+    panel.hidden = true;
+    panel.replaceChildren();
+    document.body.classList.remove('reading');
+    const toolbar = root.querySelector<HTMLElement>('.story-toolbar');
+    if (toolbar) toolbar.inert = false;
   };
 }

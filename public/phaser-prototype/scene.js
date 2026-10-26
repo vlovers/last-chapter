@@ -161,8 +161,7 @@ class Bookshop extends Phaser.Scene {
       const label = target?.querySelector('span');
       if (label) label.textContent = spot.label;
     }
-    $('#objective').textContent =
-      `День ${this.story.day} · ${this.story.visitor}. Ваші рішення зберігаються.`;
+    $('#objective').textContent = `День ${this.story.day} · ${this.story.guidance.text}`;
     const eyebrow = document.querySelector('.masthead .eyebrow');
     if (eyebrow) eyebrow.textContent = `Беллвік · День ${this.story.day}`;
     $('#stage').dataset.day = String(this.story.day);

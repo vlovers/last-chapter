@@ -1,6 +1,8 @@
 import {
   assessRecommendation,
   requestContext,
+  orderDefinition,
+  orderBook,
   restoreService,
   SERVICE_KEY,
 } from '../game/recommendation';
@@ -30,13 +32,12 @@ import {
 import { availableOptions, currentNode } from '../game/dialogue';
 import { decodeSave, encodeSave, SAVE_KEY } from '../game/save';
 import { castMember } from '../game/cast';
-import { bookForChoice } from '../content/books';
 import { seasonEnding } from '../game/endings';
 import { inspectShopSpot, shopSpots, type ShopSpotId } from '../game/exploration';
 import { completedOrders } from '../game/service';
 import { storyProgress } from '../game/progress';
 import { catalogEntries, type CatalogFilter } from '../game/catalog';
-import { journalFacts } from './journal-facts';
+import { journalFacts, journalEvidence } from './journal-facts';
 import { accessibleClues, collectClue } from './clue-board';
 
 const stagePeople: Partial<Record<ChapterStage, { name: string; actor: string | null }>> = {
@@ -133,6 +134,16 @@ export class FiveDayStory {
       .filter(([flag]) => this.chapter.flags.includes(flag))
       .map(([, text]) => text);
   }
+  get knownEvidence() {
+    return journalEvidence
+      .filter((entry) => this.chapter.flags.includes(entry.flag))
+      .map((entry) => ({
+        title: entry.title,
+        kind: entry.kind,
+        source: entry.source,
+        detail: journalFacts.find(([flag]) => flag === entry.flag)![1],
+      }));
+  }
   get inspectedSpots(): readonly string[] {
     return shopSpots
       .filter((spot) => this.chapter.flags.includes(spot.discoveryFlag))
@@ -151,24 +162,27 @@ export class FiveDayStory {
   }
   get recommendationChoices() {
     const node = currentNode(stageStory(this.stage), this.chapter.dialogue);
-    if (!(
-      (['miller', 'mara'].includes(this.stage) && node.id === 'order') ||
-      (this.stage === 'anna' && node.id === 'books')
-    ))
+    const order = orderDefinition(this.stage, node.id);
+    if (!order || order.choices.some((choice) => this.chapter.flags.includes(choice.receipt)))
       return [];
-    return availableOptions(stageStory(this.stage), this.chapter.dialogue).flatMap((option) => {
-      const bookId =
-        this.stage === 'anna'
-          ? ({ maps: 'roads', mystery: 'witnesses' } as Record<string, string>)[option.id]
-          : option.id;
-      return this.catalog().some((book) => book.id === bookId) ? [{ id: option.id, bookId }] : [];
-    });
+    const available = availableOptions(stageStory(this.stage), this.chapter.dialogue);
+    return order.choices.flatMap((choice) =>
+      available.some((option) => option.id === choice.choice)
+        ? [{ id: choice.choice, bookId: choice.book }]
+        : [],
+    );
   }
+
   get request() {
     if (!this.recommendationChoices.length) return null;
     const context = requestContext(this.stage);
     return context
-      ? { ...context, asked: this.service.asked.includes(this.stage), customer: this.visitor }
+      ? {
+          ...context,
+          asked: this.service.asked.includes(this.stage),
+          customer: this.visitor,
+          prompt: currentNode(stageStory(this.stage), this.chapter.dialogue).text,
+        }
       : null;
   }
   clarifyRequest() {
@@ -193,6 +207,44 @@ export class FiveDayStory {
         }),
       );
     return { ...reaction, accepted: Boolean(choice) };
+  }
+  get lastRecommendation() {
+    const order = orderDefinition(this.stage);
+    if (!order) return null;
+    const attempt = [...this.service.attempts]
+      .reverse()
+      .find((attempt) => attempt.stage === this.stage);
+    // The original receipt flag wins over optional diagnostics, including old saves
+    // or a purchase made directly through the authored dialogue rather than catalog.
+    const receipt = order.choices.find((choice) => this.chapter.flags.includes(choice.receipt));
+    const bookId = receipt?.book ?? attempt?.book;
+    if (!bookId) return null;
+    const accepted = Boolean(receipt);
+    if (!accepted && !this.request) return null;
+    const reaction = assessRecommendation(this.stage, bookId);
+    return reaction ? { text: reaction.text, accepted } : null;
+  }
+  get guidance() {
+    if (this.request)
+      return {
+        action: 'Обрати книжку',
+        text: `${this.visitor} чекає на книжку. Відкрийте каталог і запропонуйте видання.`,
+      };
+    if (checkpoints[this.stage])
+      return {
+        action: 'Наступний день',
+        text: 'День завершено. Продовжте історію, коли будете готові.',
+      };
+    if (this.stage === 'season-complete')
+      return {
+        action: 'Підсумок',
+        text: 'Історію завершено. Можна перечитати нотатник або почати знову.',
+      };
+    const node = this.open();
+    return {
+      action: node.choices.some((choice) => choice.id === '__advance') ? 'Далі' : 'Розмова',
+      text: `${this.visitor}. Натисніть кнопку дня, щоб продовжити. Огляди й додаткові розмови — за бажанням.`,
+    };
   }
   private persistService() {
     try {
@@ -242,16 +294,7 @@ export class FiveDayStory {
     const story = stageStory(this.stage);
     const node = currentNode(story, this.chapter.dialogue);
     const choices = availableOptions(story, this.chapter.dialogue).map((option) => {
-      const book =
-        this.stage === 'anna' && node.id === 'books'
-          ? this.catalog().find(
-              (b) =>
-                b.id ===
-                ({ maps: 'roads', mystery: 'witnesses' } as Record<string, string>)[option.id],
-            )
-          : ['miller', 'mara'].includes(this.stage)
-            ? bookForChoice(this.stage as 'miller' | 'mara', node.id, option.id)
-            : undefined;
+      const book = orderBook(this.stage, node.id, option.id);
       return {
         id: option.id,
         label: option.label,

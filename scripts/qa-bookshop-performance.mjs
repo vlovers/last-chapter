@@ -1,12 +1,11 @@
+import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const output = process.env.QA_OUTPUT || 'docs/qa/mobile-overhaul';
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({
-  channel: process.env.BROWSER_CHANNEL || 'chrome',
-  headless: true,
-});
+const fixture = await launchQaBrowser(chromium);
+const browser = fixture.browser;
 const results = [];
 try {
   for (const rate of [1, 4]) {
@@ -65,5 +64,5 @@ try {
   );
   console.log(JSON.stringify(results, null, 2));
 } finally {
-  await browser.close();
+  await fixture.close();
 }
