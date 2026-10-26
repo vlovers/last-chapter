@@ -90,6 +90,10 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
     for (const option of node.options) {
       if (options.has(option.id)) errors.push(`Duplicate option: ${node.id}/${option.id}`);
       options.add(option.id);
+      if (!option.label.trim()) errors.push(`Empty option label: ${node.id}/${option.id}`);
+      if ((option.requires ?? []).some((flag) => (option.unless ?? []).includes(flag))) {
+        errors.push(`Impossible option condition: ${node.id}/${option.id}`);
+      }
     }
   }
   if (!ids.has(story.start)) errors.push('Missing start');
