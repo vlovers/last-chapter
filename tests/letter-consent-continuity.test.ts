@@ -43,13 +43,23 @@ describe('Private letter: consent and trust across days four and five', () => {
   it('records a privacy breach without silently erasing it after respecting Iris', () => {
     const iris = play(
       irisDecision,
-      ['welcome', 'letter', 'admit-opened', 'breach-back', 'letter', 'respect-opened', 'respect-back', 'leave'],
+      ['welcome', 'letter', 'admit-opened', 'breach-back', 'leave'],
       ['saw_envelope', 'opened_private_letter'],
     );
     expect(iris.flags).toContain('opened_private_letter');
     expect(iris.flags).toContain('iris_letter_breach_admitted');
-    expect(iris.flags).toContain('iris_letter_choice_respected');
     expect(iris.flags).not.toContain('iris_letter_delivery_consented');
+  });
+
+  it('allows respecting Iris after opening the letter without erasing the breach', () => {
+    const iris = play(
+      irisDecision,
+      ['welcome', 'letter', 'respect-opened', 'respect-back', 'leave'],
+      ['saw_envelope', 'opened_private_letter'],
+    );
+    expect(iris.flags).toContain('opened_private_letter');
+    expect(iris.flags).toContain('iris_letter_choice_respected');
+    expect(iris.flags).not.toContain('iris_letter_breach_admitted');
   });
 
   it('Leo can ask for a conversation but cannot authorize Iris letter delivery', () => {
