@@ -23,7 +23,10 @@ describe('Bellwick optional encounters: complete ten-scene batch', () => {
     for (const route of ['a', 'b', 'c']) {
       let state = startDialogue(story);
       for (const id of ['talk', 'choice-' + route, 'follow-' + route, 'afterthought-end']) {
-        expect(availableOptions(story, state).some((option) => option.id === id), name + '/' + id).toBe(true);
+        expect(
+          availableOptions(story, state).some((option) => option.id === id),
+          name + '/' + id,
+        ).toBe(true);
         state = selectOption(story, state, id);
       }
       expect(currentNode(story, state).id).toBe('end');
