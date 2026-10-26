@@ -1,22 +1,36 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { FiveDayStory } from '../src/phaser/five-day-story';
 import { SAVE_KEY } from '../src/game/save';
+
+const originalStorage = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+
+afterEach(() => {
+  if (originalStorage) Object.defineProperty(globalThis, 'localStorage', originalStorage);
+  else Reflect.deleteProperty(globalThis, 'localStorage');
+});
 
 function storage() {
   const values = new Map<string, string>();
   return {
     getItem: (key: string) => values.get(key) ?? null,
-    setItem: (key: string, value: string) => { values.set(key, value); },
-    removeItem: (key: string) => { values.delete(key); },
-    clear: () => { values.clear(); },
+    setItem: (key: string, value: string) => {
+      values.set(key, value);
+    },
+    removeItem: (key: string) => {
+      values.delete(key);
+    },
+    clear: () => {
+      values.clear();
+    },
     key: (index: number) => [...values.keys()][index] ?? null,
-    get length() { return values.size; },
+    get length() {
+      return values.size;
+    },
   };
 }
 
 describe('Playable UI five-day journey', () => {
   it('persists a first-day choice across a new game controller instance', () => {
-    const previous = globalThis.localStorage;
     const memory = storage();
     Object.defineProperty(globalThis, 'localStorage', {
       configurable: true,
@@ -35,15 +49,11 @@ describe('Playable UI five-day journey', () => {
       expect(resumed.stage).toBe(game.stage);
       expect(resumed.open()).toEqual(after);
     } finally {
-      Object.defineProperty(globalThis, 'localStorage', {
-        configurable: true,
-        value: previous,
-      });
+      // afterEach restores the original property descriptor.
     }
   });
 
   it('refuses an internal advance action while conversation choices remain', () => {
-    const previous = globalThis.localStorage;
     Object.defineProperty(globalThis, 'localStorage', {
       configurable: true,
       value: storage(),
@@ -54,10 +64,7 @@ describe('Playable UI five-day journey', () => {
       expect(game.stage).toBe('miller');
       expect(() => game.choose('__restart')).toThrow();
     } finally {
-      Object.defineProperty(globalThis, 'localStorage', {
-        configurable: true,
-        value: previous,
-      });
+      // afterEach restores the original property descriptor.
     }
   });
 });
