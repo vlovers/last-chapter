@@ -1,6 +1,6 @@
 import type { ChapterState, ChapterStage } from './chapter';
 import { stageStory } from './chapter';
-import { currentNode } from './dialogue';
+import { currentNode, restoreDialogueProgress } from './dialogue';
 import { noraVisit } from '../content/nora';
 
 export const SAVE_KEY = 'last-chapter:save:v1';
@@ -43,15 +43,19 @@ const stages: readonly ChapterStage[] = [
 ];
 
 export function encodeSave(state: ChapterState): string {
+  // Reconstruct legacy completion progress before trimming the choice history.
+  const dialogue = state.dialogue.completed === undefined
+    ? restoreDialogueProgress(stageStory(state.stage), state.dialogue)
+    : state.dialogue;
   const save: SavedChapter = {
     version: VERSION,
     stage: state.stage,
     node: state.dialogue.node,
     // Preserve world discoveries and flags produced in the active dialogue.
-    flags: [...new Set([...state.flags, ...state.dialogue.flags])],
-    history: state.dialogue.history.slice(-MAX_HISTORY),
-    ...(state.dialogue.completed !== undefined
-      ? { completed: state.dialogue.completed, pending: state.dialogue.pending ?? [] }
+    flags: [...new Set([...state.flags, ...dialogue.flags])],
+    history: dialogue.history.slice(-MAX_HISTORY),
+    ...(dialogue.completed !== undefined
+      ? { completed: dialogue.completed, pending: dialogue.pending ?? [] }
       : {}),
   };
   return JSON.stringify(save);
