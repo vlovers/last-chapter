@@ -16,7 +16,7 @@ describe('Day 4: Leo and mutual consent', () => {
     const options = availableOptions(leoDecision, greet).map((option) => option.id);
     expect(options).not.toContain('letter');
     expect(options).not.toContain('evidence');
-    const informed = { ...greet, flags: ['saw_envelope', 'eleanor_confirmed_reservation'] };
+    const informed = { ...greet, flags: ['saw_envelope', 'eleanor_timeline_checked'] };
     const available = availableOptions(leoDecision, informed).map((option) => option.id);
     expect(available).toContain('letter');
     expect(available).toContain('evidence');

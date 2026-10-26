@@ -23,7 +23,8 @@ describe('Finale choice-dependent narration', () => {
       const id = `final-v3-${name}`;
       const original = finalReading.nodes.find((node) => node.id === id);
       expect(original).toBeDefined();
-      const [a, b] = original!.textWhen ?? [];
+      const a = original!.textWhen?.find((entry) => entry.requires.includes(first));
+      const b = original!.textWhen?.find((entry) => entry.requires.includes(second));
       expect(a).toBeDefined();
       expect(b).toBeDefined();
       if (!a || !b) throw new Error('Missing conditional variants: ' + id);

@@ -1,3 +1,24 @@
+import { decodeBellwickProgress, encodeBellwickProgress } from './bellwick-progress';
+import {
+  bellwickAvailable,
+  bellwickSchedule,
+  bellwickStorageKey,
+  bellwickStory,
+  type BellwickEncounterId,
+} from './bellwick-schedule';
+import {
+  decodeOliverProgress,
+  encodeOliverProgress,
+  freshOliverProgress,
+} from './optional-oliver-state';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  type DialogueState,
+} from '../game/dialogue';
+import { oliverUnreadBook } from '../content/optional/oliver';
 import type { FiveDayStory } from './five-day-story';
 import {
   answerConversation,
@@ -33,7 +54,53 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     throw new Error('Не знайдено панель історії');
   }
   const controls = { journal, catalog };
-  let mode: 'journal' | 'catalog' | 'conversation' | null = null;
+  let mode: 'journal' | 'catalog' | 'conversation' | 'oliver' | 'bellwick' | null = null;
+  let selectedBellwick: BellwickEncounterId = 'mara';
+  let bellwickProgress = decodeBellwickProgress(
+    (() => {
+      try {
+        return localStorage.getItem(bellwickStorageKey);
+      } catch {
+        return null;
+      }
+    })(),
+  );
+  let bellwickFinished: BellwickEncounterId[] = [...bellwickProgress.finished];
+  let bellwickSessions: Partial<Record<BellwickEncounterId, DialogueState>> = {
+    ...bellwickProgress.sessions,
+  };
+  const saveBellwick = () => {
+    try {
+      localStorage.setItem(
+        bellwickStorageKey,
+        encodeBellwickProgress({ finished: bellwickFinished, sessions: bellwickSessions }),
+      );
+    } catch {
+      /* optional */
+    }
+  };
+  const oliverKey = 'last-chapter:optional:oliver:v1';
+  let oliverProgress = freshOliverProgress();
+  try {
+    oliverProgress = decodeOliverProgress(localStorage.getItem(oliverKey));
+  } catch {
+    /* optional */
+  }
+  let oliverSession: DialogueState | null = oliverProgress.dialogue;
+  let oliverFinished = oliverProgress.finished;
+  const saveOliver = () => {
+    try {
+      localStorage.setItem(
+        oliverKey,
+        encodeOliverProgress({
+          finished: oliverFinished,
+          dialogue: oliverSession ?? startDialogue(oliverUnreadBook),
+        }),
+      );
+    } catch {
+      /* optional */
+    }
+  };
   const conversationKey = 'last-chapter:conversation:mara:v1';
   let selectedTopic = maraBookClub;
   const letterKey = 'last-chapter:conversation:mara:letter:v1';
@@ -80,6 +147,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   conversationButton.setAttribute('aria-label', 'Поговорити з Марою');
   conversationButton.setAttribute('aria-expanded', 'false');
   root.querySelector('.story-toolbar-actions')?.append(conversationButton);
+  const oliverButton = document.createElement('button');
+  oliverButton.type = 'button';
+  oliverButton.textContent = 'Поговорити з Олівером';
+  root.querySelector('.story-toolbar-actions')?.append(oliverButton);
+  const bellwickButton = document.createElement('button');
+  bellwickButton.type = 'button';
+  bellwickButton.textContent = 'Розмови в Беллвіку';
+  root.querySelector('.story-toolbar-actions')?.append(bellwickButton);
   let filter: CatalogFilter = 'all';
   const element = <K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -121,6 +196,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     conversationButton.dataset.new = count ? String(count) : '✓';
     conversationButton.title = count ? `Доступно тем: ${count}` : 'Доступні розмови завершено';
     conversationButton.setAttribute('aria-expanded', String(mode === 'conversation'));
+    oliverButton.hidden = story.day !== 2 || oliverFinished;
+    const availableBellwick = bellwickAvailable(story.day, bellwickFinished);
+    bellwickButton.hidden = availableBellwick.length === 0;
+    bellwickButton.dataset.new = String(availableBellwick.length);
+    bellwickButton.setAttribute('aria-expanded', String(mode === 'bellwick'));
+    if (mode === 'bellwick' && bellwickButton.hidden) mode = null;
+    oliverButton.setAttribute('aria-expanded', String(mode === 'oliver'));
+    if (mode === 'oliver' && oliverButton.hidden) mode = null;
     panel.hidden = mode === null;
     document.body.classList.toggle('reading', mode !== null);
     panel.setAttribute('aria-label', 'Сторінки книгарні');
@@ -136,7 +219,85 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       });
       panel.append(close);
     }
-    if (mode === 'conversation') {
+    if (mode === 'bellwick') {
+      const available = bellwickAvailable(story.day, bellwickFinished);
+      if (!available.some((entry) => entry.id === selectedBellwick))
+        selectedBellwick = available[0]?.id ?? 'mara';
+      const selector = element('div', '', 'story-filters');
+      for (const scene of available) {
+        const button = element('button', scene.title);
+        button.type = 'button';
+        button.setAttribute('aria-pressed', String(selectedBellwick === scene.id));
+        button.addEventListener('click', () => {
+          selectedBellwick = scene.id;
+          refresh();
+        });
+        selector.append(button);
+      }
+      panel.append(selector);
+      const scene = bellwickSchedule.find((entry) => entry.id === selectedBellwick);
+      if (scene && available.length) {
+        const script = bellwickStory(selectedBellwick);
+        const session = bellwickSessions[selectedBellwick] ?? startDialogue(script);
+        const node = currentNode(script, session);
+        panel.append(
+          element('h2', scene.title),
+          element('h3', node.speaker),
+          element('p', node.text),
+        );
+        const options = availableOptions(script, session);
+        for (const option of options) {
+          const button = element('button', option.label);
+          button.type = 'button';
+          button.addEventListener('click', () => {
+            bellwickSessions[selectedBellwick] = selectOption(script, session, option.id);
+            saveBellwick();
+            refresh();
+          });
+          panel.append(button);
+        }
+        if (!options.length) {
+          const finish = element('button', 'Завершити розмову');
+          finish.type = 'button';
+          finish.addEventListener('click', () => {
+            bellwickFinished = [...new Set([...bellwickFinished, selectedBellwick])];
+            delete bellwickSessions[selectedBellwick];
+            saveBellwick();
+            refresh();
+          });
+          panel.append(finish);
+        }
+      }
+    } else if (mode === 'oliver') {
+      if (!oliverSession) oliverSession = startDialogue(oliverUnreadBook);
+      const node = currentNode(oliverUnreadBook, oliverSession);
+      panel.append(element('h2', 'Олівер · Книжка, якої ми не читали'));
+      panel.append(element('h3', node.speaker), element('p', node.text));
+      const options = availableOptions(oliverUnreadBook, oliverSession);
+      for (const option of options) {
+        const button = element('button', option.label);
+        button.type = 'button';
+        button.addEventListener('click', () => {
+          if (!oliverSession) return;
+          oliverSession = selectOption(oliverUnreadBook, oliverSession, option.id);
+          saveOliver();
+          refresh();
+        });
+        panel.append(button);
+      }
+      if (options.length === 0) {
+        const finish = element('button', 'Завершити розмову');
+        finish.type = 'button';
+        finish.addEventListener('click', () => {
+          oliverFinished = true;
+          saveOliver();
+          oliverSession = null;
+          mode = null;
+          refresh();
+        });
+        panel.append(finish);
+      }
+    } else if (mode === 'conversation') {
       const topics = availableMaraTopics(story.day).filter((t) =>
         conversationAvailable(t, sessionFor(t.id)),
       );
@@ -285,12 +446,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       panel.append(shelf);
     }
   };
-  const toggle = (next: 'journal' | 'catalog' | 'conversation') => {
+  const toggle = (next: 'journal' | 'catalog' | 'conversation' | 'oliver') => {
     mode = mode === next ? null : next;
     refresh();
     if (mode) (panel.querySelector('button') ?? panel).focus({ preventScroll: true });
   };
   const conversationClick = () => toggle('conversation');
+  const oliverClick = () => toggle('oliver');
+  const bellwickClick = () => toggle('bellwick');
   const journalClick = () => toggle('journal');
   const catalogClick = () => toggle('catalog');
   const continueClick = () => {
@@ -299,6 +462,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     window.dispatchEvent(new CustomEvent('last-chapter:continue'));
   };
   conversationButton.addEventListener('click', conversationClick);
+  oliverButton.addEventListener('click', oliverClick);
+  bellwickButton.addEventListener('click', bellwickClick);
   journal.addEventListener('click', journalClick);
   catalog.addEventListener('click', catalogClick);
   continueButton.addEventListener('click', continueClick);
@@ -324,6 +489,21 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     returnVisit = startConversation(maraReturnVisit);
     letterDecision = startConversation(maraLetterDecision);
     selectedTopic = maraBookClub;
+    oliverSession = null;
+    oliverFinished = false;
+    bellwickProgress = decodeBellwickProgress(null);
+    bellwickFinished = [];
+    bellwickSessions = {};
+    try {
+      localStorage.removeItem(bellwickStorageKey);
+    } catch {
+      /* optional */
+    }
+    try {
+      localStorage.removeItem(oliverKey);
+    } catch {
+      /* optional */
+    }
     mode = null;
     saveConversation();
     refresh();
@@ -332,6 +512,10 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   window.__lastChapterRefresh = refresh;
   refresh();
   return () => {
+    bellwickButton.removeEventListener('click', bellwickClick);
+    bellwickButton.remove();
+    oliverButton.removeEventListener('click', oliverClick);
+    oliverButton.remove();
     conversationButton.removeEventListener('click', conversationClick);
     conversationButton.remove();
     journal.removeEventListener('click', journalClick);

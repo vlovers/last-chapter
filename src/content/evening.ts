@@ -101,9 +101,7 @@ export const firstEvening: DialogueStory = {
           text: 'Ви підписуєте конверт і залишаєте його біля журналу бронювань. Завтра можна спитати Елеонору, хто такий Генрі. Френк згортається клубком у коробці.',
         },
       ],
-      options: [
-        { id: 'cabinet-after-back', label: 'Повернутися до старої коробки', next: 'box' },
-      ],
+      options: [{ id: 'cabinet-after-back', label: 'Повернутися до старої коробки', next: 'box' }],
     },
     {
       id: 'eleanor-notes',

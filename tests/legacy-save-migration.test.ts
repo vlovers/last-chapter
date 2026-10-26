@@ -9,7 +9,7 @@ describe('Legacy dialogue save migration', () => {
     const story = stageStory('miller');
     const start = startDialogue(story);
     const first = availableOptions(story, start)[0];
-    expect(first).toBeDefined();
+    if (!first) throw new Error('Expected at least one opening dialogue choice');
     const selected = selectOption(story, start, first.id);
     const legacy: ChapterState = {
       stage: 'miller',
