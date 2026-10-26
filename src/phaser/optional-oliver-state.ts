@@ -1,4 +1,4 @@
-import { currentNode, startDialogue, type DialogueState } from '../game/dialogue';
+import { currentNode, selectOption, startDialogue, type DialogueState } from '../game/dialogue';
 import { oliverUnreadBook } from '../content/optional/oliver';
 
 export interface OliverProgress {
@@ -29,7 +29,27 @@ export function decodeOliverProgress(raw: string | null): OliverProgress {
       !Array.isArray(state.history) ||
       !state.history.every((id) => typeof id === 'string')
     ) return freshOliverProgress();
-    const dialogue = state as unknown as DialogueState;
+    if (
+      (state.completed !== undefined &&
+        (!Array.isArray(state.completed) ||
+          !state.completed.every((id) => typeof id === 'string'))) ||
+      (state.pending !== undefined &&
+        (!Array.isArray(state.pending) ||
+          !state.pending.every(
+            (entry) =>
+              entry !== null &&
+              typeof entry === 'object' &&
+              typeof (entry as Record<string, unknown>).hub === 'string' &&
+              typeof (entry as Record<string, unknown>).key === 'string',
+          )))
+    ) return freshOliverProgress();
+    // A valid node name alone is insufficient: never restore an impossible path.
+    let replay = startDialogue(oliverUnreadBook);
+    for (const optionId of state.history) {
+      replay = selectOption(oliverUnreadBook, replay, optionId as string);
+    }
+    if (replay.node !== state.node) return freshOliverProgress();
+    const dialogue = replay;
     currentNode(oliverUnreadBook, dialogue);
     return { finished: value.finished, dialogue };
   } catch {
