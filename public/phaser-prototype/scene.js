@@ -1,6 +1,6 @@
 import { createActorActions, cueActor } from './actor-actions.js';
 import { createFrameBudget } from './performance.js';
-import { viewportPlan } from './viewport.js';
+import { viewportPlan, frameWorld } from './viewport.js';
 import { WIDTH, HEIGHT, SPEED } from './config.js';
 import { validateManifest, ASSET_MANIFEST } from './assets.js';
 import { drawEnvironment } from './environment.js';
@@ -97,17 +97,12 @@ class Bookshop extends Phaser.Scene {
     const width = camera.width / camera.zoom,
       height = camera.height / camera.zoom;
     const targetX = this.cameraLook?.x ?? player.x;
-    camera.scrollX = Math.round(
-      width >= WIDTH
-        ? (WIDTH - width) / 2
-        : Math.max(0, Math.min(WIDTH - width, targetX - width / 2)),
-    );
+    const frame = frameWorld({ x: targetX, y: player.y }, width, height);
+    camera.scrollX = frame.x;
     const sheet = this.state.mode === 'dialogue' ? $('#dialogue').offsetHeight || 0 : 0;
     // Reading is a camera composition change only: viewport size and zoom stay fixed.
     camera.scrollY = Math.round(
-      sheet
-        ? player.y - Math.max(65, (camera.height - sheet - 24) * 0.7) / camera.zoom
-        : (HEIGHT - height) / 2,
+      sheet ? player.y - Math.max(65, (camera.height - sheet - 24) * 0.7) / camera.zoom : frame.y,
     );
   }
   refreshStory() {
@@ -278,6 +273,7 @@ class Bookshop extends Phaser.Scene {
           ? 'Увімкнути звук'
           : 'Вимкнути звук'
         : 'Звук недоступний';
+      $('#mute').setAttribute('aria-label', $('#mute').textContent);
       $('#mute').setAttribute('aria-pressed', String(this.audio.muted));
       $('#audio-status').textContent = !available
         ? 'Браузер не підтримує звук. Можна спокійно грати далі.'

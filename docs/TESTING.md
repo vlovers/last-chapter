@@ -47,3 +47,15 @@ Frank's real movement and petting, pause behavior, no document scrolling, canvas
 alignment and all 19 story stages. See [the QA record](qa/polish-v1/README.md).
 Unit regressions cover nested completion, legacy saves, suspended letter returns,
 conditional reopening and ten minutes of collision-checked cat movement.
+
+## Mobile bookshop overhaul
+
+`npm run test:browser:mobile` checks all five requested screen sizes plus phone
+landscape, touch and keyboard movement, viewport stability under all overlays,
+search, journal privacy, focus restoration, live orientation changes and the
+five-day story with three saved catalog purchases.
+`node scripts/qa-frank-overhaul.mjs` exercises the cat and reading-chair UI.
+`node scripts/qa-bookshop-performance.mjs` samples scene FPS and object counts at
+normal speed and 4× CPU throttling. These runners use the same optional Playwright
+setup and environment variables as the browser smoke tests. See the
+[implementation, screenshots and limitations](qa/mobile-overhaul/README.md).

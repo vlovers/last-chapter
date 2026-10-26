@@ -14,3 +14,19 @@ export function projectRect(rect, camera) {
     h: Math.round(rect.h * camera.zoom),
   };
 }
+
+export function frameWorld(player, width, height) {
+  const x =
+    width >= 640 ? (640 - width) / 2 : Math.max(0, Math.min(640 - width, player.x - width / 2));
+  const y =
+    height >= 360
+      ? (360 - height) / 2
+      : Math.max(
+          0,
+          Math.min(
+            360 - height,
+            Math.max(player.y - height + 16, Math.min((360 - height) / 2, player.y - 55)),
+          ),
+        );
+  return { x: Math.round(x), y: Math.round(y) };
+}

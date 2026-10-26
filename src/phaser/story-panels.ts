@@ -33,6 +33,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     throw new Error('Не знайдено панель історії');
   }
   const controls = { journal, catalog };
+  journal.setAttribute('aria-label', 'Нотатник');
+  catalog.setAttribute('aria-label', 'Каталог книжок');
   let mode: 'journal' | 'catalog' | 'conversation' | null = null;
   const conversationKey = 'last-chapter:conversation:mara:v1';
   let selectedTopic = maraBookClub;

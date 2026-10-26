@@ -27,6 +27,19 @@ async function sceneSnapshot(page) {
     };
   });
 }
+async function openMara(page) {
+  const toolbar = page
+    .locator('.story-toolbar-actions')
+    .getByRole('button', { name: 'Поговорити з Марою', exact: true });
+  if (await toolbar.isVisible()) await toolbar.click();
+  else {
+    await page.locator('#journal-toggle').click();
+    await page
+      .locator('#story-panel')
+      .getByRole('button', { name: 'Поговорити з Марою', exact: true })
+      .click();
+  }
+}
 async function choose(page, id) {
   await page.waitForTimeout(250);
   await page.locator(`#choices button[data-choice="${id}"]`).click();
@@ -140,7 +153,7 @@ try {
     assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), save);
     await page.keyboard.press('Escape');
     // Optional topic finishes once; the day-unlocked next topic replaces it.
-    await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
+    await openMara(page);
     await page.getByRole('heading', { name: 'Книжкові суперечки з Марою', exact: true }).waitFor();
     await page.getByRole('button', { name: 'Повернімося до роботи', exact: true }).click();
     assert.equal(
@@ -154,7 +167,7 @@ try {
     await page.keyboard.press('Escape');
     await page.reload();
     await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
-    await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
+    await openMara(page);
     assert.equal(
       await page.getByRole('button', { name: 'Книжкові суперечки з Марою', exact: true }).count(),
       0,

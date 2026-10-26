@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { viewportPlan, projectRect } from '../public/phaser-prototype/viewport.js';
+import { viewportPlan, projectRect, frameWorld } from '../public/phaser-prototype/viewport.js';
+import { Interactions } from '../public/phaser-prototype/interactions.js';
 import { createFrameBudget } from '../public/phaser-prototype/performance.js';
 import {
   initialFrank,
@@ -69,6 +70,27 @@ describe('native mobile geometry', () => {
         { scrollX: 77, scrollY: 41, worldView: { x: 171, y: 180 }, zoom: 2 },
       ),
     ).toEqual({ x: 46, y: 278, w: 50, h: 80 });
+  });
+  it('keeps offscreen reachable objects in keyboard cycling while excluding unavailable visitors', () => {
+    const shelf = { id: 'shelves' },
+      visitor = { id: 'mara' };
+    const fixture = {
+      spots: [shelf, visitor],
+      buttons: new Map([
+        ['shelves', { hidden: true, dataset: { available: 'true' } }],
+        ['mara', { hidden: true, dataset: { available: 'false' } }],
+      ]),
+    };
+    expect(Interactions.prototype.cycle.call(fixture)).toBe(shelf);
+    fixture.buttons.get('mara').dataset.available = 'true';
+    expect(Interactions.prototype.cycle.call(fixture)).toBe(visitor);
+  });
+  it('keeps feet and head visible at both vertical limits in landscape', () => {
+    for (const y of [166, 204, 335]) {
+      const frame = frameWorld({ x: 280, y }, 422, 169);
+      expect(y - frame.y).toBeLessThanOrEqual(169 - 10);
+      expect(y - 46 - frame.y).toBeGreaterThanOrEqual(0);
+    }
   });
   it('makes every interaction reachable after furniture resizing', () => {
     for (const spot of HOTSPOTS) {

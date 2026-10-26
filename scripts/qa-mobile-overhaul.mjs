@@ -121,6 +121,28 @@ try {
       await page.waitForTimeout(350);
       assert.deepEqual((await snapshot(page)).canvas, stable.canvas);
     }
+    if (height === 390) {
+      await page.locator('#game').focus();
+      await page.keyboard.down('ArrowRight');
+      await page.waitForTimeout(650);
+      await page.keyboard.up('ArrowRight');
+      await page.keyboard.down('ArrowDown');
+      await page.waitForTimeout(1600);
+      await page.keyboard.up('ArrowDown');
+      const visible = await page.evaluate(async () => {
+        const { game } = await import('/phaser-prototype/scene.js');
+        const scene = game.scene.getScene('bookshop');
+        const camera = scene.cameras.main;
+        return {
+          top: (scene.characters.player.y - 46 - camera.scrollY) * camera.zoom,
+          bottom: (scene.characters.player.y - camera.scrollY) * camera.zoom,
+          height: camera.height,
+          y: scene.characters.player.y,
+        };
+      });
+      assert.ok(visible.y > 300);
+      assert.ok(visible.top >= 0 && visible.bottom <= visible.height);
+    }
     const overflow = await page.evaluate(() => ({
       x: document.documentElement.scrollWidth > innerWidth,
       y: document.documentElement.scrollHeight > innerHeight,

@@ -21,17 +21,18 @@ try {
   await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
   await page.locator('#story-tools').waitFor();
   assert.equal(await page.locator('#day-timeline li').count(), 5);
-  assert.equal(
-    await page.locator('#story-continue').textContent(),
-    'День 1 · Пані Міллер · Продовжити',
-  );
+  assert.equal(await page.locator('#story-continue').textContent(), 'День 1 · Пані Міллер');
 
   await page.getByRole('button', { name: 'Каталог книжок' }).click();
   assert.equal(await page.locator('.story-book').count(), 5);
   await page.getByRole('button', { name: 'Детективи' }).click();
   assert.ok((await page.locator('.story-book').count()) > 0);
+  await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Нотатник' }).click();
-  await page.getByText('Поки що тут немає записів.').waitFor();
+  await page.getByRole('heading', { name: 'Нотатник книгаря' }).waitFor();
+  await page.getByRole('button', { name: 'Знахідки', exact: true }).click();
+  await page.getByText('Огляньте книгарню. Тут з’являться лише досліджені знахідки.').waitFor();
+  await page.keyboard.press('Escape');
 
   await page.locator('#story-continue').click();
   await page.getByText('Дзвіночок над дверима озвався двічі.', { exact: false }).waitFor();

@@ -9,7 +9,9 @@ export class Interactions {
     this.hint = document.querySelector('#context-action');
     this.outline = scene.add.graphics().setDepth(900);
     this.spots = [
-      ...HOTSPOTS,
+      ...HOTSPOTS.filter(
+        (spot) => includePlant || !['chair', 'cat-tree', 'bowl'].includes(spot.id),
+      ),
       ...(includePlant
         ? [
             {
@@ -102,13 +104,17 @@ export class Interactions {
         button.style.height = `${Math.max(44, projected.h)}px`;
         button.dataset.geometry = style;
       }
+      const available =
+        state.mode === 'explore' &&
+        !(spot.id === 'mara' && (state.mara !== 'ready' || state.visitorVisible === false));
+      if (button.dataset.available !== String(available))
+        button.dataset.available = String(available);
       const hidden =
         projected.x + projected.w < 0 ||
         projected.y + projected.h < 0 ||
         projected.x > this.scene.scale.width ||
         projected.y > this.scene.scale.height ||
-        state.mode !== 'explore' ||
-        (spot.id === 'mara' && (state.mara !== 'ready' || state.visitorVisible === false));
+        !available;
       if (button.hidden !== hidden) button.hidden = hidden;
       button.classList.toggle('nearby', spot === this.nearest);
       button.classList.toggle('visited', state.inspected.includes(spot.id));
@@ -138,7 +144,9 @@ export class Interactions {
     }
   }
   cycle() {
-    const spots = this.spots.filter((spot) => !this.buttons.get(spot.id).hidden);
+    const spots = this.spots.filter(
+      (spot) => this.buttons.get(spot.id).dataset.available === 'true',
+    );
     this.selected = spots[(spots.indexOf(this.selected) + 1) % spots.length];
     return this.selected;
   }

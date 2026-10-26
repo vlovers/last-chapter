@@ -2,7 +2,7 @@
 
 A browser-first **pixel-art small-town bookshop narrative game**. Customers arrive to buy books, talk about their lives and pass along rumors. The player can listen, investigate and decide when to keep or share information, with consequences for relationships across the town.
 
-**Status:** the canonical Phaser bookshop shares the five-day narrative, with persistent dialogue completion, exploration, an autonomous Frank and responsive dialogue. `/phaser-prototype/` preserves the isolated single-encounter slice. This is still a short narrative prototype, not a finished 40-minute episode. See the [gameplay polish QA](docs/qa/polish-v1/README.md) for evidence and remaining limits.
+**Status:** the canonical Phaser bookshop shares the five-day narrative, with a stable mobile viewport, overlay dialogue, compact catalog recommendations for three customers, an investigation journal and an interactive Frank with a cat tree. `/phaser-prototype/` preserves the isolated single-encounter slice. This is still a short narrative prototype, not a finished 40-minute episode. See the [mobile overhaul QA](docs/qa/mobile-overhaul/README.md) for evidence and remaining limits.
 
 ## Quick start
 
