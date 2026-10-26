@@ -27,6 +27,13 @@ export const eleanorVisit: DialogueStory = {
           next: 'eleanor-reflection',
           unless: ['eleanor_reflected_on_legacy'],
         },
+        {
+          id: 'timeline',
+          label: '«Зіставимо картку бронювання та журнал ремонту»',
+          next: 'timeline',
+          requires: ['saw_receipt', 'saw_repair_note'],
+          unless: ['eleanor_timeline_checked'],
+        },
         { id: 'shop', label: '«Якою була книгарня раніше?»', next: 'shop' },
         { id: 'flood', label: '«Розкажіть про затоплення»', next: 'flood' },
         {
@@ -48,6 +55,48 @@ export const eleanorVisit: DialogueStory = {
           requires: ['saw_envelope'],
         },
         { id: 'finish', label: '«Дякую, що завітали»', next: 'end' },
+      ],
+    },
+    {
+      id: 'timeline',
+      speaker: 'Елеонора',
+      text: 'Елеонора кладе поруч картку бронювання та журнал ремонту. Дата на картці передує затопленню. У журналі записано, коли книгарню закрили, але немає підтвердження дзвінка Лео. «Я думала, він просто не прийшов. Тепер бачу, що цього ми не знаємо».',
+      options: [
+        {
+          id: 'timeline-check',
+          label: '«Запишімо тільки те, що можемо підтвердити»',
+          next: 'timeline-result',
+          grants: ['eleanor_timeline_kept_uncertainty'],
+        },
+        {
+          id: 'timeline-blame',
+          label: '«Виходить, ви приховали його бронювання?»',
+          next: 'timeline-result',
+          grants: ['eleanor_timeline_assumed_guilt'],
+        },
+      ],
+    },
+    {
+      id: 'timeline-result',
+      speaker: 'Елеонора',
+      text: '«Я загубила записи. За це відповідаю. Але чи отримав Лео повідомлення — ми досі не знаємо».',
+      textWhen: [
+        {
+          requires: ['eleanor_timeline_kept_uncertainty'],
+          text: 'Елеонора бере чисту картку. «Тут напишемо дати. А поруч залишимо місце для того, чого не знаємо». Вона вперше дивиться на старий журнал без спроб виправдатися.',
+        },
+        {
+          requires: ['eleanor_timeline_assumed_guilt'],
+          text: '«Я загубила записи, і мені соромно. Але не називайте це приховуванням без доказів». Елеонора забирає журнал до себе: «Спершу перевіримо, що там насправді написано».',
+        },
+      ],
+      options: [
+        {
+          id: 'timeline-back',
+          label: 'Повернутися до розмови',
+          next: 'greet',
+          grants: ['eleanor_timeline_checked'],
+        },
       ],
     },
     {
