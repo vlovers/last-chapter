@@ -940,6 +940,10 @@ export const finalReading: DialogueStory = {
       id: 'final-v3-eleanor',
       speaker: 'Елеонора',
       text: '«Ні. Щоразу хочу пересунути його назад. Але сьогодні побачила, як біля вікна читає дитина. Мабуть, не кожна добра зміна має бути моєю ідеєю».',
+      textWhen: [
+        { requires: ['eleanor_will_keep_shared_memory'], text: '«Ми залишили полицю для історій відвідувачів. Тепер книгарня пам’ятає не тільки те, що пам’ятаю я».' },
+        { requires: ['eleanor_will_allow_change'], text: '«Я сама запропонувала пересунути ще один стіл. Нові люди мають право облаштовувати свій простір».' },
+      ],
       options: [
         {
           id: 'final-v3-eleanor-back',
