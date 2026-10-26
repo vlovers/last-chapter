@@ -1,0 +1,43 @@
+{
+  "head": "a2df634e25378c09dd662d454b7ea595abf9863d",
+  "results": {
+    "main": {
+      "ref": "origin/main",
+      "exitCode": 0,
+      "output": [],
+      "errors": ""
+    },
+    "parent": {
+      "ref": "origin/feat/gameplay-visual-polish-v1",
+      "exitCode": 0,
+      "output": [],
+      "errors": ""
+    },
+    "narrative": {
+      "ref": "origin/narrative/customer-orders-design-20261026",
+      "exitCode": 1,
+      "output": [
+        "src/game/save.ts",
+        "src/phaser/story-panels.ts",
+        "tests/day-four-leo.test.ts",
+        "tests/finale-rumor-exclusivity.test.ts",
+        "tests/narrative-finale-variant-precedence.test.ts",
+        "",
+        "Auto-merging scripts/qa-phaser-v5.mjs",
+        "Auto-merging src/content/day-four-iris.ts",
+        "Auto-merging src/game/save.ts",
+        "CONFLICT (content): Merge conflict in src/game/save.ts",
+        "Auto-merging src/phaser/story-panels.ts",
+        "CONFLICT (content): Merge conflict in src/phaser/story-panels.ts",
+        "Auto-merging tests/day-four-leo.test.ts",
+        "CONFLICT (content): Merge conflict in tests/day-four-leo.test.ts",
+        "Auto-merging tests/finale-resolution-invariants.test.ts",
+        "Auto-merging tests/finale-rumor-exclusivity.test.ts",
+        "CONFLICT (content): Merge conflict in tests/finale-rumor-exclusivity.test.ts",
+        "Auto-merging tests/narrative-finale-variant-precedence.test.ts",
+        "CONFLICT (content): Merge conflict in tests/narrative-finale-variant-precedence.test.ts"
+      ],
+      "errors": ""
+    }
+  }
+}

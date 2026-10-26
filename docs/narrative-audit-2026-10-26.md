@@ -1,6 +1,6 @@
 # Narrative Audit — Last Chapter
 
-**Date:** 2026-10-26  
+**Date:** 2026-10-26
 **Scope:** Source-level editorial audit of the current five-day story, character dialogue, mystery, choices, and finale. This is not a claim that the story has passed a blind-reader or playtest study.
 
 ## Executive verdict
@@ -106,42 +106,42 @@ The player is a new bookseller and caretaker of the shop, but sometimes function
 
 ### Mara
 
-**Keep:** warmth, bakery details, her wish for a morning that belongs to her, and her growing ability to ask rather than guess.  
+**Keep:** warmth, bakery details, her wish for a morning that belongs to her, and her growing ability to ask rather than guess.
 **Deepen:** let her generosity sometimes backfire. Have her overcommit, resent being taken for granted, or discover that “I’m only trying to help” can still be controlling. Her arc should not resolve merely because she learns to say a boundary once.
 
 ### Leo
 
-**Keep:** railway metaphors when used naturally, the tension between schedules and uncertainty, and the fear that honesty might burden another person.  
+**Keep:** railway metaphors when used naturally, the tension between schedules and uncertainty, and the fear that honesty might burden another person.
 **Deepen:** show his competence in a practical crisis, then show where that same competence fails emotionally. Avoid making every conversation end in a neat insight about plans and feelings.
 
 ### Iris
 
-**Keep:** the distinction between showing art and explaining a life; her return after seven years; her control over the letter.  
+**Keep:** the distinction between showing art and explaining a life; her return after seven years; her control over the letter.
 **Deepen:** give her a goal beyond protecting privacy. What does she want to make, repair, or risk now? Let her want two incompatible things—visibility and anonymity, return and distance—without resolving them into a slogan.
 
 ### Eleanor
 
-**Keep:** the key, the flood records, her fear of losing the shop’s identity.  
+**Keep:** the key, the flood records, her fear of losing the shop’s identity.
 **Deepen:** make the handover practical and contested. A shelf move or archive decision should have consequences, and she should sometimes be wrong in a way that costs her something. Her arc is one of the strongest candidates to anchor the season.
 
 ### Anna and Thomas
 
-**Keep:** their marriage is about everyday disconnection, not a sensational affair; their work and small routines give them texture.  
+**Keep:** their marriage is about everyday disconnection, not a sensational affair; their work and small routines give them texture.
 **Deepen:** stop resolving the tension mainly through a conversation about listening. Let an actual promise be missed, a practical burden go unnoticed, or a decision be made without consultation. Repair should take more than one good talk.
 
 ### Nora
 
-**Keep:** confidentiality and her refusal to reveal people who seek help.  
+**Keep:** confidentiality and her refusal to reveal people who seek help.
 **Deepen:** let her make a difficult professional choice that has a cost. At present her ethical stance can make her feel like a walking rulebook unless she has personal needs and contradictions outside the work.
 
 ### Mrs Miller
 
-**Keep:** the amateur detective instinct, the comic plant-pot mistake, and the chance to learn the difference between evidence and gossip.  
+**Keep:** the amateur detective instinct, the comic plant-pot mistake, and the chance to learn the difference between evidence and gossip.
 **Deepen:** her change must cost pride. A private apology is not always enough to undo a public rumor. Let her decide whether to correct the story publicly even when it makes her look foolish—and respect the harmed person’s right not to forgive her.
 
 ### The bookseller / player
 
-**Keep:** the shop ledger and the idea that the player must decide what belongs in the shop’s memory.  
+**Keep:** the shop ledger and the idea that the player must decide what belongs in the shop’s memory.
 **Deepen:** give the player a real internal arc, not only end-of-day journal statements. A concrete early mistake or assumption should later return in a changed form, and the player should have to repair it.
 
 ## Recommended rewrite plan

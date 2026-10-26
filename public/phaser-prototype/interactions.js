@@ -1,3 +1,4 @@
+import { projectRect } from './viewport.js';
 import { HOTSPOTS, nearestSpot, eligible } from './world.js';
 import { visitorApproach } from './visitor-roaming.js';
 export class Interactions {
@@ -8,12 +9,14 @@ export class Interactions {
     this.hint = document.querySelector('#context-action');
     this.outline = scene.add.graphics().setDepth(900);
     this.spots = [
-      ...HOTSPOTS,
+      ...HOTSPOTS.filter(
+        (spot) => includePlant || !['chair', 'cat-tree', 'bowl'].includes(spot.id),
+      ),
       ...(includePlant
         ? [
             {
               id: 'frank',
-              label: 'Погладити Френка',
+              label: 'Побути з Френком',
               rect: { x: 463, y: 171, w: 34, h: 29 },
               approach: { x: 477, y: 216 },
             },
@@ -71,8 +74,8 @@ export class Interactions {
       const canvas = scene.game.canvas.getBoundingClientRect();
       const parent = document.querySelector('#stage').getBoundingClientRect();
       Object.assign(this.root.style, {
-        left: `${canvas.left - parent.left - 3}px`,
-        top: `${canvas.top - parent.top - 3}px`,
+        left: `${canvas.left - parent.left}px`,
+        top: `${canvas.top - parent.top}px`,
         width: `${canvas.width}px`,
         height: `${canvas.height}px`,
         right: 'auto',
@@ -90,14 +93,33 @@ export class Interactions {
     for (const spot of this.spots) {
       const button = this.buttons.get(spot.id),
         rect = spot.rect;
-      button.style.left = `${rect.x / 6.4}%`;
-      button.style.top = `${rect.y / 3.6}%`;
-      button.style.width = `${rect.w / 6.4}%`;
-      button.style.height = `${rect.h / 3.6}%`;
-      button.hidden =
-        state.mode !== 'explore' ||
-        (spot.id === 'mara' && (state.mara !== 'ready' || state.visitorVisible === false));
+      const projected = projectRect(rect, this.scene.cameras.main);
+      const left = projected.x + (projected.w - Math.max(44, projected.w)) / 2;
+      const top = projected.y + (projected.h - Math.max(44, projected.h)) / 2;
+      const style = `${left}px;${top}px;${Math.max(44, projected.w)}px;${Math.max(44, projected.h)}px`;
+      if (button.dataset.geometry !== style) {
+        button.style.left = `${left}px`;
+        button.style.top = `${top}px`;
+        button.style.width = `${Math.max(44, projected.w)}px`;
+        button.style.height = `${Math.max(44, projected.h)}px`;
+        button.dataset.geometry = style;
+      }
+      const available =
+        state.mode === 'explore' &&
+        !(spot.id === 'mara' && (state.mara !== 'ready' || state.visitorVisible === false));
+      if (button.dataset.available !== String(available))
+        button.dataset.available = String(available);
+      const hidden =
+        projected.x + projected.w < 0 ||
+        projected.y + projected.h < 0 ||
+        projected.x > this.scene.scale.width ||
+        projected.y > this.scene.scale.height ||
+        !available;
+      if (button.hidden !== hidden) button.hidden = hidden;
       button.classList.toggle('nearby', spot === this.nearest);
+      button.classList.toggle('visited', state.inspected.includes(spot.id));
+      const title = spot.label + (state.inspected.includes(spot.id) ? ' · Уже оглянуто' : '');
+      if (button.title !== title) button.title = title;
     }
     this.hint.hidden = !this.nearest || state.mode !== 'explore';
     if (this.nearest) this.hint.textContent = `Е · ${this.nearest.label}`;
@@ -122,7 +144,9 @@ export class Interactions {
     }
   }
   cycle() {
-    const spots = this.spots.filter((spot) => !this.buttons.get(spot.id).hidden);
+    const spots = this.spots.filter(
+      (spot) => this.buttons.get(spot.id).dataset.available === 'true',
+    );
     this.selected = spots[(spots.indexOf(this.selected) + 1) % spots.length];
     return this.selected;
   }

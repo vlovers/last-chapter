@@ -1,0 +1,321 @@
+{
+  "results": [
+    {
+      "device": "desktop",
+      "ambient": {
+        "initial": {
+          "frank": {
+            "x": 485,
+            "y": 205,
+            "activity": "sitting"
+          },
+          "valid": true,
+          "mode": "explore",
+          "failed": false,
+          "fps": 60
+        },
+        "final": {
+          "frank": {
+            "x": 386,
+            "y": 202,
+            "activity": "walking"
+          },
+          "valid": true,
+          "mode": "explore",
+          "failed": false,
+          "fps": 60.12147903442383
+        },
+        "samples": 12
+      }
+    },
+    {
+      "device": "desktop",
+      "dimensions": {
+        "height": 900,
+        "width": 1280,
+        "scrollHeight": 900,
+        "scrollWidth": 1280,
+        "y": 0,
+        "canvas": {
+          "left": 0,
+          "top": 56,
+          "right": 1280,
+          "bottom": 836,
+          "width": 1280,
+          "height": 780
+        },
+        "game": {
+          "left": 0,
+          "top": 56,
+          "right": 1280,
+          "bottom": 836,
+          "width": 1280,
+          "height": 780
+        },
+        "hits": {
+          "left": 0,
+          "top": 56,
+          "right": 1280,
+          "bottom": 836,
+          "width": 1280,
+          "height": 780
+        },
+        "dialogue": {
+          "left": 170,
+          "top": 551,
+          "right": 1110,
+          "bottom": 820,
+          "width": 940,
+          "height": 269
+        },
+        "choices": {
+          "left": 190,
+          "top": 748,
+          "right": 1090,
+          "bottom": 800,
+          "width": 900,
+          "height": 52
+        },
+        "clippedChoices": 0
+      },
+      "visited": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "book-club",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading",
+        "season-complete"
+      ]
+    },
+    {
+      "device": "tablet",
+      "dimensions": {
+        "height": 1180,
+        "width": 820,
+        "scrollHeight": 1180,
+        "scrollWidth": 820,
+        "y": 0,
+        "canvas": {
+          "left": 0,
+          "top": 56,
+          "right": 820,
+          "bottom": 1116,
+          "width": 820,
+          "height": 1060
+        },
+        "game": {
+          "left": 0,
+          "top": 56,
+          "right": 820,
+          "bottom": 1116,
+          "width": 820,
+          "height": 1060
+        },
+        "hits": {
+          "left": 0,
+          "top": 56,
+          "right": 820,
+          "bottom": 1116,
+          "width": 820,
+          "height": 1060
+        },
+        "dialogue": {
+          "left": 20,
+          "top": 831,
+          "right": 800,
+          "bottom": 1100,
+          "width": 780,
+          "height": 269
+        },
+        "choices": {
+          "left": 40,
+          "top": 1028,
+          "right": 780,
+          "bottom": 1080,
+          "width": 740,
+          "height": 52
+        },
+        "clippedChoices": 0
+      },
+      "visited": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "book-club",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading",
+        "season-complete"
+      ]
+    },
+    {
+      "device": "mobile",
+      "dimensions": {
+        "height": 844,
+        "width": 390,
+        "scrollHeight": 844,
+        "scrollWidth": 390,
+        "y": 0,
+        "canvas": {
+          "left": 0,
+          "top": 48,
+          "right": 390,
+          "bottom": 780,
+          "width": 390,
+          "height": 732
+        },
+        "game": {
+          "left": 0,
+          "top": 48,
+          "right": 390,
+          "bottom": 780,
+          "width": 390,
+          "height": 732
+        },
+        "hits": {
+          "left": 0,
+          "top": 48,
+          "right": 390,
+          "bottom": 780,
+          "width": 390,
+          "height": 732
+        },
+        "dialogue": {
+          "left": 0,
+          "top": 481,
+          "right": 390,
+          "bottom": 780,
+          "width": 390,
+          "height": 299
+        },
+        "choices": {
+          "left": 12,
+          "top": 716,
+          "right": 378,
+          "bottom": 768,
+          "width": 366,
+          "height": 52
+        },
+        "clippedChoices": 0
+      },
+      "visited": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "book-club",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading",
+        "season-complete"
+      ]
+    },
+    {
+      "device": "compact",
+      "dimensions": {
+        "height": 720,
+        "width": 1280,
+        "scrollHeight": 720,
+        "scrollWidth": 1280,
+        "y": 0,
+        "canvas": {
+          "left": 0,
+          "top": 56,
+          "right": 1280,
+          "bottom": 656,
+          "width": 1280,
+          "height": 600
+        },
+        "game": {
+          "left": 0,
+          "top": 56,
+          "right": 1280,
+          "bottom": 656,
+          "width": 1280,
+          "height": 600
+        },
+        "hits": {
+          "left": 0,
+          "top": 56,
+          "right": 1280,
+          "bottom": 656,
+          "width": 1280,
+          "height": 600
+        },
+        "dialogue": {
+          "left": 170,
+          "top": 371,
+          "right": 1110,
+          "bottom": 640,
+          "width": 940,
+          "height": 269
+        },
+        "choices": {
+          "left": 190,
+          "top": 568,
+          "right": 1090,
+          "bottom": 620,
+          "width": 900,
+          "height": 52
+        },
+        "clippedChoices": 0
+      },
+      "visited": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "book-club",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading",
+        "season-complete"
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -15,6 +15,12 @@ export const irisDecision: DialogueStory = {
       speaker: 'Айріс',
       text: '«Я не хочу, щоб сім років мого життя вмістилися в один конверт. Але й робити вигляд, що його немає, більше не можу». Вона проводить пальцем по краю альбому.',
       options: [
+        {
+          id: 'iris-exhibition-plan',
+          label: '«Якою ти хочеш зробити виставку на п’ятий день?»',
+          next: 'iris-exhibition-plan',
+          unless: ['iris_exhibition_plan_heard'],
+        },
         { id: 'art', label: '«Розкажи про свої малюнки»', next: 'art' },
         {
           id: 'letter',
@@ -71,6 +77,48 @@ export const irisDecision: DialogueStory = {
           label: 'Повернутися до розмови',
           next: 'welcome',
           grants: ['iris_day_four_boundary_heard'],
+        },
+      ],
+    },
+    {
+      id: 'iris-exhibition-plan',
+      speaker: 'Айріс',
+      text: '«Хочу повісити три малюнки до читання. Але без підписів із чужими адресами. І не хочу, щоб пані Міллер влаштувала екскурсію моїм минулим». Вона розкладає аркуші: вікно пекарні, порожній перон і світло книгарні. «Потрібно вирішити, що побачать люди, а що залишиться в альбомі».',
+      options: [
+        {
+          id: 'iris-exhibition-open',
+          label: '«Обери роботи й підписи сама; я підготую місце»',
+          next: 'iris-exhibition-result',
+          grants: ['iris_exhibition_artist_controls'],
+        },
+        {
+          id: 'iris-exhibition-private',
+          label: '«Можемо показати лише одну роботу — або жодної»',
+          next: 'iris-exhibition-result',
+          grants: ['iris_exhibition_private_choice'],
+        },
+      ],
+    },
+    {
+      id: 'iris-exhibition-result',
+      speaker: 'Айріс',
+      text: 'Айріс довго розглядає малюнки, тоді прибирає один до папки. «Я хотіла показати все, щоб довести, що не боюся. Але це погана причина для виставки». Вона бере чисті картки для підписів.',
+      textWhen: [
+        {
+          requires: ['iris_exhibition_artist_controls'],
+          text: '«Тоді я сама напишу назви. Три малюнки — якщо завтра не передумаю. А ти допоможеш знайти місце, де їх буде добре видно». Вона вже вимірює поглядом стіну біля вікна.',
+        },
+        {
+          requires: ['iris_exhibition_private_choice'],
+          text: '«Почну з одного вікна. Інші поки залишаться в альбомі». Айріс усміхається: «Уперше це схоже на мою виставку, а не на пояснювальну записку для міста».',
+        },
+      ],
+      options: [
+        {
+          id: 'iris-exhibition-result-back',
+          label: 'Повернутися до розмови',
+          next: 'welcome',
+          grants: ['iris_exhibition_plan_heard'],
         },
       ],
     },
@@ -138,7 +186,13 @@ export const irisDecision: DialogueStory = {
           next: 'pressure',
           grants: ['iris_letter_pressured_day4'],
         },
-        { id: 'letter-back', label: '«Можемо повернутися до цього пізніше»', next: 'welcome' },
+        {
+          suspend: true,
+          repeatability: 'repeatable',
+          id: 'letter-back',
+          label: '«Можемо повернутися до цього пізніше»',
+          next: 'welcome',
+        },
       ],
     },
     {

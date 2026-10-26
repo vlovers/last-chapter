@@ -26,7 +26,12 @@ export const maraReturnVisit: ConversationTopic = {
       choices: [
         { id: 'listen', label: 'Звісно. Я слухаю', next: 'letter', remember: 'return:welcomed' },
         { id: 'frank', label: 'Спочатку Френк хоче тебе привітати', next: 'frank' },
-        { id: 'busy', label: 'Мені зараз незручно, поговоримо пізніше', next: '__exit' },
+        {
+          id: 'busy',
+          label: 'Мені зараз незручно, поговоримо пізніше',
+          next: '__exit',
+          suspend: true,
+        },
       ],
     },
     {
@@ -47,7 +52,7 @@ export const maraReturnVisit: ConversationTopic = {
           next: 'quiet',
           remember: 'return:quiet',
         },
-        { id: 'exit', label: 'Побачимося пізніше', next: '__exit' },
+        { id: 'exit', label: 'Побачимося пізніше', next: '__exit', suspend: true },
       ],
     },
     {

@@ -9,6 +9,12 @@ export interface DialogueOption {
   /** Hide an option if any of these facts is already true. */
   readonly unless?: readonly string[];
   readonly grants?: readonly string[];
+  /** Choices complete on return/exit; reusable interactions opt out explicitly. */
+  readonly repeatability?: 'once' | 'repeatable';
+  /** A changed set of these story facts opens a fresh version of the topic. */
+  readonly reopensWhen?: readonly string[];
+  /** Return without completing the active topic (for an explicit deferral). */
+  readonly suspend?: boolean;
 }
 
 export interface DialogueNode {
@@ -18,6 +24,9 @@ export interface DialogueNode {
   /** Most specific matching flag-dependent narration replaces the default text. */
   readonly textWhen?: readonly { readonly requires: readonly string[]; readonly text: string }[];
   readonly options: readonly DialogueOption[];
+  readonly hub?: boolean;
+  /** Some endings have an authored ethical priority independent of flag count. */
+  readonly variantSelection?: 'specific' | 'authored';
 }
 
 export interface DialogueStory {
@@ -29,6 +38,8 @@ export interface DialogueState {
   readonly node: SceneId;
   readonly flags: readonly string[];
   readonly history: readonly string[];
+  readonly completed?: readonly string[];
+  readonly pending?: readonly { hub: string; key: string }[];
 }
 
 export function startDialogue(story: DialogueStory): DialogueState {
@@ -46,6 +57,7 @@ export function currentNode(story: DialogueStory, state: DialogueState): Dialogu
   const variant = node.textWhen?.reduce<NonNullable<DialogueNode['textWhen']>[number] | undefined>(
     (best, entry) => {
       if (!entry.requires.every((flag) => state.flags.includes(flag))) return best;
+      if (node.variantSelection === 'authored') return best ?? entry;
       return !best || entry.requires.length > best.requires.length ? entry : best;
     },
     undefined,
@@ -53,14 +65,39 @@ export function currentNode(story: DialogueStory, state: DialogueState): Dialogu
   return variant ? { ...node, text: variant.text } : node;
 }
 
+function completionKey(node: DialogueNode, option: DialogueOption, flags: readonly string[]) {
+  return JSON.stringify([
+    node.id,
+    option.id,
+    (option.reopensWhen ?? []).filter((f) => flags.includes(f)),
+  ]);
+}
+
+/** Reconstruct legacy progress from its recorded edges, never from flags alone. */
+export function restoreDialogueProgress(story: DialogueStory, state: DialogueState): DialogueState {
+  if (state.completed !== undefined) return state;
+  let replay = startDialogue(story);
+  for (const id of state.history) {
+    const node = currentNode(story, replay);
+    const option = node.options.find((o) => o.id === id);
+    if (!option) break;
+    replay = applyOption(story, replay, node, option);
+  }
+  return { ...state, completed: replay.completed ?? [], pending: replay.pending ?? [] };
+}
+
 export function availableOptions(
   story: DialogueStory,
   state: DialogueState,
 ): readonly DialogueOption[] {
-  return currentNode(story, state).options.filter(
+  const progress = restoreDialogueProgress(story, state);
+  const node = currentNode(story, state);
+  return node.options.filter(
     (option) =>
       (option.requires ?? []).every((flag) => state.flags.includes(flag)) &&
-      !(option.unless ?? []).some((flag) => state.flags.includes(flag)),
+      !(option.unless ?? []).some((flag) => state.flags.includes(flag)) &&
+      (option.repeatability === 'repeatable' ||
+        !progress.completed?.includes(completionKey(node, option, state.flags))),
   );
 }
 
@@ -74,10 +111,49 @@ export function selectOption(
   if (!story.nodes.some((node) => node.id === option.next)) {
     throw new Error('Missing destination node');
   }
+  return applyOption(
+    story,
+    restoreDialogueProgress(story, state),
+    currentNode(story, state),
+    option,
+  );
+}
+
+function applyOption(
+  story: DialogueStory,
+  state: DialogueState,
+  node: DialogueNode,
+  option: DialogueOption,
+): DialogueState {
+  let pending = [...(state.pending ?? [])];
+  const returning = pending.some((p) => p.hub === option.next);
+  if (option.suspend) {
+    const index = pending.findIndex((p) => p.hub === option.next);
+    if (index >= 0) pending = pending.slice(0, index);
+  }
+  const completed = new Set(state.completed ?? []);
+  if (option.repeatability !== 'repeatable' && !option.suspend && !returning) {
+    const key = completionKey(node, option, state.flags);
+    if (!pending.some((p) => p.key === key)) pending.push({ hub: node.id, key });
+  }
+  const destination = story.nodes.find((n) => n.id === option.next)!;
+  // Merely opening or suspending a topic does not consume it. Returning to its
+  // hub, reaching a terminal or explicitly leaving the hub region does.
+  const remaining = pending.filter((p) => {
+    const finishes =
+      !option.suspend &&
+      (p.hub === option.next ||
+        !destination.options.length ||
+        (option.repeatability === 'repeatable' && node.hub));
+    if (finishes) completed.add(p.key);
+    return !finishes;
+  });
   return {
     node: option.next,
     flags: [...new Set([...state.flags, ...(option.grants ?? [])])],
     history: [...state.history, option.id],
+    completed: [...completed],
+    pending: remaining,
   };
 }
 

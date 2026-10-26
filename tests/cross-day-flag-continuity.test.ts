@@ -32,26 +32,26 @@ function checkpoint(stage: ChapterStage, story: DialogueStory): ChapterState {
 describe('Cross-day narrative flag continuity', () => {
   it('carries Day 1 discoveries into Day 2', () => {
     const next = startSecondDay(checkpoint('complete', firstEvening));
-    expect(next.flags).toEqual(expect.arrayContaining(persistentFlags));
-    expect(next.dialogue.flags).toEqual(expect.arrayContaining(persistentFlags));
+    expect(next.flags).toEqual(expect.arrayContaining([...persistentFlags]));
+    expect(next.dialogue.flags).toEqual(expect.arrayContaining([...persistentFlags]));
   });
 
   it('carries persistent choices into Day 3', () => {
     const next = startThirdDay(checkpoint('day2-complete', leoVisit));
-    expect(next.flags).toEqual(expect.arrayContaining(persistentFlags));
-    expect(next.dialogue.flags).toEqual(expect.arrayContaining(persistentFlags));
+    expect(next.flags).toEqual(expect.arrayContaining([...persistentFlags]));
+    expect(next.dialogue.flags).toEqual(expect.arrayContaining([...persistentFlags]));
   });
 
   it('carries persistent choices into Day 4', () => {
     const next = startFourthDay(checkpoint('day3-complete', bookClub));
-    expect(next.flags).toEqual(expect.arrayContaining(persistentFlags));
-    expect(next.dialogue.flags).toEqual(expect.arrayContaining(persistentFlags));
+    expect(next.flags).toEqual(expect.arrayContaining([...persistentFlags]));
+    expect(next.dialogue.flags).toEqual(expect.arrayContaining([...persistentFlags]));
   });
 
   it('carries persistent choices into Day 5', () => {
     const next = startFifthDay(checkpoint('day4-complete', irisDecision));
-    expect(next.flags).toEqual(expect.arrayContaining(persistentFlags));
-    expect(next.dialogue.flags).toEqual(expect.arrayContaining(persistentFlags));
+    expect(next.flags).toEqual(expect.arrayContaining([...persistentFlags]));
+    expect(next.dialogue.flags).toEqual(expect.arrayContaining([...persistentFlags]));
     expect(next.stage).toBe('day5-reading');
     expect(finalReading.nodes.some((node) => node.id === next.dialogue.node)).toBe(true);
   });
@@ -66,8 +66,8 @@ describe('Cross-day narrative flag continuity', () => {
       const restored = decodeSave(encodeSave(state));
       expect(restored, `failed to restore stage ${state.stage}`).not.toBeNull();
       expect(restored?.stage).toBe(state.stage);
-      expect(restored?.flags).toEqual(expect.arrayContaining(persistentFlags));
-      expect(restored?.dialogue.flags).toEqual(expect.arrayContaining(persistentFlags));
+      expect(restored?.flags).toEqual(expect.arrayContaining([...persistentFlags]));
+      expect(restored?.dialogue.flags).toEqual(expect.arrayContaining([...persistentFlags]));
       expect(restored?.dialogue.node).toBe(state.dialogue.node);
     }
   });

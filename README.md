@@ -2,7 +2,12 @@
 
 A browser-first **pixel-art small-town bookshop narrative game**. Customers arrive to buy books, talk about their lives and pass along rumors. The player can listen, investigate and decide when to keep or share information, with consequences for relationships across the town.
 
-**Status:** a short playable five-day narrative prototype plus an isolated Phaser bookshop vertical slice. Neither demonstrates a finished episode's target runtime or release-level art. The slice provides exploration, animated characters, contextual interactions and one branching Ukrainian encounter; it preserves the narrative app and saves.
+**Status:** the canonical Phaser bookshop shares the five-day narrative, with a stable mobile viewport, overlay dialogue, compact catalog recommendations for three customers, an investigation journal and an interactive Frank with a cat tree. `/phaser-prototype/` preserves the isolated single-encounter slice. This is still a short narrative prototype, not a finished 40-minute episode. See the [mobile overhaul QA](docs/qa/mobile-overhaul/README.md) for evidence and remaining limits.
+
+The [stabilization report](docs/qa/stabilization/README.md) records CI repairs,
+order/save regression coverage, UX changes and measured limits. The
+[narrative readiness plan](docs/integration/NARRATIVE-READINESS.md) separates
+playable content from the unapproved design pack and lists concrete integration tasks.
 
 ## Quick start
 
@@ -13,7 +18,7 @@ npm ci
 npm run dev
 ```
 
-Open the localhost URL displayed by Vite for the narrative game, or `/phaser-prototype/` for the playable bookshop. See the [slice guide](docs/art/PHASER-VERTICAL-SLICE.md) for controls and architecture. Run `npm run check` for formatting, lint, type checks, unit tests and build. A committed `package-lock.json` pins dependencies. CI uses `npm ci` for reproducible installation.
+Open the localhost URL displayed by Vite for the five-day bookshop, or `/phaser-prototype/` for the isolated encounter. See the [slice guide](docs/art/PHASER-VERTICAL-SLICE.md) for controls and architecture. Run `npm run check` for formatting, lint, type checks, unit tests and build. A committed `package-lock.json` pins dependencies. CI uses `npm ci` for reproducible installation.
 
 ## Intended play loop
 

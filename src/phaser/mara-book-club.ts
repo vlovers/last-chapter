@@ -49,7 +49,7 @@ export const maraBookClub: ConversationTopic = {
           next: 'fiction',
           remember: 'mara:fiction-not-reality',
         },
-        { id: 'exit', label: 'Мені треба обслужити клієнта', next: '__exit' },
+        { id: 'exit', label: 'Мені треба обслужити клієнта', next: '__exit', suspend: true },
       ],
     },
     {
@@ -70,7 +70,7 @@ export const maraBookClub: ConversationTopic = {
           remember: 'mara:xaden-transition',
         },
         { id: 'cat', label: 'А Френк кого підтримав би?', next: 'frank' },
-        { id: 'exit', label: 'Продовжимо іншим разом', next: '__exit' },
+        { id: 'exit', label: 'Продовжимо іншим разом', next: '__exit', suspend: true },
       ],
     },
     {
@@ -102,7 +102,7 @@ export const maraBookClub: ConversationTopic = {
           remember: 'mara:trust-context',
         },
         { id: 'hp', label: 'А як щодо секретів у Гаррі Поттері?', next: 'potter' },
-        { id: 'exit', label: 'Поговоримо пізніше', next: '__exit' },
+        { id: 'exit', label: 'Поговоримо пізніше', next: '__exit', suspend: true },
       ],
     },
     {
@@ -132,7 +132,7 @@ export const maraBookClub: ConversationTopic = {
           remember: 'mara:home-people',
         },
         { id: 'frank', label: 'У нас тут є свій охоронець затишку — Френк', next: 'frank' },
-        { id: 'exit', label: 'Повернімося до книжок іншим разом', next: '__exit' },
+        { id: 'exit', label: 'Повернімося до книжок іншим разом', next: '__exit', suspend: true },
       ],
     },
     {
@@ -180,7 +180,7 @@ export const maraBookClub: ConversationTopic = {
           remember: 'mara:boundaries',
         },
         { id: 'books', label: 'Може, оберемо Френкові книжку?', next: 'fiction' },
-        { id: 'exit', label: 'Побачимося пізніше', next: '__exit' },
+        { id: 'exit', label: 'Побачимося пізніше', next: '__exit', suspend: true },
       ],
     },
     {
@@ -206,7 +206,12 @@ export const maraBookClub: ConversationTopic = {
           next: 'closing',
           remember: 'mara:personal:respected',
         },
-        { id: 'exit', label: 'Можемо повернутися до цього іншим разом', next: '__exit' },
+        {
+          id: 'exit',
+          label: 'Можемо повернутися до цього іншим разом',
+          next: '__exit',
+          suspend: true,
+        },
       ],
     },
     {

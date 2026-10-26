@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { chooseChapterOption, startChapter } from '../src/game/chapter';
-import { decodeSave, encodeSave } from '../src/game/save';
+import { decodeSave, encodeSave, SAVE_LIMITS } from '../src/game/save';
 
 describe('local narrative save', () => {
   it('round trips a player choice', () => {
@@ -35,7 +35,11 @@ describe('local narrative save', () => {
       flags: [],
       history: [],
     };
-    expect(decodeSave(JSON.stringify({ ...base, history: Array(300).fill('greet') }))).toBeNull();
+    expect(
+      decodeSave(
+        JSON.stringify({ ...base, history: Array(SAVE_LIMITS.history + 1).fill('greet') }),
+      ),
+    ).toBeNull();
     expect(decodeSave(JSON.stringify({ ...base, flags: ['same', 'same'] }))).toBeNull();
     expect(decodeSave(JSON.stringify({ ...base, flags: [''] }))).toBeNull();
     expect(decodeSave(JSON.stringify({ ...base, flags: ['x'.repeat(121)] }))).toBeNull();

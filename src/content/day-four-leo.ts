@@ -22,7 +22,7 @@ export const leoDecision: DialogueStory = {
           id: 'evidence',
           label: '«Знайшлися записи про старе бронювання»',
           next: 'evidence',
-          requires: ['eleanor_confirmed_reservation'],
+          requires: ['eleanor_timeline_checked'],
         },
         {
           id: 'letter',
@@ -118,6 +118,16 @@ export const leoDecision: DialogueStory = {
       id: 'evidence',
       speaker: 'Лео',
       text: '«Тобто запис про бронювання був, але ніхто не може підтвердити, що мені подзвонили?» Він довго дивиться на полицю. «Це змінює те, що я думав про той день. Але не дає права вимагати від Айріс відповіді».',
+      textWhen: [
+        {
+          requires: ['eleanor_timeline_kept_uncertainty'],
+          text: 'Лео звіряє дві дати. «Тоді я думав, що книжку не відклали. А тепер виходить, її могли просто не видати через затоплення». Він кладе картку на прилавок. «Це важливо. Але я не знаю, що тоді знала Айріс».',
+        },
+        {
+          requires: ['eleanor_timeline_assumed_guilt'],
+          text: '«Ти кажеш, Елеонора приховала бронювання? Зачекай». Лео перевіряє дату в журналі. «Тут написано про закриття, а не про намір щось приховати. Я не хочу звинувачувати її за те, чого ми не довели».',
+        },
+      ],
       options: [
         {
           id: 'evidence-back',

@@ -10,6 +10,8 @@ describe('optional bookstore investigation', () => {
     expect(accessibleClues(state.flags)).toHaveLength(0);
     expect(() => collectClue(state, 'bookmark')).toThrow('Clue is not accessible');
     state = inspectShopSpot(state, 'frank');
+    expect(accessibleClues(state.flags)).toHaveLength(0);
+    state = inspectShopSpot(state, 'window');
     expect(accessibleClues(state.flags).map((clue) => clue.id)).toEqual(['bookmark']);
     state = collectClue(state, 'bookmark');
     expect(state.flags).toContain('clue_bookmark');
@@ -17,9 +19,18 @@ describe('optional bookstore investigation', () => {
     expect(collectClue(state, 'bookmark')).toBe(state);
   });
 
+  it('preserves an already collected bookmark from older Frank saves', () => {
+    const initial = startChapter();
+    const flags = ['met_frank', 'clue_bookmark'];
+    const legacy = { ...initial, flags, dialogue: { ...initial.dialogue, flags } };
+    const restored = decodeSave(encodeSave(legacy))!;
+    expect(accessibleClues(restored.flags).some((clue) => clue.id === 'bookmark')).toBe(true);
+    expect(collectClue(restored, 'bookmark')).toBe(restored);
+  });
+
   it('combines three finds into a timeline and survives v1 save roundtrip', () => {
     let state = startChapter();
-    for (const spot of ['frank', 'counter', 'shelves'] as const)
+    for (const spot of ['window', 'counter', 'shelves'] as const)
       state = inspectShopSpot(state, spot);
     for (const clue of ['bookmark', 'stamp', 'shelf']) state = collectClue(state, clue);
     expect(accessibleClues(state.flags).some((clue) => clue.id === 'timeline')).toBe(true);

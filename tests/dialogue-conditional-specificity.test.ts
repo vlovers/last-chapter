@@ -42,8 +42,21 @@ describe('Conditional dialogue specificity', () => {
     ).toBe('Мара й Лео пам’ятають спільну розмову.');
   });
 
+  it('supports explicit authored priority for consequential endings', () => {
+    const authored: DialogueStory = {
+      ...story,
+      nodes: story.nodes.map((node) => ({ ...node, variantSelection: 'authored' })),
+    };
+    expect(
+      currentNode(authored, { node: 'scene', flags: ['mara_heard', 'leo_heard'], history: [] })
+        .text,
+    ).toBe('Мара пам’ятає вашу розмову.');
+  });
+
   it('does not mutate the source order of conditional variants', () => {
     currentNode(story, { node: 'scene', flags: ['mara_heard', 'leo_heard'], history: [] });
-    expect(story.nodes[0].textWhen?.map((entry) => entry.requires.length)).toEqual([1, 2, 1]);
+    const node = story.nodes[0];
+    if (!node) throw new Error('Missing scene fixture');
+    expect(node.textWhen?.map((entry) => entry.requires.length)).toEqual([1, 2, 1]);
   });
 });

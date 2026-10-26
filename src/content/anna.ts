@@ -306,7 +306,7 @@ export const annaVisit: DialogueStory = {
     {
       id: 'anna-v3-conversation-end',
       speaker: 'Анна',
-      text: '«Дякую за розмову. Не все треба вирішувати одразу».',
+      text: '«Я запишу це для уроку, але не як готову відповідь. Може, дітям буде корисно побачити, що вчителька теж іноді шукає слова».',
       options: [
         {
           id: 'anna-v3-return',

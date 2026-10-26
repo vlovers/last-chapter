@@ -27,6 +27,12 @@ export const thomasVisit: DialogueStory = {
           next: 'thomas-reflection',
           unless: ['thomas_reflected_on_responsibility'],
         },
+        {
+          id: 'thomas-chairs',
+          label: '«Ти встиг занести стільці на шкільне читання?»',
+          next: 'thomas-chairs',
+          unless: ['thomas_chairs_discussed'],
+        },
         { id: 'repair', label: '«Так, покажу вимикач»', next: 'repair' },
         { id: 'books', label: '«Ви любите читати?»', next: 'books' },
         { id: 'anna', label: '«Анна заходила до нас»', next: 'anna' },
@@ -37,6 +43,48 @@ export const thomasVisit: DialogueStory = {
           requires: ['rumor_heard'],
         },
         { id: 'finish', label: 'Подякувати за візит', next: 'end' },
+      ],
+    },
+    {
+      id: 'thomas-chairs',
+      speaker: 'Томас',
+      text: 'Томас завмирає з викруткою в руці. «Стільці. Я обіцяв Анні занести їх до класу. Вчора взяв термінове замовлення й навіть не подзвонив. Вона сама носила їх сходами». Він дивиться на годинник. «Я вже не виправлю вчора, але можу хоча б не робити вигляд, що нічого не сталося».',
+      options: [
+        {
+          id: 'thomas-chairs-own',
+          label: '«Скажи Анні правду й запитай, як можеш допомогти тепер»',
+          next: 'thomas-chairs-result',
+          grants: ['thomas_chairs_owned_mistake'],
+        },
+        {
+          id: 'thomas-chairs-fix',
+          label: '«Може, просто принести нові стільці?»',
+          next: 'thomas-chairs-result',
+          grants: ['thomas_chairs_avoided_conversation'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-chairs-result',
+      speaker: 'Томас',
+      text: '«Я не люблю, коли через мене хтось мусить робити зайву роботу». Він складає інструменти.',
+      textWhen: [
+        {
+          requires: ['thomas_chairs_owned_mistake'],
+          text: '«Подзвоню їй зараз. Не щоб мене похвалили за вибачення. Просто вона має знати, що я пам’ятаю свою обіцянку». Він дістає телефон і відходить до вікна.',
+        },
+        {
+          requires: ['thomas_chairs_avoided_conversation'],
+          text: '«Можу принести хоч десять нових стільців. Але це не поверне Анні вечір, який вона витратила через мене». Томас відкладає телефон. Схоже, розмова знову почекає.',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-chairs-back',
+          label: 'Повернутися до розмови',
+          next: 'greet',
+          grants: ['thomas_chairs_discussed'],
+        },
       ],
     },
     {
@@ -276,7 +324,7 @@ export const thomasVisit: DialogueStory = {
     {
       id: 'thomas-v3-conversation-end',
       speaker: 'Томас',
-      text: '«Дякую за розмову. Не все треба вирішувати одразу».',
+      text: '«Гаразд. Піду перевірю ту лампу, поки вона знову не почала сваритися зі мною». Він підхоплює ящик, але цього разу не поспішає до дверей.',
       options: [
         {
           id: 'thomas-v3-return',

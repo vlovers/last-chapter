@@ -39,3 +39,18 @@ and three original 64×80 Mara SVG expressions under `public/art/bookshop/`.
 `project-original` provenance. See [source attribution](../../public/art/bookshop/ATTRIBUTION.md)
 and [before/after report](v4/README.md). The synchronized four-frame rain source remains
 unwired; the tested procedural weather layer is active.
+
+## Gameplay polish V1 — original procedural art
+
+`public/phaser-prototype/frank.js` authors Frank in native room pixels using
+integer rectangles: grey Devon Rex proportions, wedge face, stepped oversized
+ears, short wavy coat, directional facing, breathing/blink/tail frames and walk,
+sit, sleep, stretch and groom poses. `frank-behavior.js` supplies the deterministic
+ambient schedule. No external sprite, image-generation output, asset pack or
+licensed character reference was imported. Rights/provenance: original project
+art, under the repository's existing project terms.
+
+`environment.js` adds original pixel geometry for a window book pedestal, returns
+trolley, table easel and restrained rug weave. Their solids reuse the existing
+furniture footprints. All remain on the 640×360 native grid. Existing original
+visitor portraits and shared sprite palettes are reused without external artwork.

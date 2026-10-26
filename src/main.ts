@@ -360,7 +360,7 @@ function render(): void {
               },
               { title: 'Завершення вечора', matches: (id: string) => id === 'close' },
             ]
-          : [{ title: '', matches: (_id: string) => true }];
+          : [{ title: '', matches: () => true }];
       for (const group of groups) {
         const options = available.filter((option) => group.matches(option.id));
         if (options.length === 0) continue;

@@ -65,3 +65,5 @@ jobs:
           curl --fail http://127.0.0.1:5173/
           npm run test:browser
           npm run test:browser:v5
+          npm run test:browser:mobile
+          node scripts/qa-frank-overhaul.mjs
