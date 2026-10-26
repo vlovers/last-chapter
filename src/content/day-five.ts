@@ -906,6 +906,10 @@ export const finalReading: DialogueStory = {
       id: 'final-v3-thomas',
       speaker: 'Томас',
       text: '«Я запитав Анну, чи потрібна допомога. Вона сказала: посиди зі мною. Я сидів. Незвично важка робота. Але вперше за довгий час не поспішав її закінчити».',
+      textWhen: [
+        { requires: ['thomas_will_ask_before_helping'], text: '«Я запитав Анну, чи потрібна їй допомога. Вона попросила просто побути поруч. Я не шукав іншого завдання».' },
+        { requires: ['thomas_admitted_fear_of_rejection'], text: '«Я сказав Анні, що боюся бути зайвим. Вона не обіцяла, що все буде просто. Але ми нарешті говорили про нас».' },
+      ],
       options: [
         {
           id: 'final-v3-thomas-back',
