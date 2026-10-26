@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { bellwickAvailable, bellwickSchedule, bellwickStory } from '../phaser/bellwick-schedule';
-import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from '../game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../game/dialogue';
 
 describe('five-day Bellwick encounter orchestration', () => {
   it('schedules exactly two distinct encounters per day', () => {
@@ -17,7 +23,9 @@ describe('five-day Bellwick encounter orchestration', () => {
   it('does not reveal a future encounter or reopen a completed one', () => {
     for (const scene of bellwickSchedule) {
       expect(bellwickAvailable(scene.day - 1, []).some((item) => item.id === scene.id)).toBe(false);
-      expect(bellwickAvailable(scene.day, [scene.id]).some((item) => item.id === scene.id)).toBe(false);
+      expect(bellwickAvailable(scene.day, [scene.id]).some((item) => item.id === scene.id)).toBe(
+        false,
+      );
     }
   });
 
