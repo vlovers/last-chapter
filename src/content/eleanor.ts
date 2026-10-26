@@ -330,7 +330,7 @@ export const eleanorVisit: DialogueStory = {
     {
       id: 'eleanor-v3-conversation-end',
       speaker: 'Елеонора',
-      text: '«Дякую за розмову. Не все треба вирішувати одразу».',
+      text: '«Я досі хочу переставити той стіл. Завтра спробую спершу запитати, чи ви не проти, а вже потім шукатиму рулетку».',
       options: [
         {
           id: 'eleanor-v3-return',
