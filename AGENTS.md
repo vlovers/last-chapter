@@ -5,6 +5,17 @@ Applies to this repository. Read the README and relevant local documentation bef
 ## Project boundaries
 Last Chapter is a Ukrainian-language Phaser narrative game. Preserve narrative flags, dialogue consequences, accessibility and deterministic story progression; update story/character/dialogue documentation when changing canon. Do not copy third-party protected content.
 
+## Game-specific architecture and narrative invariants
+
+Preserve the richer contract on the active game integration branch `feat/dialogue-engine-mara-frank-20261025` when reconciling governance changes. Do not overwrite that branch's `AGENTS.md` with this shorter general template.
+
+- `src/game/` owns deterministic narrative state transitions and must not depend on DOM or persistence; `src/content/` owns authored narrative data, `src/styles/` visual styling, and `tests/` knowledge/trust/branching regressions.
+- Use the project's documented Node 22 + npm workflow. Run applicable `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, and `npm run check`; report skipped or unavailable checks explicitly.
+- Distinguish rumor, observation, and confirmed truth. NPCs must not know facts they could not learn; player choices cannot rewrite objective facts retroactively. Changes to consequences require narrative review and deterministic regression tests.
+- Player-facing text is natural Ukrainian (`uk-UA`), as specified in `docs/LOCALIZATION.md`. Respect confidentiality, consent, character autonomy, and plausible consequences.
+- Never introduce unlicensed assets, unverified real-world allegations, or unsafely rendered imported prose. Document asset provenance.
+- Do not claim an unfinished episode or feature is implemented. Do not inflate dialogue merely to meet a target duration.
+
 ## Development protocol
 1. Start from a scoped issue and feature branch. Identify acceptance criteria and affected behavior.
 2. Read existing implementation and tests; avoid unrelated refactors or generated-file churn.
