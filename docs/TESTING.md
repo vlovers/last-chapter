@@ -59,3 +59,16 @@ five-day story with three saved catalog purchases.
 normal speed and 4× CPU throttling. These runners use the same optional Playwright
 setup and environment variables as the browser smoke tests. See the
 [implementation, screenshots and limitations](qa/mobile-overhaul/README.md).
+
+## Stabilization and integration readiness
+
+`npm run test:browser:stabilization` covers first-use guidance, all fifteen real
+customer/book pairs, reload and receipt idempotence, actual journal provenance,
+120 overlay cycles with listener/object counts, long-text scrolling, rotation,
+reduced motion and a larger compatible save. Cat waits observe simulated time
+with a separate wall watchdog; cleanup tests prove assertions retain a failing
+exit code even when the browser transport never closes.
+
+See the [executed test/UX report](qa/stabilization/README.md) and
+[narrative integration plan](integration/NARRATIVE-READINESS.md). Future content
+proposals are not counted as implemented scenes.

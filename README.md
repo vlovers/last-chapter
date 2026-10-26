@@ -4,6 +4,11 @@ A browser-first **pixel-art small-town bookshop narrative game**. Customers arri
 
 **Status:** the canonical Phaser bookshop shares the five-day narrative, with a stable mobile viewport, overlay dialogue, compact catalog recommendations for three customers, an investigation journal and an interactive Frank with a cat tree. `/phaser-prototype/` preserves the isolated single-encounter slice. This is still a short narrative prototype, not a finished 40-minute episode. See the [mobile overhaul QA](docs/qa/mobile-overhaul/README.md) for evidence and remaining limits.
 
+The [stabilization report](docs/qa/stabilization/README.md) records CI repairs,
+order/save regression coverage, UX changes and measured limits. The
+[narrative readiness plan](docs/integration/NARRATIVE-READINESS.md) separates
+playable content from the unapproved design pack and lists concrete integration tasks.
+
 ## Quick start
 
 Requires Node.js 22 and npm.
