@@ -25,21 +25,24 @@ const cat = () =>
       valid: canStand(s.frank.state),
       nodes: s.children.length,
       fps: game.loop.actualFps,
+      simulationMs: s.frank.state.elapsed,
     };
   });
 const choose = async (id) => {
   await page.waitForTimeout(250);
   await page.locator(`#choices button[data-choice="${id}"]`).click();
 };
-const waitActivity = async (name, ms = 15000) => {
-  const end = Date.now() + ms;
+const waitActivity = async (name, simulationBudget = 15000) => {
+  const initial = await cat();
+  const end = Date.now() + 90000;
   while (Date.now() < end) {
     const state = await cat();
     assert.ok(state.valid);
     if (state.activity === name) return state;
+    if (state.simulationMs - initial.simulationMs >= simulationBudget) break;
     await page.waitForTimeout(250);
   }
-  throw Error('No ' + name + ': ' + JSON.stringify(await cat()));
+  throw Error('No ' + name + ' within simulation/wall budget: ' + JSON.stringify(await cat()));
 };
 try {
   await page.goto(process.env.BASE_URL || 'http://127.0.0.1:5173');

@@ -274,6 +274,28 @@ try {
   await page.locator('#journal-toggle').click();
   assert.equal(await page.getByText('private_fact_0', { exact: false }).count(), 0);
   await page.keyboard.press('Escape');
+  // A valid mid-story save fixture exercises the actual provenance cards.
+  await page.evaluate(() => {
+    const data = JSON.parse(localStorage.getItem('last-chapter:save:v1'));
+    data.flags.push(
+      'saw_receipt',
+      'heard_about_leak',
+      'clue_bookmark',
+      'clue_stamp',
+      'clue_shelf',
+      'clue_timeline',
+    );
+    localStorage.setItem('last-chapter:save:v1', JSON.stringify(data));
+  });
+  await page.reload();
+  await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+  await page.locator('#journal-toggle').click();
+  await page.getByRole('button', { name: 'Знахідки', exact: true }).click();
+  await page.getByText('Документ · Старі записи книгарні', { exact: true }).waitFor();
+  await page.getByText('Свідчення · слова співрозмовника · Пані Міллер', { exact: true }).waitFor();
+  await page.getByText('Припущення · потребує перевірки', { exact: true }).waitFor();
+  await screenshot(page, 'journal-provenance');
+  await page.keyboard.press('Escape');
   await page.waitForTimeout(Number(process.env.QA_SOAK_MS || 30000));
   const final = await state(page);
   assert.equal(final.nodes, original.nodes);
