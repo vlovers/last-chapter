@@ -30,7 +30,55 @@ export const leoDecision: DialogueStory = {
           next: 'letter',
           requires: ['saw_envelope'],
         },
+        {
+          id: 'leo-future',
+          label: '«Чи можна будувати майбутнє, не переписуючи минуле?»',
+          next: 'leo-future',
+          unless: ['leo_day_four_future_heard'],
+        },
         { id: 'finish', label: 'Побажати Лео спокійного вечора', next: 'end' },
+      ],
+    },
+    {
+      id: 'leo-future',
+      speaker: 'Лео',
+      text: '«Я зберіг старий квиток. Не тому, що хочу повернутися до того дня. Просто боявся викинути доказ, що колись був щасливим. Мара побачила його й нічого не запитала. А я весь вечір чекав допиту».',
+      options: [
+        {
+          id: 'leo-future-honest',
+          label: '«Можеш сам розповісти Марі, якщо захочеш»',
+          next: 'leo-future-choice',
+          grants: ['leo_day_four_chose_honesty'],
+        },
+        {
+          id: 'leo-future-private',
+          label: '«Спогад не стає зрадою лише тому, що він особистий»',
+          next: 'leo-future-choice',
+          grants: ['leo_day_four_respected_privacy'],
+        },
+      ],
+    },
+    {
+      id: 'leo-future-choice',
+      speaker: 'Лео',
+      text: '«Мені потрібен час. Не для того, щоб вигадати правильну відповідь, а щоб перестати боятися неправильної».',
+      textWhen: [
+        {
+          requires: ['leo_day_four_chose_honesty'],
+          text: '«Я хочу говорити з Марою чесно, а не так, ніби звітую за кожен день до нашої зустрічі. Мабуть, почну з того, чого боюся».',
+        },
+        {
+          requires: ['leo_day_four_respected_privacy'],
+          text: '«Можливо, минуле не треба ні ховати, ні виставляти на суд. Я можу пам’ятати його й усе одно бути тут, сьогодні».',
+        },
+      ],
+      options: [
+        {
+          id: 'leo-future-back',
+          label: 'Повернутися до розмови',
+          next: 'welcome',
+          grants: ['leo_day_four_future_heard'],
+        },
       ],
     },
     {
