@@ -69,6 +69,54 @@ describe('Narrative decisions survive chapter transitions and save/load', () => 
     ]);
   });
 
+  it('carries a Day 1 rumor into a Day 3 apology to Thomas after reload', () => {
+    const miller = choose(
+      at('miller', []),
+      'greet',
+      'town',
+      'gossip',
+      'what-saw',
+      'speculate',
+      'speculation-move-on',
+    );
+    const thomas = at('thomas', decodeSave(encodeSave(miller))!.flags);
+    const apologized = choose(
+      thomas,
+      'greet',
+      'rumor',
+      'rumor-own-words',
+      'rumor-own-words-back',
+      'finish',
+    );
+    const loaded = decodeSave(encodeSave(apologized));
+    expect(loaded?.flags).toContain('rumor_amplified');
+    expect(loaded?.flags).toContain('thomas_heard_rumor_apology');
+    expect(loaded?.flags).not.toContain('thomas_privacy_pressed');
+    expect(loaded?.dialogue.node).toBe('end');
+  });
+
+  it('keeps late confession distinct from an unearned mutual finale after reload', () => {
+    const state = startFifthDay(
+      at('day4-complete', [
+        'saw_envelope',
+        'opened_private_letter',
+        'iris_letter_choice_respected',
+        'leo_open_to_conversation',
+      ]),
+    );
+    const atLetter = choose(state, 'open', 'letter');
+    const loaded = decodeSave(encodeSave(atLetter))!;
+    expect(
+      currentNode(stageStory(loaded.stage), loaded.dialogue).options.find(
+        (option) => option.id === 'mutual',
+      )?.unless,
+    ).toContain('opened_private_letter');
+    const confessed = choose(loaded, 'admit-breach-now', 'admit-breach-now-back', 'close');
+    expect(currentNode(stageStory(confessed.stage), confessed.dialogue).text).toContain(
+      'Вона почула правду',
+    );
+  });
+
   it('persists amplification and allows a Day 2 admission without losing a book sale', () => {
     const miller = choose(
       at('miller', []),
