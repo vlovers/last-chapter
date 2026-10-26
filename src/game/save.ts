@@ -5,6 +5,10 @@ import { noraVisit } from '../content/nora';
 
 export const SAVE_KEY = 'last-chapter:save:v1';
 const VERSION = 1;
+// History is diagnostic; completed/pending ledgers preserve choice availability.
+const MAX_HISTORY = 256;
+const MAX_FLAGS = 1024;
+const MAX_LEDGER = 2048;
 
 interface SavedChapter {
   version: number;
@@ -45,7 +49,7 @@ export function encodeSave(state: ChapterState): string {
     node: state.dialogue.node,
     // Preserve world discoveries and flags produced in the active dialogue.
     flags: [...new Set([...state.flags, ...state.dialogue.flags])],
-    history: [...state.dialogue.history],
+    history: state.dialogue.history.slice(-MAX_HISTORY),
     ...(state.dialogue.completed !== undefined
       ? { completed: state.dialogue.completed, pending: state.dialogue.pending ?? [] }
       : {}),
@@ -63,7 +67,7 @@ export function decodeSave(raw: string): ChapterState | null {
       return null;
     if (!obj.flags.every((value: unknown) => typeof value === 'string')) return null;
     if (!obj.history.every((value: unknown) => typeof value === 'string')) return null;
-    if (obj.flags.length > 128 || obj.history.length > 256) return null;
+    if (obj.flags.length > MAX_FLAGS || obj.history.length > MAX_HISTORY) return null;
     // Save data is untrusted: validate it before loading dialogue content.
     if (new Set(obj.flags).size !== obj.flags.length) return null;
     if (obj.flags.some((flag: string) => !flag || flag.length > 120)) return null;
@@ -72,11 +76,11 @@ export function decodeSave(raw: string): ChapterState | null {
     if (
       obj.completed !== undefined &&
       (!Array.isArray(obj.completed) ||
-        obj.completed.length > 256 ||
+        obj.completed.length > MAX_LEDGER ||
         !obj.completed.every((v: unknown) => typeof v === 'string' && v.length <= 1000) ||
         new Set(obj.completed).size !== obj.completed.length ||
         !Array.isArray(obj.pending) ||
-        obj.pending.length > 256 ||
+        obj.pending.length > MAX_LEDGER ||
         !obj.pending.every(
           (v: unknown) =>
             !!v &&
