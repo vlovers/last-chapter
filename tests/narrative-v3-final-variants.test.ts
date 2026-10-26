@@ -17,6 +17,19 @@ describe('Narrative V3 finale variants', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
   });
 
+  it('offers one-time callbacks only after their source discussions', () => {
+    const gathering = finalReading.nodes.find((entry) => entry.id === 'gathering');
+    expect(gathering).toBeDefined();
+    for (const [name] of cases) {
+      const option = gathering!.options.find((entry) => entry.next === `final-v3-${name}`);
+      expect(option?.requires).toHaveLength(1);
+      expect(option?.unless).toEqual([`final_v3_${name}_heard`]);
+      const ending = finalReading.nodes.find((entry) => entry.id === `final-v3-${name}`);
+      expect(ending?.options[0]?.grants).toContain(`final_v3_${name}_heard`);
+      expect(ending?.options[0]?.next).toBe('gathering');
+    }
+  });
+
   for (const [name, first, second] of cases) {
     it(`${name} reflects both earlier choices`, () => {
       const node = finalReading.nodes.find((entry) => entry.id === `final-v3-${name}`);
