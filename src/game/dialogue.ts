@@ -122,5 +122,19 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
       if (!ids.has(option.next)) errors.push(`Missing destination: ${option.next}`);
     }
   }
+  const reachable = new Set<string>();
+  const queue = [story.start];
+  while (queue.length > 0) {
+    const id = queue.shift();
+    if (!id || reachable.has(id)) continue;
+    reachable.add(id);
+    const node = story.nodes.find((entry) => entry.id === id);
+    for (const option of node?.options ?? []) {
+      if (ids.has(option.next) && !reachable.has(option.next)) queue.push(option.next);
+    }
+  }
+  for (const id of ids) {
+    if (!reachable.has(id)) errors.push(`Unreachable node: ${id}`);
+  }
   return errors;
 }
