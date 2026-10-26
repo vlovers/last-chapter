@@ -16,6 +16,7 @@ import { pauseVisitor, resumeVisitor, shouldBrowse } from './visitor-lifecycle.j
 import { createVisitorBook } from './visitor-book.js';
 import { visitorReaction } from './visitor-reactions.js';
 import { createFrank } from './frank.js';
+import { FRANK_ACTIONS, frankApproach } from './frank-behavior.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -60,6 +61,12 @@ class Bookshop extends Phaser.Scene {
     this.interactions.update(this.characters.player, this.characters.mara, this.state);
     this.refreshStory();
     this.bindControls();
+    this.viewportObserver = new ResizeObserver(() => {
+      this.scale.getParentBounds();
+      this.scale.refresh();
+      this.interactions.resize();
+    });
+    this.viewportObserver.observe($('#game'));
     this.events.once('shutdown', () => this.cleanup());
     this.events.once('destroy', () => this.cleanup());
     $('#loading-message').textContent = 'Дощ залишиться за дверима. Книжки вже чекають.';
@@ -68,6 +75,10 @@ class Bookshop extends Phaser.Scene {
   }
   refreshStory() {
     if (!this.story) return;
+    this.state = {
+      ...this.state,
+      inspected: [...new Set([...this.state.inspected, ...this.story.inspectedSpots])],
+    };
     const actor = this.story.actor;
     if (actor !== this.lastStoryActor) {
       const visitor = this.characters.mara;
@@ -257,7 +268,13 @@ class Bookshop extends Phaser.Scene {
     });
   }
   canExplore() {
-    return this.started && !this.failed && this.state.mode === 'explore' && !$('#settings').open;
+    return (
+      this.started &&
+      !this.failed &&
+      this.state.mode === 'explore' &&
+      !$('#settings').open &&
+      !document.body.classList.contains('reading')
+    );
   }
   toast(text) {
     if ($('#toast').textContent !== text) $('#toast').textContent = text;
@@ -285,6 +302,27 @@ class Bookshop extends Phaser.Scene {
       this.openStory();
       return;
     }
+    if (spot.id === 'frank' && this.frank) {
+      this.story?.inspect('frank');
+      this.state = transition(this.state, { type: 'inspect', id: 'frank' });
+      this.activeDialogue = {
+        kind: 'frank',
+        note: {
+          speaker: 'Френк',
+          text:
+            this.frank.state.activity === 'sleeping'
+              ? 'Френк згорнувся клубочком. Великі вуха ледь здригаються уві сні.'
+              : 'Маленький сірий девон-рекс повертає до вас великі вуха. Він нікуди не поспішає.',
+          choices: FRANK_ACTIONS,
+        },
+      };
+      this.state = transition(this.state, { type: 'open' });
+      this.keys.clear();
+      this.path = [];
+      this.pending = null;
+      this.showDialogue();
+      return;
+    }
     const inspection = this.story ? this.story.inspect(spot.id) : null;
     this.activeDialogue = inspection
       ? { kind: 'story-object', note: inspection }
@@ -304,7 +342,7 @@ class Bookshop extends Phaser.Scene {
     const node =
       this.activeDialogue?.kind === 'story'
         ? this.story.open()
-        : this.activeDialogue?.kind === 'story-object'
+        : ['story-object', 'frank'].includes(this.activeDialogue?.kind)
           ? this.activeDialogue.note
           : dialogueNode(this.activeDialogue, this.state);
     if (!node) throw new Error('Missing dialogue node');
@@ -321,6 +359,17 @@ class Bookshop extends Phaser.Scene {
     );
   }
   choose(id) {
+    if (this.activeDialogue?.kind === 'frank') {
+      const text = this.frank.react(id, this.characters.player);
+      if (!text) return;
+      if (id === 'leave') {
+        this.closeDialogue();
+        return;
+      }
+      this.activeDialogue.note = { speaker: 'Френк', text, choices: [] };
+      this.showDialogue();
+      return;
+    }
     if (this.activeDialogue?.kind === 'story') {
       this.story.choose(id);
       this.audio.play('dialogue');
@@ -388,6 +437,19 @@ class Bookshop extends Phaser.Scene {
       if (!this.started) return;
       const amount = (SPEED * Math.min(delta, 50)) / 1000;
       const { player, mara } = this.characters;
+      if (document.body.classList.contains('reading')) {
+        this.keys.clear();
+        this.path = [];
+        this.pending = null;
+      }
+      if (this.frank) {
+        this.frank.state.held =
+          this.pending?.id === 'frank' || this.activeDialogue?.kind === 'frank';
+        this.frank.update(delta, player, { paused: !this.canExplore(), reduced: this.reduced });
+        const spot = this.interactions.spots.find((s) => s.id === 'frank');
+        spot.rect = { x: this.frank.state.x - 21, y: this.frank.state.y - 34, w: 42, h: 35 };
+        spot.approach = frankApproach(this.frank.state);
+      }
       if (this.canExplore()) {
         if (this.state.mara === 'arriving') {
           const next = this.reduced
@@ -512,7 +574,9 @@ class Bookshop extends Phaser.Scene {
     $('#enter').hidden = true;
   }
   cleanup() {
+    this.viewportObserver?.disconnect();
     this.lifecycle?.abort();
+    this.frank?.destroy();
     this.visitorBook?.destroy();
     this.dialogue?.destroy();
     this.interactions?.destroy();

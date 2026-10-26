@@ -12,10 +12,11 @@ export interface Clue {
 export const CLUES: readonly Clue[] = [
   {
     id: 'bookmark',
-    label: 'Закладка Френка',
-    detail: 'На закладці — нерівний відбиток старого штампа книгарні. Кіт знайшов її не випадково?',
+    label: 'Закладка біля вікна',
+    detail:
+      'Між книжками на підставці біля вікна лежить закладка з нерівним відбитком старого штампа книгарні.',
     flag: 'clue_bookmark',
-    required: ['met_frank'],
+    required: ['explored_window'],
   },
   {
     id: 'stamp',
@@ -43,7 +44,9 @@ export const CLUES: readonly Clue[] = [
 ];
 
 export function accessibleClues(flags: readonly string[]): readonly Clue[] {
-  return CLUES.filter((clue) => clue.required.every((flag) => flags.includes(flag)));
+  return CLUES.filter(
+    (clue) => flags.includes(clue.flag) || clue.required.every((flag) => flags.includes(flag)),
+  );
 }
 
 export function collectClue(state: ChapterState, id: string): ChapterState {

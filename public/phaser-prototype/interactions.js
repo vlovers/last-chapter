@@ -13,7 +13,7 @@ export class Interactions {
         ? [
             {
               id: 'frank',
-              label: 'Погладити Френка',
+              label: 'Побути з Френком',
               rect: { x: 463, y: 171, w: 34, h: 29 },
               approach: { x: 477, y: 216 },
             },
@@ -98,6 +98,8 @@ export class Interactions {
         state.mode !== 'explore' ||
         (spot.id === 'mara' && (state.mara !== 'ready' || state.visitorVisible === false));
       button.classList.toggle('nearby', spot === this.nearest);
+      button.classList.toggle('visited', state.inspected.includes(spot.id));
+      button.title = spot.label + (state.inspected.includes(spot.id) ? ' · Уже оглянуто' : '');
     }
     this.hint.hidden = !this.nearest || state.mode !== 'explore';
     if (this.nearest) this.hint.textContent = `Е · ${this.nearest.label}`;

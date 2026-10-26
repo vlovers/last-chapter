@@ -121,6 +121,11 @@ export class FiveDayStory {
       .filter(([flag]) => this.chapter.flags.includes(flag))
       .map(([, text]) => text);
   }
+  get inspectedSpots(): readonly string[] {
+    return shopSpots
+      .filter((spot) => this.chapter.flags.includes(spot.discoveryFlag))
+      .map((spot) => spot.id);
+  }
   get evidence() {
     return accessibleClues(this.chapter.flags).map((clue) => ({
       ...clue,
@@ -204,6 +209,7 @@ export class FiveDayStory {
     };
   }
   choose(id: string) {
+    const restarting = id === '__restart' && this.stage === 'season-complete';
     if (id === '__restart' && this.stage === 'season-complete') this.chapter = startChapter();
     else if (id === '__advance') {
       const action = checkpoints[this.stage] ?? sequence[this.stage];
@@ -222,6 +228,8 @@ export class FiveDayStory {
       this.chapter = chooseChapterOption(this.chapter, id);
     }
     this.persist();
+    if (restarting && typeof window !== 'undefined')
+      window.dispatchEvent(new Event('last-chapter:new-game'));
     return this.open();
   }
 }

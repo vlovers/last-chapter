@@ -61,14 +61,16 @@ export class DialogueUI {
     const visitorNames = {
       'Пані Міллер': 'miller',
       Мара: 'mara',
-      Ірис: 'iris',
+      Айріс: 'iris',
       Анна: 'anna',
       Лео: 'leo',
       Елеонора: 'eleanor',
       Томас: 'thomas',
       Нора: 'nora',
     };
-    this.element.dataset.visitor = actor ?? visitorNames[node.speaker] ?? 'narrator';
+    this.element.dataset.visitor =
+      visitorNames[node.speaker] ??
+      (node.speaker === 'Оповідач' ? 'narrator' : (actor ?? 'narrator'));
     this.text.textContent = node.text;
     const visitor = this.element.dataset.visitor;
     const image = isMara ? portraitDataUrl(visitor, emotion) : null;
@@ -108,8 +110,10 @@ export class DialogueUI {
         button.append(detail);
         button.setAttribute('aria-label', `${choice.label}: ${choice.book.title}`);
       } else button.textContent = choice.label;
+      button.dataset.choice = choice.id;
       button.addEventListener('click', () => {
         if (performance.now() - opened < 220) return;
+        button.dataset.selected = 'true';
         this.onChoose(choice.id);
       });
       this.choices.append(button);
@@ -125,7 +129,7 @@ export class DialogueUI {
     }
     this.element.classList.toggle('still', reduced);
     (this.choices.querySelector('button') ?? this.close).focus({ preventScroll: true });
-    this.element.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+    this.element.scrollTop = 0;
   }
   hide() {
     this.element.hidden = true;

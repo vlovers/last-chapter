@@ -798,3 +798,314 @@ body.reduced #dialogue {
     font-size: 14px;
   }
 }
+
+/* Gameplay polish V1: a bounded reading companion beside the complete room. */
+body {
+  padding: 12px;
+}
+main {
+  width: min(1286px, calc((100svh - 178px) * 16 / 9), 100%);
+}
+#stage.talking {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(330px, 1fr);
+}
+#stage.talking #game {
+  aspect-ratio: auto;
+  height: min(52svh, 500px);
+  align-self: center;
+}
+#stage.talking .hud {
+  right: calc(37.7% + 14px);
+}
+#stage.talking #objective {
+  display: none;
+}
+#dialogue {
+  grid-template-columns: 60px minmax(0, 1fr);
+  align-content: start;
+  gap: 14px;
+  padding: 18px;
+  border-top: 0;
+  border-left: 3px solid #aa8458;
+  max-height: min(52svh, 500px);
+  height: 100%;
+  overflow: hidden;
+  background: #eaddbd;
+  box-shadow:
+    inset 0 0 0 3px #cbb38d,
+    inset 0 0 0 5px #f7eccf;
+}
+#dialogue .portrait-frame {
+  grid-row: 1;
+}
+#dialogue .dialogue-body {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(52px, auto) minmax(0, 1fr) auto;
+  max-height: calc(min(52svh, 500px) - 36px);
+}
+#dialogue .dialogue-title h2 {
+  font-size: 23px;
+}
+#dialogue-text {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 17px;
+  line-height: 1.55;
+  max-height: 22svh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 10px 0 14px;
+  padding-right: 7px;
+  white-space: pre-line;
+}
+#choices {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 3px 6px 5px 3px;
+  align-content: start;
+  scrollbar-color: #86664a #d9c49c;
+}
+#choices button {
+  border-radius: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  padding: 10px 12px 10px 25px;
+  min-height: 46px;
+  box-shadow: inset 0 -2px #d2bb91;
+}
+#choices button:focus-visible {
+  background: #354e43;
+  color: #fff3d6;
+  outline: 2px solid #77502f;
+  outline-offset: 0;
+}
+#choices button:focus-visible .recommendation small,
+#choices button:focus-visible .recommendation span {
+  color: #fff3d6;
+}
+#choices button:active,
+#choices button[data-selected='true'] {
+  transform: translateY(1px);
+  background: #c8d0b0;
+}
+#portrait-fallback {
+  min-height: 68px;
+  font-size: 32px;
+}
+#dialogue.object-note .dialogue-body {
+  max-height: calc(min(52svh, 500px) - 36px);
+}
+.story-tools {
+  position: relative;
+  margin-top: 10px;
+  border-width: 1px;
+  box-shadow: inset 0 2px #b08a6233;
+}
+.story-toolbar {
+  gap: 8px;
+  padding: 9px;
+}
+.story-toolbar-actions {
+  gap: 6px;
+}
+.story-toolbar-actions button {
+  border-radius: 0;
+  padding: 8px 11px;
+  min-height: 44px;
+  font-size: 12px;
+}
+.day-step {
+  border-radius: 0;
+  width: 26px;
+  height: 28px;
+}
+#story-panel {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: -1px;
+  right: -1px;
+  z-index: 5;
+  background: #292d29;
+  border: 3px solid #aa8458;
+  box-shadow:
+    0 -8px 30px #161c20bb,
+    inset 0 0 0 2px #4d5545;
+  max-height: min(65svh, 610px);
+  padding: 20px;
+}
+#story-panel > button:not(.panel-close) {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-top: 8px;
+  border-radius: 0;
+  background: #3c493c;
+}
+#story-panel > p {
+  max-width: 70ch;
+  font:
+    17px/1.65 Georgia,
+    serif;
+}
+.panel-close {
+  float: right;
+  font-size: 22px;
+  padding: 0;
+  width: 44px;
+  border: 0;
+  background: transparent;
+}
+#hotspots .visited.nearby::after {
+  content: '·';
+}
+@media (max-width: 850px) {
+  body {
+    padding: 8px;
+  }
+  main {
+    width: 100%;
+  }
+  #stage.talking {
+    display: block;
+  }
+  #stage.talking #game {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  #stage.talking .hud {
+    right: 8px;
+  }
+  #dialogue {
+    grid-template-columns: 60px minmax(0, 1fr);
+    height: min(42svh, 390px);
+    max-height: none;
+    border-left: 0;
+    border-top: 3px solid #aa8458;
+    padding: 14px;
+  }
+  #dialogue .dialogue-body,
+  #dialogue.object-note .dialogue-body {
+    max-height: calc(min(42svh, 390px) - 28px);
+  }
+  #dialogue-text {
+    max-height: 13svh;
+    font-size: 16px;
+  }
+  .dialogue-body small {
+    display: none;
+  }
+  .story-toolbar-actions {
+    flex: 1;
+  }
+  .story-toolbar-actions button {
+    flex: 1 1 auto;
+  }
+  footer {
+    font-size: 10px;
+  }
+}
+@media (max-width: 550px) {
+  body {
+    padding: 6px;
+  }
+  .masthead {
+    padding: 3px 2px 8px;
+  }
+  h1 {
+    font-size: 21px;
+  }
+  h1 span {
+    display: none;
+  }
+  .masthead a {
+    max-width: 110px;
+    text-align: right;
+    line-height: 1.4;
+  }
+  #dialogue {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px;
+    height: max(220px, calc(100svh - 100vw * 9 / 16 - 224px));
+  }
+  #dialogue .dialogue-body,
+  #dialogue.object-note .dialogue-body {
+    max-height: calc(max(220px, 100svh - 100vw * 9 / 16 - 224px) - 24px);
+  }
+  #dialogue .dialogue-title h2 {
+    font-size: 20px;
+  }
+  #dialogue-text {
+    font-size: 16px;
+    max-height: 16svh;
+  }
+  #choices button {
+    font-size: 14px;
+  }
+  .story-timeline {
+    width: 100%;
+    justify-content: center;
+    gap: 12px;
+  }
+  .story-toolbar-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+  .story-toolbar-actions button {
+    font-size: 11px;
+    padding: 8px;
+  }
+  #story-continue {
+    font-weight: bold;
+  }
+  #story-panel {
+    padding: 14px;
+    max-height: 65svh;
+  }
+  footer {
+    display: none;
+  }
+  .welcome {
+    padding: 12px;
+  }
+  .welcome h2 {
+    font-size: 23px;
+    margin: 6px 0;
+  }
+  .welcome p {
+    font-size: 12px;
+    margin: 8px 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #choices button {
+    transition:
+      background-color 100ms,
+      border-color 100ms;
+  }
+}
+body.reduced #choices button {
+  transition: none;
+}
+
+/* Narration has no character portrait: faces belong to the actual speaker. */
+#dialogue[data-visitor='narrator'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+#dialogue[data-visitor='narrator'] .portrait-frame {
+  display: none;
+}
+
+.story-toolbar-actions button[data-new]::after {
+  content: attr(data-new);
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 7px;
+  border: 1px solid #a99970;
+  color: #ffe3a4;
+  font-size: 11px;
+}

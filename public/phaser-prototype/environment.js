@@ -170,6 +170,11 @@ export function drawEnvironment(scene) {
     r(x, 204, 1, 3, 0xd0ac7b);
     r(x + 2, 318, 1, 4, 0xd0ac7b);
   }
+  for (let y = 234; y < 298; y += 12) {
+    r(285, y, 8, 1, 0x79524e);
+    r(287, y - 2, 4, 5, 0x79524e);
+    r(529, y, 3, 1, 0x79524e);
+  }
   // Contact occlusion is below sprites and furniture. Short, dark foot contact + soft apron.
   for (const [x, y, w, h] of [
     [70, 309, 180, 8],
@@ -255,6 +260,16 @@ export function drawEnvironment(scene) {
     f(-50, -14, 100, 16, honey);
     f(-47, -11, 94, 11, 0xb18352);
     f(-49, 3, 98, 3, 0x745035);
+    // Small easel carries the day's featured book, with a brass bookmark tab.
+    f(1, -32, 18, 18, 0x3d514a);
+    f(3, -34, 14, 19, 0x69758c);
+    f(4, -33, 2, 17, 0x9aa4ad);
+    f(8, -30, 6, 1, paper);
+    f(9, -27, 4, 6, 0xd0b88a);
+    f(12, -34, 2, 5, honey);
+    f(0, -15, 20, 2, wood);
+    f(2, -13, 2, 3, wood);
+    f(16, -13, 2, 3, wood);
     f(-37, -15, 33, 13, 0x475f58);
     f(-35, -16, 29, 12, paper);
     f(-21, -16, 1, 12, 0xa28a65);
@@ -349,16 +364,28 @@ export function drawEnvironment(scene) {
       f(x + (side > 0 ? 8 : 6), y + 4, 2, 7, 0xa5ad79);
     }
   });
-  // The existing small book piles retain their original solid footprints.
-  piece(250, 189, 194, (f) => {
-    book(f, 0, 0, 25, BOOK_COLORS[3]);
-    book(f, 3, -5, 24, BOOK_COLORS[1]);
-    book(f, 1, -10, 25, BOOK_COLORS[2]);
+  // Window-side display pedestal; books are supported above the floor.
+  piece(263, 190, 195, (f) => {
+    f(-15, -8, 30, 3, honey);
+    f(-13, -5, 26, 9, wood);
+    f(-11, -4, 2, 8, 0xc99b69);
+    f(-12, 3, 5, 2, ink);
+    f(7, 3, 5, 2, ink);
+    book(f, -12, -13, 24, BOOK_COLORS[3]);
+    book(f, -10, -18, 23, BOOK_COLORS[2]);
+    f(-3, -15, 2, 7, 0xa56153);
   });
-  piece(45, 245, 249, (f) => {
-    book(f, 0, 0, 25, BOOK_COLORS[5]);
-    book(f, 2, -5, 24, BOOK_COLORS[4]);
-    book(f, 0, -10, 26, BOOK_COLORS[0]);
+  // Slim returns trolley beside the counter. No unexplained floor books.
+  piece(59, 245, 250, (f) => {
+    f(-15, -4, 30, 3, honey);
+    f(-13, -2, 26, 6, wood);
+    f(-14, -15, 2, 18, 0x684937);
+    f(12, -15, 2, 18, 0x684937);
+    f(-14, -17, 28, 2, honey);
+    f(-11, 3, 4, 2, ink);
+    f(7, 3, 4, 2, ink);
+    book(f, -11, -9, 23, BOOK_COLORS[5]);
+    book(f, -9, -14, 21, BOOK_COLORS[4]);
   });
   // Entry: panelled oak door, glazed transom, umbrella hooks, coir doormat.
   r(571, 147, 49, 72, 0x322e29);
