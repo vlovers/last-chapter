@@ -53,6 +53,7 @@ describe('finale consequence matrix', () => {
       exhibition.epilogue,
     );
   });
+
   it('preserves unrelated ending dimensions across every combination of decisions', () => {
     const letters = [[], ['final_mutual_conversation'], ['final_letter_kept_private']];
     const communities = [[], ['final_respected_privacy'], ['final_repaired_rumor']];
