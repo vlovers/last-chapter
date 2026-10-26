@@ -15,6 +15,7 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«Якщо у вас є чай без поспіху, я залишуся на десять хвилин». Вона оглядає полиці. «Хочу знайти історію, де люди не зобов’язані бути сильними щосекунди».',
       options: [
+        { id: 'nora-v3-conversation', label: '«Де закінчується дослідження й починається вторгнення?»', next: 'nora-v3-conversation', unless: ['nora_archive_ethics_discussed'] },
         {
           id: 'nora-reflection',
           label: '«Чи можна залишити історію без остаточної відповіді?»',
@@ -215,6 +216,49 @@ export const noraVisit: DialogueStory = {
           next: 'hello',
           grants: ['nora_reflected_on_uncertainty'],
         },
+      ],
+    },
+    {
+      id: 'nora-v3-conversation',
+      speaker: 'Нора',
+      text: "«У центрі ми зберігаємо історії міста. Люди хочуть точних дат, але іноді є три різні спогади про один день».",
+      options: [
+        { id: 'nora-v3-ask', label: "«Ти мусиш обрати один?»", next: 'nora-v3-conversation-question' },
+        { id: 'nora-v3-short', label: "«Можемо не продовжувати»", next: 'nora-v3-conversation-end' },
+      ],
+    },
+    {
+      id: 'nora-v3-conversation-question',
+      speaker: 'Нора',
+      text: "«Не обов’язково. Та коли залишаю всі три, мене питають, навіщо тоді архів. Ніби чесне “не знаю” — це недбалість».",
+      options: [
+        { id: 'nora-v3-challenge', label: "«А якщо одна історія приватна?»", next: 'nora-v3-conversation-counter' },
+        { id: 'nora-v3-listen', label: "«Залишимо питання відкритим»", next: 'nora-v3-conversation-end' },
+      ],
+    },
+    {
+      id: 'nora-v3-conversation-counter',
+      speaker: 'Нора',
+      text: "«Факт її існування не означає дозволу публікувати. Можу описати прогалину, не розкриваючи людину».",
+      options: [
+        { id: 'nora-v3-follow', label: "«І що ти хочеш зробити?»", next: 'nora-v3-conversation-choice' },
+        { id: 'nora-v3-pause', label: "«Не обов’язково вирішувати сьогодні»", next: 'nora-v3-conversation-end' },
+      ],
+    },
+    {
+      id: 'nora-v3-conversation-choice',
+      speaker: 'Нора',
+      text: "«Найважче — не заповнювати порожнє місце красивою версією. Порожнє місце теж інформація».",
+      options: [
+        { id: 'nora-v3-accept', label: "«Це твій вибір»", next: 'nora-v3-conversation-end' },
+      ],
+    },
+    {
+      id: 'nora-v3-conversation-end',
+      speaker: 'Нора',
+      text: "«Дякую за розмову. Не все треба вирішувати одразу».",
+      options: [
+        { id: 'nora-v3-return', label: "Повернутися до інших тем", next: 'hello', grants: ['nora_archive_ethics_discussed'] },
       ],
     },
   ],
