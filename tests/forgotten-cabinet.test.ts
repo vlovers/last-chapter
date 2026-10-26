@@ -3,6 +3,8 @@ import { firstEvening } from '../src/content/evening';
 import { eleanorVisit } from '../src/content/eleanor';
 import { irisVisit } from '../src/content/iris';
 import { bookClub } from '../src/content/book-club';
+import { irisDecision } from '../src/content/day-four-iris';
+import { finalReading } from '../src/content/day-five';
 import { availableOptions, currentNode, selectOption, validateDialogue, type DialogueState } from '../src/game/dialogue';
 
 function at(node: string, flags: string[] = []): DialogueState {
@@ -46,10 +48,28 @@ describe('Forgotten cabinet playable slice', () => {
     expect(currentNode(bookClub, records).text).toContain('тубу');
   });
 
+  it('unlocks the missing chapter only after converging cinema leads', () => {
+    const flags = ['cabinet_photo_seen', 'cinema_poster_lead', 'cinema_club_asked_for_records'];
+    expect(availableOptions(irisDecision, at('welcome', flags)).some((option) => option.id === 'missing-chapter')).toBe(true);
+    expect(availableOptions(irisDecision, at('welcome', flags.slice(0, 2))).some((option) => option.id === 'missing-chapter')).toBe(false);
+    const falseClaim = selectOption(irisDecision, at('missing-chapter', flags), 'chapter-rumor');
+    expect(falseClaim.flags).toContain('missing_chapter_false_claim');
+    expect(currentNode(irisDecision, falseClaim).text).toContain('вигадав');
+  });
+
+  it('carries manuscript choices into the final reading', () => {
+    expect(availableOptions(finalReading, at('gathering', ['missing_chapter_discussed'])).some((option) => option.id === 'chapter-reckoning')).toBe(true);
+    const blame = selectOption(finalReading, at('chapter-reckoning', ['missing_chapter_discussed']), 'chapter-blame');
+    expect(blame.flags).toContain('chapter_accused_eleanor');
+    expect(currentNode(finalReading, blame).text).toContain('йде раніше');
+  });
+
   it('keeps the existing story graphs valid', () => {
     expect(validateDialogue(firstEvening)).toEqual([]);
     expect(validateDialogue(eleanorVisit)).toEqual([]);
     expect(validateDialogue(irisVisit)).toEqual([]);
     expect(validateDialogue(bookClub)).toEqual([]);
+    expect(validateDialogue(irisDecision)).toEqual([]);
+    expect(validateDialogue(finalReading)).toEqual([]);
   });
 });
