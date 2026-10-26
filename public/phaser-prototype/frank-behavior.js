@@ -35,8 +35,8 @@ function goTo(cat, target, activity = 'walking') {
 export function frankApproach(cat) {
   const offsets = [
     [0, 24],
-    [-26, 0],
-    [26, 0],
+    [-24, 0],
+    [24, 0],
     [0, -24],
   ];
   return (

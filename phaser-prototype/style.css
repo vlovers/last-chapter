@@ -865,6 +865,8 @@ main {
   padding: 3px 6px 5px 3px;
   align-content: start;
   scrollbar-color: #86664a #d9c49c;
+  grid-auto-rows: max-content;
+  scrollbar-gutter: stable;
 }
 #choices button {
   border-radius: 0;

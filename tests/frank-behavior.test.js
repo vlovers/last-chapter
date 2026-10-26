@@ -38,6 +38,19 @@ describe('Frank ambient resident', () => {
       expect(canStand(place)).toBe(true);
       const approach = frankApproach(place);
       expect(canStand(approach)).toBe(true);
+      // Every edge of the proximity prompt must also allow an action. Offsets
+      // of 24 plus the shared 32-pixel prompt radius fit the 56-pixel reach.
+      expect(distance(place, approach)).toBeLessThanOrEqual(24);
+      for (const [dx, dy] of [
+        [32, 0],
+        [-32, 0],
+        [0, 32],
+        [0, -32],
+      ]) {
+        const edge = { x: approach.x + dx, y: approach.y + dy };
+        if (canStand(edge) && eligible(edge, { id: 'frank', approach }, { mode: 'explore' }))
+          expect(reactFrank({ ...initialFrank(), ...place }, 'watch', edge)).toBeTruthy();
+      }
       expect(findPath({ x: 171, y: 204 }, approach).length).toBeGreaterThan(0);
       expect(eligible(approach, { id: 'frank', approach }, { mode: 'explore' })).toBe(true);
       expect(reactFrank({ ...initialFrank(), ...place }, 'pet', approach)).toBeTruthy();

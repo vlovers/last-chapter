@@ -33,7 +33,7 @@ async function choose(page, id) {
 }
 async function layout(page) {
   await page.waitForTimeout(300);
-  return page.evaluate(() => {
+  const measured = await page.evaluate(() => {
     const rect = (selector) => {
       const r = document.querySelector(selector).getBoundingClientRect();
       return {
@@ -56,8 +56,13 @@ async function layout(page) {
       hits: rect('#hotspots'),
       dialogue: rect('#dialogue'),
       choices: rect('#choices'),
+      clippedChoices: Array.from(document.querySelectorAll('#choices button')).filter(
+        (button) => button.scrollHeight > button.clientHeight + 1,
+      ).length,
     };
   });
+  assert.equal(measured.clippedChoices, 0, 'Wrapped choice text must fit its button');
+  return measured;
 }
 try {
   for (const [device, width, height] of [

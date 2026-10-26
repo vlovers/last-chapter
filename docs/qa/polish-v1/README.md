@@ -75,8 +75,19 @@ day has a screenshot on each viewport; `results.json` records measured layout an
 ambient FPS samples. Existing suites also exercise reduced motion, unavailable
 Web Audio, missing portraits, object navigation and both gift endings.
 
+Final local verification on 2026-10-26: **492 tests in 103 files passed**; all
+three browser commands passed. All four viewports completed all 19 stages with
+zero page/console errors and no document overflow. The raw final measurements
+are in [results.json](results.json). The core Mara hub regression reloads both
+an unfinished bakery discussion and its completed return to the hub.
+
 Before screenshots were captured from `0a6387b` before implementation. Committed
-representatives live in [screenshots](screenshots/). Full day-by-day captures are
+representatives live in [screenshots](screenshots/). The [desktop portrait](screenshots/desktop-portrait.png),
+[completed Mara hub](screenshots/desktop-mara-completed-topic.png),
+[Frank interaction](screenshots/frank-petting.png),
+[tablet](screenshots/tablet-portrait.png) and
+[mobile](screenshots/mobile-portrait.png) are representative final captures.
+Full day-by-day captures are
 available from the browser QA artifact in CI. Screenshots were visually inspected,
 including desktop portrait/choices, tablet, mobile and Frank interaction.
 
