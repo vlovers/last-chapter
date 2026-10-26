@@ -21,5 +21,7 @@ describe('Once-only finale memories', () => {
     expect(state.node).toBe('gathering');
     expect(state.flags).toContain(completion);
     expect(availableOptions(finalReading, state).some((option) => option.id === optionId)).toBe(false);
+    const before = state;
+    expect(() => selectOption(finalReading, before, optionId)).toThrow();
   });
 });
