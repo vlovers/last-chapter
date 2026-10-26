@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { annaVisit } from '../src/content/anna';
+import { eleanorVisit } from '../src/content/eleanor';
 import { firstEvening } from '../src/content/evening';
+import { noraVisit } from '../src/content/nora';
 import { thomasVisit } from '../src/content/thomas';
 import { validateDialogue } from '../src/game/dialogue';
 
@@ -26,9 +28,20 @@ describe('Five-day narrative pressure and character voice', () => {
     expect(ending?.text).not.toContain('Не все треба вирішувати одразу');
   });
 
+  it('gives Eleanor and Nora distinct, concrete closing actions', () => {
+    const eleanor = eleanorVisit.nodes.find((node) => node.id === 'eleanor-v3-conversation-end');
+    const nora = noraVisit.nodes.find((node) => node.id === 'nora-v3-conversation-end');
+
+    expect(eleanor?.text).toContain('рулетку');
+    expect(nora?.text).toContain('до каталогу');
+    expect(nora?.text).toContain('доступ до приватних записів обмежений');
+  });
+
   it('keeps all affected dialogue graphs structurally valid', () => {
     expect(validateDialogue(firstEvening)).toEqual([]);
     expect(validateDialogue(annaVisit)).toEqual([]);
     expect(validateDialogue(thomasVisit)).toEqual([]);
+    expect(validateDialogue(eleanorVisit)).toEqual([]);
+    expect(validateDialogue(noraVisit)).toEqual([]);
   });
 });
