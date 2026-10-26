@@ -81,6 +81,8 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
   for (const node of story.nodes) {
     if (ids.has(node.id)) errors.push(`Duplicate node: ${node.id}`);
     ids.add(node.id);
+    if (!node.id.trim()) errors.push('Empty node id');
+    if (!node.speaker.trim()) errors.push(`Empty speaker: ${node.id}`);
     if (!node.text.trim()) errors.push(`Empty text: ${node.id}`);
     for (const variant of node.textWhen ?? []) {
       if (!variant.text.trim()) errors.push(`Empty conditional text: ${node.id}`);
@@ -96,6 +98,8 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
     for (const option of node.options) {
       if (options.has(option.id)) errors.push(`Duplicate option: ${node.id}/${option.id}`);
       options.add(option.id);
+      if (!option.id.trim()) errors.push(`Empty option id: ${node.id}`);
+      if (!option.next.trim()) errors.push(`Empty destination: ${node.id}/${option.id}`);
       if (!option.label.trim()) errors.push(`Empty option label: ${node.id}/${option.id}`);
       for (const field of ['requires', 'unless', 'grants'] as const) {
         if ((option[field] ?? []).some((flag) => !flag.trim())) {
