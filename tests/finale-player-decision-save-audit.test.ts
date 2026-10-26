@@ -19,15 +19,6 @@ function initial(flags: readonly string[] = []): DialogueState {
   return { node: 'gathering', flags, history: [] };
 }
 
-function key(state: DialogueState): string {
-  return JSON.stringify([
-    state.node,
-    [...state.flags].sort(),
-    [...(state.completed ?? [])].sort(),
-    state.pending ?? [],
-  ]);
-}
-
 function playableAfterSave(state: DialogueState): DialogueState {
   const chapter: ChapterState = {
     stage: 'day5-reading',
@@ -37,40 +28,6 @@ function playableAfterSave(state: DialogueState): DialogueState {
   const restored = decodeSave(encodeSave(chapter));
   expect(restored, 'A playable finale state must survive saving').not.toBeNull();
   return restored!.dialogue;
-}
-
-function checkReachability(start: DialogueState, expected: string): void {
-  const queue: DialogueState[] = [playableAfterSave(start)];
-  const seen = new Set<string>();
-  let reachedEnding = false;
-  let reachedExpected = false;
-
-  for (let cursor = 0; cursor < queue.length; cursor += 1) {
-    const state = queue[cursor]!;
-    const id = key(state);
-    if (seen.has(id)) continue;
-    seen.add(id);
-    if (state.node === 'end') {
-      reachedEnding = true;
-      continue;
-    }
-    const options = availableOptions(finalReading, state);
-    expect(options.length, `Dead end at ${state.node} in ${expected}`).toBeGreaterThan(0);
-    for (const option of options) {
-      // The close option is deliberately a valid escape; other routes still
-      // must remain live when players actually choose to explore them.
-      const next = playableAfterSave(selectOption(finalReading, state, option.id));
-      if (next.flags.includes(expected)) reachedExpected = true;
-      if (next.node === 'end') reachedEnding = true;
-      if (!seen.has(key(next))) queue.push(next);
-    }
-    // A bound catches accidentally repeatable narrative cycles without making
-    // the test depend on all optional combinations being enumerated.
-    if (seen.size > 60000) throw new Error('Finale state space exceeded audit limit');
-  }
-
-  expect(reachedEnding, `No ending reachable from ${expected}`).toBe(true);
-  expect(reachedExpected, `Choice consequence ${expected} is unreachable`).toBe(true);
 }
 
 describe('Final evening player-facing save and decision audit', () => {
