@@ -79,10 +79,10 @@ describe('Iris letter continuity across five days', () => {
     expect(currentNode(finalReading, letter).text).toContain('досі запечатаний');
 
     const opened = { ...letter, flags: [...letter.flags, 'opened_private_letter'] };
-    expect(currentNode(finalReading, opened).text).toContain('порушена печатка');
+    expect(currentNode(finalReading, opened).text).toContain('Печатка на конверті порушена');
 
     const admitted = { ...opened, flags: [...opened.flags, 'iris_letter_breach_admitted'] };
-    expect(currentNode(finalReading, admitted).text).toContain('Айріс уже знає');
+    expect(currentNode(finalReading, admitted).text).toContain('Айріс знає');
     expect(availableOptions(finalReading, admitted).map((option) => option.id)).not.toContain(
       'mutual',
     );
@@ -91,7 +91,9 @@ describe('Iris letter continuity across five days', () => {
       ...admitted,
       flags: [...admitted.flags, 'iris_letter_choice_respected', 'leo_open_to_conversation'],
     };
-    expect(availableOptions(finalReading, ready).map((option) => option.id)).toContain('mutual');
+    expect(availableOptions(finalReading, ready).map((option) => option.id)).not.toContain(
+      'mutual',
+    );
     const saved = { stage: 'day5-reading' as const, dialogue: ready, flags: ready.flags };
     expect(decodeSave(encodeSave(saved))).toEqual(saved);
   });
