@@ -27,7 +27,12 @@ export const finalReading: DialogueStory = {
           next: 'rumor',
           unless: ['final_respected_privacy', 'final_repaired_rumor'],
         },
-        { id: 'iris', label: 'Запитати Айріс про її малюнки', next: 'iris' },
+        {
+          id: 'iris',
+          label: 'Запитати Айріс про її малюнки',
+          next: 'iris',
+          unless: ['final_supported_iris', 'final_iris_exhibition'],
+        },
         {
           id: 'letter',
           label: 'Повернутися до питання старого листа',
