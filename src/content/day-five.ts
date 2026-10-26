@@ -29,24 +29,28 @@ export const finalReading: DialogueStory = {
           label: 'Згадати розмову з Марою',
           next: 'mara-callback',
           requires: ['mara_day_four_reflected'],
+          unless: ['final_mara_heard'],
         },
         {
           id: 'eleanor-memory',
           label: 'Подякувати Елеонорі за історію книгарні',
           next: 'eleanor-memory',
           requires: ['eleanor_shared_shop_memory'],
+          unless: ['final_eleanor_heard'],
         },
         {
           id: 'leo-memory',
           label: 'Поговорити з Лео про життя без розкладу',
           next: 'leo-memory',
           requires: ['leo_shared_future_plan'],
+          unless: ['final_leo_heard'],
         },
         {
           id: 'miller-memory',
           label: 'Поговорити з пані Міллер про припущення',
           next: 'miller-memory',
           requires: ['miller_observation_distinguished'],
+          unless: ['final_miller_heard'],
         },
         {
           id: 'leo-reflection-callback',
