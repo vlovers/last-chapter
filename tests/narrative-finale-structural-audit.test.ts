@@ -8,11 +8,14 @@ describe('Final evening structural audit', () => {
     node.options.map((option) => ({ node: node.id, option })),
   );
 
-  it('has unique node IDs and option IDs', () => {
+  it('has unique node IDs and unique option IDs within each node', () => {
     const nodeIds = nodes.map((node) => node.id);
-    const optionIds = options.map(({ option }) => option.id);
     expect(new Set(nodeIds).size).toBe(nodeIds.length);
-    expect(new Set(optionIds).size).toBe(optionIds.length);
+    // The engine resolves option IDs within the current node, not across the entire story.
+    for (const node of nodes) {
+      const optionIds = node.options.map((option) => option.id);
+      expect(new Set(optionIds).size, `duplicate option ID in ${node.id}`).toBe(optionIds.length);
+    }
   });
 
   it('all choices point to existing nodes and the full dialogue validates', () => {
