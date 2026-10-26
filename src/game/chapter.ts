@@ -145,7 +145,8 @@ export function finishSecondDay(state: ChapterState): ChapterState {
 /** Move from the Iris encounter to Anna, retaining Day 1 and Day 2 flags. */
 export function advanceSecondDay(state: ChapterState): ChapterState {
   if (state.stage !== 'iris') throw new Error('Finish Day 1 before meeting Anna');
-  if (availableOptions(irisVisit, state.dialogue).length) throw new Error('Finish the Iris conversation');
+  if (availableOptions(irisVisit, state.dialogue).length)
+    throw new Error('Finish the Iris conversation');
   return { ...state, stage: 'anna', dialogue: { ...startDialogue(annaVisit), flags: state.flags } };
 }
 
@@ -176,7 +177,8 @@ export function finishThirdDay(state: ChapterState): ChapterState {
 /** Advance Day 3 from Eleanor to Thomas without losing previous discoveries. */
 export function advanceToThomas(state: ChapterState): ChapterState {
   if (state.stage !== 'eleanor') throw new Error('Finish Eleanor first');
-  if (availableOptions(eleanorVisit, state.dialogue).length) throw new Error('Finish Eleanor first');
+  if (availableOptions(eleanorVisit, state.dialogue).length)
+    throw new Error('Finish Eleanor first');
   return {
     ...state,
     stage: 'thomas',
@@ -215,7 +217,8 @@ export function startFourthDay(state: ChapterState): ChapterState {
 /** Close the first Day 4 encounter only after the conversation is complete. */
 export function finishFourthDay(state: ChapterState): ChapterState {
   if (state.stage !== 'day4-leo') throw new Error('Finish Leo first');
-  if (availableOptions(leoDecision, state.dialogue).length) throw new Error('Finish the conversation');
+  if (availableOptions(leoDecision, state.dialogue).length)
+    throw new Error('Finish the conversation');
   return { ...state, stage: 'day4-complete' };
 }
 
@@ -254,6 +257,7 @@ export function startFifthDay(state: ChapterState): ChapterState {
 /** End the first season only after the final gathering concludes. */
 export function finishSeason(state: ChapterState): ChapterState {
   if (state.stage !== 'day5-reading') throw new Error('Finish Day 5 first');
-  if (availableOptions(finalReading, state.dialogue).length) throw new Error('Finish the final gathering');
+  if (availableOptions(finalReading, state.dialogue).length)
+    throw new Error('Finish the final gathering');
   return { ...state, stage: 'season-complete' };
 }
