@@ -8,13 +8,13 @@ Codex PR #23 implements three customer orders (Miller, Mara, Anna), stable dialo
 
 ## Five-day progression
 
-| Day | Main investigation (must remain independently accessible) | Orders | Optional character scenes | End-of-day condition |
-|---|---|---|---|---|
-| 1 | Introduce missing-page question; observe sealed letter without mandatory opening | Miller, Mara (implemented in PR #23) | Frank routine; Sophie flowers if approved | Player knows what was actually seen, not who is guilty |
-| 2 | Anna's account about Thomas carrying chairs; Miller can distort it into a rumor | Anna (implemented in PR #23) | Nora long conversation; Oliver unread-book game if approved | Testimony and rumor are separate |
-| 3 | Compare dated archive inventory and public event notice as two inspectable objects | Thomas, Nora (drafts only) | Thomas deep talk; Sophie game, Oliver tournament if approved | Discrepancy becomes verified ONLY after both originals inspected |
-| 4 | Ask about Leo's map; handle consequences of Iris letter privacy | Iris, Leo (drafts only) | Mara and Iris long talks; ordinary shop life | Accusation changes relationships, not evidence |
-| 5 | Prepare statement; public accusation, uncertain disclosure, private verification, or admission of past lie | Eleanor (draft only) | Eleanor talk before public decision; Sophie/Oliver everyday scenes | Finale uses actual evidence, privacy, rumor history and encountered people |
+| Day | Main investigation (must remain independently accessible)                                                  | Orders                               | Optional character scenes                                          | End-of-day condition                                                       |
+| --- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| 1   | Introduce missing-page question; observe sealed letter without mandatory opening                           | Miller, Mara (implemented in PR #23) | Frank routine; Sophie flowers if approved                          | Player knows what was actually seen, not who is guilty                     |
+| 2   | Anna's account about Thomas carrying chairs; Miller can distort it into a rumor                            | Anna (implemented in PR #23)         | Nora long conversation; Oliver unread-book game if approved        | Testimony and rumor are separate                                           |
+| 3   | Compare dated archive inventory and public event notice as two inspectable objects                         | Thomas, Nora (drafts only)           | Thomas deep talk; Sophie game, Oliver tournament if approved       | Discrepancy becomes verified ONLY after both originals inspected           |
+| 4   | Ask about Leo's map; handle consequences of Iris letter privacy                                            | Iris, Leo (drafts only)              | Mara and Iris long talks; ordinary shop life                       | Accusation changes relationships, not evidence                             |
+| 5   | Prepare statement; public accusation, uncertain disclosure, private verification, or admission of past lie | Eleanor (draft only)                 | Eleanor talk before public decision; Sophie/Oliver everyday scenes | Finale uses actual evidence, privacy, rumor history and encountered people |
 
 **Scheduling caveat:** this is a proposed placement, not a claim all scenes have canonical dates. Check each dialogue's authored day window and existing game chapter timeline before implementation.
 
