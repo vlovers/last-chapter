@@ -8,6 +8,7 @@ import {
   type ChapterStage,
 } from '../src/game/chapter';
 import { startDialogue, type DialogueStory } from '../src/game/dialogue';
+import { decodeSave, encodeSave } from '../src/game/save';
 import { firstEvening } from '../src/content/evening';
 import { leoVisit } from '../src/content/leo';
 import { bookClub } from '../src/content/book-club';
@@ -54,4 +55,21 @@ describe('Cross-day narrative flag continuity', () => {
     expect(next.stage).toBe('day5-reading');
     expect(finalReading.nodes.some((node) => node.id === next.dialogue.node)).toBe(true);
   });
+  it('preserves world and dialogue flags through a save/load round-trip at every checkpoint', () => {
+    const checkpoints = [
+      startSecondDay(checkpoint('complete', firstEvening)),
+      startThirdDay(checkpoint('day2-complete', leoVisit)),
+      startFourthDay(checkpoint('day3-complete', bookClub)),
+      startFifthDay(checkpoint('day4-complete', irisDecision)),
+    ];
+    for (const state of checkpoints) {
+      const restored = decodeSave(encodeSave(state));
+      expect(restored, `failed to restore stage ${state.stage}`).not.toBeNull();
+      expect(restored?.stage).toBe(state.stage);
+      expect(restored?.flags).toEqual(expect.arrayContaining(persistentFlags));
+      expect(restored?.dialogue.flags).toEqual(expect.arrayContaining(persistentFlags));
+      expect(restored?.dialogue.node).toBe(state.dialogue.node);
+    }
+  });
+
 });
