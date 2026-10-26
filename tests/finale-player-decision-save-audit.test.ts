@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import {
-  availableOptions,
-  selectOption,
-  type DialogueState,
-} from '../src/game/dialogue';
+import { availableOptions, selectOption, type DialogueState } from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 import type { ChapterState } from '../src/game/chapter';
 
@@ -43,10 +39,9 @@ describe('Final evening player-facing save and decision audit', () => {
   });
 
   it('keeps the chapter conversation available to a player who actually discussed it', () => {
-    const options = availableOptions(
-      finalReading,
-      initial(['missing_chapter_discussed']),
-    ).map((item) => item.id);
+    const options = availableOptions(finalReading, initial(['missing_chapter_discussed'])).map(
+      (item) => item.id,
+    );
     expect(options).toContain('chapter-reckoning');
     expect(options).toContain('close');
   });
