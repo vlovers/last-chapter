@@ -18,9 +18,7 @@ function storyWithOption(field: 'requires' | 'unless' | 'grants'): DialogueStory
 
 describe('Dialogue rejects blank state flags', () => {
   it.each(['requires', 'unless', 'grants'] as const)('rejects a blank %s flag', (field) => {
-    expect(validateDialogue(storyWithOption(field))).toContain(
-      `Blank ${field} flag: start/continue`,
-    );
+    expect(validateDialogue(storyWithOption(field))).toContain(`Blank ${field} flag: start/continue`);
   });
 
   it('rejects blank conditional narration flags', () => {
