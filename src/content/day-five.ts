@@ -657,6 +657,13 @@ export const finalReading: DialogueStory = {
           requires: ['iris_letter_choice_respected', 'leo_open_to_conversation'],
         },
         {
+          id: 'admit-breach-now',
+          label: '«Айріс, я відкрив конверт без твого дозволу»',
+          next: 'admit-breach-now',
+          requires: ['opened_private_letter'],
+          unless: ['iris_letter_breach_admitted', 'final_letter_breach_disclosed'],
+        },
+        {
           id: 'repair-trust',
           label: 'Визнати порушення довіри й залишити рішення Айріс',
           next: 'repair-trust',
@@ -682,6 +689,19 @@ export const finalReading: DialogueStory = {
           label: 'Дати їм простір і повернутися до гостей',
           next: 'gathering',
           grants: ['final_mutual_conversation'],
+        },
+      ],
+    },
+    {
+      id: 'admit-breach-now',
+      speaker: 'Айріс',
+      text: 'Айріс дивиться на зім’яту печатку. «Ти мав сказати раніше. Я не знаю, чи змогла б знову довірити тобі щось особисте». Лео робить крок до них, але вона зупиняє його поглядом. «Це розмова між мною й тобою. Я сама вирішу, що робити далі».',
+      options: [
+        {
+          id: 'admit-breach-now-back',
+          label: '«Я не вимагатиму пробачення. Конверт залишиться тобі»',
+          next: 'gathering',
+          grants: ['final_letter_breach_disclosed', 'final_accepted_consequences'],
         },
       ],
     },
