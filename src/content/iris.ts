@@ -27,6 +27,13 @@ export const irisVisit: DialogueStory = {
           next: 'iris-reflection',
           unless: ['iris_reflected_on_identity'],
         },
+        {
+          id: 'cinema',
+          label: '«Пам’ятаєте старий кінотеатр?»',
+          next: 'cinema',
+          requires: ['cabinet_photo_seen'],
+          unless: ['cinema_iris_heard'],
+        },
         { id: 'ask-art', label: '«Розкажете про ілюстрації?»', next: 'art' },
         { id: 'ask-return', label: '«Що привело вас назад?»', next: 'return' },
         { id: 'ask-old', label: '«Ви знали колишню власницю?»', next: 'eleanor' },
@@ -37,6 +44,44 @@ export const irisVisit: DialogueStory = {
           requires: ['saw_envelope'],
         },
         { id: 'end-early', label: '«Можете просто подивитися книжки»', next: 'end' },
+      ],
+    },
+    {
+      id: 'cinema',
+      speaker: 'Айріс',
+      text: '«Там завжди продавали надто солоний попкорн. А на афішах малювали руду лисицю». Айріс відкладає альбом. «Генрі Вітмор керував кінотеатром. Він міг вигнати людину із залу за розмови під час фільму».',
+      options: [
+        {
+          id: 'cinema-poster',
+          label: '«Де можна знайти старі афіші?»',
+          next: 'cinema-result',
+          grants: ['cinema_poster_lead'],
+        },
+        {
+          id: 'cinema-art',
+          label: '«А що ви малюєте зараз?»',
+          next: 'cinema-result',
+          grants: ['cinema_iris_art_first'],
+        },
+      ],
+    },
+    {
+      id: 'cinema-result',
+      speaker: 'Айріс',
+      text: '«Колись афіші зберігали у палітурній майстерні». Вона гортає альбом. «Ось Френк. Я намалювала його з короною. Він і без неї поводиться як король».',
+      textWhen: [
+        {
+          requires: ['cinema_iris_art_first'],
+          text: 'Айріс показує малюнок Френка, який розвалився на стосі книжок. «Поглянь. Схоже, у вас тут два власники».',
+        },
+      ],
+      options: [
+        {
+          id: 'cinema-back',
+          label: 'Повернутися до розмови',
+          next: 'welcome',
+          grants: ['cinema_iris_heard'],
+        },
       ],
     },
     {
