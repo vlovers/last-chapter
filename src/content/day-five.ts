@@ -112,6 +112,20 @@ export const finalReading: DialogueStory = {
           unless: ['final_v3_eleanor_heard'],
         },
         {
+          id: 'anna-classroom-callback',
+          label: 'Дізнатися, чим закінчилася суперечка дітей про книжку',
+          next: 'anna-classroom-callback',
+          requires: ['anna_book_disagreement_discussed'],
+          unless: ['final_anna_classroom_heard'],
+        },
+        {
+          id: 'thomas-book-callback',
+          label: 'Запитати Томаса про роман із човном',
+          next: 'thomas-book-callback',
+          requires: ['thomas_reading_challenge_discussed'],
+          unless: ['final_thomas_book_heard'],
+        },
+        {
           id: 'anna',
           label: 'Послухати Анну про шкільний книжковий клуб',
           next: 'anna',
@@ -418,6 +432,52 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до гостей',
           next: 'gathering',
           grants: ['final_anna_club_heard'],
+        },
+      ],
+    },
+    {
+      id: 'anna-classroom-callback',
+      speaker: 'Анна',
+      text: '«У класі досі сперечаються про острів. Я вже перестала рахувати, хто за кого. Зате сьогодні вперше почула, як Джуліан сказав Еммі: “Я не згоден, але покажи, де ти це прочитала”». Анна підсовує вам закладку з намальованим маяком.',
+      textWhen: [
+        {
+          requires: ['anna_classroom_debate_encouraged'],
+          text: '«Ми влаштували дебати. Емма говорила про корабель, Джуліан — про маяк. Вони не помирилися в поглядах, зате вперше дослухали один одного до кінця. А тепер просять наступну книжку — ще суперечливішу».',
+        },
+        {
+          requires: ['anna_classroom_alternate_endings'],
+          text: '«Емма намалювала втечу з острова, Джуліан — ціле місто навколо маяка. Потім вони помінялися аркушами й почали домальовувати деталі. Ніхто не відмовився від своєї кінцівки. Мені це подобається».',
+        },
+      ],
+      options: [
+        {
+          id: 'anna-classroom-callback-back',
+          label: 'Повернутися до вечора читань',
+          next: 'gathering',
+          grants: ['final_anna_classroom_heard'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-book-callback',
+      speaker: 'Томас',
+      text: '«Я повернув Анні роман. Не сказав, що полюбив його. Сказав, що він мене розсердив». Томас бере зі столу закладку. «Вона відповіла: “Нарешті ми можемо посперечатися не через список справ”».',
+      textWhen: [
+        {
+          requires: ['thomas_book_ambiguity_accepted'],
+          text: '«Я перечитав останню сторінку. Човен так і не відплив, а я вже не впевнений, що автор винен мені іншу кінцівку. Анна каже, це найкраща рецензія, яку я міг написати».',
+        },
+        {
+          requires: ['thomas_book_ending_disputed'],
+          text: '«Я й досі вважаю, що герой мав відплисти. Анна не погоджується. Учора ми сперечалися цілу вечерю, а потім вона попросила мене вибрати нашу наступну книжку. Небезпечна пропозиція».',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-book-callback-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_thomas_book_heard'],
         },
       ],
     },
