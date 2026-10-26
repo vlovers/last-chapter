@@ -655,6 +655,7 @@ export const finalReading: DialogueStory = {
           label: 'Запропонувати приватну розмову, якщо обоє згодні',
           next: 'mutual',
           requires: ['iris_letter_choice_respected', 'leo_open_to_conversation'],
+          unless: ['opened_private_letter'],
         },
         {
           id: 'admit-breach-now',
