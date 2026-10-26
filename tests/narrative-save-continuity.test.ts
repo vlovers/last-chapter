@@ -113,6 +113,25 @@ describe('Narrative decisions survive chapter transitions and save/load', () => 
     );
   });
 
+  it('does not offer Thomas a false apology for a rumor the player only heard', () => {
+    const miller = choose(
+      at('miller', []),
+      'greet',
+      'town',
+      'gossip',
+      'what-saw',
+      'acknowledge',
+    );
+    const thomas = at('thomas', decodeSave(encodeSave(miller))!.flags);
+    const conversation = choose(thomas, 'greet', 'rumor');
+    const options = availableOptions(
+      stageStory(conversation.stage),
+      conversation.dialogue,
+    ).map((option) => option.id);
+    expect(options).not.toContain('rumor-own-words');
+    expect(options).toContain('rumor-boundary');
+  });
+
   it('persists amplification and allows a Day 2 admission without losing a book sale', () => {
     const miller = choose(
       at('miller', []),
