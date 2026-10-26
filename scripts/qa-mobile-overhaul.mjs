@@ -79,6 +79,11 @@ try {
     await shot(page, `${width}-dialogue`);
     await page.keyboard.press('Tab');
     assert.ok(await page.locator('#dialogue :focus').count());
+    if (width === 390 || width === 1440) {
+      await choose(page, 'greet');
+      await shot(page, `${width}-portrait`);
+      assert.deepEqual((await snapshot(page)).canvas, stable.canvas);
+    }
     await page.keyboard.press('Escape');
     await page.locator('#catalog-toggle').click();
     await page.getByRole('heading', { name: 'Книжки на полицях' }).waitFor();

@@ -89,7 +89,7 @@ export const thomasVisit: DialogueStory = {
     },
     {
       id: 'repair',
-      speaker: 'Томас'
+      speaker: 'Томас',
       text: '«Старий контакт. Не страшно, але краще замінити». Він дістає маленький ліхтарик. «Люблю лагодити речі. Шкода, що не все у світі має зрозумілу схему».',
       options: [
         { id: 'repair-follow', label: '«Важко, коли не знаєш причини?»', next: 'work' },

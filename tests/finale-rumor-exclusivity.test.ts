@@ -12,6 +12,11 @@ describe('Final rumor conversation is a single meaningful decision', () => {
       let state = selectOption(finalReading, startDialogue(finalReading), 'open');
       state = selectOption(finalReading, state, 'rumor');
       state = selectOption(finalReading, state, choice);
+      expect(state.node).toBe(choice);
+      expect(availableOptions(finalReading, state).map((option) => option.id)).toEqual([
+        `${choice}-back`,
+      ]);
+      state = selectOption(finalReading, state, `${choice}-back`);
       expect(state.node).toBe('gathering');
       expect(state.flags).toContain(granted);
       expect(state.flags).not.toContain(opposite);

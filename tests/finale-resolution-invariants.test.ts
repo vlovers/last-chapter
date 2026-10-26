@@ -34,8 +34,8 @@ describe('Final gathering narrative invariants', () => {
 
   it('does not grant contradictory flags during any of the resolved endings', () => {
     const routes = [
-      ['rumor', 'rumor-respect'],
-      ['rumor', 'rumor-apology'],
+      ['rumor', 'rumor-respect', 'rumor-respect-back'],
+      ['rumor', 'rumor-apology', 'rumor-apology-back'],
       ['iris', 'iris-choice'],
       ['iris', 'iris-exhibit', 'exhibit-back'],
       ['letter', 'mutual', 'mutual-back'],
