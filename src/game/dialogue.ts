@@ -41,9 +41,11 @@ export function startDialogue(story: DialogueStory): DialogueState {
 export function currentNode(story: DialogueStory, state: DialogueState): DialogueNode {
   const node = story.nodes.find((entry) => entry.id === state.node);
   if (!node) throw new Error('Missing dialogue node');
-  const variant = node.textWhen?.find((entry) =>
-    entry.requires.every((flag) => state.flags.includes(flag)),
-  );
+  // Prefer the most specific matching narration. A generic one-flag variant
+  // must not hide a later two-flag variant when both conditions are true.
+  const variant = node.textWhen
+    ?.filter((entry) => entry.requires.every((flag) => state.flags.includes(flag)))
+    .sort((left, right) => right.requires.length - left.requires.length)[0];
   return variant ? { ...node, text: variant.text } : node;
 }
 
