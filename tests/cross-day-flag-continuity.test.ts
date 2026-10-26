@@ -7,7 +7,7 @@ import {
   type ChapterState,
   type ChapterStage,
 } from '../src/game/chapter';
-import { startDialogue } from '../src/game/dialogue';
+import { startDialogue, type DialogueStory } from '../src/game/dialogue';
 import { firstEvening } from '../src/content/evening';
 import { leoVisit } from '../src/content/leo';
 import { bookClub } from '../src/content/book-club';
@@ -20,7 +20,7 @@ const persistentFlags = [
   'iris_letter_choice_respected',
 ] as const;
 
-function checkpoint(stage: ChapterStage, story: typeof firstEvening): ChapterState {
+function checkpoint(stage: ChapterStage, story: DialogueStory): ChapterState {
   return {
     stage,
     flags: [...persistentFlags],
