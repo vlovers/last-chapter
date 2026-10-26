@@ -13,7 +13,7 @@ import {
   type DialogueState,
 } from '../src/game/dialogue';
 
-function at(node: string, flags: string[] = []): DialogueState {
+function at(node: string, flags: readonly string[] = []): DialogueState {
   return { node, flags, history: [] };
 }
 
