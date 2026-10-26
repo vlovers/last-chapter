@@ -65,6 +65,14 @@ describe('Forgotten cabinet playable slice', () => {
     expect(currentNode(finalReading, blame).text).toContain('йде раніше');
   });
 
+  it('lets a careful player discover the manuscript dating contradiction', () => {
+    const flags = ['missing_chapter_discussed', 'missing_chapter_copied'];
+    expect(availableOptions(finalReading, at('chapter-reckoning', flags)).some((option) => option.id === 'chapter-check-provenance')).toBe(true);
+    const verified = selectOption(finalReading, at('chapter-provenance', flags), 'chapter-provenance-back');
+    expect(verified.flags).toContain('chapter_provenance_checked');
+    expect(availableOptions(finalReading, at('chapter-reckoning', verified.flags)).some((option) => option.id === 'chapter-check-provenance')).toBe(false);
+  });
+
   it('keeps the existing story graphs valid', () => {
     expect(validateDialogue(firstEvening)).toEqual([]);
     expect(validateDialogue(eleanorVisit)).toEqual([]);
