@@ -1,6 +1,6 @@
 # Bellwick — Day 5 finale: four playable narrative routes
 
-**Status:** authored Ukrainian dialogue design, NOT integrated into runtime. **Dependency:** existing canon's five-day ending must be checked before implementation. This pack supplies *variants* of a final reading evening, not a declaration of a new culprit or a replacement for current ending. **Do not invent an identified thief.**
+**Status:** authored Ukrainian dialogue design, NOT integrated into runtime. **Dependency:** existing canon's five-day ending must be checked before implementation. This pack supplies _variants_ of a final reading evening, not a declaration of a new culprit or a replacement for current ending. **Do not invent an identified thief.**
 
 ## Shared setup: «Вечір, коли всі прийшли не лише по книжки»
 
@@ -19,6 +19,7 @@ _Елеонора перевіряє, чи всі стільці стоять р
 **Нора:** «Тоді не будемо вдавати, що знаємо більше, ніж знаємо».
 
 Player's short response:
+
 - «Я скажу тільки те, що можу підтвердити».
 - «Я хочу назвати того, кого підозрюю».
 - «Я не хочу читати чужий лист».
@@ -47,6 +48,7 @@ Otherwise:
 **Елеонора:** «У нас узагалі-то ще є книжки».
 
 **Гравець:**
+
 - «Можемо продовжити перевірку завтра». → **Нора:** «Я залишу список того, що варто знайти».
 - «Цього вечора досить». → **Мара:** «Тоді хтось нарешті спробує пиріг?».
 - «Мені шкода, що я не знаю більше». → **Елеонора:** «Це не найгірше, що можна сказати вголос».
@@ -76,6 +78,7 @@ If target is Eleanor:
 If another target exists in actual canon, write a distinct reaction before implementation; do not insert a generic response that assumes guilt.
 
 **Гравець:**
+
 - «Я мав сказати це приватно». → **Нора:** «Тепер це вже почули всі».
 - «Я не відмовляюся від своєї версії». → **Міллер:** «Завтра про це говоритиме все місто».
 - «Я помилився, назвавши це вголос». → **Мара:** «Тоді скажи це так само голосно».
@@ -100,6 +103,7 @@ If letter opened:
 **Нора:** «Те, що ти вже прочитав, не означає, що всі мають це почути».
 
 **Гравець:**
+
 - «Повернімося до читання». → **Елеонора:** «Нарешті хтось згадав, навіщо тут стільці».
 - «Я продовжу пошук приватно». → **Нора:** «Тоді домовимося, які документи можна перевіряти».
 - «Якщо власник захоче, він розповість сам». → **Мара:** «І матиме право не розповідати».
@@ -124,6 +128,7 @@ If Thomas absent:
 **Анна:** «Я бачила його зі стільцями. Це все, що я казала».
 
 **Гравець:**
+
 - «Я хочу, щоб це запам'ятали». → **Міллер:** «Побачимо, що саме люди запам'ятають».
 - «Я не прошу вибачити мене зараз». → **Мара:** «Тоді не вимагай відповіді».
 - «Можемо повернутися до книжок». → **Елеонора:** «Так. Але не робімо вигляд, що розмови не було».
@@ -132,30 +137,38 @@ If Thomas absent:
 
 ## Epilogue cards — modular, never imply unseen events
 
-Select **one** core finale card plus zero or more *actually earned* social cards. These are short in-game Ukrainian texts, not narrated moral conclusions.
+Select **one** core finale card plus zero or more _actually earned_ social cards. These are short in-game Ukrainian texts, not narrated moral conclusions.
 
 ### Core card: records verified, no accusation
+
 «Наступного ранку Нора принесла два аркуші з датами. Вони лежали поруч на столі, і ніхто не називав їх відповіддю».
 
 ### Core card: records unverified
+
 «У списку справ залишилися дві дати й порожнє місце для відповіді. Книгарня відчинилася вчасно».
 
 ### Core card: public accusation
+
 «У Беллвіку переказували вечір по-різному. Але ім'я, назване вголос, усі запам'ятали однаково».
 
 ### Core card: privacy-first
+
 «Лист залишився не для чужих очей. На наступному читанні сперечалися про зовсім іншу книжку».
 
 ### Social card: Thomas guarded after apology
+
 «Томас полагодив дверну ручку й пішов до того, як закипів чай. Уперше за кілька днів він хоча б зайшов».
 
 ### Social card: Anna order completed
+
 «На касі лежала листівка від книжкового клубу. На ній був кіт у короні».
 
 ### Social card: Iris privacy breached
+
 «Айріс забрала свій малюнок зі стіни. Вона сказала, що повернеться, коли вирішить, де йому місце».
 
 ### Social card: Frank ambient
+
 «Френк заснув на складеному пакеті. Ніхто не наважився його забрати».
 
 ## Decision precedence and impossible states
