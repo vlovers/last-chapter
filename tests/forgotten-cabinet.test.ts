@@ -73,6 +73,21 @@ describe('Forgotten cabinet playable slice', () => {
     expect(availableOptions(finalReading, at('chapter-reckoning', verified.flags)).some((option) => option.id === 'chapter-check-provenance')).toBe(false);
   });
 
+  it('lets a liar confess or shift blame and keeps those outcomes distinct', () => {
+    const flags = ['missing_chapter_discussed', 'missing_chapter_false_claim'];
+    expect(availableOptions(finalReading, at('chapter-reckoning', flags)).some((option) => option.id === 'chapter-confront-lie')).toBe(true);
+    const admitted = selectOption(finalReading, at('chapter-confession', flags), 'chapter-confession-own');
+    const shifted = selectOption(finalReading, at('chapter-confession', flags), 'chapter-confession-deflect');
+    expect(admitted.flags).toContain('chapter_apology_promised');
+    expect(shifted.flags).toContain('chapter_blame_shifted');
+    expect(currentNode(finalReading, at('end', shifted.flags)).text).toContain('винна тільки я');
+  });
+
+  it('makes public accusations change the closing scene', () => {
+    expect(currentNode(finalReading, at('end', ['chapter_accused_eleanor'])).text).toContain('не повернулася');
+    expect(currentNode(finalReading, at('end', ['chapter_publicly_read'])).text).toContain('прочитаний уривок');
+  });
+
   it('keeps the existing story graphs valid', () => {
     expect(validateDialogue(firstEvening)).toEqual([]);
     expect(validateDialogue(eleanorVisit)).toEqual([]);
