@@ -22,7 +22,9 @@ describe('Iris final artwork decision', () => {
       expect(state.node).toBe('gathering');
       expect(state.flags).toContain(expected);
       expect(state.flags).not.toContain(opposite);
-      expect(availableOptions(finalReading, state).some((option) => option.id === 'iris')).toBe(false);
+      expect(availableOptions(finalReading, state).some((option) => option.id === 'iris')).toBe(
+        false,
+      );
       expect(() => selectOption(finalReading, state, 'iris')).toThrow();
     },
   );
