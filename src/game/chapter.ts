@@ -218,14 +218,12 @@ export function skipBookClub(state: ChapterState): ChapterState {
   if (state.stage !== 'nora') throw new Error('Finish Nora before deciding about the club');
   if (availableOptions(noraVisit, state.dialogue).length)
     throw new Error('Finish Nora before deciding about the club');
+  const flags = [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])];
   return {
     ...state,
     stage: 'quiet-evening',
-    flags: [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])],
-    dialogue: {
-      ...startDialogue(quietEvening),
-      flags: [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])],
-    },
+    flags,
+    dialogue: { ...startDialogue(quietEvening), flags },
   };
 }
 
