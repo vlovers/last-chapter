@@ -43,10 +43,12 @@ describe('order receipts survive five-day save/restore', () => {
       for (const receipt of beforeRestore) observedReceipts.add(JSON.stringify(receipt));
       story = new FiveDayStory();
       visitedDays.add(story.day);
-      expect(story.orders.map((order) => ({
-        customer: order.customer,
-        book: order.book.id,
-      }))).toEqual(beforeRestore);
+      expect(
+        story.orders.map((order) => ({
+          customer: order.customer,
+          book: order.book.id,
+        })),
+      ).toEqual(beforeRestore);
       expect(decodeSave(values.get(SAVE_KEY) ?? '')).not.toBeNull();
     }
 
