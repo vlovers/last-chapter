@@ -125,13 +125,12 @@ export function advanceChapter(state: ChapterState): ChapterState {
   }
   const nextStage = stages[stages.indexOf(state.stage) + 1];
   if (!nextStage) throw new Error('Invalid chapter stage');
+  const flags = [...new Set([...state.flags, ...state.dialogue.flags])];
   return {
     ...state,
     stage: nextStage,
-    dialogue: {
-      ...startDialogue(stageStory(nextStage)),
-      flags: [...new Set([...state.flags, ...state.dialogue.flags])],
-    },
+    flags,
+    dialogue: { ...startDialogue(stageStory(nextStage)), flags },
   };
 }
 
