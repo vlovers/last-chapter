@@ -105,10 +105,16 @@ export class FiveDayStory {
       /* Storage may be blocked. */
     }
     this.chapter = saved ?? startChapter();
-    try {
-      this.service = restoreService(localStorage.getItem(SERVICE_KEY) ?? '');
-    } catch {
-      /* optional */
+    if (saved) {
+      try {
+        this.service = restoreService(localStorage.getItem(SERVICE_KEY) ?? '');
+      } catch {
+        /* optional */
+      }
+    } else {
+      // Service attempts belong to the narrative save. Without a valid chapter,
+      // discard orphaned recommendations before a new playthrough can inherit them.
+      this.persistService();
     }
   }
   get stage(): ChapterStage {
