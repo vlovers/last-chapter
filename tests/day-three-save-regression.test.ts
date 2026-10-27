@@ -52,16 +52,13 @@ describe('Day 3 completion checkpoint regression', () => {
       flags: [],
     };
     expect(() => encodeSave(invalid)).toThrow('Save cannot be restored');
-    expect(
-      decodeSave(
-        JSON.stringify({
-          version: 1,
-          stage: invalid.stage,
-          node: invalid.dialogue.node,
-          flags: [],
-          history: [],
-        }),
-      ),
-    ).toBeNull();
+    const malformed = JSON.stringify({
+      version: 1,
+      stage: invalid.stage,
+      node: invalid.dialogue.node,
+      flags: [],
+      history: [],
+    });
+    expect(decodeSave(malformed)).toBeNull();
   });
 });
