@@ -42,10 +42,10 @@ describe('finale consequence matrix', () => {
   });
 
   it('preserves every independent future when Iris and Mara are both supported', () => {
-    const exhibition = ending('final_iris_exhibition');
-    const mara = ending('mara_future_supported');
-    const bookClub = ending();
-    const both = ending('final_iris_exhibition', 'mara_future_supported');
+    const exhibition = ending('final_iris_exhibition', 'book_club_started');
+    const mara = ending('mara_future_supported', 'book_club_started');
+    const bookClub = ending('book_club_started');
+    const both = ending('final_iris_exhibition', 'mara_future_supported', 'book_club_started');
     expect(new Set([exhibition.epilogue, mara.epilogue, bookClub.epilogue]).size).toBe(3);
     expect(exhibition.epilogue).toContain('Вікна Беллвіка');
     expect(mara.epilogue).toContain('Мара почала');
@@ -54,10 +54,17 @@ describe('finale consequence matrix', () => {
     }
     expect(both.epilogue).toContain('Вікна Беллвіка');
     expect(both.epilogue).toContain('Мара почала');
-    expect(both.epilogue).toBe(ending('mara_future_supported', 'final_iris_exhibition').epilogue);
-    expect(ending('final_letter_kept_private', 'final_iris_exhibition').epilogue).toBe(
+    expect(both.epilogue).toBe(ending('mara_future_supported', 'final_iris_exhibition', 'book_club_started').epilogue);
+    expect(ending('final_letter_kept_private', 'final_iris_exhibition', 'book_club_started').epilogue).toBe(
       exhibition.epilogue,
     );
+  });
+
+  it('does not invent a book club after a quiet evening', () => {
+    const quiet = ending('evening_shop_kept_open', 'final_iris_exhibition');
+    expect(quiet.epilogue).toContain('замість книжкового клубу');
+    expect(quiet.epilogue).toContain('Вікна Беллвіка');
+    expect(quiet.epilogue).not.toContain('нове оголошення про книжковий клуб');
   });
 
   it('preserves unrelated ending dimensions across every combination of decisions', () => {
