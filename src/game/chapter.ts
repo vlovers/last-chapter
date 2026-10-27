@@ -128,7 +128,7 @@ export function advanceChapter(state: ChapterState): ChapterState {
   return {
     ...state,
     stage: nextStage,
-    dialogue: { ...startDialogue(stageStory(nextStage)), flags: state.flags },
+    dialogue: { ...startDialogue(stageStory(nextStage)), flags: [...new Set([...state.flags, ...state.dialogue.flags])] },
   };
 }
 
@@ -154,14 +154,14 @@ export function advanceSecondDay(state: ChapterState): ChapterState {
   if (state.stage !== 'iris') throw new Error('Finish Day 1 before meeting Anna');
   if (availableOptions(irisVisit, state.dialogue).length)
     throw new Error('Finish the Iris conversation');
-  return { ...state, stage: 'anna', dialogue: { ...startDialogue(annaVisit), flags: state.flags } };
+  return { ...state, stage: 'anna', dialogue: { ...startDialogue(annaVisit), flags: [...new Set([...state.flags, ...state.dialogue.flags])] } };
 }
 
 /** Continue Day 2 after Anna's visit. */
 export function advanceToLeo(state: ChapterState): ChapterState {
   if (state.stage !== 'anna') throw new Error('Finish Anna first');
   if (availableOptions(annaVisit, state.dialogue).length) throw new Error('Finish Anna first');
-  return { ...state, stage: 'leo', dialogue: { ...startDialogue(leoVisit), flags: state.flags } };
+  return { ...state, stage: 'leo', dialogue: { ...startDialogue(leoVisit), flags: [...new Set([...state.flags, ...state.dialogue.flags])] } };
 }
 
 /** Start Day 3 after all Day 2 conversations, retaining world discoveries. */
@@ -195,7 +195,7 @@ export function advanceToThomas(state: ChapterState): ChapterState {
   return {
     ...state,
     stage: 'thomas',
-    dialogue: { ...startDialogue(thomasVisit), flags: state.flags },
+    dialogue: { ...startDialogue(thomasVisit), flags: [...new Set([...state.flags, ...state.dialogue.flags])] },
   };
 }
 
@@ -203,7 +203,7 @@ export function advanceToThomas(state: ChapterState): ChapterState {
 export function advanceToNora(state: ChapterState): ChapterState {
   if (state.stage !== 'thomas') throw new Error('Finish Thomas first');
   if (availableOptions(thomasVisit, state.dialogue).length) throw new Error('Finish Thomas first');
-  return { ...state, stage: 'nora', dialogue: { ...startDialogue(noraVisit), flags: state.flags } };
+  return { ...state, stage: 'nora', dialogue: { ...startDialogue(noraVisit), flags: [...new Set([...state.flags, ...state.dialogue.flags])] } };
 }
 
 /** Gather the community after Nora's visit, without losing previous choices. */
@@ -271,7 +271,7 @@ export function advanceToDayFourMara(state: ChapterState): ChapterState {
   return {
     ...state,
     stage: 'day4-mara',
-    dialogue: { ...startDialogue(maraDecision), flags: state.flags },
+    dialogue: { ...startDialogue(maraDecision), flags: [...new Set([...state.flags, ...state.dialogue.flags])] },
   };
 }
 
@@ -282,7 +282,7 @@ export function advanceToDayFourLeo(state: ChapterState): ChapterState {
   return {
     ...state,
     stage: 'day4-leo',
-    dialogue: { ...startDialogue(leoDecision), flags: state.flags },
+    dialogue: { ...startDialogue(leoDecision), flags: [...new Set([...state.flags, ...state.dialogue.flags])] },
   };
 }
 
