@@ -62,7 +62,7 @@ function play(route: 'first' | 'last' | 'alternating') {
       const saved = decodeSave(values.get(SAVE_KEY) ?? '');
       expect(saved).not.toBeNull();
       expect(saved?.stage).toBe(story.stage);
-      expect(saved?.flags).toEqual(expect.arrayContaining(before?.flags ?? []));
+      expect(saved?.flags).toEqual(expect.arrayContaining([...(before?.flags ?? [])]));
       expect(new Set(saved?.flags).size).toBe(saved?.flags.length);
       if (story.stage !== previous) visited.push(story.stage);
 
