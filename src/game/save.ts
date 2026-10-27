@@ -26,10 +26,9 @@ interface SavedChapter {
 
 /** localStorage stores UTF-16 strings, but the save budget is in UTF-8 bytes. */
 function exceedsSaveLimit(raw: string): boolean {
-  return (
-    raw.length > SAVE_LIMITS.bytes ||
-    new TextEncoder().encode(raw).byteLength > SAVE_LIMITS.bytes
-  );
+  if (raw.length > SAVE_LIMITS.bytes) return true;
+  const byteLength = new TextEncoder().encode(raw).byteLength;
+  return byteLength > SAVE_LIMITS.bytes;
 }
 
 const stages: readonly ChapterStage[] = [
