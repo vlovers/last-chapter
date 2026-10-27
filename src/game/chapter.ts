@@ -200,7 +200,10 @@ export function startBookClub(state: ChapterState): ChapterState {
     ...state,
     stage: 'book-club',
     flags: [...new Set([...state.flags, 'book_club_started'])],
-    dialogue: { ...startDialogue(bookClub), flags: [...new Set([...state.flags, 'book_club_started'])] },
+    dialogue: {
+      ...startDialogue(bookClub),
+      flags: [...new Set([...state.flags, 'book_club_started'])],
+    },
   };
 }
 
