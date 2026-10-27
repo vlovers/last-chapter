@@ -142,7 +142,11 @@ export function startSecondDay(state: ChapterState): ChapterState {
 export function finishSecondDay(state: ChapterState): ChapterState {
   if (state.stage !== 'leo') throw new Error('Finish all Day 2 visits first');
   if (availableOptions(leoVisit, state.dialogue).length) throw new Error('Finish the conversation');
-  return { ...state, stage: 'day2-complete' };
+  return {
+    ...state,
+    stage: 'day2-complete',
+    flags: [...new Set([...state.flags, ...state.dialogue.flags])],
+  };
 }
 
 /** Move from the Iris encounter to Anna, retaining Day 1 and Day 2 flags. */
