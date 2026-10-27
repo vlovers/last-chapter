@@ -24,22 +24,24 @@ describe('Fifth-day choice consequences', () => {
   ])(
     'shows the %s purchase callback and keeps it in the ending',
     (flag, visible, hidden, back) => {
-    let chapter = enterFinale([flag]);
-    chapter = chooseChapterOption(chapter, 'anna');
-    const options = availableOptions(finalReading, chapter.dialogue).map((option) => option.id);
-    expect(options).toContain(visible);
-    expect(options).not.toContain(hidden);
-    chapter = chooseChapterOption(chapter, visible);
-    expect(currentNode(finalReading, chapter.dialogue).text.length).toBeGreaterThan(40);
-    chapter = chooseChapterOption(chapter, back);
-    expect(chapter.flags).toContain('final_anna_club_heard');
+      let chapter = enterFinale([flag]);
+      chapter = chooseChapterOption(chapter, 'anna');
+      const options = availableOptions(finalReading, chapter.dialogue).map(
+        (option) => option.id,
+      );
+      expect(options).toContain(visible);
+      expect(options).not.toContain(hidden);
+      chapter = chooseChapterOption(chapter, visible);
+      expect(currentNode(finalReading, chapter.dialogue).text.length).toBeGreaterThan(40);
+      chapter = chooseChapterOption(chapter, back);
+      expect(chapter.flags).toContain('final_anna_club_heard');
       expect(
         availableOptions(finalReading, chapter.dialogue).map((option) => option.id),
       ).not.toContain('anna');
-    chapter = chooseChapterOption(chapter, 'close');
-    chapter = finishSeason(chapter);
-    expect(chapter.flags).toContain(flag);
-    expect(chapter.flags).toContain('final_anna_club_heard');
+      chapter = chooseChapterOption(chapter, 'close');
+      chapter = finishSeason(chapter);
+      expect(chapter.flags).toContain(flag);
+      expect(chapter.flags).toContain('final_anna_club_heard');
       expect(chapter.stage).toBe('season-complete');
     },
   );
