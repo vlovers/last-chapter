@@ -45,11 +45,7 @@ describe('finale consequence matrix', () => {
     const exhibition = ending('final_iris_exhibition', 'book_club_started');
     const mara = ending('mara_future_supported', 'book_club_started');
     const bookClub = ending('book_club_started');
-    const both = ending(
-      'final_iris_exhibition',
-      'mara_future_supported',
-      'book_club_started',
-    );
+    const both = ending('final_iris_exhibition', 'mara_future_supported', 'book_club_started');
     expect(new Set([exhibition.epilogue, mara.epilogue, bookClub.epilogue]).size).toBe(3);
     expect(exhibition.epilogue).toContain('Вікна Беллвіка');
     expect(mara.epilogue).toContain('Мара почала');
@@ -93,7 +89,10 @@ describe('finale consequence matrix', () => {
     expect(discovered.epilogue).toContain('Знайдена ввечері сторінка');
     expect(respected.epilogue).toContain('залишити знайдену сторінку між ними');
     expect(questioned.epilogue).toContain('пошукати власника знайденої сторінки');
-    expect(new Set([untouched.epilogue, discovered.epilogue, respected.epilogue, questioned.epilogue]).size).toBe(4);
+    expect(
+      new Set([untouched.epilogue, discovered.epilogue, respected.epilogue, questioned.epilogue])
+        .size,
+    ).toBe(4);
 
     for (const result of [untouched, discovered, respected, questioned]) {
       expect(result.epilogue).toContain('Френк заснув біля вікна');
@@ -102,7 +101,11 @@ describe('finale consequence matrix', () => {
   });
 
   it('keeps the manuscript decision independent of the letter and community outcomes', () => {
-    const manuscriptFlags = ['evening_shop_kept_open', 'quiet_evening_page_found', 'iris_quiet_page_privacy_respected'];
+    const manuscriptFlags = [
+      'evening_shop_kept_open',
+      'quiet_evening_page_found',
+      'iris_quiet_page_privacy_respected',
+    ];
     const baseline = ending(...manuscriptFlags);
     const changed = ending(...manuscriptFlags, 'final_mutual_conversation', 'final_repaired_rumor');
     expect(changed.epilogue).toBe(baseline.epilogue);
