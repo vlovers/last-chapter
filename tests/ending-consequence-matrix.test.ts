@@ -76,6 +76,40 @@ describe('finale consequence matrix', () => {
     expect(quiet.epilogue).not.toContain('нове оголошення про книжковий клуб');
   });
 
+  it('remembers the quiet-evening manuscript without claiming it was resolved', () => {
+    const untouched = ending('evening_shop_kept_open');
+    const discovered = ending('evening_shop_kept_open', 'quiet_evening_page_found');
+    const respected = ending(
+      'evening_shop_kept_open',
+      'quiet_evening_page_found',
+      'iris_quiet_page_privacy_respected',
+    );
+    const questioned = ending(
+      'evening_shop_kept_open',
+      'quiet_evening_page_found',
+      'iris_quiet_page_identity_questioned',
+    );
+
+    expect(discovered.epilogue).toContain('Знайдена ввечері сторінка');
+    expect(respected.epilogue).toContain('залишити знайдену сторінку між ними');
+    expect(questioned.epilogue).toContain('пошукати власника знайденої сторінки');
+    expect(new Set([untouched.epilogue, discovered.epilogue, respected.epilogue, questioned.epilogue]).size).toBe(4);
+
+    for (const result of [untouched, discovered, respected, questioned]) {
+      expect(result.epilogue).toContain('Френк заснув біля вікна');
+      expect(result.epilogue).not.toContain('нове оголошення про книжковий клуб');
+    }
+  });
+
+  it('keeps the manuscript decision independent of the letter and community outcomes', () => {
+    const manuscriptFlags = ['evening_shop_kept_open', 'quiet_evening_page_found', 'iris_quiet_page_privacy_respected'];
+    const baseline = ending(...manuscriptFlags);
+    const changed = ending(...manuscriptFlags, 'final_mutual_conversation', 'final_repaired_rumor');
+    expect(changed.epilogue).toBe(baseline.epilogue);
+    expect(changed.letter).not.toBe(baseline.letter);
+    expect(changed.community).not.toBe(baseline.community);
+  });
+
   it('preserves unrelated ending dimensions across every combination of decisions', () => {
     const letters = [[], ['final_mutual_conversation'], ['final_letter_kept_private']];
     const communities = [[], ['final_respected_privacy'], ['final_repaired_rumor']];
