@@ -160,7 +160,9 @@ function render(): void {
         : chapter.stage === 'day2-complete'
           ? 'Другий день завершено. Наступного ранку до книгарні завітає Елеонора.'
           : chapter.stage === 'day3-complete'
-            ? 'Книжковий клуб завершився. Наступного ранку Айріс повернеться до книгарні.'
+            ? chapter.flags.includes('book_club_started')
+              ? 'Книжковий клуб завершився. Наступного ранку Айріс повернеться до книгарні.'
+              : 'Тихий вечір у книгарні завершився. Наступного ранку Айріс повернеться до книгарні.'
             : chapter.stage === 'day4-complete'
               ? 'Четвертий день завершено. Завтра книгарня запросить сусідів на спільне читання.'
               : seasonEnding(chapter).letter;
@@ -407,7 +409,7 @@ function render(): void {
                     ? 'Зустріти Нору →'
                     : chapter.stage === 'nora'
                       ? 'Відкрити книжковий клуб →'
-                      : chapter.stage === 'book-club'
+                      : chapter.stage === 'book-club' || chapter.stage === 'quiet-evening'
                         ? 'Завершити третій день →'
                         : chapter.stage === 'day4-iris'
                           ? 'Зустріти Мару →'
@@ -432,7 +434,7 @@ function render(): void {
                     ? advanceToNora(chapter)
                     : chapter.stage === 'nora'
                       ? startBookClub(chapter)
-                      : chapter.stage === 'book-club'
+                      : chapter.stage === 'book-club' || chapter.stage === 'quiet-evening'
                         ? finishThirdDay(chapter)
                         : chapter.stage === 'day4-iris'
                           ? advanceToDayFourMara(chapter)
