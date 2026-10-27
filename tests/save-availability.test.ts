@@ -22,7 +22,7 @@ describe('narrative persistence availability', () => {
     expect(saved.has(SAVE_KEY)).toBe(false);
     blocked = false;
     const next = story.open().choices[0];
-    expect(next).toBeDefined();
+    if (!next) throw new Error('Expected an available dialogue choice');
     story.choose(next.id);
     expect(story.isProgressSaved).toBe(true);
     expect(saved.has(SAVE_KEY)).toBe(true);
