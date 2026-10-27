@@ -288,6 +288,58 @@ export const finalReading: DialogueStory = {
       ],
     },
     {
+      id: 'quiet-manuscript-followup',
+      speaker: 'Айріс',
+      text: '«Я ще думаю про той аркуш. Не знаю, чи він мамин. Але хочу сама вирішити, що з ним робити». Френк сідає на її альбом.',
+      textWhen: [
+        {
+          requires: ['iris_quiet_page_stars_compared'],
+          text: '«На листівці три зірочки, а на аркуші дві. Я порівняла їх ще раз. Можливо, почерк інший. Не хочу вигадувати відповідь».',
+        },
+        {
+          requires: ['iris_quiet_page_window_theory'],
+          text: '«Я перечитала уривок про відчинене вікно. Мама часто писала про очікування. Але це ще не доводить, що сторінка її».',
+        },
+      ],
+      options: [
+        {
+          id: 'quiet-manuscript-archive',
+          label: 'Зберегти аркуш у книгарні до нових відомостей',
+          next: 'quiet-manuscript-result',
+          grants: ['final_quiet_manuscript_archived'],
+        },
+        {
+          id: 'quiet-manuscript-return',
+          label: 'Передати аркуш Айріс',
+          next: 'quiet-manuscript-result',
+          grants: ['final_quiet_manuscript_returned'],
+        },
+      ],
+    },
+    {
+      id: 'quiet-manuscript-result',
+      speaker: 'Айріс',
+      text: '«Дякую, що не зробив із цього виставу». Вона відсуває альбом від Френка.',
+      textWhen: [
+        {
+          requires: ['final_quiet_manuscript_archived'],
+          text: '«Покладемо аркуш у конверт і запишемо лише дату знахідки». Айріс бере ручку.',
+        },
+        {
+          requires: ['final_quiet_manuscript_returned'],
+          text: 'Айріс ховає аркуш між сторінками альбому. «Якщо захочу продовжити пошуки, я прийду».',
+        },
+      ],
+      options: [
+        {
+          id: 'quiet-manuscript-result-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_quiet_manuscript_followup'],
+        },
+      ],
+    },
+    {
       id: 'shared-table',
       speaker: 'Анна',
       text: 'Анна кладе на стіл книжку без обкладинки. «Мої учні сперечалися, чи можна розповідати історію друга, якщо вона здається повчальною. Один сказав: якщо історія правдива, значить, можна. Інша відповіла: правда не робить її твоєю». Мара відсуває чашку. «А якщо мовчання теж когось ранить?»',
