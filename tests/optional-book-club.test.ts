@@ -95,16 +95,20 @@ describe('optional day-three book club', () => {
       flags: ['quiet_evening_page_found'],
     });
     const gathering = chooseChapterOption(finalDay, 'open');
-    expect(availableOptions(finalReading, gathering.dialogue).map((option) => option.id)).not.toContain(
-      'quiet-manuscript-followup',
-    );
+    expect(
+      availableOptions(finalReading, gathering.dialogue).map((option) => option.id),
+    ).not.toContain('quiet-manuscript-followup');
   });
 
   it('archives the manuscript without claiming that its author is known', () => {
     const finalDay = startFifthDay({
       ...startChapter(),
       stage: 'day4-complete',
-      flags: ['quiet_evening_page_found', 'iris_quiet_page_discussed', 'iris_quiet_page_window_theory'],
+      flags: [
+        'quiet_evening_page_found',
+        'iris_quiet_page_discussed',
+        'iris_quiet_page_window_theory',
+      ],
     });
     const gathering = chooseChapterOption(finalDay, 'open');
     const followup = chooseChapterOption(gathering, 'quiet-manuscript-followup');
