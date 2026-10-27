@@ -318,7 +318,25 @@ try {
     if (nextDay) {
       // Exercise the actual touch target used to start the next day.
       await page.waitForTimeout(240);
-      await page.locator('#choices button[data-choice="__advance"]').tap();
+      if (plan.stage === 'complete') {
+        // A second activation of the same detached button must not replay the
+        // checkpoint transition or throw while the next scene is loading.
+        const transition = await page.evaluate(() => {
+          const button = document.querySelector('#choices button[data-choice="__advance"]');
+          const before = window.__lastChapterStory.stage;
+          button.click();
+          const afterFirst = window.__lastChapterStory.stage;
+          button.click();
+          return { before, afterFirst, afterSecond: window.__lastChapterStory.stage };
+        });
+        assert.deepEqual(transition, {
+          before: 'complete',
+          afterFirst: 'iris',
+          afterSecond: 'iris',
+        });
+      } else {
+        await page.locator('#choices button[data-choice="__advance"]').tap();
+      }
     } else {
       await choose(page, '__advance');
     }
