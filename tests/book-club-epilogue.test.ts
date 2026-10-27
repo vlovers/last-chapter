@@ -14,6 +14,12 @@ describe('book club epilogue', () => {
     expect(ending.epilogue).not.toContain('чистий аркуш');
   });
 
+  it('remembers the quiet bookstore evening when the club was skipped', () => {
+    const ending = seasonEnding({ flags: ['book_club_skipped', 'evening_shop_kept_open'] });
+    expect(ending.epilogue).toContain('Френк заснув біля вікна');
+    expect(ending.epilogue).not.toContain('нове оголошення про книжковий клуб');
+  });
+
   it('preserves independent character outcomes alongside the club', () => {
     const ending = seasonEnding({
       flags: ['book_club_started', 'final_iris_exhibition', 'mara_future_supported'],
