@@ -239,6 +239,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_eleanor_reflection_heard'],
         },
         {
+          id: 'quiet-manuscript-followup',
+          label: 'Поговорити з Айріс про знайдену сторінку',
+          next: 'quiet-manuscript-followup',
+          requires: ['iris_quiet_page_discussed'],
+          unless: ['final_quiet_manuscript_followup'],
+        },
+        {
           id: 'frank-evening',
           label: 'Побути з Френком біля вікна',
           next: 'frank-evening',
