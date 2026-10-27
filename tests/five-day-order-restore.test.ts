@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { decodeSave, SAVE_KEY } from '../src/game/save';
+import { SERVICE_KEY } from '../src/game/recommendation';
 import { FiveDayStory } from '../src/phaser/five-day-story';
 
 function useStorage() {
@@ -22,6 +23,16 @@ describe('order receipts survive five-day save/restore', () => {
   it('keeps each completed order after every choice and clears receipts on restart', () => {
     const values = useStorage();
     let story = new FiveDayStory();
+    story.choose('greet');
+    story.choose('books');
+    expect(story.request).not.toBeNull();
+    story.clarifyRequest();
+    expect(story.recommend('letters')?.accepted).toBe(false);
+    const rememberedService = values.get(SERVICE_KEY);
+    expect(rememberedService).toBeTruthy();
+    story = new FiveDayStory();
+    expect(story.request?.asked).toBe(true);
+    expect(story.lastRecommendation?.accepted).toBe(false);
     const visitedDays = new Set<number>([story.day]);
     const observedReceipts = new Set<string>();
     let maxOrders = 0;
@@ -50,6 +61,7 @@ describe('order receipts survive five-day save/restore', () => {
         })),
       ).toEqual(beforeRestore);
       expect(decodeSave(values.get(SAVE_KEY) ?? '')).not.toBeNull();
+      expect(values.get(SERVICE_KEY)).toBe(rememberedService);
     }
 
     expect(story.stage).toBe('season-complete');
@@ -59,5 +71,10 @@ describe('order receipts survive five-day save/restore', () => {
     story = new FiveDayStory();
     expect(story.stage).toBe('miller');
     expect(story.orders).toEqual([]);
+    expect(JSON.parse(values.get(SERVICE_KEY) ?? 'null')).toEqual({
+      version: 1,
+      asked: [],
+      attempts: [],
+    });
   });
 });
