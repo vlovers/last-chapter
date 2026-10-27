@@ -1,0 +1,25 @@
+import { describe, expect, it } from 'vitest';
+import { seasonEnding } from '../src/game/endings';
+
+describe('book club epilogue', () => {
+  it('does not claim a meeting was scheduled without attendance', () => {
+    const ending = seasonEnding({ flags: [] });
+    expect(ending.epilogue).not.toContain('нове оголошення про книжковий клуб');
+    expect(ending.epilogue).toContain('чистий аркуш');
+  });
+
+  it('mentions the next meeting after the book club has started', () => {
+    const ending = seasonEnding({ flags: ['book_club_started'] });
+    expect(ending.epilogue).toContain('нове оголошення про книжковий клуб');
+    expect(ending.epilogue).not.toContain('чистий аркуш');
+  });
+
+  it('preserves independent character outcomes alongside the club', () => {
+    const ending = seasonEnding({
+      flags: ['book_club_started', 'final_iris_exhibition', 'mara_future_supported'],
+    });
+    expect(ending.epilogue).toContain('Вікна Беллвіка');
+    expect(ending.epilogue).toContain('Мара почала шукати');
+    expect(ending.epilogue).toContain('книжковий клуб');
+  });
+});
