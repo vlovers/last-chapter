@@ -68,9 +68,8 @@ function play(route: 'first' | 'last' | 'alternating') {
       // a partial save when tapped too early.
       if (dialogue.length > 0) {
         const untouchedSave = values.get(SAVE_KEY);
-        expect(() => story.choose('__advance')).toThrow(
-          'Finish the conversation before advancing',
-        );
+        const advanceEarly = () => story.choose('__advance');
+        expect(advanceEarly).toThrow('Finish the conversation before advancing');
         expect(values.get(SAVE_KEY)).toBe(untouchedSave);
         expect(story.open()).toEqual(view);
       }
