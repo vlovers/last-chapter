@@ -68,7 +68,11 @@ describe('optional day-three book club', () => {
     const finalDay = startFifthDay({
       ...startChapter(),
       stage: 'day4-complete',
-      flags: ['quiet_evening_page_found', 'iris_quiet_page_discussed', 'iris_quiet_page_stars_compared'],
+      flags: [
+        'quiet_evening_page_found',
+        'iris_quiet_page_discussed',
+        'iris_quiet_page_stars_compared',
+      ],
     });
     const gathering = chooseChapterOption(finalDay, 'open');
     expect(availableOptions(finalReading, gathering.dialogue).map((option) => option.id)).toContain(
@@ -79,9 +83,9 @@ describe('optional day-three book club', () => {
     const handedOver = chooseChapterOption(followup, 'quiet-manuscript-return');
     const returned = chooseChapterOption(handedOver, 'quiet-manuscript-result-back');
     expect(seasonEnding(returned).epilogue).toContain('Айріс забрала сторінку');
-    expect(availableOptions(finalReading, returned.dialogue).map((option) => option.id)).not.toContain(
-      'quiet-manuscript-followup',
-    );
+    expect(
+      availableOptions(finalReading, returned.dialogue).map((option) => option.id),
+    ).not.toContain('quiet-manuscript-followup');
   });
 
   it('persists the quiet evening and its completed checkpoint', () => {
