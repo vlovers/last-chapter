@@ -248,7 +248,7 @@ export function finishFourthDay(state: ChapterState): ChapterState {
   if (state.stage !== 'day4-leo') throw new Error('Finish Leo first');
   if (availableOptions(leoDecision, state.dialogue).length)
     throw new Error('Finish the conversation');
-  return { ...state, stage: 'day4-complete' };
+  return { ...state, stage: 'day4-complete', flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
 }
 
 /** Meet Mara after Iris has finished, carrying forward every previous decision. */
@@ -288,5 +288,5 @@ export function finishSeason(state: ChapterState): ChapterState {
   if (state.stage !== 'day5-reading') throw new Error('Finish Day 5 first');
   if (availableOptions(finalReading, state.dialogue).length)
     throw new Error('Finish the final gathering');
-  return { ...state, stage: 'season-complete' };
+  return { ...state, stage: 'season-complete', flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
 }
