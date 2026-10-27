@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { finishFourthDay, finishSeason, startChapter } from '../src/game/chapter';
 import { startDialogue } from '../src/game/dialogue';
+import { decodeSave, encodeSave } from '../src/game/save';
 import { leoDecision } from '../src/content/day-four-leo';
 import { finalReading } from '../src/content/day-five';
 
@@ -21,6 +22,7 @@ describe('late-season checkpoint discoveries', () => {
     const result = finishFourthDay(chapter);
     expect(result.stage).toBe('day4-complete');
     expect(result.flags).toEqual(['earlier_choice', 'day_four_new_discovery']);
+    expect(decodeSave(encodeSave(result))?.flags).toContain('day_four_new_discovery');
   });
 
   it('retains dialogue-only flags when the season ends', () => {
@@ -39,5 +41,6 @@ describe('late-season checkpoint discoveries', () => {
     const result = finishSeason(chapter);
     expect(result.stage).toBe('season-complete');
     expect(result.flags).toEqual(['earlier_choice', 'final_new_discovery']);
+    expect(decodeSave(encodeSave(result))?.flags).toContain('final_new_discovery');
   });
 });
