@@ -143,12 +143,20 @@ describe('optional day-three book club', () => {
 
   it('does not contradict the final manuscript custody decision in the epilogue', () => {
     const returned = seasonEnding({
-      flags: ['quiet_evening_page_found', 'iris_quiet_page_privacy_respected', 'final_quiet_manuscript_returned'],
+      flags: [
+        'quiet_evening_page_found',
+        'iris_quiet_page_privacy_respected',
+        'final_quiet_manuscript_returned',
+      ],
     }).epilogue;
     expect(returned).toContain('Айріс забрала сторінку');
     expect(returned).not.toContain('залишити знайдену сторінку');
     const archived = seasonEnding({
-      flags: ['quiet_evening_page_found', 'iris_quiet_page_identity_questioned', 'final_quiet_manuscript_archived'],
+      flags: [
+        'quiet_evening_page_found',
+        'iris_quiet_page_identity_questioned',
+        'final_quiet_manuscript_archived',
+      ],
     }).epilogue;
     expect(archived).toContain('зберегли у книгарні');
     expect(archived).not.toContain('пошукати власника');
