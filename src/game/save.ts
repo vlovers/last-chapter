@@ -81,6 +81,9 @@ export function encodeSave(state: ChapterState): string {
   };
   const serialized = JSON.stringify(save);
   if (exceedsSaveLimit(serialized)) throw new Error('Save exceeds byte limit');
+  // Never write a save that our own decoder would discard on the next launch.
+  // This also covers ledger/flag limits and invalid dialogue nodes, not just bytes.
+  if (decodeSave(serialized) === null) throw new Error('Save cannot be restored');
   return serialized;
 }
 
