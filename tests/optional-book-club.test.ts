@@ -4,18 +4,17 @@ import {
   finishThirdDay,
   skipBookClub,
   startChapter,
+  advanceToDayFourMara,
   startFourthDay,
   startFifthDay,
-  advanceToDayFourMara,
 } from '../src/game/chapter';
-import { selectOption, startDialogue } from '../src/game/dialogue';
+import { availableOptions, currentNode, selectOption, startDialogue } from '../src/game/dialogue';
 import { quietEvening } from '../src/content/quiet-evening';
 import { noraVisit } from '../src/content/nora';
 import { encodeSave, decodeSave } from '../src/game/save';
 import { storyProgress } from '../src/game/progress';
 import { finalReading } from '../src/content/day-five';
 import { seasonEnding } from '../src/game/endings';
-import { availableOptions, currentNode } from '../src/game/dialogue';
 
 describe('optional day-three book club', () => {
   it('rejects skipping before Nora has finished speaking', () => {
@@ -119,7 +118,7 @@ describe('optional day-three book club', () => {
     const restored = decodeSave(encodeSave(completed));
     expect(restored?.flags).toContain('final_quiet_manuscript_archived');
     expect(restored?.flags).not.toContain('final_quiet_manuscript_returned');
-    expect(seasonEnding(restored!).epilogue).toContain('зберегли окремо');
+    expect(seasonEnding(restored!).epilogue).toContain('зберегли у книгарні');
   });
 
   it('carries the manuscript clue through the actual Iris dialogue and into Mara', () => {
