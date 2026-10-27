@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { chooseChapterOption, finishThirdDay, skipBookClub, startChapter, startFourthDay } from '../src/game/chapter';
+import {
+  chooseChapterOption,
+  finishThirdDay,
+  skipBookClub,
+  startChapter,
+  startFourthDay,
+} from '../src/game/chapter';
 import { selectOption, startDialogue } from '../src/game/dialogue';
 import { quietEvening } from '../src/content/quiet-evening';
 import { noraVisit } from '../src/content/nora';

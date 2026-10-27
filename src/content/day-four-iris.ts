@@ -233,9 +233,7 @@ export const irisDecision: DialogueStory = {
           text: '«Тільки без імен і без фотографій сторінки», — каже Айріс. «Я хочу знати, якщо хтось її впізнає. Раніше за плітки».',
         },
       ],
-      options: [
-        { id: 'quiet-page-return', label: 'Повернутися до розмови', next: 'welcome' },
-      ],
+      options: [{ id: 'quiet-page-return', label: 'Повернутися до розмови', next: 'welcome' }],
     },
     {
       id: 'past',
