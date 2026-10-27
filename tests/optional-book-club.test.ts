@@ -88,6 +88,35 @@ describe('optional day-three book club', () => {
     ).not.toContain('quiet-manuscript-followup');
   });
 
+  it('keeps the manuscript finale hidden without a conversation with Iris', () => {
+    const finalDay = startFifthDay({
+      ...startChapter(),
+      stage: 'day4-complete',
+      flags: ['quiet_evening_page_found'],
+    });
+    const gathering = chooseChapterOption(finalDay, 'open');
+    expect(availableOptions(finalReading, gathering.dialogue).map((option) => option.id)).not.toContain(
+      'quiet-manuscript-followup',
+    );
+  });
+
+  it('archives the manuscript without claiming that its author is known', () => {
+    const finalDay = startFifthDay({
+      ...startChapter(),
+      stage: 'day4-complete',
+      flags: ['quiet_evening_page_found', 'iris_quiet_page_discussed', 'iris_quiet_page_window_theory'],
+    });
+    const gathering = chooseChapterOption(finalDay, 'open');
+    const followup = chooseChapterOption(gathering, 'quiet-manuscript-followup');
+    expect(currentNode(finalReading, followup.dialogue).text).toContain('відчинене вікно');
+    const archived = chooseChapterOption(followup, 'quiet-manuscript-archive');
+    const completed = chooseChapterOption(archived, 'quiet-manuscript-result-back');
+    const restored = decodeSave(encodeSave(completed));
+    expect(restored?.flags).toContain('final_quiet_manuscript_archived');
+    expect(restored?.flags).not.toContain('final_quiet_manuscript_returned');
+    expect(seasonEnding(restored!).epilogue).toContain('зберегли окремо');
+  });
+
   it('persists the quiet evening and its completed checkpoint', () => {
     const evening = {
       ...startChapter(),
