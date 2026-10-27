@@ -49,5 +49,10 @@ describe('Anna book recommendations persist through the second day', () => {
     expect(decodeSave(values.get(SAVE_KEY) ?? '')?.flags).toContain(receipt);
     expect(story.orders.some((order) => order.book.id === book)).toBe(true);
     expect(story.stage).toBe('leo');
+    const completedOrders = story.orders.length;
+    expect(completedOrders).toBeGreaterThan(0);
+    const resumed = new FiveDayStory();
+    expect(resumed.orders).toEqual(story.orders);
+    expect(resumed.stage).toBe('leo');
   });
 });
