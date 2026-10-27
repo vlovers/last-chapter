@@ -45,11 +45,7 @@ describe('finale consequence matrix', () => {
     const exhibition = ending('final_iris_exhibition', 'book_club_started');
     const mara = ending('mara_future_supported', 'book_club_started');
     const bookClub = ending('book_club_started');
-    const both = ending(
-      'final_iris_exhibition',
-      'mara_future_supported',
-      'book_club_started',
-    );
+    const both = ending('final_iris_exhibition', 'mara_future_supported', 'book_club_started');
     expect(new Set([exhibition.epilogue, mara.epilogue, bookClub.epilogue]).size).toBe(3);
     expect(exhibition.epilogue).toContain('Вікна Беллвіка');
     expect(mara.epilogue).toContain('Мара почала');
