@@ -46,13 +46,22 @@ describe('Day 3 completion checkpoint regression', () => {
   });
 
   it('rejects unrelated dialogue nodes in a Day 3 checkpoint', () => {
-    const malformed = JSON.parse(
-      encodeSave({
-        stage: 'day3-complete',
-        dialogue: { ...startDialogue(bookClub), node: 'not-a-scene' },
-        flags: [],
-      }),
-    ) as Record<string, unknown>;
-    expect(decodeSave(JSON.stringify(malformed))).toBeNull();
+    const invalid: ChapterState = {
+      stage: 'day3-complete',
+      dialogue: { ...startDialogue(bookClub), node: 'not-a-scene' },
+      flags: [],
+    };
+    expect(() => encodeSave(invalid)).toThrow('Save cannot be restored');
+    expect(
+      decodeSave(
+        JSON.stringify({
+          version: 1,
+          stage: invalid.stage,
+          node: invalid.dialogue.node,
+          flags: [],
+          history: [],
+        }),
+      ),
+    ).toBeNull();
   });
 });
