@@ -207,6 +207,18 @@ export function startBookClub(state: ChapterState): ChapterState {
   };
 }
 
+/** Leave the evening gathering optional after Nora's conversation. */
+export function skipBookClub(state: ChapterState): ChapterState {
+  if (state.stage !== 'nora') throw new Error('Finish Nora before deciding about the club');
+  if (availableOptions(noraVisit, state.dialogue).length)
+    throw new Error('Finish Nora before deciding about the club');
+  return {
+    ...state,
+    stage: 'day3-complete',
+    flags: [...new Set([...state.flags, 'book_club_skipped'])],
+  };
+}
+
 /** Begin Day 4 without revealing private correspondence or discarding previous choices. */
 export function startFourthDay(state: ChapterState): ChapterState {
   if (state.stage !== 'day3-complete') throw new Error('Finish Day 3 first');
