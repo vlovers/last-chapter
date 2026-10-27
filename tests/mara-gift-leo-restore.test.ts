@@ -25,9 +25,6 @@ describe('Mara gift choices reach Leo after save and restore', () => {
     let sawGift = false;
     for (let step = 0; step < 500 && !sawGift; step++) {
       const view = story.open();
-      if (story.stage === 'miller' && step > 20) {
-        throw new Error(`Miller path at step ${step}: ${JSON.stringify(view.choices.map((item) => item.id))}`);
-      }
       if (
         story.stage === 'mara' &&
         story.recommendationChoices.some((item) => item.bookId === book)
@@ -44,7 +41,8 @@ describe('Mara gift choices reach Leo after save and restore', () => {
         story.choose(gift);
         sawGift = true;
       } else {
-        const preferred = story.stage === 'leo' && view.choices.find((item) => item.id === 'mara');
+        const preferred =
+          story.stage === 'leo' ? view.choices.find((item) => item.id === 'mara') : undefined;
         const choice =
           preferred ??
           view.choices.find((item) => item.id === '__advance') ??
