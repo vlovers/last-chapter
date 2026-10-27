@@ -222,7 +222,10 @@ export function skipBookClub(state: ChapterState): ChapterState {
     ...state,
     stage: 'quiet-evening',
     flags: [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])],
-    dialogue: { ...startDialogue(quietEvening), flags: [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])] },
+    dialogue: {
+      ...startDialogue(quietEvening),
+      flags: [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])],
+    },
   };
 }
 

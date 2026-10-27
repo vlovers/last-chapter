@@ -23,7 +23,12 @@ export const quietEvening: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Між двома старими романами лежить тонкий аркуш без обкладинки. На полях — маленькі зірочки біля виправлених речень. У тексті згадується вікно, яке хтось навмисно залишив незачиненим.',
       options: [
-        { id: 'keep-page', label: 'Покласти аркуш до нотатника', next: 'end', grants: ['quiet_evening_page_found'] },
+        {
+          id: 'keep-page',
+          label: 'Покласти аркуш до нотатника',
+          next: 'end',
+          grants: ['quiet_evening_page_found'],
+        },
         { id: 'leave-page', label: 'Залишити аркуш на місці', next: 'end' },
       ],
     },
