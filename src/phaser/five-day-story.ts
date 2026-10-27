@@ -20,6 +20,7 @@ import {
   finishFourthDay,
   finishSeason,
   startBookClub,
+  skipBookClub,
   startChapter,
   startSecondDay,
   startThirdDay,
@@ -326,8 +327,11 @@ export class FiveDayStory {
           : {}),
       };
     });
-    if (!choices.length && sequence[this.stage])
+    if (!choices.length && sequence[this.stage]) {
       choices.push({ id: '__advance', label: sequence[this.stage]!.label });
+      if (this.stage === 'nora')
+        choices.push({ id: '__skip_club', label: 'Пропустити книжковий клуб і завершити день' });
+    }
     const member = castMember(node.speaker);
     return {
       speaker: node.speaker,
@@ -340,7 +344,9 @@ export class FiveDayStory {
   choose(id: string) {
     const restarting = id === '__restart' && this.stage === 'season-complete';
     if (id === '__restart' && this.stage === 'season-complete') this.chapter = startChapter();
-    else if (id === '__advance') {
+    else if (id === '__skip_club') {
+      this.chapter = skipBookClub(this.chapter);
+    } else if (id === '__advance') {
       const action = checkpoints[this.stage] ?? sequence[this.stage];
       if (!action) throw new Error('No valid next stage');
       // A stage can advance only when the actual dialogue graph has no
