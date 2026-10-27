@@ -34,9 +34,9 @@ describe('recommendation memory and narrative save stay aligned', () => {
     story.clarifyRequest();
     const accepted = new Set(story.recommendationChoices.map((choice) => choice.bookId));
     const catalog = story.catalog();
-    const rejected = catalog.find((entry) => !accepted.has(entry.book.id));
+    const rejected = catalog.find((entry) => !accepted.has(entry.id));
     expect(rejected).toBeDefined();
-    const result = story.recommend(rejected!.book.id);
+    const result = story.recommend(rejected!.id);
     expect(result?.accepted).toBe(false);
     const savedChapter = storage.get(SAVE_KEY);
     expect(savedChapter).toBeDefined();
@@ -49,7 +49,7 @@ describe('recommendation memory and narrative save stay aligned', () => {
     expect(restored.orders).toEqual(story.orders);
     expect(JSON.parse(storage.get(SERVICE_KEY)!).attempts).toContainEqual({
       stage,
-      book: rejected!.book.id,
+      book: rejected!.id,
     });
   });
 });
