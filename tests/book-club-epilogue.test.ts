@@ -26,12 +26,16 @@ describe('book club epilogue', () => {
   });
 
   it('respects Iris privacy in the manuscript follow-up', () => {
-    const ending = seasonEnding({ flags: ['quiet_evening_page_found', 'iris_quiet_page_privacy_respected'] });
+    const ending = seasonEnding({
+      flags: ['quiet_evening_page_found', 'iris_quiet_page_privacy_respected'],
+    });
     expect(ending.epilogue).toContain('таємницю розгадано');
   });
 
   it('reflects the choice to investigate without public accusations', () => {
-    const ending = seasonEnding({ flags: ['quiet_evening_page_found', 'iris_quiet_page_identity_questioned'] });
+    const ending = seasonEnding({
+      flags: ['quiet_evening_page_found', 'iris_quiet_page_identity_questioned'],
+    });
     expect(ending.epilogue).toContain('без публічних звинувачень');
   });
 
