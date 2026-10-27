@@ -94,6 +94,48 @@ describe('local narrative save', () => {
     ).toThrow('Save exceeds byte limit');
   });
 
+  it('never encodes saves that the decoder would discard on the next launch', () => {
+    const base = startChapter();
+    const invalidStates = [
+      {
+        ...base,
+        flags: Array.from({ length: SAVE_LIMITS.flags + 1 }, (_, i) => `flag_${i}`),
+      },
+      {
+        ...base,
+        dialogue: {
+          ...base.dialogue,
+          completed: Array.from(
+            { length: SAVE_LIMITS.completed + 1 },
+            (_, i) => `completed_${i}`,
+          ),
+          pending: [],
+        },
+      },
+      {
+        ...base,
+        dialogue: {
+          ...base.dialogue,
+          completed: [],
+          pending: Array.from(
+            { length: SAVE_LIMITS.pending + 1 },
+            (_, i) => ({ hub: 'arrival', key: `topic_${i}` }),
+          ),
+        },
+      },
+      {
+        ...base,
+        dialogue: { ...base.dialogue, node: 'missing-node' },
+      },
+    ];
+    for (const state of invalidStates) {
+      expect(() => encodeSave(state)).toThrow('Save cannot be restored');
+    }
+    const valid = chooseChapterOption(base, 'greet');
+    const encoded = encodeSave(valid);
+    expect(decodeSave(encoded)).toEqual(valid);
+  });
+
   it('still round trips normal Ukrainian story flags and dialogue', () => {
     const chapter = chooseChapterOption(startChapter(), 'greet');
     const flags = [...chapter.flags, 'нотатка_про_книгарню'];
