@@ -31,6 +31,11 @@ describe('Mara gift choices reach Leo after save and restore', () => {
       ) {
         expect(story.recommend(book)?.accepted).toBe(true);
         purchased = true;
+      } else if (
+        story.stage === 'miller' &&
+        story.recommendationChoices.some((item) => item.bookId === 'orchard')
+      ) {
+        expect(story.recommend('orchard')?.accepted).toBe(true);
       } else if (story.stage === 'leo' && view.choices.some((item) => item.id === gift)) {
         expect(view.choices.some((item) => item.id === gift)).toBe(true);
         story.choose(gift);
