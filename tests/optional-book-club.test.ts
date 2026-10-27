@@ -21,7 +21,9 @@ describe('optional day-three book club', () => {
       flags: kept.flags,
     };
     expect(decodeSave(encodeSave(chapter))?.flags).toContain('quiet_evening_page_found');
-    expect(finishThirdDay(chapter).stage).toBe('day3-complete');
+    const checkpoint = finishThirdDay({ ...chapter, flags: ['book_club_skipped'] });
+    expect(checkpoint.stage).toBe('day3-complete');
+    expect(checkpoint.flags).toContain('quiet_evening_page_found');
   });
 
   it('allows leaving the page without claiming it was collected', () => {
