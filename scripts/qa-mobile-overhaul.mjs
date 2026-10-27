@@ -62,16 +62,21 @@ try {
     if (width < 900)
       await page.touchscreen.tap(before.canvas.x + target.x, before.canvas.y + target.y);
     else await page.mouse.click(before.canvas.x + target.x, before.canvas.y + target.y);
+    // A transient waypoint can cross the threshold before the route finishes.
+    // Assert the settled position, not an intermediate animation frame.
     await page.waitForFunction(
       async (initialX) => {
         const { game } = await import('/phaser-prototype/scene.js');
         const scene = game.scene.getScene('bookshop');
-        return scene.characters.player.x > initialX + 10;
+        return scene.path.length === 0 && scene.characters.player.x > initialX + 10;
       },
       before.player.x,
-      { timeout: 2500 },
+      { timeout: 4000 },
     );
-    assert.ok((await snapshot(page)).player.x > before.player.x + 10);
+    assert.ok(
+      (await snapshot(page)).player.x > before.player.x + 10,
+      `Touch movement must finish to the right at ${width}x${height}`,
+    );
     await page.locator('#game').focus();
     const x = (await snapshot(page)).player.x;
     await page.keyboard.down('ArrowRight');
