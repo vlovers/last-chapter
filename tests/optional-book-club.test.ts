@@ -5,12 +5,16 @@ import {
   skipBookClub,
   startChapter,
   startFourthDay,
+  startFifthDay,
 } from '../src/game/chapter';
 import { selectOption, startDialogue } from '../src/game/dialogue';
 import { quietEvening } from '../src/content/quiet-evening';
 import { noraVisit } from '../src/content/nora';
 import { encodeSave, decodeSave } from '../src/game/save';
 import { storyProgress } from '../src/game/progress';
+import { finalReading } from '../src/content/day-five';
+import { seasonEnding } from '../src/game/endings';
+import { availableOptions, currentNode } from '../src/game/dialogue';
 
 describe('optional day-three book club', () => {
   it('rejects skipping before Nora has finished speaking', () => {
@@ -58,6 +62,26 @@ describe('optional day-three book club', () => {
     expect(fourthDay.flags).toContain('quiet_evening_page_found');
     expect(fourthDay.dialogue.flags).toContain('quiet_evening_page_found');
     expect(fourthDay.flags).not.toContain('book_club_started');
+  });
+
+  it('offers a day-five manuscript decision and reflects custody in the ending', () => {
+    const finalDay = startFifthDay({
+      ...startChapter(),
+      stage: 'day4-complete',
+      flags: ['quiet_evening_page_found', 'iris_quiet_page_discussed', 'iris_quiet_page_stars_compared'],
+    });
+    const gathering = chooseChapterOption(finalDay, 'open');
+    expect(availableOptions(finalReading, gathering.dialogue).map((option) => option.id)).toContain(
+      'quiet-manuscript-followup',
+    );
+    const followup = chooseChapterOption(gathering, 'quiet-manuscript-followup');
+    expect(currentNode(finalReading, followup.dialogue).text).toContain('три зірочки');
+    const handedOver = chooseChapterOption(followup, 'quiet-manuscript-return');
+    const returned = chooseChapterOption(handedOver, 'quiet-manuscript-result-back');
+    expect(seasonEnding(returned).epilogue).toContain('Айріс забрала сторінку');
+    expect(availableOptions(finalReading, returned.dialogue).map((option) => option.id)).not.toContain(
+      'quiet-manuscript-followup',
+    );
   });
 
   it('persists the quiet evening and its completed checkpoint', () => {
