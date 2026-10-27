@@ -128,7 +128,10 @@ export function advanceChapter(state: ChapterState): ChapterState {
   return {
     ...state,
     stage: nextStage,
-    dialogue: { ...startDialogue(stageStory(nextStage)), flags: [...new Set([...state.flags, ...state.dialogue.flags])] },
+    dialogue: {
+      ...startDialogue(stageStory(nextStage)),
+      flags: [...new Set([...state.flags, ...state.dialogue.flags])],
+    },
   };
 }
 
