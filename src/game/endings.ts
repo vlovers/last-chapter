@@ -48,6 +48,11 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
               'Знайдена ввечері сторінка залишилася в нотатнику — запитанням, на яке ще немає відповіді.',
             ]
           : []),
+    ...(flags.has('final_quiet_manuscript_returned')
+      ? ['Айріс забрала сторінку додому. Вона сама вирішить, чи повертатися до пошуків.']
+      : flags.has('final_quiet_manuscript_archived')
+        ? ['Знайдену сторінку й стару листівку зберегли окремо, без припущень про автора.']
+        : []),
     ...(flags.has('book_club_started')
       ? ['Наступного тижня на дверях з’явилося нове оголошення про книжковий клуб.']
       : [
