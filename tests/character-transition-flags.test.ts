@@ -26,13 +26,49 @@ const transitions: readonly {
   story: DialogueStory;
   advance: (state: ReturnType<typeof startChapter>) => ReturnType<typeof startChapter>;
 }[] = [
-  { name: 'Miller to Mara', from: 'miller', to: 'mara', story: millerVisit, advance: advanceChapter },
-  { name: 'Iris to Anna', from: 'iris', to: 'anna', story: irisVisit, advance: advanceSecondDay },
+  {
+    name: 'Miller to Mara',
+    from: 'miller',
+    to: 'mara',
+    story: millerVisit,
+    advance: advanceChapter,
+  },
+  {
+    name: 'Iris to Anna',
+    from: 'iris',
+    to: 'anna',
+    story: irisVisit,
+    advance: advanceSecondDay,
+  },
   { name: 'Anna to Leo', from: 'anna', to: 'leo', story: annaVisit, advance: advanceToLeo },
-  { name: 'Eleanor to Thomas', from: 'eleanor', to: 'thomas', story: eleanorVisit, advance: advanceToThomas },
-  { name: 'Thomas to Nora', from: 'thomas', to: 'nora', story: thomasVisit, advance: advanceToNora },
-  { name: 'Day-four Iris to Mara', from: 'day4-iris', to: 'day4-mara', story: irisDecision, advance: advanceToDayFourMara },
-  { name: 'Day-four Mara to Leo', from: 'day4-mara', to: 'day4-leo', story: maraDecision, advance: advanceToDayFourLeo },
+  {
+    name: 'Eleanor to Thomas',
+    from: 'eleanor',
+    to: 'thomas',
+    story: eleanorVisit,
+    advance: advanceToThomas,
+  },
+  {
+    name: 'Thomas to Nora',
+    from: 'thomas',
+    to: 'nora',
+    story: thomasVisit,
+    advance: advanceToNora,
+  },
+  {
+    name: 'Day-four Iris to Mara',
+    from: 'day4-iris',
+    to: 'day4-mara',
+    story: irisDecision,
+    advance: advanceToDayFourMara,
+  },
+  {
+    name: 'Day-four Mara to Leo',
+    from: 'day4-mara',
+    to: 'day4-leo',
+    story: maraDecision,
+    advance: advanceToDayFourLeo,
+  },
 ];
 
 describe('character transitions retain dialogue discoveries', () => {
