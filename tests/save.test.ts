@@ -105,10 +105,7 @@ describe('local narrative save', () => {
         ...base,
         dialogue: {
           ...base.dialogue,
-          completed: Array.from(
-            { length: SAVE_LIMITS.completed + 1 },
-            (_, i) => `completed_${i}`,
-          ),
+          completed: Array.from({ length: SAVE_LIMITS.completed + 1 }, (_, i) => `completed_${i}`),
           pending: [],
         },
       },
@@ -117,10 +114,10 @@ describe('local narrative save', () => {
         dialogue: {
           ...base.dialogue,
           completed: [],
-          pending: Array.from(
-            { length: SAVE_LIMITS.pending + 1 },
-            (_, i) => ({ hub: 'arrival', key: `topic_${i}` }),
-          ),
+          pending: Array.from({ length: SAVE_LIMITS.pending + 1 }, (_, i) => ({
+            hub: 'arrival',
+            key: `topic_${i}`,
+          })),
         },
       },
       {
