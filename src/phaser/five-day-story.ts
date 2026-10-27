@@ -103,7 +103,8 @@ export class FiveDayStory {
     try {
       saved = decodeSave(localStorage.getItem(SAVE_KEY) ?? '');
     } catch {
-      /* Storage may be blocked. */
+      // Reading may be blocked before the first player choice.
+      this.saveAvailable = false;
     }
     this.chapter = saved ?? startChapter();
     if (saved) {
