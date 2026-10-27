@@ -87,6 +87,7 @@ describe('character transitions retain dialogue discoveries', () => {
     };
     const result = advance(state);
     expect(result.stage).toBe(to);
+    expect(result.flags).toContain('current_dialogue_discovery');
     expect(result.dialogue.flags).toContain('current_dialogue_discovery');
     expect(result.dialogue.flags).toContain('previous_discovery');
   });
