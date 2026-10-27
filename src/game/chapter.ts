@@ -215,7 +215,7 @@ export function skipBookClub(state: ChapterState): ChapterState {
   return {
     ...state,
     stage: 'day3-complete',
-    flags: [...new Set([...state.flags, 'book_club_skipped'])],
+    flags: [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])],
   };
 }
 
