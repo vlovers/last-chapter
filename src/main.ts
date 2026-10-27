@@ -19,6 +19,7 @@ import {
   advanceToNora,
   finishThirdDay,
   startBookClub,
+  skipBookClub,
   startFourthDay,
   finishFourthDay,
   advanceToDayFourMara,
@@ -449,6 +450,17 @@ function render(): void {
         render();
       });
       actions.append(next);
+      if (chapter.stage === 'nora') {
+        const quietButton = document.createElement('button');
+        quietButton.type = 'button';
+        quietButton.textContent = 'Залишитися у книгарні на тихий вечір →';
+        quietButton.addEventListener('click', () => {
+          chapter = skipBookClub(chapter);
+          persistChapter();
+          render();
+        });
+        actions.append(quietButton);
+      }
     }
   }
 
