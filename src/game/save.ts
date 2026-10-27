@@ -158,6 +158,9 @@ export function decodeSave(raw: string): ChapterState | null {
         }
       }
     }
+    // A completed day-three checkpoint can originate from Nora, the book club,
+    // or the optional quiet evening. Its dialogue node is historical, not an
+    // active scene; preserve it even if later content changes the stage graph.
     // Keep the original shape for untouched saves; availability lazily migrates
     // old histories. Encoding their next choice writes the explicit ledger.
     return { stage, dialogue, flags: obj.flags as string[] };
