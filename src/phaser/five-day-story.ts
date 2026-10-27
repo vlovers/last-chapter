@@ -52,6 +52,7 @@ const stagePeople: Partial<Record<ChapterStage, { name: string; actor: string | 
   thomas: { name: 'Томас', actor: 'thomas' },
   nora: { name: 'Нора', actor: 'nora' },
   'book-club': { name: 'Книжковий клуб', actor: null },
+  'quiet-evening': { name: 'Тихий вечір у книгарні', actor: null },
   'day4-iris': { name: 'Айріс', actor: 'iris' },
   'day4-mara': { name: 'Мара', actor: 'mara' },
   'day4-leo': { name: 'Лео', actor: 'leo' },
@@ -79,6 +80,7 @@ const sequence: Partial<
   thomas: { label: 'Зустріти Нору', next: advanceToNora },
   nora: { label: 'Відкрити книжковий клуб', next: startBookClub },
   'book-club': { label: 'Завершити третій день', next: finishThirdDay },
+  'quiet-evening': { label: 'Завершити третій день', next: finishThirdDay },
   'day4-iris': { label: 'Зустріти Мару', next: advanceToDayFourMara },
   'day4-mara': { label: 'Зустріти Лео', next: advanceToDayFourLeo },
   'day4-leo': { label: 'Завершити четвертий день', next: finishFourthDay },
@@ -89,7 +91,7 @@ const dayOf = (stage: ChapterStage): number =>
     ? 1
     : ['iris', 'anna', 'leo', 'day2-complete'].includes(stage)
       ? 2
-      : ['eleanor', 'thomas', 'nora', 'book-club', 'day3-complete'].includes(stage)
+      : ['eleanor', 'thomas', 'nora', 'book-club', 'quiet-evening', 'day3-complete'].includes(stage)
         ? 3
         : ['day4-iris', 'day4-mara', 'day4-leo', 'day4-complete'].includes(stage)
           ? 4
