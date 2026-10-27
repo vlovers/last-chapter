@@ -332,7 +332,7 @@ export class FiveDayStory {
     if (!choices.length && sequence[this.stage]) {
       choices.push({ id: '__advance', label: sequence[this.stage]!.label });
       if (this.stage === 'nora')
-        choices.push({ id: '__skip_club', label: 'Пропустити книжковий клуб і завершити день' });
+        choices.push({ id: '__skip_club', label: 'Залишитися в книгарні на тихий вечір' });
     }
     const member = castMember(node.speaker);
     return {
