@@ -47,6 +47,7 @@ describe('Fifth-day choice consequences', () => {
     expect(choices(enterFinale([]))).not.toContain('letter');
     expect(choices(enterFinale(['saw_envelope']))).toContain('letter');
   });
+
   it.each([
     ['iris', 'iris_day_four_respected_freedom', 'iris_day_four_supported_belonging'],
     ['mara', 'mara_day_four_named_own_needs', 'mara_day_four_chose_own_time'],
@@ -77,5 +78,4 @@ describe('Fifth-day choice consequences', () => {
     expect(endings[0]).not.toBe(endings[1]);
     expect(choices(enterFinale([first]))).not.toContain(callback);
   });
-
 });
