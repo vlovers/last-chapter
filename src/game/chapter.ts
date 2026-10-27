@@ -1,3 +1,4 @@
+import { quietEvening } from '../content/quiet-evening';
 import { finalReading } from '../content/day-five';
 import { leoDecision } from '../content/day-four-leo';
 import { maraDecision } from '../content/day-four-mara';
@@ -33,6 +34,7 @@ export type ChapterStage =
   | 'thomas'
   | 'nora'
   | 'book-club'
+  | 'quiet-evening'
   | 'day3-complete'
   | 'day4-iris'
   | 'day4-mara'
@@ -69,6 +71,8 @@ export const stageStory = (stage: ChapterStage): DialogueStory => {
       return eleanorVisit;
     case 'thomas':
       return thomasVisit;
+    case 'quiet-evening':
+      return quietEvening;
     case 'book-club':
     case 'day3-complete':
       return bookClub;
@@ -168,8 +172,10 @@ export function startThirdDay(state: ChapterState): ChapterState {
 
 /** Finish the current Day 3 sequence after Thomas's visit. */
 export function finishThirdDay(state: ChapterState): ChapterState {
-  if (state.stage !== 'book-club') throw new Error('Finish the book club first');
-  if (availableOptions(bookClub, state.dialogue).length) throw new Error('Finish the conversation');
+  if (state.stage !== 'book-club' && state.stage !== 'quiet-evening')
+    throw new Error('Finish the evening first');
+  if (availableOptions(stageStory(state.stage), state.dialogue).length)
+    throw new Error('Finish the conversation');
   return { ...state, stage: 'day3-complete' };
 }
 
@@ -214,8 +220,9 @@ export function skipBookClub(state: ChapterState): ChapterState {
     throw new Error('Finish Nora before deciding about the club');
   return {
     ...state,
-    stage: 'day3-complete',
+    stage: 'quiet-evening',
     flags: [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])],
+    dialogue: { ...startDialogue(quietEvening), flags: [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])] },
   };
 }
 
