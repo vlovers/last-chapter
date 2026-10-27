@@ -3,6 +3,13 @@ import { FiveDayStory } from '../src/phaser/five-day-story';
 import { decodeSave, SAVE_KEY } from '../src/game/save';
 import { seasonEnding } from '../src/game/endings';
 
+const nextDayStage: Partial<Record<string, string>> = {
+  complete: 'iris',
+  'day2-complete': 'eleanor',
+  'day3-complete': 'day4-iris',
+  'day4-complete': 'day5-reading',
+};
+
 const expectedStages = [
   'miller',
   'mara',
@@ -57,8 +64,23 @@ function play(route: 'first' | 'last' | 'alternating') {
             ? dialogue[dialogue.length - 1]
             : dialogue[step % 2 === 0 ? 0 : dialogue.length - 1]);
       if (!choice) throw new Error(`Route ${route} stuck at ${story.stage} after ${step} steps`);
+      // The day button must never bypass an unfinished conversation or write
+      // a partial save when tapped too early.
+      if (dialogue.length > 0) {
+        const untouchedSave = values.get(SAVE_KEY);
+        expect(() => story.choose('__advance')).toThrow(
+          'Finish the conversation before advancing',
+        );
+        expect(values.get(SAVE_KEY)).toBe(untouchedSave);
+        expect(story.open()).toEqual(view);
+      }
       const previous = story.stage;
       story.choose(choice.id);
+      if (nextDayStage[previous]) {
+        expect(choice.id).toBe('__advance');
+        expect(story.stage).toBe(nextDayStage[previous]);
+        expect(story.open().choices.some((option) => option.id === '__advance')).toBe(false);
+      }
       const saved = decodeSave(values.get(SAVE_KEY) ?? '');
       expect(saved).not.toBeNull();
       expect(saved?.stage).toBe(story.stage);
