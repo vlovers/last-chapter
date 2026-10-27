@@ -45,7 +45,11 @@ describe('finale consequence matrix', () => {
     const exhibition = ending('final_iris_exhibition', 'book_club_started');
     const mara = ending('mara_future_supported', 'book_club_started');
     const bookClub = ending('book_club_started');
-    const both = ending('final_iris_exhibition', 'mara_future_supported', 'book_club_started');
+    const both = ending(
+      'final_iris_exhibition',
+      'mara_future_supported',
+      'book_club_started',
+    );
     expect(new Set([exhibition.epilogue, mara.epilogue, bookClub.epilogue]).size).toBe(3);
     expect(exhibition.epilogue).toContain('Вікна Беллвіка');
     expect(mara.epilogue).toContain('Мара почала');
@@ -57,9 +61,12 @@ describe('finale consequence matrix', () => {
     expect(both.epilogue).toBe(
       ending('mara_future_supported', 'final_iris_exhibition', 'book_club_started').epilogue,
     );
-    expect(
-      ending('final_letter_kept_private', 'final_iris_exhibition', 'book_club_started').epilogue,
-    ).toBe(exhibition.epilogue);
+    const privateExhibition = ending(
+      'final_letter_kept_private',
+      'final_iris_exhibition',
+      'book_club_started',
+    );
+    expect(privateExhibition.epilogue).toBe(exhibition.epilogue);
   });
 
   it('does not invent a book club after a quiet evening', () => {
