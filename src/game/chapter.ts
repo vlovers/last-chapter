@@ -227,7 +227,12 @@ export function skipBookClub(state: ChapterState): ChapterState {
   if (availableOptions(noraVisit, state.dialogue).length)
     throw new Error('Finish Nora before deciding about the club');
   const flags = [
-    ...new Set([...state.flags, ...state.dialogue.flags, 'book_club_skipped', 'evening_shop_kept_open']),
+    ...new Set([
+      ...state.flags,
+      ...state.dialogue.flags,
+      'book_club_skipped',
+      'evening_shop_kept_open',
+    ]),
   ];
   return {
     ...state,
@@ -252,7 +257,11 @@ export function finishFourthDay(state: ChapterState): ChapterState {
   if (state.stage !== 'day4-leo') throw new Error('Finish Leo first');
   if (availableOptions(leoDecision, state.dialogue).length)
     throw new Error('Finish the conversation');
-  return { ...state, stage: 'day4-complete', flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
+  return {
+    ...state,
+    stage: 'day4-complete',
+    flags: [...new Set([...state.flags, ...state.dialogue.flags])],
+  };
 }
 
 /** Meet Mara after Iris has finished, carrying forward every previous decision. */
@@ -292,5 +301,9 @@ export function finishSeason(state: ChapterState): ChapterState {
   if (state.stage !== 'day5-reading') throw new Error('Finish Day 5 first');
   if (availableOptions(finalReading, state.dialogue).length)
     throw new Error('Finish the final gathering');
-  return { ...state, stage: 'season-complete', flags: [...new Set([...state.flags, ...state.dialogue.flags])] };
+  return {
+    ...state,
+    stage: 'season-complete',
+    flags: [...new Set([...state.flags, ...state.dialogue.flags])],
+  };
 }
