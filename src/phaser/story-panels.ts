@@ -146,7 +146,15 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         : id === maraReturnVisit.id
           ? returnVisit
           : letterDecision;
+  const saveWarning = document.createElement('p');
+  saveWarning.id = 'save-warning';
+  saveWarning.setAttribute('role', 'alert');
+  saveWarning.textContent =
+    'Не вдалося зберегти прогрес. Після оновлення сторінки останні рішення можуть зникнути.';
+  saveWarning.hidden = true;
+  root.prepend(saveWarning);
   const refresh = () => {
+    saveWarning.hidden = story.isProgressSaved;
     timeline.replaceChildren();
     for (const day of story.progress) {
       const item = element('li', String(day.day), `day-step day-step--${day.status}`);
@@ -637,6 +645,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   return () => {
     conversationButton.removeEventListener('click', conversationClick);
     conversationButton.remove();
+    saveWarning.remove();
     journal.removeEventListener('click', journalClick);
     catalog.removeEventListener('click', catalogClick);
     continueButton.removeEventListener('click', continueClick);

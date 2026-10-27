@@ -1282,3 +1282,15 @@ body.reduced * {
   padding: 6px 8px;
   min-width: 70px;
 }
+
+/* Persistent and screen-reader-visible warning for unavailable narrative saves. */
+#save-warning:not([hidden]) {
+  margin: 0 0 10px;
+  padding: 10px 14px;
+  border: 1px solid #ad7246;
+  border-radius: 8px;
+  background: #3b2924;
+  color: #ffe8c8;
+  font-size: 14px;
+  line-height: 1.45;
+}

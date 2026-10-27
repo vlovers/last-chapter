@@ -24,6 +24,13 @@ interface SavedChapter {
   pending?: readonly { hub: string; key: string }[];
 }
 
+/** localStorage stores UTF-16 strings, but the save budget is in UTF-8 bytes. */
+function exceedsSaveLimit(raw: string): boolean {
+  if (raw.length > SAVE_LIMITS.bytes) return true;
+  const byteLength = new TextEncoder().encode(raw).byteLength;
+  return byteLength > SAVE_LIMITS.bytes;
+}
+
 const stages: readonly ChapterStage[] = [
   'miller',
   'mara',
@@ -72,12 +79,17 @@ export function encodeSave(state: ChapterState): string {
       ? { completed: dialogue.completed, pending: dialogue.pending ?? [] }
       : {}),
   };
-  return JSON.stringify(save);
+  const serialized = JSON.stringify(save);
+  if (exceedsSaveLimit(serialized)) throw new Error('Save exceeds byte limit');
+  // Never write a save that our own decoder would discard on the next launch.
+  // This also covers ledger/flag limits and invalid dialogue nodes, not just bytes.
+  if (decodeSave(serialized) === null) throw new Error('Save cannot be restored');
+  return serialized;
 }
 
 export function decodeSave(raw: string): ChapterState | null {
   try {
-    if (raw.length > SAVE_LIMITS.bytes) return null;
+    if (exceedsSaveLimit(raw)) return null;
     const data: unknown = JSON.parse(raw);
     if (!data || typeof data !== 'object') return null;
     const obj = data as Record<string, unknown>;

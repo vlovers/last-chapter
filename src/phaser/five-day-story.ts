@@ -97,19 +97,31 @@ const dayOf = (stage: ChapterStage): number =>
 export class FiveDayStory {
   private chapter: ChapterState;
   private service = restoreService('');
+  private saveAvailable = true;
   constructor() {
     let saved: ChapterState | null = null;
     try {
       saved = decodeSave(localStorage.getItem(SAVE_KEY) ?? '');
     } catch {
-      /* Storage may be blocked. */
+      // Reading may be blocked before the first player choice.
+      this.saveAvailable = false;
     }
     this.chapter = saved ?? startChapter();
-    try {
-      this.service = restoreService(localStorage.getItem(SERVICE_KEY) ?? '');
-    } catch {
-      /* optional */
+    if (saved) {
+      try {
+        this.service = restoreService(localStorage.getItem(SERVICE_KEY) ?? '');
+      } catch {
+        /* optional */
+      }
+    } else {
+      // Service attempts belong to the narrative save. Without a valid chapter,
+      // discard orphaned recommendations before a new playthrough can inherit them.
+      this.persistService();
     }
+  }
+  /** False when the most recent narrative save could not be persisted. */
+  get isProgressSaved(): boolean {
+    return this.saveAvailable;
   }
   get stage(): ChapterStage {
     return this.chapter.stage;
@@ -269,8 +281,10 @@ export class FiveDayStory {
   private persist(): void {
     try {
       localStorage.setItem(SAVE_KEY, encodeSave(this.chapter));
+      this.saveAvailable = true;
     } catch {
-      /* Continue without persistence. */
+      // Continue playing, but expose the failure so the UI can warn the player.
+      this.saveAvailable = false;
     }
   }
   open() {

@@ -54,16 +54,61 @@ try {
     // Real touch movement, measured through the running scene and shared collision model.
     const target = await page.evaluate(async () => {
       const { game } = await import('/phaser-prototype/scene.js');
+      const { canStand, findPath } = await import('/phaser-prototype/world.js');
       const s = game.scene.getScene('bookshop');
       const c = s.cameras.main;
       const p = s.characters.player;
-      return { x: (p.x + 32 - c.scrollX) * c.zoom, y: (p.y - c.scrollY) * c.zoom };
+      const goal = { x: p.x + 32, y: p.y };
+      // Observe the actual Phaser input, not just the synthetic browser tap.
+      // Registered after the game handler so its recorded route is the result.
+      window.__qaPointer = null;
+      s.input.once('pointerdown', (pointer) => {
+        window.__qaPointer = {
+          x: pointer.x,
+          y: pointer.y,
+          canExplore: s.canExplore(),
+          routeLength: s.path.length,
+        };
+      });
+      return {
+        x: (goal.x - c.scrollX) * c.zoom,
+        y: (goal.y - c.scrollY) * c.zoom,
+        walkable: canStand(goal),
+        routeLength: findPath(p, goal).length,
+      };
     });
+    assert.ok(
+      target.walkable && target.routeLength > 0,
+      `Touch target must have a walkable route at ${width}x${height}: ${JSON.stringify(target)}`,
+    );
     if (width < 900)
       await page.touchscreen.tap(before.canvas.x + target.x, before.canvas.y + target.y);
     else await page.mouse.click(before.canvas.x + target.x, before.canvas.y + target.y);
-    await page.waitForTimeout(700);
-    assert.ok((await snapshot(page)).player.x > before.player.x + 10);
+    await page.waitForFunction(() => Boolean(window.__qaPointer), null, { timeout: 2000 });
+    const pointer = await page.evaluate(() => window.__qaPointer);
+    assert.ok(
+      pointer.canExplore && pointer.routeLength > 0,
+      `Phaser must accept the tap and start a route at ${width}x${height}: ${JSON.stringify({ target, pointer })}`,
+    );
+    // A transient waypoint can cross the threshold before the route finishes.
+    // Assert the settled position, and include input/route diagnostics on failure.
+    try {
+      await page.waitForFunction(
+        async (initialX) => {
+          const { game } = await import('/phaser-prototype/scene.js');
+          const scene = game.scene.getScene('bookshop');
+          return scene.path.length === 0 && scene.characters.player.x > initialX + 10;
+        },
+        before.player.x,
+        { timeout: 4000 },
+      );
+    } catch (error) {
+      const actual = await snapshot(page);
+      throw new Error(
+        `Touch movement did not settle at ${width}x${height}: ${JSON.stringify({ before: before.player, target, pointer, actual: actual.player })}`,
+        { cause: error },
+      );
+    }
     await page.locator('#game').focus();
     const x = (await snapshot(page)).player.x;
     await page.keyboard.down('ArrowRight');
@@ -245,13 +290,113 @@ try {
     }
     if (plan.stage === 'season-complete') {
       await shot(page, 'five-day-finale');
+      const finale = await page.evaluate(() => ({
+        save: localStorage.getItem('last-chapter:save:v1'),
+        stage: window.__lastChapterStory.stage,
+        ending: window.__lastChapterStory.open().text,
+      }));
+      assert.ok(finale.save);
+      assert.equal(finale.stage, 'season-complete');
+      await page.reload();
+      await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+      const restored = await page.evaluate(() => ({
+        save: localStorage.getItem('last-chapter:save:v1'),
+        stage: window.__lastChapterStory.stage,
+        ending: window.__lastChapterStory.open().text,
+      }));
+      assert.deepEqual(restored, finale, 'The finale must survive a mobile reload');
+      await page.locator('#story-continue').tap();
+      await page.locator('#dialogue:not([hidden])').waitFor();
       break;
     }
-    await choose(page, '__advance');
+    const nextDay = {
+      complete: 'iris',
+      'day2-complete': 'eleanor',
+      'day3-complete': 'day4-iris',
+      'day4-complete': 'day5-reading',
+    }[plan.stage];
+    if (nextDay) {
+      // Exercise the actual touch target used to start the next day.
+      await page.waitForTimeout(240);
+      if (plan.stage === 'complete') {
+        // A second activation of the same detached button must not replay the
+        // checkpoint transition or throw while the next scene is loading.
+        const transition = await page.evaluate(() => {
+          const button = document.querySelector('#choices button[data-choice="__advance"]');
+          const before = window.__lastChapterStory.stage;
+          button.click();
+          const afterFirst = window.__lastChapterStory.stage;
+          button.click();
+          return { before, afterFirst, afterSecond: window.__lastChapterStory.stage };
+        });
+        assert.deepEqual(transition, {
+          before: 'complete',
+          afterFirst: 'iris',
+          afterSecond: 'iris',
+        });
+      } else {
+        await page.locator('#choices button[data-choice="__advance"]').tap();
+      }
+    } else {
+      await choose(page, '__advance');
+    }
     await page.keyboard.press('Escape');
+    if (nextDay) {
+      // A day transition must survive a full mobile page reload, not just
+      // in-memory dialogue state. Check the visible choices and order ledger.
+      const checkpoint = await page.evaluate(() => {
+        const story = window.__lastChapterStory;
+        return {
+          save: localStorage.getItem('last-chapter:save:v1'),
+          stage: story.stage,
+          day: story.day,
+          orders: story.orders.map((order) => order.book.id),
+          notes: story.notes,
+          view: story.open(),
+        };
+      });
+      assert.equal(checkpoint.stage, nextDay);
+      assert.ok(checkpoint.save);
+      await page.reload();
+      await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+      const restored = await page.evaluate(() => {
+        const story = window.__lastChapterStory;
+        return {
+          save: localStorage.getItem('last-chapter:save:v1'),
+          stage: story.stage,
+          day: story.day,
+          orders: story.orders.map((order) => order.book.id),
+          notes: story.notes,
+          view: story.open(),
+        };
+      });
+      assert.deepEqual(restored, checkpoint, `Day transition ${plan.stage} must restore`);
+      await page.locator('#story-continue').tap();
+      await page.locator('#dialogue:not([hidden])').waitFor();
+      await page.keyboard.press('Escape');
+    }
   }
-  assert.equal(visited.at(-1), 'season-complete');
-  assert.equal(new Set(visited).size, 19);
+  assert.deepEqual(visited, [
+    'miller',
+    'mara',
+    'evening',
+    'complete',
+    'iris',
+    'anna',
+    'leo',
+    'day2-complete',
+    'eleanor',
+    'thomas',
+    'nora',
+    'book-club',
+    'day3-complete',
+    'day4-iris',
+    'day4-mara',
+    'day4-leo',
+    'day4-complete',
+    'day5-reading',
+    'season-complete',
+  ]);
   assert.equal(orders.length, 3);
   await page.keyboard.press('Escape');
   await page.waitForTimeout(2500);
