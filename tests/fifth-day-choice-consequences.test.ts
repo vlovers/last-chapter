@@ -7,6 +7,7 @@ import {
 } from '../src/game/chapter';
 import { availableOptions, currentNode, startDialogue } from '../src/game/dialogue';
 import { finalReading } from '../src/content/day-five';
+import { decodeSave, encodeSave } from '../src/game/save';
 
 function enterFinale(flags: string[]) {
   const previous: ChapterState = {
@@ -67,7 +68,10 @@ describe('Fifth-day choice consequences', () => {
       expect(choices(chapter)).toContain(callback);
       chapter = chooseChapterOption(chapter, callback);
       const text = currentNode(finalReading, chapter.dialogue).text;
-      chapter = chooseChapterOption(chapter, back);
+      const restored = decodeSave(encodeSave(chapter));
+      expect(restored).not.toBeNull();
+      expect(currentNode(finalReading, restored!.dialogue).text).toBe(text);
+      chapter = chooseChapterOption(restored!, back);
       expect(chapter.flags).toContain(heard);
       expect(choices(chapter)).not.toContain(callback);
       chapter = finishSeason(chooseChapterOption(chapter, 'close'));
