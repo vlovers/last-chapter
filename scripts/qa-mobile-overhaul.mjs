@@ -292,8 +292,54 @@ try {
       await shot(page, 'five-day-finale');
       break;
     }
-    await choose(page, '__advance');
+    const nextDay = {
+      complete: 'iris',
+      'day2-complete': 'eleanor',
+      'day3-complete': 'day4-iris',
+      'day4-complete': 'day5-reading',
+    }[plan.stage];
+    if (nextDay) {
+      // Exercise the actual touch target used to start the next day.
+      await page.waitForTimeout(240);
+      await page.locator('#choices button[data-choice="__advance"]').tap();
+    } else {
+      await choose(page, '__advance');
+    }
     await page.keyboard.press('Escape');
+    if (nextDay) {
+      // A day transition must survive a full mobile page reload, not just
+      // in-memory dialogue state. Check the visible choices and order ledger.
+      const checkpoint = await page.evaluate(() => {
+        const story = window.__lastChapterStory;
+        return {
+          save: localStorage.getItem('last-chapter:save:v1'),
+          stage: story.stage,
+          day: story.day,
+          orders: story.orders.map((order) => order.book.id),
+          notes: story.notes,
+          view: story.open(),
+        };
+      });
+      assert.equal(checkpoint.stage, nextDay);
+      assert.ok(checkpoint.save);
+      await page.reload();
+      await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+      const restored = await page.evaluate(() => {
+        const story = window.__lastChapterStory;
+        return {
+          save: localStorage.getItem('last-chapter:save:v1'),
+          stage: story.stage,
+          day: story.day,
+          orders: story.orders.map((order) => order.book.id),
+          notes: story.notes,
+          view: story.open(),
+        };
+      });
+      assert.deepEqual(restored, checkpoint, `Day transition ${plan.stage} must restore`);
+      await page.locator('#story-continue').tap();
+      await page.locator('#dialogue:not([hidden])').waitFor();
+      await page.keyboard.press('Escape');
+    }
   }
   assert.equal(visited.at(-1), 'season-complete');
   assert.equal(new Set(visited).size, 19);
