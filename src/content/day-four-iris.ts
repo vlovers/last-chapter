@@ -23,6 +23,13 @@ export const irisDecision: DialogueStory = {
         },
         { id: 'art', label: '«Розкажи про свої малюнки»', next: 'art' },
         {
+          id: 'quiet-page',
+          label: '«Учора в книгарні знайшовся аркуш рукопису»',
+          next: 'quiet-page',
+          requires: ['quiet_evening_page_found'],
+          unless: ['iris_quiet_page_discussed'],
+        },
+        {
           id: 'letter',
           label: '«Можемо поговорити про лист»',
           next: 'letter',
@@ -132,6 +139,25 @@ export const irisDecision: DialogueStory = {
           label: '«Тут завжди знайдеться місце для твоїх малюнків»',
           next: 'welcome',
           grants: ['iris_offered_exhibition'],
+        },
+      ],
+    },
+    {
+      id: 'quiet-page',
+      speaker: 'Айріс',
+      text: 'Айріс уважно дивиться на маленькі зірочки на полях. «Так позначала правки моя мама. Але я не можу сказати, хто залишив сторінку у книгарні». Вона повертає аркуш, не торкаючись самого тексту. «Не показуй його іншим, доки ми не зрозуміємо, чий він».',
+      options: [
+        {
+          id: 'quiet-page-respect',
+          label: '«Залишу аркуш у себе й нікого не квапитиму»',
+          next: 'welcome',
+          grants: ['iris_quiet_page_discussed', 'iris_quiet_page_privacy_respected'],
+        },
+        {
+          id: 'quiet-page-ask',
+          label: '«А якщо хтось упізнає почерк?»',
+          next: 'welcome',
+          grants: ['iris_quiet_page_discussed', 'iris_quiet_page_identity_questioned'],
         },
       ],
     },
