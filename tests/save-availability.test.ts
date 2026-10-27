@@ -16,6 +16,7 @@ describe('narrative persistence availability', () => {
     });
     const story = new FiveDayStory();
     expect(story.stage).toBe('miller');
+    expect(story.isProgressSaved).toBe(false);
     expect(story.open().choices.some((choice) => choice.id === 'greet')).toBe(true);
     expect(() => story.choose('greet')).not.toThrow();
     expect(story.isProgressSaved).toBe(false);
