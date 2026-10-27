@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { finishThirdDay, skipBookClub, startChapter } from '../src/game/chapter';
-import { startDialogue } from '../src/game/dialogue';
+import { selectOption, startDialogue } from '../src/game/dialogue';
 import { quietEvening } from '../src/content/quiet-evening';
 import { encodeSave, decodeSave } from '../src/game/save';
 import { storyProgress } from '../src/game/progress';
@@ -8,6 +8,26 @@ import { storyProgress } from '../src/game/progress';
 describe('optional day-three book club', () => {
   it('rejects skipping before Nora has finished speaking', () => {
     expect(() => skipBookClub(startChapter())).toThrow();
+  });
+
+  it('lets the player keep the manuscript page and carries it through a save', () => {
+    const opened = selectOption(quietEvening, startDialogue(quietEvening), 'tidy-books');
+    const kept = selectOption(quietEvening, opened, 'keep-page');
+    expect(kept.flags).toContain('quiet_evening_page_found');
+    const chapter = {
+      ...startChapter(),
+      stage: 'quiet-evening' as const,
+      dialogue: kept,
+      flags: kept.flags,
+    };
+    expect(decodeSave(encodeSave(chapter))?.flags).toContain('quiet_evening_page_found');
+    expect(finishThirdDay(chapter).stage).toBe('day3-complete');
+  });
+
+  it('allows leaving the page without claiming it was collected', () => {
+    const opened = selectOption(quietEvening, startDialogue(quietEvening), 'tidy-books');
+    const left = selectOption(quietEvening, opened, 'leave-page');
+    expect(left.flags).not.toContain('quiet_evening_page_found');
   });
 
   it('persists the quiet evening and its completed checkpoint', () => {
