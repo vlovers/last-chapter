@@ -5,6 +5,22 @@ import { SAVE_KEY } from '../src/game/save';
 afterEach(() => vi.unstubAllGlobals());
 
 describe('narrative persistence availability', () => {
+  it('keeps the story playable when storage reads and writes both fail', () => {
+    vi.stubGlobal('localStorage', {
+      getItem: () => {
+        throw new Error('SecurityError');
+      },
+      setItem: () => {
+        throw new Error('SecurityError');
+      },
+    });
+    const story = new FiveDayStory();
+    expect(story.stage).toBe('miller');
+    expect(story.open().choices.some((choice) => choice.id === 'greet')).toBe(true);
+    expect(() => story.choose('greet')).not.toThrow();
+    expect(story.isProgressSaved).toBe(false);
+    expect(story.open().choices.length).toBeGreaterThan(0);
+  });
   it('reports a blocked save and recovers when storage becomes writable', () => {
     const saved = new Map<string, string>();
     let blocked = true;
