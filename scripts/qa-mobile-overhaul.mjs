@@ -290,6 +290,23 @@ try {
     }
     if (plan.stage === 'season-complete') {
       await shot(page, 'five-day-finale');
+      const finale = await page.evaluate(() => ({
+        save: localStorage.getItem('last-chapter:save:v1'),
+        stage: window.__lastChapterStory.stage,
+        ending: window.__lastChapterStory.open().text,
+      }));
+      assert.ok(finale.save);
+      assert.equal(finale.stage, 'season-complete');
+      await page.reload();
+      await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+      const restored = await page.evaluate(() => ({
+        save: localStorage.getItem('last-chapter:save:v1'),
+        stage: window.__lastChapterStory.stage,
+        ending: window.__lastChapterStory.open().text,
+      }));
+      assert.deepEqual(restored, finale, 'The finale must survive a mobile reload');
+      await page.locator('#story-continue').tap();
+      await page.locator('#dialogue:not([hidden])').waitFor();
       break;
     }
     const nextDay = {
@@ -341,8 +358,27 @@ try {
       await page.keyboard.press('Escape');
     }
   }
-  assert.equal(visited.at(-1), 'season-complete');
-  assert.equal(new Set(visited).size, 19);
+  assert.deepEqual(visited, [
+    'miller',
+    'mara',
+    'evening',
+    'complete',
+    'iris',
+    'anna',
+    'leo',
+    'day2-complete',
+    'eleanor',
+    'thomas',
+    'nora',
+    'book-club',
+    'day3-complete',
+    'day4-iris',
+    'day4-mara',
+    'day4-leo',
+    'day4-complete',
+    'day5-reading',
+    'season-complete',
+  ]);
   assert.equal(orders.length, 3);
   await page.keyboard.press('Escape');
   await page.waitForTimeout(2500);
