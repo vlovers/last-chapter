@@ -165,10 +165,19 @@ export class DialogueUI {
       } else button.textContent = choice.label;
       button.dataset.choice = choice.id;
       button.addEventListener('click', () => {
-        if (performance.now() - opened < 220) return;
+        if (button.disabled || performance.now() - opened < 220) return;
+        // A rapid second tap can arrive after the first choice has replaced
+        // this button. Never replay a stale dialogue action.
+        button.disabled = true;
         button.dataset.selected = 'true';
         this.finishTyping();
-        this.onChoose(choice.id);
+        try {
+          this.onChoose(choice.id);
+        } catch (error) {
+          button.disabled = false;
+          delete button.dataset.selected;
+          throw error;
+        }
       });
       this.choices.append(button);
     }
