@@ -176,7 +176,11 @@ export function finishThirdDay(state: ChapterState): ChapterState {
     throw new Error('Finish the evening first');
   if (availableOptions(stageStory(state.stage), state.dialogue).length)
     throw new Error('Finish the conversation');
-  return { ...state, stage: 'day3-complete' };
+  return {
+    ...state,
+    stage: 'day3-complete',
+    flags: [...new Set([...state.flags, ...state.dialogue.flags])],
+  };
 }
 
 /** Advance Day 3 from Eleanor to Thomas without losing previous discoveries. */
@@ -205,10 +209,10 @@ export function startBookClub(state: ChapterState): ChapterState {
   return {
     ...state,
     stage: 'book-club',
-    flags: [...new Set([...state.flags, 'book_club_started'])],
+    flags: [...new Set([...state.flags, ...state.dialogue.flags, 'book_club_started'])],
     dialogue: {
       ...startDialogue(bookClub),
-      flags: [...new Set([...state.flags, 'book_club_started'])],
+      flags: [...new Set([...state.flags, ...state.dialogue.flags, 'book_club_started'])],
     },
   };
 }
@@ -218,7 +222,9 @@ export function skipBookClub(state: ChapterState): ChapterState {
   if (state.stage !== 'nora') throw new Error('Finish Nora before deciding about the club');
   if (availableOptions(noraVisit, state.dialogue).length)
     throw new Error('Finish Nora before deciding about the club');
-  const flags = [...new Set([...state.flags, 'book_club_skipped', 'evening_shop_kept_open'])];
+  const flags = [
+    ...new Set([...state.flags, ...state.dialogue.flags, 'book_club_skipped', 'evening_shop_kept_open']),
+  ];
   return {
     ...state,
     stage: 'quiet-evening',
