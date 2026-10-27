@@ -145,20 +145,96 @@ export const irisDecision: DialogueStory = {
     {
       id: 'quiet-page',
       speaker: 'Айріс',
-      text: 'Айріс уважно дивиться на маленькі зірочки на полях. «Так позначала правки моя мама. Але я не можу сказати, хто залишив сторінку у книгарні». Вона повертає аркуш, не торкаючись самого тексту. «Не показуй його іншим, доки ми не зрозуміємо, чий він».',
+      text: 'Айріс упізнає маленькі зірочки на полях. «Мама так позначала місця, до яких хотіла повернутися. Вона завжди ставила три зірки, навіть якщо виправляла одне слово». Айріс проводить поглядом по аркушу. «А тут лише дві».',
+      options: [
+        {
+          id: 'quiet-page-stars',
+          label: '«Може, третю зірку хтось стер?»',
+          next: 'quiet-page-stars',
+        },
+        {
+          id: 'quiet-page-window',
+          label: '«Чому в уривку залишили вікно відчиненим?»',
+          next: 'quiet-page-window',
+        },
+        {
+          id: 'quiet-page-privacy',
+          label: '«Не будемо поки показувати аркуш іншим»',
+          next: 'quiet-page-choice',
+        },
+      ],
+    },
+    {
+      id: 'quiet-page-stars',
+      speaker: 'Айріс',
+      text: '«Або це взагалі не її рука». Вона дістає з альбому стару листівку. У кутку — три зірки, намальовані синім чорнилом. «Я зберігала це як закладку. Навіть не думала, що колись доведеться порівнювати почерк».',
+      options: [
+        {
+          id: 'quiet-page-compare',
+          label: 'Порівняти листівку й аркуш, не роблячи висновків',
+          next: 'quiet-page-choice',
+          grants: ['iris_quiet_page_stars_compared'],
+        },
+        {
+          id: 'quiet-page-no-compare',
+          label: '«Можеш прибрати листівку. Не обов’язково зараз»',
+          next: 'quiet-page-choice',
+        },
+      ],
+    },
+    {
+      id: 'quiet-page-window',
+      speaker: 'Айріс',
+      text: '«У дитинстві я думала, що це про втечу. Але в маминому романі вікна відчиняли, коли чекали на когось». Вона замовкає. «Хоча це не доводить, що сторінка з того роману».',
+      options: [
+        {
+          id: 'quiet-page-note-window',
+          label: 'Записати здогад про вікно, не називаючи його фактом',
+          next: 'quiet-page-choice',
+          grants: ['iris_quiet_page_window_theory'],
+        },
+        {
+          id: 'quiet-page-leave-window',
+          label: '«Поки залишимо це питання відкритим»',
+          next: 'quiet-page-choice',
+        },
+      ],
+    },
+    {
+      id: 'quiet-page-choice',
+      speaker: 'Айріс',
+      text: '«Я не знаю, хто приніс сторінку. І не впевнена, що хочу дізнатися сьогодні». Вона повертає аркуш. «Але якщо ти щось робитимеш із ним, скажи мені спершу».',
       options: [
         {
           id: 'quiet-page-respect',
-          label: '«Залишу аркуш у себе й нікого не квапитиму»',
-          next: 'welcome',
+          label: '«Залишу аркуш у себе й спершу поговорю з тобою»',
+          next: 'quiet-page-result',
           grants: ['iris_quiet_page_discussed', 'iris_quiet_page_privacy_respected'],
         },
         {
           id: 'quiet-page-ask',
-          label: '«А якщо хтось упізнає почерк?»',
-          next: 'welcome',
+          label: '«Спитаю в когось про почерк, але без імен»',
+          next: 'quiet-page-result',
           grants: ['iris_quiet_page_discussed', 'iris_quiet_page_identity_questioned'],
         },
+      ],
+    },
+    {
+      id: 'quiet-page-result',
+      speaker: 'Айріс',
+      text: '«Гаразд. Тільки не перетворюй мою маму на загадку для всього міста». Вона прибирає листівку назад до альбому.',
+      textWhen: [
+        {
+          requires: ['iris_quiet_page_privacy_respected'],
+          text: '«Дякую. Я сама ще не знаю, чи готова повертатися до її рукописів». Айріс обережно закриває альбом, але залишає руку на обкладинці.',
+        },
+        {
+          requires: ['iris_quiet_page_identity_questioned'],
+          text: '«Тільки без імен і без фотографій сторінки», — каже Айріс. «Я хочу знати, якщо хтось її впізнає. Раніше за плітки».',
+        },
+      ],
+      options: [
+        { id: 'quiet-page-return', label: 'Повернутися до розмови', next: 'welcome' },
       ],
     },
     {
