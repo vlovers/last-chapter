@@ -6,6 +6,7 @@ import {
   startChapter,
   startFourthDay,
   startFifthDay,
+  advanceToDayFourMara,
 } from '../src/game/chapter';
 import { selectOption, startDialogue } from '../src/game/dialogue';
 import { quietEvening } from '../src/content/quiet-evening';
@@ -119,6 +120,25 @@ describe('optional day-three book club', () => {
     expect(restored?.flags).toContain('final_quiet_manuscript_archived');
     expect(restored?.flags).not.toContain('final_quiet_manuscript_returned');
     expect(seasonEnding(restored!).epilogue).toContain('зберегли окремо');
+  });
+
+  it('carries the manuscript clue through the actual Iris dialogue and into Mara', () => {
+    const chapter = startFourthDay({
+      ...startChapter(),
+      stage: 'day3-complete',
+      flags: ['quiet_evening_page_found'],
+    });
+    const welcome = chooseChapterOption(chapter, 'welcome');
+    const page = chooseChapterOption(welcome, 'quiet-page');
+    const stars = chooseChapterOption(page, 'quiet-page-stars');
+    const compared = chooseChapterOption(stars, 'quiet-page-compare');
+    const respected = chooseChapterOption(compared, 'quiet-page-respect');
+    const returned = chooseChapterOption(respected, 'quiet-page-return');
+    const finished = chooseChapterOption(returned, 'leave');
+    const mara = advanceToDayFourMara(decodeSave(encodeSave(finished))!);
+    expect(mara.flags).toContain('iris_quiet_page_stars_compared');
+    expect(mara.flags).toContain('iris_quiet_page_privacy_respected');
+    expect(mara.dialogue.flags).toContain('iris_quiet_page_discussed');
   });
 
   it('persists the quiet evening and its completed checkpoint', () => {
