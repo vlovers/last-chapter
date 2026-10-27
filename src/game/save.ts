@@ -2,6 +2,7 @@ import type { ChapterState, ChapterStage } from './chapter';
 import { stageStory } from './chapter';
 import { currentNode, restoreDialogueProgress } from './dialogue';
 import { noraVisit } from '../content/nora';
+import { quietEvening } from '../content/quiet-evening';
 
 export const SAVE_KEY = 'last-chapter:save:v1';
 const VERSION = 1;
@@ -61,7 +62,11 @@ export function encodeSave(state: ChapterState): string {
       dialogue = restoreDialogueProgress(stageStory(state.stage), dialogue);
     } catch {
       if (state.stage !== 'day3-complete') throw new Error('Invalid legacy dialogue save');
-      dialogue = restoreDialogueProgress(noraVisit, dialogue);
+      try {
+        dialogue = restoreDialogueProgress(quietEvening, dialogue);
+      } catch {
+        dialogue = restoreDialogueProgress(noraVisit, dialogue);
+      }
     }
   }
   const save: SavedChapter = {
@@ -146,7 +151,11 @@ export function decodeSave(raw: string): ChapterState | null {
       try {
         currentNode(noraVisit, dialogue);
       } catch {
-        return null;
+        try {
+          currentNode(quietEvening, dialogue);
+        } catch {
+          return null;
+        }
       }
     }
     // Keep the original shape for untouched saves; availability lazily migrates
