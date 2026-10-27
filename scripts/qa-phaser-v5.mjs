@@ -96,12 +96,17 @@ try {
   assert.equal(walk.stage, 'season-complete');
   assert.equal(walk.visited.length, 18);
   assert.ok(walk.progress.every((day) => day.status === 'completed'));
+  const finalSave = await page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
+  assert.ok(finalSave, 'Completed season must be saved');
+  const finalState = JSON.parse(finalSave);
+  assert.equal(finalState.stage, 'season-complete');
   await page.reload();
   await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
   await page.locator('#story-continue').click();
   await page.getByRole('heading', { name: 'Останній розділ · Перший сезон' }).waitFor();
   await page.screenshot({ path: `${output}/season-finale.png`, fullPage: true });
   assert.equal(await page.locator('#day-timeline .day-step--completed').count(), 5);
+  assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), finalSave);
   assert.deepEqual(errors, []);
   await writeFile(`${output}/results.json`, JSON.stringify({ walk, errors }, null, 2));
   console.log(JSON.stringify({ walk, errors, output }, null, 2));
