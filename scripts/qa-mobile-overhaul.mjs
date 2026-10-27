@@ -54,29 +54,61 @@ try {
     // Real touch movement, measured through the running scene and shared collision model.
     const target = await page.evaluate(async () => {
       const { game } = await import('/phaser-prototype/scene.js');
+      const { canStand, findPath } = await import('/phaser-prototype/world.js');
       const s = game.scene.getScene('bookshop');
       const c = s.cameras.main;
       const p = s.characters.player;
-      return { x: (p.x + 32 - c.scrollX) * c.zoom, y: (p.y - c.scrollY) * c.zoom };
+      const goal = { x: p.x + 32, y: p.y };
+      // Observe the actual Phaser input, not just the synthetic browser tap.
+      // Registered after the game handler so its recorded route is the result.
+      window.__qaPointer = null;
+      s.input.once('pointerdown', (pointer) => {
+        window.__qaPointer = {
+          x: pointer.x,
+          y: pointer.y,
+          canExplore: s.canExplore(),
+          routeLength: s.path.length,
+        };
+      });
+      return {
+        x: (goal.x - c.scrollX) * c.zoom,
+        y: (goal.y - c.scrollY) * c.zoom,
+        walkable: canStand(goal),
+        routeLength: findPath(p, goal).length,
+      };
     });
+    assert.ok(
+      target.walkable && target.routeLength > 0,
+      `Touch target must have a walkable route at ${width}x${height}: ${JSON.stringify(target)}`,
+    );
     if (width < 900)
       await page.touchscreen.tap(before.canvas.x + target.x, before.canvas.y + target.y);
     else await page.mouse.click(before.canvas.x + target.x, before.canvas.y + target.y);
-    // A transient waypoint can cross the threshold before the route finishes.
-    // Assert the settled position, not an intermediate animation frame.
-    await page.waitForFunction(
-      async (initialX) => {
-        const { game } = await import('/phaser-prototype/scene.js');
-        const scene = game.scene.getScene('bookshop');
-        return scene.path.length === 0 && scene.characters.player.x > initialX + 10;
-      },
-      before.player.x,
-      { timeout: 4000 },
-    );
+    await page.waitForFunction(() => Boolean(window.__qaPointer), null, { timeout: 2000 });
+    const pointer = await page.evaluate(() => window.__qaPointer);
     assert.ok(
-      (await snapshot(page)).player.x > before.player.x + 10,
-      `Touch movement must finish to the right at ${width}x${height}`,
+      pointer.canExplore && pointer.routeLength > 0,
+      `Phaser must accept the tap and start a route at ${width}x${height}: ${JSON.stringify({ target, pointer })}`,
     );
+    // A transient waypoint can cross the threshold before the route finishes.
+    // Assert the settled position, and include input/route diagnostics on failure.
+    try {
+      await page.waitForFunction(
+        async (initialX) => {
+          const { game } = await import('/phaser-prototype/scene.js');
+          const scene = game.scene.getScene('bookshop');
+          return scene.path.length === 0 && scene.characters.player.x > initialX + 10;
+        },
+        before.player.x,
+        { timeout: 4000 },
+      );
+    } catch (error) {
+      const actual = await snapshot(page);
+      throw new Error(
+        `Touch movement did not settle at ${width}x${height}: ${JSON.stringify({ before: before.player, target, pointer, actual: actual.player })}`,
+        { cause: error },
+      );
+    }
     await page.locator('#game').focus();
     const x = (await snapshot(page)).player.x;
     await page.keyboard.down('ArrowRight');
