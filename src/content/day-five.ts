@@ -246,6 +246,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_chapter_evidence_reviewed'],
         },
         {
+          id: 'manuscript-provenance',
+          label: 'Запитати Айріс, кому тепер належать знайдені сторінки',
+          next: 'manuscript-provenance',
+          requires: ['final_workshop_evidence_reviewed'],
+          unless: ['final_manuscript_provenance_decided'],
+        },
+        {
           id: 'workshop-evidence',
           label: 'Зіставити з Айріс фотографію майстерні та рукопис',
           next: 'workshop-evidence',
@@ -401,6 +408,44 @@ export const finalReading: DialogueStory = {
           next: 'gathering',
           grants: ['final_chapter_evidence_reviewed'],
         },
+      ],
+    },
+    {
+      id: 'manuscript-provenance',
+      speaker: 'Айріс',
+      text: '«Реставраторка відповіла. У майстерні справді лишилася коробка з чернетками, але її ніхто не відкривав роками. Вона дозволить мені прийти завтра». Айріс дивиться на аркуші. «І ще: на звороті одного стоїть мамин підпис, а на другому — тільки ініціали. Я більше не хочу називати їх одним рукописом, поки не перевірю».',
+      textWhen: [
+        {
+          requires: ['final_workshop_search_deferred'],
+          text: '«Я вирішила не відкривати коробки сьогодні. Реставраторка каже, що вони можуть зачекати». Айріс торкається краю аркуша. «Один підписаний мамою, інший — лише ініціалами. Не хочу вдавати, ніби знаю більше, ніж знаю».',
+        },
+      ],
+      options: [
+        { id: 'provenance-return', label: '«Віддаймо обидва аркуші тобі»', next: 'manuscript-provenance-result', grants: ['final_provenance_iris_custody'] },
+        { id: 'provenance-archive', label: '«Залишимо копії в книгарні, якщо ти не проти»', next: 'manuscript-provenance-result', grants: ['final_provenance_consent_archive'] },
+        { id: 'provenance-wait', label: '«Не вирішуймо, доки не перевіриш коробку»', next: 'manuscript-provenance-result', grants: ['final_provenance_wait_for_evidence'] },
+      ],
+    },
+    {
+      id: 'manuscript-provenance-result',
+      speaker: 'Айріс',
+      text: '«Гаразд. Але оригінали залишаться в мене, доки не з’ясуємо, кому вони належать». Айріс прибирає аркуші до альбому. «А тепер я хочу послухати, що Нора каже про книжку, яку всі так хвалять».',
+      textWhen: [
+        {
+          requires: ['final_provenance_iris_custody'],
+          text: '«Дякую». Айріс обережно вкладає обидва аркуші до альбому. «Я покажу їх реставраторці, але рішення про публікацію — не сьогодні».',
+        },
+        {
+          requires: ['final_provenance_consent_archive'],
+          text: '«Копії — можна. Тільки без мого імені на табличці, поки ми не впевнені». Айріс усміхається. «І сховай їх від Френка. Він уже пробував з’їсти одну закладку».',
+        },
+        {
+          requires: ['final_provenance_wait_for_evidence'],
+          text: '«Саме так». Айріс повертає фотографію в альбом. «Завтра подивимося, що в коробці. Сьогодні я нарешті хочу просто послухати Нору».',
+        },
+      ],
+      options: [
+        { id: 'provenance-finish', label: 'Повернутися до вечора історій', next: 'gathering', grants: ['final_manuscript_provenance_decided'] },
       ],
     },
     {
