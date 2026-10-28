@@ -178,6 +178,23 @@ describe('optional day-three book club', () => {
     expect(returned.flags).not.toContain('final_quiet_manuscript_returned');
   });
 
+  it('preserves every available dialogue branch when the interface paginates', () => {
+    const day = startFifthDay({
+      ...startChapter(),
+      stage: 'day4-complete',
+      flags: ['quiet_evening_page_found', 'iris_quiet_page_discussed'],
+    });
+    const gathering = chooseChapterOption(day, 'open');
+    const all = availableOptions(finalReading, gathering.dialogue);
+    expect(all.length).toBeGreaterThan(4);
+    const pages = Array.from({ length: Math.ceil(all.length / 3) }, (_, index) =>
+      all.slice(index * 3, (index + 1) * 3),
+    );
+    expect(pages.flat().map((option) => option.id)).toEqual(all.map((option) => option.id));
+    expect(pages.every((page) => page.length <= 3)).toBe(true);
+    expect(all.map((option) => option.id)).toContain('quiet-manuscript-followup');
+  });
+
   it('persists the quiet evening and its completed checkpoint', () => {
     const evening = {
       ...startChapter(),
