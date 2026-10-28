@@ -343,15 +343,16 @@ export class FiveDayStory {
     }
     const totalPages = Math.max(1, Math.ceil(choices.length / 3));
     this.choicePage = Math.min(this.choicePage, totalPages - 1);
-    const visibleChoices = totalPages === 1
-      ? choices
-      : [
-          ...choices.slice(this.choicePage * 3, (this.choicePage + 1) * 3),
-          {
-            id: '__more_choices',
-            label: this.choicePage < totalPages - 1 ? 'Інші варіанти →' : '← Попередні варіанти',
-          },
-        ];
+    const visibleChoices =
+      totalPages === 1
+        ? choices
+        : [
+            ...choices.slice(this.choicePage * 3, (this.choicePage + 1) * 3),
+            {
+              id: '__more_choices',
+              label: this.choicePage < totalPages - 1 ? 'Інші варіанти →' : '← Попередні варіанти',
+            },
+          ];
     const member = castMember(node.speaker);
     return {
       speaker: node.speaker,

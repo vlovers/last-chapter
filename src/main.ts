@@ -324,7 +324,12 @@ function render(): void {
       actions.append(shelf);
     } else {
       const available = availableOptions(story, chapter.dialogue);
-      const pageKey = chapter.stage + ':' + chapter.dialogue.node + ':' + available.map((option) => option.id).join(',');
+      const pageKey =
+        chapter.stage +
+        ':' +
+        chapter.dialogue.node +
+        ':' +
+        available.map((option) => option.id).join(',');
       if (pageKey !== dialoguePageKey) {
         dialoguePageKey = pageKey;
         dialoguePage = 0;
@@ -406,7 +411,8 @@ function render(): void {
         pager.className = 'dialogue-options-group';
         const navigation = document.createElement('button');
         navigation.type = 'button';
-        navigation.textContent = dialoguePage < totalPages - 1 ? 'Інші варіанти →' : '← Попередні варіанти';
+        navigation.textContent =
+          dialoguePage < totalPages - 1 ? 'Інші варіанти →' : '← Попередні варіанти';
         navigation.addEventListener('click', () => {
           dialoguePage = dialoguePage < totalPages - 1 ? dialoguePage + 1 : 0;
           render();

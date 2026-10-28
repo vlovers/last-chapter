@@ -98,10 +98,7 @@ try {
       dialogue: { ...startDialogue(noraVisit), node: 'end' },
     };
     const quiet = skipBookClub(noraFinished);
-    const found = chooseChapterOption(
-      chooseChapterOption(quiet, 'tidy-books'),
-      'keep-page',
-    );
+    const found = chooseChapterOption(chooseChapterOption(quiet, 'tidy-books'), 'keep-page');
     const quietDayFour = startFourthDay(finishThirdDay(found));
     assert.ok(quietDayFour.flags.includes('quiet_evening_page_found'));
     assert.ok(quietDayFour.dialogue.flags.includes('book_club_skipped'));
