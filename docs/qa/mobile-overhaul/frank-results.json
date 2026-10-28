@@ -1,0 +1,51 @@
+{
+  "paused": {
+    "activity": "sitting",
+    "elevation": 0,
+    "x": 485,
+    "y": 205,
+    "pets": 0,
+    "meals": 0,
+    "games": 0,
+    "valid": true,
+    "nodes": 31,
+    "fps": 59.1953125
+  },
+  "eating": {
+    "activity": "eating",
+    "elevation": 0,
+    "x": 512.9633694422206,
+    "y": 210.99215059476157,
+    "pets": 1,
+    "meals": 1,
+    "games": 0,
+    "valid": true,
+    "nodes": 31,
+    "fps": 59.886016845703125
+  },
+  "resting": {
+    "activity": "resting",
+    "elevation": 85,
+    "x": 438,
+    "y": 211,
+    "pets": 1,
+    "meals": 1,
+    "games": 1,
+    "valid": true,
+    "nodes": 31,
+    "fps": 60.537390047589724
+  },
+  "loaded": {
+    "activity": "sitting",
+    "elevation": 0,
+    "x": 485,
+    "y": 205,
+    "pets": 1,
+    "meals": 1,
+    "games": 1,
+    "valid": true,
+    "nodes": 31,
+    "fps": 60
+  },
+  "errors": []
+}

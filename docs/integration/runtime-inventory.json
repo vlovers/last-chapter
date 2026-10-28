@@ -1,0 +1,166 @@
+{
+  "canonicalStages": [
+    "miller",
+    "mara",
+    "evening",
+    "complete",
+    "iris",
+    "anna",
+    "leo",
+    "day2-complete",
+    "eleanor",
+    "thomas",
+    "nora",
+    "book-club",
+    "day3-complete",
+    "day4-iris",
+    "day4-mara",
+    "day4-leo",
+    "day4-complete",
+    "day5-reading",
+    "season-complete"
+  ],
+  "distinctChapterGraphs": 14,
+  "orders": [
+    {
+      "id": "order_miller_day1",
+      "stage": "miller",
+      "node": "order",
+      "books": ["orchard", "witnesses"],
+      "validationErrors": []
+    },
+    {
+      "id": "order_mara_day1",
+      "stage": "mara",
+      "node": "order",
+      "books": ["station", "roads", "letters"],
+      "validationErrors": []
+    },
+    {
+      "id": "order_anna_day2",
+      "stage": "anna",
+      "node": "books",
+      "books": ["roads", "witnesses"],
+      "validationErrors": []
+    }
+  ],
+  "chapterGraphs": [
+    {
+      "stage": "miller",
+      "nodes": 26,
+      "choices": 47
+    },
+    {
+      "stage": "mara",
+      "nodes": 38,
+      "choices": 81
+    },
+    {
+      "stage": "evening",
+      "nodes": 10,
+      "choices": 21
+    },
+    {
+      "stage": "complete",
+      "nodes": 10,
+      "choices": 21
+    },
+    {
+      "stage": "iris",
+      "nodes": 24,
+      "choices": 41
+    },
+    {
+      "stage": "anna",
+      "nodes": 25,
+      "choices": 44
+    },
+    {
+      "stage": "leo",
+      "nodes": 29,
+      "choices": 50
+    },
+    {
+      "stage": "day2-complete",
+      "nodes": 29,
+      "choices": 50
+    },
+    {
+      "stage": "eleanor",
+      "nodes": 25,
+      "choices": 46
+    },
+    {
+      "stage": "thomas",
+      "nodes": 24,
+      "choices": 40
+    },
+    {
+      "stage": "nora",
+      "nodes": 22,
+      "choices": 36
+    },
+    {
+      "stage": "book-club",
+      "nodes": 9,
+      "choices": 16
+    },
+    {
+      "stage": "day3-complete",
+      "nodes": 9,
+      "choices": 16
+    },
+    {
+      "stage": "day4-iris",
+      "nodes": 14,
+      "choices": 25
+    },
+    {
+      "stage": "day4-mara",
+      "nodes": 16,
+      "choices": 27
+    },
+    {
+      "stage": "day4-leo",
+      "nodes": 13,
+      "choices": 22
+    },
+    {
+      "stage": "day4-complete",
+      "nodes": 13,
+      "choices": 22
+    },
+    {
+      "stage": "day5-reading",
+      "nodes": 56,
+      "choices": 102
+    },
+    {
+      "stage": "season-complete",
+      "nodes": 56,
+      "choices": 102
+    }
+  ],
+  "optionalMaraTopics": [
+    {
+      "id": "mara.book-club.v1",
+      "title": "Книжкові суперечки з Марою",
+      "nodes": 11
+    },
+    {
+      "id": "mara.after-hours.v1",
+      "title": "Після закриття: книги, люди й Френк",
+      "nodes": 21
+    },
+    {
+      "id": "mara.return-visit.v1",
+      "title": "Мара повертається",
+      "nodes": 8
+    },
+    {
+      "id": "mara.letter-decision.v1",
+      "title": "Лист, на який не обов’язково відповідати",
+      "nodes": 8
+    }
+  ]
+}
