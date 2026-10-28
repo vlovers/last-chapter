@@ -136,16 +136,16 @@ export const noraVisit: DialogueStory = {
     {
       id: 'nora-reflection',
       speaker: 'Нора',
-      text: '«У записах мене найбільше лякає не помилка, а порожнє місце».',
+      text: '«У нас в архіві знайшли фото відкриття кінотеатру. Тільки ніхто не може згадати, якого року його зробили». Нора дістає блокнот. «Троє свідків, три різні дати».',
       options: [
         {
           id: 'nora-reflect-question',
-          label: '«А що для тебе в цьому найважче?»',
+          label: '«І ніхто не зберіг афішу?»',
           next: 'nora-reflection-deep',
         },
         {
           id: 'nora-reflect-return',
-          label: '«Дякую, що поділився цим»',
+          label: '«Оце у вас детектив»',
           next: 'nora-reflection-end',
         },
       ],
@@ -153,16 +153,16 @@ export const noraVisit: DialogueStory = {
     {
       id: 'nora-reflection-deep',
       speaker: 'Нора',
-      text: '«Я можу знайти дату. Але не можу довести, що людина тоді відчувала».',
+      text: '«Афіші немає. Зате є лист, де один чоловік скаржиться на ціну квитка». Нора перегортає сторінку. «Шкода, що він не написав дату».',
       options: [
         {
           id: 'nora-reflect-continue',
-          label: '«І що ти хочеш змінити?»',
+          label: '«То як ти підпишеш фото?»',
           next: 'nora-reflection-record',
         },
         {
           id: 'nora-reflect-listen',
-          label: '«Можна просто побути з цим»',
+          label: '«Може, виставити всі три версії?»',
           next: 'nora-reflection-record',
         },
       ],
@@ -197,7 +197,7 @@ export const noraVisit: DialogueStory = {
     {
       id: 'nora-reflection-consent',
       speaker: 'Нора',
-      text: '«Я так захопилася відновленням історії, що не спитала, чи люди взагалі хочуть знову бачити свої імена на стіні».',
+      text: '«На звороті фото є три імені. Двоє людей уже померли, а третя мешкає за рогом». Нора ховає блокнот. «Перш ніж вішати це на виставці, я зайду до неї».',
       options: [{ id: 'nora-consent-back', label: 'Послухати далі', next: 'nora-reflection-end' }],
     },
     {
@@ -277,9 +277,9 @@ export const noraVisit: DialogueStory = {
     {
       id: 'nora-v3-conversation-choice',
       speaker: 'Нора',
-      text: '«Найважче — не заповнювати порожнє місце красивою версією. Порожнє місце теж інформація».',
+      text: '«Напишу всі три роки й попрошу відвідувачів принести старі афіші». Нора посміхається. «Може, хтось нарешті розбере горище».',
       options: [
-        { id: 'nora-v3-accept', label: '«Це твій вибір»', next: 'nora-v3-conversation-end' },
+        { id: 'nora-v3-accept', label: '«А раптом хтось принесе афішу?»', next: 'nora-v3-conversation-end' },
       ],
     },
     {
