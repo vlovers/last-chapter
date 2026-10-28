@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, selectOption, startDialogue } from '../src/game/dialogue';
+import { availableOptions, selectOption, startDialogue, type DialogueState } from '../src/game/dialogue';
 import { seasonEnding } from '../src/game/endings';
 
 describe('lost pages: complete evidence route', () => {
   it('connects manuscript, workshop, Eleanor ledger, consent and closing', () => {
-    let state = {
+    let state: DialogueState = {
       ...startDialogue(finalReading),
       flags: [
         'iris_margin_note_discussed',
