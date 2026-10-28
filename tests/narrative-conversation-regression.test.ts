@@ -3,6 +3,7 @@ import { maraVisit } from '../src/content/mara';
 import { noraVisit } from '../src/content/nora';
 import { finalReading } from '../src/content/day-five';
 import { decodeSave, encodeSave } from '../src/game/save';
+import { finishSeason, startFifthDay, type ChapterState } from '../src/game/chapter';
 import {
   availableOptions,
   currentNode,
@@ -354,4 +355,62 @@ describe('narrative conversation regression', () => {
     });
     expect(decodeSave(raw)).toBeNull();
   });
+  it('carries every previous-day flag into the fifth-day dialogue', () => {
+    const flags = [
+      'saw_envelope',
+      'opened_private_letter',
+      'mara_own_morning_heard',
+      'nora_will_seek_consent',
+    ];
+    const previous: ChapterState = {
+      stage: 'day4-complete',
+      flags,
+      dialogue: { ...startDialogue(finalReading), flags },
+    };
+    const next = startFifthDay(previous);
+    expect(next.stage).toBe('day5-reading');
+    expect(next.dialogue.node).toBe('morning');
+    expect(next.dialogue.flags).toEqual(flags);
+    expect(next.flags).toEqual(flags);
+  });
+
+  it('refuses to begin the final day before the fourth-day checkpoint', () => {
+    const previous: ChapterState = {
+      stage: 'day3-complete',
+      flags: [],
+      dialogue: startDialogue(finalReading),
+    };
+    expect(() => startFifthDay(previous)).toThrow('Finish Day 4 first');
+  });
+
+  it('does not complete the season while final dialogue choices remain', () => {
+    const state: ChapterState = {
+      stage: 'day5-reading',
+      flags: [],
+      dialogue: startDialogue(finalReading),
+    };
+    expect(() => finishSeason(state)).toThrow('Finish the final gathering');
+  });
+
+  it('preserves all final-day decisions at a terminal season checkpoint', () => {
+    const terminal = finalReading.nodes.find((node) => node.options.length === 0);
+    expect(terminal).toBeDefined();
+    const flags = ['saw_envelope', 'final_letter_kept_private', 'final_repaired_rumor'];
+    const state: ChapterState = {
+      stage: 'day5-reading',
+      flags: ['saw_envelope'],
+      dialogue: {
+        ...startDialogue(finalReading),
+        node: terminal!.id,
+        flags,
+      },
+    };
+    const finished = finishSeason(state);
+    expect(finished.stage).toBe('season-complete');
+    expect(finished.flags).toEqual(flags);
+    const restored = decodeSave(encodeSave(finished));
+    expect(restored?.stage).toBe('season-complete');
+    expect(restored?.flags).toEqual(flags);
+  });
+
 });
