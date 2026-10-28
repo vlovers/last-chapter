@@ -118,6 +118,13 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
         : flags.has('final_ledger_record_private')
           ? ['Журнал залишився в шухляді книгарні. Айріс поки не знає, що вдалося встановити.']
           : []),
+    ...(flags.has('final_ledger_iris_joke_hurt')
+      ? ['Після невдалого жарту Айріс провела решту вечора біля вікна й майже не розмовляла з тобою.']
+      : flags.has('final_ledger_eleanor_pressed')
+        ? ['Айріс не захотіла переглядати журнал посеред свята. Вона сама вирішить, коли повертатися до розмови.']
+        : flags.has('final_ledger_iris_listened')
+          ? ['Айріс та Елеонора домовилися повернутися до журналу після розмови з матір’ю Айріс.']
+          : []),
     ...(flags.has('book_club_started')
       ? ['Наступного тижня на дверях з’явилося нове оголошення про книжковий клуб.']
       : [
