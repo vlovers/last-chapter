@@ -464,7 +464,11 @@ export const maraVisit: DialogueStory = {
       text: '«Тоді почну з одного ранку. Просто скажу, що наступного четверга не беру додаткових замовлень. Якщо запитають чому — скажу, що хочу почитати».',
       options: [
         { id: 'mara-choice-try', label: '«Сем переживе один ранок»', next: 'mara-own-finish' },
-        { id: 'mara-choice-wait', label: '«А яку книжку хочеш дочитати?»', next: 'mara-own-finish' },
+        {
+          id: 'mara-choice-wait',
+          label: '«А яку книжку хочеш дочитати?»',
+          next: 'mara-own-finish',
+        },
       ],
     },
     {
