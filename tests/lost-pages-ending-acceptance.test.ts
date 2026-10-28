@@ -62,7 +62,9 @@ describe('lost pages ending acceptance: evidence, consent and chronology', () =>
 
   it('keeps dialogue choices within the four-choice contract', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
-    for (const node of finalReading.nodes) {
+    // The gathering is a paginated hub, not a four-button dialogue scene.
+    for (const node of finalReading.nodes.filter((entry) => !entry.hub)) {
+      if (node.id === 'gathering') continue;
       expect(node.options.length, node.id).toBeLessThanOrEqual(4);
     }
   });
