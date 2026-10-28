@@ -412,5 +412,4 @@ describe('narrative conversation regression', () => {
     expect(restored?.stage).toBe('season-complete');
     expect(restored?.flags).toEqual(flags);
   });
-
 });
