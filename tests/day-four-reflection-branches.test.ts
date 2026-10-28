@@ -70,7 +70,7 @@ describe('Day four character choices', () => {
       expect(state.flags).toContain(flag);
       expect(currentNode(story, state).text.length).toBeGreaterThan(20);
       const followup = availableOptions(story, state)[0];
-      expect(followup).toBeDefined();
+      if (!followup) throw new Error('Missing Day 4 follow-up option');
       state = selectOption(story, state, followup.id);
       state = selectOption(story, state, back);
       expect(state.node).toBe(entry);
