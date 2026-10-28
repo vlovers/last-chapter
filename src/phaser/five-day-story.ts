@@ -101,6 +101,8 @@ export class FiveDayStory {
   private chapter: ChapterState;
   private service = restoreService('');
   private saveAvailable = true;
+  private choicePage = 0;
+  private choicePageKey = '';
   constructor() {
     let saved: ChapterState | null = null;
     try {
@@ -334,11 +336,27 @@ export class FiveDayStory {
       if (this.stage === 'nora')
         choices.push({ id: '__skip_club', label: 'Залишитися в книгарні на тихий вечір' });
     }
+    const pageKey = this.stage + ':' + node.id + ':' + choices.map((choice) => choice.id).join(',');
+    if (this.choicePageKey !== pageKey) {
+      this.choicePageKey = pageKey;
+      this.choicePage = 0;
+    }
+    const totalPages = Math.max(1, Math.ceil(choices.length / 3));
+    this.choicePage = Math.min(this.choicePage, totalPages - 1);
+    const visibleChoices = totalPages === 1
+      ? choices
+      : [
+          ...choices.slice(this.choicePage * 3, (this.choicePage + 1) * 3),
+          {
+            id: '__more_choices',
+            label: this.choicePage < totalPages - 1 ? 'Інші варіанти →' : '← Попередні варіанти',
+          },
+        ];
     const member = castMember(node.speaker);
     return {
       speaker: node.speaker,
       text: node.text,
-      choices,
+      choices: visibleChoices,
       canRecommend: this.recommendationChoices.length > 0,
       portrait: member?.id === 'mara' ? '/art/bookshop/mara.svg' : (member?.portrait ?? ''),
     };
@@ -346,7 +364,12 @@ export class FiveDayStory {
   choose(id: string) {
     const restarting = id === '__restart' && this.stage === 'season-complete';
     if (id === '__restart' && this.stage === 'season-complete') this.chapter = startChapter();
-    else if (id === '__skip_club') {
+    else if (id === '__more_choices') {
+      const options = availableOptions(stageStory(this.stage), this.chapter.dialogue);
+      const pages = Math.max(1, Math.ceil(options.length / 3));
+      this.choicePage = this.choicePage < pages - 1 ? this.choicePage + 1 : 0;
+      return this.open();
+    } else if (id === '__skip_club') {
       this.chapter = skipBookClub(this.chapter);
     } else if (id === '__advance') {
       const action = checkpoints[this.stage] ?? sequence[this.stage];
