@@ -21,7 +21,9 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
     'nora_confidentiality_pressed',
   ].some((flag) => flags.has(flag));
   const community =
-    flags.has('final_repaired_rumor') || flags.has('final_respected_privacy')
+    flags.has('final_miller_ledger_rumor_seeded')
+      ? 'На вечорі знову пішла чутка про нібито знайдений фінал роману. Пані Міллер повторила її як факт, хоча ніхто не встановив авторство сторінок. Попередні вибачення не зупинили нову плітку.'
+      : flags.has('final_repaired_rumor') || flags.has('final_respected_privacy')
       ? pressedPrivacy
         ? 'На вечорі прозвучало прохання не переказувати чужих історій. Воно не стирає попередніх нав’язливих запитань, але залишає місце для іншої поведінки.'
         : 'На вечорі історій гості говорили про різницю між турботою й цікавістю. Ніхто не може обіцяти за все місто, але сьогодні чужі таємниці не стали розвагою.'
@@ -136,6 +138,19 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
         : flags.has('final_ledger_aftercare_cleanup')
           ? [
               'Після читання ти допоміг Марі прибрати столи. Френк забрав собі порожню коробку з-під печива.',
+            ]
+          : []),
+    ...(flags.has('final_miller_ledger_boundary')
+      ? [
+          'Пані Міллер образилася, коли ти не розповів про журнал. Утім, розмову вона перевела на книжки, а не на чужі листи.',
+        ]
+      : flags.has('final_miller_ledger_rumor_seeded')
+        ? [
+            'Пані Міллер розповіла гостям, ніби зниклий фінал уже знайшли. Айріс дізналася про чутку й перестала ділитися з тобою подробицями пошуків.',
+          ]
+        : flags.has('final_miller_ledger_flood_memory')
+          ? [
+              'Пані Міллер згадала, як допомагала після затоплення. Її спогади додали людських деталей, але не встановили автора рукопису.',
             ]
           : []),
     ...(flags.has('book_club_started')
