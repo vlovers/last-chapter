@@ -320,9 +320,24 @@ export const finalReading: DialogueStory = {
       speaker: 'Мара',
       text: '«Я б залишила ту, де вона йде», — каже Мара, повертаючи Айріс сторінку. «Не тому, що йти завжди правильно. Просто вона нарешті сама замовляє сніданок». Айріс пирхає: «Ти обираєш фінал за булочкою?»',
       options: [
-        { id: 'chapter-argument-mara', label: '«Мені теж цікавіший другий уривок»', next: 'chapter-argument-response', grants: ['final_chapter_mara_supported'] },
-        { id: 'chapter-argument-iris', label: '«Повернення теж може бути сміливим»', next: 'chapter-argument-response', grants: ['final_chapter_iris_supported'] },
-        { id: 'chapter-argument-neither', label: '«А може, вони обидві помиляються щодо фіналу?»', next: 'chapter-argument-response', grants: ['final_chapter_versions_questioned'] },
+        {
+          id: 'chapter-argument-mara',
+          label: '«Мені теж цікавіший другий уривок»',
+          next: 'chapter-argument-response',
+          grants: ['final_chapter_mara_supported'],
+        },
+        {
+          id: 'chapter-argument-iris',
+          label: '«Повернення теж може бути сміливим»',
+          next: 'chapter-argument-response',
+          grants: ['final_chapter_iris_supported'],
+        },
+        {
+          id: 'chapter-argument-neither',
+          label: '«А може, вони обидві помиляються щодо фіналу?»',
+          next: 'chapter-argument-response',
+          grants: ['final_chapter_versions_questioned'],
+        },
       ],
     },
     {
@@ -344,7 +359,12 @@ export const finalReading: DialogueStory = {
         },
       ],
       options: [
-        { id: 'chapter-argument-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_chapter_argument_heard'] },
+        {
+          id: 'chapter-argument-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_chapter_argument_heard'],
+        },
       ],
     },
     {
