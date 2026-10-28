@@ -239,6 +239,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_eleanor_reflection_heard'],
         },
         {
+          id: 'chapter-evidence',
+          label: 'Розглянути з Норою два уривки й запис у нотатнику',
+          next: 'chapter-evidence',
+          requires: ['final_missing_chapter_discussed'],
+          unless: ['final_chapter_evidence_reviewed'],
+        },
+        {
           id: 'chapter-argument',
           label: 'Послухати суперечку Мари й Айріс про фінал рукопису',
           next: 'chapter-argument',
@@ -314,6 +321,40 @@ export const finalReading: DialogueStory = {
         },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
       ],
+    },
+    {
+      id: 'chapter-evidence',
+      speaker: 'Нора',
+      text: '«В обох уривках згадане те саме вікно, але чорнило різне». Нора кладе поруч свій блокнот. «І це ще не означає, що їх написали в різні роки. У мене теж три ручки в сумці».',
+      options: [
+        { id: 'chapter-evidence-order', label: '«А якщо це дві послідовні сцени?»', next: 'chapter-evidence-order', grants: ['final_chapter_order_hypothesis'] },
+        { id: 'chapter-evidence-alternative', label: '«Може, авторка випробовувала різні фінали?»', next: 'chapter-evidence-alternative', grants: ['final_chapter_alternative_hypothesis'] },
+        { id: 'chapter-evidence-hold', label: '«Доказів поки замало»', next: 'chapter-evidence-hold', grants: ['final_chapter_evidence_inconclusive'] },
+      ],
+    },
+    {
+      id: 'chapter-evidence-order',
+      speaker: 'Нора',
+      text: '«Тоді треба знайти перехід між ними. Бо поки в нас є дві сцени й жодної сторінки посередині». Вона обводить у блокноті слово «вікно». «Не поспішай ставити крапку».',
+      options: [{ id: 'chapter-evidence-order-back', label: '«Запишу це як версію»', next: 'chapter-evidence-result' }],
+    },
+    {
+      id: 'chapter-evidence-alternative',
+      speaker: 'Нора',
+      text: '«Цілком можливо. Я якось переписувала листа чотири рази, а потім узагалі не відправила». Нора всміхається. «Тільки не називаймо жоден варіант остаточним».',
+      options: [{ id: 'chapter-evidence-alternative-back', label: '«Поки обидва залишаються відкритими»', next: 'chapter-evidence-result' }],
+    },
+    {
+      id: 'chapter-evidence-hold',
+      speaker: 'Нора',
+      text: '«Нарешті хтось сказав це раніше за мене». Нора закриває блокнот. «Можемо перевірити папір іншим разом. Сьогодні Анна обіцяла читати щось про драконів».',
+      options: [{ id: 'chapter-evidence-hold-back', label: 'Повернутися до свята', next: 'chapter-evidence-result' }],
+    },
+    {
+      id: 'chapter-evidence-result',
+      speaker: 'Оповідач',
+      text: 'Нора повертає уривки Айріс. Та ховає їх у свій альбом. Біля вікна Мара вже сперечається з Анною, чи можна назвати дракона домашнім улюбленцем. Френк уважно слухає, ніби питання стосується особисто його.',
+      options: [{ id: 'chapter-evidence-result-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_chapter_evidence_reviewed'] }],
     },
     {
       id: 'chapter-argument',
