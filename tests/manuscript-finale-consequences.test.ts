@@ -114,6 +114,24 @@ describe('manuscript finale continuity', () => {
     }
   });
 
+  it('does not invent a restorer response during the same evening', () => {
+    const routes = [
+      { flag: 'final_workshop_permission_requested', expected: 'Відповіді ще немає' },
+      { flag: 'final_workshop_search_deferred', expected: 'Вони можуть зачекати' },
+    ];
+    for (const { flag, expected } of routes) {
+      const gathering = selectOption(finalReading, {
+        ...startDialogue(finalReading),
+        flags: ['final_workshop_evidence_reviewed', flag],
+      }, 'open');
+      const discussion = selectOption(finalReading, gathering, 'manuscript-provenance');
+      const text = currentNode(finalReading, discussion).text;
+      expect(text).toContain(expected);
+      expect(text).not.toContain('Реставраторка відповіла');
+      expect(text).not.toContain('Реставраторка каже');
+    }
+  });
+
   it('lets the player pause the investigation without resolving the number', () => {
     const opening = selectOption(finalReading, { ...startDialogue(finalReading), flags: ['iris_margin_note_discussed', 'iris_margin_date_theory'] }, 'open');
     const followup = selectOption(finalReading, opening, 'margin-followup');
