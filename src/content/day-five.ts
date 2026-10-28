@@ -71,28 +71,28 @@ export const finalReading: DialogueStory = {
         },
         {
           id: 'final-v3-leo-option',
-          label: '«Чи вдалося поговорити без готового плану?»',
+          label: '«Ви з Марою нарешті домовилися про вихідні?»',
           next: 'final-v3-leo',
           requires: ['leo_honesty_discussed'],
           unless: ['final_v3_leo_heard'],
         },
         {
           id: 'final-v3-iris-option',
-          label: '«Чи показала ти малюнки без пояснень?»',
+          label: '«Які малюнки ти все-таки повісила?»',
           next: 'final-v3-iris',
           requires: ['iris_art_boundaries_discussed'],
           unless: ['final_v3_iris_heard'],
         },
         {
           id: 'final-v3-anna-option',
-          label: '«Як діти сприйняли питання без відповіді?»',
+          label: '«Як минула суперечка дітей про книжку?»',
           next: 'final-v3-anna',
           requires: ['anna_uncertainty_discussed'],
           unless: ['final_v3_anna_heard'],
         },
         {
           id: 'final-v3-thomas-option',
-          label: '«Чи вдалося побути поруч без інструментів?»',
+          label: '«Ти вже повернув Анні її книжку?»',
           next: 'final-v3-thomas',
           requires: ['thomas_listening_discussed'],
           unless: ['final_v3_thomas_heard'],
@@ -147,7 +147,7 @@ export const finalReading: DialogueStory = {
         },
         {
           id: 'rumor',
-          label: 'Запропонувати поговорити про силу чуток',
+          label: 'Запитати пані Міллер, чи поговорила вона з Томасом',
           next: 'rumor',
           unless: ['final_respected_privacy', 'final_repaired_rumor'],
         },
@@ -566,7 +566,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'rumor-respect',
       speaker: 'Пані Міллер',
-      text: '«Я вже сказала Норі, що переплутала свої здогади з фактами». Пані Міллер складає запрошення навпіл. «Тепер треба сказати Томасу. Він, мабуть, і двері мені не відчинить».',
+      text: '«Норі я вже сказала, що вигадала зайве». Пані Міллер мнеться біля дверей. «А Томасу ще ні. Він сьогодні тут? Може, хоч не доведеться дзвонити йому додому».',
       options: [
         {
           id: 'rumor-respect-back',
@@ -721,7 +721,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'iris',
       speaker: 'Айріс',
-      text: '«Я намалювала ці вікна для виставки, але тепер думаю: може, це просто подарунок книгарні. Мені подобається, що світло видно з вулиці, навіть якщо ніхто не знає, хто всередині».',
+      text: '«Я принесла п’ять малюнків, але місця на стіні вистачить тільки для трьох». Айріс розгортає папку. «Пані Міллер уже попросила один для себе. Навіть не запитала, чи продаю я їх».',
       options: [
         {
           id: 'iris-exhibit',
@@ -731,7 +731,7 @@ export const finalReading: DialogueStory = {
         },
         {
           id: 'iris-choice',
-          label: '«Ти можеш вирішити, де будуть твої роботи»',
+          label: '«Може, залишиш кілька малюнків у книгарні?»',
           next: 'gathering',
           grants: ['final_supported_iris'],
         },
@@ -740,7 +740,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'exhibit',
       speaker: 'Айріс',
-      text: '«Тоді підпишемо їх просто: “Вікна Беллвіка”. Без пояснень про минуле. Нехай кожен побачить щось своє».',
+      text: '«Тоді повісимо ось ці три. Назву “Вікна Беллвіка” напишу сама». Айріс відступає на крок. «Тільки рівень знайдіть, будь ласка. Минулого разу все висіло криво».',
       options: [
         {
           id: 'exhibit-back',
@@ -833,7 +833,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'repair-trust',
       speaker: 'Айріс',
-      text: 'Ти визнав помилку. Це важливо. Але я не обіцяю, що тепер довірятиму тобі так само. Мені потрібен час, і я сама вирішу, що буде з листом.',
+      text: '«Я почула твої вибачення», — каже Айріс, не дивлячись на вас. «Але більше не бери мої речі без дозволу. Конверт залиш мені».',
       options: [
         {
           id: 'repair-trust-back',
@@ -846,7 +846,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'wait',
       speaker: 'Айріс',
-      text: '«Дякую. Можливо, я прочитаю його вголос Лео колись. А можливо, залишу собі. Тепер я знаю, що можу вирішувати без поспіху».',
+      text: '«Поклади його в шухляду за касою, будь ласка», — просить Айріс. «Я заберу після вечора. Зараз не хочу, щоб Лео побачив мене з ним».',
       options: [
         {
           id: 'wait-back',
