@@ -87,7 +87,7 @@ describe('finale consequence matrix', () => {
     );
 
     expect(discovered.epilogue).toContain('Знайдена ввечері сторінка');
-    expect(respected.epilogue).toContain('залишити знайдену сторінку між ними');
+    expect(respected.epilogue).toContain('поки не показувати знайдену сторінку іншим');
     expect(questioned.epilogue).toContain('пошукати власника знайденої сторінки');
     expect(
       new Set([untouched.epilogue, discovered.epilogue, respected.epilogue, questioned.epilogue])

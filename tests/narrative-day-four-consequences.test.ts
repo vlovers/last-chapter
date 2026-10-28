@@ -28,7 +28,7 @@ describe('Day four decisions have day five consequences', () => {
       'три малюнки',
     );
     expect(currentNode(finalReading, { ...privateArt, node: 'final-v3-iris' }).text).toContain(
-      'одне вікно',
+      'тільки один малюнок',
     );
     const returned = selectOption(irisDecision, open, 'iris-exhibition-result-back');
     expect(

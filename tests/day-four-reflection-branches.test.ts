@@ -69,6 +69,9 @@ describe('Day four character choices', () => {
       state = selectOption(story, state, decision);
       expect(state.flags).toContain(flag);
       expect(currentNode(story, state).text.length).toBeGreaterThan(20);
+      const followup = availableOptions(story, state)[0];
+      if (!followup) throw new Error('Missing Day 4 follow-up option');
+      state = selectOption(story, state, followup.id);
       state = selectOption(story, state, back);
       expect(state.node).toBe(entry);
       expect(availableOptions(story, state).some((option) => option.id === choice)).toBe(false);

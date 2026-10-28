@@ -33,8 +33,8 @@ describe('Five-day narrative pressure and character voice', () => {
     const nora = noraVisit.nodes.find((node) => node.id === 'nora-v3-conversation-end');
 
     expect(eleanor?.text).toContain('рулетку');
-    expect(nora?.text).toContain('до каталогу');
-    expect(nora?.text).toContain('доступ до приватних записів обмежений');
+    expect(nora?.text).toContain('дату ще перевіряємо');
+    expect(nora?.text).toContain('приватні листи не показуємо');
   });
 
   it('keeps all affected dialogue graphs structurally valid', () => {
