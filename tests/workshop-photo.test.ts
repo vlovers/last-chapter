@@ -10,7 +10,10 @@ import {
 import { seasonEnding } from '../src/game/endings';
 import { decodeSave, encodeSave } from '../src/game/save';
 
-const prerequisites = ['final_ledger_scene_complete', 'final_manuscript_provenance_decided'] as const;
+const prerequisites = [
+  'final_ledger_scene_complete',
+  'final_manuscript_provenance_decided',
+] as const;
 
 function gathering(flags: string[] = [...prerequisites]) {
   return selectOption(finalReading, { ...startDialogue(finalReading), flags }, 'open');
