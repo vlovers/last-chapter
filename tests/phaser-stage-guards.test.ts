@@ -17,16 +17,18 @@ afterEach(() => store.clear());
 describe('story stage transition guards', () => {
   it('cannot skip the opening conversation through an internal action', () => {
     const story = new FiveDayStory();
+    const initialSave = store.get(SAVE_KEY);
     expect(story.stage).toBe('miller');
     expect(() => story.choose('__advance')).toThrow('Finish the conversation');
     expect(story.stage).toBe('miller');
-    expect(store.has(SAVE_KEY)).toBe(false);
+    expect(store.get(SAVE_KEY)).toBe(initialSave);
   });
   it('does not persist invalid control actions', () => {
     const story = new FiveDayStory();
+    const initialSave = store.get(SAVE_KEY);
     expect(() => story.choose('__missing')).toThrow('Unknown story action');
     expect(story.stage).toBe('miller');
-    expect(store.has(SAVE_KEY)).toBe(false);
+    expect(store.get(SAVE_KEY)).toBe(initialSave);
   });
   it('keeps normal player dialogue choices and save continuity', () => {
     const story = new FiveDayStory();

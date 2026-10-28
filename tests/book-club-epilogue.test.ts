@@ -22,21 +22,25 @@ describe('book club epilogue', () => {
 
   it('keeps the manuscript clue unresolved when Iris has not discussed it', () => {
     const ending = seasonEnding({ flags: ['quiet_evening_page_found'] });
-    expect(ending.epilogue).toContain('запитанням, на яке ще немає відповіді');
+    expect(ending.epilogue).toContain('залишилася нерозгаданою');
+    expect(ending.epilogue).not.toContain('забрала сторінку');
   });
 
   it('respects Iris privacy in the manuscript follow-up', () => {
     const ending = seasonEnding({
       flags: ['quiet_evening_page_found', 'iris_quiet_page_privacy_respected'],
     });
-    expect(ending.epilogue).toContain('таємницю розгадано');
+    expect(ending.epilogue).toContain('поки не показувати знайдену сторінку іншим');
+    expect(ending.epilogue).not.toContain('таємницю розгадано');
+    expect(ending.epilogue).not.toContain('забрала сторінку');
   });
 
   it('reflects the choice to investigate without public accusations', () => {
     const ending = seasonEnding({
       flags: ['quiet_evening_page_found', 'iris_quiet_page_identity_questioned'],
     });
-    expect(ending.epilogue).toContain('без публічних звинувачень');
+    expect(ending.epilogue).toContain('обережно пошукати власника знайденої сторінки');
+    expect(ending.epilogue).not.toContain('автора встановлено');
   });
 
   it('preserves independent character outcomes alongside the club', () => {

@@ -54,14 +54,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       ...letterDecision.memories,
     ]);
   try {
-    const saved = localStorage.getItem(conversationKey);
+    const saved = story.hasRestoredProgress ? localStorage.getItem(conversationKey) : null;
     if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
-    const savedAfterHours = localStorage.getItem(afterHoursKey);
+    const savedAfterHours = story.hasRestoredProgress ? localStorage.getItem(afterHoursKey) : null;
     if (savedAfterHours)
       afterHours = restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours;
-    const savedReturn = localStorage.getItem(returnKey);
+    const savedReturn = story.hasRestoredProgress ? localStorage.getItem(returnKey) : null;
     if (savedReturn) returnVisit = restoreConversation(maraReturnVisit, savedReturn) ?? returnVisit;
-    const savedLetter = localStorage.getItem(letterKey);
+    const savedLetter = story.hasRestoredProgress ? localStorage.getItem(letterKey) : null;
     if (savedLetter)
       letterDecision = restoreConversation(maraLetterDecision, savedLetter) ?? letterDecision;
   } catch {
@@ -77,11 +77,13 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       /* optional */
     }
   };
+  if (!story.hasRestoredProgress) saveConversation();
   const conversationButton = document.createElement('button');
   conversationButton.type = 'button';
   conversationButton.textContent = 'Поговорити з Марою';
   conversationButton.setAttribute('aria-label', 'Поговорити з Марою');
   conversationButton.setAttribute('aria-expanded', 'false');
+  conversationButton.setAttribute('aria-controls', 'story-panel');
   root.querySelector('.story-toolbar-actions')?.append(conversationButton);
   let filter: CatalogFilter = 'all';
   let search = '';
@@ -90,7 +92,10 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   let returnFocus: HTMLElement | null = null;
   let personalNotes = '';
   try {
-    personalNotes = (localStorage.getItem('last-chapter:notes:v1') ?? '').slice(0, 4000);
+    personalNotes = story.hasRestoredProgress
+      ? (localStorage.getItem('last-chapter:notes:v1') ?? '').slice(0, 4000)
+      : '';
+    if (!story.hasRestoredProgress) localStorage.setItem('last-chapter:notes:v1', '');
   } catch {
     /* optional */
   }
@@ -118,6 +123,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       'thomas',
       'nora',
       'book-club',
+      'quiet-evening',
       'day3-complete',
       'day4-iris',
       'day4-mara',
@@ -392,7 +398,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         );
         // Available evidence remains an explicit investigation action, separate from discovered cards.
         for (const clue of story.evidence.filter((clue) => !clue.collected)) {
-          const gather = element('button', 'Дослідити знайдений предмет');
+          const gather = element('button', `Дослідити: ${clue.label}`);
           gather.type = 'button';
           gather.addEventListener('click', () => {
             story.gatherEvidence(clue.id);
@@ -587,7 +593,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     if (event.key === 'Tab') {
       const focusable = Array.from(
         panel.querySelectorAll<HTMLElement>('button, input, textarea, summary, a[href]'),
-      ).filter((node) => !node.hidden);
+      ).filter(
+        (node) => !node.hidden && !node.matches(':disabled') && node.getClientRects().length > 0,
+      );
       const first = focusable[0],
         last = focusable.at(-1);
       if (event.shiftKey && document.activeElement === first) {

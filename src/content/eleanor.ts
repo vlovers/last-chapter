@@ -237,7 +237,7 @@ export const eleanorVisit: DialogueStory = {
         },
         {
           id: 'eleanor-reflect-return',
-          label: '«Дякую, що поділився цим»',
+          label: '«Дякую, що поділилася цим»',
           next: 'eleanor-reflection-end',
         },
       ],

@@ -77,10 +77,75 @@ export const journalFacts: readonly (readonly [string, string])[] = [
   ['opened_private_letter', 'Ви розкрили приватного листа без дозволу.'],
   ['letter_secured', 'Лист залишився у безпечному місці.'],
   ['ask_eleanor_next_day', 'Завтра слід запитати Елеонору про закриття книгарні.'],
+  ['book_club_started', 'Ви провели книжковий клуб у книгарні.'],
+  ['book_club_skipped', 'Замість книжкового клубу ви обрали тихий вечір.'],
+  [
+    'iris_mothers_draft_heard',
+    'Айріс згадала мамину чернетку «Загублені сторінки» та зірочки на полях.',
+  ],
+  [
+    'quiet_evening_page_found',
+    'Між старими романами знайдено аркуш із двома зірочками та уривком про відчинене вікно. Автора не встановлено.',
+  ],
+  [
+    'quiet_evening_page_examined',
+    'На знайденому аркуші дві цілі олівцеві зірочки. Біля них не видно слідів гумки. Край паперу обрізано рівно.',
+  ],
+  [
+    'iris_quiet_page_stars_compared',
+    'На листівці матері Айріс три сині зірочки, на аркуші — дві олівцеві. Це різні позначки; авторство аркуша не підтверджено.',
+  ],
+  [
+    'iris_quiet_page_window_theory',
+    'Припущення: відчинене вікно в уривку може означати очікування, а не втечу. Так Айріс пам’ятає мамині історії.',
+  ],
+  ['iris_quiet_page_privacy_respected', 'Ви домовилися з Айріс поки не показувати аркуш іншим.'],
+  [
+    'iris_quiet_page_identity_questioned',
+    'Айріс погодилася на обережні запитання про почерк: без імен і фотографій аркуша.',
+  ],
+  [
+    'final_quiet_manuscript_returned',
+    'Ви передали знайдений аркуш Айріс. Вона забрала його в альбомі.',
+  ],
+  [
+    'final_quiet_manuscript_archived',
+    'За згодою Айріс аркуш збережено в закритому конверті у книгарні. У записі — лише дата й місце знахідки.',
+  ],
 ];
 
 /** Provenance for already-authored, already-heard journal facts. No new discoveries. */
 export const journalEvidence = [
+  {
+    flag: 'quiet_evening_page_found',
+    title: 'Загублена сторінка',
+    kind: 'observation',
+    source: 'Тихий вечір · стіл із книжками',
+  },
+  {
+    flag: 'quiet_evening_page_examined',
+    title: 'Папір і позначки',
+    kind: 'observation',
+    source: 'Огляд аркуша під лампою',
+  },
+  {
+    flag: 'iris_mothers_draft_heard',
+    title: 'Мамина чернетка',
+    kind: 'testimony',
+    source: 'Айріс · другий день',
+  },
+  {
+    flag: 'iris_quiet_page_stars_compared',
+    title: 'Порівняння зірочок',
+    kind: 'observation',
+    source: 'Аркуш і листівка Айріс',
+  },
+  {
+    flag: 'iris_quiet_page_window_theory',
+    title: 'Вікно: втеча чи очікування?',
+    kind: 'inference',
+    source: 'Розмова з Айріс · четвертий день',
+  },
   {
     flag: 'saw_receipt',
     title: 'Картка бронювання',

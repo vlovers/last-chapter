@@ -21,6 +21,7 @@ const playable: readonly ChapterStage[] = [
   'thomas',
   'nora',
   'book-club',
+  'quiet-evening',
   'day4-iris',
   'day4-mara',
   'day4-leo',

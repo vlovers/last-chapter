@@ -237,7 +237,7 @@ export const annaVisit: DialogueStory = {
         },
         {
           id: 'anna-reflect-return',
-          label: '«Дякую, що поділився цим»',
+          label: '«Дякую, що поділилася цим»',
           next: 'anna-reflection-end',
         },
       ],

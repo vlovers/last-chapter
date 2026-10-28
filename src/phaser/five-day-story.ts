@@ -99,6 +99,7 @@ const dayOf = (stage: ChapterStage): number =>
 
 export class FiveDayStory {
   private chapter: ChapterState;
+  readonly hasRestoredProgress: boolean;
   private service = restoreService('');
   private saveAvailable = true;
   private choicePage = 0;
@@ -112,6 +113,7 @@ export class FiveDayStory {
       this.saveAvailable = false;
     }
     this.chapter = saved ?? startChapter();
+    this.hasRestoredProgress = saved !== null;
     if (saved) {
       try {
         this.service = restoreService(localStorage.getItem(SERVICE_KEY) ?? '');
@@ -122,6 +124,9 @@ export class FiveDayStory {
       // Service attempts belong to the narrative save. Without a valid chapter,
       // discard orphaned recommendations before a new playthrough can inherit them.
       this.persistService();
+      // Anchor optional notes and conversations to this playthrough even before
+      // the first dialogue choice, so a reload does not discard them.
+      this.persist();
     }
   }
   /** False when the most recent narrative save could not be persisted. */
@@ -297,7 +302,12 @@ export class FiveDayStory {
     if (checkpoint)
       return {
         speaker: 'Книгарня',
-        text: `День ${this.day} завершено. Ваші рішення залишаються з вами.`,
+        text:
+          this.stage === 'day3-complete'
+            ? this.chapter.flags.includes('book_club_started')
+              ? 'Книжковий клуб завершився. На столі — крихти й список книжок на наступну зустріч. Завтра повернеться Айріс.'
+              : 'Тихий вечір у книгарні завершився. Стільці залишилися складеними. Завтра повернеться Айріс.'
+            : `День ${this.day} завершено. Ваші рішення залишаються з вами.`,
         choices: [{ id: '__advance', label: checkpoint.label }],
         portrait: '',
       };

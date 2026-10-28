@@ -98,6 +98,7 @@ export class DialogueUI {
     this.visualText = document.createElement('span');
     this.visualText.setAttribute('aria-hidden', 'true');
     this.text.append(accessible, this.visualText);
+    this.text.scrollTop = 0;
     this.skip.hidden = reduced;
     this.text.style.minHeight = '';
     this.visualText.textContent = node.text;

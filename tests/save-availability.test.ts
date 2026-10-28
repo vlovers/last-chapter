@@ -33,7 +33,7 @@ describe('narrative persistence availability', () => {
       },
     });
     const story = new FiveDayStory();
-    expect(story.isProgressSaved).toBe(true);
+    expect(story.isProgressSaved).toBe(false);
     story.choose('greet');
     expect(story.isProgressSaved).toBe(false);
     expect(saved.has(SAVE_KEY)).toBe(false);

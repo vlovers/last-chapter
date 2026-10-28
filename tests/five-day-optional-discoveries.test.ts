@@ -22,9 +22,10 @@ describe('optional bookstore discoveries across the five-day story', () => {
   it('keeps Frank, shop discoveries and the completed clue chain through every day and clears them on restart', () => {
     const values = useStorage();
     let story = new FiveDayStory();
+    const initialSave = values.get(SAVE_KEY);
     expect(story.evidence).toEqual([]);
     expect(story.gatherEvidence.bind(story, 'bookmark')).toThrow('Clue is not accessible');
-    expect(values.has(SAVE_KEY)).toBe(false);
+    expect(values.get(SAVE_KEY)).toBe(initialSave);
 
     for (const spot of ['frank', 'window', 'counter', 'shelves'] as const) {
       expect(story.inspect(spot)).not.toBeNull();
@@ -104,9 +105,10 @@ describe('optional bookstore discoveries across the five-day story', () => {
   it('does not write a save for unknown shop spots or inaccessible clues', () => {
     const values = useStorage();
     const story = new FiveDayStory();
+    const initialSave = values.get(SAVE_KEY);
     expect(story.inspect('unknown')).toBeNull();
     expect(() => story.gatherEvidence('timeline')).toThrow('Clue is not accessible');
-    expect(values.has(SAVE_KEY)).toBe(false);
+    expect(values.get(SAVE_KEY)).toBe(initialSave);
     expect(story.inspectedSpots).toEqual([]);
     expect(story.evidence).toEqual([]);
   });
