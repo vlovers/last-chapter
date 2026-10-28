@@ -253,7 +253,7 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«О четвертій тридцять. Одного разу я прийшла раніше за постачальника й хвилин десять не могла відчинити двері». Мара сміється. «Потім виявилося, що я крутила не той ключ».',
       options: [
-        { id: 'tired-ask', label: '«І як ти витримуєш такі ранки?»', next: 'bakery-silence' },
+        { id: 'tired-ask', label: '«Ого, о пів на п’яту! Тоді каву треба міцну»', next: 'bakery-silence' },
         { id: 'tired-return', label: '«Можемо поговорити про інше»', next: 'topics' },
       ],
     },
@@ -466,7 +466,7 @@ export const maraVisit: DialogueStory = {
         { id: 'mara-choice-try', label: '«Сем переживе один ранок»', next: 'mara-own-finish' },
         {
           id: 'mara-choice-wait',
-          label: '«А яку книжку хочеш дочитати?»',
+          label: '«Тоді залиш книжку на четвер»',
           next: 'mara-own-finish',
         },
       ],
