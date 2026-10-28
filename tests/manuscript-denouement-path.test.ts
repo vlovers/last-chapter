@@ -49,6 +49,9 @@ describe('lost pages: complete evidence route', () => {
       'manuscript-provenance',
       'provenance-archive',
       'provenance-finish',
+      'archive-handover',
+      'archive-handover-iris',
+      'archive-handover-finish',
       'close',
     ];
     for (const id of route) {
@@ -63,10 +66,12 @@ describe('lost pages: complete evidence route', () => {
     expect(state.flags).toContain('final_ledger_letter_connection_heard');
     expect(state.flags).toContain('final_ledger_iris_told');
     expect(state.flags).toContain('final_provenance_consent_archive');
+    expect(state.flags).toContain('final_archive_iris_boundaries');
     const epilogue = seasonEnding({ flags: state.flags }).epilogue;
     expect(epilogue).toContain('номер коробки');
     expect(epilogue).toContain('того самого затоплення');
     expect(epilogue).toContain('лише копії');
+    expect(epilogue).toContain('лише собі та Елеонорі');
     expect(epilogue).not.toContain('Цифра сімнадцять поки лишилася загадкою');
   });
 });
