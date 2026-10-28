@@ -239,6 +239,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_eleanor_reflection_heard'],
         },
         {
+          id: 'margin-followup',
+          label: 'Повернутися з Айріс до загадкового числа на аркуші',
+          next: 'margin-followup',
+          requires: ['iris_margin_note_discussed'],
+          unless: ['final_margin_followup_heard'],
+        },
+        {
           id: 'workshop-followup',
           label: 'Запитати Айріс, чи дізналася вона щось про стару майстерню',
           next: 'workshop-followup',
@@ -292,6 +299,48 @@ export const finalReading: DialogueStory = {
           unless: ['final_shared_table_heard'],
         },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
+      ],
+    },
+    {
+      id: 'margin-followup',
+      speaker: 'Айріс',
+      text: 'Айріс дістає з альбому стару фотографію. На ній — стелаж із коробками, а поруч її мати сміється, тримаючи величезні ножиці. «Я знайшла це вранці. Бачиш? На коробці написано сім, не сімнадцять. Я вчора помилилася».',
+      textWhen: [
+        {
+          requires: ['iris_margin_box_theory'],
+          text: '«Ти питав про коробки. Я знайшла фото майстерні: там справді стояли чернетки. Але номер на найближчій коробці — сім, а не сімнадцять». Айріс підсуває фотографію. «Здається, ми надто хотіли побачити відповідь».',
+        },
+        {
+          requires: ['iris_margin_date_theory'],
+          text: '«Ти припустив, що це дата. Я перевірила мамин календар: сімнадцятого там нічого немає. Зате знайшла фотографію майстерні. На коробці видно сім, а не сімнадцять». Айріс знизує плечима. «Поки жодна версія не виграла».',
+        },
+      ],
+      options: [
+        {
+          id: 'margin-followup-compare',
+          label: '«Порівняймо почерк на фото й на аркуші»',
+          next: 'margin-followup-result',
+          grants: ['final_margin_handwriting_compared'],
+        },
+        {
+          id: 'margin-followup-rest',
+          label: '«Залишимо це до завтра. Зараз твоє свято»',
+          next: 'margin-followup-result',
+          grants: ['final_margin_inquiry_paused'],
+        },
+      ],
+    },
+    {
+      id: 'margin-followup-result',
+      speaker: 'Айріс',
+      text: '«Гаразд. Але фотографію я заберу собі». Айріс складає її в альбом. «Мама на ній така щаслива. Не хочу, щоб вона стала просто доказом у чиїйсь справі».',
+      options: [
+        {
+          id: 'margin-followup-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_margin_followup_heard'],
+        },
       ],
     },
     {
