@@ -25,8 +25,20 @@ const snapshot = (page) =>
     };
   });
 const choose = async (page, id) => {
-  await page.waitForTimeout(240);
-  await page.locator(`#choices button[data-choice="${id}"]`).click();
+  for (let pageIndex = 0; pageIndex < 30; pageIndex++) {
+    await page.waitForTimeout(240);
+    const choice = page.locator(`#choices button[data-choice="${id}"]`);
+    if (await choice.count()) {
+      await choice.click();
+      return;
+    }
+    const more = page.locator('#choices button[data-choice="__more_choices"]');
+    if (!(await more.count())) {
+      throw new Error(`Dialogue option ${id} is not available on this node`);
+    }
+    await more.click();
+  }
+  throw new Error(`Dialogue option ${id} was not found across 30 choice pages`);
 };
 const shot = async (page, name) => {
   await page.waitForTimeout(1050);
