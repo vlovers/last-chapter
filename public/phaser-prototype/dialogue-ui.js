@@ -131,11 +131,17 @@ export class DialogueUI {
       node.choices.length ? 'Продовжити пізніше' : 'Закрити розмову',
     );
     this.choices.replaceChildren();
+    this.choices.classList.toggle('has-finish', Boolean(node.gathering));
+    const choiceList = node.gathering ? document.createElement('div') : this.choices;
+    if (node.gathering) {
+      choiceList.className = 'choice-list';
+      this.choices.append(choiceList);
+    }
     if (node.section) {
       const heading = document.createElement('h3');
       heading.className = 'dialogue-section';
       heading.textContent = node.section;
-      this.choices.append(heading);
+      choiceList.append(heading);
     }
     this.element.querySelector('#browse-order')?.remove();
     if (node.canRecommend) {
@@ -186,7 +192,7 @@ export class DialogueUI {
           throw error;
         }
       });
-      this.choices.append(button);
+      (node.gathering && choice.id === 'close' ? this.choices : choiceList).append(button);
     }
     if (!node.choices.length) {
       const button = document.createElement('button');

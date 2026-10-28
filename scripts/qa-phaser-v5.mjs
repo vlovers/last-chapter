@@ -8,13 +8,19 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
 const output = resolve(process.env.QA_OUTPUT || '/private/tmp/last-chapter-v5-qa');
 await mkdir(output, { recursive: true });
+const routes = process.env.QA_ROUTES ? process.env.QA_ROUTES.split(',') : ['A', 'B', 'C', 'D'];
+assert.ok(
+  routes.length && routes.every((id) => ['A', 'B', 'C', 'D'].includes(id)),
+  'Unknown QA route',
+);
 const fixture = await launchQaBrowser(chromium);
 const results = [];
 let page, context, route;
 const saveKey = 'last-chapter:save:v1';
 const readSave = () => page.evaluate((key) => JSON.parse(localStorage.getItem(key)), saveKey);
 const shot = async (name) => {
-  if (await page.locator('#typewriter-skip').isVisible()) await page.locator('#typewriter-skip').click();
+  if (await page.locator('#typewriter-skip').isVisible())
+    await page.locator('#typewriter-skip').click();
   return page.screenshot({ path: `${output}/${route}-${name}.png`, fullPage: true });
 };
 const openStory = async () => {
@@ -104,7 +110,7 @@ const optionalMara = async () => {
 };
 
 try {
-  for (route of ['A', 'B', 'C', 'D']) {
+  for (route of routes) {
     const quiet = route !== 'A',
       archive = route === 'C';
     const errors = [];
@@ -301,9 +307,28 @@ try {
     await choose('open');
     await guests(8);
     assert.ok((await page.locator('#choices [data-choice]').count()) <= 5);
+    const finishVisible = await page
+      .locator('#choices [data-choice="close"]')
+      .evaluate((button) => {
+        const bounds = button.getBoundingClientRect();
+        const panel = document.querySelector('#choices').getBoundingClientRect();
+        return bounds.top >= panel.top && bounds.bottom <= panel.bottom + 1;
+      });
+    assert.ok(
+      finishVisible,
+      'Finishing the evening must stay visible without scrolling optional topics',
+    );
     await shot('finale-overview');
     if (quiet) {
       await choose('quiet-manuscript-followup');
+      const custodyVisible = await page.locator('#choices [data-choice]').evaluateAll((buttons) => {
+        const panel = document.querySelector('#choices').getBoundingClientRect();
+        return buttons.every((button) => {
+          const bounds = button.getBoundingClientRect();
+          return bounds.top >= panel.top && bounds.bottom <= panel.bottom + 1;
+        });
+      });
+      assert.ok(custodyVisible, 'Both manuscript custody choices must be visible together');
       await shot('custody-choice');
       await choose(archive ? 'quiet-manuscript-archive' : 'quiet-manuscript-return');
       if (route === 'D') await reload();

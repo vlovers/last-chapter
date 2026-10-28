@@ -17,7 +17,7 @@ describe('The final gathering reacts to completed conversations', () => {
   it('shows the original gathering before the player makes any decisions', () => {
     const state = selectOption(finalReading, startDialogue(finalReading), 'open');
     expect(currentNode(finalReading, state).text).toContain('Френк вкрав закладку');
-    expect(currentNode(finalReading, state).text).not.toContain('сама розповіла, як помилилася');
+    expect(currentNode(finalReading, state).text).not.toContain('вибачилася перед Томасом');
   });
 
   it('uses the first matching reaction when multiple stories have resolved', () => {

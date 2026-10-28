@@ -1,5 +1,21 @@
 # Roadmap — Narrative First
 
+## Verified five-day candidate — 2026-10-28
+
+The canonical Phaser route now supports a complete short five-day playthrough,
+both Day 3 evenings, an inspectable manuscript, two independent manuscript
+custody outcomes, three catalog orders, a provenance journal, optional Mara
+sessions, restart and browser reload. The book club and final reading use the
+existing cast sprites; finale conversations have grouped, counted navigation.
+See the [production QA record](qa/production-20261028/README.md) for executed
+routes, screenshots, checks and limits.
+
+The next milestone is a structured external playtest: measure runtime, follow
+players' theories, review Ukrainian voice and pacing, and test accessibility
+and browser/device behavior beyond Chromium. The 40-minute episode target is
+unmeasured. The older long-form phase checklist below is a design backlog,
+not a statement that these first-pass scenes or Phaser assets are absent.
+
 > Product decision (2026-10-24): finish a complete five-day **text-first playable game** before expanding interactive shop mechanics; produce final art, animation and audio only after the game systems are proven. Do not merge the draft PR without owner approval.
 
 ## Phase 1 — Complete playable narrative (CURRENT PRIORITY)

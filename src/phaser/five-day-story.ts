@@ -376,6 +376,7 @@ export class FiveDayStory {
       this.choiceGroup = null;
       return {
         ...view,
+        gathering: true,
         choices: [
           ...groups.map((group) => ({
             id: `__topics_${group.id}`,
@@ -416,6 +417,7 @@ export class FiveDayStory {
           ];
     return {
       ...view,
+      gathering,
       section: selected?.label ?? '',
       choices: [
         ...visibleChoices,

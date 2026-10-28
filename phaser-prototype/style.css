@@ -885,6 +885,22 @@ main {
   font-size: 14px;
   color: #68523d;
 }
+#choices.has-finish {
+  overflow: hidden;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+#choices .choice-list {
+  display: grid;
+  gap: 6px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 3px;
+}
+#choices.has-finish > button {
+  border-color: #6b785c;
+  background: #e1e4c5;
+}
 #dialogue[data-visitor='narrator'],
 #dialogue.object-note {
   grid-template-columns: 1fr;
@@ -1266,6 +1282,14 @@ body.reduced * {
 }
 #dialogue.compact #choices {
   max-height: 20svh;
+}
+@media (max-width: 600px) {
+  #dialogue.compact {
+    max-height: min(65svh, 450px);
+  }
+  #dialogue.compact .dialogue-body {
+    max-height: calc(min(65svh, 450px) - 40px);
+  }
 }
 
 /* The day control states its action; optional conversations remain secondary. */

@@ -18,6 +18,8 @@ describe('Private letter epilogues', () => {
   it('keeps the neutral epilogue when the letter is unresolved', () => {
     let state = selectOption(finalReading, startDialogue(finalReading), 'open');
     state = selectOption(finalReading, state, 'close');
-    expect(currentNode(finalReading, state).text).toContain('Книгарня знову має майбутнє');
+    expect(currentNode(finalReading, state).text).toContain('датою наступної зустрічі');
+    expect(state.flags).not.toContain('final_mutual_conversation');
+    expect(state.flags).not.toContain('final_letter_kept_private');
   });
 });

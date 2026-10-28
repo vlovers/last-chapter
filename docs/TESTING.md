@@ -21,6 +21,8 @@ transition API. `qa-story-ui.mjs` navigates the actual pagination and finale gro
 Each route checks its composed ending, three receipts, restart isolation and
 browser errors, and writes screenshots, a final save and a Playwright trace.
 `results.json` records partial failures rather than marking unexecuted routes passed.
+`QA_ROUTES=A` selects only Route A for a production-preview smoke; omitting it
+always runs all four routes. The runner also works against `vite preview`.
 
 `node scripts/qa-production-recovery.mjs` separately tests deliberately missing,
 corrupt and blocked storage, orphan optional-session cleanup and keyboard focus.

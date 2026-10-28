@@ -39,7 +39,8 @@ describe('Miller rumor accountability callback', () => {
 
     expect(respect?.next).toBe('rumor-respect');
     expect(apology?.next).toBe('rumor-apology');
-    expect(respectScene?.text).toContain('не буду знову переказувати');
+    expect(respectScene?.text).toContain('переплутала свої здогади з фактами');
+    expect(respectScene?.text).toContain('Тепер треба сказати Томасу');
     expect(apologyScene?.text).toContain('двом сусідам');
     expect(apologyScene?.text).toContain('одразу пробачили');
     expect(respectScene?.options[0]?.grants).toContain('final_respected_privacy');
