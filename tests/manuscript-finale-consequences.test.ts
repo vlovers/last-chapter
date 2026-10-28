@@ -11,13 +11,21 @@ describe('manuscript finale continuity', () => {
 
   it('hides the manuscript reading without both Iris conversations', () => {
     for (const flags of [[], ['iris_margin_note_discussed'], ['iris_quiet_page_discussed']]) {
-      const gathering = selectOption(finalReading, { ...startDialogue(finalReading), flags }, 'open');
+      const gathering = selectOption(
+        finalReading,
+        { ...startDialogue(finalReading), flags },
+        'open',
+      );
       expect(options(finalReading, gathering)).not.toContain('missing-chapter-choice');
     }
   });
 
   it('keeps the two readings mutually exclusive and remembers the chosen excerpt', () => {
-    const gathering = selectOption(finalReading, { ...startDialogue(finalReading), flags: clueFlags }, 'open');
+    const gathering = selectOption(
+      finalReading,
+      { ...startDialogue(finalReading), flags: clueFlags },
+      'open',
+    );
     expect(options(finalReading, gathering)).toContain('missing-chapter-choice');
     const choice = selectOption(finalReading, gathering, 'missing-chapter-choice');
     const departure = selectOption(finalReading, choice, 'missing-chapter-read-leave');
@@ -32,7 +40,11 @@ describe('manuscript finale continuity', () => {
   });
 
   it("changes Mara and Iris dialogue according to the player's position", () => {
-    const opening = selectOption(finalReading, { ...startDialogue(finalReading), flags: [...clueFlags, 'final_missing_chapter_discussed'] }, 'open');
+    const opening = selectOption(
+      finalReading,
+      { ...startDialogue(finalReading), flags: [...clueFlags, 'final_missing_chapter_discussed'] },
+      'open',
+    );
     const argument = selectOption(finalReading, opening, 'chapter-argument');
     for (const [choice, flag, expected] of [
       ['chapter-argument-mara', 'final_chapter_mara_supported', 'Команда сніданку'],
@@ -48,10 +60,14 @@ describe('manuscript finale continuity', () => {
   });
 
   it('compares paper without claiming the manuscript is authenticated', () => {
-    const gathering = selectOption(finalReading, {
-      ...startDialogue(finalReading),
-      flags: ['final_margin_followup_heard', 'final_missing_chapter_discussed'],
-    }, 'open');
+    const gathering = selectOption(
+      finalReading,
+      {
+        ...startDialogue(finalReading),
+        flags: ['final_margin_followup_heard', 'final_missing_chapter_discussed'],
+      },
+      'open',
+    );
     expect(options(finalReading, gathering)).toContain('workshop-evidence');
     const evidence = selectOption(finalReading, gathering, 'workshop-evidence');
     const compared = selectOption(finalReading, evidence, 'workshop-evidence-compare');
@@ -66,10 +82,24 @@ describe('manuscript finale continuity', () => {
   it('keeps permission and deferral as distinct outcomes', () => {
     const flags = ['final_margin_followup_heard', 'final_missing_chapter_discussed'];
     for (const [choice, returnChoice, expectedFlag, epilogueText] of [
-      ['workshop-evidence-ask', 'workshop-evidence-owner-back', 'final_workshop_permission_requested', 'попросити дозволу'],
-      ['workshop-evidence-keep', 'workshop-evidence-rest-back', 'final_workshop_search_deferred', 'почекає'],
+      [
+        'workshop-evidence-ask',
+        'workshop-evidence-owner-back',
+        'final_workshop_permission_requested',
+        'попросити дозволу',
+      ],
+      [
+        'workshop-evidence-keep',
+        'workshop-evidence-rest-back',
+        'final_workshop_search_deferred',
+        'почекає',
+      ],
     ]) {
-      const gathering = selectOption(finalReading, { ...startDialogue(finalReading), flags }, 'open');
+      const gathering = selectOption(
+        finalReading,
+        { ...startDialogue(finalReading), flags },
+        'open',
+      );
       const evidence = selectOption(finalReading, gathering, 'workshop-evidence');
       const response = selectOption(finalReading, evidence, choice);
       const result = selectOption(finalReading, response, returnChoice);
@@ -81,15 +111,23 @@ describe('manuscript finale continuity', () => {
 
   it('offers custody only after the evidence discussion', () => {
     const base = ['final_margin_followup_heard', 'final_missing_chapter_discussed'];
-    const gathering = selectOption(finalReading, {
-      ...startDialogue(finalReading),
-      flags: base,
-    }, 'open');
+    const gathering = selectOption(
+      finalReading,
+      {
+        ...startDialogue(finalReading),
+        flags: base,
+      },
+      'open',
+    );
     expect(options(finalReading, gathering)).not.toContain('manuscript-provenance');
-    const ready = selectOption(finalReading, {
-      ...startDialogue(finalReading),
-      flags: [...base, 'final_workshop_evidence_reviewed'],
-    }, 'open');
+    const ready = selectOption(
+      finalReading,
+      {
+        ...startDialogue(finalReading),
+        flags: [...base, 'final_workshop_evidence_reviewed'],
+      },
+      'open',
+    );
     expect(options(finalReading, ready)).toContain('manuscript-provenance');
   });
 
@@ -100,15 +138,21 @@ describe('manuscript finale continuity', () => {
       ['provenance-wait', 'final_provenance_wait_for_evidence', 'відклали'],
     ] as const;
     for (const [choice, flag, epilogue] of cases) {
-      const gathering = selectOption(finalReading, {
-        ...startDialogue(finalReading),
-        flags: ['final_workshop_evidence_reviewed'],
-      }, 'open');
+      const gathering = selectOption(
+        finalReading,
+        {
+          ...startDialogue(finalReading),
+          flags: ['final_workshop_evidence_reviewed'],
+        },
+        'open',
+      );
       const discussion = selectOption(finalReading, gathering, 'manuscript-provenance');
       const result = selectOption(finalReading, discussion, choice);
       const finished = selectOption(finalReading, result, 'provenance-finish');
       expect(finished.flags).toContain(flag);
-      expect(finished.flags.filter((entry) => entry.startsWith('final_provenance_'))).toEqual([flag]);
+      expect(finished.flags.filter((entry) => entry.startsWith('final_provenance_'))).toEqual([
+        flag,
+      ]);
       expect(options(finalReading, finished)).not.toContain('manuscript-provenance');
       expect(seasonEnding({ flags: finished.flags }).epilogue).toContain(epilogue);
     }
@@ -120,10 +164,14 @@ describe('manuscript finale continuity', () => {
       { flag: 'final_workshop_search_deferred', expected: 'Вони можуть зачекати' },
     ];
     for (const { flag, expected } of routes) {
-      const gathering = selectOption(finalReading, {
-        ...startDialogue(finalReading),
-        flags: ['final_workshop_evidence_reviewed', flag],
-      }, 'open');
+      const gathering = selectOption(
+        finalReading,
+        {
+          ...startDialogue(finalReading),
+          flags: ['final_workshop_evidence_reviewed', flag],
+        },
+        'open',
+      );
       const discussion = selectOption(finalReading, gathering, 'manuscript-provenance');
       const text = currentNode(finalReading, discussion).text;
       expect(text).toContain(expected);
@@ -133,7 +181,14 @@ describe('manuscript finale continuity', () => {
   });
 
   it('lets the player pause the investigation without resolving the number', () => {
-    const opening = selectOption(finalReading, { ...startDialogue(finalReading), flags: ['iris_margin_note_discussed', 'iris_margin_date_theory'] }, 'open');
+    const opening = selectOption(
+      finalReading,
+      {
+        ...startDialogue(finalReading),
+        flags: ['iris_margin_note_discussed', 'iris_margin_date_theory'],
+      },
+      'open',
+    );
     const followup = selectOption(finalReading, opening, 'margin-followup');
     expect(currentNode(finalReading, followup).text).toContain('календар');
     const paused = selectOption(finalReading, followup, 'margin-followup-rest');

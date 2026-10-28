@@ -120,8 +120,10 @@ try {
       'keep-page',
     );
     const clubDayFour = startFourthDay(finishThirdDay(foundAfterClub));
-    if (!clubDayFour.flags.includes('book_club_started') ||
-        !clubDayFour.flags.includes('quiet_evening_page_found')) {
+    if (
+      !clubDayFour.flags.includes('book_club_started') ||
+      !clubDayFour.flags.includes('quiet_evening_page_found')
+    ) {
       throw new Error('Post-club exploration lost the club or manuscript progress');
     }
     for (let i = 0; i < 25 && story.stage !== 'season-complete'; i++) {

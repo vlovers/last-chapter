@@ -83,5 +83,4 @@ describe('ledger aftermath', () => {
       availableOptions(finalReading, restored!.dialogue).map((option) => option.id),
     ).not.toContain('ledger-aftercare');
   });
-
 });

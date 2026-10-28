@@ -537,13 +537,25 @@ export const finalReading: DialogueStory = {
           text: 'Ти записуєш лише перевірені факти: коробка сімнадцять, затоплення, розрізнені аркуші. Поруч ставиш два знаки питання — біля авторства та попередження. Нора закриває нотатник. «Це залишиться між нами, доки Айріс сама не дізнається про журнал».',
         },
       ],
-      options: [{ id: 'aftercare-inventory-back', label: 'Покласти нотатник до шухляди', next: 'ledger-aftercare-end' }],
+      options: [
+        {
+          id: 'aftercare-inventory-back',
+          label: 'Покласти нотатник до шухляди',
+          next: 'ledger-aftercare-end',
+        },
+      ],
     },
     {
       id: 'ledger-aftercare-apology',
       speaker: 'Айріс',
       text: '«Я знаю, що ти не хотів образити». Айріс не відходить від вікна. «Але коли хтось говорить про мамині речі, мені не смішно». Вона дивиться на твою простягнуту чашку. «Дякую за чай. Поговоримо іншим разом».',
-      options: [{ id: 'aftercare-apology-back', label: 'Не вимагати негайного прощення', next: 'ledger-aftercare-end' }],
+      options: [
+        {
+          id: 'aftercare-apology-back',
+          label: 'Не вимагати негайного прощення',
+          next: 'ledger-aftercare-end',
+        },
+      ],
     },
     {
       id: 'ledger-aftercare-cleanup',
@@ -555,7 +567,13 @@ export const finalReading: DialogueStory = {
           text: 'Мара мовчки подає тобі рушник. «Айріс треба трохи часу», — каже вона, не дивлячись у бік вікна. Френк забирається в порожню коробку з-під печива. «А цьому часу не треба. Він уже пробачив усіх, хто давав йому їсти».',
         },
       ],
-      options: [{ id: 'aftercare-cleanup-back', label: 'Завершити прибирання', next: 'ledger-aftercare-end' }],
+      options: [
+        {
+          id: 'aftercare-cleanup-back',
+          label: 'Завершити прибирання',
+          next: 'ledger-aftercare-end',
+        },
+      ],
     },
     {
       id: 'ledger-aftercare-end',
@@ -745,9 +763,24 @@ export const finalReading: DialogueStory = {
       speaker: 'Нора',
       text: '«У нас є два уривки, різне чорнило, різні краї паперу й коробка, яку ніхто ще не перевірив». Нора розкладає аркуші на чистому столі. «Який висновок ти готовий записати без слова “можливо”?»',
       options: [
-        { id: 'reconstruction-same', label: '«Це дві версії одного фіналу»', next: 'chapter-reconstruction-check', grants: ['final_reconstruction_alternative_claim'] },
-        { id: 'reconstruction-order', label: '«Це послідовні сцени однієї історії»', next: 'chapter-reconstruction-check', grants: ['final_reconstruction_sequence_claim'] },
-        { id: 'reconstruction-unknown', label: '«Ми ще не знаємо, чи обидва аркуші належать їй»', next: 'chapter-reconstruction-check', grants: ['final_reconstruction_authorship_open'] },
+        {
+          id: 'reconstruction-same',
+          label: '«Це дві версії одного фіналу»',
+          next: 'chapter-reconstruction-check',
+          grants: ['final_reconstruction_alternative_claim'],
+        },
+        {
+          id: 'reconstruction-order',
+          label: '«Це послідовні сцени однієї історії»',
+          next: 'chapter-reconstruction-check',
+          grants: ['final_reconstruction_sequence_claim'],
+        },
+        {
+          id: 'reconstruction-unknown',
+          label: '«Ми ще не знаємо, чи обидва аркуші належать їй»',
+          next: 'chapter-reconstruction-check',
+          grants: ['final_reconstruction_authorship_open'],
+        },
       ],
     },
     {
@@ -769,8 +802,18 @@ export const finalReading: DialogueStory = {
         },
       ],
       options: [
-        { id: 'reconstruction-tell-iris', label: 'Розповісти Айріс про всі сумніви', next: 'chapter-reconstruction-result', grants: ['final_reconstruction_disclosed_uncertainty'] },
-        { id: 'reconstruction-keep-note', label: 'Залишити припущення в особистих нотатках', next: 'chapter-reconstruction-result', grants: ['final_reconstruction_notes_private'] },
+        {
+          id: 'reconstruction-tell-iris',
+          label: 'Розповісти Айріс про всі сумніви',
+          next: 'chapter-reconstruction-result',
+          grants: ['final_reconstruction_disclosed_uncertainty'],
+        },
+        {
+          id: 'reconstruction-keep-note',
+          label: 'Залишити припущення в особистих нотатках',
+          next: 'chapter-reconstruction-result',
+          grants: ['final_reconstruction_notes_private'],
+        },
       ],
     },
     {
@@ -784,7 +827,12 @@ export const finalReading: DialogueStory = {
         },
       ],
       options: [
-        { id: 'reconstruction-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_chapter_reconstruction_done'] },
+        {
+          id: 'reconstruction-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_chapter_reconstruction_done'],
+        },
       ],
     },
     {
@@ -802,9 +850,24 @@ export const finalReading: DialogueStory = {
         },
       ],
       options: [
-        { id: 'provenance-return', label: '«Віддаймо обидва аркуші тобі»', next: 'manuscript-provenance-result', grants: ['final_provenance_iris_custody'] },
-        { id: 'provenance-archive', label: '«Залишимо копії в книгарні, якщо ти не проти»', next: 'manuscript-provenance-result', grants: ['final_provenance_consent_archive'] },
-        { id: 'provenance-wait', label: '«Не вирішуймо, доки не перевіриш коробку»', next: 'manuscript-provenance-result', grants: ['final_provenance_wait_for_evidence'] },
+        {
+          id: 'provenance-return',
+          label: '«Віддаймо обидва аркуші тобі»',
+          next: 'manuscript-provenance-result',
+          grants: ['final_provenance_iris_custody'],
+        },
+        {
+          id: 'provenance-archive',
+          label: '«Залишимо копії в книгарні, якщо ти не проти»',
+          next: 'manuscript-provenance-result',
+          grants: ['final_provenance_consent_archive'],
+        },
+        {
+          id: 'provenance-wait',
+          label: '«Не вирішуймо, доки не перевіриш коробку»',
+          next: 'manuscript-provenance-result',
+          grants: ['final_provenance_wait_for_evidence'],
+        },
       ],
     },
     {
@@ -826,7 +889,12 @@ export const finalReading: DialogueStory = {
         },
       ],
       options: [
-        { id: 'provenance-finish', label: 'Повернутися до вечора історій', next: 'gathering', grants: ['final_manuscript_provenance_decided'] },
+        {
+          id: 'provenance-finish',
+          label: 'Повернутися до вечора історій',
+          next: 'gathering',
+          grants: ['final_manuscript_provenance_decided'],
+        },
       ],
     },
     {
@@ -834,34 +902,74 @@ export const finalReading: DialogueStory = {
       speaker: 'Айріс',
       text: '«Я збільшила фотографію. Поруч із сімкою видно ще одну риску. Це може бути одиниця, а може — подряпина на коробці». Айріс кладе поряд сторінку. «Ми шукаємо сімнадцять так старанно, що скоро побачимо його навіть у візерунку на чашці».',
       options: [
-        { id: 'workshop-evidence-compare', label: '«Порівняймо папір, а не цифри»', next: 'workshop-evidence-paper', grants: ['final_workshop_paper_compared'] },
-        { id: 'workshop-evidence-ask', label: '«Можна запитати реставраторку про коробки?»', next: 'workshop-evidence-owner', grants: ['final_workshop_permission_requested'] },
-        { id: 'workshop-evidence-keep', label: '«Не чіпаймо мамині речі сьогодні»', next: 'workshop-evidence-rest', grants: ['final_workshop_search_deferred'] },
+        {
+          id: 'workshop-evidence-compare',
+          label: '«Порівняймо папір, а не цифри»',
+          next: 'workshop-evidence-paper',
+          grants: ['final_workshop_paper_compared'],
+        },
+        {
+          id: 'workshop-evidence-ask',
+          label: '«Можна запитати реставраторку про коробки?»',
+          next: 'workshop-evidence-owner',
+          grants: ['final_workshop_permission_requested'],
+        },
+        {
+          id: 'workshop-evidence-keep',
+          label: '«Не чіпаймо мамині речі сьогодні»',
+          next: 'workshop-evidence-rest',
+          grants: ['final_workshop_search_deferred'],
+        },
       ],
     },
     {
       id: 'workshop-evidence-paper',
       speaker: 'Айріс',
       text: '«Ось цей край обрізаний вручну. А в другому уривку — рівний, машинний». Вона піднімає обидва аркуші до світла. «Це не доводить, хто їх написав. Але, можливо, їх навіть не друкували разом».',
-      options: [{ id: 'workshop-evidence-paper-back', label: '«Запишімо різницю»', next: 'workshop-evidence-end' }],
+      options: [
+        {
+          id: 'workshop-evidence-paper-back',
+          label: '«Запишімо різницю»',
+          next: 'workshop-evidence-end',
+        },
+      ],
     },
     {
       id: 'workshop-evidence-owner',
       speaker: 'Айріс',
       text: '«Запитати можна. Але не заходити туди без дозволу й не нишпорити в чужих речах». Вона ховає фотографію в альбом. «Я сама напишу реставраторці після вечора».',
-      options: [{ id: 'workshop-evidence-owner-back', label: '«Домовилися»', next: 'workshop-evidence-end' }],
+      options: [
+        {
+          id: 'workshop-evidence-owner-back',
+          label: '«Домовилися»',
+          next: 'workshop-evidence-end',
+        },
+      ],
     },
     {
       id: 'workshop-evidence-rest',
       speaker: 'Айріс',
       text: '«Дякую». Айріс підсуває тобі тарілку. «Тоді допоможи мені вирішити складніше питання: кому дістанеться остання булочка?»',
-      options: [{ id: 'workshop-evidence-rest-back', label: '«Френкові точно не можна»', next: 'workshop-evidence-end' }],
+      options: [
+        {
+          id: 'workshop-evidence-rest-back',
+          label: '«Френкові точно не можна»',
+          next: 'workshop-evidence-end',
+        },
+      ],
     },
     {
       id: 'workshop-evidence-end',
       speaker: 'Айріс',
       text: '«Завтра я подивлюся на все свіжими очима. А зараз хочу послухати, як Нора сперечається з пані Міллер про детективи».',
-      options: [{ id: 'workshop-evidence-finish', label: 'Повернутися до вечора історій', next: 'gathering', grants: ['final_workshop_evidence_reviewed'] }],
+      options: [
+        {
+          id: 'workshop-evidence-finish',
+          label: 'Повернутися до вечора історій',
+          next: 'gathering',
+          grants: ['final_workshop_evidence_reviewed'],
+        },
+      ],
     },
     {
       id: 'chapter-argument',
