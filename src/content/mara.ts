@@ -301,19 +301,19 @@ export const maraVisit: DialogueStory = {
       options: [
         {
           id: 'trust-forgive',
-          label: '«Можна пробачити й не повертатися»',
+          label: '«І після цього вона його пробачила?»',
           next: 'trust-forgive',
           grants: ['mara_discussed_forgiveness'],
         },
         {
           id: 'trust-change',
-          label: '«А якщо людина справді змінилася?»',
+          label: '«Може, він справді змінився за ці двісті сторінок?»',
           next: 'trust-change',
           grants: ['mara_discussed_change'],
         },
         {
           id: 'trust-quiet',
-          label: '«Можемо не говорити про це»',
+          label: '«Годі про цього хлопця. Як справи в пекарні?»',
           next: 'trust-respect',
           grants: ['mara_boundaries_respected'],
         },
@@ -348,7 +348,7 @@ export const maraVisit: DialogueStory = {
     {
       id: 'trust-respect',
       speaker: 'Мара',
-      text: 'Дякую. Дивна річ: коли тобі дозволяють мовчати, іноді хочеться сказати більше. Але сьогодні я краще розкажу про булочки.',
+      text: '«О, про пекарню я можу годинами». Мара зітхає. «Сем знову переплутав корицю з мускатним горіхом. Три дека довелося переробляти».',
       options: [
         { id: 'trust-respect-bakery', label: '«Домовилися. Що нового в пекарні?»', next: 'bakery' },
         { id: 'trust-respect-order', label: '«Тоді оберімо подарунок»', next: 'order' },
@@ -444,7 +444,7 @@ export const maraVisit: DialogueStory = {
     {
       id: 'mara-own-counter',
       speaker: 'Мара',
-      text: '«Ви говорите так, ніби сказати “ні” легко. А коли сусідка просить торт на ранок і каже, що тільки мені довіряє? Її довіра теж справжня. Не хочу вдавати, що чужі потреби — дрібниці».',
+      text: '«Сем знову просив підмінити його в неділю. Каже, що більше нікого немає». Мара зітхає. «А я вже купила книжку й домовилася з собою, що хоч раз дочитаю її до обіду».',
       options: [
         {
           id: 'mara-counter-care',
@@ -463,8 +463,8 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«Тоді почну з одного ранку. Просто скажу, що наступного четверга не беру додаткових замовлень. Якщо запитають чому — скажу, що хочу почитати».',
       options: [
-        { id: 'mara-choice-try', label: '«Це звучить як твій вибір»', next: 'mara-own-finish' },
-        { id: 'mara-choice-wait', label: '«І ти можеш змінити план»', next: 'mara-own-finish' },
+        { id: 'mara-choice-try', label: '«Сем переживе один ранок»', next: 'mara-own-finish' },
+        { id: 'mara-choice-wait', label: '«А яку книжку хочеш дочитати?»', next: 'mara-own-finish' },
       ],
     },
     {
