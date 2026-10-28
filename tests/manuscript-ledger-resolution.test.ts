@@ -55,8 +55,34 @@ describe('lost pages: Eleanor ledger resolution', () => {
     }
   });
 
+  it('links the two losses only when the player knows about the envelope', () => {
+    const plain = selectOption(
+      finalReading,
+      openGathering(['final_chapter_reconstruction_done']),
+      'ledger-resolution',
+    );
+    const plainEvidence = selectOption(finalReading, plain, 'ledger-ask-warning');
+    expect(availableOptions(finalReading, plainEvidence).map((item) => item.id)).not.toContain(
+      'ledger-letter-connection',
+    );
+    const known = selectOption(
+      finalReading,
+      openGathering(['final_chapter_reconstruction_done', 'saw_envelope']),
+      'ledger-resolution',
+    );
+    const evidence = selectOption(finalReading, known, 'ledger-ask-warning');
+    const connection = selectOption(finalReading, evidence, 'ledger-letter-connection');
+    expect(currentNode(finalReading, connection).text).toContain('Те саме');
+    const returned = selectOption(finalReading, connection, 'ledger-letter-connection-back');
+    expect(returned.flags).toContain('final_ledger_letter_connection_heard');
+    expect(availableOptions(finalReading, returned).map((item) => item.id)).not.toContain(
+      'ledger-letter-connection',
+    );
+    expect(seasonEnding({ flags: returned.flags }).epilogue).toContain('того самого затоплення');
+  });
+
   it('keeps each new scene within four visible choices', () => {
-    for (const id of ['ledger-resolution', 'ledger-evidence', 'ledger-outcome']) {
+    for (const id of ['ledger-resolution', 'ledger-evidence', 'ledger-letter-connection', 'ledger-outcome']) {
       const node = finalReading.nodes.find((item) => item.id === id);
       expect(node).toBeDefined();
       expect(node!.options.length).toBeLessThanOrEqual(4);
