@@ -354,5 +354,4 @@ describe('narrative conversation regression', () => {
     });
     expect(decodeSave(raw)).toBeNull();
   });
-
 });
