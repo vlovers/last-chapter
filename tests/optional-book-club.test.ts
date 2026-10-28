@@ -161,6 +161,23 @@ describe('optional day-three book club', () => {
     expect(archived).not.toContain('пошукати власника');
   });
 
+  it('keeps both manuscript choices mutually exclusive', () => {
+    const initial = startFifthDay({
+      ...startChapter(),
+      stage: 'day4-complete',
+      flags: ['quiet_evening_page_found', 'iris_quiet_page_discussed'],
+    });
+    const gathering = chooseChapterOption(initial, 'open');
+    const followup = chooseChapterOption(gathering, 'quiet-manuscript-followup');
+    const archived = chooseChapterOption(followup, 'quiet-manuscript-archive');
+    expect(availableOptions(finalReading, archived.dialogue).map((option) => option.id)).not.toContain(
+      'quiet-manuscript-return',
+    );
+    const returned = chooseChapterOption(archived, 'quiet-manuscript-result-back');
+    expect(returned.flags).toContain('final_quiet_manuscript_archived');
+    expect(returned.flags).not.toContain('final_quiet_manuscript_returned');
+  });
+
   it('persists the quiet evening and its completed checkpoint', () => {
     const evening = {
       ...startChapter(),
