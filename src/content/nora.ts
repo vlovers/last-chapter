@@ -279,7 +279,11 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«Напишу всі три роки й попрошу відвідувачів принести старі афіші». Нора посміхається. «Може, хтось нарешті розбере горище».',
       options: [
-        { id: 'nora-v3-accept', label: '«А раптом хтось принесе афішу?»', next: 'nora-v3-conversation-end' },
+        {
+          id: 'nora-v3-accept',
+          label: '«А раптом хтось принесе афішу?»',
+          next: 'nora-v3-conversation-end',
+        },
       ],
     },
     {
