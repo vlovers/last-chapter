@@ -246,6 +246,14 @@ export const finalReading: DialogueStory = {
           unless: ['final_chapter_evidence_reviewed'],
         },
         {
+          id: 'ledger-resolution',
+          label: 'Зіставити число сімнадцять зі старим журналом Елеонори',
+          next: 'ledger-resolution',
+          requires: ['final_chapter_reconstruction_done'],
+          unless: ['final_ledger_scene_complete'],
+          grants: ['final_ledger_resolved_17'],
+        },
+        {
           id: 'chapter-reconstruction',
           label: 'Спробувати відновити порядок зниклих сторінок',
           next: 'chapter-reconstruction',
@@ -414,6 +422,93 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до гостей',
           next: 'gathering',
           grants: ['final_chapter_evidence_reviewed'],
+        },
+      ],
+    },
+    {
+      id: 'ledger-resolution',
+      speaker: 'Елеонора',
+      text: 'Елеонора приносить журнал, який ти бачив під час розмови про затоплення. Папір пахне пилом, а кутик однієї сторінки злипся від води. «Ось. Коробка сімнадцять. Не майстерня — наша книгарня». Під номером написано: «Розрізнені аркуші. Сушити окремо. Не передавати до друку без згоди авторки». Елеонора торкається олівцевої сімнадцятки на знайденому аркуші. «Ці цифри ставила я».',
+      options: [
+        {
+          id: 'ledger-ask-warning',
+          label: '«Тоді хто написав попередження на звороті?»',
+          next: 'ledger-evidence',
+          grants: ['final_ledger_warning_questioned'],
+        },
+        {
+          id: 'ledger-ask-missing',
+          label: '«Як аркуш опинився між романами?»',
+          next: 'ledger-evidence',
+          grants: ['final_ledger_misfiling_questioned'],
+        },
+        {
+          id: 'ledger-ask-iris',
+          label: '«Чому ви не розповіли про це Айріс раніше?»',
+          next: 'ledger-evidence',
+          grants: ['final_ledger_eleanor_accountability'],
+        },
+      ],
+    },
+    {
+      id: 'ledger-evidence',
+      speaker: 'Елеонора',
+      text: '«Я складала врятоване після потопу по коробках. Не всі речі повернулися на свої місця. Не пам’ятаю, хто залишив запис на аркуші, але у журналі прохання авторки: нічого не віддавати до друку без її дозволу». Елеонора відсуває чашку. «Мені слід було зберегти список краще».',
+      textWhen: [
+        {
+          requires: ['final_ledger_warning_questioned'],
+          text: '«Ці слова на звороті — не мій почерк», — каже Елеонора. «Але в журналі є прохання авторки: не віддавати матеріали до друку без її дозволу. Можливо, йшлося саме про останню сторінку. Можливо, ні. Я не буду вигадувати».',
+        },
+        {
+          requires: ['final_ledger_misfiling_questioned'],
+          text: '«Коли книгарню відчинили після потопу, ми поспішали повернути книжки на полиці». Елеонора крутить олівець. «Сторінка могла застрягти між романами тоді. Але я не бачила, як це сталося. Я лише знаю, що коробка сімнадцять була тут, а не в майстерні».',
+        },
+        {
+          requires: ['final_ledger_eleanor_accountability'],
+          text: '«Я думала, все, що висохло, повернулося до власників». Елеонора не відводить очей. «Потім минуло сім років. Це не виправдання. Якщо Айріс захоче почути, я розповім їй сама. Але не проси її пробачити мене за твоїм розкладом».',
+        },
+      ],
+      options: [
+        {
+          id: 'ledger-tell-iris',
+          label: '«Айріс має побачити цей запис сьогодні»',
+          next: 'ledger-outcome',
+          grants: ['final_ledger_iris_told'],
+        },
+        {
+          id: 'ledger-ask-eleanor',
+          label: '«Поговоріть з Айріс самі, коли будете готові»',
+          next: 'ledger-outcome',
+          grants: ['final_ledger_eleanor_to_tell'],
+        },
+        {
+          id: 'ledger-private',
+          label: '«Поки залишмо журнал у книгарні»',
+          next: 'ledger-outcome',
+          grants: ['final_ledger_record_private'],
+        },
+      ],
+    },
+    {
+      id: 'ledger-outcome',
+      speaker: 'Айріс',
+      text: 'Айріс повільно читає запис. «Отже, сімнадцять — не дата й не номер коробки палітурника». Вона піднімає очі на Елеонору. «Мені потрібно подумати. І ні, зараз я не хочу, щоб усі дивилися на мене». Елеонора мовчки киває. Мара відсуває від них стільці, звільняючи трохи місця.',
+      textWhen: [
+        {
+          requires: ['final_ledger_eleanor_to_tell'],
+          text: 'Елеонора обережно закриває журнал. «Я сама поговорю з Айріс. Не посеред свята». Вона дивиться на двері, за якими чути сміх Мари. «Сімнадцять — це номер нашої коробки. Принаймні тепер ми знаємо, де шукати решту».',
+        },
+        {
+          requires: ['final_ledger_record_private'],
+          text: 'Елеонора ховає журнал до шухляди. «Не називаймо це кінцем справи. Я ще маю поговорити з Айріс». З іншого кінця кімнати Нора просить передати їй чай. Френк уже вмостився на журналі, наче охороняє знахідку.',
+        },
+      ],
+      options: [
+        {
+          id: 'ledger-finish',
+          label: 'Повернутися до спільного читання',
+          next: 'gathering',
+          grants: ['final_ledger_scene_complete'],
         },
       ],
     },
