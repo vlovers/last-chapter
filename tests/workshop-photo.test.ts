@@ -115,7 +115,9 @@ describe('workshop photograph: a fair false lead, not a second revelation', () =
 
   it('has valid graph links and no more than four choices per new node', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
-    for (const node of finalReading.nodes.filter((node) => node.id.startsWith('workshop-photo'))) {
+    for (const node of finalReading.nodes.filter((node) =>
+      node.id.startsWith('workshop-photo'),
+    )) {
       expect(node.options.length, node.id).toBeLessThanOrEqual(4);
     }
   });
