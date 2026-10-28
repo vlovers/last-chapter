@@ -42,12 +42,48 @@ describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
   });
 
   it.each([
-    ['tomorrow-shelf', 'tomorrow-shelf-argue', 'tomorrow-shelf-finish', 'final_bookshop_debate_shelf', 'сперечатися про фінали'],
-    ['tomorrow-shelf', 'tomorrow-shelf-surprise', 'tomorrow-shelf-finish', 'final_bookshop_surprise_shelf', 'книжка-сюрприз'],
-    ['tomorrow-cards', 'tomorrow-cards-window', 'tomorrow-cards-finish', 'final_bookshop_children_window', 'дитячі малюнки'],
-    ['tomorrow-cards', 'tomorrow-cards-box', 'tomorrow-cards-finish', 'final_bookshop_wish_box', 'скринька читацьких побажань'],
-    ['tomorrow-tea', 'tomorrow-tea-rest', 'tomorrow-tea-finish', 'final_bookshop_quiet_cup', 'чашку чаю'],
-    ['tomorrow-tea', 'tomorrow-tea-buns', 'tomorrow-tea-finish', 'final_bookshop_mara_recipe', 'рецепт булочок'],
+    [
+      'tomorrow-shelf',
+      'tomorrow-shelf-argue',
+      'tomorrow-shelf-finish',
+      'final_bookshop_debate_shelf',
+      'сперечатися про фінали',
+    ],
+    [
+      'tomorrow-shelf',
+      'tomorrow-shelf-surprise',
+      'tomorrow-shelf-finish',
+      'final_bookshop_surprise_shelf',
+      'книжка-сюрприз',
+    ],
+    [
+      'tomorrow-cards',
+      'tomorrow-cards-window',
+      'tomorrow-cards-finish',
+      'final_bookshop_children_window',
+      'дитячі малюнки',
+    ],
+    [
+      'tomorrow-cards',
+      'tomorrow-cards-box',
+      'tomorrow-cards-finish',
+      'final_bookshop_wish_box',
+      'скринька читацьких побажань',
+    ],
+    [
+      'tomorrow-tea',
+      'tomorrow-tea-rest',
+      'tomorrow-tea-finish',
+      'final_bookshop_quiet_cup',
+      'чашку чаю',
+    ],
+    [
+      'tomorrow-tea',
+      'tomorrow-tea-buns',
+      'tomorrow-tea-finish',
+      'final_bookshop_mara_recipe',
+      'рецепт булочок',
+    ],
   ])('persists %s / %s as a one-shot consequence', (entry, choice, finish, flag, epilogue) => {
     const scene = selectOption(finalReading, gathering(), 'bookshop-tomorrow');
     const branch = selectOption(finalReading, scene, entry);
@@ -99,7 +135,9 @@ describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
 
   it('validates every new node and limits each to four choices', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
-    for (const node of finalReading.nodes.filter((entry) => entry.id.startsWith('bookshop-tomorrow'))) {
+    for (const node of finalReading.nodes.filter((entry) =>
+      entry.id.startsWith('bookshop-tomorrow'),
+    )) {
       expect(node.options.length, node.id).toBeLessThanOrEqual(4);
     }
   });
