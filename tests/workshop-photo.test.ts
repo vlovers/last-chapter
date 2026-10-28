@@ -101,6 +101,22 @@ describe('workshop photograph: a fair false lead, not a second revelation', () =
     expect(done.flags).not.toContain('final_archive_iris_boundaries');
   });
 
+  it('keeps a corrected rumor separate from the evidence decision', () => {
+    const flags = [
+      ...prerequisites,
+      'final_miller_ledger_rumor_seeded',
+      'final_miller_rumor_corrected_publicly',
+    ];
+    const scene = selectOption(finalReading, gathering(flags), 'workshop-photo');
+    const compared = selectOption(finalReading, scene, 'photo-compare');
+    const unmarked = selectOption(finalReading, compared, 'photo-unmarked');
+    const done = selectOption(finalReading, unmarked, 'photo-result-finish');
+    const ending = seasonEnding({ flags: done.flags });
+    expect(ending.community).toContain('не почув виправлення');
+    expect(ending.epilogue).toContain('без нових підписів');
+    expect(done.flags).not.toContain('final_ledger_iris_told');
+  });
+
   it('persists a finished decision after a save/reload', () => {
     const scene = selectOption(finalReading, gathering(), 'workshop-photo');
     const asked = selectOption(finalReading, scene, 'photo-ask');
