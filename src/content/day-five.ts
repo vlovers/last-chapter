@@ -470,6 +470,13 @@ export const finalReading: DialogueStory = {
       ],
       options: [
         {
+          id: 'ledger-letter-connection',
+          label: '«Це те саме затоплення, через яке зник лист?»',
+          next: 'ledger-letter-connection',
+          requires: ['saw_envelope'],
+          unless: ['final_ledger_letter_connection_heard'],
+        },
+        {
           id: 'ledger-tell-iris',
           label: '«Айріс має побачити цей запис сьогодні»',
           next: 'ledger-outcome',
@@ -486,6 +493,19 @@ export const finalReading: DialogueStory = {
           label: '«Поки залишмо журнал у книгарні»',
           next: 'ledger-outcome',
           grants: ['final_ledger_record_private'],
+        },
+      ],
+    },
+    {
+      id: 'ledger-letter-connection',
+      speaker: 'Елеонора',
+      text: '«Те саме», — каже Елеонора. «Лист залишився в книжці, яку ми сховали від води. А аркуші сушили окремо, і я не повернула їх до папки». Вона дивиться на старий журнал. «Тоді здавалося: головне — врятувати папір. А кому він був потрібен, я навіть не запитала».',
+      options: [
+        {
+          id: 'ledger-letter-connection-back',
+          label: '«Два різні сліди одного вечора»',
+          next: 'ledger-evidence',
+          grants: ['final_ledger_letter_connection_heard'],
         },
       ],
     },
