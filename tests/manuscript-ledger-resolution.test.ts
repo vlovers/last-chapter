@@ -42,9 +42,14 @@ describe('lost pages: Eleanor ledger resolution', () => {
       const outcome = selectOption(finalReading, evidence, choice);
       const finished = selectOption(finalReading, outcome, 'ledger-finish');
       expect(finished.flags).toContain(flag);
-      expect(finished.flags.filter((item) => item.startsWith('final_ledger_iris_') ||
-        item === 'final_ledger_eleanor_to_tell' ||
-        item === 'final_ledger_record_private')).toEqual([flag]);
+      expect(
+        finished.flags.filter(
+          (item) =>
+            item.startsWith('final_ledger_iris_') ||
+            item === 'final_ledger_eleanor_to_tell' ||
+            item === 'final_ledger_record_private',
+        ),
+      ).toEqual([flag]);
       expect(availableOptions(finalReading, finished).map((item) => item.id)).not.toContain(
         'ledger-resolution',
       );
@@ -108,7 +113,14 @@ describe('lost pages: Eleanor ledger resolution', () => {
   });
 
   it('keeps each new scene within four visible choices', () => {
-    for (const id of ['ledger-resolution', 'ledger-evidence', 'ledger-letter-connection', 'ledger-iris-confrontation', 'ledger-iris-response', 'ledger-outcome']) {
+    for (const id of [
+      'ledger-resolution',
+      'ledger-evidence',
+      'ledger-letter-connection',
+      'ledger-iris-confrontation',
+      'ledger-iris-response',
+      'ledger-outcome',
+    ]) {
       const node = finalReading.nodes.find((item) => item.id === id);
       expect(node).toBeDefined();
       expect(node!.options.length).toBeLessThanOrEqual(4);
