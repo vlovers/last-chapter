@@ -291,10 +291,7 @@ describe('narrative conversation regression', () => {
 
   it('preserves the correct choice-dependent Nora callback after progress restoration', () => {
     const state: DialogueState = {
-      ...withFlags(finalReading, [
-        'nora_archive_ethics_discussed',
-        'nora_will_seek_consent',
-      ]),
+      ...withFlags(finalReading, ['nora_archive_ethics_discussed', 'nora_will_seek_consent']),
       node: 'gathering',
     };
     const callback = selectOption(finalReading, state, 'final-v3-nora-option');
@@ -308,5 +305,4 @@ describe('narrative conversation regression', () => {
       'final-v3-nora-back',
     );
   });
-
 });
