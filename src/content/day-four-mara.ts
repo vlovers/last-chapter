@@ -117,7 +117,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'work-back',
-          label: '«То що читатимеш у неділю?»',
+          label: '«То яку книжку взяла на неділю?»',
           next: 'greet',
           grants: ['mara_supported_independence'],
         },
@@ -152,7 +152,7 @@ export const maraDecision: DialogueStory = {
     {
       id: 'station',
       speaker: 'Мара',
-      text: '«Я сховала в книжці квиток із нашої першої спільної поїздки. Лео шукав його минулого тижня й перевернув усю шухляду». Мара сміється. «Тільки не кажи йому!»',
+      text: '«Я сховала в книжці копію квитка з нашої першої спільної поїздки. Оригінал у Лео, він досі зберігає його в шухляді». Мара сміється. «Тільки не кажи йому про сюрприз!»',
       options: [
         {
           id: 'station-back',
@@ -182,7 +182,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'letters-back',
-          label: '«А який розділ він прочитає першим?»',
+          label: '«Він і справді прочитає її за ніч?»',
           next: 'greet',
           grants: ['mara_gift_encouraged'],
         },
@@ -191,11 +191,11 @@ export const maraDecision: DialogueStory = {
     {
       id: 'remember-trust',
       speaker: 'Мара',
-      text: '«Пам’ятаю той роман. У фіналі він приніс квіти, а вона одразу погодилася на весілля». Мара пирхає. «Я досі хочу знати, куди поділася її подруга, яка його терпіти не могла».',
+      text: '«Ще й як пам’ятаю. Він приніс квіти, а вона одразу погодилася на весілля». Мара пирхає. «Я досі хочу знати, куди поділася її подруга, яка його терпіти не могла».',
       options: [
         {
           id: 'remember-trust-back',
-          label: '«А ти вже вибрала, де поставиш столик?»',
+          label: '«І ти досі сердишся на той фінал?»',
           next: 'greet',
           grants: ['mara_day_four_reflected'],
         },
@@ -208,7 +208,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'future-back',
-          label: '«А булочки для столика вже придумала?»',
+          label: '«А що подаватимеш до кави за тим столиком?»',
           next: 'greet',
           grants: ['mara_future_supported'],
         },
