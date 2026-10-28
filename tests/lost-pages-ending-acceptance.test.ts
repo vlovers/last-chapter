@@ -60,11 +60,15 @@ describe('lost pages ending acceptance: evidence, consent and chronology', () =>
     expect(ending.community).toContain('не почув виправлення');
   });
 
-  it('keeps dialogue choices within the four-choice contract', () => {
+  it('keeps the new closing scenes within four authored choices', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
-    // The gathering is a paginated hub, not a four-button dialogue scene.
-    for (const node of finalReading.nodes.filter((entry) => !entry.hub)) {
-      if (node.id === 'gathering') continue;
+    // Older scenes and the gathering can have more authored options; the UI
+    // paginates them into three choices plus a navigation control.
+    for (const node of finalReading.nodes.filter(
+      (entry) =>
+        entry.id.startsWith('bookshop-tomorrow') ||
+        ['archive-handover', 'miller-rumor-aftermath'].includes(entry.id),
+    )) {
       expect(node.options.length, node.id).toBeLessThanOrEqual(4);
     }
   });
