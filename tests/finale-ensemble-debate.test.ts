@@ -4,9 +4,9 @@ import { availableOptions, currentNode, selectOption, startDialogue } from '../s
 
 describe('Optional fifth-day ensemble debate', () => {
   it.each([
-    ['shared-table-consent', 'final_shared_table_consent', 'не зараз'],
+    ['shared-table-consent', 'final_shared_table_consent', 'не сьогодні'],
     ['shared-table-accountability', 'final_shared_table_accountability', 'помилилася'],
-    ['shared-table-uncertainty', 'final_shared_table_uncertainty', 'прогалини'],
+    ['shared-table-uncertainty', 'final_shared_table_uncertainty', 'афіші старого кінотеатру'],
   ])('preserves distinct consequence for %s', (choice, flag, fragment) => {
     const start = startDialogue(finalReading);
     const gathering = selectOption(finalReading, start, 'open');
