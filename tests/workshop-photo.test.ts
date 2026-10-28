@@ -10,10 +10,7 @@ import {
 import { seasonEnding } from '../src/game/endings';
 import { decodeSave, encodeSave } from '../src/game/save';
 
-const prerequisites = [
-  'final_ledger_scene_complete',
-  'final_manuscript_provenance_decided',
-];
+const prerequisites = ['final_ledger_scene_complete', 'final_manuscript_provenance_decided'];
 
 function gathering(flags: string[] = [...prerequisites]) {
   return selectOption(finalReading, { ...startDialogue(finalReading), flags }, 'open');
@@ -39,11 +36,41 @@ describe('workshop photograph: a fair false lead, not a second revelation', () =
   });
 
   it.each([
-    ['photo-compare', 'photo-annotate', 'photo-result-finish', 'final_workshop_photo_sources_separated', 'два окремі факти'],
-    ['photo-compare', 'photo-unmarked', 'photo-result-finish', 'final_workshop_photo_unmarked', 'без нових підписів'],
-    ['photo-ask', 'photo-admit', 'photo-result-finish', 'final_workshop_photo_nora_corrected', 'виправила помилкову'],
-    ['photo-ask', 'photo-keep-joke', 'photo-result-finish', 'final_workshop_photo_private_joke', 'між собою'],
-    ['photo-leave', 'photo-leave-finish', '', 'final_workshop_photo_deferred', 'відклали до іншого дня'],
+    [
+      'photo-compare',
+      'photo-annotate',
+      'photo-result-finish',
+      'final_workshop_photo_sources_separated',
+      'два окремі факти',
+    ],
+    [
+      'photo-compare',
+      'photo-unmarked',
+      'photo-result-finish',
+      'final_workshop_photo_unmarked',
+      'без нових підписів',
+    ],
+    [
+      'photo-ask',
+      'photo-admit',
+      'photo-result-finish',
+      'final_workshop_photo_nora_corrected',
+      'виправила помилкову',
+    ],
+    [
+      'photo-ask',
+      'photo-keep-joke',
+      'photo-result-finish',
+      'final_workshop_photo_private_joke',
+      'між собою',
+    ],
+    [
+      'photo-leave',
+      'photo-leave-finish',
+      '',
+      'final_workshop_photo_deferred',
+      'відклали до іншого дня',
+    ],
   ])('keeps the %s / %s outcome exclusive and permanent', (entry, choice, finish, flag, text) => {
     const scene = selectOption(finalReading, gathering(), 'workshop-photo');
     const branch = selectOption(finalReading, scene, entry);
