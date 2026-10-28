@@ -35,7 +35,7 @@ describe('manuscript finale continuity', () => {
     const opening = selectOption(finalReading, { ...startDialogue(finalReading), flags: [...clueFlags, 'final_missing_chapter_discussed'] }, 'open');
     const argument = selectOption(finalReading, opening, 'chapter-argument');
     for (const [choice, flag, expected] of [
-      ['chapter-argument-mara', 'final_chapter_mara_supported', 'команда сніданку'],
+      ['chapter-argument-mara', 'final_chapter_mara_supported', 'Команда сніданку'],
       ['chapter-argument-iris', 'final_chapter_iris_supported', 'От бачиш'],
       ['chapter-argument-neither', 'final_chapter_versions_questioned', 'не фінал'],
     ]) {
