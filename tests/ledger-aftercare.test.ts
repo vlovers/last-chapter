@@ -38,7 +38,11 @@ describe('ledger aftermath', () => {
   });
 
   it('allows an apology only when the joke hurt Iris without forcing forgiveness', () => {
-    const ordinary = selectOption(finalReading, openWith(['final_ledger_scene_complete']), 'ledger-aftercare');
+    const ordinary = selectOption(
+      finalReading,
+      openWith(['final_ledger_scene_complete']),
+      'ledger-aftercare',
+    );
     expect(availableOptions(finalReading, ordinary).map((option) => option.id)).not.toContain(
       'aftercare-apologize',
     );
