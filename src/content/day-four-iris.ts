@@ -30,6 +30,13 @@ export const irisDecision: DialogueStory = {
           unless: ['iris_paper_star_discussed'],
         },
         {
+          id: 'margin-note',
+          label: '«На звороті аркуша є запис і число сімнадцять»',
+          next: 'margin-note',
+          requires: ['quiet_evening_margin_warning_seen'],
+          unless: ['iris_margin_note_discussed'],
+        },
+        {
           id: 'quiet-page',
           label: '«Учора в книгарні знайшовся аркуш рукопису»',
           next: 'quiet-page',
@@ -225,6 +232,62 @@ export const irisDecision: DialogueStory = {
           label: 'Повернутися до розмови',
           next: 'welcome',
           grants: ['iris_paper_star_discussed'],
+        },
+      ],
+    },
+    {
+      id: 'margin-note',
+      speaker: 'Айріс',
+      text: '«Сімнадцять?» Айріс забирає руку з альбому. «Мама нумерувала коробки з чернетками. Але це може бути будь-що. Де ти знайшов напис?»',
+      options: [
+        {
+          id: 'margin-box',
+          label: '«Може, йдеться про коробку з рукописами?»',
+          next: 'margin-box',
+          grants: ['iris_margin_box_theory'],
+        },
+        {
+          id: 'margin-date',
+          label: '«Може, це дата?»',
+          next: 'margin-date',
+          grants: ['iris_margin_date_theory'],
+        },
+      ],
+    },
+    {
+      id: 'margin-box',
+      speaker: 'Айріс',
+      text: '«Колись коробки стояли в майстерні палітурника. Я пам’ятаю одну з синьою стрічкою, але не номер». Вона зітхає. «Не хочу, щоб ти через мій здогад перевернув чужу майстерню».',
+      options: [
+        {
+          id: 'margin-box-back',
+          label: '«Спершу запитаємо власника»',
+          next: 'margin-note-end',
+        },
+      ],
+    },
+    {
+      id: 'margin-date',
+      speaker: 'Айріс',
+      text: '«Сімнадцятого ми святкували день народження бабусі. А ще це може бути номер сторінки». Айріс усміхається. «Бачиш? Я вже вигадала три пояснення й жодного не довела».',
+      options: [
+        {
+          id: 'margin-date-back',
+          label: '«Занотуємо всі версії»',
+          next: 'margin-note-end',
+        },
+      ],
+    },
+    {
+      id: 'margin-note-end',
+      speaker: 'Айріс',
+      text: '«Домовилися. І поки нікому не показуй напис без мого дозволу». Френк тягнеться до олівця, і Айріс встигає його перехопити.',
+      options: [
+        {
+          id: 'margin-note-return',
+          label: 'Повернутися до розмови',
+          next: 'welcome',
+          grants: ['iris_margin_note_discussed'],
         },
       ],
     },
