@@ -246,6 +246,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_chapter_evidence_reviewed'],
         },
         {
+          id: 'chapter-reconstruction',
+          label: 'Спробувати відновити порядок зниклих сторінок',
+          next: 'chapter-reconstruction',
+          requires: ['final_chapter_evidence_reviewed', 'final_workshop_evidence_reviewed'],
+          unless: ['final_chapter_reconstruction_done'],
+        },
+        {
           id: 'manuscript-provenance',
           label: 'Запитати Айріс, кому тепер належать знайдені сторінки',
           next: 'manuscript-provenance',
@@ -408,6 +415,53 @@ export const finalReading: DialogueStory = {
           next: 'gathering',
           grants: ['final_chapter_evidence_reviewed'],
         },
+      ],
+    },
+    {
+      id: 'chapter-reconstruction',
+      speaker: 'Нора',
+      text: '«У нас є два уривки, різне чорнило, різні краї паперу й коробка, яку ніхто ще не перевірив». Нора розкладає аркуші на чистому столі. «Який висновок ти готовий записати без слова “можливо”?»',
+      options: [
+        { id: 'reconstruction-same', label: '«Це дві версії одного фіналу»', next: 'chapter-reconstruction-check', grants: ['final_reconstruction_alternative_claim'] },
+        { id: 'reconstruction-order', label: '«Це послідовні сцени однієї історії»', next: 'chapter-reconstruction-check', grants: ['final_reconstruction_sequence_claim'] },
+        { id: 'reconstruction-unknown', label: '«Ми ще не знаємо, чи обидва аркуші належать їй»', next: 'chapter-reconstruction-check', grants: ['final_reconstruction_authorship_open'] },
+      ],
+    },
+    {
+      id: 'chapter-reconstruction-check',
+      speaker: 'Нора',
+      text: '«Це гарна версія. Але версія — не доказ». Нора показує на другий аркуш. «Поки не побачимо коробку й не звіримо почерк, ми не можемо чесно поставити ці сторінки поруч як оригінальний фінал».',
+      textWhen: [
+        {
+          requires: ['final_reconstruction_alternative_claim'],
+          text: '«Може бути», — каже Нора. «Та різний папір не доводить, що це дві версії. А однакове вікно не доводить, що обидві сцени писала та сама людина».',
+        },
+        {
+          requires: ['final_reconstruction_sequence_claim'],
+          text: '«Тоді між ними бракує переходу», — каже Нора. «Ми можемо його уявити. Але не маємо права підкладати вигаданий аркуш до справжніх».',
+        },
+        {
+          requires: ['final_reconstruction_authorship_open'],
+          text: '«Саме це й можемо сказати напевно: авторство другого аркуша не встановлено». Нора закриває блокнот. «Мені теж хочеться відповіді. Але не такої, яку ми самі домалювали».',
+        },
+      ],
+      options: [
+        { id: 'reconstruction-tell-iris', label: 'Розповісти Айріс про всі сумніви', next: 'chapter-reconstruction-result', grants: ['final_reconstruction_disclosed_uncertainty'] },
+        { id: 'reconstruction-keep-note', label: 'Залишити припущення в особистих нотатках', next: 'chapter-reconstruction-result', grants: ['final_reconstruction_notes_private'] },
+      ],
+    },
+    {
+      id: 'chapter-reconstruction-result',
+      speaker: 'Айріс',
+      text: '«Дякую, що не назвав припущення відповіддю». Айріс дивиться на аркуші. «Завтра я спробую з’ясувати, хто їх писав. А сьогодні хочу, щоб книжка хоча б трохи залишилася книжкою».',
+      textWhen: [
+        {
+          requires: ['final_reconstruction_notes_private'],
+          text: 'Айріс помічає, як ти закриваєш нотатник. «Знову розгадуєте щось із Норою?» — усміхається вона. «Залиште хоч одну загадку для наступної зустрічі».',
+        },
+      ],
+      options: [
+        { id: 'reconstruction-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_chapter_reconstruction_done'] },
       ],
     },
     {
