@@ -682,7 +682,7 @@ export const finalReading: DialogueStory = {
       options: [
         {
           id: 'rumor-miller-listen',
-          label: '«А що ви робитимете, коли знову почуєте цю історію?»',
+          label: '«А якщо пані Міллер знову почне розповідати це сусідам?»',
           next: 'rumor-miller-answer',
         },
         {
@@ -1044,17 +1044,17 @@ export const finalReading: DialogueStory = {
       options: [
         {
           id: 'bookseller-truth',
-          label: '«Як говорити правду, не забираючи чужого права мовчати?»',
+          label: '«А Томас знає, що про нього розповідали?»',
           next: 'bookseller-truth',
         },
         {
           id: 'bookseller-care',
-          label: '«Як бути поруч і не вирішувати за інших?»',
+          label: '«Мара вже поговорила з Лео про той квиток?»',
           next: 'bookseller-care',
         },
         {
           id: 'bookseller-change',
-          label: '«Як зберегти важливе, не боячись змін?»',
+          label: '«Елеонора вже бачила нові полиці біля вікна?»',
           next: 'bookseller-change',
         },
       ],
