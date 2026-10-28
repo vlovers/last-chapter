@@ -14,8 +14,8 @@ describe('Mara and Leo share consequences across character arcs', () => {
       'mara_day_four_named_own_needs',
       'leo_day_four_chose_honesty',
     );
-    expect(text).toContain('Ми з Лео поговорили');
-    expect(text).toContain('чого потребую');
+    expect(text).toContain('Ми з Лео нарешті поговорили про той квиток');
+    expect(text).toContain('перевернули половину квартири');
   });
 
   it('lets Leo recognize Mara boundaries without deciding for her', () => {
@@ -24,8 +24,8 @@ describe('Mara and Leo share consequences across character arcs', () => {
       'leo_day_four_chose_honesty',
       'mara_day_four_named_own_needs',
     );
-    expect(text).toContain('власне');
-    expect(text).toContain('замість вгадувати');
+    expect(text).toContain('просто поснідати вдома');
+    expect(text).toContain('зроблю млинці');
   });
 
   it('does not reveal the mutual outcome when Mara only chose time for herself', () => {
