@@ -446,5 +446,4 @@ describe('narrative conversation regression', () => {
     };
     expect(() => chooseChapterOption(state, 'open')).toThrow('Chapter segment completed');
   });
-
 });
