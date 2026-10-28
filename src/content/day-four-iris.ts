@@ -183,8 +183,17 @@ export const irisDecision: DialogueStory = {
       speaker: 'Айріс',
       text: '«У майстерні? Там колись працював палітурник. Мама носила йому рукописи, коли боялася зіпсувати сторінки степлером». Айріс відсуває чашку. «А зірки ми вирізали разом. Тільки наші були з обгорток від цукерок».',
       options: [
-        { id: 'quiet-star-ask', label: '«Може, хтось досі користується майстернею?»', next: 'quiet-star-memory', grants: ['iris_paper_star_workshop_questioned'] },
-        { id: 'quiet-star-joke', label: '«Френк вважає, що це його нова територія»', next: 'quiet-star-memory' },
+        {
+          id: 'quiet-star-ask',
+          label: '«Може, хтось досі користується майстернею?»',
+          next: 'quiet-star-memory',
+          grants: ['iris_paper_star_workshop_questioned'],
+        },
+        {
+          id: 'quiet-star-joke',
+          label: '«Френк вважає, що це його нова територія»',
+          next: 'quiet-star-memory',
+        },
       ],
     },
     {
@@ -192,15 +201,32 @@ export const irisDecision: DialogueStory = {
       speaker: 'Айріс',
       text: '«Палітурник помер давно. Ключі мала його сестра, але я не бачила її років десять». Айріс усміхається, коли Френк намагається залізти в її сумку. «Я не хочу бігти туди з ліхтарем. Можемо просто запитати, чи майстерню хтось орендує».',
       options: [
-        { id: 'quiet-star-inquire', label: '«Запитаю про майстерню, не згадуючи твою маму»', next: 'quiet-star-result', grants: ['iris_workshop_discreet_inquiry'] },
-        { id: 'quiet-star-wait', label: '«Добре, не будемо поспішати»', next: 'quiet-star-result', grants: ['iris_workshop_left_uninvestigated'] },
+        {
+          id: 'quiet-star-inquire',
+          label: '«Запитаю про майстерню, не згадуючи твою маму»',
+          next: 'quiet-star-result',
+          grants: ['iris_workshop_discreet_inquiry'],
+        },
+        {
+          id: 'quiet-star-wait',
+          label: '«Добре, не будемо поспішати»',
+          next: 'quiet-star-result',
+          grants: ['iris_workshop_left_uninvestigated'],
+        },
       ],
     },
     {
       id: 'quiet-star-result',
       speaker: 'Айріс',
       text: '«Дякую. Якщо там справді хтось працює, я б хотіла побачити старі палітурки. Не обов’язково сьогодні». Вона забирає Френка зі своєї сумки й повертається до альбому.',
-      options: [{ id: 'quiet-star-back', label: 'Повернутися до розмови', next: 'welcome', grants: ['iris_paper_star_discussed'] }],
+      options: [
+        {
+          id: 'quiet-star-back',
+          label: 'Повернутися до розмови',
+          next: 'welcome',
+          grants: ['iris_paper_star_discussed'],
+        },
+      ],
     },
     {
       id: 'quiet-page',
