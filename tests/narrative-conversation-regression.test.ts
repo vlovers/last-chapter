@@ -219,4 +219,94 @@ describe('narrative conversation regression', () => {
     expect(onlyRumor.text).toContain('Томасом');
     expect(both.text).not.toBe(onlyRumor.text);
   });
+  it('completes the sealed-letter route and removes it from the gathering', () => {
+    const state: DialogueState = {
+      ...withFlags(finalReading, ['saw_envelope']),
+      node: 'gathering',
+    };
+    const after = ['letter', 'wait', 'wait-back'].reduce(
+      (progress, option) => selectOption(finalReading, progress, option),
+      state,
+    );
+    expect(after.node).toBe('gathering');
+    expect(after.flags).toContain('final_letter_kept_private');
+    expect(availableOptions(finalReading, after).map((option) => option.id)).not.toContain(
+      'letter',
+    );
+  });
+
+  it('discloses a letter breach without silently granting Iris forgiveness', () => {
+    const state: DialogueState = {
+      ...withFlags(finalReading, ['saw_envelope', 'opened_private_letter']),
+      node: 'gathering',
+    };
+    const after = ['letter', 'admit-breach-now', 'admit-breach-now-back'].reduce(
+      (progress, option) => selectOption(finalReading, progress, option),
+      state,
+    );
+    expect(after.flags).toContain('final_letter_breach_disclosed');
+    expect(after.flags).toContain('final_accepted_consequences');
+    expect(after.flags).not.toContain('final_mutual_conversation');
+    expect(availableOptions(finalReading, after).map((option) => option.id)).not.toContain(
+      'letter',
+    );
+  });
+
+  it('keeps the rumor repair and privacy routes as distinct consequences', () => {
+    const gathering: DialogueState = {
+      ...startDialogue(finalReading),
+      node: 'gathering',
+    };
+    const apology = ['rumor', 'rumor-apology', 'rumor-apology-back'].reduce(
+      (state, option) => selectOption(finalReading, state, option),
+      gathering,
+    );
+    const privacy = ['rumor', 'rumor-respect', 'rumor-respect-back'].reduce(
+      (state, option) => selectOption(finalReading, state, option),
+      gathering,
+    );
+    expect(apology.flags).toContain('final_repaired_rumor');
+    expect(apology.flags).not.toContain('final_respected_privacy');
+    expect(privacy.flags).toContain('final_respected_privacy');
+    expect(privacy.flags).not.toContain('final_repaired_rumor');
+    expect(availableOptions(finalReading, apology).map((option) => option.id)).not.toContain(
+      'rumor',
+    );
+  });
+
+  it('does not replay a completed Mara callback after returning to the gathering', () => {
+    const state: DialogueState = {
+      ...withFlags(finalReading, ['mara_own_morning_heard']),
+      node: 'gathering',
+    };
+    const after = ['final-v3-mara-option', 'final-v3-mara-back'].reduce(
+      (progress, option) => selectOption(finalReading, progress, option),
+      state,
+    );
+    expect(after.flags).toContain('final_v3_mara_heard');
+    expect(availableOptions(finalReading, after).map((option) => option.id)).not.toContain(
+      'final-v3-mara-option',
+    );
+  });
+
+  it('preserves the correct choice-dependent Nora callback after progress restoration', () => {
+    const state: DialogueState = {
+      ...withFlags(finalReading, [
+        'nora_archive_ethics_discussed',
+        'nora_will_seek_consent',
+      ]),
+      node: 'gathering',
+    };
+    const callback = selectOption(finalReading, state, 'final-v3-nora-option');
+    const legacy: DialogueState = {
+      node: callback.node,
+      flags: callback.flags,
+      history: callback.history,
+    };
+    expect(currentNode(finalReading, legacy).text).toContain('власниці');
+    expect(availableOptions(finalReading, legacy).map((option) => option.id)).toContain(
+      'final-v3-nora-back',
+    );
+  });
+
 });
