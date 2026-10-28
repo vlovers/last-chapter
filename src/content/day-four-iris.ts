@@ -48,17 +48,17 @@ export const irisDecision: DialogueStory = {
     {
       id: 'iris-boundaries',
       speaker: 'Айріс',
-      text: '«Усі кажуть: нарешті ти вдома. Наче це зобов’язання. А я сьогодні вперше зайшла сюди без думки, що мушу комусь довести, чому повернулася».',
+      text: '«Пані Міллер уже тричі запитала, коли я нарешті розпакую валізу». Айріс стукає олівцем по столу. «Я ще навіть не вирішила, де купити зубну пасту».',
       options: [
         {
           id: 'iris-boundaries-stay',
-          label: '«Можна любити місто й не обіцяти залишитися назавжди»',
+          label: '«Може, вона просто скучила?»',
           next: 'iris-boundaries-choice',
           grants: ['iris_day_four_respected_freedom'],
         },
         {
           id: 'iris-boundaries-belong',
-          label: '«Можна бути вдома, навіть коли ще не знаєш, де твоє місце»',
+          label: '«Тебе більше дратує питання чи сама валіза?»',
           next: 'iris-boundaries-choice',
           grants: ['iris_day_four_supported_belonging'],
         },
@@ -67,21 +67,50 @@ export const irisDecision: DialogueStory = {
     {
       id: 'iris-boundaries-choice',
       speaker: 'Айріс',
-      text: '«Мені бракувало саме цього: розмови, після якої не потрібно одразу ухвалювати рішення». Вона відкриває альбом на чистій сторінці.',
+      text: '«І те, й інше». Вона відсуває альбом. «Вибач. Ти тут ні до чого. Просто сьогодні кожен другий знає, що мені робити далі».',
       textWhen: [
         {
           requires: ['iris_day_four_respected_freedom'],
-          text: '«Я можу поїхати ще раз. І це не зробить моє повернення неправдою. Дякую, що не називаєш свободу зрадою».',
+          text: '«Може, й скучила. Але це не означає, що їй можна розкладати мої речі по шафах». Айріс зітхає. «Ти теж вважаєш, що я знову втечу?»',
         },
         {
           requires: ['iris_day_four_supported_belonging'],
-          text: '«Мабуть, дім — це місце, де мені дозволено сумніватися. Дякую, що не вимагаєш від мене певності».',
+          text: '«Валіза хоча б мовчить». Айріс сміється, але швидко стихає. «Якщо я її розпакую, всі вирішать, що я залишаюся. А якщо ні — що збираюся втекти».',
+        },
+      ],
+      options: [
+        {
+          id: 'iris-boundaries-followup-honest',
+          label: '«Не знаю. Ти сама хочеш залишитися?»',
+          next: 'iris-boundaries-followup',
+          grants: ['iris_day_four_boundary_asked_directly'],
+        },
+        {
+          id: 'iris-boundaries-followup-joke',
+          label: '«Можеш для початку купити зубну пасту»',
+          next: 'iris-boundaries-followup',
+          grants: ['iris_day_four_boundary_joked'],
+        },
+      ],
+    },
+    {
+      id: 'iris-boundaries-followup',
+      speaker: 'Айріс',
+      text: '«Оце вже схоже на план». Вона записує щось на полях альбому. «Зубна паста, кава, а потім — світові рішення. Саме в такому порядку».',
+      textWhen: [
+        {
+          requires: ['iris_day_four_boundary_asked_directly'],
+          text: '«Сьогодні — так. А за місяць не знаю». Айріс дивиться на тебе. «Тільки не розповідай пані Міллер, що я сказала слово “сьогодні”. Вона вже принесе мені ключі від запасної кімнати».',
+        },
+        {
+          requires: ['iris_day_four_boundary_joked'],
+          text: 'Айріс нарешті сміється по-справжньому. «Гаразд. Але якщо в крамниці лише м’ятна, я знову поїду». Вона ховає олівець за вухо.',
         },
       ],
       options: [
         {
           id: 'iris-boundaries-back',
-          label: 'Повернутися до розмови',
+          label: '«Гаразд, не затримуватиму тебе»',
           next: 'welcome',
           grants: ['iris_day_four_boundary_heard'],
         },
