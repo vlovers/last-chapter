@@ -246,6 +246,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_chapter_evidence_reviewed'],
         },
         {
+          id: 'miller-ledger-gossip',
+          label: 'Поговорити з пані Міллер, яка помітила старий журнал',
+          next: 'miller-ledger-gossip',
+          requires: ['final_ledger_scene_complete', 'final_ledger_iris_told'],
+          unless: ['final_miller_ledger_conversation_done'],
+        },
+        {
           id: 'ledger-aftercare',
           label: 'Залишитися після розмови про коробку сімнадцять',
           next: 'ledger-aftercare',
@@ -429,6 +436,58 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до гостей',
           next: 'gathering',
           grants: ['final_chapter_evidence_reviewed'],
+        },
+      ],
+    },
+    {
+      id: 'miller-ledger-gossip',
+      speaker: 'Пані Міллер',
+      text: '«Я не підслуховувала», — каже пані Міллер, навіть не привітавшись. «Просто бачила, як Елеонора принесла журнал, а Айріс пішла до вікна. І раптом усі зробили вигляд, що говорять про погоду». Вона ставить чашку на прилавок. «Щось знайшли?»',
+      options: [
+        {
+          id: 'miller-ledger-boundary',
+          label: '«Це справа Айріс. Запитайте її, якщо вона сама захоче»',
+          next: 'miller-ledger-response',
+          grants: ['final_miller_ledger_boundary'],
+        },
+        {
+          id: 'miller-ledger-tease',
+          label: '«Може, знайшли зниклий фінал. Тільки це між нами»',
+          next: 'miller-ledger-response',
+          grants: ['final_miller_ledger_rumor_seeded'],
+        },
+        {
+          id: 'miller-ledger-memory',
+          label: '«Ви пам’ятаєте, як книгарню затопило?»',
+          next: 'miller-ledger-response',
+          grants: ['final_miller_ledger_flood_memory'],
+        },
+      ],
+    },
+    {
+      id: 'miller-ledger-response',
+      speaker: 'Пані Міллер',
+      text: '«То й не треба було загадково перешіптуватися біля каси». Вона поправляє шарф. «Добре, не питатиму. Але книжку, яку я принесла, ви мені все одно запишіть».',
+      textWhen: [
+        {
+          requires: ['final_miller_ledger_boundary'],
+          text: '«Могли б просто сказати, що не хочете говорити». Пані Міллер ображено випрямляє спину. За мить додає: «Тоді порадьте хоч нормальний детектив. Без тих фіналів, де винен садівник».',
+        },
+        {
+          requires: ['final_miller_ledger_rumor_seeded'],
+          text: '«Між нами, звісно». Пані Міллер вже повертається до Нори: «Уявляєте, у них, здається, знайшовся фінал старого роману!» Нора піднімає голову. «Ви самі його читали?» — «Ні, але мені сказали». Ти розумієш, що зупинити цю розмову буде непросто.',
+        },
+        {
+          requires: ['final_miller_ledger_flood_memory'],
+          text: '«Ще б пак. Я тоді принесла відро й дві ковдри. А Елеонора сказала, що відра в нас уже є, зате потрібні сухі рушники». Пані Міллер знизує плечима. «Хто куди клав сторінки, не пам’ятаю. Я більше рятувала чайник».',
+        },
+      ],
+      options: [
+        {
+          id: 'miller-ledger-back',
+          label: 'Повернутися до вечора читання',
+          next: 'gathering',
+          grants: ['final_miller_ledger_conversation_done'],
         },
       ],
     },
