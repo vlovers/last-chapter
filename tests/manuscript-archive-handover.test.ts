@@ -114,6 +114,26 @@ describe('lost pages: archive handover', () => {
     expect(seasonEnding({ flags: finished.flags }).epilogue).toContain('Після чутки');
   });
 
+  it('does not restore archive access just because Miller corrected the rumor', () => {
+    const handover = selectOption(
+      finalReading,
+      openWith([
+        ledgerDone,
+        custodyDone,
+        'final_ledger_iris_told',
+        'final_miller_ledger_rumor_seeded',
+        'final_miller_rumor_corrected_publicly',
+      ]),
+      'archive-handover',
+    );
+    const answer = selectOption(finalReading, handover, 'archive-handover-iris');
+    expect(currentNode(finalReading, answer).text).toContain('ніхто не читатиме');
+    const finished = selectOption(finalReading, answer, 'archive-handover-finish');
+    const epilogue = seasonEnding({ flags: finished.flags }).epilogue;
+    expect(epilogue).toContain('Після чутки');
+    expect(epilogue).not.toContain('Айріс дозволила читати опис лише собі');
+  });
+
   it('preserves a handover after save/reload and does not replay it', () => {
     const handover = selectOption(
       finalReading,
