@@ -84,6 +84,13 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
         : flags.has('final_workshop_search_deferred')
           ? ['Фотографія майстерні залишилася в альбомі. Розмова про коробки почекає до іншого дня.']
           : []),
+    ...(flags.has('final_provenance_iris_custody')
+      ? ['Айріс забрала оригінали обох аркушів і домовилася перевірити їхнє походження, перш ніж вирішувати щось про публікацію.']
+      : flags.has('final_provenance_consent_archive')
+        ? ['З дозволу Айріс у книгарні залишилися лише копії сторінок, без імені автора, якого ще не встановили.']
+        : flags.has('final_provenance_wait_for_evidence')
+          ? ['Рішення про сторінки відклали до огляду коробки в майстерні. Оригінали поки залишилися в Айріс.']
+          : []),
     ...(flags.has('book_club_started')
       ? ['Наступного тижня на дверях з’явилося нове оголошення про книжковий клуб.']
       : [
