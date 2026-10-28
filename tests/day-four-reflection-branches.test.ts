@@ -18,6 +18,7 @@ describe('Day four character choices', () => {
       'iris-boundaries',
       'iris-boundaries-stay',
       'iris_day_four_respected_freedom',
+      'iris-boundaries-followup-honest',
       'iris-boundaries-back',
     ],
     [
@@ -26,6 +27,7 @@ describe('Day four character choices', () => {
       'mara-own-story',
       'mara-own-story-work',
       'mara_day_four_chose_own_time',
+      'mara-own-story-followup-direct',
       'mara-own-story-back',
     ],
     [
@@ -34,6 +36,7 @@ describe('Day four character choices', () => {
       'leo-future',
       'leo-future-honest',
       'leo_day_four_chose_honesty',
+      'leo-future-followup-direct',
       'leo-future-back',
     ],
     [
@@ -42,6 +45,7 @@ describe('Day four character choices', () => {
       'iris-boundaries',
       'iris-boundaries-belong',
       'iris_day_four_supported_belonging',
+      'iris-boundaries-followup-joke',
       'iris-boundaries-back',
     ],
     [
@@ -50,6 +54,7 @@ describe('Day four character choices', () => {
       'mara-own-story',
       'mara-own-story-love',
       'mara_day_four_named_own_needs',
+      'mara-own-story-followup-joke',
       'mara-own-story-back',
     ],
     [
@@ -58,20 +63,19 @@ describe('Day four character choices', () => {
       'leo-future',
       'leo-future-private',
       'leo_day_four_respected_privacy',
+      'leo-future-followup-humor',
       'leo-future-back',
     ],
   ] as const)(
     'returns to conversation with a recorded choice',
-    (story, entry, choice, decision, flag, back) => {
+    (story, entry, choice, decision, flag, followup, back) => {
       expect(validateDialogue(story)).toEqual([]);
       let state = selectOption(story, startDialogue(story), entry);
       state = selectOption(story, state, choice);
       state = selectOption(story, state, decision);
       expect(state.flags).toContain(flag);
       expect(currentNode(story, state).text.length).toBeGreaterThan(20);
-      const followup = availableOptions(story, state)[0];
-      expect(followup).toBeDefined();
-      state = selectOption(story, state, followup.id);
+      state = selectOption(story, state, followup);
       state = selectOption(story, state, back);
       expect(state.node).toBe(entry);
       expect(availableOptions(story, state).some((option) => option.id === choice)).toBe(false);

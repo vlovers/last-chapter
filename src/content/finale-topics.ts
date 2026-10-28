@@ -1,0 +1,62 @@
+/** Presentation only: option IDs and narrative conditions stay in day-five.ts. */
+export const finaleTopicGroups = [
+  {
+    id: 'people',
+    label: 'Поговорити з гостями',
+    choices: [
+      'anna',
+      'iris',
+      'final-v3-mara-option',
+      'final-v3-leo-option',
+      'final-v3-iris-option',
+      'final-v3-anna-option',
+      'final-v3-thomas-option',
+      'final-v3-nora-option',
+      'final-v3-eleanor-option',
+      'day-four-iris-callback',
+      'day-four-mara-callback',
+      'day-four-leo-callback',
+    ],
+  },
+  {
+    id: 'together',
+    label: 'За спільним столом',
+    choices: [
+      'final-iris-eleanor-option',
+      'final-couple-anna-thomas-option',
+      'final-couple-conversation-option',
+      'shared-table',
+    ],
+  },
+  {
+    id: 'mystery',
+    label: 'Лист і загублена сторінка',
+    choices: [
+      'letter',
+      'quiet-manuscript-followup',
+      'rumor',
+      'rumor-player-accountability',
+      'rumor-miller-followup',
+    ],
+  },
+  {
+    id: 'memories',
+    label: 'Книжки, спогади й Френк',
+    choices: [
+      'anna-classroom-callback',
+      'thomas-book-callback',
+      'mara-callback',
+      'eleanor-memory',
+      'leo-memory',
+      'miller-memory',
+      'leo-reflection-callback',
+      'iris-reflection-callback',
+      'anna-reflection-callback',
+      'thomas-reflection-callback',
+      'nora-reflection-callback',
+      'eleanor-reflection-callback',
+      'frank-evening',
+      'bookseller-reflection',
+    ],
+  },
+] as const;

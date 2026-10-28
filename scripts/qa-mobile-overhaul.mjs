@@ -1,4 +1,5 @@
 import { launchQaBrowser } from './qa-browser.mjs';
+import { clickStoryChoice } from './qa-story-ui.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
@@ -25,8 +26,7 @@ const snapshot = (page) =>
     };
   });
 const choose = async (page, id) => {
-  await page.waitForTimeout(240);
-  await page.locator(`#choices button[data-choice="${id}"]`).click();
+  await clickStoryChoice(page, id);
 };
 const shot = async (page, name) => {
   await page.waitForTimeout(1050);

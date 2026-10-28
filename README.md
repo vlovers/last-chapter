@@ -9,6 +9,11 @@ order/save regression coverage, UX changes and measured limits. The
 [narrative readiness plan](docs/integration/NARRATIVE-READINESS.md) separates
 playable content from the unapproved design pack and lists concrete integration tasks.
 
+The [five-day production QA report](docs/qa/production-20261028/README.md) covers
+the complete UI routes, both Day 3 evenings, manuscript custody, save recovery,
+the grouped finale and visible community gatherings. Playtime remains unmeasured;
+this is a candidate for a structured external playtest, not a finished 40-minute episode.
+
 ## Quick start
 
 Requires Node.js 22 and npm.

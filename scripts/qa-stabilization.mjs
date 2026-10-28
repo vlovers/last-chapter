@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { launchQaBrowser } from './qa-browser.mjs';
+import { clickStoryChoice } from './qa-story-ui.mjs';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const output = process.env.QA_OUTPUT || '/private/tmp/last-chapter-stabilization/qa';
 const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
@@ -18,8 +19,7 @@ const enter = async (page) => {
   await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
 };
 const choose = async (page, id) => {
-  await page.waitForTimeout(240);
-  await page.locator(`#choices button[data-choice="${id}"]`).click();
+  await clickStoryChoice(page, id);
 };
 const state = (page) =>
   page.evaluate(async () => {

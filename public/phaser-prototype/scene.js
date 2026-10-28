@@ -11,6 +11,7 @@ import { initialState, transition } from './state.js';
 import { openDialogue, dialogueNode, chooseDialogue, validateDialogue } from './dialogue-state.js';
 import { DialogueUI } from './dialogue-ui.js';
 import { Interactions } from './interactions.js';
+import { createGathering } from './gathering.js';
 import { BookshopAudio } from './audio.js';
 import { VISITOR_IDS } from './visitor-art.js';
 import { visitorEntrance } from './visitor-entrances.js';
@@ -59,6 +60,7 @@ class Bookshop extends Phaser.Scene {
       () => this.frameBudget.reduced,
     );
     this.characters = createCharacters(this, this.story ? ['player', ...VISITOR_IDS] : undefined);
+    this.gathering = this.story ? createGathering(this) : null;
     this.visitorBook = createVisitorBook(this);
     this.actorActions = createActorActions(this);
     this.lastStoryActor = this.story ? null : 'mara';
@@ -107,6 +109,14 @@ class Bookshop extends Phaser.Scene {
   }
   refreshStory() {
     if (!this.story) return;
+    this.gathering.sync(this.story.stage);
+    const guests = this.gathering.actors.map((actor) => actor.speaker);
+    $('#game').setAttribute(
+      'aria-description',
+      guests.length
+        ? `У книгарні: ${guests.join(', ')}. Спільні розмови — кнопкою дня під книгарнею.`
+        : '',
+    );
     this.state = {
       ...this.state,
       inspected: [...new Set([...this.state.inspected, ...this.story.inspectedSpots])],
@@ -431,7 +441,7 @@ class Bookshop extends Phaser.Scene {
   showDialogue() {
     const node =
       this.activeDialogue?.kind === 'story'
-        ? this.story.open()
+        ? this.story.present()
         : ['story-object', 'frank'].includes(this.activeDialogue?.kind)
           ? this.activeDialogue.note
           : dialogueNode(this.activeDialogue, this.state);
@@ -692,6 +702,7 @@ class Bookshop extends Phaser.Scene {
         this.reduced,
       );
       this.actorActions.update([player, mara], time, this.reduced, speaking ? mara : null);
+      this.gathering?.update(this.reduced, speaking ? this.dialogue.name.textContent : null);
       this.frameCamera();
       this.interactions.update(player, mara, this.state);
     } catch (error) {
@@ -711,6 +722,7 @@ class Bookshop extends Phaser.Scene {
     $('#enter').hidden = true;
   }
   cleanup() {
+    this.gathering?.destroy();
     this.departing?.sprite.destroy();
     this.departing?.shadow.destroy();
     this.departing = null;

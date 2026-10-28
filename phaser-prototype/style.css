@@ -880,6 +880,11 @@ main {
 #choices button:active {
   background: #c8d0b0;
 }
+.dialogue-section {
+  margin: 0 0 3px;
+  font-size: 14px;
+  color: #68523d;
+}
 #dialogue[data-visitor='narrator'],
 #dialogue.object-note {
   grid-template-columns: 1fr;

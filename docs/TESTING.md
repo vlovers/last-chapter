@@ -5,6 +5,31 @@ The narrative suite covers deterministic knowledge, trust, dialogue, five-day sc
 book recommendations, endings and save migrations. It must continue to pass when changing
 the independent Phaser slice.
 
+## Complete five-day UI routes
+
+With Vite running and the optional Playwright tooling configured below,
+`npm run test:browser:v5` plays four fresh contexts from Day 1 to season completion:
+
+- A: three catalog orders, book club, character conversations, mutual letter conversation and final reading; normal animation.
+- B: quiet evening, physical manuscript inspection, comparison with Iris's postcard, privacy agreement and returning the page.
+- C: alternative book choices, the window interpretation, limited inquiry and archiving the page.
+- D: a 390×844 phone, ten full reloads across conversations, day checkpoints and manuscript custody; suspended optional Mara conversation resumed on Day 4; both clues examined.
+
+Every narrative change is a real button click. The runner reads saves and Phaser
+guest visibility to assert results; it never injects a chapter or calls the story
+transition API. `qa-story-ui.mjs` navigates the actual pagination and finale groups.
+Each route checks its composed ending, three receipts, restart isolation and
+browser errors, and writes screenshots, a final save and a Playwright trace.
+`results.json` records partial failures rather than marking unexecuted routes passed.
+
+`node scripts/qa-production-recovery.mjs` separately tests deliberately missing,
+corrupt and blocked storage, orphan optional-session cleanup and keyboard focus.
+Only this fault-injection runner damages storage; it does not count as a gameplay route.
+
+CI stores each runner's output separately and uploads browser evidence for seven
+days, including on failure. See the [production QA record](qa/production-20261028/README.md)
+for the actual verification and remaining playtest limits.
+
 `tests/phaser-slice.test.js` tests every Mara branch, state isolation/immutability,
 interaction proximity and arrival gates, nonoverlapping hit areas, movement boundaries,
 substepped collision and sliding, safe navigation segments, reachable approach points,

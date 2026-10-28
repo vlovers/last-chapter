@@ -6,6 +6,25 @@ This is a **temporary prototype save**, not a production-ready secure save syste
 
 A later production save should include a deterministic event history, migration tests, story content version and recovery UX for incompatible saves. No account or cloud storage is needed for this game.
 
+## Five-day production pass
+
+The v1 format and all existing dialogue node/option IDs remain compatible.
+Fresh games now save their opening state immediately, anchoring optional notes
+and Mara sessions before the first choice. If the narrative save is missing or
+invalid, orphan recommendations, optional conversations and notes start fresh;
+a valid narrative save retains them. Explicit restart clears them as well.
+
+Finale categories and choice pages are presentation state. `FiveDayStory.open()`
+returns the complete canonical choices; `present()` applies the grouped and paged
+UI. Navigation does not grant flags, complete topics or write the narrative save.
+Reloading inside a conversation restores the authored node and completion ledger;
+reopening the gathering starts from its category overview.
+
+Manuscript observations, interpretations, privacy agreements and final custody
+use separate flags. A returned page and an archived page are mutually exclusive
+outcomes on reachable paths. Journal copy distinguishes physical observations
+from Iris's testimony and the player's window interpretation.
+
 ## Gameplay polish V1 completion ledger
 
 The existing v1 key and version remain valid. Saves may additionally contain

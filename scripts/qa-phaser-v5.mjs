@@ -1,4 +1,5 @@
 import { launchQaBrowser } from './qa-browser.mjs';
+import { clickStoryChoice } from './qa-story-ui.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -12,7 +13,10 @@ const results = [];
 let page, context, route;
 const saveKey = 'last-chapter:save:v1';
 const readSave = () => page.evaluate((key) => JSON.parse(localStorage.getItem(key)), saveKey);
-const shot = (name) => page.screenshot({ path: `${output}/${route}-${name}.png`, fullPage: true });
+const shot = async (name) => {
+  if (await page.locator('#typewriter-skip').isVisible()) await page.locator('#typewriter-skip').click();
+  return page.screenshot({ path: `${output}/${route}-${name}.png`, fullPage: true });
+};
 const openStory = async () => {
   if (!(await page.locator('#dialogue').isVisible())) await page.locator('#story-continue').click();
   await page.locator('#dialogue:not([hidden])').waitFor();
@@ -20,9 +24,8 @@ const openStory = async () => {
 const choose = async (id) => {
   // Respect the accidental-double-tap guard. Every state change comes from a
   // real UI click: no injected saves, story API calls or scene shortcuts.
-  await page.waitForTimeout(240);
   const before = await readSave();
-  await page.locator(`#choices button[data-choice="${id}"]`).click();
+  await clickStoryChoice(page, id);
   await page.waitForFunction(
     ({ key, before }) => localStorage.getItem(key) !== before,
     { key: saveKey, before: JSON.stringify(before) },
@@ -41,6 +44,16 @@ const follow = async (...ids) => {
 const at = async (stage) => {
   assert.equal(await page.locator('#story-continue').getAttribute('data-stage'), stage);
   assert.equal((await readSave()).stage, stage);
+};
+const guests = async (expected) => {
+  const visible = await page.evaluate(async () => {
+    const { game } = await import('/phaser-prototype/scene.js');
+    const scene = game.scene.getScene('bookshop');
+    return scene.gathering.actors
+      .filter((actor) => actor.sprite.visible && actor.shadow.visible)
+      .map((actor) => actor.name);
+  });
+  assert.equal(visible.length, expected);
 };
 const storedProgress = () =>
   page.evaluate(() => ({
@@ -99,7 +112,7 @@ try {
     results.push(result);
     context = await fixture.browser.newContext({
       viewport: route === 'D' ? { width: 390, height: 844 } : { width: 1280, height: 900 },
-      reducedMotion: 'reduce',
+      reducedMotion: route === 'A' ? 'no-preference' : 'reduce',
       hasTouch: route === 'D',
     });
     await context.tracing.start({ screenshots: true, snapshots: true });
@@ -208,6 +221,7 @@ try {
     await follow('hello', 'work', 'work-follow', 'rest-back', 'end');
     await choose(quiet ? '__skip_club' : '__advance');
     await at(quiet ? 'quiet-evening' : 'book-club');
+    await guests(quiet ? 0 : 4);
     if (quiet) {
       await journal('Люди');
       assert.equal(
@@ -285,6 +299,9 @@ try {
     );
     await checkpoint('day4-complete', 'day5-reading');
     await choose('open');
+    await guests(8);
+    assert.ok((await page.locator('#choices [data-choice]').count()) <= 5);
+    await shot('finale-overview');
     if (quiet) {
       await choose('quiet-manuscript-followup');
       await shot('custody-choice');
@@ -312,6 +329,7 @@ try {
     await shot('final-reading');
     await choose('__advance');
     await at('season-complete');
+    await guests(0);
     const ending = await page.locator('#dialogue-text .sr-only').textContent();
     assert.match(ending, /Мара почала шукати/);
     assert.match(ending, /Вікна Беллвіка/);

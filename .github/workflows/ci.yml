@@ -63,7 +63,15 @@ jobs:
             sleep 1
           done
           curl --fail http://127.0.0.1:5173/
-          npm run test:browser
-          npm run test:browser:v5
-          npm run test:browser:mobile
-          node scripts/qa-frank-overhaul.mjs
+          QA_OUTPUT=/tmp/last-chapter-qa/legacy npm run test:browser
+          QA_OUTPUT=/tmp/last-chapter-qa/five-day npm run test:browser:v5
+          QA_OUTPUT=/tmp/last-chapter-qa/mobile npm run test:browser:mobile
+          QA_OUTPUT=/tmp/last-chapter-qa/frank node scripts/qa-frank-overhaul.mjs
+          QA_OUTPUT=/tmp/last-chapter-qa/recovery node scripts/qa-production-recovery.mjs
+      - name: Retain browser evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: last-chapter-browser-qa
+          path: /tmp/last-chapter-qa
+          retention-days: 7

@@ -40,6 +40,7 @@ import { storyProgress } from '../game/progress';
 import { catalogEntries, type CatalogFilter } from '../game/catalog';
 import { journalFacts, journalEvidence } from './journal-facts';
 import { accessibleClues, collectClue } from './clue-board';
+import { finaleTopicGroups } from '../content/finale-topics';
 
 const stagePeople: Partial<Record<ChapterStage, { name: string; actor: string | null }>> = {
   miller: { name: 'Пані Міллер', actor: 'miller' },
@@ -104,6 +105,8 @@ export class FiveDayStory {
   private saveAvailable = true;
   private choicePage = 0;
   private choicePageKey = '';
+  private choiceGroup: string | null = null;
+  private choicePages = 1;
   constructor() {
     let saved: ChapterState | null = null;
     try {
@@ -346,12 +349,57 @@ export class FiveDayStory {
       if (this.stage === 'nora')
         choices.push({ id: '__skip_club', label: 'Залишитися в книгарні на тихий вечір' });
     }
-    const pageKey = this.stage + ':' + node.id + ':' + choices.map((choice) => choice.id).join(',');
+    const member = castMember(node.speaker);
+    return {
+      speaker: node.speaker,
+      text: node.text,
+      choices,
+      canRecommend: this.recommendationChoices.length > 0,
+      portrait: member?.id === 'mara' ? '/art/bookshop/mara.svg' : (member?.portrait ?? ''),
+    };
+  }
+  /** UI navigation never changes dialogue availability, decisions or saved state. */
+  present() {
+    const view = this.open();
+    let choices = view.choices;
+    const gathering = this.stage === 'day5-reading' && this.chapter.dialogue.node === 'gathering';
+    const groups = finaleTopicGroups
+      .map((group) => ({
+        ...group,
+        available: choices.filter((choice) =>
+          (group.choices as readonly string[]).includes(choice.id),
+        ),
+      }))
+      .filter((group) => group.available.length);
+    const selected = gathering ? groups.find((group) => group.id === this.choiceGroup) : undefined;
+    if (gathering && !selected) {
+      this.choiceGroup = null;
+      return {
+        ...view,
+        choices: [
+          ...groups.map((group) => ({
+            id: `__topics_${group.id}`,
+            label: `${group.label} (${group.available.length})`,
+          })),
+          ...choices.filter((choice) => choice.id === 'close'),
+        ],
+      };
+    }
+    if (selected) choices = selected.available;
+    const pageKey =
+      this.stage +
+      ':' +
+      this.chapter.dialogue.node +
+      ':' +
+      this.choiceGroup +
+      ':' +
+      choices.map((choice) => choice.id).join(',');
     if (this.choicePageKey !== pageKey) {
       this.choicePageKey = pageKey;
       this.choicePage = 0;
     }
     const totalPages = Math.max(1, Math.ceil(choices.length / 3));
+    this.choicePages = totalPages;
     this.choicePage = Math.min(this.choicePage, totalPages - 1);
     const visibleChoices =
       totalPages === 1
@@ -360,26 +408,40 @@ export class FiveDayStory {
             ...choices.slice(this.choicePage * 3, (this.choicePage + 1) * 3),
             {
               id: '__more_choices',
-              label: this.choicePage < totalPages - 1 ? 'Інші варіанти →' : '← Попередні варіанти',
+              label:
+                this.choicePage < totalPages - 1
+                  ? `Інші варіанти → (${this.choicePage + 1}/${totalPages})`
+                  : `До перших варіантів ↺ (${this.choicePage + 1}/${totalPages})`,
             },
           ];
-    const member = castMember(node.speaker);
     return {
-      speaker: node.speaker,
-      text: node.text,
-      choices: visibleChoices,
-      canRecommend: this.recommendationChoices.length > 0,
-      portrait: member?.id === 'mara' ? '/art/bookshop/mara.svg' : (member?.portrait ?? ''),
+      ...view,
+      section: selected?.label ?? '',
+      choices: [
+        ...visibleChoices,
+        ...(selected
+          ? [
+              { id: '__topics', label: 'До всіх гостей' },
+              ...view.choices.filter((choice) => choice.id === 'close'),
+            ]
+          : []),
+      ],
     };
   }
   choose(id: string) {
     const restarting = id === '__restart' && this.stage === 'season-complete';
     if (id === '__restart' && this.stage === 'season-complete') this.chapter = startChapter();
     else if (id === '__more_choices') {
-      const options = availableOptions(stageStory(this.stage), this.chapter.dialogue);
-      const pages = Math.max(1, Math.ceil(options.length / 3));
-      this.choicePage = this.choicePage < pages - 1 ? this.choicePage + 1 : 0;
-      return this.open();
+      if (!this.present().choices.some((choice) => choice.id === id))
+        throw new Error('Navigation unavailable');
+      this.choicePage = (this.choicePage + 1) % this.choicePages;
+      return this.present();
+    } else if (id === '__topics' || id.startsWith('__topics_')) {
+      if (!this.present().choices.some((choice) => choice.id === id))
+        throw new Error('Navigation unavailable');
+      this.choiceGroup = id === '__topics' ? null : id.slice('__topics_'.length);
+      this.choicePage = 0;
+      return this.present();
     } else if (id === '__skip_club') {
       this.chapter = skipBookClub(this.chapter);
     } else if (id === '__advance') {
@@ -400,6 +462,8 @@ export class FiveDayStory {
     }
     this.persist();
     if (restarting) {
+      this.choiceGroup = null;
+      this.choicePage = 0;
       this.service = restoreService('');
       this.persistService();
     }

@@ -131,6 +131,12 @@ export class DialogueUI {
       node.choices.length ? 'Продовжити пізніше' : 'Закрити розмову',
     );
     this.choices.replaceChildren();
+    if (node.section) {
+      const heading = document.createElement('h3');
+      heading.className = 'dialogue-section';
+      heading.textContent = node.section;
+      this.choices.append(heading);
+    }
     this.element.querySelector('#browse-order')?.remove();
     if (node.canRecommend) {
       const browse = document.createElement('button');
