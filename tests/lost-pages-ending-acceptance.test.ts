@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 import { seasonEnding } from '../src/game/endings';
 
 const ledger = 'final_ledger_scene_complete';
@@ -30,8 +35,9 @@ describe('lost pages ending acceptance: evidence, consent and chronology', () =>
       gathering([ledger, custody, 'final_ledger_record_private']),
       'archive-handover',
     );
-    expect(availableOptions(finalReading, handover).map((choice) => choice.id))
-      .not.toContain('archive-handover-iris');
+    expect(availableOptions(finalReading, handover).map((choice) => choice.id)).not.toContain(
+      'archive-handover-iris',
+    );
   });
 
   it('does not treat correcting a rumor as permission to read the archive', () => {
