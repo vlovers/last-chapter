@@ -42,7 +42,23 @@ async function openMara(page) {
 }
 async function choose(page, id) {
   await page.waitForTimeout(250);
-  await page.locator(`#choices button[data-choice="${id}"]`).click();
+  const choices = page.locator('#choices');
+  const target = choices.locator('button[data-choice="' + id + '"]');
+  const nextPage = choices.locator('button[data-choice="__more_choices"]');
+  for (let pageIndex = 0; pageIndex < 12; pageIndex++) {
+    if (await target.isVisible()) {
+      await target.click();
+      return;
+    }
+    if (!(await nextPage.isVisible())) {
+      const visible = await choices.locator('button').evaluateAll((buttons) =>
+        buttons.map((button) => button.getAttribute('data-choice')),
+      );
+      throw new Error('Choice "' + id + '" unavailable; visible choices: ' + visible.join(', '));
+    }
+    await nextPage.click();
+  }
+  throw new Error('Choice "' + id + '" not found after 12 choice pages');
 }
 async function layout(page) {
   await page.waitForTimeout(300);
