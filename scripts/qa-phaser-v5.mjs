@@ -54,6 +54,25 @@ try {
 
   // Walk all 19 stages via reachable terminal routes instead of cycling first options.
   const walk = await page.evaluate(async () => {
+    const assert = {
+      ok(value, message = 'Browser assertion failed') {
+        if (!value) throw new Error(message);
+      },
+      equal(actual, expected, message = 'Browser equality assertion failed') {
+        if (!Object.is(actual, expected)) {
+          throw new Error(
+            `${message}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`,
+          );
+        }
+      },
+      deepEqual(actual, expected, message = 'Browser deep equality assertion failed') {
+        if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+          throw new Error(
+            `${message}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`,
+          );
+        }
+      },
+    };
     const { chooseChapterOption, stageStory, startChapter } = await import('/src/game/chapter.ts');
     const { availableOptions } = await import('/src/game/dialogue.ts');
     const { decodeSave, SAVE_KEY } = await import('/src/game/save.ts');
