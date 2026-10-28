@@ -13,7 +13,10 @@ import {
 } from '../src/game/dialogue';
 
 function walk(story: DialogueStory, choices: readonly string[]) {
-  return choices.reduce((state, choice) => selectOption(story, state, choice), startDialogue(story));
+  return choices.reduce(
+    (state, choice) => selectOption(story, state, choice),
+    startDialogue(story),
+  );
 }
 
 function withFlags(story: DialogueStory, flags: readonly string[]): DialogueState {
@@ -71,10 +74,7 @@ describe('narrative conversation regression', () => {
 
   it('unlocks the Mara and Leo scene only after both prerequisite conversations', () => {
     const alone = withFlags(finalReading, ['mara_own_morning_heard']);
-    const together = withFlags(finalReading, [
-      'mara_own_morning_heard',
-      'leo_honesty_discussed',
-    ]);
+    const together = withFlags(finalReading, ['mara_own_morning_heard', 'leo_honesty_discussed']);
     const atGathering = (state: DialogueState): DialogueState => ({
       ...state,
       node: 'gathering',
