@@ -50,7 +50,7 @@ describe('manuscript finale continuity', () => {
       ['chapter-argument-mara', 'final_chapter_mara_supported', 'Команда сніданку'],
       ['chapter-argument-iris', 'final_chapter_iris_supported', 'От бачиш'],
       ['chapter-argument-neither', 'final_chapter_versions_questioned', 'не фінал'],
-    ]) {
+    ] as const) {
       const response = selectOption(finalReading, argument, choice);
       expect(response.flags).toContain(flag);
       expect(currentNode(finalReading, response).text).toContain(expected);
@@ -94,7 +94,7 @@ describe('manuscript finale continuity', () => {
         'final_workshop_search_deferred',
         'почекає',
       ],
-    ]) {
+    ] as const) {
       const gathering = selectOption(
         finalReading,
         { ...startDialogue(finalReading), flags },
