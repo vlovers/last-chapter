@@ -239,6 +239,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_eleanor_reflection_heard'],
         },
         {
+          id: 'workshop-followup',
+          label: 'Запитати Айріс, чи дізналася вона щось про стару майстерню',
+          next: 'workshop-followup',
+          requires: ['iris_paper_star_discussed'],
+          unless: ['final_workshop_followup_heard'],
+        },
+        {
           id: 'quiet-manuscript-followup',
           label: 'Поговорити з Айріс про знайдену сторінку',
           next: 'quiet-manuscript-followup',
@@ -285,6 +292,48 @@ export const finalReading: DialogueStory = {
           unless: ['final_shared_table_heard'],
         },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
+      ],
+    },
+    {
+      id: 'workshop-followup',
+      speaker: 'Айріс',
+      text: '«У майстерні тепер ремонтують старі книжки. Виявляється, сестра палітурника здавала ключі одному студенту». Айріс крутить у пальцях закладку. «Я не впевнена, що хочу знайомитися з ним посеред свята».',
+      textWhen: [
+        {
+          requires: ['iris_workshop_discreet_inquiry'],
+          text: '«Ти запитав про майстерню, як і обіцяв, без мого імені. Там тепер ремонтують старі книжки. Один студент орендує приміщення в сестри палітурника». Айріс ховає закладку в альбом. «Дивно знати, що місце не стояло порожнім».',
+        },
+        {
+          requires: ['iris_workshop_left_uninvestigated'],
+          text: '«Я все-таки пройшла повз майстерню. На дверях висить оголошення про ремонт книжок. Не заходила». Айріс усміхається. «Може, іншим разом. Сьогодні я прийшла послухати історії».',
+        },
+      ],
+      options: [
+        {
+          id: 'workshop-visit-later',
+          label: '«Якщо захочеш, підемо туди разом після свята»',
+          next: 'workshop-result',
+          grants: ['final_workshop_visit_offered'],
+        },
+        {
+          id: 'workshop-leave-alone',
+          label: '«Тоді сьогодні просто побудь тут»',
+          next: 'workshop-result',
+          grants: ['final_workshop_visit_deferred'],
+        },
+      ],
+    },
+    {
+      id: 'workshop-result',
+      speaker: 'Айріс',
+      text: '«Домовилися». Айріс ставить альбом біля стіни й дивиться на людей, які сперечаються про книжки. «Знаєш, я скучила навіть за цими суперечками».',
+      options: [
+        {
+          id: 'workshop-result-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_workshop_followup_heard'],
+        },
       ],
     },
     {
