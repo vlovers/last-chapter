@@ -20,6 +20,7 @@ import {
   finishFourthDay,
   finishSeason,
   startBookClub,
+  exploreAfterBookClub,
   skipBookClub,
   startChapter,
   startSecondDay,
@@ -335,6 +336,11 @@ export class FiveDayStory {
       choices.push({ id: '__advance', label: sequence[this.stage]!.label });
       if (this.stage === 'nora')
         choices.push({ id: '__skip_club', label: 'Залишитися в книгарні на тихий вечір' });
+      if (this.stage === 'book-club')
+        choices.push({
+          id: '__explore_after_club',
+          label: 'Прибрати після клубу й оглянути книгарню',
+        });
     }
     const pageKey = this.stage + ':' + node.id + ':' + choices.map((choice) => choice.id).join(',');
     if (this.choicePageKey !== pageKey) {
@@ -370,6 +376,8 @@ export class FiveDayStory {
       const pages = Math.max(1, Math.ceil(options.length / 3));
       this.choicePage = this.choicePage < pages - 1 ? this.choicePage + 1 : 0;
       return this.open();
+    } else if (id === '__explore_after_club') {
+      this.chapter = exploreAfterBookClub(this.chapter);
     } else if (id === '__skip_club') {
       this.chapter = skipBookClub(this.chapter);
     } else if (id === '__advance') {
