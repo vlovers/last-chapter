@@ -228,6 +228,20 @@ export function startBookClub(state: ChapterState): ChapterState {
   };
 }
 
+/** After the book club, players can still inspect the closed shop for manuscript clues. */
+export function exploreAfterBookClub(state: ChapterState): ChapterState {
+  if (state.stage !== 'book-club') throw new Error('Finish the book club first');
+  if (availableOptions(bookClub, state.dialogue).length)
+    throw new Error('Finish the book club first');
+  const flags = [...new Set([...state.flags, ...state.dialogue.flags, 'book_club_started'])];
+  return {
+    ...state,
+    stage: 'quiet-evening',
+    flags,
+    dialogue: { ...startDialogue(quietEvening), flags },
+  };
+}
+
 /** Leave the evening gathering optional after Nora's conversation. */
 export function skipBookClub(state: ChapterState): ChapterState {
   if (state.stage !== 'nora') throw new Error('Finish Nora before deciding about the club');
