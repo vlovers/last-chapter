@@ -239,6 +239,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_eleanor_reflection_heard'],
         },
         {
+          id: 'chapter-argument',
+          label: 'Послухати суперечку Мари й Айріс про фінал рукопису',
+          next: 'chapter-argument',
+          requires: ['final_missing_chapter_discussed'],
+          unless: ['final_chapter_argument_heard'],
+        },
+        {
           id: 'missing-chapter-choice',
           label: 'Попросити Айріс прочитати уривок із незакінченого рукопису',
           next: 'missing-chapter-choice',
@@ -306,6 +313,38 @@ export const finalReading: DialogueStory = {
           unless: ['final_shared_table_heard'],
         },
         { id: 'close', label: 'Завершити вечір спільним читанням', next: 'end' },
+      ],
+    },
+    {
+      id: 'chapter-argument',
+      speaker: 'Мара',
+      text: '«Я б залишила ту, де вона йде», — каже Мара, повертаючи Айріс сторінку. «Не тому, що йти завжди правильно. Просто вона нарешті сама замовляє сніданок». Айріс пирхає: «Ти обираєш фінал за булочкою?»',
+      options: [
+        { id: 'chapter-argument-mara', label: '«Мені теж цікавіший другий уривок»', next: 'chapter-argument-response', grants: ['final_chapter_mara_supported'] },
+        { id: 'chapter-argument-iris', label: '«Повернення теж може бути сміливим»', next: 'chapter-argument-response', grants: ['final_chapter_iris_supported'] },
+        { id: 'chapter-argument-neither', label: '«А може, вони обидві помиляються щодо фіналу?»', next: 'chapter-argument-response', grants: ['final_chapter_versions_questioned'] },
+      ],
+    },
+    {
+      id: 'chapter-argument-response',
+      speaker: 'Айріс',
+      text: '«Я не знаю, який із них справжній», — каже Айріс. Мара вже відламала половину булочки й простягає їй. «Тоді поки не вибирай. Ти ж не на конкурсі». Айріс бере булочку, хоча ще хвилину тому казала, що не голодна.',
+      textWhen: [
+        {
+          requires: ['final_chapter_mara_supported'],
+          text: '«О, тепер вас двоє», — каже Айріс. Мара задоволено киває. «Команда сніданку». Айріс сміється й нарешті бере запропоновану булочку.',
+        },
+        {
+          requires: ['final_chapter_iris_supported'],
+          text: '«От бачиш», — Айріс піднімає брови. Мара відламує шматок булочки. «Гаразд. Але повертатися треба туди, де тебе справді чекають, а не просто залишили світло».',
+        },
+        {
+          requires: ['final_chapter_versions_questioned'],
+          text: '«Може, це взагалі не фінал», — каже Айріс. Мара дивиться на два аркуші. «Тоді ми сперечалися через середину книжки. Чудово». Обидві сміються.',
+        },
+      ],
+      options: [
+        { id: 'chapter-argument-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_chapter_argument_heard'] },
       ],
     },
     {
