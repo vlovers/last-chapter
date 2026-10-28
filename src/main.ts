@@ -19,6 +19,7 @@ import {
   advanceToNora,
   finishThirdDay,
   startBookClub,
+  exploreAfterBookClub,
   skipBookClub,
   startFourthDay,
   finishFourthDay,
@@ -480,6 +481,17 @@ function render(): void {
         render();
       });
       actions.append(next);
+      if (chapter.stage === 'book-club') {
+        const exploreButton = document.createElement('button');
+        exploreButton.type = 'button';
+        exploreButton.textContent = 'Прибрати після клубу й оглянути книгарню →';
+        exploreButton.addEventListener('click', () => {
+          chapter = exploreAfterBookClub(chapter);
+          persistChapter();
+          render();
+        });
+        actions.append(exploreButton);
+      }
       if (chapter.stage === 'nora') {
         const quietButton = document.createElement('button');
         quietButton.type = 'button';
