@@ -313,9 +313,24 @@ export const finalReading: DialogueStory = {
       speaker: 'Айріс',
       text: '«Я принесла два уривки. В одному героїня повертається додому й знаходить на столі дві чашки. В іншому вона бачить ті самі чашки, але йде далі. Я завжди думала, що один із них — чернетка». Айріс дивиться на Френка, який спить на стосі книжок. «Тепер не впевнена».',
       options: [
-        { id: 'missing-chapter-read-home', label: '«Прочитай той, де вона повертається»', next: 'missing-chapter-home', grants: ['final_chapter_home_version_read'] },
-        { id: 'missing-chapter-read-leave', label: '«А що в другому уривку?»', next: 'missing-chapter-leave', grants: ['final_chapter_departure_version_read'] },
-        { id: 'missing-chapter-no-read', label: '«Можеш залишити обидва для себе»', next: 'missing-chapter-after', grants: ['final_chapter_reading_declined'] },
+        {
+          id: 'missing-chapter-read-home',
+          label: '«Прочитай той, де вона повертається»',
+          next: 'missing-chapter-home',
+          grants: ['final_chapter_home_version_read'],
+        },
+        {
+          id: 'missing-chapter-read-leave',
+          label: '«А що в другому уривку?»',
+          next: 'missing-chapter-leave',
+          grants: ['final_chapter_departure_version_read'],
+        },
+        {
+          id: 'missing-chapter-no-read',
+          label: '«Можеш залишити обидва для себе»',
+          next: 'missing-chapter-after',
+          grants: ['final_chapter_reading_declined'],
+        },
       ],
     },
     {
@@ -323,7 +338,12 @@ export const finalReading: DialogueStory = {
       speaker: 'Айріс',
       text: '«Вона торкнулася холодної чашки. Хтось чекав її до самого ранку, а потім пішов на роботу. Вона зняла пальто й поставила чайник». Айріс складає аркуш. «Мені подобався цей фінал. Але мама закреслила останній рядок».',
       options: [
-        { id: 'missing-chapter-home-ask', label: '«Може, це не фінал, а лише одна з можливостей?»', next: 'missing-chapter-after', grants: ['final_chapter_multiple_endings_considered'] },
+        {
+          id: 'missing-chapter-home-ask',
+          label: '«Може, це не фінал, а лише одна з можливостей?»',
+          next: 'missing-chapter-after',
+          grants: ['final_chapter_multiple_endings_considered'],
+        },
       ],
     },
     {
@@ -331,7 +351,12 @@ export const finalReading: DialogueStory = {
       speaker: 'Айріс',
       text: '«Вона побачила у вікні світло, але не постукала. За рогом була пекарня, де вже місили тісто. Вона зайшла туди й уперше за багато років замовила сніданок лише для себе». Айріс зітхає. «Цей уривок мама не закреслила. Просто не підписала».',
       options: [
-        { id: 'missing-chapter-leave-ask', label: '«А якщо обидва уривки належать одній історії?»', next: 'missing-chapter-after', grants: ['final_chapter_sequence_theory'] },
+        {
+          id: 'missing-chapter-leave-ask',
+          label: '«А якщо обидва уривки належать одній історії?»',
+          next: 'missing-chapter-after',
+          grants: ['final_chapter_sequence_theory'],
+        },
       ],
     },
     {
@@ -339,7 +364,12 @@ export const finalReading: DialogueStory = {
       speaker: 'Айріс',
       text: '«Я поки не знаю, що мама хотіла надрукувати. Може, вона й сама не знала». Айріс прибирає аркуші до альбому. «Але тепер це схоже на її голос, а не на чиюсь розповідь про неї».',
       options: [
-        { id: 'missing-chapter-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_missing_chapter_discussed'] },
+        {
+          id: 'missing-chapter-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_missing_chapter_discussed'],
+        },
       ],
     },
     {
