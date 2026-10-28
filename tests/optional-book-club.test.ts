@@ -170,9 +170,9 @@ describe('optional day-three book club', () => {
     const gathering = chooseChapterOption(initial, 'open');
     const followup = chooseChapterOption(gathering, 'quiet-manuscript-followup');
     const archived = chooseChapterOption(followup, 'quiet-manuscript-archive');
-    expect(availableOptions(finalReading, archived.dialogue).map((option) => option.id)).not.toContain(
-      'quiet-manuscript-return',
-    );
+    expect(
+      availableOptions(finalReading, archived.dialogue).map((option) => option.id),
+    ).not.toContain('quiet-manuscript-return');
     const returned = chooseChapterOption(archived, 'quiet-manuscript-result-back');
     expect(returned.flags).toContain('final_quiet_manuscript_archived');
     expect(returned.flags).not.toContain('final_quiet_manuscript_returned');
