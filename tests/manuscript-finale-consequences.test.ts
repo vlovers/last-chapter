@@ -31,7 +31,7 @@ describe('manuscript finale continuity', () => {
     expect(seasonEnding({ flags: returned.flags }).epilogue).toContain('ранкову пекарню');
   });
 
-  it('changes Mara and Iris dialogue according to the player's position', () => {
+  it("changes Mara and Iris dialogue according to the player's position", () => {
     const opening = selectOption(finalReading, { ...startDialogue(finalReading), flags: [...clueFlags, 'final_missing_chapter_discussed'] }, 'open');
     const argument = selectOption(finalReading, opening, 'chapter-argument');
     for (const [choice, flag, expected] of [
