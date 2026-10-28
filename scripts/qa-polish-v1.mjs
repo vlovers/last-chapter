@@ -45,17 +45,20 @@ async function choose(page, id) {
   const choices = page.locator('#choices');
   const target = choices.locator('button[data-choice="' + id + '"]');
   const nextPage = choices.locator('button[data-choice="__more_choices"]');
+  const visitedPages = new Set();
   for (let pageIndex = 0; pageIndex < 12; pageIndex++) {
-    if (await target.isVisible()) {
+    const visible = await choices.locator('button').evaluateAll((buttons) =>
+      buttons.map((button) => button.getAttribute('data-choice')),
+    );
+    if (visible.includes(id)) {
       await target.click();
       return;
     }
-    if (!(await nextPage.isVisible())) {
-      const visible = await choices.locator('button').evaluateAll((buttons) =>
-        buttons.map((button) => button.getAttribute('data-choice')),
-      );
+    const signature = visible.join(',');
+    if (visitedPages.has(signature) || !visible.includes('__more_choices')) {
       throw new Error('Choice "' + id + '" unavailable; visible choices: ' + visible.join(', '));
     }
+    visitedPages.add(signature);
     await nextPage.click();
   }
   throw new Error('Choice "' + id + '" not found after 12 choice pages');
@@ -284,6 +287,13 @@ try {
         await page.keyboard.press('Escape');
         break;
       }
+      const currentChoices = await page.locator('#choices button').evaluateAll((buttons) =>
+        buttons.map((button) => button.getAttribute('data-choice')),
+      );
+      assert.ok(
+        currentChoices.includes('__advance'),
+        'Terminal route must expose __advance for ' + plan.stage,
+      );
       await choose(page, '__advance');
       await page.keyboard.press('Escape');
     }
