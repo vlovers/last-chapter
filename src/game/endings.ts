@@ -20,7 +20,9 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
     'thomas_privacy_pressed',
     'nora_confidentiality_pressed',
   ].some((flag) => flags.has(flag));
-  const community = flags.has('final_miller_ledger_rumor_seeded')
+  const community = flags.has('final_miller_rumor_corrected_publicly')
+    ? 'На вечорі поширилася чутка про нібито знайдений фінал. Після твого зізнання пані Міллер виправила сказане перед гостями, які ще залишалися. Дехто вже пішов і не почув виправлення; авторство сторінок так і не встановили.'
+    : flags.has('final_miller_ledger_rumor_seeded')
     ? 'На вечорі знову пішла чутка про нібито знайдений фінал роману. Пані Міллер повторила її як факт, хоча ніхто не встановив авторство сторінок. Попередні вибачення не зупинили нову плітку.'
     : flags.has('final_repaired_rumor') || flags.has('final_respected_privacy')
       ? pressedPrivacy
@@ -174,6 +176,23 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
               'Пані Міллер згадала, як допомагала після затоплення. Її спогади додали людських деталей, але не встановили автора рукопису.',
             ]
           : []),
+    ...(flags.has('final_miller_rumor_corrected_publicly')
+      ? [
+          'Ти попросив Міллер виправити неправдиву новину без подробиць про Айріс. Вона це зробила, але Айріс не пообіцяла знову довіряти тобі свої записи.',
+        ]
+      : flags.has('final_miller_rumor_iris_choice')
+        ? [
+            'Ти визнав, що запустив чутку, й залишив Айріс право вирішувати, як відповідати. Вона попросила поки не говорити про рукопис.',
+          ]
+        : flags.has('final_miller_rumor_deflected')
+          ? [
+              'Ти спробував перекласти провину за чутку на Міллер. Айріс знала, що це неправда, і більше не обговорювала з тобою знайдені сторінки.',
+            ]
+          : flags.has('final_miller_rumor_avoided')
+            ? [
+                'Ти не відповів Айріс на питання про чутку. Вона провела решту вечора з Анною, а не за столом із рукописом.',
+              ]
+            : []),
     ...(flags.has('book_club_started')
       ? ['Наступного тижня на дверях з’явилося нове оголошення про книжковий клуб.']
       : [
