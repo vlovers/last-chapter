@@ -34,7 +34,7 @@ describe('Five-day narrative pressure and character voice', () => {
 
     expect(eleanor?.text).toContain('рулетку');
     expect(nora?.text).toContain('дату ще перевіряємо');
-    expect(nora?.text).toContain('приватні листи не показуємо');
+    expect(nora?.text).toContain('листи залишаються в теці');
   });
 
   it('keeps all affected dialogue graphs structurally valid', () => {

@@ -43,7 +43,7 @@ describe('Reservation evidence chain', () => {
     ).toContain('дві дати');
     expect(
       currentNode(leoDecision, state('evidence', ['eleanor_timeline_assumed_guilt'])).text,
-    ).toContain('не довели');
+    ).toContain('спершу спитаємо її');
   });
 
   it('keeps both dialogue graphs valid', () => {

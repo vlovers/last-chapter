@@ -175,7 +175,7 @@ describe('Private letter: consent and trust across days four and five', () => {
       ['saw_envelope', 'leo_day_four_chose_honesty', 'mara_day_four_named_own_needs'],
     );
     const text = currentNode(finalReading, state).text;
-    expect(text).toContain('Старий конверт');
+    expect(text).toContain('лежить старий конверт');
     expect(text).not.toContain('порушену печатку');
   });
 

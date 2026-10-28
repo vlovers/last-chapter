@@ -50,6 +50,7 @@ function play(route: 'first' | 'last' | 'alternating') {
     let story = new FiveDayStory();
     const visited = [story.stage];
     const attempted = new Map<string, Set<string>>();
+
     for (let step = 0; step < 1000 && story.stage !== 'season-complete'; step++) {
       const before = decodeSave(values.get(SAVE_KEY) ?? '');
       const view = story.open();
