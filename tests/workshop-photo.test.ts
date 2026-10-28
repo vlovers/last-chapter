@@ -35,53 +35,57 @@ describe('workshop photograph: a fair false lead, not a second revelation', () =
     expect(currentNode(finalReading, compare).text).toContain('не зробило б її авторкою');
   });
 
-  it.each([
-    [
-      'photo-compare',
-      'photo-annotate',
-      'photo-result-finish',
-      'final_workshop_photo_sources_separated',
-      'два окремі факти',
-    ],
-    [
-      'photo-compare',
-      'photo-unmarked',
-      'photo-result-finish',
-      'final_workshop_photo_unmarked',
-      'без нових підписів',
-    ],
-    [
-      'photo-ask',
-      'photo-admit',
-      'photo-result-finish',
-      'final_workshop_photo_nora_corrected',
-      'виправила помилкову',
-    ],
-    [
-      'photo-ask',
-      'photo-keep-joke',
-      'photo-result-finish',
-      'final_workshop_photo_private_joke',
-      'між собою',
-    ],
-    [
-      'photo-leave',
-      'photo-leave-finish',
-      '',
-      'final_workshop_photo_deferred',
-      'відклали до іншого дня',
-    ],
-  ])('keeps the %s / %s outcome exclusive and permanent', (entry, choice, finish, flag, text) => {
-    const scene = selectOption(finalReading, gathering(), 'workshop-photo');
-    const branch = selectOption(finalReading, scene, entry);
-    const answer = selectOption(finalReading, branch, choice);
-    const done = finish ? selectOption(finalReading, answer, finish) : answer;
-    expect(done.node).toBe('gathering');
-    expect(done.flags).toContain(flag);
-    expect(done.flags).toContain('final_workshop_photo_complete');
-    expect(options(done)).not.toContain('workshop-photo');
-    expect(seasonEnding({ flags: done.flags }).epilogue).toContain(text);
-  });
+  const outcomes = [
+    {
+      entry: 'photo-compare',
+      choice: 'photo-annotate',
+      finish: 'photo-result-finish',
+      flag: 'final_workshop_photo_sources_separated',
+      text: 'два окремі факти',
+    },
+    {
+      entry: 'photo-compare',
+      choice: 'photo-unmarked',
+      finish: 'photo-result-finish',
+      flag: 'final_workshop_photo_unmarked',
+      text: 'без нових підписів',
+    },
+    {
+      entry: 'photo-ask',
+      choice: 'photo-admit',
+      finish: 'photo-result-finish',
+      flag: 'final_workshop_photo_nora_corrected',
+      text: 'виправила помилкову',
+    },
+    {
+      entry: 'photo-ask',
+      choice: 'photo-keep-joke',
+      finish: 'photo-result-finish',
+      flag: 'final_workshop_photo_private_joke',
+      text: 'між собою',
+    },
+    {
+      entry: 'photo-leave',
+      choice: 'photo-leave-finish',
+      finish: '',
+      flag: 'final_workshop_photo_deferred',
+      text: 'відклали до іншого дня',
+    },
+  ] as const;
+
+  for (const { entry, choice, finish, flag, text } of outcomes) {
+    it(`keeps ${entry} / ${choice} exclusive and permanent`, () => {
+      const scene = selectOption(finalReading, gathering(), 'workshop-photo');
+      const branch = selectOption(finalReading, scene, entry);
+      const answer = selectOption(finalReading, branch, choice);
+      const done = finish ? selectOption(finalReading, answer, finish) : answer;
+      expect(done.node).toBe('gathering');
+      expect(done.flags).toContain(flag);
+      expect(done.flags).toContain('final_workshop_photo_complete');
+      expect(options(done)).not.toContain('workshop-photo');
+      expect(seasonEnding({ flags: done.flags }).epilogue).toContain(text);
+    });
+  }
 
   it('does not erase a rumor or grant public archive access', () => {
     const flags = [...prerequisites, 'final_miller_ledger_rumor_seeded'];
