@@ -69,7 +69,8 @@ describe('lost pages: archive handover', () => {
       expect(finished.flags).toContain('final_archive_handover_complete');
       expect(
         finished.flags.filter(
-          (entry) => entry.startsWith('final_archive_') && entry !== 'final_archive_handover_complete',
+          (entry) =>
+            entry.startsWith('final_archive_') && entry !== 'final_archive_handover_complete',
         ),
       ).toEqual([flag]);
       expect(choices(finished)).not.toContain('archive-handover');
