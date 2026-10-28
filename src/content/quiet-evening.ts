@@ -9,6 +9,7 @@ export const quietEvening: DialogueStory = {
       text: 'Останній відвідувач виходить, і дзвіночок над дверима стихає. Стільці для книжкового клубу залишилися складеними. Френк стрибає на підвіконня, де дощ малює тонкі доріжки на склі.',
       options: [
         { id: 'sit-frank', label: 'Посидіти поруч із Френком', next: 'frank' },
+        { id: 'listen-rain', label: 'Перевірити, хто залишив світло у вікні навпроти', next: 'window' },
         { id: 'tidy-books', label: 'Розібрати книжки на столі', next: 'manuscript' },
       ],
     },
@@ -17,6 +18,24 @@ export const quietEvening: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Френк торкається лапою твоєї руки, ніби перевіряє, чи ти справді залишаєшся. Потім вмощується поряд. Тут нарешті можна нікуди не поспішати.',
       options: [{ id: 'frank-books', label: 'Повернутися до книжок', next: 'manuscript' }],
+    },
+    {
+      id: 'window',
+      speaker: 'Оповідач',
+      text: 'Навпроти книгарні світиться вікно порожньої майстерні. На склі хтось залишив паперову зірку. Учора її точно не було. Френк зістрибує з підвіконня і веде тебе до столу зі старими книжками.',
+      options: [
+        { id: 'window-watch', label: 'Запам’ятати паперову зірку', next: 'window-memory', grants: ['quiet_evening_paper_star_seen'] },
+        { id: 'window-ignore', label: 'Не заглядати в чужі вікна', next: 'manuscript' },
+      ],
+    },
+    {
+      id: 'window-memory',
+      speaker: 'Оповідач',
+      text: 'Зірка вирізана з газетного паперу. На одному промені видно половину слова «розділ». Коли ти нахиляєшся ближче, за вікном гасне світло. Можливо, там просто закінчили роботу. Але чому папір висить із зовнішнього боку скла?',
+      options: [
+        { id: 'window-note', label: 'Записати деталь у нотатник і повернутися до столу', next: 'manuscript', grants: ['quiet_evening_window_clue_recorded'] },
+        { id: 'window-leave', label: 'Залишити це до ранку', next: 'manuscript' },
+      ],
     },
     {
       id: 'manuscript',
@@ -30,6 +49,16 @@ export const quietEvening: DialogueStory = {
           grants: ['quiet_evening_page_found'],
         },
         { id: 'leave-page', label: 'Залишити аркуш на місці', next: 'end' },
+        { id: 'read-margin', label: 'Роздивитися запис на звороті', next: 'margin' },
+      ],
+    },
+    {
+      id: 'margin',
+      speaker: 'Оповідач',
+      text: 'На звороті олівцем написано: «Не віддавай їм останню сторінку». Нижче — маленька пляма від кави й число 17 без місяця та року. Це схоже на поспішну записку, але ти не знаєш, кому вона адресована.',
+      options: [
+        { id: 'margin-keep', label: 'Зберегти сторінку разом із записом', next: 'end', grants: ['quiet_evening_page_found', 'quiet_evening_margin_warning_seen'] },
+        { id: 'margin-leave', label: 'Повернути сторінку між книжками', next: 'end', grants: ['quiet_evening_margin_warning_seen'] },
       ],
     },
     {
