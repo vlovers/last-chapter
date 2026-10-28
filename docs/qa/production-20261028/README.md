@@ -7,7 +7,7 @@ test edit. Work stayed in a dedicated worktree and branch,
 `feat/five-day-production-quality-20261028`; the original checkout was preserved.
 `main` was still the repository bootstrap. Open PRs and active branches were
 reviewed before editing. The batch incorporates the narrative work through
-`519348c`, including character-specific Day 4 follow-ups and the latest grounded
+`4552b3c`, including character-specific Day 4 follow-ups and the latest grounded
 Day 5 prose. No PR was merged, and nothing was deployed or published as a game.
 
 ## Already implemented
@@ -74,7 +74,7 @@ Raw route results are in [routes.json](routes.json).
 ## Additional verification
 
 - `npm ci`: passed using Node 22 and the committed lockfile; no dependency changes were needed.
-- `npm run check`: passed — formatting, ESLint, TypeScript, **795 tests in 138 files**, and production build.
+- `npm run check`: passed — formatting, ESLint, TypeScript, **815 tests in 138 files**, and production build.
 - `npm run test:browser:v5`: passed all four routes above, including real guest visibility and the pinned finish control.
 - `npm run test:browser:mobile`: passed six layouts (375, 390, 430, 768, 1440 and phone landscape), touch/keyboard movement, catalog orders, day transitions and finale reload. See [mobile.json](mobile.json).
 - Storage recovery: missing/corrupt main saves clear orphan notes, sessions and receipts; blocked storage leaves dialogue playable and shows the save warning. Journal keyboard focus checks passed. See [recovery.json](recovery.json).
