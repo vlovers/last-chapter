@@ -100,11 +100,30 @@ try {
     const quiet = skipBookClub(noraFinished);
     const found = chooseChapterOption(chooseChapterOption(quiet, 'tidy-books'), 'keep-page');
     const quietDayFour = startFourthDay(finishThirdDay(found));
-    assert.ok(quietDayFour.flags.includes('quiet_evening_page_found'));
-    assert.ok(quietDayFour.dialogue.flags.includes('book_club_skipped'));
+    if (!quietDayFour.flags.includes('quiet_evening_page_found')) {
+      throw new Error('Quiet evening lost the manuscript clue');
+    }
+    if (!quietDayFour.dialogue.flags.includes('book_club_skipped')) {
+      throw new Error('Quiet evening lost the skipped-club choice');
+    }
     const club = startBookClub(noraFinished);
-    assert.ok(club.flags.includes('book_club_started'));
-    assert.ok(!club.flags.includes('book_club_skipped'));
+    if (!club.flags.includes('book_club_started') || club.flags.includes('book_club_skipped')) {
+      throw new Error('Book club flags are inconsistent');
+    }
+    const { exploreAfterBookClub } = await import('/src/game/chapter.ts');
+    const afterClub = exploreAfterBookClub({
+      ...club,
+      dialogue: { ...club.dialogue, node: 'end' },
+    });
+    const foundAfterClub = chooseChapterOption(
+      chooseChapterOption(afterClub, 'tidy-books'),
+      'keep-page',
+    );
+    const clubDayFour = startFourthDay(finishThirdDay(foundAfterClub));
+    if (!clubDayFour.flags.includes('book_club_started') ||
+        !clubDayFour.flags.includes('quiet_evening_page_found')) {
+      throw new Error('Post-club exploration lost the club or manuscript progress');
+    }
     for (let i = 0; i < 25 && story.stage !== 'season-complete'; i++) {
       const stage = story.stage;
       visited.add(stage);
