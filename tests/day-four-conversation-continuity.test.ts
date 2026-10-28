@@ -2,7 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { irisDecision } from '../src/content/day-four-iris';
 import { maraDecision } from '../src/content/day-four-mara';
 import { leoDecision } from '../src/content/day-four-leo';
-import { availableOptions, currentNode, selectOption, startDialogue, type DialogueStory } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  type DialogueStory,
+} from '../src/game/dialogue';
 
 function follow(story: DialogueStory, ids: string[]) {
   return ids.reduce((state, id) => selectOption(story, state, id), startDialogue(story));
