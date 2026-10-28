@@ -117,7 +117,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'work-back',
-          label: '«Твій час теж важливий»',
+          label: '«То що читатимеш у неділю?»',
           next: 'greet',
           grants: ['mara_supported_independence'],
         },
@@ -142,7 +142,7 @@ export const maraDecision: DialogueStory = {
         },
         {
           id: 'letters',
-          label: '«Історії в листах дають привід поговорити»',
+          label: '«Він уже здогадався, що це подарунок?»',
           next: 'letters',
           requires: ['sold_letters'],
         },
@@ -182,7 +182,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'letters-back',
-          label: '«Головне — ваші власні слова»',
+          label: '«А який розділ він прочитає першим?»',
           next: 'greet',
           grants: ['mara_gift_encouraged'],
         },
@@ -191,11 +191,11 @@ export const maraDecision: DialogueStory = {
     {
       id: 'remember-trust',
       speaker: 'Мара',
-      text: 'Пам’ятаю. Пробачення не означає повернення. Іноді найважче — дозволити іншій людині самій обрати, чи готова вона говорити.',
+      text: '«Пам’ятаю той роман. У фіналі він приніс квіти, а вона одразу погодилася на весілля». Мара пирхає. «Я досі хочу знати, куди поділася її подруга, яка його терпіти не могла».',
       options: [
         {
           id: 'remember-trust-back',
-          label: '«Ти маєш право на власний вибір»',
+          label: '«А ти вже вибрала, де поставиш столик?»',
           next: 'greet',
           grants: ['mara_day_four_reflected'],
         },
@@ -208,7 +208,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'future-back',
-          label: '«Це чудова мрія — твоя власна»',
+          label: '«А булочки для столика вже придумала?»',
           next: 'greet',
           grants: ['mara_future_supported'],
         },
@@ -227,13 +227,13 @@ export const maraDecision: DialogueStory = {
         },
         {
           id: 'truth',
-          label: '«Ти маєш право поговорити з Лео про свої почуття»',
+          label: '«Може, просто запитаєш Лео про той квиток?»',
           next: 'truth',
           grants: ['mara_supported_independence'],
         },
         {
           id: 'push',
-          label: '«Тобі слід дізнатися все прямо зараз»',
+          label: '«Треба змусити Лео все пояснити сьогодні»',
           next: 'push',
           grants: ['mara_letter_pressured'],
         },
@@ -242,13 +242,13 @@ export const maraDecision: DialogueStory = {
     {
       id: 'privacy',
       speaker: 'Мара',
-      text: '«Дякую. Якщо Лео захоче поговорити, я вислухаю. Але я не хочу будувати наші стосунки на чужому конверті».',
+      text: '«Добре. Якщо Лео захоче щось розповісти, я вислухаю». Мара дивиться на пакунок. «Але чужий лист мені не показуй. Я навіть свій список покупок від нього ховаю».',
       options: [{ id: 'privacy-back', label: 'Повернутися до розмови', next: 'greet' }],
     },
     {
       id: 'truth',
       speaker: 'Мара',
-      text: '«Так і зроблю. Ми можемо говорити про важкі речі, не перетворюючи їх на випробування. Я не збираюся змагатися з чиїмось спогадом».',
+      text: '«Запитаю його про квиток сьогодні ввечері». Мара мнеться. «Тільки спочатку нагодую. Голодний Лео починає пояснювати все так, ніби захищає дисертацію».',
       options: [{ id: 'truth-back', label: 'Повернутися до розмови', next: 'greet' }],
     },
     {
