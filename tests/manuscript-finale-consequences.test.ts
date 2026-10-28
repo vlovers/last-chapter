@@ -47,6 +47,38 @@ describe('manuscript finale continuity', () => {
     }
   });
 
+  it('compares paper without claiming the manuscript is authenticated', () => {
+    const gathering = selectOption(finalReading, {
+      ...startDialogue(finalReading),
+      flags: ['final_margin_followup_heard', 'final_missing_chapter_discussed'],
+    }, 'open');
+    expect(options(finalReading, gathering)).toContain('workshop-evidence');
+    const evidence = selectOption(finalReading, gathering, 'workshop-evidence');
+    const compared = selectOption(finalReading, evidence, 'workshop-evidence-compare');
+    expect(currentNode(finalReading, compared).text).toContain('обрізаний вручну');
+    const result = selectOption(finalReading, compared, 'workshop-evidence-paper-back');
+    const finished = selectOption(finalReading, result, 'workshop-evidence-finish');
+    expect(finished.flags).toContain('final_workshop_paper_compared');
+    expect(options(finalReading, finished)).not.toContain('workshop-evidence');
+    expect(seasonEnding({ flags: finished.flags }).epilogue).toContain('різні краї паперу');
+  });
+
+  it('keeps permission and deferral as distinct outcomes', () => {
+    const flags = ['final_margin_followup_heard', 'final_missing_chapter_discussed'];
+    for (const [choice, returnChoice, expectedFlag, epilogueText] of [
+      ['workshop-evidence-ask', 'workshop-evidence-owner-back', 'final_workshop_permission_requested', 'попросити дозволу'],
+      ['workshop-evidence-keep', 'workshop-evidence-rest-back', 'final_workshop_search_deferred', 'почекає'],
+    ]) {
+      const gathering = selectOption(finalReading, { ...startDialogue(finalReading), flags }, 'open');
+      const evidence = selectOption(finalReading, gathering, 'workshop-evidence');
+      const response = selectOption(finalReading, evidence, choice);
+      const result = selectOption(finalReading, response, returnChoice);
+      const finished = selectOption(finalReading, result, 'workshop-evidence-finish');
+      expect(finished.flags).toContain(expectedFlag);
+      expect(seasonEnding({ flags: finished.flags }).epilogue).toContain(epilogueText);
+    }
+  });
+
   it('lets the player pause the investigation without resolving the number', () => {
     const opening = selectOption(finalReading, { ...startDialogue(finalReading), flags: ['iris_margin_note_discussed', 'iris_margin_date_theory'] }, 'open');
     const followup = selectOption(finalReading, opening, 'margin-followup');
