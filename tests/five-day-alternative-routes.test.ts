@@ -56,14 +56,22 @@ function play(route: 'first' | 'last' | 'alternating') {
       const advance = view.choices.find((choice) => choice.id === '__advance');
       const finish = view.choices.find((choice) => choice.id === 'finish');
       const dialogue = view.choices.filter((choice) => !choice.id.startsWith('__'));
+      const sceneKey = `${story.stage}:${view.speaker}:${view.text}`;
+      const tried = attempted.get(sceneKey) ?? new Set<string>();
+      const untried = dialogue.filter((option) => !tried.has(option.id));
+      const candidates = untried.length > 0 ? untried : dialogue;
       const choice =
         advance ??
         finish ??
         (route === 'first'
-          ? dialogue[0]
+          ? candidates[0]
           : route === 'last'
-            ? dialogue[dialogue.length - 1]
-            : dialogue[step % 2 === 0 ? 0 : dialogue.length - 1]);
+            ? candidates[candidates.length - 1]
+            : candidates[step % 2 === 0 ? 0 : candidates.length - 1]);
+      if (choice && !choice.id.startsWith('__')) {
+        tried.add(choice.id);
+        attempted.set(sceneKey, tried);
+      }
       if (!choice) throw new Error(`Route ${route} stuck at ${story.stage} after ${step} steps`);
       // The day button must never bypass an unfinished conversation or write
       // a partial save when tapped too early.
