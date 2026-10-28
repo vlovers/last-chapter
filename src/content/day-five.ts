@@ -246,6 +246,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_chapter_evidence_reviewed'],
         },
         {
+          id: 'miller-rumor-aftermath',
+          label: 'Поговорити з Айріс після чутки про фінал роману',
+          next: 'miller-rumor-aftermath',
+          requires: ['final_miller_ledger_rumor_seeded', 'final_miller_ledger_conversation_done'],
+          unless: ['final_miller_rumor_aftermath_done'],
+        },
+        {
           id: 'miller-ledger-gossip',
           label: 'Поговорити з пані Міллер, яка помітила старий журнал',
           next: 'miller-ledger-gossip',
@@ -436,6 +443,81 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до гостей',
           next: 'gathering',
           grants: ['final_chapter_evidence_reviewed'],
+        },
+      ],
+    },
+    {
+      id: 'miller-rumor-aftermath',
+      speaker: 'Айріс',
+      text: '«Пані Міллер щойно запитала, який із маминих фіналів я збираюся видати». Айріс ставить чашку на підвіконня. «Вона навіть не читала тих сторінок. А я ще не знаю, чи обидві мамині». З-за столу долинає сміх: Анна вчить Френка не красти закладки. Айріс не усміхається. «Хто їй це сказав?»',
+      options: [
+        {
+          id: 'rumor-own',
+          label: '«Я. Сказав дурницю, і вона рознесла її далі»',
+          next: 'miller-rumor-owned',
+          grants: ['final_miller_rumor_owned'],
+        },
+        {
+          id: 'rumor-deflect',
+          label: '«Міллер сама все перекрутила»',
+          next: 'miller-rumor-aftermath-response',
+          grants: ['final_miller_rumor_deflected'],
+        },
+        {
+          id: 'rumor-leave',
+          label: 'Не відповідати й повернутися до прилавка',
+          next: 'miller-rumor-aftermath-response',
+          grants: ['final_miller_rumor_avoided'],
+        },
+      ],
+    },
+    {
+      id: 'miller-rumor-owned',
+      speaker: 'Айріс',
+      text: '«Дякую, що хоч зараз сказав прямо». Вона забирає чашку з підвіконня. «Але я вже тричі почула про той фінал. Мені не хочеться проводити вечір, виправляючи чужі вигадки». З сусіднього столу Мара гукає, що чайник знову закипів. Айріс дивиться на тебе: «І що тепер?»',
+      options: [
+        {
+          id: 'rumor-correct',
+          label: 'Попросити Міллер виправити лише неправдиву новину',
+          next: 'miller-rumor-aftermath-response',
+          grants: ['final_miller_rumor_corrected_publicly'],
+        },
+        {
+          id: 'rumor-ask-iris',
+          label: '«Я не говоритиму за тебе. Як ти хочеш вчинити?»',
+          next: 'miller-rumor-aftermath-response',
+          grants: ['final_miller_rumor_iris_choice'],
+        },
+      ],
+    },
+    {
+      id: 'miller-rumor-aftermath-response',
+      speaker: 'Айріс',
+      text: 'Айріс чекає відповіді ще мить, тоді відходить до Анни. Ти повертаєшся до прилавка, де Френк саме намагається залізти в порожню коробку з-під печива.',
+      textWhen: [
+        {
+          requires: ['final_miller_rumor_corrected_publicly'],
+          text: 'Ти просиш пані Міллер сказати гостям лише те, що вона переплутала припущення з фактом. «Отже, фіналу ніхто не знайшов?» — перепитує вона й неохоче повторює це біля столу. Айріс чує виправлення. «Дякую. Але ті, хто вже пішов, його не почують», — каже вона й повертається до Анни.',
+        },
+        {
+          requires: ['final_miller_rumor_iris_choice'],
+          text: '«Сьогодні — ніяк», — відповідає Айріс. «Я прийшла послухати книжки, а не захищати мамині чернетки». Вона киває на двері: «Якщо Міллер знову запитає, скажи тільки, що ти помилився. Без подробиць». Ти погоджуєшся. Айріс бере тарілку для Анни, але більше про рукопис не говорить.',
+        },
+        {
+          requires: ['final_miller_rumor_deflected'],
+          text: '«Нора чула, що саме ти сказав», — тихо відповідає Айріс. «Не треба робити з Міллер єдину винну». Вона бере свою чашку й сідає поруч з Анною. Та підсуває їй книжку, не ставлячи запитань.',
+        },
+        {
+          requires: ['final_miller_rumor_avoided'],
+          text: 'Ти мовчки повертаєшся до прилавка. Айріс не йде за тобою. Мара простягає їй чай і питає, чи потрібна ще одна тарілка. «Ні, дякую», — відповідає Айріс. Розмова про рукопис на цьому закінчується, але чутка залишається.',
+        },
+      ],
+      options: [
+        {
+          id: 'rumor-aftermath-finish',
+          label: 'Повернутися до вечора читання',
+          next: 'gathering',
+          grants: ['final_miller_rumor_aftermath_done'],
         },
       ],
     },
