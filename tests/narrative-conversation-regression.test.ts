@@ -3,7 +3,12 @@ import { maraVisit } from '../src/content/mara';
 import { noraVisit } from '../src/content/nora';
 import { finalReading } from '../src/content/day-five';
 import { decodeSave, encodeSave } from '../src/game/save';
-import { finishSeason, startFifthDay, type ChapterState } from '../src/game/chapter';
+import {
+  chooseChapterOption,
+  finishSeason,
+  startFifthDay,
+  type ChapterState,
+} from '../src/game/chapter';
 import {
   availableOptions,
   currentNode,
@@ -412,4 +417,34 @@ describe('narrative conversation regression', () => {
     expect(restored?.stage).toBe('season-complete');
     expect(restored?.flags).toEqual(flags);
   });
+  it('keeps both Nora archive decisions distinct after save and reload', () => {
+    for (const [choice, expected] of [
+      ['nora_will_preserve_uncertainty', 'дати'],
+      ['nora_will_seek_consent', 'власниці'],
+    ] as const) {
+      const flags = ['nora_archive_ethics_discussed', choice];
+      const dialogue: DialogueState = {
+        ...startDialogue(finalReading),
+        node: 'gathering',
+        flags,
+      };
+      const saved = encodeSave({ stage: 'day5-reading', dialogue, flags });
+      const restored = decodeSave(saved);
+      expect(restored).not.toBeNull();
+      const callback = selectOption(finalReading, restored!.dialogue, 'final-v3-nora-option');
+      expect(currentNode(finalReading, callback).text).toContain(expected);
+    }
+  });
+
+  it('prevents a completed final chapter from accepting new choices', () => {
+    const terminal = finalReading.nodes.find((node) => node.options.length === 0);
+    expect(terminal).toBeDefined();
+    const state: ChapterState = {
+      stage: 'season-complete',
+      flags: [],
+      dialogue: { ...startDialogue(finalReading), node: terminal!.id },
+    };
+    expect(() => chooseChapterOption(state, 'open')).toThrow('Chapter segment completed');
+  });
+
 });
