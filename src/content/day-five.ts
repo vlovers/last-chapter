@@ -1,5 +1,6 @@
 import type { DialogueStory } from '../game/dialogue';
 import { bookshopTomorrowNodes, bookshopTomorrowOption } from './bookshop-tomorrow';
+import { workshopPhotoNodes, workshopPhotoOption } from './workshop-photo';
 
 /** Фінальний день першого сезону. Рішення людей важливіші за чужу цікавість. */
 export const finalReading: DialogueStory = {
@@ -261,6 +262,7 @@ export const finalReading: DialogueStory = {
           unless: ['final_miller_ledger_conversation_done'],
         },
         bookshopTomorrowOption,
+        workshopPhotoOption,
         {
           id: 'archive-handover',
           label: 'Вирішити, як зберігати записи про коробку сімнадцять',
@@ -2550,6 +2552,7 @@ export const finalReading: DialogueStory = {
       ],
     },
     ...bookshopTomorrowNodes,
+    ...workshopPhotoNodes,
     {
       id: 'end',
       variantSelection: 'authored',
