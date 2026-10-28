@@ -117,7 +117,7 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'mara-kind',
-          label: '«І який із трьох потягів ти вибрав?»',
+          label: '«Головне, щоб Мара не проспала відправлення»',
           next: 'welcome',
           grants: ['leo_respected_mara_relationship'],
         },
@@ -139,7 +139,7 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'past-back',
-          label: '«Що ти їй напишеш?»',
+          label: '«Сподіваюся, вона відповість»',
           next: 'welcome',
           grants: ['leo_supported_mutual_consent'],
         },
