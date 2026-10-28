@@ -16,7 +16,7 @@ export const maraDecision: DialogueStory = {
       text: '«Я принесла булочки. Тільки не питай, чому в пакеті одна надкушена». Мара кладе пакунок на прилавок. «У мене був довгий день. Можна хвилинку посидіти?»',
       options: [
         { id: 'work', label: '«Ти змогла відмовитися від зайвої зміни?»', next: 'work' },
-        { id: 'book', label: '«Як тобі книжка для Лео?»', next: 'book' },
+        { id: 'book', label: '«Ти вже подарувала Лео книжку?»', next: 'book' },
         {
           id: 'letter',
           label: '«Є дещо з минулого, що може стосуватися Лео»',
@@ -117,7 +117,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'work-back',
-          label: '«То яку книжку взяла на неділю?»',
+          label: '«Сподіваюся, книжка виявиться цікавою»',
           next: 'greet',
           grants: ['mara_supported_independence'],
         },
@@ -182,7 +182,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'letters-back',
-          label: '«Він і справді прочитає її за ніч?»',
+          label: '«Тільки не розповідай йому фінал»',
           next: 'greet',
           grants: ['mara_gift_encouraged'],
         },
@@ -195,7 +195,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'remember-trust-back',
-          label: '«І ти досі сердишся на той фінал?»',
+          label: '«Тепер мені теж цікаво, де поділася подруга»',
           next: 'greet',
           grants: ['mara_day_four_reflected'],
         },
@@ -208,7 +208,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'future-back',
-          label: '«А що подаватимеш до кави за тим столиком?»',
+          label: '«Не дай Сему зайняти столик коробками»',
           next: 'greet',
           grants: ['mara_future_supported'],
         },
