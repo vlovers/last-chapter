@@ -79,6 +79,41 @@ describe('manuscript finale continuity', () => {
     }
   });
 
+  it('offers custody only after the evidence discussion', () => {
+    const base = ['final_margin_followup_heard', 'final_missing_chapter_discussed'];
+    const gathering = selectOption(finalReading, {
+      ...startDialogue(finalReading),
+      flags: base,
+    }, 'open');
+    expect(options(finalReading, gathering)).not.toContain('manuscript-provenance');
+    const ready = selectOption(finalReading, {
+      ...startDialogue(finalReading),
+      flags: [...base, 'final_workshop_evidence_reviewed'],
+    }, 'open');
+    expect(options(finalReading, ready)).toContain('manuscript-provenance');
+  });
+
+  it('keeps custody decisions exclusive and visible in the epilogue', () => {
+    const cases = [
+      ['provenance-return', 'final_provenance_iris_custody', 'забрала оригінали'],
+      ['provenance-archive', 'final_provenance_consent_archive', 'лише копії'],
+      ['provenance-wait', 'final_provenance_wait_for_evidence', 'відклали'],
+    ] as const;
+    for (const [choice, flag, epilogue] of cases) {
+      const gathering = selectOption(finalReading, {
+        ...startDialogue(finalReading),
+        flags: ['final_workshop_evidence_reviewed'],
+      }, 'open');
+      const discussion = selectOption(finalReading, gathering, 'manuscript-provenance');
+      const result = selectOption(finalReading, discussion, choice);
+      const finished = selectOption(finalReading, result, 'provenance-finish');
+      expect(finished.flags).toContain(flag);
+      expect(finished.flags.filter((entry) => entry.startsWith('final_provenance_'))).toEqual([flag]);
+      expect(options(finalReading, finished)).not.toContain('manuscript-provenance');
+      expect(seasonEnding({ flags: finished.flags }).epilogue).toContain(epilogue);
+    }
+  });
+
   it('lets the player pause the investigation without resolving the number', () => {
     const opening = selectOption(finalReading, { ...startDialogue(finalReading), flags: ['iris_margin_note_discussed', 'iris_margin_date_theory'] }, 'open');
     const followup = selectOption(finalReading, opening, 'margin-followup');
