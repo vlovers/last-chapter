@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import { availableOptions, currentNode, selectOption, startDialogue } from '../src/game/dialogue';
 import { seasonEnding } from '../src/game/endings';
+import { decodeSave, encodeSave } from '../src/game/save';
 
 function openWith(flags: string[]) {
   return selectOption(finalReading, { ...startDialogue(finalReading), flags }, 'open');
@@ -62,4 +63,21 @@ describe('ledger aftermath', () => {
     expect(finished.flags).not.toContain('final_ledger_aftercare_inventory');
     expect(seasonEnding({ flags: finished.flags }).epilogue).toContain('коробку з-під печива');
   });
+  it('survives a save/reload without reopening the aftercare scene', () => {
+    const gathering = openWith(['final_ledger_scene_complete']);
+    const aftercare = selectOption(finalReading, gathering, 'ledger-aftercare');
+    const cleanup = selectOption(finalReading, aftercare, 'aftercare-cleanup');
+    const end = selectOption(finalReading, cleanup, 'aftercare-cleanup-back');
+    const finished = selectOption(finalReading, end, 'aftercare-finish');
+    const restored = decodeSave(
+      encodeSave({ stage: 'day5-reading', dialogue: finished, flags: finished.flags }),
+    );
+    expect(restored).not.toBeNull();
+    expect(restored?.flags).toContain('final_ledger_aftercare_cleanup');
+    expect(restored?.dialogue.completed).toEqual(finished.completed);
+    expect(
+      availableOptions(finalReading, restored!.dialogue).map((option) => option.id),
+    ).not.toContain('ledger-aftercare');
+  });
+
 });
