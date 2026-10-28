@@ -326,7 +326,7 @@ export const maraVisit: DialogueStory = {
       options: [
         {
           id: 'trust-forgive-deeper',
-          label: '«А що тоді означає щасливий кінець?»',
+          label: '«А ти б переписала останній розділ?»',
           next: 'trust-ending',
         },
         { id: 'trust-forgive-back', label: '«Повернімося до книжок»', next: 'topics' },
@@ -339,7 +339,7 @@ export const maraVisit: DialogueStory = {
       options: [
         {
           id: 'trust-change-deeper',
-          label: '«Значить, кожен має право на власний фінал?»',
+          label: '«Автор хоча б пояснив, чому вона погодилася?»',
           next: 'trust-ending',
         },
         { id: 'trust-change-back', label: '«Змінимо тему»', next: 'topics' },
@@ -444,16 +444,16 @@ export const maraVisit: DialogueStory = {
     {
       id: 'mara-own-counter',
       speaker: 'Мара',
-      text: '«Сем знову просив підмінити його в неділю. Каже, що більше нікого немає». Мара зітхає. «А я вже купила книжку й домовилася з собою, що хоч раз дочитаю її до обіду».',
+      text: '«Сем знову просив підмінити його в четвер. Каже, що більше нікого немає». Мара зітхає. «А я вже купила книжку й домовилася з собою, що хоч раз дочитаю її до обіду».',
       options: [
         {
           id: 'mara-counter-care',
-          label: '«Можна цінувати довіру й чесно назвати свої сили»',
+          label: '«Скажи Сему, що в четвер тебе не буде»',
           next: 'mara-own-choice',
         },
         {
           id: 'mara-counter-boundary',
-          label: '«А хто питає, скільки сил залишилося в тебе?»',
+          label: '«Може, він нарешті навчиться пекти без тебе?»',
           next: 'mara-own-choice',
         },
       ],
