@@ -219,5 +219,4 @@ describe('narrative conversation regression', () => {
     expect(onlyRumor.text).toContain('Томасом');
     expect(both.text).not.toBe(onlyRumor.text);
   });
-
 });
