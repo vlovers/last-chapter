@@ -128,7 +128,9 @@ export const leoDecision: DialogueStory = {
       id: 'trains',
       speaker: 'Лео',
       text: '«Колись я пропустив потяг, бо десять хвилин звіряв два розклади». Лео сміється. «Мара тоді просто сіла на наступний. А я біг за нею з валізою».',
-      options: [{ id: 'trains-back', label: '«Тільки наступного разу не пропусти потяг»', next: 'welcome' }],
+      options: [
+        { id: 'trains-back', label: '«Тільки наступного разу не пропусти потяг»', next: 'welcome' },
+      ],
     },
     {
       id: 'past',
