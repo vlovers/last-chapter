@@ -118,4 +118,106 @@ describe('narrative conversation regression', () => {
     expect(exposed).toContain('letter');
     expect(exposed).toContain('rumor-player-accountability');
   });
+  it('keeps the sealed and opened letter versions separate', () => {
+    const sealed = currentNode(finalReading, {
+      ...withFlags(finalReading, ['saw_envelope']),
+      node: 'letter',
+    });
+    const opened = currentNode(finalReading, {
+      ...withFlags(finalReading, ['saw_envelope', 'opened_private_letter']),
+      node: 'letter',
+    });
+    const admitted = currentNode(finalReading, {
+      ...withFlags(finalReading, [
+        'saw_envelope',
+        'opened_private_letter',
+        'iris_letter_breach_admitted',
+      ]),
+      node: 'letter',
+    });
+    expect(sealed.text).toContain('запечатаний');
+    expect(opened.text).toContain('порушена');
+    expect(admitted.text).toContain('Айріс знає');
+    expect(new Set([sealed.text, opened.text, admitted.text]).size).toBe(3);
+  });
+
+  it('never offers mutual letter conversation after a privacy breach', () => {
+    const base: DialogueState = {
+      ...withFlags(finalReading, [
+        'saw_envelope',
+        'iris_letter_choice_respected',
+        'leo_open_to_conversation',
+      ]),
+      node: 'letter',
+    };
+    expect(availableOptions(finalReading, base).map((option) => option.id)).toContain('mutual');
+    expect(
+      availableOptions(finalReading, {
+        ...base,
+        flags: [...base.flags, 'opened_private_letter'],
+      }).map((option) => option.id),
+    ).not.toContain('mutual');
+  });
+
+  it('requires the player to own the opened letter before offering trust repair', () => {
+    const base: DialogueState = {
+      ...withFlags(finalReading, ['saw_envelope', 'opened_private_letter']),
+      node: 'letter',
+    };
+    const before = availableOptions(finalReading, base).map((option) => option.id);
+    expect(before).toContain('admit-breach-now');
+    expect(before).not.toContain('repair-trust');
+    const admitted = {
+      ...base,
+      flags: [...base.flags, 'iris_letter_breach_admitted'],
+    };
+    const after = availableOptions(finalReading, admitted).map((option) => option.id);
+    expect(after).not.toContain('admit-breach-now');
+    expect(after).toContain('repair-trust');
+  });
+
+  it('keeps the rumor accountability route separate from a rumor merely heard', () => {
+    const base: DialogueState = { ...startDialogue(finalReading), node: 'gathering' };
+    const heard = availableOptions(finalReading, {
+      ...base,
+      flags: ['rumor_heard'],
+    }).map((option) => option.id);
+    const amplified = availableOptions(finalReading, {
+      ...base,
+      flags: ['rumor_heard', 'rumor_amplified'],
+    }).map((option) => option.id);
+    expect(heard).toContain('rumor-miller-followup');
+    expect(heard).not.toContain('rumor-player-accountability');
+    expect(amplified).toContain('rumor-player-accountability');
+  });
+
+  it('shows distinct Iris exhibition outcomes for a private and an open choice', () => {
+    const privateVersion = currentNode(finalReading, {
+      ...withFlags(finalReading, ['iris_exhibition_private_choice']),
+      node: 'final-v3-iris',
+    });
+    const openVersion = currentNode(finalReading, {
+      ...withFlags(finalReading, ['iris_exhibition_artist_controls']),
+      node: 'final-v3-iris',
+    });
+    expect(privateVersion.text).toContain('один малюнок');
+    expect(openVersion.text).toContain('три малюнки');
+    expect(privateVersion.text).not.toBe(openVersion.text);
+  });
+
+  it('prioritizes the combined gathering callback over a single-condition callback', () => {
+    const node = 'gathering';
+    const both = currentNode(finalReading, {
+      ...withFlags(finalReading, ['final_repaired_rumor', 'final_iris_exhibition']),
+      node,
+    });
+    const onlyRumor = currentNode(finalReading, {
+      ...withFlags(finalReading, ['final_repaired_rumor']),
+      node,
+    });
+    expect(both.text).toContain('малюнків');
+    expect(onlyRumor.text).toContain('Томасом');
+    expect(both.text).not.toBe(onlyRumor.text);
+  });
+
 });
