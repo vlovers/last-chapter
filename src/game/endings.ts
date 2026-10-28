@@ -68,7 +68,7 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
               'Мара й Айріс домовилися перечитати рукопис від початку, перш ніж сперечатися про останній рядок.',
             ]
           : []),
-    ...(flags.has('final_margin_handwriting_compared')
+    ...(flags.has('final_margin_handwriting_compared') && !flags.has('final_ledger_resolved_17')
       ? [
           'Фотографію майстерні й сторінку вирішили порівняти уважніше. Цифра сімнадцять поки лишилася загадкою.',
         ]
@@ -89,7 +89,7 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
       : flags.has('final_provenance_consent_archive')
         ? ['З дозволу Айріс у книгарні залишилися лише копії сторінок, без імені автора, якого ще не встановили.']
         : flags.has('final_provenance_wait_for_evidence')
-          ? ['Рішення про сторінки відклали до огляду коробки в майстерні. Оригінали поки залишилися в Айріс.']
+          ? ['Рішення про сторінки відклали до перевірки решти матеріалів. Оригінали поки залишилися в Айріс.']
           : []),
     ...(flags.has('final_reconstruction_alternative_claim')
       ? ['У нотатнику залишилася версія про два можливі фінали, але доказів для неї поки бракує.']
@@ -103,6 +103,18 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
       : flags.has('final_reconstruction_notes_private')
         ? ['Припущення Нори й власника книгарні поки залишилися в особистому нотатнику.']
         : []),
+    ...(flags.has('final_ledger_resolved_17')
+      ? [
+          'Старий журнал Елеонори підтвердив: сімнадцять — номер коробки, в якій після затоплення сушили розрізнені аркуші. Хто написав попередження на звороті, ще невідомо.',
+        ]
+      : []),
+    ...(flags.has('final_ledger_iris_told')
+      ? ['Айріс побачила запис про врятовані аркуші. Їй знадобився час, щоб поговорити з Елеонорою без свідків.']
+      : flags.has('final_ledger_eleanor_to_tell')
+        ? ['Елеонора пообіцяла сама показати Айріс старий журнал, коли свято закінчиться.']
+        : flags.has('final_ledger_record_private')
+          ? ['Журнал залишився в шухляді книгарні. Айріс поки не знає, що вдалося встановити.']
+          : []),
     ...(flags.has('book_club_started')
       ? ['Наступного тижня на дверях з’явилося нове оголошення про книжковий клуб.']
       : [
