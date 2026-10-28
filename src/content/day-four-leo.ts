@@ -13,7 +13,7 @@ export const leoDecision: DialogueStory = {
     {
       id: 'welcome',
       speaker: 'Лео',
-      text: '«Я останнім часом багато думаю про те, як ми пам’ятаємо людей. Інколи здається, що пам’ятаєш людину, а насправді — свою останню розмову з нею».',
+      text: '«Мара знайшла старий квиток у моїй шухляді». Лео знімає мокру куртку. «Не сварилися, але я чомусь досі прокручую ту розмову в голові».',
       options: [
         { id: 'mara', label: '«Як ви з Марою?»', next: 'mara' },
         { id: 'trains', label: '«Досі любиш старі станції?»', next: 'trains' },
@@ -32,7 +32,7 @@ export const leoDecision: DialogueStory = {
         },
         {
           id: 'leo-future',
-          label: '«Чи можна будувати майбутнє, не переписуючи минуле?»',
+          label: '«То що сталося з тим квитком?»',
           next: 'leo-future',
           unless: ['leo_day_four_future_heard'],
         },
