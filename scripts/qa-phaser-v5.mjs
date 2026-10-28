@@ -66,7 +66,12 @@ try {
       const seen = new Set();
       for (let index = 0; index < queue.length && index < 5000; index++) {
         const entry = queue[index];
-        const key = entry.state.dialogue.node + '|' + [...entry.state.flags].sort().join(',');
+        const key = JSON.stringify({
+          node: entry.state.dialogue.node,
+          flags: [...entry.state.dialogue.flags].sort(),
+          completed: [...(entry.state.dialogue.completed ?? [])].sort(),
+          pending: entry.state.dialogue.pending ?? [],
+        });
         if (seen.has(key)) continue;
         seen.add(key);
         const options = availableOptions(stageStory(initial.stage), entry.state.dialogue);
@@ -80,6 +85,29 @@ try {
       }
       throw new Error('No reachable terminal for ' + initial.stage);
     };
+    // Verify both optional Day 3 routes before advancing the live season.
+    // This uses the same transition engine as the browser story, but leaves
+    // the current save untouched.
+    const { skipBookClub, startBookClub, finishThirdDay, startFourthDay } =
+      await import('/src/game/chapter.ts');
+    const { noraVisit } = await import('/src/content/nora.ts');
+    const { startDialogue } = await import('/src/game/dialogue.ts');
+    const noraFinished = {
+      ...startChapter(),
+      stage: 'nora',
+      dialogue: { ...startDialogue(noraVisit), node: 'end' },
+    };
+    const quiet = skipBookClub(noraFinished);
+    const found = chooseChapterOption(
+      chooseChapterOption(quiet, 'tidy-books'),
+      'keep-page',
+    );
+    const quietDayFour = startFourthDay(finishThirdDay(found));
+    assert.ok(quietDayFour.flags.includes('quiet_evening_page_found'));
+    assert.ok(quietDayFour.dialogue.flags.includes('book_club_skipped'));
+    const club = startBookClub(noraFinished);
+    assert.ok(club.flags.includes('book_club_started'));
+    assert.ok(!club.flags.includes('book_club_skipped'));
     for (let i = 0; i < 25 && story.stage !== 'season-complete'; i++) {
       const stage = story.stage;
       visited.add(stage);
