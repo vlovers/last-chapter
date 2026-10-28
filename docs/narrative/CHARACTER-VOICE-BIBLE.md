@@ -11,6 +11,7 @@ Natural dialogue is not a string of perfect quotes. People interrupt themselves,
 ## Voice fingerprints
 
 ### Mara — quick, warm, funny; hides exhaustion behind a joke
+
 - Rhythm: short-to-medium phrases, quick pivots, questions back to the other person.
 - Vocabulary: bakery shifts, dough, early mornings, customers, food; concrete rather than philosophical.
 - Humor: affectionate exaggeration and small workplace absurdities.
@@ -19,6 +20,7 @@ Natural dialogue is not a string of perfect quotes. People interrupt themselves,
 - Example: “Я сказала, що можу підмінити. А потім ще раз. Тепер начальник думає, що в мене взагалі немає дому.”
 
 ### Leo — precise and self-correcting; uses logistics to avoid vulnerability
+
 - Rhythm: starts with a fact, adds a qualification, then catches himself overexplaining.
 - Vocabulary: time, routes, platforms, missed connections, practical details.
 - Humor: dry, slightly awkward, rarely performs for an audience.
@@ -27,6 +29,7 @@ Natural dialogue is not a string of perfect quotes. People interrupt themselves,
 - Example: “Я пам’ятаю час. 18:40, здається. Ні, 18:45. Бачите? Оце я пам’ятаю. А що сказав — ні.”
 
 ### Iris — observant, exact, private; does not explain herself on demand
+
 - Rhythm: quiet direct statements; notices a specific visual detail; can stop mid-answer.
 - Vocabulary: light, color, edges, windows, paper, the physical act of drawing.
 - Humor: dry and understated, often a small correction.
@@ -35,6 +38,7 @@ Natural dialogue is not a string of perfect quotes. People interrupt themselves,
 - Example: “Я перемалювала це вікно тричі. Не тому, що воно важливе. Просто вранці рама була синя, а ввечері — сіра.”
 
 ### Eleanor — practical, proud, sentimental in spite of herself
+
 - Rhythm: begins with a practical complaint or correction, then lets one memory slip out.
 - Vocabulary: shelves, keys, repairs, receipts, customers, the shop’s routines.
 - Humor: dry, familiar, sometimes bossy.
@@ -43,6 +47,7 @@ Natural dialogue is not a string of perfect quotes. People interrupt themselves,
 - Example: “Полиця там стояла двадцять років. И я знаю, что это не аргумент. Но попробуйте сами её передвинуть.”
 
 ### Mrs Miller — sociable, nosy, quick to connect dots; embarrassed by uncertainty
+
 - Rhythm: starts a story before asking permission; adds details in parentheses; occasionally corrects herself.
 - Vocabulary: neighbors, errands, who was where, old detective novels.
 - Humor: gossip with comic confidence.
@@ -51,6 +56,7 @@ Natural dialogue is not a string of perfect quotes. People interrupt themselves,
 - Example: “Я не говорю, что он это сделал. Я говорю, что виделa его у двери. Хотя… нет, это был вторник? Надо было записать.”
 
 ### Nora — measured, careful, professional; warmer in the pauses
+
 - Rhythm: asks one precise question at a time; leaves space rather than explaining every caveat.
 - Vocabulary: what was said, what was recorded, what is known, what cannot be shared.
 - Humor: subtle and infrequent.
@@ -59,6 +65,7 @@ Natural dialogue is not a string of perfect quotes. People interrupt themselves,
 - Example: “Я могу проверить дату. Кто приходил и зачем — это уже не моя история для пересказа.”
 
 ### Anna — thoughtful teacher who is less composed in her own life
+
 - Rhythm: begins an explanation, catches herself, tries again more personally.
 - Vocabulary: books, students, lessons, things she meant to do.
 - Humor: gentle, often self-deprecating.
@@ -67,6 +74,7 @@ Natural dialogue is not a string of perfect quotes. People interrupt themselves,
 - Example: “Я детям всё время говорю: ошибаться нормально. А потом сама три дня переживаю из-за одной фразы на собрании.”
 
 ### Thomas — practical, quiet, shows care by doing; struggles to say what he feels
+
 - Rhythm: plain statements, pauses, unfinished thoughts; prefers a task to a confession.
 - Vocabulary: repairs, objects, food, work, what needs doing.
 - Humor: understated, sometimes a one-word answer.
@@ -75,6 +83,7 @@ Natural dialogue is not a string of perfect quotes. People interrupt themselves,
 - Example: “Я починил защёлку. Она заедала. …Нет, я знаю, ты спрашивала не об этом.”
 
 ### The bookseller / player — curious but not omniscient
+
 - Rhythm: short questions, occasional awkwardness, admits uncertainty.
 - Role: the player can notice and choose; they should not diagnose everyone or always find the wisest response.
 - Avoid: choices where every option sounds like the ideal therapist.

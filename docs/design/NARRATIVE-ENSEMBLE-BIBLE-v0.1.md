@@ -15,7 +15,7 @@
 
 **Emotional rhythm:** warmth → friction → curiosity → recontextualization → breathing room. Avoid ten consecutive confessions or the impression that every visitor needs therapy. Some scenes should be genuinely funny, mundane, or quiet.
 
-**Meaningful choice:** A stance changes *how* a later scene is framed, what an NPC volunteers, or which action the player may take. It need not determine whether a person is saved. The player is a bookseller, not a therapist or omniscient judge.
+**Meaningful choice:** A stance changes _how_ a later scene is framed, what an NPC volunteers, or which action the player may take. It need not determine whether a person is saved. The player is a bookseller, not a therapist or omniscient judge.
 
 **Five-day architecture:** Day 1 introduces masks; Day 2 exposes contradictions; Day 3 tests relationships; Day 4 forces decisions; Day 5 shows consequences and what remains unresolved. This is a production scaffold, not a requirement that every character appear on all five days.
 
@@ -35,6 +35,7 @@
 ## Character design contract
 
 Every major NPC needs:
+
 - **Surface:** first impression, mannerisms, social role, reading taste, visual/audio motif.
 - **External want:** the specific action they pursue during this visit.
 - **Inner need:** something they may learn but cannot receive as a quest reward.
@@ -62,7 +63,7 @@ Every major NPC needs:
 **Links:** Leo challenges her reading of intentions; Anna notices when she uses jokes to change the subject.  
 **Topics:** Tamlin/Rhysand and double standards; why people defend fictional characters; protection versus control; empathy versus accountability; whether closure requires contact; Frank's suspiciously excellent timing.  
 **Five-day beats:** playful debate → first personal slip → letter surfaces → she chooses what, if anything, to answer → returns with an imperfect but owned decision.  
-**Choice effects:** player may be empathetic, skeptical, or uncertain; Mara recalls the *reasoning*, not a friendship score. She can reject advice and still remain a regular.  
+**Choice effects:** player may be empathetic, skeptical, or uncertain; Mara recalls the _reasoning_, not a friendship score. She can reject advice and still remain a regular.  
 **Mirror:** «Чи можна зрозуміти людину й усе одно не впускати її назад?»  
 **Sample:** «Я не хочу, щоб ти вирішувала за мене. Я хочу зрозуміти, чому мені так кортить, щоб це зробив хтось інший».  
 **Caution:** Reconcile with existing four Mara conversation topics; do not rewrite their established letter outcome blindly.
@@ -238,36 +239,37 @@ Frank is a **small grey Devon Rex** with curly fur and oversized ears. He provid
 
 ## Dialogue topic matrix
 
-| Character | Warm / funny | Literary or ethical debate | Personal tension | Later callback |
-| --- | --- | --- | --- | --- |
-| Mara | Frank judges readers | Tamlin/Rhysand, agency | The unsent answer | Repeats player's distinction between empathy and permission |
-| Miller | Bookshop rules | Who owns a place's history? | Fear of change | Lets the player alter one small ritual |
-| Iris | Terrible first drafts | Art versus approval | Being ordinary | Quotes her once-deleted sentence |
-| Anna | Gifts gone wrong | Care or obligation? | Saying no | Accepts or declines help without punishment |
-| Leo | The wrong book gift | Secrecy versus loyalty | Owning an omission | Uses the player's language about consent |
-| Eleanor | Misdated memories | Unreliable narrators | Certainty under pressure | Revises a detail, not her whole identity |
-| Thomas | Angry book reviews | Nesta, anger and repair | Need to be heard | Distinguishes apology from restitution |
-| Nora | Comfort rereads | Belonging in fiction | Visibility | Speaks up once in her own way |
-| Solomiia* | Reading night chaos | Self-sacrifice tropes | Exhaustion | Delegates without apologizing |
-| Adrian* | Dust jackets | Value and access | Family legacy | Lends an object without surrendering identity |
+| Character | Warm / funny          | Literary or ethical debate  | Personal tension         | Later callback                                              |
+| --------- | --------------------- | --------------------------- | ------------------------ | ----------------------------------------------------------- |
+| Mara      | Frank judges readers  | Tamlin/Rhysand, agency      | The unsent answer        | Repeats player's distinction between empathy and permission |
+| Miller    | Bookshop rules        | Who owns a place's history? | Fear of change           | Lets the player alter one small ritual                      |
+| Iris      | Terrible first drafts | Art versus approval         | Being ordinary           | Quotes her once-deleted sentence                            |
+| Anna      | Gifts gone wrong      | Care or obligation?         | Saying no                | Accepts or declines help without punishment                 |
+| Leo       | The wrong book gift   | Secrecy versus loyalty      | Owning an omission       | Uses the player's language about consent                    |
+| Eleanor   | Misdated memories     | Unreliable narrators        | Certainty under pressure | Revises a detail, not her whole identity                    |
+| Thomas    | Angry book reviews    | Nesta, anger and repair     | Need to be heard         | Distinguishes apology from restitution                      |
+| Nora      | Comfort rereads       | Belonging in fiction        | Visibility               | Speaks up once in her own way                               |
+| Solomiia* | Reading night chaos   | Self-sacrifice tropes       | Exhaustion               | Delegates without apologizing                               |
+| Adrian*   | Dust jackets          | Value and access            | Family legacy            | Lends an object without surrendering identity               |
 
-*Proposed future characters.*
+_Proposed future characters._
 
 ## Five-day dramatic structure (preserve existing mandatory events)
 
-| Day | Ensemble function | Player question | Production guard |
-| --- | --- | --- | --- |
-| 1 | Introduce personalities and contradictory first impressions | Who do I trust too quickly? | No confessions on first meeting |
-| 2 | Show small, verifiable discrepancies | What did I assume? | Give observable clues before conclusions |
-| 3 | Let relationships exert pressure | What do I owe other people? | NPCs can disagree with player's interpretation |
-| 4 | Force decisions with real tradeoffs | What can I change, and what isn't mine to decide? | No forced forgiveness or breach of privacy |
-| 5 | Show effects and preserve uncertainty | What do I carry forward? | No magical resolution of every conflict |
+| Day | Ensemble function                                           | Player question                                   | Production guard                               |
+| --- | ----------------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------- |
+| 1   | Introduce personalities and contradictory first impressions | Who do I trust too quickly?                       | No confessions on first meeting                |
+| 2   | Show small, verifiable discrepancies                        | What did I assume?                                | Give observable clues before conclusions       |
+| 3   | Let relationships exert pressure                            | What do I owe other people?                       | NPCs can disagree with player's interpretation |
+| 4   | Force decisions with real tradeoffs                         | What can I change, and what isn't mine to decide? | No forced forgiveness or breach of privacy     |
+| 5   | Show effects and preserve uncertainty                       | What do I carry forward?                          | No magical resolution of every conflict        |
 
 **Pacing budget (editorial targets, not measured):** 1–3 minutes mandatory conversation per beat, 4–8 minutes optional character topic, 12–20 minutes for one featured deep book debate. After a heavy conversation, offer exploration, a shop task, humor or a quiet moment. Do not front-load all ten characters into five days.
 
 ## Choice and memory design
 
 **Avoid a single friendship number.** Store discrete, versioned memories:
+
 - `topic:<id>:heard` — encountered the subject.
 - `stance:<id>:<value>` — an interpretation, not a moral grade.
 - `promise:<id>:made|kept|broken` — only for explicit commitments.
@@ -276,7 +278,7 @@ Frank is a **small grey Devon Rex** with curly fur and oversized ears. He provid
 
 **Callbacks:** At least one immediate, one delayed, one interpersonal (another NPC responds to consequences, not secret omniscience). Avoid infinite flag growth; define a schema and migration before implementation. Existing save model remains authoritative.
 
-**Choice families:** curiosity / skepticism / solidarity / humor / respectful silence. A 'leave this topic' option is always legitimate. Choices should reflect *values and attention*, not hidden personality tests.
+**Choice families:** curiosity / skepticism / solidarity / humor / respectful silence. A 'leave this topic' option is always legitimate. Choices should reflect _values and attention_, not hidden personality tests.
 
 **Failure modes to test:** NPC reveals information player never learned; contradictory memories coexist; reload resets boundaries; a 'neutral' answer secretly loses affection; spoiler appears before opt-in; character repeats the same confession; one answer is always objectively correct.
 
@@ -308,7 +310,7 @@ Accessibility / save-reload test:
 - **Mirror test:** a reflective question emerges from behavior, not a sermon.
 - **Continuity test:** character history is consistent across days and save/reload.
 - **Humor test:** every long heavy arc contains human relief, not jokes at a vulnerable person's expense.
-- **Playtest:** ask what the player *thought* and *felt*, not only whether they liked the character.
+- **Playtest:** ask what the player _thought_ and _felt_, not only whether they liked the character.
 - **Evidence audit:** every major reveal must be reconstructible after the fact.
 - **Exit test:** short-path player understands the story without optional 20-minute debates.
 - **Spoiler test:** real-book discussion defaults to spoiler-free.
@@ -316,28 +318,33 @@ Accessibility / save-reload test:
 ## Implementation plan: prioritized vertical slices
 
 **P0 — Canon audit (before new scripted dialogue):**
+
 1. Inventory all existing scenes for eight cast members, day gates, promises, reveals and existing flags.
 2. Produce a canon-versus-proposal matrix; mark conflicts and choose revisions consciously.
 3. Confirm which two proposed characters, if any, fit pacing; do not add them to production cast yet.
 
 **P1 — Character bible v1:**
+
 1. Lock external want, protective belief, off-screen life and arc for each existing character.
 2. Write two relationships and one independent action for each.
 3. Create scene cards and Ukrainian voice rules for each recurring visitor.
 
 **P2 — One complete vertical slice:**
+
 1. Use Mara as reference: optional 2-minute exit and 15-minute discussion.
 2. Preserve four existing topic IDs and letter decision continuity.
 3. Implement three memory callbacks and boundaries, with test coverage.
 4. Run automated checks and two human playtests.
 
 **P3 — Ensemble expansion:**
+
 1. Develop Miller/Eleanor and Anna/Thomas paired tensions.
 2. Develop Iris/Nora on creative identity and belonging.
 3. Develop Leo on truth and responsibility.
 4. Introduce future additions only if they strengthen the central theme and do not dilute the existing eight.
 
 **P4 — Integration and release readiness:**
+
 1. Day-by-day dramatic pacing audit.
 2. UI, portraits, sound cues and quiet shop interactions.
 3. Ukrainian editorial review, accessibility and spoiler consent.
