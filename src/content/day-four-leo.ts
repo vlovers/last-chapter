@@ -117,7 +117,7 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'mara-kind',
-          label: '«Важливо слухати, чого хочете ви обоє»',
+          label: '«Мара вже вибрала місто біля моря?»',
           next: 'welcome',
           grants: ['leo_respected_mara_relationship'],
         },
@@ -127,8 +127,8 @@ export const leoDecision: DialogueStory = {
     {
       id: 'trains',
       speaker: 'Лео',
-      text: '«На старих вокзалах мені подобаються табло. Вони показують усі напрямки, але не обирають за тебе. Можливо, дорослішання — це купити квиток, не чекаючи ідеального розкладу».',
-      options: [{ id: 'trains-back', label: '«Гарне порівняння»', next: 'welcome' }],
+      text: '«Колись я пропустив потяг, бо десять хвилин звіряв два розклади». Лео сміється. «Мара тоді просто сіла на наступний. А я біг за нею з валізою».',
+      options: [{ id: 'trains-back', label: '«Тільки наступного разу не пропусти потяг»', next: 'welcome' }],
     },
     {
       id: 'past',
@@ -137,7 +137,7 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'past-back',
-          label: '«Це має бути рішення вас обох»',
+          label: '«А ти вже написав Айріс?»',
           next: 'welcome',
           grants: ['leo_supported_mutual_consent'],
         },
@@ -160,7 +160,7 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'evidence-back',
-          label: '«Ми знаємо лише те, що підтверджено»',
+          label: '«Можемо ще перевірити журнал бронювань»',
           next: 'welcome',
           grants: ['leo_understood_timeline'],
         },
@@ -194,13 +194,13 @@ export const leoDecision: DialogueStory = {
     {
       id: 'letter-wait',
       speaker: 'Лео',
-      text: '«Дякую. Мені цікаво, що там, звісно. Але цікавість не важливіша за те, що вона вирішить сама».',
+      text: '«Дякую. Я, звісно, хочу знати, що там написано». Лео крутить картку між пальцями. «Але не хочу, щоб Айріс дізналася про лист від когось у черзі за хлібом».',
       options: [{ id: 'wait-back', label: 'Повернутися до розмови', next: 'welcome' }],
     },
     {
       id: 'letter-ask',
       speaker: 'Лео',
-      text: '«Скажи тільки, що я готовий вислухати. Без обіцянок і без сцени на весь Беллвік. Я теж маю поговорити з Марою — чесно, не ховаючись за минулим».',
+      text: '«Скажи їй, що я можу зустрітися після роботи. Якщо вона захоче». Лео зупиняється біля дверей. «І Марі я сьогодні поясню про той квиток. Вона вже двічі питала, чи я його викину».',
       options: [
         { id: 'ask-back', label: '«Передам лише твою готовність говорити»', next: 'welcome' },
       ],
@@ -208,8 +208,8 @@ export const leoDecision: DialogueStory = {
     {
       id: 'letter-push',
       speaker: 'Лео',
-      text: '«Ні. Я вже колись думав, що мовчання іншої людини дає мені право придумати за неї відповідь. Більше не хочу так робити».',
-      options: [{ id: 'push-back', label: '«Ти маєш рацію»', next: 'welcome' }],
+      text: '«Ні. Якщо Айріс не хоче передавати лист, я не стану його брати». Лео відсуває долоню від прилавка. «Можемо просто залишити його тут?»',
+      options: [{ id: 'push-back', label: '«Гаразд, не чіпатиму конверт»', next: 'welcome' }],
     },
     {
       id: 'end',
