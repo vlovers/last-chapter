@@ -91,6 +91,18 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
         : flags.has('final_provenance_wait_for_evidence')
           ? ['Рішення про сторінки відклали до огляду коробки в майстерні. Оригінали поки залишилися в Айріс.']
           : []),
+    ...(flags.has('final_reconstruction_alternative_claim')
+      ? ['У нотатнику залишилася версія про два можливі фінали, але доказів для неї поки бракує.']
+      : flags.has('final_reconstruction_sequence_claim')
+        ? ['У нотатнику залишилася версія про дві послідовні сцени. Сторінки між ними так і не знайшли.']
+        : flags.has('final_reconstruction_authorship_open')
+          ? ['У нотатнику окремо позначили: авторство другого аркуша досі не встановлено.']
+          : []),
+    ...(flags.has('final_reconstruction_disclosed_uncertainty')
+      ? ['Айріс дізналася про сумніви щодо походження сторінок і вирішила перевірити їх, перш ніж робити висновки.']
+      : flags.has('final_reconstruction_notes_private')
+        ? ['Припущення Нори й власника книгарні поки залишилися в особистому нотатнику.']
+        : []),
     ...(flags.has('book_club_started')
       ? ['Наступного тижня на дверях з’явилося нове оголошення про книжковий клуб.']
       : [
