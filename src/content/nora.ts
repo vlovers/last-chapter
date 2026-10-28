@@ -17,13 +17,13 @@ export const noraVisit: DialogueStory = {
       options: [
         {
           id: 'nora-v3-conversation',
-          label: '«А що, як хтось просить чужі записи з архіву?»',
+          label: '«Що там за плутанина з датою відкриття кінотеатру?»',
           next: 'nora-v3-conversation',
           unless: ['nora_archive_ethics_discussed'],
         },
         {
           id: 'nora-reflection',
-          label: '«Ви колись кидали книжку перед фіналом?»',
+          label: '«Що нового знайшлося в архіві?»',
           next: 'nora-reflection',
           unless: ['nora_reflected_on_uncertainty'],
         },
@@ -189,7 +189,7 @@ export const noraVisit: DialogueStory = {
     {
       id: 'nora-reflection-uncertain',
       speaker: 'Нора',
-      text: '«Три голоси, три різні дати і чесне «не підтверджено». Можливо, негарно виглядатиме на виставці. Зате ніхто не стане декорацією для чужої впевненості».',
+      text: '«Напишу під фото: “Рік відкриття не встановлено”. Пані Міллер буде незадоволена, зате зможемо додати дату, коли знайдемо афішу».',
       options: [
         { id: 'nora-uncertain-back', label: 'Послухати далі', next: 'nora-reflection-end' },
       ],
