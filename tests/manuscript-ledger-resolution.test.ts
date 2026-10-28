@@ -81,8 +81,34 @@ describe('lost pages: Eleanor ledger resolution', () => {
     expect(seasonEnding({ flags: returned.flags }).epilogue).toContain('того самого затоплення');
   });
 
+  it('lets Iris react differently to listening, pressure and a careless joke', () => {
+    const responses = [
+      ['ledger-confrontation-listen', 'final_ledger_iris_listened', 'домовилися'],
+      ['ledger-confrontation-demand', 'final_ledger_eleanor_pressed', 'не захотіла'],
+      ['ledger-confrontation-joke', 'final_ledger_iris_joke_hurt', 'невдалого жарту'],
+    ] as const;
+    for (const [choice, flag, epilogueText] of responses) {
+      const ledger = selectOption(
+        finalReading,
+        openGathering(['final_chapter_reconstruction_done']),
+        'ledger-resolution',
+      );
+      const evidence = selectOption(finalReading, ledger, 'ledger-ask-iris');
+      const outcome = selectOption(finalReading, evidence, 'ledger-tell-iris');
+      const confrontation = selectOption(finalReading, outcome, 'ledger-iris-confrontation');
+      const response = selectOption(finalReading, confrontation, choice);
+      expect(response.flags).toContain(flag);
+      const back = selectOption(finalReading, response, 'ledger-iris-response-back');
+      expect(availableOptions(finalReading, back).map((item) => item.id)).not.toContain(
+        'ledger-iris-confrontation',
+      );
+      const finished = selectOption(finalReading, back, 'ledger-finish');
+      expect(seasonEnding({ flags: finished.flags }).epilogue).toContain(epilogueText);
+    }
+  });
+
   it('keeps each new scene within four visible choices', () => {
-    for (const id of ['ledger-resolution', 'ledger-evidence', 'ledger-letter-connection', 'ledger-outcome']) {
+    for (const id of ['ledger-resolution', 'ledger-evidence', 'ledger-letter-connection', 'ledger-iris-confrontation', 'ledger-iris-response', 'ledger-outcome']) {
       const node = finalReading.nodes.find((item) => item.id === id);
       expect(node).toBeDefined();
       expect(node!.options.length).toBeLessThanOrEqual(4);
