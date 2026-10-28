@@ -66,7 +66,7 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«У центрі сьогодні зламався чайник. Пів дня шукали майстра, а потім з’ясували, що хтось просто витягнув вилку». Нора зітхає. «Іноді це вся наша робота за день».',
       options: [
-        { id: 'work-follow', label: '«Ви втомлюєтеся слухати?»', next: 'rest' },
+        { id: 'work-follow', label: '«А відвідувачі хоч помітили, що чайник не працював?»', next: 'rest' },
         { id: 'work-back', label: '«Зрозуміло»', next: 'hello' },
       ],
     },
@@ -77,7 +77,7 @@ export const noraVisit: DialogueStory = {
       options: [
         {
           id: 'rest-back',
-          label: '«М’ята, здається, перемогла»',
+          label: '«Може, базиліку потрібне нове підвіконня?»',
           next: 'hello',
           grants: ['nora_shared_garden'],
         },
@@ -90,7 +90,7 @@ export const noraVisit: DialogueStory = {
       options: [
         {
           id: 'bellwick-back',
-          label: '«Книгарня може бути таким місцем»',
+          label: '«Тут можна просто купити хліб і мовчати»',
           next: 'hello',
           grants: ['nora_hopes_for_safe_shop'],
         },
