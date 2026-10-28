@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { maraVisit } from '../src/content/mara';
 import { noraVisit } from '../src/content/nora';
 import { finalReading } from '../src/content/day-five';
+import { decodeSave, encodeSave } from '../src/game/save';
 import {
   availableOptions,
   currentNode,
@@ -305,4 +306,53 @@ describe('narrative conversation regression', () => {
       'final-v3-nora-back',
     );
   });
+  it('round-trips a completed letter scene through the save format', () => {
+    const state: DialogueState = {
+      ...withFlags(finalReading, ['saw_envelope']),
+      node: 'gathering',
+    };
+    const dialogue = ['letter', 'wait', 'wait-back'].reduce(
+      (progress, option) => selectOption(finalReading, progress, option),
+      state,
+    );
+    const saved = encodeSave({
+      stage: 'day5-reading',
+      dialogue,
+      flags: [...dialogue.flags],
+    });
+    const restored = decodeSave(saved);
+    expect(restored).not.toBeNull();
+    expect(restored?.dialogue.node).toBe('gathering');
+    expect(restored?.flags).toContain('final_letter_kept_private');
+    expect(
+      availableOptions(finalReading, restored!.dialogue).map((option) => option.id),
+    ).not.toContain('letter');
+  });
+
+  it('round-trips a completed rumor apology without reopening the scene', () => {
+    const state: DialogueState = { ...startDialogue(finalReading), node: 'gathering' };
+    const dialogue = ['rumor', 'rumor-apology', 'rumor-apology-back'].reduce(
+      (progress, option) => selectOption(finalReading, progress, option),
+      state,
+    );
+    const restored = decodeSave(
+      encodeSave({ stage: 'day5-reading', dialogue, flags: [...dialogue.flags] }),
+    );
+    expect(restored?.flags).toContain('final_repaired_rumor');
+    expect(
+      availableOptions(finalReading, restored!.dialogue).map((option) => option.id),
+    ).not.toContain('rumor');
+  });
+
+  it('rejects a save with a missing final-day dialogue node', () => {
+    const raw = JSON.stringify({
+      version: 1,
+      stage: 'day5-reading',
+      node: 'missing-finale-node',
+      flags: [],
+      history: [],
+    });
+    expect(decodeSave(raw)).toBeNull();
+  });
+
 });
