@@ -41,6 +41,8 @@ let previewBook: Book | null = null;
 let activeSpot: ShopSpotId | null = null;
 let catalogFilter: CatalogFilter = 'all';
 let journalOpen = false;
+let dialoguePage = 0;
+let dialoguePageKey = '';
 
 function restoreChapter() {
   try {
@@ -322,6 +324,15 @@ function render(): void {
       actions.append(shelf);
     } else {
       const available = availableOptions(story, chapter.dialogue);
+      const pageKey = chapter.stage + ':' + chapter.dialogue.node + ':' + available.map((option) => option.id).join(',');
+      if (pageKey !== dialoguePageKey) {
+        dialoguePageKey = pageKey;
+        dialoguePage = 0;
+      }
+      const pageSize = 3;
+      const totalPages = Math.max(1, Math.ceil(available.length / pageSize));
+      dialoguePage = Math.min(dialoguePage, totalPages - 1);
+      const visible = available.slice(dialoguePage * pageSize, (dialoguePage + 1) * pageSize);
       const groups =
         node.id === 'gathering'
           ? [
@@ -366,7 +377,7 @@ function render(): void {
             ]
           : [{ title: '', matches: () => true }];
       for (const group of groups) {
-        const options = available.filter((option) => group.matches(option.id));
+        const options = visible.filter((option) => group.matches(option.id));
         if (options.length === 0) continue;
         const section = document.createElement('section');
         section.className = 'dialogue-options-group';
@@ -389,6 +400,19 @@ function render(): void {
           section.append(button);
         }
         actions.append(section);
+      }
+      if (totalPages > 1) {
+        const pager = document.createElement('div');
+        pager.className = 'dialogue-options-group';
+        const navigation = document.createElement('button');
+        navigation.type = 'button';
+        navigation.textContent = dialoguePage < totalPages - 1 ? 'Інші варіанти →' : '← Попередні варіанти';
+        navigation.addEventListener('click', () => {
+          dialoguePage = dialoguePage < totalPages - 1 ? dialoguePage + 1 : 0;
+          render();
+        });
+        pager.append(navigation);
+        actions.append(pager);
       }
     }
     if (node.options.length === 0) {
