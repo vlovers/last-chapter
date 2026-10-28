@@ -150,9 +150,7 @@ describe('five-day case closure: proof, uncertainty and consent', () => {
       expect(state.flags).toContain('final_case_closure_complete');
       expect(options(state)).not.toContain('case-closure');
       expect(seasonEnding({ flags: state.flags }).epilogue).toContain(epilogue);
-      expect(
-        outcomes.filter(({ outcome: other }) => state.flags.includes(other)),
-      ).toHaveLength(1);
+      expect(outcomes.filter(({ outcome: other }) => state.flags.includes(other))).toHaveLength(1);
     });
   }
 
