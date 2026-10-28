@@ -246,6 +246,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_chapter_evidence_reviewed'],
         },
         {
+          id: 'workshop-evidence',
+          label: 'Зіставити з Айріс фотографію майстерні та рукопис',
+          next: 'workshop-evidence',
+          requires: ['final_margin_followup_heard', 'final_missing_chapter_discussed'],
+          unless: ['final_workshop_evidence_reviewed'],
+        },
+        {
           id: 'chapter-argument',
           label: 'Послухати суперечку Мари й Айріс про фінал рукопису',
           next: 'chapter-argument',
@@ -395,6 +402,40 @@ export const finalReading: DialogueStory = {
           grants: ['final_chapter_evidence_reviewed'],
         },
       ],
+    },
+    {
+      id: 'workshop-evidence',
+      speaker: 'Айріс',
+      text: '«Я збільшила фотографію. Поруч із сімкою видно ще одну риску. Це може бути одиниця, а може — подряпина на коробці». Айріс кладе поряд сторінку. «Ми шукаємо сімнадцять так старанно, що скоро побачимо його навіть у візерунку на чашці».',
+      options: [
+        { id: 'workshop-evidence-compare', label: '«Порівняймо папір, а не цифри»', next: 'workshop-evidence-paper', grants: ['final_workshop_paper_compared'] },
+        { id: 'workshop-evidence-ask', label: '«Можна запитати реставраторку про коробки?»', next: 'workshop-evidence-owner', grants: ['final_workshop_permission_requested'] },
+        { id: 'workshop-evidence-keep', label: '«Не чіпаймо мамині речі сьогодні»', next: 'workshop-evidence-rest', grants: ['final_workshop_search_deferred'] },
+      ],
+    },
+    {
+      id: 'workshop-evidence-paper',
+      speaker: 'Айріс',
+      text: '«Ось цей край обрізаний вручну. А в другому уривку — рівний, машинний». Вона піднімає обидва аркуші до світла. «Це не доводить, хто їх написав. Але, можливо, їх навіть не друкували разом».',
+      options: [{ id: 'workshop-evidence-paper-back', label: '«Запишімо різницю»', next: 'workshop-evidence-end' }],
+    },
+    {
+      id: 'workshop-evidence-owner',
+      speaker: 'Айріс',
+      text: '«Запитати можна. Але не заходити туди без дозволу й не нишпорити в чужих речах». Вона ховає фотографію в альбом. «Я сама напишу реставраторці після вечора».',
+      options: [{ id: 'workshop-evidence-owner-back', label: '«Домовилися»', next: 'workshop-evidence-end' }],
+    },
+    {
+      id: 'workshop-evidence-rest',
+      speaker: 'Айріс',
+      text: '«Дякую». Айріс підсуває тобі тарілку. «Тоді допоможи мені вирішити складніше питання: кому дістанеться остання булочка?»',
+      options: [{ id: 'workshop-evidence-rest-back', label: '«Френкові точно не можна»', next: 'workshop-evidence-end' }],
+    },
+    {
+      id: 'workshop-evidence-end',
+      speaker: 'Айріс',
+      text: '«Завтра я подивлюся на все свіжими очима. А зараз хочу послухати, як Нора сперечається з пані Міллер про детективи».',
+      options: [{ id: 'workshop-evidence-finish', label: 'Повернутися до вечора історій', next: 'gathering', grants: ['final_workshop_evidence_reviewed'] }],
     },
     {
       id: 'chapter-argument',
