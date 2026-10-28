@@ -38,7 +38,7 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
     ...(flags.has('final_quiet_manuscript_returned')
       ? ['Айріс забрала сторінку додому. Вона сама вирішить, чи повертатися до пошуків.']
       : flags.has('final_quiet_manuscript_archived')
-        ? ['Знайдену сторінку зберегли у книгарні без припущень про її автора.']
+        ? ['Знайдену сторінку спершу зберегли у книгарні без припущень про її автора.']
         : flags.has('iris_quiet_page_privacy_respected')
           ? ['Айріс попросила поки не показувати знайдену сторінку іншим.']
           : flags.has('iris_quiet_page_identity_questioned')
@@ -85,7 +85,7 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
           ? ['Фотографія майстерні залишилася в альбомі. Розмова про коробки почекає до іншого дня.']
           : []),
     ...(flags.has('final_provenance_iris_custody')
-      ? ['Айріс забрала оригінали обох аркушів і домовилася перевірити їхнє походження, перш ніж вирішувати щось про публікацію.']
+      ? ['Айріс забрала оригінали обох аркушів і збирається перевірити їхнє походження, перш ніж вирішувати щось про публікацію.']
       : flags.has('final_provenance_consent_archive')
         ? ['З дозволу Айріс у книгарні залишилися лише копії сторінок, без імені автора, якого ще не встановили.']
         : flags.has('final_provenance_wait_for_evidence')
@@ -107,6 +107,9 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
       ? [
           'Старий журнал Елеонори підтвердив: сімнадцять — номер коробки, в якій після затоплення сушили розрізнені аркуші. Хто написав попередження на звороті, ще невідомо.',
         ]
+      : []),
+    ...(flags.has('final_ledger_letter_connection_heard')
+      ? ['Елеонора підтвердила, що лист і сторінки загубилися під час того самого затоплення, хоча їхні історії не тотожні.']
       : []),
     ...(flags.has('final_ledger_iris_told')
       ? ['Айріс побачила запис про врятовані аркуші. Їй знадобився час, щоб поговорити з Елеонорою без свідків.']
