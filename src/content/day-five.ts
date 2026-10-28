@@ -246,6 +246,13 @@ export const finalReading: DialogueStory = {
           unless: ['final_chapter_evidence_reviewed'],
         },
         {
+          id: 'ledger-aftercare',
+          label: 'Залишитися після розмови про коробку сімнадцять',
+          next: 'ledger-aftercare',
+          requires: ['final_ledger_scene_complete'],
+          unless: ['final_ledger_aftercare_complete'],
+        },
+        {
           id: 'ledger-resolution',
           label: 'Зіставити число сімнадцять зі старим журналом Елеонори',
           next: 'ledger-resolution',
@@ -422,6 +429,85 @@ export const finalReading: DialogueStory = {
           label: 'Повернутися до гостей',
           next: 'gathering',
           grants: ['final_chapter_evidence_reviewed'],
+        },
+      ],
+    },
+    {
+      id: 'ledger-aftercare',
+      speaker: 'Нора',
+      text: 'Нора складає чашки біля мийки. «То що робимо з журналом? Я б не клала його під Френка. Він чудовий кіт, але жахливий архіваріус». Елеонора знімає зі столу мокру підставку й мовчки підсуває тобі чистий аркуш.',
+      textWhen: [
+        {
+          requires: ['final_ledger_iris_joke_hurt'],
+          text: 'Айріс стоїть біля вікна й розмовляє з Анною. Нора ставить біля тебе чашку. «Ти хотів розрядити обстановку. Вийшло погано». Вона киває на журнал. «Із записами ми розберемося. А от із людьми доведеться говорити».',
+        },
+        {
+          requires: ['final_ledger_record_private'],
+          text: 'Елеонора прибирає журнал подалі від гостей. Нора тихо питає: «Айріс поки не знає?» Ти киваєш. «Тоді не залишаймо відкритий журнал на столі, де кожен може його прочитати». Френк обнюхує порожню коробку з-під печива.',
+        },
+      ],
+      options: [
+        {
+          id: 'aftercare-inventory',
+          label: 'Записати, що відомо, а що досі лишається загадкою',
+          next: 'ledger-aftercare-inventory',
+          grants: ['final_ledger_aftercare_inventory'],
+        },
+        {
+          id: 'aftercare-apologize',
+          label: 'Спробувати вибачитися перед Айріс за невдалий жарт',
+          next: 'ledger-aftercare-apology',
+          requires: ['final_ledger_iris_joke_hurt'],
+          grants: ['final_ledger_aftercare_apology'],
+        },
+        {
+          id: 'aftercare-cleanup',
+          label: 'Відкласти журнал і допомогти прибрати після читання',
+          next: 'ledger-aftercare-cleanup',
+          grants: ['final_ledger_aftercare_cleanup'],
+        },
+      ],
+    },
+    {
+      id: 'ledger-aftercare-inventory',
+      speaker: 'Нора',
+      text: 'Ти записуєш три речі: «17 — коробка книгарні після затоплення»; «аркуші сушили окремо»; «автор другого уривка та попередження не встановлені». Нора читає через плече. «Ось це вже схоже на справу. Не на красиву версію, а на те, що можна перевірити».',
+      textWhen: [
+        {
+          requires: ['final_ledger_record_private'],
+          text: 'Ти записуєш лише перевірені факти: коробка сімнадцять, затоплення, розрізнені аркуші. Поруч ставиш два знаки питання — біля авторства та попередження. Нора закриває нотатник. «Це залишиться між нами, доки Айріс сама не дізнається про журнал».',
+        },
+      ],
+      options: [{ id: 'aftercare-inventory-back', label: 'Покласти нотатник до шухляди', next: 'ledger-aftercare-end' }],
+    },
+    {
+      id: 'ledger-aftercare-apology',
+      speaker: 'Айріс',
+      text: '«Я знаю, що ти не хотів образити». Айріс не відходить від вікна. «Але коли хтось говорить про мамині речі, мені не смішно». Вона дивиться на твою простягнуту чашку. «Дякую за чай. Поговоримо іншим разом».',
+      options: [{ id: 'aftercare-apology-back', label: 'Не вимагати негайного прощення', next: 'ledger-aftercare-end' }],
+    },
+    {
+      id: 'ledger-aftercare-cleanup',
+      speaker: 'Мара',
+      text: '«О, нарешті людина, яка бачить цілу гору чашок!» Мара вручає тобі рушник. Френк сідає просто в порожню коробку з-під печива. «Тільки не віддавай йому ще й касу, — сміється вона. — Він і так поводиться як власник».',
+      textWhen: [
+        {
+          requires: ['final_ledger_iris_joke_hurt'],
+          text: 'Мара мовчки подає тобі рушник. «Айріс треба трохи часу», — каже вона, не дивлячись у бік вікна. Френк забирається в порожню коробку з-під печива. «А цьому часу не треба. Він уже пробачив усіх, хто давав йому їсти».',
+        },
+      ],
+      options: [{ id: 'aftercare-cleanup-back', label: 'Завершити прибирання', next: 'ledger-aftercare-end' }],
+    },
+    {
+      id: 'ledger-aftercare-end',
+      speaker: 'Оповідач',
+      text: 'За вікном дощ майже вщух. Нора нарешті знаходить свою закладку під лапою Френка, а Елеонора ставить журнал на суху полицю. У книгарні ще пахне чаєм і папером. На сьогодні цього досить.',
+      options: [
+        {
+          id: 'aftercare-finish',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_ledger_aftercare_complete'],
         },
       ],
     },
