@@ -16,21 +16,36 @@ import { seasonEnding } from '../src/game/endings';
 const routes = [
   {
     label: 'application',
-    route: ['leo-course-ask-why', 'leo-course-why-continue', 'leo-course-apply', 'leo-course-apply-colleague'],
+    route: [
+      'leo-course-ask-why',
+      'leo-course-why-continue',
+      'leo-course-apply',
+      'leo-course-apply-colleague',
+    ],
     decision: 'leo_night_course_application_planned',
     final: 'Я надіслав заявку',
     epilogue: 'надіслав заявку',
   },
   {
     label: 'shift negotiation',
-    route: ['leo-course-ask-boss', 'leo-course-boss-continue', 'leo-course-negotiate', 'leo-course-negotiate-colleague'],
+    route: [
+      'leo-course-ask-boss',
+      'leo-course-boss-continue',
+      'leo-course-negotiate',
+      'leo-course-negotiate-colleague',
+    ],
     decision: 'leo_night_course_shift_request_planned',
     final: 'Я поговорив із Джун',
     epilogue: 'поговорив із Джун',
   },
   {
     label: 'deferral',
-    route: ['leo-course-ask-commute', 'leo-course-commute-continue', 'leo-course-pause', 'leo-course-pause-colleague'],
+    route: [
+      'leo-course-ask-commute',
+      'leo-course-commute-continue',
+      'leo-course-pause',
+      'leo-course-pause-colleague',
+    ],
     decision: 'leo_night_course_deferred',
     final: 'Я не подав заявку',
     epilogue: 'вирішив не подавати',
@@ -39,7 +54,14 @@ const routes = [
 
 function leoRoute(route: readonly string[]): DialogueState {
   let state = startDialogue(leoVisit);
-  for (const option of ['greet', 'leo-schedule', 'leo-night-course-topic', ...route, 'leo-course-colleague-finish', 'leo-course-return']) {
+  for (const option of [
+    'greet',
+    'leo-schedule',
+    'leo-night-course-topic',
+    ...route,
+    'leo-course-colleague-finish',
+    'leo-course-return',
+  ]) {
     expect(
       availableOptions(leoVisit, state).map((item) => item.id),
       `Leo option ${option} missing at ${state.node}`,
