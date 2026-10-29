@@ -1,5 +1,6 @@
 import type { DialogueStory } from '../game/dialogue';
 import { rumorProgramNodes, rumorProgramOption } from './rumor-program';
+import { lastCopyNodes, lastCopyOption } from './last-copy';
 import { afterCaseTeaNodes, afterCaseTeaOption } from './after-case-tea';
 import { bookshopTomorrowNodes, bookshopTomorrowOption } from './bookshop-tomorrow';
 import { caseClosureNodes, caseClosureOption } from './case-closure';
@@ -269,6 +270,7 @@ export const finalReading: DialogueStory = {
         caseClosureOption,
         rumorProgramOption,
         afterCaseTeaOption,
+        lastCopyOption,
         {
           id: 'archive-handover',
           label: 'Вирішити, як зберігати записи про коробку сімнадцять',
@@ -2562,6 +2564,7 @@ export const finalReading: DialogueStory = {
     ...caseClosureNodes,
     ...rumorProgramNodes,
     ...afterCaseTeaNodes,
+    ...lastCopyNodes,
     {
       id: 'end',
       variantSelection: 'authored',
