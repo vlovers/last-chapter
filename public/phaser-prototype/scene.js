@@ -136,7 +136,10 @@ class Bookshop extends Phaser.Scene {
         visitor.x = 590;
         visitor.y = 221;
         const entrance = visitorEntrance(actor);
-        this.arrival = [{ x: entrance.x, y: entrance.y }];
+        // Visitors enter through the door, then walk into the shop before dialogue.
+        // Keep the per-character entrance as a safe fallback if pathfinding fails.
+        const welcomePath = findPath(visitor, { x: 240, y: 235 });
+        this.arrival = welcomePath.length ? welcomePath : [{ x: entrance.x, y: entrance.y }];
         this.visitorPace = entrance.pace;
         this.state = { ...this.state, mara: 'arriving' };
         this.roaming = { path: [], pause: 1800, step: 0, engaged: false, goal: null };
