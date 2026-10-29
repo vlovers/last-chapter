@@ -62,7 +62,7 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Найскладніше намалювати тишу. Не порожнечу — саме тишу, коли двоє людей сидять поруч і їм не потрібно нічого доводити». Вона торкається корінця книжки. «Колись я хотіла зробити цілу історію без слів».',
       options: [
-        { id: 'art-more', label: '«А чому не зробили?»', next: 'art-more' },
+        { id: 'art-more', label: '«Щось завадило чи просто передумала?»', next: 'art-more' },
         { id: 'art-back', label: '«Про що ще поговоримо?»', next: 'welcome' },
       ],
     },
@@ -168,7 +168,7 @@ export const irisVisit: DialogueStory = {
       options: [
         {
           id: 'iris-reflect-question',
-          label: '«А що для тебе в цьому найважче?»',
+          label: '«А на якій сторінці ти зазвичай застрягаєш?»',
           next: 'iris-reflection-deep',
         },
         {
