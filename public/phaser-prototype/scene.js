@@ -174,8 +174,12 @@ class Bookshop extends Phaser.Scene {
     if (!this.story || !this.canExplore()) return;
     this.roaming = pauseVisitor(this.roaming);
     if (this.story.actor && distance(this.characters.mara, this.characters.player) > 80) {
-      this.roaming.path = findPath(this.characters.mara, { x: 240, y: 235 });
-      this.orderApproach = true;
+      const route = findPath(this.characters.mara, { x: 240, y: 235 });
+      this.roaming.path = route;
+      this.orderApproach = route.length > 0;
+      // Conversation may open while the visitor is still entering the shop.
+      // The conversation route takes priority over the entrance animation.
+      if (this.orderApproach) this.state = { ...this.state, mara: 'ready' };
     }
     this.characters.player.direction = facingToward(this.characters.player, this.characters.mara);
     cueActor(this.characters.mara, 'greet', this.time.now);
@@ -416,6 +420,12 @@ class Bookshop extends Phaser.Scene {
       this.showDialogue();
       return;
     }
+    // In story mode the visitor hotspot must open the current authored scene,
+    // not the legacy standalone Mara greeting graph.
+    if (spot.id === 'mara' && this.story) {
+      this.openStory();
+      return;
+    }
     const inspection = this.story ? this.story.inspect(spot.id) : null;
     this.activeDialogue = inspection
       ? { kind: 'story-object', note: inspection }
@@ -574,10 +584,15 @@ class Bookshop extends Phaser.Scene {
         spot.approach = frankApproach(this.frank.state);
       }
       if (this.orderApproach && this.roaming.path.length && !document.hidden) {
-        updateCharacter(mara, this.follow(mara, this.roaming.path, amount * 0.7), this.reduced);
+        updateCharacter(
+          mara,
+          this.reduced ? { ...this.roaming.path.at(-1) } : this.follow(mara, this.roaming.path, amount * 0.7),
+          this.reduced,
+        );
+        if (this.reduced) this.roaming.path = [];
         if (!this.roaming.path.length) {
           this.orderApproach = false;
-          mara.direction = 'left';
+          mara.direction = facingToward(mara, this.characters.player);
         }
       }
       if (this.handoffUntil && time > this.handoffUntil) {
