@@ -420,4 +420,16 @@ describe('conversational pacing and continuity', () => {
     }
   });
 
+  it.each([
+    ['books-bad-review-mara', 'books-bad-review-mara-back'],
+    ['books-bad-review-miller', 'books-bad-review-miller-back'],
+    ['books-bad-review-anna', 'books-bad-review-anna-back'],
+  ] as const)('book club disagreement %s resolves without blocking the meeting', (choice, finish) => {
+    let state = selectOption(bookClub, at(bookClub, 'books'), 'books-bad-review');
+    state = selectOption(bookClub, state, choice);
+    state = selectOption(bookClub, state, finish);
+    expect(state.node).toBe('welcome');
+    expect(state.flags).toContain('club_bad_romance_debated');
+  });
+
 });
