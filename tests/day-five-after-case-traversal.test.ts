@@ -25,7 +25,7 @@ describe('Day five: after-case relationship choices are playable', () => {
         state = selectOption(finalReading, state, `after-${person}-${ending}-new`);
         const finish = availableOptions(finalReading, state)[0];
         expect(finish?.grants?.[0]).toMatch(/^final_after_/);
-        const consequence = finish.grants?.[0];
+        const consequence = finish!.grants?.[0];
         state = selectOption(finalReading, state, finish!.id);
         expect(state.node).toBe('after-case-finish');
         expect(state.flags).toContain(consequence);
