@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { annaVisit } from '../src/content/anna';
 import { bookClub } from '../src/content/book-club';
+import { millerVisit } from '../src/content/first-day';
 import { leoVisit } from '../src/content/leo';
 import { irisVisit } from '../src/content/iris';
 import { thomasVisit } from '../src/content/thomas';
@@ -276,6 +277,24 @@ describe('conversational pacing and continuity', () => {
     const state = selectOption(bookClub, at(bookClub, hub), option);
     expect(state.node).toBe('welcome');
     expect(state.flags).toContain(flag);
+  });
+
+  it('Miller can talk about ordinary town life without unlocking case clues', () => {
+    const state = selectOption(millerVisit, at(millerVisit, 'topics'), 'miller-neighbors');
+    expect(state.node).toBe('miller-neighbors');
+    expect(options(millerVisit, 'miller-neighbors')).toEqual(
+      expect.arrayContaining(['miller-neighbors-mara', 'miller-neighbors-thomas']),
+    );
+    for (const [choice, returnChoice, flag] of [
+      ['miller-neighbors-mara', 'miller-neighbors-mara-back', 'miller_bakery_story_heard'],
+      ['miller-neighbors-thomas', 'miller-neighbors-thomas-back', 'miller_thomas_baking_story_heard'],
+    ] as const) {
+      const branch = selectOption(millerVisit, state, choice);
+      const back = selectOption(millerVisit, branch, returnChoice);
+      expect(back.node).toBe('topics');
+      expect(back.flags).toContain(flag);
+      expect(back.flags).not.toContain('rumor_amplified');
+    }
   });
 
 });
