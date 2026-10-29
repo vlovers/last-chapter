@@ -52,8 +52,8 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'leo-ticket-feeling-back',
-          label: '«І як довго ти збирався з нею сперечатися подумки?»',
-          next: 'welcome',
+          label: '«А що ти їй насправді відповів?»',
+          next: 'leo-future',
           grants: ['leo_day_four_ticket_feeling_heard'],
         },
       ],
@@ -148,7 +148,7 @@ export const leoDecision: DialogueStory = {
       speaker: 'Лео',
       text: '«Колись я пропустив потяг, бо десять хвилин звіряв два розклади». Лео сміється. «Мара тоді просто сіла на наступний. А я біг за нею з валізою».',
       options: [
-        { id: 'trains-back', label: '«Мара, мабуть, досі згадує твою валізу»', next: 'welcome' },
+        { id: 'trains-back', label: '«І як ви після цього взагалі плануєте подорожі?»', next: 'mara' },
       ],
     },
     {
