@@ -193,7 +193,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     conversationButton.setAttribute('aria-expanded', String(mode === 'conversation'));
     panel.hidden = mode === null;
     document.body.classList.toggle('reading', mode !== null);
-    panel.setAttribute('aria-label', mode === 'conversation' ? 'Розмова з Марою' : mode === 'journal' ? 'Нотатник книгаря' : 'Книжкова полиця');
+    panel.setAttribute(
+      'aria-label',
+      mode === 'conversation'
+        ? 'Розмова з Марою'
+        : mode === 'journal'
+          ? 'Нотатник книгаря'
+          : 'Книжкова полиця',
+    );
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-modal', 'true');
     panel.classList.toggle('story-panel--conversation', mode === 'conversation');
