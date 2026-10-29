@@ -46,6 +46,7 @@ export const quietEvening: DialogueStory = {
           label: 'Розібрати записки й чашки після книжкового клубу',
           next: 'closing-book-club-cleanup',
           requires: ['book_club_started'],
+          unless: ['club_bookmarks_saved', 'club_reading_list_joke_seen', 'club_frank_cleaning_attempt'],
         },
         {
           id: 'closing-leftovers',
