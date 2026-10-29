@@ -1,3 +1,4 @@
+import type { DialogueState } from '../src/game/dialogue';
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import {
@@ -28,7 +29,7 @@ describe('Final day remembers decisions from earlier Bellwick evenings', () => {
         expect(availableOptions(finalReading, initial).map((item) => item.id)).not.toContain(
           option,
         );
-        let state = { ...initial, flags: [scene.flag] };
+        let state: DialogueState = { ...initial, flags: [scene.flag] };
         expect(availableOptions(finalReading, state).map((item) => item.id)).toContain(option);
         state = selectOption(finalReading, state, option);
         state = selectOption(finalReading, state, `final-town-${scene.id}-${ending}`);
