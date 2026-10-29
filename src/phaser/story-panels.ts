@@ -79,7 +79,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   };
   const conversationButton = document.createElement('button');
   conversationButton.type = 'button';
-  conversationButton.textContent = 'Поговорити з Марою';
+  conversationButton.textContent = 'Мара · Поговорити';
   conversationButton.setAttribute('aria-label', 'Поговорити з Марою');
   conversationButton.setAttribute('aria-expanded', 'false');
   root.querySelector('.story-toolbar-actions')?.append(conversationButton);
@@ -193,9 +193,12 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     conversationButton.setAttribute('aria-expanded', String(mode === 'conversation'));
     panel.hidden = mode === null;
     document.body.classList.toggle('reading', mode !== null);
-    panel.setAttribute('aria-label', 'Сторінки книгарні');
+    panel.setAttribute('aria-label', mode === 'conversation' ? 'Розмова з Марою' : mode === 'journal' ? 'Нотатник книгаря' : 'Книжкова полиця');
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-modal', 'true');
+    panel.classList.toggle('story-panel--conversation', mode === 'conversation');
+    panel.classList.toggle('story-panel--journal', mode === 'journal');
+    panel.classList.toggle('story-panel--catalog', mode === 'catalog');
     const blocked = mode !== null;
     const talking = document.querySelector('#stage')?.classList.contains('talking');
     const loading = !document.querySelector<HTMLElement>('#loading')?.hidden;
@@ -241,15 +244,12 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         });
         topicSelector.append(button);
       }
-      panel.append(
-        topicSelector,
-        element('h2', selectedTopic.title),
-        element(
-          'p',
-          'Додаткова розмова. Її можна відкласти й продовжити пізніше.',
-          'optional-hint',
-        ),
-      );
+      panel.append(element('p', 'Мара · у книгарні', 'conversation-eyebrow'));
+      panel.append(element('h2', 'Розмова з Марою'));
+      const topicDetails = element('details', '', 'conversation-topics');
+      const topicSummary = element('summary', `Тема: ${selectedTopic.title} · змінити`);
+      topicDetails.append(topicSummary, topicSelector);
+      panel.append(topicDetails);
       const activeConversation =
         selectedTopic.id === maraBookClub.id
           ? conversation
@@ -278,7 +278,10 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
           ...activeConversation,
           memories: sharedMemories(),
         });
-        panel.append(element('h3', node.speaker), element('p', node.text));
+        const exchange = element('section', '', 'conversation-exchange');
+        exchange.append(element('h3', node.speaker), element('p', node.text));
+        panel.append(exchange);
+        const replies = element('div', '', 'conversation-replies');
         for (const choice of node.choices) {
           const button = element('button', choice.label);
           button.type = 'button';
@@ -297,10 +300,12 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
             refresh();
             (panel.querySelector('button') ?? conversationButton).focus({ preventScroll: true });
           });
-          panel.append(button);
+          replies.append(button);
         }
+        panel.append(replies);
       }
     } else if (mode === 'journal') {
+      panel.append(element('p', 'Записи з Беллвіка', 'notebook-eyebrow'));
       panel.append(element('h2', 'Нотатник книгаря'));
       const tabs = element('nav', '', 'journal-tabs');
       tabs.setAttribute('aria-label', 'Розділи нотатника');
@@ -441,6 +446,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         panel.append(label, notes, element('p', 'Ці записи залишаються лише у вашому браузері.'));
       }
     } else if (mode === 'catalog') {
+      panel.append(element('p', 'Каталог книгарні', 'catalog-eyebrow'));
       panel.append(element('h2', 'Книжки на полицях'));
       if (reaction) {
         const result = element('div', '', 'evidence-card');
