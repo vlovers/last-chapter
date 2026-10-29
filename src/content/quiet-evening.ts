@@ -46,7 +46,11 @@ export const quietEvening: DialogueStory = {
           label: 'Розібрати записки й чашки після книжкового клубу',
           next: 'closing-book-club-cleanup',
           requires: ['book_club_started'],
-          unless: ['club_bookmarks_saved', 'club_reading_list_joke_seen', 'club_frank_cleaning_attempt'],
+          unless: [
+            'club_bookmarks_saved',
+            'club_reading_list_joke_seen',
+            'club_frank_cleaning_attempt',
+          ],
         },
         {
           id: 'closing-leftovers',
@@ -60,28 +64,61 @@ export const quietEvening: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Під порожніми чашками знайшлися три закладки, одна серветка з намальованим драконом і список книжок, у якому хтось дописав: «Не брати нічого, де всі помирають». Френк обнюхує крихти, але до роботи не долучається.',
       options: [
-        { id: 'closing-cleanup-bookmarks', label: 'Розкласти забуті закладки біля каси', next: 'closing-cleanup-bookmarks' },
-        { id: 'closing-cleanup-note', label: 'Прочитати, що ще написали на списку', next: 'closing-cleanup-note' },
-        { id: 'closing-cleanup-frank', label: 'Попросити Френка допомогти з прибиранням', next: 'closing-cleanup-frank' },
+        {
+          id: 'closing-cleanup-bookmarks',
+          label: 'Розкласти забуті закладки біля каси',
+          next: 'closing-cleanup-bookmarks',
+        },
+        {
+          id: 'closing-cleanup-note',
+          label: 'Прочитати, що ще написали на списку',
+          next: 'closing-cleanup-note',
+        },
+        {
+          id: 'closing-cleanup-frank',
+          label: 'Попросити Френка допомогти з прибиранням',
+          next: 'closing-cleanup-frank',
+        },
       ],
     },
     {
       id: 'closing-cleanup-bookmarks',
       speaker: 'Оповідач',
       text: 'На першій закладці — намальована чайка, на другій — адреса кав’ярні, на третій — слова «повернути Анні». Ти кладеш усі три біля каси й залишаєш коротку записку для гостей. Френк одразу сідає на неї.',
-      options: [{ id: 'closing-cleanup-bookmarks-back', label: 'Повернутися до вечірніх справ', next: 'closing', grants: ['club_bookmarks_saved'] }],
+      options: [
+        {
+          id: 'closing-cleanup-bookmarks-back',
+          label: 'Повернутися до вечірніх справ',
+          next: 'closing',
+          grants: ['club_bookmarks_saved'],
+        },
+      ],
     },
     {
       id: 'closing-cleanup-note',
       speaker: 'Оповідач',
       text: 'Під списком хтось дрібним почерком дописав: «Але якщо помирає лише дворецький, можна». Нижче Мара відповіла: «Тоді хай хоч перед тим поїсть». Анна намалювала поруч маленьку булочку. У Беллвіку навіть списки читання перетворюються на розмову.',
-      options: [{ id: 'closing-cleanup-note-back', label: 'Залишити список на завтра', next: 'closing', grants: ['club_reading_list_joke_seen'] }],
+      options: [
+        {
+          id: 'closing-cleanup-note-back',
+          label: 'Залишити список на завтра',
+          next: 'closing',
+          grants: ['club_reading_list_joke_seen'],
+        },
+      ],
     },
     {
       id: 'closing-cleanup-frank',
       speaker: 'Оповідач',
       text: 'Френк піднімає голову, повільно підходить до стосу серветок і скидає одну на підлогу. Після цього повертається на стілець. «Дякую, колего», — кажеш ти. Кіт навіть не озирається.',
-      options: [{ id: 'closing-cleanup-frank-back', label: 'Самостійно завершити прибирання', next: 'closing', grants: ['club_frank_cleaning_attempt'] }],
+      options: [
+        {
+          id: 'closing-cleanup-frank-back',
+          label: 'Самостійно завершити прибирання',
+          next: 'closing',
+          grants: ['club_frank_cleaning_attempt'],
+        },
+      ],
     },
     {
       id: 'frank',
