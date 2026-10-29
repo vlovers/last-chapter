@@ -96,7 +96,7 @@ describe('complete optional narrative journeys', () => {
     [
       'Iris: fox illustration',
       irisVisit,
-      ['hello', 'iris-sketch-mishap', 'iris-sketch-mishap-fix', 'iris-sketch-mishap-fix-back'],
+      ['welcome', 'iris-sketch-mishap', 'iris-sketch-mishap-fix', 'iris-sketch-mishap-fix-back'],
       'welcome',
       'iris_fox_story_heard',
     ],
@@ -110,7 +110,7 @@ describe('complete optional narrative journeys', () => {
     [
       'Thomas: music box',
       thomasVisit,
-      ['hello', 'thomas-repair-funny', 'thomas-repair-funny-note', 'thomas-repair-funny-note-back'],
+      ['greet', 'thomas-repair-funny', 'thomas-repair-funny-note', 'thomas-repair-funny-note-back'],
       'greet',
       'thomas_music_box_story_heard',
     ],
