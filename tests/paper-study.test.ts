@@ -65,10 +65,7 @@ describe('under the lamp: manuscript comparison', () => {
 
   it('does not ask Iris to guess an author after she declined the case discussion', () => {
     const state = play(
-      [
-        'paper-study',
-        'paper-study-voices',
-      ],
+      ['paper-study', 'paper-study-voices'],
       [...evidence, 'final_ledger_iris_told', 'final_case_iris_declined'],
     );
     expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
