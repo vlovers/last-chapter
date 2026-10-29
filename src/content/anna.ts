@@ -92,7 +92,7 @@ export const annaVisit: DialogueStory = {
         {
           id: 'anna-disagreement-back',
           label: 'Повернутися до вибору книжок',
-          next: 'hello',
+          next: 'books',
           grants: ['anna_book_disagreement_discussed'],
         },
       ],
@@ -114,7 +114,7 @@ export const annaVisit: DialogueStory = {
         {
           id: 'classroom-back',
           label: '«І хто переміг у суперечці — Емма чи Джуліан?»',
-          next: 'hello',
+          next: 'books',
         },
       ],
     },
@@ -149,7 +149,7 @@ export const annaVisit: DialogueStory = {
         {
           id: 'town-back',
           label: '«У Беллвіку новини й справді розходяться швидше за пошту»',
-          next: 'hello',
+          next: 'books',
         },
         { id: 'town-books', label: '«Підберемо книжку для класу»', next: 'books' },
       ],
