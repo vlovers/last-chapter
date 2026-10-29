@@ -87,7 +87,6 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
     expect(state.node).toBe('rumor-decision');
   });
 
-
   it.each([
     [
       'a financial dispute that leads Nora to separate facts from headlines',
@@ -119,7 +118,10 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
   ])('plays %s and survives save restoration', (_name, route) => {
     let state = { ...startDialogue(finalReading), node: 'gathering', flags: eligible };
     for (const id of route) {
-      expect(availableOptions(finalReading, state).map((option) => option.id), id).toContain(id);
+      expect(
+        availableOptions(finalReading, state).map((option) => option.id),
+        id,
+      ).toContain(id);
       state = JSON.parse(JSON.stringify(selectOption(finalReading, state, id)));
     }
     expect(state.node).toBe('gathering');
