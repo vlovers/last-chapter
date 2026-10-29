@@ -173,8 +173,16 @@ export const bookClub: DialogueStory = {
       speaker: 'Пані Міллер',
       text: '«Тоді тримайте язика за зубами!» Міллер так різко кладе чашку, що Анна здригається. «Минулого року один чоловік у черзі до пекарні розповів мені фінал детективу. Я перестала з ним вітатися». Мара кашляє: «Ви з ним учора пів години говорили». — «Це була ділова розмова. Про макові рулети».',
       options: [
-        { id: 'miller-spoiler-apologize', label: '«Добре, мовчатиму. А як тоді обговорювати книжку?»', next: 'miller-spoiler-rules' },
-        { id: 'miller-spoiler-tease', label: '«А раптом дворецький справді винен?»', next: 'miller-spoiler-tease' },
+        {
+          id: 'miller-spoiler-apologize',
+          label: '«Добре, мовчатиму. А як тоді обговорювати книжку?»',
+          next: 'miller-spoiler-rules',
+        },
+        {
+          id: 'miller-spoiler-tease',
+          label: '«А раптом дворецький справді винен?»',
+          next: 'miller-spoiler-tease',
+        },
         { id: 'miller-spoiler-back', label: 'Залишити загадку нерозкритою', next: 'welcome' },
       ],
     },
@@ -182,13 +190,27 @@ export const bookClub: DialogueStory = {
       id: 'miller-spoiler-rules',
       speaker: 'Анна',
       text: '«У мене є правило: до середини книжки можна сварити персонажів, після середини — тільки пошепки». Міллер пирскає. «А якщо хтось читає повільно?» — «Тоді спитаємо, на якій сторінці він зупинився». Мара піднімає руку: «А якщо я читаю тільки останню сторінку?» Обидві дивляться на неї з таким жахом, що вона сміється першою.',
-      options: [{ id: 'miller-spoiler-rules-back', label: 'Домовитися питати перед спойлерами', next: 'welcome', grants: ['club_spoiler_rules_agreed'] }],
+      options: [
+        {
+          id: 'miller-spoiler-rules-back',
+          label: 'Домовитися питати перед спойлерами',
+          next: 'welcome',
+          grants: ['club_spoiler_rules_agreed'],
+        },
+      ],
     },
     {
       id: 'miller-spoiler-tease',
       speaker: 'Пані Міллер',
       text: 'Міллер примружується. «Ви зараз жартуєте чи зізнаєтеся?» — «У чому?» — питає Анна. «У тому, що знаєте фінал!» Мара нахиляється до тебе: «Скажи ще, що винна була бібліотекарка». Міллер стискає книжку. «Не смійте. Я сьогодні дочитаю, і завтра ви всі від мене почуєте».',
-      options: [{ id: 'miller-spoiler-tease-back', label: 'Пообіцяти не розповідати фінал', next: 'welcome', grants: ['club_miller_spoiler_teased'] }],
+      options: [
+        {
+          id: 'miller-spoiler-tease-back',
+          label: 'Пообіцяти не розповідати фінал',
+          next: 'welcome',
+          grants: ['club_miller_spoiler_teased'],
+        },
+      ],
     },
     {
       id: 'argument',
