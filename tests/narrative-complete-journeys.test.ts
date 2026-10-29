@@ -286,4 +286,14 @@ describe('complete optional narrative journeys', () => {
       expect(choices.some((option) => option.id === 'tidy-books')).toBe(true);
     }
   });
+  it.each([
+    ['miller-spoiler-apologize', 'miller-spoiler-rules-back', 'club_spoiler_rules_agreed'],
+    ['miller-spoiler-tease', 'miller-spoiler-tease-back', 'club_miller_spoiler_teased'],
+  ] as const)('Miller spoiler conversation %s returns to the club', (choice, finish, flag) => {
+    const state = follow(bookClub, ['welcome', 'ask-miller', 'miller-spoiler', choice, finish]);
+    expect(state.node).toBe('welcome');
+    expect(state.flags).toContain(flag);
+    expect(availableOptions(bookClub, state).some((option) => option.id === 'discuss-books')).toBe(true);
+  });
+
 });
