@@ -25,7 +25,11 @@ export const irisVisit: DialogueStory = {
         },
       ],
       options: [
-        { id: 'iris-seven-years', label: '«Що ти найбільше пам’ятаєш із тих субот у книгарні?»', next: 'return' },
+        {
+          id: 'iris-seven-years',
+          label: '«Що ти найбільше пам’ятаєш із тих субот у книгарні?»',
+          next: 'return',
+        },
         {
           id: 'iris-unprinted',
           label: '«А покажете книжку, яку так і не надрукували?»',

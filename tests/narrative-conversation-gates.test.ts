@@ -227,8 +227,11 @@ describe('conversational pacing and continuity', () => {
     expect(line).not.toContain('все-таки сказав Марі');
   });
 
-  it('Thomas does not invent Anna\'s approval or a completed repair', () => {
-    const line = currentNode(thomasVisit, at(thomasVisit, 'greet', ['thomas_listening_discussed'])).text;
+  it("Thomas does not invent Anna's approval or a completed repair", () => {
+    const line = currentNode(
+      thomasVisit,
+      at(thomasVisit, 'greet', ['thomas_listening_discussed']),
+    ).text;
     expect(line).toContain('думаю над тим');
     expect(line).not.toContain('Анна сказала');
     expect(line).not.toContain('лампа тепер працює');
@@ -248,5 +251,4 @@ describe('conversational pacing and continuity', () => {
       expect(availableOptions(story, at(story, hub, [flag])).length).toBeGreaterThan(0);
     }
   });
-
 });
