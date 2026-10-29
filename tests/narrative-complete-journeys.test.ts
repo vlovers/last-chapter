@@ -153,4 +153,77 @@ describe('complete optional narrative journeys', () => {
   ] as const)('%s has a valid dialogue graph', (_name, story) => {
     expect(validateDialogue(story)).toEqual([]);
   });
+  it('Anna classroom story changes the later book club welcome through carried flags', () => {
+    const visit = follow(annaVisit, [
+      'hello',
+      'anna-school-funny',
+      'anna-school-funny-work',
+      'anna-school-funny-work-back',
+    ]);
+    const clubState = { ...startDialogue(bookClub), flags: visit.flags };
+    const greeting = selectOption(bookClub, clubState, 'welcome');
+    expect(currentNode(bookClub, greeting).text).toContain('дракона');
+    expect(availableOptions(bookClub, greeting).some((option) => option.id === 'discuss-books')).toBe(true);
+  });
+
+  it('Miller bakery gossip changes book club dialogue without spreading harmful rumors', () => {
+    const visit = follow(millerVisit, [
+      'greet',
+      'chat',
+      'miller-neighbors',
+      'miller-neighbors-mara',
+      'miller-neighbors-mara-back',
+    ]);
+    expect(visit.flags).not.toContain('rumor_amplified');
+    const clubState = { ...startDialogue(bookClub), flags: visit.flags };
+    const greeting = selectOption(bookClub, clubState, 'welcome');
+    expect(currentNode(bookClub, greeting).text).toContain('кориці');
+  });
+
+  it('three independent conversations create the combined club opening', () => {
+    const anna = follow(annaVisit, [
+      'hello',
+      'anna-school-funny',
+      'anna-school-funny-work',
+      'anna-school-funny-work-back',
+    ]);
+    const leo = follow(leoVisit, [
+      'greet',
+      'leo-station-funny',
+      'leo-station-funny-boss',
+      'leo-station-funny-boss-return',
+    ]);
+    const miller = follow(millerVisit, [
+      'greet',
+      'chat',
+      'miller-neighbors',
+      'miller-neighbors-mara',
+      'miller-neighbors-mara-back',
+    ]);
+    const club = {
+      ...startDialogue(bookClub),
+      flags: [...new Set([...anna.flags, ...leo.flags, ...miller.flags])],
+    };
+    const greeting = selectOption(bookClub, club, 'welcome');
+    const text = currentNode(bookClub, greeting).text;
+    expect(text).toContain('дракона');
+    expect(text).toContain('місяця');
+    expect(text).toContain('корицю');
+  });
+
+  it('quiet evening Frank detours still allow the player to finish the manuscript scene', () => {
+    for (const path of [
+      ['sit-frank', 'frank-toy', 'frank-toy-play', 'frank-toy-win-books'],
+      ['sit-frank', 'frank-treat', 'frank-treat-pet', 'frank-treat-pet-books'],
+      ['closing-leftovers', 'closing-leftovers-note', 'closing-leftovers-note-books'],
+    ]) {
+      let state = follow(quietEvening, path);
+      state = selectOption(quietEvening, state, 'read-margin');
+      state = selectOption(quietEvening, state, 'margin-keep');
+      expect(state.node).toBe('end');
+      expect(state.flags).toContain('quiet_evening_page_found');
+      expect(state.flags).toContain('quiet_evening_margin_warning_seen');
+    }
+  });
+
 });
