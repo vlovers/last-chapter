@@ -31,14 +31,8 @@ describe('Anna and Thomas final reading continuity', () => {
   });
 
   it.each([
-    [
-      ['thomas_anna_chairs_direct_talk'],
-      'Я спитав, коли їй буде зручно поговорити',
-    ],
-    [
-      ['thomas_anna_chairs_player_kept_distance'],
-      'Ми ще не закінчили цю розмову',
-    ],
+    [['thomas_anna_chairs_direct_talk'], 'Я спитав, коли їй буде зручно поговорити'],
+    [['thomas_anna_chairs_player_kept_distance'], 'Ми ще не закінчили цю розмову'],
     [['thomas_chairs_owned_mistake'], 'Я подзвонив і вибачився'],
     [['thomas_chairs_avoided_conversation'], 'Я купив стільці'],
   ] as const)('keeps Thomas own account consistent: %j', (flags, text) => {
