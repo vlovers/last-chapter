@@ -45,7 +45,7 @@ export const rumorProgramNodes: readonly DialogueNode[] = [
       },
       {
         id: 'rumor-decide-direct',
-        label: 'Вирішити, що робити з програмками',
+        label: 'Підійти до Міллер із програмкою й попросити виправлення',
         next: 'rumor-decision',
       },
     ],
@@ -101,7 +101,7 @@ export const rumorProgramNodes: readonly DialogueNode[] = [
       },
       {
         id: 'rumor-people-decision',
-        label: 'Не продовжувати суперечку при гостях',
+        label: 'Відвести Міллер убік, щоб не сперечатися при гостях',
         next: 'rumor-decision',
       },
     ],
