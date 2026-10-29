@@ -48,6 +48,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
         label: 'Повернутися до гостей, а полицю залишити на ранок',
         next: 'gathering',
         suspend: true,
+        repeatability: 'repeatable',
       },
     ],
   },
