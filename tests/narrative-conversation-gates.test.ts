@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { annaVisit } from '../src/content/anna';
 import { bookClub } from '../src/content/book-club';
+import { afterCaseTeaNodes } from '../src/content/after-case-tea';
 import { millerVisit } from '../src/content/first-day';
 import { leoVisit } from '../src/content/leo';
 import { irisVisit } from '../src/content/iris';
@@ -436,4 +437,37 @@ describe('conversational pacing and continuity', () => {
       expect(state.flags).toContain('club_bad_romance_debated');
     },
   );
+  it.each([
+    ['club-new-reader-anna', 'club-new-reader-anna-back'],
+    ['club-new-reader-miller', 'club-new-reader-miller-back'],
+  ] as const)('book recommendations %s return to the club', (choice, finish) => {
+    let state = selectOption(bookClub, at(bookClub, 'welcome'), 'club-new-reader');
+    state = selectOption(bookClub, state, choice);
+    state = selectOption(bookClub, state, finish);
+    expect(state.node).toBe('welcome');
+    expect(state.flags).toContain('club_recommended_easy_reading');
+  });
+
+  it('Mara book recommendation has a real second exchange', () => {
+    let state = selectOption(bookClub, at(bookClub, 'welcome'), 'club-new-reader');
+    state = selectOption(bookClub, state, 'club-new-reader-mara');
+    state = selectOption(bookClub, state, 'club-new-reader-mara-back');
+    expect(currentNode(bookClub, state).text).toContain('камінь');
+    state = selectOption(bookClub, state, 'club-new-reader-mara-finish');
+    expect(state.node).toBe('welcome');
+    expect(state.flags).toContain('club_recommended_easy_reading');
+  });
+
+  it.each([
+    ['after-frank-box', 'after-frank-box-finish', 'final_after_case_frank_box'],
+    ['after-frank-lap', 'after-frank-lap-finish', 'final_after_case_frank_lap'],
+  ] as const)('Frank after-case branch %s is complete', (choice, finish, flag) => {
+    const story: DialogueStory = { start: 'after-case-tea', nodes: afterCaseTeaNodes };
+    let state = selectOption(story, startDialogue(story), 'after-tea-frank');
+    state = selectOption(story, state, choice);
+    state = selectOption(story, state, finish);
+    expect(state.node).toBe('after-case-finish');
+    expect(state.flags).toContain(flag);
+  });
+
 });
