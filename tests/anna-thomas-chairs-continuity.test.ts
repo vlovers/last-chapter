@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { annaVisit } from '../src/content/anna';
 import { thomasVisit } from '../src/content/thomas';
-import {
-  availableOptions,
-  currentNode,
-  startDialogue,
-  selectOption,
-} from '../src/game/dialogue';
+import { availableOptions, currentNode, startDialogue, selectOption } from '../src/game/dialogue';
 
 describe('Anna and Thomas chairs continuity', () => {
   const at = (story: typeof annaVisit, flags: string[]) => {
