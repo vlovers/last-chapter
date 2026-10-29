@@ -16,6 +16,24 @@ export const irisDecision: DialogueStory = {
       text: '«Я не хочу, щоб сім років мого життя вмістилися в один конверт. Але й робити вигляд, що його немає, більше не можу». Вона проводить пальцем по краю альбому.',
       options: [
         {
+          id: 'iris-letter-feeling',
+          label: '«Ти не мусиш вирішувати долю листа сьогодні»',
+          next: 'iris-letter-feeling',
+          unless: ['iris_day_four_letter_feeling_heard'],
+        },
+        {
+          id: 'iris-letter-ask',
+          label: '«Що саме тебе лякає в цьому конверті?»',
+          next: 'iris-letter-ask',
+          unless: ['iris_day_four_letter_fear_heard'],
+        },
+        {
+          id: 'letter',
+          label: '«Можемо поговорити про лист»',
+          next: 'letter',
+          requires: ['saw_envelope'],
+        },
+        {
           id: 'iris-exhibition-plan',
           label: '«Якою ти хочеш зробити виставку на п’ятий день?»',
           next: 'iris-exhibition-plan',
@@ -43,12 +61,6 @@ export const irisDecision: DialogueStory = {
           requires: ['quiet_evening_page_found'],
           unless: ['iris_quiet_page_discussed'],
         },
-        {
-          id: 'letter',
-          label: '«Можемо поговорити про лист»',
-          next: 'letter',
-          requires: ['saw_envelope'],
-        },
         { id: 'past', label: '«Що для тебе змінилося після повернення?»', next: 'past' },
         {
           id: 'iris-boundaries',
@@ -57,6 +69,32 @@ export const irisDecision: DialogueStory = {
           unless: ['iris_day_four_boundary_heard'],
         },
         { id: 'leave', label: '«Не поспішай із рішенням»', next: 'end' },
+      ],
+    },
+    {
+      id: 'iris-letter-feeling',
+      speaker: 'Айріс',
+      text: '«Дякую». Вона не відсуває конверт, лише кладе долоню поруч. «Мені всі кажуть: відкрий — і стане легше. Але ж там можуть бути слова, після яких уже не повернешся до вчора».',
+      options: [
+        {
+          id: 'iris-letter-feeling-return',
+          label: '«Тоді почнемо з того, що ти сама хочеш розповісти»',
+          next: 'welcome',
+          grants: ['iris_day_four_letter_feeling_heard'],
+        },
+      ],
+    },
+    {
+      id: 'iris-letter-ask',
+      speaker: 'Айріс',
+      text: '«Що я впізнаю почерк. Або не впізнаю». Айріс дивиться на мокре скло. «І тоді доведеться вирішувати, кому про це сказати. Я ще не готова до міських порад».',
+      options: [
+        {
+          id: 'iris-letter-ask-return',
+          label: '«Я не розповідатиму нікому без твого дозволу»',
+          next: 'welcome',
+          grants: ['iris_day_four_letter_fear_heard'],
+        },
       ],
     },
     {
