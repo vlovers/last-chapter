@@ -121,7 +121,9 @@ describe('Nora and Miller: cinema photo and private memories', () => {
     expect(options).toContain('final-miller-cinema-topic');
     expect(options).not.toContain('final-nora-miller-cinema-topic');
     const opened = selectOption(finalReading, state, 'final-miller-cinema-topic');
-    expect(currentNode(finalReading, opened).text).toContain('залишу вдома');
+    expect(currentNode(finalReading, opened).text).toContain('історію про брата');
+    const joined = selectOption(finalReading, opened, 'final-miller-cinema-open');
+    expect(currentNode(finalReading, joined).text).toContain('залишу вдома');
   });
 
   it('joint follow-up respects Nora pending consent and Miller private family story', () => {
@@ -133,7 +135,7 @@ describe('Nora and Miller: cinema photo and private memories', () => {
     ]);
     const opened = selectOption(finalReading, state, 'final-nora-miller-cinema-topic');
     expect(currentNode(finalReading, opened).text).toContain('Відповіді досі немає');
-    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+    expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(
       'final-miller-cinema-topic',
     );
   });
@@ -185,6 +187,7 @@ describe('Nora and Miller: cinema photo and private memories', () => {
     let state = finalAtGathering(['miller_cinema_photo_discussed']);
     for (const id of [
       'final-miller-cinema-topic',
+      'final-miller-cinema-open',
       'final-nora-miller-compare',
       'final-nora-miller-compare-detail',
       'final-nora-miller-compare-invite',
