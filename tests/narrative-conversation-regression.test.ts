@@ -42,6 +42,8 @@ describe('narrative conversation regression', () => {
   it('keeps Nora on the cinema photograph until the archive choice is recorded', () => {
     const state = walk(noraVisit, [
       'hello',
+      'nora-tea',
+      'nora-tea-back',
       'nora-reflection',
       'nora-reflect-question',
       'nora-reflect-continue',
