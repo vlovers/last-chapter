@@ -22,6 +22,23 @@ const arcs = [
   ['eleanor', eleanorVisit, 'eleanor_reflected_on_legacy', 'greet'],
 ] as const;
 
+function prepareReflection(story: (typeof arcs)[number][1], prefix: string) {
+  let state = startDialogue(story);
+  const entry = prefix === 'iris' ? 'welcome' : prefix === 'eleanor' || prefix === 'leo' || prefix === 'thomas' ? 'greet' : 'hello';
+  state = selectOption(story, state, entry);
+  if (prefix === 'anna') {
+    for (const choice of ['anna-book-disagreement', 'anna-disagreement-debate', 'anna-disagreement-back']) {
+      state = selectOption(story, state, choice);
+    }
+  }
+  if (prefix === 'nora') {
+    for (const choice of ['nora-tea', 'nora-tea-back']) {
+      state = selectOption(story, state, choice);
+    }
+  }
+  return state;
+}
+
 describe('Optional character reflection arcs', () => {
   it.each(arcs)(
     '%s supports a deep and a short reflection without trapping the player',
@@ -32,7 +49,7 @@ describe('Optional character reflection arcs', () => {
         expect(
           availableOptions(story, state).some((option) => option.id === `${prefix}-reflection`),
         ).toBe(false);
-        state = selectOption(story, state, introduction);
+        state = prepareReflection(story, prefix);
         const option = availableOptions(story, state).find(
           (item) => item.id === `${prefix}-reflection`,
         );
@@ -106,9 +123,8 @@ describe('Optional character reflection arcs', () => {
   ] as const)(
     '%s has a playable alternate decision',
     (prefix, story, introduction, choice, back, flag) => {
-      let state = startDialogue(story);
+      let state = prepareReflection(story, prefix);
       for (const option of [
-        introduction,
         `${prefix}-reflection`,
         `${prefix}-reflect-question`,
         `${prefix}-reflect-continue`,
@@ -180,9 +196,8 @@ describe('Optional character reflection arcs', () => {
   ] as const)(
     '%s alternate branch returns safely and records its choice',
     (prefix, story, intro, decision, followup, extra, flag) => {
-      let state = startDialogue(story);
+      let state = prepareReflection(story, prefix);
       const choices = [
-        intro,
         `${prefix}-reflection`,
         `${prefix}-reflect-question`,
         `${prefix}-reflect-continue`,
