@@ -115,4 +115,30 @@ describe('conversational pacing and continuity', () => {
     expect(mixed).not.toBe(pressured);
   });
 
+  it.each([
+    ['Mara', maraDecision, 'greet'],
+    ['Leo', leoDecision, 'welcome'],
+    ['Iris', irisDecision, 'welcome'],
+    ['Anna', annaVisit, 'hello'],
+    ['Nora', noraVisit, 'hello'],
+  ] as const)('%s has no duplicate condition sets for the same hub', (_name, story, hub) => {
+    const node = story.nodes.find((entry) => entry.id === hub);
+    expect(node).toBeDefined();
+    const conditions = (node!.textWhen ?? []).map((entry) =>
+      [...entry.requires].sort().join('|'),
+    );
+    expect(new Set(conditions).size).toBe(conditions.length);
+  });
+
+  it('combined trust history overrides generic single-fact responses', () => {
+    const story = noraVisit;
+    const pressured = currentNode(story, at(story, 'hello', ['nora_confidentiality_pressed']));
+    const mixed = currentNode(
+      story,
+      at(story, 'hello', ['nora_confidentiality_pressed', 'nora_confidentiality_respected']),
+    );
+    expect(pressured.text).toContain('не розповідатиму');
+    expect(mixed.text).toContain('потім передумав');
+  });
+
 });
