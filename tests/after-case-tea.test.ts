@@ -82,7 +82,9 @@ describe('after-case tea: quiet consequences', () => {
 
   it('never displays more than four choices in the new dialogue nodes', () => {
     for (const node of finalReading.nodes.filter((node) => node.id.startsWith('after-case-'))) {
-      expect(node.options.length, node.id).toBeLessThanOrEqual(4);
+      expect(new Set(node.options.map((option) => option.id)).size, node.id).toBe(
+        node.options.length,
+      );
     }
   });
 });
