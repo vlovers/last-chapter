@@ -97,7 +97,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'paper-fit-back',
-        label: 'Не називати невдале зіставлення доказом двох авторів',
+        label: 'Записати, що краї аркушів не збіглися',
         next: 'paper-study',
         grants: ['final_paper_edges_checked'],
       },
@@ -110,7 +110,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'paper-thomas-back',
-        label: 'Відділити загальну практику від долі цих аркушів',
+        label: 'Запитати Томаса, чи бачив він саме ці аркуші',
         next: 'paper-study',
         grants: ['final_paper_edges_checked'],
       },
@@ -159,7 +159,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'paper-mara-back',
-        label: 'Не плутати улюблений фінал зі справжнім',
+        label: 'Запитати Мару, чи має вона хоч один доказ про фінал',
         next: 'paper-study',
         grants: ['final_paper_ink_checked'],
       },
@@ -184,7 +184,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
       },
       {
         id: 'paper-voices-back',
-        label: 'Не видавати чутки за свідчення',
+        label: 'Запитати Міллер, хто був поруч, коли вона це почула',
         next: 'paper-study',
         grants: ['final_paper_voices_heard'],
       },
@@ -203,7 +203,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'paper-iris-respect',
-        label: 'Не просити Айріс вгадувати чужі думки',
+        label: 'Запитати Айріс лише про те, що вона бачила сама',
         next: 'paper-study',
         grants: ['final_paper_voices_heard', 'final_paper_iris_not_pressured'],
       },
