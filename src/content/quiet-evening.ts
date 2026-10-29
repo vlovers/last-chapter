@@ -21,7 +21,11 @@ export const quietEvening: DialogueStory = {
           next: 'window',
         },
         { id: 'tidy-books', label: 'Розібрати книжки на столі', next: 'manuscript' },
-        { id: 'closing-leftovers', label: 'Знайти, хто забув на столі книжку', next: 'closing-leftovers' },
+        {
+          id: 'closing-leftovers',
+          label: 'Знайти, хто забув на столі книжку',
+          next: 'closing-leftovers',
+        },
       ],
     },
     {
@@ -31,7 +35,11 @@ export const quietEvening: DialogueStory = {
       options: [
         { id: 'frank-books', label: 'Повернутися до книжок', next: 'manuscript' },
         { id: 'frank-toy', label: 'Дістати Френкову іграшку з-під прилавка', next: 'frank-toy' },
-        { id: 'frank-treat', label: 'Перевірити, чому Френк сидить біля шафки', next: 'frank-treat' },
+        {
+          id: 'frank-treat',
+          label: 'Перевірити, чому Френк сидить біля шафки',
+          next: 'frank-treat',
+        },
       ],
     },
     {
@@ -39,51 +47,104 @@ export const quietEvening: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Під прилавком знаходиться пошарпана мишка на мотузці. Френк удає, що її не бачить. Щойно ти повертаєшся до столу, він кидається з-за коробки, промахується й ображено дивиться на мишку. Доводиться повторити виставу.',
       options: [
-        { id: 'frank-toy-play', label: 'Пограти ще хвилину, поки Френк не переможе', next: 'frank-toy-win' },
-        { id: 'frank-toy-books', label: 'Залишити мишку біля коробки й повернутися до книжок', next: 'manuscript', grants: ['quiet_evening_frank_played'] },
+        {
+          id: 'frank-toy-play',
+          label: 'Пограти ще хвилину, поки Френк не переможе',
+          next: 'frank-toy-win',
+        },
+        {
+          id: 'frank-toy-books',
+          label: 'Залишити мишку біля коробки й повернутися до книжок',
+          next: 'manuscript',
+          grants: ['quiet_evening_frank_played'],
+        },
       ],
     },
     {
       id: 'frank-toy-win',
       speaker: 'Оповідач',
       text: 'Нарешті Френк ловить мишку, притискає її лапами й переможно нявкає. За хвилину він забуває про здобич і сідає на відкритий роман. У книгарні знову тихо — якщо не рахувати муркотіння.',
-      options: [{ id: 'frank-toy-win-books', label: 'Обережно забрати роман і продовжити прибирання', next: 'manuscript', grants: ['quiet_evening_frank_played'] }],
+      options: [
+        {
+          id: 'frank-toy-win-books',
+          label: 'Обережно забрати роман і продовжити прибирання',
+          next: 'manuscript',
+          grants: ['quiet_evening_frank_played'],
+        },
+      ],
     },
     {
       id: 'frank-treat',
       speaker: 'Оповідач',
       text: 'Френк сидить перед шафкою з кормом так нерухомо, ніби охороняє важливі документи. Коли ти відкриваєш дверцята, він підводиться й тихо нявкає. Миска вже повна. Схоже, справа не в голоді, а в бажанні отримати щось цікавіше.',
       options: [
-        { id: 'frank-treat-pet', label: 'Почухати Френка за вухом замість додаткової порції', next: 'frank-treat-pet' },
-        { id: 'frank-treat-books', label: 'Закрити шафку й повернутися до столу', next: 'manuscript' },
+        {
+          id: 'frank-treat-pet',
+          label: 'Почухати Френка за вухом замість додаткової порції',
+          next: 'frank-treat-pet',
+        },
+        {
+          id: 'frank-treat-books',
+          label: 'Закрити шафку й повернутися до столу',
+          next: 'manuscript',
+        },
       ],
     },
     {
       id: 'frank-treat-pet',
       speaker: 'Оповідач',
       text: 'Френк спочатку дивиться на тебе з докором, але за кілька секунд підставляє голову під долоню. Потім сам веде тебе до стосу книжок, які давно час розкласти. Можливо, він просто перевіряв, чи ти ще тут.',
-      options: [{ id: 'frank-treat-pet-books', label: 'Піти за Френком до столу', next: 'manuscript', grants: ['quiet_evening_frank_company'] }],
+      options: [
+        {
+          id: 'frank-treat-pet-books',
+          label: 'Піти за Френком до столу',
+          next: 'manuscript',
+          grants: ['quiet_evening_frank_company'],
+        },
+      ],
     },
     {
       id: 'closing-leftovers',
       speaker: 'Оповідач',
       text: 'На столі лежить роман із закладкою з кав’ярні Мари. Усередині олівцем написано: «Поверну в четвер. Якщо забуду — нагадати про корицю». Підпису немає. Френк намагається витягти закладку зубами.',
       options: [
-        { id: 'closing-leftovers-save', label: 'Покласти книжку на полицю забутих речей', next: 'closing-leftovers-save' },
-        { id: 'closing-leftovers-note', label: 'Залишити Марі записку про знайдену книжку', next: 'closing-leftovers-note' },
+        {
+          id: 'closing-leftovers-save',
+          label: 'Покласти книжку на полицю забутих речей',
+          next: 'closing-leftovers-save',
+        },
+        {
+          id: 'closing-leftovers-note',
+          label: 'Залишити Марі записку про знайдену книжку',
+          next: 'closing-leftovers-note',
+        },
       ],
     },
     {
       id: 'closing-leftovers-save',
       speaker: 'Оповідач',
       text: 'Книжка стає поруч із загубленою рукавичкою й порожнім футляром для окулярів. Тут є місце для чужих речей, поки їх не згадають. Ти повертаєшся до стосу романів на столі.',
-      options: [{ id: 'closing-leftovers-save-books', label: 'Продовжити прибирати книжки', next: 'manuscript', grants: ['quiet_evening_lost_book_shelved'] }],
+      options: [
+        {
+          id: 'closing-leftovers-save-books',
+          label: 'Продовжити прибирати книжки',
+          next: 'manuscript',
+          grants: ['quiet_evening_lost_book_shelved'],
+        },
+      ],
     },
     {
       id: 'closing-leftovers-note',
       speaker: 'Оповідач',
       text: 'На маленькому аркуші ти пишеш: «Маро, хтось залишив роман і згадував корицю». Френк сідає просто на записку. Доводиться переписати її ще раз і приклеїти вище, ніж дістають котячі лапи.',
-      options: [{ id: 'closing-leftovers-note-books', label: 'Повернутися до столу', next: 'manuscript', grants: ['quiet_evening_mara_lost_book_note'] }],
+      options: [
+        {
+          id: 'closing-leftovers-note-books',
+          label: 'Повернутися до столу',
+          next: 'manuscript',
+          grants: ['quiet_evening_mara_lost_book_note'],
+        },
+      ],
     },
     {
       id: 'window',

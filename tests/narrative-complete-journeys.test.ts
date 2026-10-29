@@ -20,7 +20,10 @@ function follow(story: DialogueStory, path: readonly string[]) {
   let state = startDialogue(story);
   for (const id of path) {
     const options = availableOptions(story, state);
-    expect(options.map((option) => option.id), `Missing ${id} at ${state.node}`).toContain(id);
+    expect(
+      options.map((option) => option.id),
+      `Missing ${id} at ${state.node}`,
+    ).toContain(id);
     state = selectOption(story, state, id);
   }
   return state;
@@ -28,19 +31,109 @@ function follow(story: DialogueStory, path: readonly string[]) {
 
 describe('complete optional narrative journeys', () => {
   it.each([
-    ['book club: argument with Anna', bookClub, ['welcome', 'discuss-books', 'books-argument', 'argument-anna', 'argument-anna-back'], 'welcome', 'club_argued_about_characters'],
-    ['book club: disagreement with Mara', bookClub, ['welcome', 'ask-mara', 'mara-disagree', 'mara-disagree-push', 'mara-disagree-more-back'], 'welcome', 'club_mara_disagreed'],
-    ['book club: bad romance with Miller', bookClub, ['welcome', 'discuss-books', 'books-bad-review', 'books-bad-review-miller', 'books-bad-review-miller-back'], 'welcome', 'club_bad_romance_debated'],
-    ['book club: reading recommendations', bookClub, ['welcome', 'club-new-reader', 'club-new-reader-mara', 'club-new-reader-mara-back', 'club-new-reader-mara-finish'], 'welcome', 'club_recommended_easy_reading'],
-    ['Miller: bakery and Mara', millerVisit, ['greet', 'chat', 'miller-neighbors', 'miller-neighbors-mara', 'miller-neighbors-mara-back'], 'topics', 'miller_bakery_story_heard'],
-    ['Anna: dragon union', annaVisit, ['hello', 'anna-school-funny', 'anna-school-funny-work', 'anna-school-funny-work-back'], 'hello', 'anna_classroom_joke_heard'],
-    ['Leo: lost cardboard moon', leoVisit, ['greet', 'leo-station-funny', 'leo-station-funny-boss', 'leo-station-funny-boss-return'], 'greet', 'leo_station_moon_story_heard'],
-    ['Iris: fox illustration', irisVisit, ['hello', 'iris-sketch-mishap', 'iris-sketch-mishap-fix', 'iris-sketch-mishap-fix-back'], 'welcome', 'iris_fox_story_heard'],
-    ['Nora: newspaper misprint', noraVisit, ['hello', 'nora-newspaper', 'nora-newspaper-letter', 'nora-newspaper-letter-back'], 'hello', 'nora_newspaper_story_heard'],
-    ['Thomas: music box', thomasVisit, ['hello', 'thomas-repair-funny', 'thomas-repair-funny-note', 'thomas-repair-funny-note-back'], 'greet', 'thomas_music_box_story_heard'],
-    ['quiet evening: Frank wins', quietEvening, ['sit-frank', 'frank-toy', 'frank-toy-play', 'frank-toy-win-books'], 'manuscript', 'quiet_evening_frank_played'],
-    ['quiet evening: Frank gets attention', quietEvening, ['sit-frank', 'frank-treat', 'frank-treat-pet', 'frank-treat-pet-books'], 'manuscript', 'quiet_evening_frank_company'],
-    ['quiet evening: lost book note', quietEvening, ['closing-leftovers', 'closing-leftovers-note', 'closing-leftovers-note-books'], 'manuscript', 'quiet_evening_mara_lost_book_note'],
+    [
+      'book club: argument with Anna',
+      bookClub,
+      ['welcome', 'discuss-books', 'books-argument', 'argument-anna', 'argument-anna-back'],
+      'welcome',
+      'club_argued_about_characters',
+    ],
+    [
+      'book club: disagreement with Mara',
+      bookClub,
+      ['welcome', 'ask-mara', 'mara-disagree', 'mara-disagree-push', 'mara-disagree-more-back'],
+      'welcome',
+      'club_mara_disagreed',
+    ],
+    [
+      'book club: bad romance with Miller',
+      bookClub,
+      [
+        'welcome',
+        'discuss-books',
+        'books-bad-review',
+        'books-bad-review-miller',
+        'books-bad-review-miller-back',
+      ],
+      'welcome',
+      'club_bad_romance_debated',
+    ],
+    [
+      'book club: reading recommendations',
+      bookClub,
+      [
+        'welcome',
+        'club-new-reader',
+        'club-new-reader-mara',
+        'club-new-reader-mara-back',
+        'club-new-reader-mara-finish',
+      ],
+      'welcome',
+      'club_recommended_easy_reading',
+    ],
+    [
+      'Miller: bakery and Mara',
+      millerVisit,
+      ['greet', 'chat', 'miller-neighbors', 'miller-neighbors-mara', 'miller-neighbors-mara-back'],
+      'topics',
+      'miller_bakery_story_heard',
+    ],
+    [
+      'Anna: dragon union',
+      annaVisit,
+      ['hello', 'anna-school-funny', 'anna-school-funny-work', 'anna-school-funny-work-back'],
+      'hello',
+      'anna_classroom_joke_heard',
+    ],
+    [
+      'Leo: lost cardboard moon',
+      leoVisit,
+      ['greet', 'leo-station-funny', 'leo-station-funny-boss', 'leo-station-funny-boss-return'],
+      'greet',
+      'leo_station_moon_story_heard',
+    ],
+    [
+      'Iris: fox illustration',
+      irisVisit,
+      ['hello', 'iris-sketch-mishap', 'iris-sketch-mishap-fix', 'iris-sketch-mishap-fix-back'],
+      'welcome',
+      'iris_fox_story_heard',
+    ],
+    [
+      'Nora: newspaper misprint',
+      noraVisit,
+      ['hello', 'nora-newspaper', 'nora-newspaper-letter', 'nora-newspaper-letter-back'],
+      'hello',
+      'nora_newspaper_story_heard',
+    ],
+    [
+      'Thomas: music box',
+      thomasVisit,
+      ['hello', 'thomas-repair-funny', 'thomas-repair-funny-note', 'thomas-repair-funny-note-back'],
+      'greet',
+      'thomas_music_box_story_heard',
+    ],
+    [
+      'quiet evening: Frank wins',
+      quietEvening,
+      ['sit-frank', 'frank-toy', 'frank-toy-play', 'frank-toy-win-books'],
+      'manuscript',
+      'quiet_evening_frank_played',
+    ],
+    [
+      'quiet evening: Frank gets attention',
+      quietEvening,
+      ['sit-frank', 'frank-treat', 'frank-treat-pet', 'frank-treat-pet-books'],
+      'manuscript',
+      'quiet_evening_frank_company',
+    ],
+    [
+      'quiet evening: lost book note',
+      quietEvening,
+      ['closing-leftovers', 'closing-leftovers-note', 'closing-leftovers-note-books'],
+      'manuscript',
+      'quiet_evening_mara_lost_book_note',
+    ],
   ] as const)('%s can be played from its actual entry', (_name, story, path, destination, flag) => {
     const state = follow(story, path);
     expect(state.node).toBe(destination);
