@@ -1,3 +1,4 @@
+import type { DialogueState } from '../src/game/dialogue';
 import { describe, expect, it } from 'vitest';
 import { quietEvening } from '../src/content/quiet-evening';
 import { finalReading } from '../src/content/day-five';
@@ -57,7 +58,7 @@ describe('Evening decisions unlock the correct day-five callbacks', () => {
     });
     for (const outcome of route.outcomes) {
       it(`finishes ${route.dayFive}/${outcome} without leaking another choice`, () => {
-        let state = {
+        let state: DialogueState = {
           ...startDialogue(finalReading),
           node: 'gathering',
           flags: [route.flag],
