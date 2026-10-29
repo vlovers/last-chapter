@@ -15,6 +15,8 @@ export const eleanorVisit: DialogueStory = {
       speaker: 'Елеонора',
       text: '«Тут пахне так само. Папір, дощ і чай, який хтось знову забув допити». Вона усміхається. «Я обіцяла не командувати. Але ту полицю я б переставила».',
       options: [
+        { id: 'eleanor-shelf', label: '«А куди б ви переставили ту полицю?»', next: 'shop' },
+        { id: 'eleanor-tea', label: '«Спершу чай. А потім можете покритикувати все»', next: 'shop' },
         {
           id: 'eleanor-v3-conversation',
           label: '«Кому належить книгарня після передачі ключів?»',
@@ -34,7 +36,6 @@ export const eleanorVisit: DialogueStory = {
           requires: ['saw_receipt', 'saw_repair_note'],
           unless: ['eleanor_timeline_checked'],
         },
-        { id: 'shop', label: '«Якою була книгарня раніше?»', next: 'shop' },
         { id: 'flood', label: '«Розкажіть про затоплення»', next: 'flood' },
         {
           id: 'ledger',
