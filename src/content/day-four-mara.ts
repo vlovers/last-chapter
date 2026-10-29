@@ -58,7 +58,7 @@ export const maraDecision: DialogueStory = {
         },
         {
           id: 'remember-trust',
-          label: '«Пам’ятаєш нашу розмову про прощення?»',
+          label: '«Ти після нашої розмови ще бачила Лео?»',
           next: 'remember-trust',
           requires: ['mara_discussed_forgiveness'],
         },
