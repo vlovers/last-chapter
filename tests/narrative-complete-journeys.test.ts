@@ -131,7 +131,7 @@ describe('complete optional narrative journeys', () => {
     [
       'quiet evening: lost book note',
       quietEvening,
-      ['closing-leftovers', 'closing-leftovers-note', 'closing-leftovers-note-books'],
+      ['sit-frank', 'closing-leftovers', 'closing-leftovers-note', 'closing-leftovers-note-books'],
       'manuscript',
       'quiet_evening_mara_lost_book_note',
     ],
@@ -218,7 +218,7 @@ describe('complete optional narrative journeys', () => {
     for (const path of [
       ['sit-frank', 'frank-toy', 'frank-toy-play', 'frank-toy-win-books'],
       ['sit-frank', 'frank-treat', 'frank-treat-pet', 'frank-treat-pet-books'],
-      ['closing-leftovers', 'closing-leftovers-note', 'closing-leftovers-note-books'],
+      ['sit-frank', 'closing-leftovers', 'closing-leftovers-note', 'closing-leftovers-note-books'],
     ]) {
       let state = follow(quietEvening, path);
       state = selectOption(quietEvening, state, 'read-margin');
@@ -231,7 +231,7 @@ describe('complete optional narrative journeys', () => {
 
   it.each([
     [['book_club_started', 'club_bad_romance_debated'], 'весілля'],
-    [['book_club_started', 'club_recommended_easy_reading'], 'коміксів'],
+    [['book_club_started', 'club_recommended_easy_reading'], 'коротких книжок'],
     [['book_club_started', 'club_argued_about_characters'], 'злодій'],
     [
       ['book_club_started', 'club_bad_romance_debated', 'club_recommended_easy_reading'],
