@@ -62,7 +62,11 @@ export const noraVisit: DialogueStory = {
           requires: ['nora_tea_pause_heard'],
           unless: ['nora_reflected_on_uncertainty'],
         },
-        { id: 'nora-newspaper', label: '«Тобі траплялися смішні помилки в старих газетах?»', next: 'nora-newspaper' },
+        {
+          id: 'nora-newspaper',
+          label: '«Тобі траплялися смішні помилки в старих газетах?»',
+          next: 'nora-newspaper',
+        },
         { id: 'work', label: '«Як вам працюється в громадському центрі?»', next: 'work' },
         { id: 'bellwick', label: '«Що вам подобається в Беллвіку?»', next: 'bellwick' },
         {
@@ -194,15 +198,31 @@ export const noraVisit: DialogueStory = {
       speaker: 'Нора',
       text: '«У випуску за сорок сьомий рік надрукували: “Міський хор шукає нових ворогів”. Мали бути “нові голоси”. На наступному тижні хтось надіслав листа, що готовий стати ворогом хору, але тільки по суботах». Нора усміхається. «Лист досі лежить в архіві».',
       options: [
-        { id: 'nora-newspaper-letter', label: '«І що хор відповів?»', next: 'nora-newspaper-letter' },
-        { id: 'nora-newspaper-back', label: '«Тепер я теж хочу почитати ті газети»', next: 'hello', grants: ['nora_newspaper_story_heard'] },
+        {
+          id: 'nora-newspaper-letter',
+          label: '«І що хор відповів?»',
+          next: 'nora-newspaper-letter',
+        },
+        {
+          id: 'nora-newspaper-back',
+          label: '«Тепер я теж хочу почитати ті газети»',
+          next: 'hello',
+          grants: ['nora_newspaper_story_heard'],
+        },
       ],
     },
     {
       id: 'nora-newspaper-letter',
       speaker: 'Нора',
       text: '«Запросили його на репетицію. Він прийшов із дружиною, і обоє залишилися співати». Нора знизує плечима. «Мені подобається, що ніхто не виправив цю помилку. Інакше ми б не дізналися про найввічливішого ворога в історії Беллвіка».',
-      options: [{ id: 'nora-newspaper-letter-back', label: '«Треба розповісти це на книжковому клубі»', next: 'hello', grants: ['nora_newspaper_story_heard'] }],
+      options: [
+        {
+          id: 'nora-newspaper-letter-back',
+          label: '«Треба розповісти це на книжковому клубі»',
+          next: 'hello',
+          grants: ['nora_newspaper_story_heard'],
+        },
+      ],
     },
     {
       id: 'end',

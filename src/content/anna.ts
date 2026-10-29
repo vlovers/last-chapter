@@ -68,7 +68,11 @@ export const annaVisit: DialogueStory = {
           unless: ['anna_book_disagreement_discussed'],
         },
         { id: 'school', label: '«Що люблять читати ваші учні?»', next: 'school' },
-        { id: 'anna-school-funny', label: '«А який найдивніший відгук на книжку ти отримувала?»', next: 'anna-school-funny' },
+        {
+          id: 'anna-school-funny',
+          label: '«А який найдивніший відгук на книжку ти отримувала?»',
+          next: 'anna-school-funny',
+        },
         { id: 'teacher', label: '«Вам подобається викладати?»', next: 'teacher' },
         { id: 'town', label: '«Як вам живеться в Беллвіку?»', next: 'town' },
         {
@@ -273,15 +277,31 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Один хлопчик написав: “Книжка хороша, але дракон мало працює”. Я запитала, що це означає. Він сказав, що дракон весь час сидить на скарбі, а міг би допомагати на фермі». Анна сміється. «Тепер у нас на дошці висить розклад драконячих змін».',
       options: [
-        { id: 'anna-school-funny-work', label: '«А скільки дракон заробляє?»', next: 'anna-school-funny-work' },
-        { id: 'anna-school-funny-back', label: '«Звучить як хороший книжковий клуб»', next: 'hello', grants: ['anna_classroom_joke_heard'] },
+        {
+          id: 'anna-school-funny-work',
+          label: '«А скільки дракон заробляє?»',
+          next: 'anna-school-funny-work',
+        },
+        {
+          id: 'anna-school-funny-back',
+          label: '«Звучить як хороший книжковий клуб»',
+          next: 'hello',
+          grants: ['anna_classroom_joke_heard'],
+        },
       ],
     },
     {
       id: 'anna-school-funny-work',
       speaker: 'Анна',
       text: '«Два відра яблук на тиждень. Але Макс вимагає доплату за нічні зміни». Анна хитає головою. «Завтра розбиратимемося з профспілкою драконів. Я до цього не готувалася в університеті».',
-      options: [{ id: 'anna-school-funny-work-back', label: '«Бажаю успіху на переговорах»', next: 'hello', grants: ['anna_classroom_joke_heard'] }],
+      options: [
+        {
+          id: 'anna-school-funny-work-back',
+          label: '«Бажаю успіху на переговорах»',
+          next: 'hello',
+          grants: ['anna_classroom_joke_heard'],
+        },
+      ],
     },
     {
       id: 'end',

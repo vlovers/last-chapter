@@ -47,7 +47,11 @@ export const irisVisit: DialogueStory = {
           next: 'iris-reflection',
           unless: ['iris_reflected_on_identity'],
         },
-        { id: 'iris-sketch-mishap', label: '«А був малюнок, який зовсім не вдався?»', next: 'iris-sketch-mishap' },
+        {
+          id: 'iris-sketch-mishap',
+          label: '«А був малюнок, який зовсім не вдався?»',
+          next: 'iris-sketch-mishap',
+        },
         { id: 'ask-old', label: '«Ви знали колишню власницю?»', next: 'eleanor' },
         {
           id: 'ask-letter',
@@ -161,15 +165,31 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Якось намалювала для дитячої книжки лисицю. Редактор написав: “Чудовий борсук”. Я три дні доводила, що це лисиця». Айріс сміється. «На четвертий домалювала їй табличку з написом “ЛИСИЦЯ”. Редактор попросив прибрати зайвий текст».',
       options: [
-        { id: 'iris-sketch-mishap-fix', label: '«То як ти вийшла з цієї ситуації?»', next: 'iris-sketch-mishap-fix' },
-        { id: 'iris-sketch-mishap-back', label: '«Покажеш інший малюнок?»', next: 'welcome', grants: ['iris_fox_story_heard'] },
+        {
+          id: 'iris-sketch-mishap-fix',
+          label: '«То як ти вийшла з цієї ситуації?»',
+          next: 'iris-sketch-mishap-fix',
+        },
+        {
+          id: 'iris-sketch-mishap-back',
+          label: '«Покажеш інший малюнок?»',
+          next: 'welcome',
+          grants: ['iris_fox_story_heard'],
+        },
       ],
     },
     {
       id: 'iris-sketch-mishap-fix',
       speaker: 'Айріс',
       text: '«Намалювала ще одну лисицю. Вона була схожа на собаку». Айріс знизує плечима. «Книжку надрукували з першою. Тепер діти питають, чому борсук живе в лисячій норі. Мені подобається, що вони помічають».',
-      options: [{ id: 'iris-sketch-mishap-fix-back', label: '«Звучить як найкраща частина книжки»', next: 'welcome', grants: ['iris_fox_story_heard'] }],
+      options: [
+        {
+          id: 'iris-sketch-mishap-fix-back',
+          label: '«Звучить як найкраща частина книжки»',
+          next: 'welcome',
+          grants: ['iris_fox_story_heard'],
+        },
+      ],
     },
     {
       id: 'end',

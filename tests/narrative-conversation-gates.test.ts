@@ -301,29 +301,77 @@ describe('conversational pacing and continuity', () => {
     }
   });
   it.each([
-    ['Anna', annaVisit, 'hello', 'anna-school-funny', 'anna-school-funny', 'anna-school-funny-work', 'anna-school-funny-work-back', 'anna_classroom_joke_heard'],
-    ['Leo', leoVisit, 'greet', 'leo-station-funny', 'leo-station-funny', 'leo-station-funny-boss', 'leo-station-funny-boss-return', 'leo_station_moon_story_heard'],
-  ] as const)('%s has a complete optional everyday story', (_name, story, hub, option, scene, followup, finish, flag) => {
-    const start = at(story, hub);
-    const entered = selectOption(story, start, option);
-    expect(entered.node).toBe(scene);
-    const detail = selectOption(story, entered, followup);
-    const returned = selectOption(story, detail, finish);
-    expect(returned.node).toBe(hub);
-    expect(returned.flags).toContain(flag);
-  });
+    [
+      'Anna',
+      annaVisit,
+      'hello',
+      'anna-school-funny',
+      'anna-school-funny',
+      'anna-school-funny-work',
+      'anna-school-funny-work-back',
+      'anna_classroom_joke_heard',
+    ],
+    [
+      'Leo',
+      leoVisit,
+      'greet',
+      'leo-station-funny',
+      'leo-station-funny',
+      'leo-station-funny-boss',
+      'leo-station-funny-boss-return',
+      'leo_station_moon_story_heard',
+    ],
+  ] as const)(
+    '%s has a complete optional everyday story',
+    (_name, story, hub, option, scene, followup, finish, flag) => {
+      const start = at(story, hub);
+      const entered = selectOption(story, start, option);
+      expect(entered.node).toBe(scene);
+      const detail = selectOption(story, entered, followup);
+      const returned = selectOption(story, detail, finish);
+      expect(returned.node).toBe(hub);
+      expect(returned.flags).toContain(flag);
+    },
+  );
 
   it.each([
-    ['Iris', irisVisit, 'welcome', 'iris-sketch-mishap', 'iris-sketch-mishap-fix', 'iris-sketch-mishap-fix-back', 'iris_fox_story_heard'],
-    ['Nora', noraVisit, 'hello', 'nora-newspaper', 'nora-newspaper-letter', 'nora-newspaper-letter-back', 'nora_newspaper_story_heard'],
-    ['Thomas', thomasVisit, 'greet', 'thomas-repair-funny', 'thomas-repair-funny-note', 'thomas-repair-funny-note-back', 'thomas_music_box_story_heard'],
-  ] as const)('%s has a complete optional personal story', (_name, story, hub, option, followup, finish, flag) => {
-    const entered = selectOption(story, at(story, hub), option);
-    const detail = selectOption(story, entered, followup);
-    const returned = selectOption(story, detail, finish);
-    expect(returned.node).toBe(hub);
-    expect(returned.flags).toContain(flag);
-  });
+    [
+      'Iris',
+      irisVisit,
+      'welcome',
+      'iris-sketch-mishap',
+      'iris-sketch-mishap-fix',
+      'iris-sketch-mishap-fix-back',
+      'iris_fox_story_heard',
+    ],
+    [
+      'Nora',
+      noraVisit,
+      'hello',
+      'nora-newspaper',
+      'nora-newspaper-letter',
+      'nora-newspaper-letter-back',
+      'nora_newspaper_story_heard',
+    ],
+    [
+      'Thomas',
+      thomasVisit,
+      'greet',
+      'thomas-repair-funny',
+      'thomas-repair-funny-note',
+      'thomas-repair-funny-note-back',
+      'thomas_music_box_story_heard',
+    ],
+  ] as const)(
+    '%s has a complete optional personal story',
+    (_name, story, hub, option, followup, finish, flag) => {
+      const entered = selectOption(story, at(story, hub), option);
+      const detail = selectOption(story, entered, followup);
+      const returned = selectOption(story, detail, finish);
+      expect(returned.node).toBe(hub);
+      expect(returned.flags).toContain(flag);
+    },
+  );
 
   it.each([
     ['anna_classroom_joke_heard', 'дракона'],
@@ -338,5 +386,4 @@ describe('conversational pacing and continuity', () => {
     expect(callback).not.toBe(defaultLine);
     expect(options(bookClub, 'welcome', [flag])).toContain('discuss-books');
   });
-
 });
