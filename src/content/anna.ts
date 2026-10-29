@@ -68,7 +68,7 @@ export const annaVisit: DialogueStory = {
           unless: ['anna_book_disagreement_discussed'],
         },
         { id: 'school', label: '«Що люблять читати ваші учні?»', next: 'school' },
-        { id: 'anna-school-funny', label: '«А який найдивніший відгук на книжку ти отримувала?»', next: 'anna-school-funny' }
+        { id: 'anna-school-funny', label: '«А який найдивніший відгук на книжку ти отримувала?»', next: 'anna-school-funny' },
         { id: 'teacher', label: '«Вам подобається викладати?»', next: 'teacher' },
         { id: 'town', label: '«Як вам живеться в Беллвіку?»', next: 'town' },
         {
