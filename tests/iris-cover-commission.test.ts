@@ -15,7 +15,12 @@ import { seasonEnding } from '../src/game/endings';
 
 const choices = [
   ['iris-cover-accept', 'iris-cover-accept-back', 'iris_cover_revisions_chosen', 'веселку'],
-  ['iris-cover-negotiate', 'iris-cover-negotiate-back', 'iris_cover_negotiation_chosen', 'два ескізи'],
+  [
+    'iris-cover-negotiate',
+    'iris-cover-negotiate-back',
+    'iris_cover_negotiation_chosen',
+    'два ескізи',
+  ],
   ['iris-cover-decline', 'iris-cover-decline-back', 'iris_cover_independent_chosen', 'відмовилася'],
 ] as const;
 
@@ -42,21 +47,24 @@ describe('Iris independent illustration commission', () => {
     );
   });
 
-  it.each(choices)('carries the work choice into day four: %s', (_choice, _back, flag, expected) => {
-    const welcome = from(irisDecision, 'welcome', ['iris_cover_commission_discussed', flag]);
-    expect(availableOptions(irisDecision, welcome).map((o) => o.id)).toContain(
-      'iris-cover-day-four-topic',
-    );
-    const followup = selectOption(irisDecision, welcome, 'iris-cover-day-four-topic');
-    expect(currentNode(irisDecision, followup).text).toContain(expected);
-    const work = selectOption(irisDecision, followup, 'iris-cover-four-ask-work');
-    const returned = selectOption(irisDecision, work, 'iris-cover-four-work-back');
-    expect(returned.node).toBe('welcome');
-    expect(returned.flags).toContain('iris_cover_day_four_followup');
-    expect(availableOptions(irisDecision, returned).map((o) => o.id)).not.toContain(
-      'iris-cover-day-four-topic',
-    );
-  });
+  it.each(choices)(
+    'carries the work choice into day four: %s',
+    (_choice, _back, flag, expected) => {
+      const welcome = from(irisDecision, 'welcome', ['iris_cover_commission_discussed', flag]);
+      expect(availableOptions(irisDecision, welcome).map((o) => o.id)).toContain(
+        'iris-cover-day-four-topic',
+      );
+      const followup = selectOption(irisDecision, welcome, 'iris-cover-day-four-topic');
+      expect(currentNode(irisDecision, followup).text).toContain(expected);
+      const work = selectOption(irisDecision, followup, 'iris-cover-four-ask-work');
+      const returned = selectOption(irisDecision, work, 'iris-cover-four-work-back');
+      expect(returned.node).toBe('welcome');
+      expect(returned.flags).toContain('iris_cover_day_four_followup');
+      expect(availableOptions(irisDecision, returned).map((o) => o.id)).not.toContain(
+        'iris-cover-day-four-topic',
+      );
+    },
+  );
 
   it.each(choices)('preserves the work choice through day five: %s', (_choice, _back, flag) => {
     const gathering = from(finalReading, 'gathering', [
