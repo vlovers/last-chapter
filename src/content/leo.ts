@@ -503,20 +503,40 @@ export const leoVisit: DialogueStory = {
       id: 'leo-music-join',
       speaker: 'Лео',
       text: '«Ні. Я намагався оголосити посадку». Він знічується. «Але потім хтось попросив мене заспівати приспів у мікрофон. Начальник досі згадує».',
-      options: [{ id: 'leo-music-join-back', label: '«Хочу почути запис»', next: 'greet', grants: ['leo_platform_singing_heard'] }],
+      options: [
+        {
+          id: 'leo-music-join-back',
+          label: '«Хочу почути запис»',
+          next: 'greet',
+          grants: ['leo_platform_singing_heard'],
+        },
+      ],
     },
     {
       id: 'leo-music-train',
       speaker: 'Лео',
       text: '«На сім хвилин раніше. Люди навіть образилися». Лео розводить руками. «Єдиний випадок у моїй кар’єрі, коли пунктуальність усім зіпсувала настрій».',
-      options: [{ id: 'leo-music-train-back', label: '«Наступного разу затримай його заради бісу»', next: 'greet', grants: ['leo_platform_concert_heard'] }],
+      options: [
+        {
+          id: 'leo-music-train-back',
+          label: '«Наступного разу затримай його заради бісу»',
+          next: 'greet',
+          grants: ['leo_platform_concert_heard'],
+        },
+      ],
     },
     {
       id: 'leo-music-mara',
       speaker: 'Лео',
       text: '«Мара б принесла булочки й почала продавати квитки». Він усміхається. «Вона завжди бачить можливість там, де я бачу порушення розкладу».',
-      options: [{ id: 'leo-music-mara-back', label: '«Може, запросиш її на наступний концерт?»', next: 'greet', grants: ['leo_mara_platform_idea_heard'] }],
+      options: [
+        {
+          id: 'leo-music-mara-back',
+          label: '«Може, запросиш її на наступний концерт?»',
+          next: 'greet',
+          grants: ['leo_mara_platform_idea_heard'],
+        },
+      ],
     },
-
   ],
 };
