@@ -9,7 +9,12 @@ export const paperStudyOption: DialogueOption = {
   label: 'Порівняти два рукописні аркуші під лампою',
   next: 'paper-study',
   requires: ['final_chapter_evidence_reviewed', 'final_ledger_scene_complete'],
-  unless: ['final_paper_study_done', 'final_manuscript_provenance_decided'],
+  unless: [
+    'final_paper_study_done',
+    'final_manuscript_provenance_decided',
+    'final_letter_breach_disclosed',
+    'final_case_iris_declined',
+  ],
 };
 
 export const paperStudyNodes: readonly DialogueNode[] = [
