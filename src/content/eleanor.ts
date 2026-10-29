@@ -23,13 +23,13 @@ export const eleanorVisit: DialogueStory = {
         },
         {
           id: 'eleanor-v3-conversation',
-          label: '«Кому належить книгарня після передачі ключів?»',
+          label: '«Ви справді можете зайти сюди й нічого не переставити?»',
           next: 'eleanor-v3-conversation',
           unless: ['eleanor_change_discussed'],
         },
         {
           id: 'eleanor-reflection',
-          label: '«Що для тебе означає передати книгарню?»',
+          label: '«А що було найважче залишити тут після передачі ключів?»',
           next: 'eleanor-reflection',
           unless: ['eleanor_reflected_on_legacy'],
         },
