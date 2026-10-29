@@ -18,16 +18,16 @@ export const leoVisit: DialogueStory = {
       text: '«Я Лео. Працюю на залізниці. Іноді заходжу в книгарні, щоб нагадати собі: у світі існують історії без розкладу». Він усміхається. «Хоча це трохи лякає».',
       options: [
         { id: 'leo-schedule', label: '«А що не так з історіями без розкладу?»', next: 'trains' },
-        { id: 'leo-books', label: '«Яку книжку шукає людина з залізниці?»', next: 'town' },
+        { id: 'leo-books', label: '«Що тобі подобається в Беллвіку, крім залізниці?»', next: 'town' },
         {
           id: 'leo-reflection',
-          label: '«Чому тобі так важливо все передбачити?»',
+          label: '«А що робиш, коли потяг запізнюється й план летить шкереберть?»',
           next: 'leo-reflection',
           unless: ['leo_reflected_on_uncertainty'],
         },
         {
           id: 'leo-honest-talk',
-          label: '«Коли обережність стає мовчанням?»',
+          label: '«Ти завжди так довго збираєшся сказати важливе?»',
           next: 'leo-honest-talk',
           unless: ['leo_honesty_discussed'],
         },
