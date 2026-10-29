@@ -19,7 +19,10 @@ describe('Day 4: Mara has her own story', () => {
   it('only refers to the specific gift when that book was sold', () => {
     const greet = selectOption(maraDecision, startDialogue(maraDecision), 'greet');
     const rested = selectOption(maraDecision, greet, 'mara-rest');
-    const ready = selectOption(maraDecision, rested, 'mara-rest-back');
+    const story = selectOption(maraDecision, rested, 'mara-rest-back');
+    const choice = selectOption(maraDecision, story, 'mara-own-story-work');
+    const result = selectOption(maraDecision, choice, 'mara-own-story-work-back');
+    const ready = selectOption(maraDecision, result, 'mara-own-story-back');
     const book = selectOption(maraDecision, ready, 'book');
     expect(availableOptions(maraDecision, book).map((option) => option.id)).not.toContain(
       'station',
