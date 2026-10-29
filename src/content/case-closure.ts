@@ -254,7 +254,7 @@ export const caseClosureNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'case-rumor-back',
-        label: 'Не називати виправлення повернутою довірою',
+        label: 'Сказати, що виправлення афіші ще не означає примирення',
         next: 'case-closure',
         grants: ['final_case_people_heard'],
       },
@@ -315,7 +315,7 @@ export const caseClosureNodes: readonly DialogueNode[] = [
       },
       {
         id: 'case-decision-iris',
-        label: 'Запитати Айріс, чи хоче вона визначити межі підсумку',
+        label: 'Запитати Айріс, що можна сказати гостям про рукопис',
         next: 'case-closure-iris',
         requires: ['final_ledger_iris_told'],
       },
