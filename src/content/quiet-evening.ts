@@ -40,7 +40,7 @@ export const quietEvening: DialogueStory = {
           next: 'window-memory',
           grants: ['quiet_evening_paper_star_seen'],
         },
-        { id: 'window-ignore', label: 'Залишити штору в спокої й повернутися до Френка', next: 'manuscript' },
+        { id: 'window-ignore', label: 'Не розглядати вікно й повернутися до книжок', next: 'manuscript' },
       ],
     },
     {
