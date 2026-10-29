@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, currentNode, selectOption, startDialogue } from '../src/game/dialogue';
+import { availableOptions, currentNode, selectOption, startDialogue, type DialogueState } from '../src/game/dialogue';
 import { seasonEnding } from '../src/game/endings';
 
 const eligible = [
@@ -36,7 +36,7 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
       'чутка отримала ще кілька',
     ],
   ])('plays the %s route and persists its epilogue', (choice, finish, flag, expected) => {
-    let state = { ...startDialogue(finalReading), node: 'gathering', flags: eligible };
+    let state: DialogueState = { ...startDialogue(finalReading), node: 'gathering', flags: eligible };
     for (const id of [
       'rumor-program',
       'rumor-decide-direct',
@@ -74,7 +74,7 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
   });
 
   it('lets Iris refuse to speak for the bookstore after a letter breach', () => {
-    let state = {
+    let state: DialogueState = {
       ...startDialogue(finalReading),
       node: 'gathering',
       flags: [...eligible, 'final_letter_breach_disclosed'],
@@ -116,7 +116,7 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
       ],
     ],
   ])('plays %s and survives save restoration', (_name, route) => {
-    let state = { ...startDialogue(finalReading), node: 'gathering', flags: eligible };
+    let state: DialogueState = { ...startDialogue(finalReading), node: 'gathering', flags: eligible };
     for (const id of route) {
       expect(
         availableOptions(finalReading, state).map((option) => option.id),
