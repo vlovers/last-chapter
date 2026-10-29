@@ -37,9 +37,9 @@ export const leoDecision: DialogueStory = {
           next: 'leo-future',
           unless: ['leo_day_four_future_heard'],
         },
-        { id: 'mara', label: '«Як ви з Марою?»', next: 'mara' },
+        { id: 'mara', label: '«Як ви з Марою?»', next: 'mara', requires: ['leo_day_four_ticket_feeling_heard'] },
         { id: 'trains', label: '«Досі любиш старі станції?»', next: 'trains' },
-        { id: 'past', label: '«Ти хотів би поговорити з Айріс?»', next: 'past' },
+        { id: 'past', label: '«Ти хотів би поговорити з Айріс?»', next: 'past', requires: ['leo_day_four_future_heard'] },
         {
           id: 'evidence',
           label: '«Знайшлися записи про старе бронювання»',
