@@ -10,10 +10,7 @@ import {
 } from '../src/game/dialogue';
 import { seasonEnding } from '../src/game/endings';
 
-const evidence = [
-  'final_chapter_evidence_reviewed',
-  'final_ledger_scene_complete',
-];
+const evidence = ['final_chapter_evidence_reviewed', 'final_ledger_scene_complete'];
 
 function atGathering(flags: string[]): DialogueState {
   return { ...startDialogue(finalReading), node: 'gathering', flags };
@@ -97,7 +94,11 @@ describe('under the lamp: manuscript comparison', () => {
   });
 
   it('requires earlier evidence and the ledger before the examination unlocks', () => {
-    for (const flags of [[], ['final_chapter_evidence_reviewed'], ['final_ledger_scene_complete']]) {
+    for (const flags of [
+      [],
+      ['final_chapter_evidence_reviewed'],
+      ['final_ledger_scene_complete'],
+    ]) {
       const state = { ...startDialogue(finalReading), node: 'gathering', flags };
       expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
         'paper-study',
