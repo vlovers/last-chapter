@@ -113,4 +113,60 @@ describe('Phaser Lost Pages case conclusion', () => {
     expect(saved?.flags).toContain('final_case_sealed');
     expect(saved?.flags).not.toContain('final_ledger_iris_told');
   });
+
+  it('plays the Thomas, Nora and Anna routes in Phaser and persists the quiet ending', () => {
+    const story = loadFinale([
+      'final_ledger_scene_complete',
+      'final_manuscript_provenance_decided',
+      'saw_envelope',
+    ]);
+    story.choose('case-closure');
+    const timeline = story.choose('case-topic-timeline');
+    expect(timeline.choices.map((option) => option.id)).toEqual([
+      'case-timeline-letter',
+      'case-timeline-shelves',
+      'case-timeline-thomas',
+      'case-timeline-back',
+    ]);
+    expect(timeline.choices).toHaveLength(4);
+
+    story.choose('case-timeline-thomas');
+    story.choose('case-thomas-ask');
+    const afterThomas = story.choose('case-thomas-answer-back');
+    expect(afterThomas.choices.map((option) => option.id)).toContain('case-topic-authors');
+
+    story.choose('case-topic-authors');
+    story.choose('case-authors-nora');
+    story.choose('case-nora-annotate');
+    story.choose('case-topic-people');
+    story.choose('case-people-anna');
+    const ready = story.choose('case-anna-privacy');
+    expect(ready.choices.map((option) => option.id)).toEqual(['case-topic-finish']);
+
+    story.choose('case-topic-finish');
+    story.choose('case-decision-seal');
+    story.choose('case-result-finish');
+
+    const saved = decodeSave(values.get(SAVE_KEY) ?? '');
+    expect(saved?.flags).toContain('final_case_closure_complete');
+    expect(saved?.flags).toContain('final_case_thomas_limit_recorded');
+    expect(saved?.flags).toContain('final_case_nora_uncertainty_labeled');
+    expect(saved?.flags).toContain('final_case_anna_private_classroom');
+    expect(saved?.flags).not.toContain('final_ledger_iris_told');
+
+    const ending = seasonEnding({ flags: saved!.flags });
+    expect(ending.epilogue).toContain('не бачив');
+    expect(ending.epilogue).toContain('невідоме авторство');
+    expect(ending.epilogue).toContain('не перетворила');
+
+    const restored = new FiveDayStory();
+    expect(restored.stage).toBe('day5-reading');
+    for (let page = 0; page < 40; page++) {
+      const choices = restored.open().choices;
+      expect(choices.length).toBeLessThanOrEqual(4);
+      expect(choices.some((option) => option.id === 'case-closure')).toBe(false);
+      if (!choices.some((option) => option.id === '__more_choices')) break;
+      restored.choose('__more_choices');
+    }
+  });
 });
