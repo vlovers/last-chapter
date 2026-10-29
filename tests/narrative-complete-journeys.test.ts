@@ -286,5 +286,4 @@ describe('complete optional narrative journeys', () => {
       expect(choices.some((option) => option.id === 'tidy-books')).toBe(true);
     }
   });
-
 });
