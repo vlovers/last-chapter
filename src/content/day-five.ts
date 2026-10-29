@@ -8,6 +8,7 @@ import { afterCaseTeaNodes, afterCaseTeaOption } from './after-case-tea';
 import { bookshopTomorrowNodes, bookshopTomorrowOption } from './bookshop-tomorrow';
 import { caseClosureNodes, caseClosureOption } from './case-closure';
 import { workshopPhotoNodes, workshopPhotoOption } from './workshop-photo';
+import { maraWindowFinalNodes } from './mara-window-table';
 
 /** Фінальний день першого сезону. Рішення людей важливіші за чужу цікавість. */
 export const finalReading: DialogueStory = {
@@ -2331,6 +2332,13 @@ export const finalReading: DialogueStory = {
       ],
       options: [
         {
+          id: 'final-mara-window-ask',
+          label: '«А що сталося з твоїми грушевими завитками?»',
+          next: 'final-mara-window',
+          requires: ['mara_window_plan_discussed'],
+          unless: ['final_mara_window_done'],
+        },
+        {
           id: 'final-v3-mara-back',
           label: 'Повернутися до гостей',
           next: 'gathering',
@@ -2338,6 +2346,7 @@ export const finalReading: DialogueStory = {
         },
       ],
     },
+    ...maraWindowFinalNodes,
     {
       id: 'final-v3-leo',
       speaker: 'Лео',
