@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import { availableOptions, currentNode, selectOption, startDialogue } from '../src/game/dialogue';
+import { seasonEnding } from '../src/game/endings';
 
 const prerequisites = ['anna_uncertainty_discussed', 'thomas_listening_discussed'];
 
@@ -67,6 +68,12 @@ describe('Anna and Thomas final reading continuity', () => {
     const back = selectOption(finalReading, response, 'final-at-school-return');
     expect(back.node).toBe('gathering');
     expect(back.flags).toContain('final_anna_thomas_heard');
+    const epilogue = seasonEnding({ flags: back.flags }).epilogue;
+    expect(epilogue).toContain(
+      choice === 'final-at-children-offer'
+        ? 'Анна записала в блокнот пропозицію'
+        : 'Анна забрала додому малюнки',
+    );
     expect(availableOptions(finalReading, back).map((option) => option.id)).not.toContain(
       'final-couple-anna-thomas',
     );
