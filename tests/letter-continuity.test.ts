@@ -52,7 +52,7 @@ describe('Iris letter continuity across five days', () => {
 
     const admitted = selectOption(irisDecision, state, 'admit-opened');
     expect(admitted.flags).toContain('iris_letter_breach_admitted');
-    expect(currentNode(irisDecision, admitted).text).toContain('Ти мав запитати');
+    expect(currentNode(irisDecision, admitted).text).toContain('Треба було спитати');
     expect(admitted.flags).not.toContain('iris_letter_choice_respected');
 
     const respected = selectOption(irisDecision, state, 'respect-opened');
