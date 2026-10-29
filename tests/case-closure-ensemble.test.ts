@@ -66,7 +66,7 @@ describe('three bookmarks: witnesses, readers and privacy', () => {
 
   for (const [choice, flag, phrase] of [
     ['case-anna-bookmark', 'final_case_anna_story_question', 'дракона'],
-    ['case-anna-privacy', 'final_case_anna_private_classroom', 'поза заняттям'],
+    ['case-anna-privacy', 'final_case_anna_private_classroom', 'не перетворила'],
   ] as const) {
     it('keeps Anna’s classroom separate from private papers: ' + choice, () => {
       const people = selectOption(finalReading, atCase(), 'case-topic-people');
