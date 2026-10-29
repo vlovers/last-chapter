@@ -30,7 +30,7 @@ function follow(flags: string[], route: string[]): DialogueState {
 
 describe('Iris evidence follow-up: trust, consent and uncertain clues', () => {
   it('requires both earlier discoveries and disappears after completion', () => {
-    for (const flags of [[], [discovered[0]], [discovered[1]]]) {
+    for (const flags of [[], ['iris_quiet_page_discussed'], ['iris_margin_note_discussed']]) {
       const state = { ...startDialogue(finalReading), node: 'gathering', flags };
       expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
         'final-iris-evidence-topic',
@@ -60,7 +60,6 @@ describe('Iris evidence follow-up: trust, consent and uncertain clues', () => {
     const state = enter([...discovered, boundary]);
     const ids = availableOptions(finalReading, state).map((option) => option.id);
     expect(ids).not.toContain('final-iris-evidence-ask');
-    expect(ids).toContain('final-iris-evidence-private');
     expect(ids).toContain('final-iris-evidence-private');
     expect(currentNode(finalReading, state).text).not.toContain('Можна спитати Нору');
   });
