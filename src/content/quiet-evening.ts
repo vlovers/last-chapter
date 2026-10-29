@@ -40,7 +40,7 @@ export const quietEvening: DialogueStory = {
           next: 'window-memory',
           grants: ['quiet_evening_paper_star_seen'],
         },
-        { id: 'window-ignore', label: 'Не заглядати в чужі вікна', next: 'manuscript' },
+        { id: 'window-ignore', label: 'Залишити штору в спокої й повернутися до Френка', next: 'manuscript' },
       ],
     },
     {
@@ -54,7 +54,7 @@ export const quietEvening: DialogueStory = {
           next: 'manuscript',
           grants: ['quiet_evening_window_clue_recorded'],
         },
-        { id: 'window-leave', label: 'Залишити це до ранку', next: 'manuscript' },
+        { id: 'window-leave', label: 'Закрити нотатник і розібратися завтра', next: 'manuscript' },
       ],
     },
     {
