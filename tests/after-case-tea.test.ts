@@ -71,6 +71,16 @@ describe('after-case tea: quiet consequences', () => {
     expect(rumorVariant?.text).not.toContain('пробачила');
   });
 
+  it('does not erase Miller rumor consequences with a tidy apology', () => {
+    const node = finalReading.nodes.find((item) => item.id === 'after-case-miller-apology-new');
+    const rumorVariant = node?.textWhen?.find((variant) =>
+      variant.requires?.includes('final_miller_ledger_rumor_seeded'),
+    );
+    expect(rumorVariant?.text).toContain('Нора не відповідає');
+    expect(rumorVariant?.text).toContain('Ніхто не називає це вибаченням');
+    expect(rumorVariant?.text).not.toContain('влаштовує всіх');
+  });
+
   it('does not reveal a ledger that the player kept private', () => {
     const node = finalReading.nodes.find((item) => item.id === 'after-case-tea');
     const privateVariant = node?.textWhen?.find((variant) =>
