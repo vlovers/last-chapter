@@ -68,7 +68,7 @@ export const noraVisit: DialogueStory = {
       text: '«Читаю по п’ять сторінок у трамваї. Учора заснула над детективом і прокинулася біля ринку». Нора всміхається. «Тож бажано щось без двадцяти підозрюваних».',
       options: [
         { id: 'books-ask', label: '«Можливо, вам підійде збірка листів?»', next: 'letters' },
-        { id: 'books-back', label: '«Подивімося інші теми»', next: 'hello' },
+        { id: 'books-back', label: '«А окрім книжок — як там справи в центрі?»', next: 'hello' },
       ],
     },
     {
@@ -94,7 +94,7 @@ export const noraVisit: DialogueStory = {
           label: '«А відвідувачі хоч помітили, що чайник не працював?»',
           next: 'rest',
         },
-        { id: 'work-back', label: '«Зрозуміло»', next: 'hello' },
+        { id: 'work-back', label: '«У вас там, бачу, майстри без роботи не залишаться»', next: 'hello' },
       ],
     },
     {
@@ -104,7 +104,7 @@ export const noraVisit: DialogueStory = {
       options: [
         {
           id: 'rest-back',
-          label: '«Може, базиліку потрібне нове підвіконня?»',
+          label: '«А базилік хоча б не вимикає подовжувач?»',
           next: 'hello',
           grants: ['nora_shared_garden'],
         },
@@ -146,7 +146,7 @@ export const noraVisit: DialogueStory = {
       id: 'boundary',
       speaker: 'Нора',
       text: '«Дякую. Томас сьогодні й так вислухав достатньо чужих здогадів». Нора поправляє ремінець торби. «А зараз краще порадьте мені щось смішне. Детективів на сьогодні досить».',
-      options: [{ id: 'boundary-back', label: '«Із задоволенням»', next: 'hello' }],
+      options: [{ id: 'boundary-back', label: '«Є одна смішна історія про сусідів і яблуню»', next: 'hello' }],
     },
     {
       id: 'refusal',
