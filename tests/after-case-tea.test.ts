@@ -48,6 +48,27 @@ describe('after-case tea: quiet consequences', () => {
     );
   });
 
+  it('reacts to Miller rumor without pretending that trust was restored', () => {
+    const node = finalReading.nodes.find((item) => item.id === 'after-case-tea');
+    expect(node?.textWhen?.some((variant) =>
+      variant.requires?.includes('final_miller_ledger_rumor_seeded'),
+    )).toBe(true);
+    const rumorVariant = node?.textWhen?.find((variant) =>
+      variant.requires?.includes('final_miller_ledger_rumor_seeded'),
+    );
+    expect(rumorVariant?.text).toContain('Міллер');
+    expect(rumorVariant?.text).not.toContain('пробачила');
+  });
+
+  it('does not reveal a ledger that the player kept private', () => {
+    const node = finalReading.nodes.find((item) => item.id === 'after-case-tea');
+    const privateVariant = node?.textWhen?.find((variant) =>
+      variant.requires?.includes('final_ledger_record_private'),
+    );
+    expect(privateVariant?.text).toContain('ховає журнал');
+    expect(privateVariant?.text).not.toContain('Айріс');
+  });
+
   it('never displays more than four choices in the new dialogue nodes', () => {
     for (const node of finalReading.nodes.filter((node) => node.id.startsWith('after-case-'))) {
       expect(node.options.length, node.id).toBeLessThanOrEqual(4);
