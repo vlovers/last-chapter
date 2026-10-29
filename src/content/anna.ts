@@ -120,8 +120,8 @@ export const annaVisit: DialogueStory = {
       options: [
         {
           id: 'anna-disagreement-back',
-          label: 'Повернутися до вибору книжок',
-          next: 'books',
+          label: 'Повернутися до розмови з Анною',
+          next: 'hello',
           grants: ['anna_book_disagreement_discussed'],
         },
       ],
