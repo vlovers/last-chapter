@@ -53,6 +53,15 @@ describe('Anna and Thomas chairs continuity', () => {
     ).toBe(false);
   });
 
+  it('does not overwrite Anna’s response with a generic variant after Thomas owns his mistake', () => {
+    const flags = ['thomas_chairs_discussed', 'thomas_chairs_owned_mistake'];
+    const entry = selectOption(annaVisit, at(annaVisit, flags), 'anna-thomas-chairs-followup');
+    expect(currentNode(annaVisit, entry).text).toContain('Він подзвонив мені');
+    const listened = selectOption(annaVisit, entry, 'anna-chairs-listen');
+    expect(currentNode(annaVisit, listened).text).toContain('Дякую');
+    expect(listened.flags).toContain('thomas_chairs_owned_mistake');
+  });
+
   it('keeps Thomas ownership and avoidance options available in his own scene', () => {
     const ids = thomasVisit.nodes
       .find((node) => node.id === 'thomas-chairs')
