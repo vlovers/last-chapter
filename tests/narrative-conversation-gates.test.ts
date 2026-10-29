@@ -159,4 +159,20 @@ describe('conversational pacing and continuity', () => {
     expect(next.node).toBe(destination);
   });
 
+  it.each([
+    ['Leo remembers honesty', leoVisit, 'greet', 'leo_honesty_discussed', 'Марі'],
+    ['Leo remembers uncertainty', leoVisit, 'greet', 'leo_reflected_on_uncertainty', 'потяги'],
+    ['Iris remembers privacy', irisVisit, 'welcome', 'iris_boundary_respected', 'Дякую'],
+    ['Iris remembers sketches', irisVisit, 'welcome', 'iris_reflected_on_identity', 'ескізи'],
+    ['Thomas remembers listening', thomasVisit, 'greet', 'thomas_listening_discussed', 'Анна'],
+    ['Thomas remembers responsibility', thomasVisit, 'greet', 'thomas_reflected_on_responsibility', 'лампочку'],
+    ['Eleanor allows changes', eleanorVisit, 'greet', 'eleanor_will_allow_change', 'інакше'],
+    ['Eleanor remembers the old sign', eleanorVisit, 'greet', 'eleanor_reflected_on_legacy', 'таблички'],
+  ] as const)('%s changes the returning greeting', (_name, story, hub, flag, phrase) => {
+    const original = currentNode(story, at(story, hub)).text;
+    const returning = currentNode(story, at(story, hub, [flag])).text;
+    expect(returning).toContain(phrase);
+    expect(returning).not.toBe(original);
+  });
+
 });
