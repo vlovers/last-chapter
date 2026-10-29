@@ -94,7 +94,11 @@ export const noraVisit: DialogueStory = {
           label: '«А відвідувачі хоч помітили, що чайник не працював?»',
           next: 'rest',
         },
-        { id: 'work-back', label: '«У вас там, бачу, майстри без роботи не залишаться»', next: 'hello' },
+        {
+          id: 'work-back',
+          label: '«У вас там, бачу, майстри без роботи не залишаться»',
+          next: 'hello',
+        },
       ],
     },
     {
@@ -146,7 +150,13 @@ export const noraVisit: DialogueStory = {
       id: 'boundary',
       speaker: 'Нора',
       text: '«Дякую. Томас сьогодні й так вислухав достатньо чужих здогадів». Нора поправляє ремінець торби. «А зараз краще порадьте мені щось смішне. Детективів на сьогодні досить».',
-      options: [{ id: 'boundary-back', label: '«Є одна смішна історія про сусідів і яблуню»', next: 'hello' }],
+      options: [
+        {
+          id: 'boundary-back',
+          label: '«Є одна смішна історія про сусідів і яблуню»',
+          next: 'hello',
+        },
+      ],
     },
     {
       id: 'refusal',
