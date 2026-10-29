@@ -1,11 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 
 describe('Final day remembers decisions from earlier Bellwick evenings', () => {
   const scenes = [
     { id: 'frank', flag: 'closing_frank_extra_playtime', endings: ['rest', 'toy', 'joke'] },
-    { id: 'leo', flag: 'closing_late_visitors_walk_heard', endings: ['tease', 'privacy', 'invite'] },
+    {
+      id: 'leo',
+      flag: 'closing_late_visitors_walk_heard',
+      endings: ['tease', 'privacy', 'invite'],
+    },
     { id: 'notes', flag: 'closing_exchange_reader_note_left', endings: ['reply', 'open', 'quiet'] },
     { id: 'anna', flag: 'club_anna_stage_box_prepared', endings: ['build', 'kids', 'cat'] },
     { id: 'town', flag: 'closing_town_dinner_noticed', endings: ['salad', 'dessert', 'invite'] },
@@ -16,7 +25,9 @@ describe('Final day remembers decisions from earlier Bellwick evenings', () => {
       it(`unlocks ${scene.id} and completes ${ending} exactly once`, () => {
         const initial = { ...startDialogue(finalReading), node: 'gathering' };
         const option = `final-town-${scene.id}-option`;
-        expect(availableOptions(finalReading, initial).map((item) => item.id)).not.toContain(option);
+        expect(availableOptions(finalReading, initial).map((item) => item.id)).not.toContain(
+          option,
+        );
         let state = { ...initial, flags: [scene.flag] };
         expect(availableOptions(finalReading, state).map((item) => item.id)).toContain(option);
         state = selectOption(finalReading, state, option);

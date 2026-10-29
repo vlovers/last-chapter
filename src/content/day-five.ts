@@ -50,11 +50,41 @@ export const finalReading: DialogueStory = {
         },
       ],
       options: [
-        { id: 'final-town-frank-option', label: 'Запитати Елеонору, чому Френк сьогодні такий сонний', next: 'final-town-frank', requires: ['closing_frank_extra_playtime'], unless: ['final_town_frank_done'] },
-        { id: 'final-town-leo-option', label: 'Підколоти Мару й Лео за вчорашню прогулянку', next: 'final-town-leo', requires: ['closing_late_visitors_walk_heard'], unless: ['final_town_leo_done'] },
-        { id: 'final-town-notes-option', label: 'Перевірити, чи відповів незнайомий читач', next: 'final-town-notes', requires: ['closing_exchange_reader_note_left'], unless: ['final_town_notes_done'] },
-        { id: 'final-town-anna-option', label: 'Показати Анні коробку для шкільного спектаклю', next: 'final-town-anna', requires: ['club_anna_stage_box_prepared'], unless: ['final_town_anna_done'] },
-        { id: 'final-town-town-option', label: 'Запитати сусідів про спільну вечерю', next: 'final-town-town', requires: ['closing_town_dinner_noticed'], unless: ['final_town_town_done'] },
+        {
+          id: 'final-town-frank-option',
+          label: 'Запитати Елеонору, чому Френк сьогодні такий сонний',
+          next: 'final-town-frank',
+          requires: ['closing_frank_extra_playtime'],
+          unless: ['final_town_frank_done'],
+        },
+        {
+          id: 'final-town-leo-option',
+          label: 'Підколоти Мару й Лео за вчорашню прогулянку',
+          next: 'final-town-leo',
+          requires: ['closing_late_visitors_walk_heard'],
+          unless: ['final_town_leo_done'],
+        },
+        {
+          id: 'final-town-notes-option',
+          label: 'Перевірити, чи відповів незнайомий читач',
+          next: 'final-town-notes',
+          requires: ['closing_exchange_reader_note_left'],
+          unless: ['final_town_notes_done'],
+        },
+        {
+          id: 'final-town-anna-option',
+          label: 'Показати Анні коробку для шкільного спектаклю',
+          next: 'final-town-anna',
+          requires: ['club_anna_stage_box_prepared'],
+          unless: ['final_town_anna_done'],
+        },
+        {
+          id: 'final-town-town-option',
+          label: 'Запитати сусідів про спільну вечерю',
+          next: 'final-town-town',
+          requires: ['closing_town_dinner_noticed'],
+          unless: ['final_town_town_done'],
+        },
         {
           id: 'final-iris-eleanor-option',
           label: 'Подивитися, як Айріс та Елеонора облаштовують виставку',
@@ -2584,140 +2614,305 @@ export const finalReading: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Елеонора дивиться на Френка, який лежить просто на списку замовлень. «Хтось учора грався з ним до ночі. А тепер він вимагає вихідний». Мара підсуває котові подушку. «І премію у вигляді риби».',
       options: [
-        { id: 'final-town-frank-rest', label: 'Залишити Френка спати', next: 'final-town-frank-rest-result' },
-        { id: 'final-town-frank-toy', label: 'Сховати іграшку до вечора', next: 'final-town-frank-toy-result' },
-        { id: 'final-town-frank-joke', label: '«Мабуть, він читав усю ніч»', next: 'final-town-frank-joke-result' },
+        {
+          id: 'final-town-frank-rest',
+          label: 'Залишити Френка спати',
+          next: 'final-town-frank-rest-result',
+        },
+        {
+          id: 'final-town-frank-toy',
+          label: 'Сховати іграшку до вечора',
+          next: 'final-town-frank-toy-result',
+        },
+        {
+          id: 'final-town-frank-joke',
+          label: '«Мабуть, він читав усю ніч»',
+          next: 'final-town-frank-joke-result',
+        },
       ],
     },
     {
       id: 'final-town-frank-rest-result',
       speaker: 'Оповідач',
       text: 'Ти переносиш список замовлень на інший стіл. Френк навіть не розплющує очей. «Розумний працівник», — каже Елеонора. «Знає, коли делегувати».',
-      options: [{ id: 'final-town-frank-rest-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_frank_done', 'final_frank_rest_respected'] }],
+      options: [
+        {
+          id: 'final-town-frank-rest-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_frank_done', 'final_frank_rest_respected'],
+        },
+      ],
     },
     {
       id: 'final-town-frank-toy-result',
       speaker: 'Оповідач',
       text: 'Френк прокидається рівно в ту мить, коли ти ховаєш мотузку. Він дивиться на шухляду, потім на тебе. Елеонора зітхає: «Тепер весь день стежитиме».',
-      options: [{ id: 'final-town-frank-toy-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_frank_done', 'final_frank_toy_hidden'] }],
+      options: [
+        {
+          id: 'final-town-frank-toy-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_frank_done', 'final_frank_toy_hidden'],
+        },
+      ],
     },
     {
       id: 'final-town-frank-joke-result',
       speaker: 'Оповідач',
       text: '«Тоді нехай напише відгук», — відповідає Нора. Френк потягується й скидає закладку. «Ось, — каже Мара. — Дві зірки».',
-      options: [{ id: 'final-town-frank-joke-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_frank_done', 'final_frank_review_joked'] }],
+      options: [
+        {
+          id: 'final-town-frank-joke-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_frank_done', 'final_frank_review_joked'],
+        },
+      ],
     },
     {
       id: 'final-town-leo',
       speaker: 'Оповідач',
       text: 'Мара намагається заховати мокру парасолю за стелаж. Лео каже: «Ми просто гуляли». Анна дивиться на його черевики. «Тоді чому ти знову прийшов у тих самих мокрих?»',
       options: [
-        { id: 'final-town-leo-tease', label: '«То ви знайшли короткий маршрут?»', next: 'final-town-leo-tease-result' },
-        { id: 'final-town-leo-privacy', label: 'Змінити тему, щоб не бентежити їх', next: 'final-town-leo-privacy-result' },
-        { id: 'final-town-leo-invite', label: '«Наступного разу заходьте без вигаданої причини»', next: 'final-town-leo-invite-result' },
+        {
+          id: 'final-town-leo-tease',
+          label: '«То ви знайшли короткий маршрут?»',
+          next: 'final-town-leo-tease-result',
+        },
+        {
+          id: 'final-town-leo-privacy',
+          label: 'Змінити тему, щоб не бентежити їх',
+          next: 'final-town-leo-privacy-result',
+        },
+        {
+          id: 'final-town-leo-invite',
+          label: '«Наступного разу заходьте без вигаданої причини»',
+          next: 'final-town-leo-invite-result',
+        },
       ],
     },
     {
       id: 'final-town-leo-tease-result',
       speaker: 'Оповідач',
       text: '«Знайшли довгий», — відповідає Мара. Лео усміхається: «І зупинилися біля пекарні». — «Вона була зачинена», — додає Мара, але виглядає цілком задоволеною.',
-      options: [{ id: 'final-town-leo-tease-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_leo_done', 'final_leo_mara_walk_teased'] }],
+      options: [
+        {
+          id: 'final-town-leo-tease-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_leo_done', 'final_leo_mara_walk_teased'],
+        },
+      ],
     },
     {
       id: 'final-town-leo-privacy-result',
       speaker: 'Оповідач',
       text: 'Ти питаєш, чи хтось хоче чаю. Мара відразу погоджується, а Лео допомагає дістати чашки. Анна підморгує тобі, але нічого не каже.',
-      options: [{ id: 'final-town-leo-privacy-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_leo_done', 'final_leo_mara_privacy_kept'] }],
+      options: [
+        {
+          id: 'final-town-leo-privacy-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_leo_done', 'final_leo_mara_privacy_kept'],
+        },
+      ],
     },
     {
       id: 'final-town-leo-invite-result',
       speaker: 'Оповідач',
       text: 'Мара розводить руками: «А ми й не вигадували. Книжка справді була потрібна». Лео киває так серйозно, що Анна не витримує й сміється.',
-      options: [{ id: 'final-town-leo-invite-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_leo_done', 'final_leo_mara_invited_back'] }],
+      options: [
+        {
+          id: 'final-town-leo-invite-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_leo_done', 'final_leo_mara_invited_back'],
+        },
+      ],
     },
     {
       id: 'final-town-notes',
       speaker: 'Оповідач',
       text: 'У романі без обкладинки з’явилася нова записка: «Фінал того вартий. Але чай усе одно з мене». Нора бере аркуш за край. «Це вже книжкове листування. Можна я теж долучуся?»',
       options: [
-        { id: 'final-town-notes-reply', label: 'Залишити відповідь із часом для чаю', next: 'final-town-notes-reply-result' },
-        { id: 'final-town-notes-open', label: 'Запросити всіх читачів залишати відповіді', next: 'final-town-notes-open-result' },
-        { id: 'final-town-notes-quiet', label: 'Залишити листування між двома читачами', next: 'final-town-notes-quiet-result' },
+        {
+          id: 'final-town-notes-reply',
+          label: 'Залишити відповідь із часом для чаю',
+          next: 'final-town-notes-reply-result',
+        },
+        {
+          id: 'final-town-notes-open',
+          label: 'Запросити всіх читачів залишати відповіді',
+          next: 'final-town-notes-open-result',
+        },
+        {
+          id: 'final-town-notes-quiet',
+          label: 'Залишити листування між двома читачами',
+          next: 'final-town-notes-quiet-result',
+        },
       ],
     },
     {
       id: 'final-town-notes-reply-result',
       speaker: 'Оповідач',
       text: 'Ти пишеш: «Субота, четверта. Принось книжку». Нора кладе записку назад і обіцяє не читати її першою. Ти їй майже віриш.',
-      options: [{ id: 'final-town-notes-reply-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_notes_done', 'final_exchange_tea_meeting_planned'] }],
+      options: [
+        {
+          id: 'final-town-notes-reply-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_notes_done', 'final_exchange_tea_meeting_planned'],
+        },
+      ],
     },
     {
       id: 'final-town-notes-open-result',
       speaker: 'Оповідач',
       text: 'Анна пропонує зробити окрему коробку для анонімних книжкових листів. Елеонора погоджується за однієї умови: «Ніяких чужих адрес на дошці».',
-      options: [{ id: 'final-town-notes-open-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_notes_done', 'final_exchange_reader_letters_started'] }],
+      options: [
+        {
+          id: 'final-town-notes-open-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_notes_done', 'final_exchange_reader_letters_started'],
+        },
+      ],
     },
     {
       id: 'final-town-notes-quiet-result',
       speaker: 'Оповідач',
       text: 'Ти вкладаєш записку назад у роман. Нора знизує плечима. «Гаразд. Не все має бути книжковим клубом». Вона бере іншу книжку й сідає біля вікна.',
-      options: [{ id: 'final-town-notes-quiet-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_notes_done', 'final_exchange_letters_private'] }],
+      options: [
+        {
+          id: 'final-town-notes-quiet-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_notes_done', 'final_exchange_letters_private'],
+        },
+      ],
     },
     {
       id: 'final-town-anna',
       speaker: 'Оповідач',
       text: 'Анна бачить напис «Для дракона, який був деревом» і сміється. «Це ж ідеально! Діти вже вирішили, що в другій частині він вирощуватиме яблука». Томас заглядає в коробку. «Я можу зробити сцену».',
       options: [
-        { id: 'final-town-anna-build', label: 'Попросити Томаса допомогти з декораціями', next: 'final-town-anna-build-result' },
-        { id: 'final-town-anna-kids', label: 'Запропонувати дітям самим розфарбувати коробку', next: 'final-town-anna-kids-result' },
-        { id: 'final-town-anna-cat', label: '«А Френк може зіграти дракона?»', next: 'final-town-anna-cat-result' },
+        {
+          id: 'final-town-anna-build',
+          label: 'Попросити Томаса допомогти з декораціями',
+          next: 'final-town-anna-build-result',
+        },
+        {
+          id: 'final-town-anna-kids',
+          label: 'Запропонувати дітям самим розфарбувати коробку',
+          next: 'final-town-anna-kids-result',
+        },
+        {
+          id: 'final-town-anna-cat',
+          label: '«А Френк може зіграти дракона?»',
+          next: 'final-town-anna-cat-result',
+        },
       ],
     },
     {
       id: 'final-town-anna-build-result',
       speaker: 'Оповідач',
       text: '«Тільки без справжнього вогню», — попереджає Анна. Томас піднімає руки: «Я планував картон». Мара додає: «А я планувала яблучний пиріг. Усі при справі».',
-      options: [{ id: 'final-town-anna-build-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_anna_done', 'final_school_stage_team_formed'] }],
+      options: [
+        {
+          id: 'final-town-anna-build-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_anna_done', 'final_school_stage_team_formed'],
+        },
+      ],
     },
     {
       id: 'final-town-anna-kids-result',
       speaker: 'Оповідач',
       text: 'Анна погоджується. «Тоді завтра принесу фарби». Томас радить накрити підлогу старими газетами. Френк, почувши шурхіт, уже тягнеться до коробки лапою.',
-      options: [{ id: 'final-town-anna-kids-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_anna_done', 'final_school_box_painting_planned'] }],
+      options: [
+        {
+          id: 'final-town-anna-kids-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_anna_done', 'final_school_box_painting_planned'],
+        },
+      ],
     },
     {
       id: 'final-town-anna-cat-result',
       speaker: 'Оповідач',
       text: 'Анна роздивляється кота. «Він зірве виставу». — «Зате квитки розкуплять», — каже Мара. Френк позіхає, явно не погоджуючись на репетиції.',
-      options: [{ id: 'final-town-anna-cat-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_anna_done', 'final_school_frank_cast_joked'] }],
+      options: [
+        {
+          id: 'final-town-anna-cat-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_anna_done', 'final_school_frank_cast_joked'],
+        },
+      ],
     },
     {
       id: 'final-town-town',
       speaker: 'Оповідач',
       text: 'Міллер з’являється біля столу з блокнотом. «Я принесла список страв». Мара зазирає через плече. «Тут три пироги й жодного салату». — «Бо я не довіряю салатам», — відповідає Міллер.',
       options: [
-        { id: 'final-town-town-salad', label: 'Записатися принести салат', next: 'final-town-town-salad-result' },
-        { id: 'final-town-town-dessert', label: 'Запропонувати десерт разом із Марою', next: 'final-town-town-dessert-result' },
-        { id: 'final-town-town-invite', label: 'Запросити тих, хто соромиться приходити', next: 'final-town-town-invite-result' },
+        {
+          id: 'final-town-town-salad',
+          label: 'Записатися принести салат',
+          next: 'final-town-town-salad-result',
+        },
+        {
+          id: 'final-town-town-dessert',
+          label: 'Запропонувати десерт разом із Марою',
+          next: 'final-town-town-dessert-result',
+        },
+        {
+          id: 'final-town-town-invite',
+          label: 'Запросити тих, хто соромиться приходити',
+          next: 'final-town-town-invite-result',
+        },
       ],
     },
     {
       id: 'final-town-town-salad-result',
       speaker: 'Оповідач',
       text: 'Міллер робить позначку з таким виглядом, ніби ти щойно врятував вечерю. Мара шепоче: «Головне — не кажи їй, що там буде рукола».',
-      options: [{ id: 'final-town-town-salad-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_town_done', 'final_town_dinner_salad_promised'] }],
+      options: [
+        {
+          id: 'final-town-town-salad-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_town_done', 'final_town_dinner_salad_promised'],
+        },
+      ],
     },
     {
       id: 'final-town-town-dessert-result',
       speaker: 'Оповідач',
       text: '«Домовилися, — каже Мара. — Але без конкурсу». Міллер уже записує щось у блокнот. «Я й не думала», — відповідає вона надто швидко.',
-      options: [{ id: 'final-town-town-dessert-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_town_done', 'final_town_dinner_dessert_planned'] }],
+      options: [
+        {
+          id: 'final-town-town-dessert-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_town_done', 'final_town_dinner_dessert_planned'],
+        },
+      ],
     },
     {
       id: 'final-town-town-invite-result',
       speaker: 'Оповідач',
       text: 'Анна пропонує залишити на дверях напис: «Можна прийти без страви». Міллер думає секунду, потім киває. «Тільки нехай попередять, скільки буде людей».',
-      options: [{ id: 'final-town-town-invite-back', label: 'Повернутися до гостей', next: 'gathering', grants: ['final_town_town_done', 'final_town_dinner_open_invitation'] }],
+      options: [
+        {
+          id: 'final-town-town-invite-back',
+          label: 'Повернутися до гостей',
+          next: 'gathering',
+          grants: ['final_town_town_done', 'final_town_dinner_open_invitation'],
+        },
+      ],
     },
     {
       id: 'end',
