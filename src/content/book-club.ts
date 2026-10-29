@@ -52,6 +52,7 @@ export const bookClub: DialogueStory = {
         { id: 'discuss-books', label: '«Поговорімо про книжки»', next: 'books' },
         { id: 'ask-mara', label: '«Маро, а яку кінцівку ти вважаєш вдалою?»', next: 'mara' },
         { id: 'ask-miller', label: '«Пані Міллер, ви знайшли нову загадку?»', next: 'miller' },
+        { id: 'club-new-reader', label: '«А що порадите людині, яка давно нічого не читала?»', next: 'club-new-reader' },
         { id: 'close', label: 'Подякувати всім і завершити зустріч', next: 'end' },
       ],
     },
@@ -302,6 +303,40 @@ export const bookClub: DialogueStory = {
           grants: ['club_bad_romance_debated'],
         },
       ],
+    },
+    {
+      id: 'club-new-reader',
+      speaker: 'Анна',
+      text: '«Не починайте з того, що всі називають обов’язковим», — каже Анна. «Мій учень цілий місяць носив “серйозний роман” і засинав на третій сторінці». Міллер відсуває чашку. «А я засинаю на другій. Дайте людині щось із убивством у першому розділі». Мара сміється: «Або з булочками».',
+      options: [
+        { id: 'club-new-reader-anna', label: '«Анно, і що хлопчик зрештою прочитав?»', next: 'club-new-reader-anna' },
+        { id: 'club-new-reader-miller', label: '«Міллер, а якщо не хочеться детектив?»', next: 'club-new-reader-miller' },
+        { id: 'club-new-reader-mara', label: '«Маро, в тебе є книжка саме про булочки?»', next: 'club-new-reader-mara' },
+      ],
+    },
+    {
+      id: 'club-new-reader-anna',
+      speaker: 'Анна',
+      text: '«Комікс про кота, який вважав себе директором школи. Прочитав за вечір і наступного дня приніс власне продовження». Вона киває на Френка. «Не кажіть вашому котові. Він і без того дивиться на нас, наче платить тут оренду».',
+      options: [{ id: 'club-new-reader-anna-back', label: '«Френк і є наш директор»', next: 'welcome', grants: ['club_recommended_easy_reading'] }],
+    },
+    {
+      id: 'club-new-reader-miller',
+      speaker: 'Пані Міллер',
+      text: '«Тоді історію про сімейні сварки. Там теж усі щось приховують, просто ніхто не лежить у саду під трояндами». Мара піднімає брову: «Я думала, ви порадите кулінарну книжку». — «У кулінарних книжках замало підозрюваних».',
+      options: [{ id: 'club-new-reader-miller-back', label: '«Візьму щось про сімейні сварки»', next: 'welcome', grants: ['club_recommended_easy_reading'] }],
+    },
+    {
+      id: 'club-new-reader-mara',
+      speaker: 'Мара',
+      text: '«Є одна, де пекарка випадково успадкувала замок. Але попереджаю: рецепти там нікудишні». Міллер пирхає: «Це художня література, Мара». — «А тісто все одно не підніметься. Я перевіряла».',
+      options: [{ id: 'club-new-reader-mara-back', label: '«Ти справді пекла за рецептом із роману?»', next: 'club-new-reader-mara-more' }],
+    },
+    {
+      id: 'club-new-reader-mara-more',
+      speaker: 'Мара',
+      text: '«Двічі. Першого разу вийшов камінь, другого — дуже дорогий камінь із ваніллю». Вона підсовує тарілку з булочками. «Ось ці за моїм рецептом. Їх хоча б можна їсти».',
+      options: [{ id: 'club-new-reader-mara-finish', label: '«Тоді почну з булочки й першого розділу»', next: 'welcome', grants: ['club_recommended_easy_reading'] }],
     },
     {
       id: 'end',
