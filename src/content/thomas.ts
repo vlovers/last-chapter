@@ -15,6 +15,8 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Томас Гейл. Якщо лампа тріщить, не треба її вмовляти. Вона від цього не стає чемнішою». Він ставить ящик на підлогу. «Можна глянути?»',
       options: [
+        { id: 'thomas-lamp-first', label: '«Так, ось вимикач. Вона блимає від учора»', next: 'repair' },
+        { id: 'thomas-lamp-joke', label: '«А якщо чемно попросити — точно не допоможе?»', next: 'repair' },
         {
           id: 'thomas-v3-conversation',
           label: '«Чи можна полагодити образу, як лампу?»',
@@ -39,7 +41,6 @@ export const thomasVisit: DialogueStory = {
           next: 'thomas-reading-challenge',
           unless: ['thomas_reading_challenge_discussed'],
         },
-        { id: 'repair', label: '«Так, покажу вимикач»', next: 'repair' },
         { id: 'books', label: '«Ви любите читати?»', next: 'books' },
         { id: 'anna', label: '«Анна заходила до нас»', next: 'anna' },
         {
