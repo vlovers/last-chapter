@@ -375,7 +375,7 @@ export class FiveDayStory {
     if (id === '__restart' && this.stage === 'season-complete') this.chapter = startChapter();
     else if (id === '__more_choices') {
       const options = availableOptions(stageStory(this.stage), this.chapter.dialogue);
-      const pages = options.length <= 4 ? 1 : Math.ceil(options.length / 3);
+      const pages = options.length <= 3 ? 1 : Math.ceil(options.length / 3);
       this.choicePage = this.choicePage < pages - 1 ? this.choicePage + 1 : 0;
       return this.open();
     } else if (id === '__explore_after_club') {
