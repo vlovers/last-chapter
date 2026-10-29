@@ -50,9 +50,11 @@ describe('after-case tea: quiet consequences', () => {
 
   it('reacts to Miller rumor without pretending that trust was restored', () => {
     const node = finalReading.nodes.find((item) => item.id === 'after-case-tea');
-    expect(node?.textWhen?.some((variant) =>
-      variant.requires?.includes('final_miller_ledger_rumor_seeded'),
-    )).toBe(true);
+    expect(
+      node?.textWhen?.some((variant) =>
+        variant.requires?.includes('final_miller_ledger_rumor_seeded'),
+      ),
+    ).toBe(true);
     const rumorVariant = node?.textWhen?.find((variant) =>
       variant.requires?.includes('final_miller_ledger_rumor_seeded'),
     );

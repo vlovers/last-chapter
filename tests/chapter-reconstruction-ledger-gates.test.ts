@@ -56,15 +56,23 @@ describe('chapter reconstruction and ledger continuity', () => {
     ['ledger-ask-eleanor', 'final_ledger_eleanor_to_tell'],
     ['ledger-private', 'final_ledger_record_private'],
   ])('remembers the journal disclosure route %s', (choice, expected) => {
-    const ledger = selectOption(finalReading, begin(['final_chapter_reconstruction_done']), 'ledger-resolution');
+    const ledger = selectOption(
+      finalReading,
+      begin(['final_chapter_reconstruction_done']),
+      'ledger-resolution',
+    );
     const evidence = selectOption(finalReading, ledger, 'ledger-ask-warning');
     const outcome = selectOption(finalReading, evidence, choice);
     expect(outcome.flags).toContain(expected);
-    expect(outcome.flags.filter((flag) => [
-      'final_ledger_iris_told',
-      'final_ledger_eleanor_to_tell',
-      'final_ledger_record_private',
-    ].includes(flag))).toEqual([expected]);
+    expect(
+      outcome.flags.filter((flag) =>
+        [
+          'final_ledger_iris_told',
+          'final_ledger_eleanor_to_tell',
+          'final_ledger_record_private',
+        ].includes(flag),
+      ),
+    ).toEqual([expected]);
   });
 
   it('does not reveal the ledger before reconstruction is finished', () => {
