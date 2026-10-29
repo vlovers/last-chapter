@@ -257,7 +257,7 @@ export const lastCopyNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'last-copy-break-return',
-        label: 'Не виправдовуватися й повернутися до гостей',
+        label: 'Не сперечатися й повернутися до гостей',
         next: 'gathering',
         grants: ['final_last_copy_done'],
       },
