@@ -1,3 +1,4 @@
+import type { DialogueState } from '../src/game/dialogue';
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import { availableOptions, selectOption, startDialogue } from '../src/game/dialogue';
@@ -34,7 +35,7 @@ describe('Day five: after-case choices lead into their final-night consequences'
 
   for (const route of routes) {
     it(`connects ${route.person} after-case choice to finale through a real save`, () => {
-      let dialogue = {
+      let dialogue: DialogueState = {
         ...startDialogue(finalReading),
         node: 'gathering',
         flags: ['final_case_closure_complete'],
@@ -44,7 +45,7 @@ describe('Day five: after-case choices lead into their final-night consequences'
       dialogue = selectOption(finalReading, dialogue, `after-${route.person}-${route.choice}-new`);
       const finish = availableOptions(finalReading, dialogue)[0];
       expect(finish?.grants).toContain(route.flag);
-      dialogue = selectOption(finalReading, dialogue, finish.id);
+      dialogue = selectOption(finalReading, dialogue, finish!.id);
       dialogue = selectOption(finalReading, dialogue, 'after-tea-return');
       expect(dialogue.node).toBe('gathering');
 
