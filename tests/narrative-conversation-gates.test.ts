@@ -325,4 +325,18 @@ describe('conversational pacing and continuity', () => {
     expect(returned.flags).toContain(flag);
   });
 
+  it.each([
+    ['anna_classroom_joke_heard', 'дракона'],
+    ['miller_bakery_story_heard', 'кориці'],
+    ['leo_station_moon_story_heard', 'місяць'],
+    ['iris_fox_story_heard', 'борсуком'],
+    ['nora_newspaper_story_heard', 'хор'],
+  ] as const)('book club recalls earlier everyday history %s', (flag, phrase) => {
+    const defaultLine = currentNode(bookClub, at(bookClub, 'welcome')).text;
+    const callback = currentNode(bookClub, at(bookClub, 'welcome', [flag])).text;
+    expect(callback).toContain(phrase);
+    expect(callback).not.toBe(defaultLine);
+    expect(options(bookClub, 'welcome', [flag])).toContain('discuss-books');
+  });
+
 });
