@@ -16,7 +16,7 @@ export const bookClub: DialogueStory = {
       text: '«Я попросила учнів придумати запитання до історії. Найкраще було таке: якщо герой помиляється, чи мусимо ми перестати його любити?» Мара ставить тарілку посеред столу. «Сподіваюся, ні. Інакше мої булочки залишаться без друзів».',
       options: [
         { id: 'discuss-books', label: '«Поговорімо про книжки»', next: 'books' },
-        { id: 'ask-mara', label: '«Марo, яку кінцівку ти б переписала власноруч?»', next: 'mara' },
+        { id: 'ask-mara', label: '«Марo, а яку кінцівку ти вважаєш вдалою?»', next: 'mara' },
         { id: 'ask-miller', label: '«Пані Міллер, ви знайшли нову загадку?»', next: 'miller' },
         { id: 'close', label: 'Подякувати всім і завершити зустріч', next: 'end' },
       ],
@@ -28,7 +28,7 @@ export const bookClub: DialogueStory = {
       options: [
         {
           id: 'maps-follow',
-          label: '«А герой хоч раз питав, чого хоче вона?»',
+          label: '«А герої самі обирали свій шлях чи просто йшли за мапою?»',
           next: 'maps',
           requires: ['anna_chose_maps'],
         },
