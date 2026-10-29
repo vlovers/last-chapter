@@ -31,6 +31,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
         label: 'Запитати Мару про завтрашній ранок',
         next: 'after-case-mara',
       },
+      { id: 'after-tea-frank', label: 'Забрати у Френка рушник і запропонувати йому коробку', next: 'after-case-frank' },
       { id: 'after-tea-quiet', label: 'Мовчки вимити чашки', next: 'after-case-quiet' },
     ],
   },
@@ -84,6 +85,27 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
         grants: ['final_after_case_quiet_shared'],
       },
     ],
+  },
+  {
+    id: 'after-case-frank',
+    speaker: 'Оповідач',
+    text: 'Френк ображено спостерігає, як ти піднімаєш рушник. Поруч стоїть порожня коробка з-під книжок. Кіт обнюхує її, залазить усередину, а потім негайно вистрибує: дно шелестить надто голосно. «Він у нас вибагливий критик», — каже Мара.',
+    options: [
+      { id: 'after-frank-box', label: 'Підстелити в коробку старий папір', next: 'after-case-frank-box' },
+      { id: 'after-frank-lap', label: 'Посадити Френка собі на коліна', next: 'after-case-frank-lap' },
+    ],
+  },
+  {
+    id: 'after-case-frank-box',
+    speaker: 'Мара',
+    text: 'Френк обережно повертається в коробку, вкладається на папір і починає муркотіти. «Ось і все, — каже Мара. — Ми витратили п’ять днів на загадкові сторінки, а йому потрібен був один чистий аркуш». Нора нарешті сміється.',
+    options: [{ id: 'after-frank-box-finish', label: 'Залишити Френка спати й прибрати чашки', next: 'after-case-finish', grants: ['final_after_case_frank_box'] }],
+  },
+  {
+    id: 'after-case-frank-lap',
+    speaker: 'Оповідач',
+    text: 'Френк вмощується на колінах, чіпляється лапою за рукав і засинає саме тоді, коли ти збираєшся підвестися. Елеонора дивиться на гору чашок. «Зрозуміло. Тепер у нас на одного працівника менше».',
+    options: [{ id: 'after-frank-lap-finish', label: 'Попросити Мару допомогти з чашками', next: 'after-case-finish', grants: ['final_after_case_frank_lap'] }],
   },
   {
     id: 'after-case-finish',
