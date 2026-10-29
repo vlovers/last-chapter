@@ -232,6 +232,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
         id: 'paper-decision-neutral',
         label: 'Дозволити Норі описати метод, але не називати автора',
         next: 'paper-study-outcome',
+        unless: ['final_paper_iris_lent_originals'],
         grants: ['final_paper_neutral_report'],
       },
       {
