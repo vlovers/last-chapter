@@ -14,6 +14,7 @@ import {
   startDialogue,
   validateDialogue,
   type DialogueStory,
+  type DialogueState,
 } from '../src/game/dialogue';
 
 function follow(story: DialogueStory, path: readonly string[]) {
@@ -252,7 +253,7 @@ describe('complete optional narrative journeys', () => {
   ] as const)(
     'book club cleanup %s resolves once and leaves the evening open',
     (choice, finish, flag) => {
-      let state = { ...startDialogue(quietEvening), flags: ['book_club_started'] };
+      let state: DialogueState = { ...startDialogue(quietEvening), flags: ['book_club_started'] };
       state = selectOption(quietEvening, state, 'closing-book-club-cleanup');
       state = selectOption(quietEvening, state, choice);
       state = selectOption(quietEvening, state, finish);
