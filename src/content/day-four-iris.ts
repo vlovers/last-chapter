@@ -17,7 +17,7 @@ export const irisDecision: DialogueStory = {
       options: [
         {
           id: 'iris-letter-feeling',
-          label: '«Ти не мусиш вирішувати долю листа сьогодні»',
+          label: '«Хочеш, я просто приберу конверт із прилавка?»',
           next: 'iris-letter-feeling',
           unless: ['iris_day_four_letter_feeling_heard'],
         },
@@ -64,7 +64,7 @@ export const irisDecision: DialogueStory = {
         { id: 'past', label: '«Що для тебе змінилося після повернення?»', next: 'past' },
         {
           id: 'iris-boundaries',
-          label: '«Що означає повернутися, але не бути зобов’язаною залишитися?»',
+          label: '«Пані Міллер вже питає, коли ти розпакуєш валізу?»',
           next: 'iris-boundaries',
           unless: ['iris_day_four_boundary_heard'],
         },
@@ -78,7 +78,7 @@ export const irisDecision: DialogueStory = {
       options: [
         {
           id: 'iris-letter-feeling-return',
-          label: '«Тоді почнемо з того, що ти сама хочеш розповісти»',
+          label: '«Гаразд. А що ти малювала всю ніч?»',
           next: 'welcome',
           grants: ['iris_day_four_letter_feeling_heard'],
         },
@@ -91,7 +91,7 @@ export const irisDecision: DialogueStory = {
       options: [
         {
           id: 'iris-letter-ask-return',
-          label: '«Я не розповідатиму нікому без твого дозволу»',
+          label: '«Якщо хтось запитає, скажу, що ми пили чай»',
           next: 'welcome',
           grants: ['iris_day_four_letter_fear_heard'],
         },
