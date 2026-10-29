@@ -16,6 +16,16 @@ export const annaVisit: DialogueStory = {
       text: '«Я Анна Гейл, викладаю в місцевій школі. У нас завтра читання, а бібліотечні примірники вирішили одночасно зникнути. Діти, звісно, називають це змовою».',
       options: [
         {
+          id: 'anna-reading-help',
+          label: '«Давай підберемо книжки для завтрашнього читання»',
+          next: 'books',
+        },
+        {
+          id: 'anna-reading-children',
+          label: '«А що діти самі хочуть читати?»',
+          next: 'school',
+        },
+        {
           id: 'anna-v3-conversation',
           label: '«Чи повинна вчителька завжди знати відповідь?»',
           next: 'anna-v3-conversation',
