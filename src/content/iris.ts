@@ -23,13 +23,13 @@ export const irisVisit: DialogueStory = {
         },
         {
           id: 'iris-v3-conversation',
-          label: '«Чи має художниця пояснювати кожну свою роботу?»',
+          label: '«А що кажеш людям, які вимагають пояснити кожен малюнок?»',
           next: 'iris-v3-conversation',
           unless: ['iris_art_boundaries_discussed'],
         },
         {
           id: 'iris-reflection',
-          label: '«Чи обов’язково пояснювати свої малюнки?»',
+          label: '«Буває, що малюнок тобі подобається, а пояснювати його зовсім не хочеться?»',
           next: 'iris-reflection',
           unless: ['iris_reflected_on_identity'],
         },
