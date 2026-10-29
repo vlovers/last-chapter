@@ -386,4 +386,38 @@ describe('conversational pacing and continuity', () => {
     expect(callback).not.toBe(defaultLine);
     expect(options(bookClub, 'welcome', [flag])).toContain('discuss-books');
   });
+  it('book club combines three earlier anecdotes instead of arbitrarily dropping them', () => {
+    const flags = [
+      'anna_classroom_joke_heard',
+      'miller_bakery_story_heard',
+      'leo_station_moon_story_heard',
+    ];
+    const line = currentNode(bookClub, at(bookClub, 'welcome', flags)).text;
+    expect(line).toContain('дракона');
+    expect(line).toContain('місяця');
+    expect(line).toContain('корицю');
+    expect(line).not.toBe(currentNode(bookClub, at(bookClub, 'welcome', [flags[0]])).text);
+  });
+
+  it('book club combines Iris and Nora memories when both were heard', () => {
+    const line = currentNode(bookClub, at(bookClub, 'welcome', [
+      'iris_fox_story_heard',
+      'nora_newspaper_story_heard',
+    ])).text;
+    expect(line).toContain('лисиці');
+    expect(line).toContain('хору');
+  });
+
+  it('every book club branch points to an existing scene and options have unique ids', () => {
+    const nodes = new Set(bookClub.nodes.map((node) => node.id));
+    expect(nodes.size).toBe(bookClub.nodes.length);
+    for (const node of bookClub.nodes) {
+      const optionIds = node.options.map((option) => option.id);
+      expect(new Set(optionIds).size).toBe(optionIds.length);
+      for (const option of node.options) {
+        expect(nodes.has(option.next), node.id + ' -> ' + option.id + ' -> ' + option.next).toBe(true);
+      }
+    }
+  });
+
 });
