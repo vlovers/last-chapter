@@ -28,6 +28,7 @@ export const leoVisit: DialogueStory = {
       ],
       options: [
         { id: 'leo-schedule', label: '«Розкажеш, як минула зміна на залізниці?»', next: 'trains' },
+        { id: 'leo-station-funny', label: '«Яка найдивніша річ губилася у ваших потягах?»', next: 'leo-station-funny' },
         {
           id: 'leo-books',
           label: '«Що тобі подобається в Беллвіку, крім залізниці?»',
@@ -219,6 +220,27 @@ export const leoVisit: DialogueStory = {
       speaker: 'Лео',
       text: '«Можливо. Але ви не знаєте, що я маю робити зі своїм минулим». Він відступає від прилавка. «Мені потрібен час».',
       options: [{ id: 'pressure-end', label: 'Не наполягати', next: 'end' }],
+    },
+    {
+      id: 'leo-station-funny',
+      speaker: 'Лео',
+      text: '«Величезний картонний місяць. Хтось віз декорації до шкільної вистави й залишив його в останньому вагоні». Лео усміхається. «Черговий написав у журналі: “Знайдено небесне тіло”. Начальник попросив уточнити, чи воно небезпечне».',
+      options: [
+        { id: 'leo-station-funny-boss', label: '«І що ти відповів начальнику?»', next: 'leo-station-funny-boss' },
+        { id: 'leo-station-funny-back', label: '«Місяць хоч повернули?»', next: 'leo-station-funny-back' },
+      ],
+    },
+    {
+      id: 'leo-station-funny-boss',
+      speaker: 'Лео',
+      text: '«Що небезпечний тільки для тих, хто забув текст ролі». Лео дивиться у вікно. «Увечері прибігла вчителька й забрала його. Здається, діти навіть не помітили пропажі».',
+      options: [{ id: 'leo-station-funny-boss-return', label: 'Повернутися до книжок', next: 'greet', grants: ['leo_station_moon_story_heard'] }],
+    },
+    {
+      id: 'leo-station-funny-back',
+      speaker: 'Лео',
+      text: '«Так. Із записом у журналі: “Місяць повернуто власнику”». Він усміхається. «У нас рідко бувають такі красиві звіти».',
+      options: [{ id: 'leo-station-funny-return', label: 'Повернутися до книжок', next: 'greet', grants: ['leo_station_moon_story_heard'] }],
     },
     {
       id: 'end',
