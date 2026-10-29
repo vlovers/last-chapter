@@ -182,8 +182,8 @@ export const noraVisit: DialogueStory = {
       options: [
         {
           id: 'boundary-back',
-          label: '«Є одна смішна історія про сусідів і яблуню»',
-          next: 'letters',
+          label: '«Краще поговорімо про книжки»',
+          next: 'hello',
         },
       ],
     },
