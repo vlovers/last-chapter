@@ -124,6 +124,35 @@ describe('Iris independent illustration commission', () => {
     expect(seasonEnding({ flags: end.flags }).epilogue).toContain('рукописів');
   });
 
+  it('does not offer the day-four callback when Iris has not discussed the commission', () => {
+    const state = from(irisDecision, 'welcome');
+    expect(availableOptions(irisDecision, state).map((o) => o.id)).not.toContain(
+      'iris-cover-day-four-topic',
+    );
+  });
+
+  it.each([
+    ['iris_cover_revisions_chosen', 'веселкою'],
+    ['iris_cover_negotiation_chosen', 'тестовий друк'],
+    ['iris_cover_independent_chosen', 'чотири сторінки'],
+  ])('keeps the three commission epilogues distinct: %s', (flag, expected) => {
+    const ending = seasonEnding({ flags: ['iris_cover_commission_discussed', flag] });
+    expect(ending.epilogue).toContain(expected);
+  });
+
+  it('does not claim permission to display a draft after the player keeps distance', () => {
+    const state = from(finalReading, 'gathering', [
+      'iris_cover_day_four_followup',
+      'iris_cover_revisions_chosen',
+    ]);
+    const callback = selectOption(finalReading, state, 'final-iris-cover-topic');
+    const returned = selectOption(finalReading, callback, 'final-iris-cover-leave');
+    expect(returned.flags).not.toContain('final_iris_cover_portfolio_offered');
+    expect(seasonEnding({ flags: returned.flags }).epilogue).not.toContain(
+      'У книгарні запропонували місце',
+    );
+  });
+
   it('keeps all three dialogue graphs structurally valid', () => {
     for (const story of [irisVisit, irisDecision, finalReading]) {
       expect(validateDialogue(story)).toEqual([]);
