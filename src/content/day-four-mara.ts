@@ -52,8 +52,8 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'mara-rest-back',
-          label: '«Домовилися. Розкажеш, як минув день?»',
-          next: 'greet',
+          label: '«А що було найгіршим за сьогодні?»',
+          next: 'mara-own-story',
           grants: ['mara_day_four_rest_heard'],
         },
       ],
@@ -123,8 +123,8 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'mara-own-story-back',
-          label: '«Тепер розумію, чому ти принесла дві торби. А що з книжкою для Лео?»',
-          next: 'greet',
+          label: '«А книжку для Лео вже загорнула?»',
+          next: 'book',
           grants: ['mara_day_four_own_story_heard'],
         },
       ],
@@ -136,8 +136,8 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'work-back',
-          label: '«Що читатимеш у свій перший вільний недільний ранок?»',
-          next: 'greet',
+          label: '«А що ти взяла почитати на вихідний?»',
+          next: 'book',
           grants: ['mara_supported_independence'],
         },
       ],
