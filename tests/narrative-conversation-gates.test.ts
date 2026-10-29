@@ -28,8 +28,12 @@ describe('conversational pacing and continuity', () => {
     state = selectOption(noraVisit, state, 'nora-tea');
     state = selectOption(noraVisit, state, 'nora-tea-back');
     expect(state.flags).toContain('nora_tea_pause_heard');
-    expect(availableOptions(noraVisit, state).map((choice) => choice.id)).toContain('nora-reflection');
-    expect(availableOptions(noraVisit, state).map((choice) => choice.id)).toContain('nora-v3-conversation');
+    expect(availableOptions(noraVisit, state).map((choice) => choice.id)).toContain(
+      'nora-reflection',
+    );
+    expect(availableOptions(noraVisit, state).map((choice) => choice.id)).toContain(
+      'nora-v3-conversation',
+    );
     expect(currentNode(noraVisit, state).text).toContain('чашку');
   });
 
@@ -41,8 +45,12 @@ describe('conversational pacing and continuity', () => {
     state = selectOption(annaVisit, state, 'anna-disagreement-debate');
     state = selectOption(annaVisit, state, 'anna-disagreement-back');
     expect(state.flags).toContain('anna_book_disagreement_discussed');
-    expect(availableOptions(annaVisit, state).map((choice) => choice.id)).toContain('anna-reflection');
-    expect(availableOptions(annaVisit, state).map((choice) => choice.id)).toContain('anna-v3-conversation');
+    expect(availableOptions(annaVisit, state).map((choice) => choice.id)).toContain(
+      'anna-reflection',
+    );
+    expect(availableOptions(annaVisit, state).map((choice) => choice.id)).toContain(
+      'anna-v3-conversation',
+    );
     expect(currentNode(annaVisit, state).text).toContain('Емма');
   });
 
@@ -55,9 +63,13 @@ describe('conversational pacing and continuity', () => {
 
   it('Leo does not jump from a ticket confession directly to Iris', () => {
     expect(options(leoDecision, 'welcome')).not.toContain('past');
-    expect(options(leoDecision, 'welcome', ['leo_day_four_ticket_feeling_heard'])).toContain('mara');
+    expect(options(leoDecision, 'welcome', ['leo_day_four_ticket_feeling_heard'])).toContain(
+      'mara',
+    );
     expect(options(leoDecision, 'welcome', ['leo_day_four_future_heard'])).toContain('past');
-    expect(currentNode(leoDecision, at(leoDecision, 'welcome', ['leo_day_four_future_heard'])).text).toContain('пекарні');
+    expect(
+      currentNode(leoDecision, at(leoDecision, 'welcome', ['leo_day_four_future_heard'])).text,
+    ).toContain('пекарні');
   });
 
   it('contextual hub lines do not repeat the opening after a subject is discussed', () => {

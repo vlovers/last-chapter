@@ -32,7 +32,12 @@ export const maraDecision: DialogueStory = {
           unless: ['mara_day_four_rest_heard'],
         },
         { id: 'work', label: '«Ти змогла відмовитися від зайвої зміни?»', next: 'work' },
-        { id: 'book', label: '«Ти вже подарувала Лео книжку?»', next: 'book', requires: ['mara_day_four_rest_heard'] },
+        {
+          id: 'book',
+          label: '«Ти вже подарувала Лео книжку?»',
+          next: 'book',
+          requires: ['mara_day_four_rest_heard'],
+        },
         {
           id: 'letter',
           label: '«Є дещо з минулого, що може стосуватися Лео»',
@@ -45,7 +50,12 @@ export const maraDecision: DialogueStory = {
           next: 'remember-trust',
           requires: ['mara_discussed_forgiveness'],
         },
-        { id: 'future', label: '«Чого ти сама хочеш цього року?»', next: 'future', requires: ['mara_day_four_own_story_heard'] },
+        {
+          id: 'future',
+          label: '«Чого ти сама хочеш цього року?»',
+          next: 'future',
+          requires: ['mara_day_four_own_story_heard'],
+        },
         {
           id: 'mara-own-story',
           label: '«Що сталося сьогодні в пекарні?»',
