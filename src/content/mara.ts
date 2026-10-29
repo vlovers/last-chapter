@@ -503,9 +503,21 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«Я, звісно», — відповідає Мара так швидко, що ти навіть не встигаєш поставити чашку. «Але пані Міллер переконана, що її племінниця робить кращі». Мара знизує голос: «Її племінниця купує тісто замороженим. Я бачила коробки».',
       options: [
-        { id: 'mara-competition-gossip', label: '«Розкажеш Міллер про коробки?»', next: 'mara-competition-gossip' },
-        { id: 'mara-competition-kind', label: '«Може, їй просто подобаються булочки племінниці»', next: 'mara-competition-kind' },
-        { id: 'mara-competition-test', label: '«А якби зробити сліпу дегустацію?»', next: 'mara-competition-test' },
+        {
+          id: 'mara-competition-gossip',
+          label: '«Розкажеш Міллер про коробки?»',
+          next: 'mara-competition-gossip',
+        },
+        {
+          id: 'mara-competition-kind',
+          label: '«Може, їй просто подобаються булочки племінниці»',
+          next: 'mara-competition-kind',
+        },
+        {
+          id: 'mara-competition-test',
+          label: '«А якби зробити сліпу дегустацію?»',
+          next: 'mara-competition-test',
+        },
       ],
     },
     {
@@ -513,7 +525,12 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«І зруйнувати сімейне свято через круасан? Спокуса велика», — зізнається Мара. «Але тоді Міллер прийде сюди й розповість, що я одного разу переплутала сіль із цукром. І це, на жаль, правда».',
       options: [
-        { id: 'mara-competition-gossip-back', label: '«Домовилися: мовчимо про круасани»', next: 'topics', grants: ['mara_bakery_rivalry_secret_kept'] },
+        {
+          id: 'mara-competition-gossip-back',
+          label: '«Домовилися: мовчимо про круасани»',
+          next: 'topics',
+          grants: ['mara_bakery_rivalry_secret_kept'],
+        },
       ],
     },
     {
@@ -521,7 +538,12 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«Мабуть. Міллер завжди бере в мене дві булочки, але хвалить племінницю». Мара усміхається. «Може, я просто ревную до замороженого тіста. Це найгірший любовний трикутник у місті».',
       options: [
-        { id: 'mara-competition-kind-back', label: '«Це вже сюжет для роману»', next: 'topics', grants: ['mara_bakery_rivalry_softened'] },
+        {
+          id: 'mara-competition-kind-back',
+          label: '«Це вже сюжет для роману»',
+          next: 'topics',
+          grants: ['mara_bakery_rivalry_softened'],
+        },
       ],
     },
     {
@@ -529,7 +551,12 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«Ні. Минулого разу я програла сліпу дегустацію власному вчорашньому пирогу», — каже Мара. «Начальниця досі нагадує. Якщо хочеш зберегти нашу дружбу, забудь цю ідею».',
       options: [
-        { id: 'mara-competition-test-back', label: '«Гаразд, жодних дегустацій»', next: 'topics', grants: ['mara_bakery_rivalry_joked'] },
+        {
+          id: 'mara-competition-test-back',
+          label: '«Гаразд, жодних дегустацій»',
+          next: 'topics',
+          grants: ['mara_bakery_rivalry_joked'],
+        },
       ],
     },
     {
@@ -537,9 +564,21 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«З Анною. Ми два тижні не могли погодитися, з ким має залишитися героїня. Анна хотіла мандрівника, а я — капітана повітряного корабля». Мара відсуває пакет із булочками. «Капітан хоча б умів готувати. Це важливо».',
       options: [
-        { id: 'mara-couples-captain', label: '«Команда капітана. Їжа — серйозний аргумент»', next: 'mara-couples-captain' },
-        { id: 'mara-couples-traveler', label: '«Мандрівник хоча б не прив’язаний до корабля»', next: 'mara-couples-traveler' },
-        { id: 'mara-couples-heroine', label: '«А може, їй не потрібен жоден із них?»', next: 'mara-couples-heroine' },
+        {
+          id: 'mara-couples-captain',
+          label: '«Команда капітана. Їжа — серйозний аргумент»',
+          next: 'mara-couples-captain',
+        },
+        {
+          id: 'mara-couples-traveler',
+          label: '«Мандрівник хоча б не прив’язаний до корабля»',
+          next: 'mara-couples-traveler',
+        },
+        {
+          id: 'mara-couples-heroine',
+          label: '«А може, їй не потрібен жоден із них?»',
+          next: 'mara-couples-heroine',
+        },
       ],
     },
     {
@@ -547,7 +586,12 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«Ось! Нарешті хтось мене розуміє». Мара переможно стукає по прилавку. «Тільки Анні не кажи. Вона принесе цілу таблицю з причинами, чому мандрівник кращий».',
       options: [
-        { id: 'mara-couples-captain-back', label: '«Чекатиму на таблицю Анни»', next: 'topics', grants: ['mara_fantasy_captain_supported'] },
+        {
+          id: 'mara-couples-captain-back',
+          label: '«Чекатиму на таблицю Анни»',
+          next: 'topics',
+          grants: ['mara_fantasy_captain_supported'],
+        },
       ],
     },
     {
@@ -555,7 +599,12 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«Так сказала й Анна. А потім з’ясувалося, що він загубив героїню в лісі». Мара розводить руками. «Якщо це романтика, то мені потрібна карта й компас».',
       options: [
-        { id: 'mara-couples-traveler-back', label: '«Добре, компас купимо окремо»', next: 'topics', grants: ['mara_fantasy_traveler_supported'] },
+        {
+          id: 'mara-couples-traveler-back',
+          label: '«Добре, компас купимо окремо»',
+          next: 'topics',
+          grants: ['mara_fantasy_traveler_supported'],
+        },
       ],
     },
     {
@@ -563,7 +612,12 @@ export const maraVisit: DialogueStory = {
       speaker: 'Мара',
       text: '«Вона ж наприкінці відкрила власну таверну!» — Мара раптом усміхається. «Слухай, я стільки сперечалася про чоловіків, що забула про таверну. Там навіть є дракон, який миє посуд».',
       options: [
-        { id: 'mara-couples-heroine-back', label: '«Оце вже гарний фінал»', next: 'topics', grants: ['mara_fantasy_independence_discussed'] },
+        {
+          id: 'mara-couples-heroine-back',
+          label: '«Оце вже гарний фінал»',
+          next: 'topics',
+          grants: ['mara_fantasy_independence_discussed'],
+        },
       ],
     },
     {

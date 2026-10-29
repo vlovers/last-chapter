@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { maraVisit } from '../src/content/mara';
-import { availableOptions, selectOption, startDialogue, validateDialogue } from '../src/game/dialogue';
+import {
+  availableOptions,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
 
 const enterTopics = () => {
   let state = startDialogue(maraVisit);
@@ -16,7 +21,11 @@ describe('Mara bakery rivalry and fantasy arguments', () => {
   });
   it('offers distinct consequences for bakery gossip', () => {
     for (const [choice, back, flag] of [
-      ['mara-competition-gossip', 'mara-competition-gossip-back', 'mara_bakery_rivalry_secret_kept'],
+      [
+        'mara-competition-gossip',
+        'mara-competition-gossip-back',
+        'mara_bakery_rivalry_secret_kept',
+      ],
       ['mara-competition-kind', 'mara-competition-kind-back', 'mara_bakery_rivalry_softened'],
       ['mara-competition-test', 'mara-competition-test-back', 'mara_bakery_rivalry_joked'],
     ] as const) {
