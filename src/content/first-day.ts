@@ -63,7 +63,7 @@ export const millerVisit: DialogueStory = {
       options: [
         {
           id: 'challenge',
-          label: '«А ви самі це бачили чи вам розповіли?»',
+          label: '«Ви бачили, про що вони говорили, чи тільки як виходили?»',
           next: 'boundary',
           grants: ['rumor_heard', 'rumor_challenged'],
         },
