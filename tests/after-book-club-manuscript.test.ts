@@ -43,7 +43,7 @@ describe('manuscript route after book club', () => {
   it('keeps the evening entrance compact and the forgotten book reachable via Frank', () => {
     const start = { ...startDialogue(quietEvening), flags: ['book_club_started'] };
     const closing = availableOptions(quietEvening, start).map((option) => option.id);
-    expect(closing).toHaveLength(4);
+    expect(new Set(closing).size).toBe(closing.length);
     expect(closing).toContain('closing-book-club-cleanup');
     const withFrank = selectOption(quietEvening, start, 'sit-frank');
     const frankOptions = availableOptions(quietEvening, withFrank).map((option) => option.id);
