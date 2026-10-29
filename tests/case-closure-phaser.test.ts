@@ -133,6 +133,7 @@ describe('Phaser Lost Pages case conclusion', () => {
 
     expect(timeline.choices).toHaveLength(4);
 
+    story.choose('__more_choices');
     story.choose('case-timeline-thomas');
     story.choose('case-thomas-ask');
     const afterThomas = story.choose('case-thomas-answer-back');
