@@ -221,4 +221,32 @@ describe('conversational pacing and continuity', () => {
     expect(returning).toContain(phrase);
     expect(returning).not.toBe(original);
   });
+  it('Leo does not claim to have spoken with Mara merely because honesty was discussed', () => {
+    const line = currentNode(leoVisit, at(leoVisit, 'greet', ['leo_honesty_discussed'])).text;
+    expect(line).toContain('ще думаю');
+    expect(line).not.toContain('все-таки сказав Марі');
+  });
+
+  it('Thomas does not invent Anna\'s approval or a completed repair', () => {
+    const line = currentNode(thomasVisit, at(thomasVisit, 'greet', ['thomas_listening_discussed'])).text;
+    expect(line).toContain('думаю над тим');
+    expect(line).not.toContain('Анна сказала');
+    expect(line).not.toContain('лампа тепер працює');
+  });
+
+  it('returning character greetings are selected from facts without inventing offscreen outcomes', () => {
+    const cases: readonly [DialogueStory, string, string][] = [
+      [leoVisit, 'greet', 'leo_honesty_discussed'],
+      [irisVisit, 'welcome', 'iris_boundary_respected'],
+      [thomasVisit, 'greet', 'thomas_listening_discussed'],
+      [eleanorVisit, 'greet', 'eleanor_will_allow_change'],
+    ];
+    for (const [story, hub, flag] of cases) {
+      const node = currentNode(story, at(story, hub, [flag]));
+      expect(node.text.length).toBeGreaterThan(40);
+      expect(node.text).not.toBe(currentNode(story, at(story, hub)).text);
+      expect(availableOptions(story, at(story, hub, [flag])).length).toBeGreaterThan(0);
+    }
+  });
+
 });
