@@ -24,10 +24,19 @@ const arcs = [
 
 function prepareReflection(story: (typeof arcs)[number][1], prefix: string) {
   let state = startDialogue(story);
-  const entry = prefix === 'iris' ? 'welcome' : prefix === 'eleanor' || prefix === 'leo' || prefix === 'thomas' ? 'greet' : 'hello';
+  const entry =
+    prefix === 'iris'
+      ? 'welcome'
+      : prefix === 'eleanor' || prefix === 'leo' || prefix === 'thomas'
+        ? 'greet'
+        : 'hello';
   state = selectOption(story, state, entry);
   if (prefix === 'anna') {
-    for (const choice of ['anna-book-disagreement', 'anna-disagreement-debate', 'anna-disagreement-back']) {
+    for (const choice of [
+      'anna-book-disagreement',
+      'anna-disagreement-debate',
+      'anna-disagreement-back',
+    ]) {
       state = selectOption(story, state, choice);
     }
   }

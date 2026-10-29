@@ -57,7 +57,12 @@ export const leoVisit: DialogueStory = {
           next: 'letter',
           requires: ['saw_envelope'],
         },
-        { id: 'finish', label: '«Можете спокійно оглянути полиці»', next: 'end', repeatability: 'repeatable' },
+        {
+          id: 'finish',
+          label: '«Можете спокійно оглянути полиці»',
+          next: 'end',
+          repeatability: 'repeatable',
+        },
       ],
     },
     {
