@@ -67,6 +67,7 @@ export const annaVisit: DialogueStory = {
           next: 'anna-book-disagreement',
           unless: ['anna_book_disagreement_discussed'],
         },
+        { id: 'anna-school-theater', label: '«А діти колись ставили виставу за книжкою?»', next: 'anna-school-theater' },
         { id: 'school', label: '«Що люблять читати ваші учні?»', next: 'school' },
         {
           id: 'anna-school-funny',
@@ -467,5 +468,34 @@ export const annaVisit: DialogueStory = {
         },
       ],
     },
+    {
+      id: 'anna-school-theater',
+      speaker: 'Анна',
+      text: '«Минулої весни ставили казку про дракона. Головний герой захворів, і його замінив хлопчик, який мав грати дерево». Анна сміється. «Він вийшов із гілками на голові й оголосив: тепер я дракон, але в мене фотосинтез».',
+      options: [
+        { id: 'anna-theater-parents', label: '«А що сказали батьки?»', next: 'anna-theater-parents' },
+        { id: 'anna-theater-hero', label: '«Хлопчик заслужив головну роль»', next: 'anna-theater-hero' },
+        { id: 'anna-theater-mess', label: '«А вистава взагалі дійшла до фіналу?»', next: 'anna-theater-mess' },
+      ],
+    },
+    {
+      id: 'anna-theater-parents',
+      speaker: 'Анна',
+      text: '«Одна мама плакала від сміху. Тато дракона записав усе на телефон, але випадково знімав власні черевики». Анна знизує плечима. «Тепер у нас є дві легенди: дракон-дерево і дуже драматичні черевики».',
+      options: [{ id: 'anna-theater-parents-back', label: '«Покажи колись це відео»', next: 'hello', grants: ['anna_school_theater_parents_heard'] }],
+    },
+    {
+      id: 'anna-theater-hero',
+      speaker: 'Анна',
+      text: '«Він сам так вирішив. Тепер хоче зіграти всіх персонажів у наступній виставі». Вона підморгує. «Я сказала, що спочатку йому треба навчитися виходити зі сцени».',
+      options: [{ id: 'anna-theater-hero-back', label: '«Не зупиняй майбутню зірку»', next: 'hello', grants: ['anna_school_theater_hero_heard'] }],
+    },
+    {
+      id: 'anna-theater-mess',
+      speaker: 'Анна',
+      text: '«Так. Принцеса врятувала дракона, бо забула, що мала його перемогти». Анна усміхається. «Ніхто не заперечував. Усі хотіли на перерву, де були печива».',
+      options: [{ id: 'anna-theater-mess-back', label: '«Це кращий фінал, ніж у казці»', next: 'hello', grants: ['anna_school_theater_ending_heard'] }],
+    },
+
   ],
 };
