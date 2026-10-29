@@ -15,6 +15,13 @@ export const leoDecision: DialogueStory = {
       speaker: 'Лео',
       text: '«Мара знайшла старий квиток у моїй шухляді». Лео знімає мокру куртку. «Не сварилися, але я чомусь досі прокручую ту розмову в голові».',
       options: [
+        {
+          id: 'leo-ticket-feeling',
+          label: '«Схоже, тобі було важко говорити про той квиток»',
+          next: 'leo-ticket-feeling',
+          unless: ['leo_day_four_ticket_feeling_heard'],
+        },
+        { id: 'leo-future', label: '«То що сталося з тим квитком?»', next: 'leo-future', unless: ['leo_day_four_future_heard'] },
         { id: 'mara', label: '«Як ви з Марою?»', next: 'mara' },
         { id: 'trains', label: '«Досі любиш старі станції?»', next: 'trains' },
         { id: 'past', label: '«Ти хотів би поговорити з Айріс?»', next: 'past' },
@@ -30,14 +37,14 @@ export const leoDecision: DialogueStory = {
           next: 'letter',
           requires: ['saw_envelope'],
         },
-        {
-          id: 'leo-future',
-          label: '«То що сталося з тим квитком?»',
-          next: 'leo-future',
-          unless: ['leo_day_four_future_heard'],
-        },
         { id: 'finish', label: 'Побажати Лео спокійного вечора', next: 'end' },
       ],
+    },
+    {
+      id: 'leo-ticket-feeling',
+      speaker: 'Лео',
+      text: '«Так. Мара навіть не запитала, чому я його зберігаю. А я вже вигадав цілу сварку, де вона ображається, а я захищаюся». Лео крутить ґудзик куртки. «Дурна звичка — сперечатися з людьми, поки вони мовчать».',
+      options: [{ id: 'leo-ticket-feeling-back', label: '«Може, варто поговорити з нею, а не з уявною сваркою?»', next: 'welcome', grants: ['leo_day_four_ticket_feeling_heard'] }],
     },
     {
       id: 'leo-future',
