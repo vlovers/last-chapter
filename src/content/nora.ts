@@ -16,6 +16,13 @@ export const noraVisit: DialogueStory = {
       text: '«Чай є? Тоді я на десять хвилин». Нора опускає важку торбу на підлогу. «Тільки не радьте мені книжку про те, як усе встигати. У мене вже три такі недочитані».',
       options: [
         {
+          id: 'nora-tea',
+          label: '«Чай уже заварюється. Можеш просто перепочити»',
+          next: 'nora-tea',
+          unless: ['nora_tea_pause_heard'],
+        },
+        { id: 'books', label: '«Тоді пошукаємо щось легше за поради про продуктивність»', next: 'books' },
+        {
           id: 'nora-v3-conversation',
           label: '«Що там за плутанина з датою відкриття кінотеатру?»',
           next: 'nora-v3-conversation',
@@ -27,7 +34,6 @@ export const noraVisit: DialogueStory = {
           next: 'nora-reflection',
           unless: ['nora_reflected_on_uncertainty'],
         },
-        { id: 'books', label: '«Які історії вам подобаються?»', next: 'books' },
         { id: 'work', label: '«Як вам працюється в громадському центрі?»', next: 'work' },
         { id: 'bellwick', label: '«Що вам подобається в Беллвіку?»', next: 'bellwick' },
         {
@@ -38,6 +44,12 @@ export const noraVisit: DialogueStory = {
         },
         { id: 'end', label: '«Гарного вечора»', next: 'end' },
       ],
+    },
+    {
+      id: 'nora-tea',
+      speaker: 'Нора',
+      text: '«О, це найкраща пропозиція за сьогодні». Вона сідає ближче до вікна. «У центрі сьогодні знову загубили ключ від шафи. Знайшли в самій шафі. І так щовівторка».',
+      options: [{ id: 'nora-tea-back', label: '«Залишимо шафу в спокої. Яку книжку тобі показати?»', next: 'hello', grants: ['nora_tea_pause_heard'] }],
     },
     {
       id: 'books',
