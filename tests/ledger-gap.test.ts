@@ -54,18 +54,21 @@ describe('Lost Pages: the empty ledger recipient field', () => {
   });
 
   it('lets Iris inspect and receive a private copy only when already informed', () => {
-    const state = play([...entryFlags, 'final_ledger_iris_told'], [
-      'ledger-gap',
-      'ledger-gap-check',
-      'ledger-gap-check-back',
-      'ledger-gap-eleanor',
-      'ledger-gap-press',
-      'ledger-gap-iris',
-      'ledger-gap-iris-back',
-      'ledger-gap-decide',
-      'ledger-gap-copy',
-      'ledger-gap-finish',
-    ]);
+    const state = play(
+      [...entryFlags, 'final_ledger_iris_told'],
+      [
+        'ledger-gap',
+        'ledger-gap-check',
+        'ledger-gap-check-back',
+        'ledger-gap-eleanor',
+        'ledger-gap-press',
+        'ledger-gap-iris',
+        'ledger-gap-iris-back',
+        'ledger-gap-decide',
+        'ledger-gap-copy',
+        'ledger-gap-finish',
+      ],
+    );
     expect(state.flags).toContain('final_ledger_gap_iris_copy');
     expect(state.flags).toContain('final_ledger_gap_iris_heard');
     expect(seasonEnding({ flags: state.flags }).epilogue).toContain('приватну копію');
