@@ -114,7 +114,7 @@ export const firstEvening: DialogueStory = {
         },
         {
           id: 'letter-conclude',
-          label: 'Записати, що означає знайдений конверт',
+          label: 'Зіставити конверт із карткою бронювання',
           next: 'deduction',
           requires: ['saw_receipt'],
         },
