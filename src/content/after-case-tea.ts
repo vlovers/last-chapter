@@ -66,7 +66,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
       },
       {
         id: 'after-mara-space',
-        label: 'Запитати Мару, чи хоче вона провести ранок сама',
+        label: 'Залишити Марі право самій вирішити, як провести ранок',
         next: 'after-case-finish',
         grants: ['final_after_case_mara_space'],
       },
