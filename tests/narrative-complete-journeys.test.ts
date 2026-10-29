@@ -163,7 +163,9 @@ describe('complete optional narrative journeys', () => {
     const clubState = { ...startDialogue(bookClub), flags: visit.flags };
     const greeting = selectOption(bookClub, clubState, 'welcome');
     expect(currentNode(bookClub, greeting).text).toContain('дракона');
-    expect(availableOptions(bookClub, greeting).some((option) => option.id === 'discuss-books')).toBe(true);
+    expect(
+      availableOptions(bookClub, greeting).some((option) => option.id === 'discuss-books'),
+    ).toBe(true);
   });
 
   it('Miller bakery gossip changes book club dialogue without spreading harmful rumors', () => {
@@ -230,11 +232,17 @@ describe('complete optional narrative journeys', () => {
     [['book_club_started', 'club_bad_romance_debated'], 'весілля'],
     [['book_club_started', 'club_recommended_easy_reading'], 'коміксів'],
     [['book_club_started', 'club_argued_about_characters'], 'злодій'],
-    [['book_club_started', 'club_bad_romance_debated', 'club_recommended_easy_reading'], 'рецептами'],
+    [
+      ['book_club_started', 'club_bad_romance_debated', 'club_recommended_easy_reading'],
+      'рецептами',
+    ],
   ] as const)('quiet evening remembers book club outcome %j', (flags, phrase) => {
     const scene = currentNode(quietEvening, { ...startDialogue(quietEvening), flags });
     expect(scene.text).toContain(phrase);
-    expect(availableOptions(quietEvening, { ...startDialogue(quietEvening), flags }).some((o) => o.id === 'sit-frank')).toBe(true);
+    expect(
+      availableOptions(quietEvening, { ...startDialogue(quietEvening), flags }).some(
+        (o) => o.id === 'sit-frank',
+      ),
+    ).toBe(true);
   });
-
 });
