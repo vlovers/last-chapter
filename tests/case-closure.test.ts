@@ -74,7 +74,7 @@ describe('five-day case closure: proof, uncertainty and consent', () => {
     const knownTimeline = selectOption(finalReading, known, 'case-topic-timeline');
     expect(options(knownTimeline)).toContain('case-timeline-letter');
     const letter = selectOption(finalReading, knownTimeline, 'case-timeline-letter');
-    expect(currentNode(finalReading, letter).text).toContain('один вечір');
+    expect(currentNode(finalReading, letter).text).toContain('Один вечір');
     const returned = selectOption(finalReading, letter, 'case-letter-back');
     expect(returned.flags).toContain('final_case_timeline_heard');
   });
