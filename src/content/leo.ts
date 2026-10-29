@@ -319,7 +319,7 @@ export const leoVisit: DialogueStory = {
       options: [
         {
           id: 'leo-reflect-question',
-          label: '«А що для тебе в цьому найважче?»',
+          label: '«І що ти робиш, коли вже нічого не можна змінити?»',
           next: 'leo-reflection-deep',
         },
         {
