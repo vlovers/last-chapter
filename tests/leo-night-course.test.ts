@@ -145,6 +145,24 @@ describe('Leo independent railway course', () => {
     );
   });
 
+  it.each(routes)('keeps the $label ending intact when Leo wants privacy', (choice) => {
+    const dayTwo = leoRoute(choice.route);
+    let state = selectOption(finalReading, finale(dayTwo.flags), 'final-leo-night-course');
+    state = selectOption(finalReading, state, 'final-leo-course-ask-book');
+    state = selectOption(finalReading, state, 'final-leo-course-book-next');
+    state = selectOption(finalReading, state, 'final-leo-course-space');
+    state = selectOption(finalReading, state, 'final-leo-course-return');
+    expect(state.node).toBe('gathering');
+    expect(state.flags).toContain('final_leo_course_space_respected');
+    expect(state.flags).not.toContain('final_leo_course_notebook_offered');
+    const ending = seasonEnding({ flags: state.flags }).epilogue;
+    expect(ending).toContain(choice.epilogue);
+    expect(ending).toContain('розповість сам');
+    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+      'final-leo-night-course',
+    );
+  });
+
   it('keeps the independent career story out of unrelated endings', () => {
     const epilogue = seasonEnding({ flags: [] }).epilogue;
     expect(epilogue).not.toContain('Грейфорді');
