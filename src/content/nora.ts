@@ -250,6 +250,12 @@ export const noraVisit: DialogueStory = {
           next: 'nora-reflection-deep',
         },
         {
+          id: 'nora-cinema-exhibit',
+          label: '«А кого видно на світлині? Її можна виставляти?»',
+          next: 'nora-cinema-exhibit',
+          unless: ['nora_cinema_exhibit_discussed'],
+        },
+        {
           id: 'nora-reflect-return',
           label: '«Оце у вас детектив»',
           next: 'nora-reflection-end',
@@ -463,6 +469,103 @@ export const noraVisit: DialogueStory = {
           label: '«Не кожна загадка потребує розслідування»',
           next: 'hello',
           grants: ['nora_umbrella_mystery_joked'],
+        },
+      ],
+    },
+    {
+      id: 'nora-cinema-exhibit',
+      speaker: 'Нора',
+      text: 'Нора розгортає фото кінотеатру: під вивіскою стоять четверо людей, один тримає величезний букет. «Міллер хоче повісити це в центрі й підписати червнем. Але на звороті лише чиєсь “влітку”. А ще одна людина на фото просила не влаштовувати з неї виставку». Вона кладе фото зображенням донизу. «Я вже замовила рамку. І тепер думаю, що робити».',
+      options: [
+        {
+          id: 'nora-cinema-facade',
+          label: '«Покажи будівлю без чужих облич»',
+          next: 'nora-cinema-facade',
+        },
+        {
+          id: 'nora-cinema-ask',
+          label: '«Спершу запитай дозволу в тих, кого впізнали»',
+          next: 'nora-cinema-ask',
+        },
+        {
+          id: 'nora-cinema-pause',
+          label: '«Виставку можна перенести»',
+          next: 'nora-cinema-pause',
+        },
+      ],
+    },
+    {
+      id: 'nora-cinema-facade',
+      speaker: 'Нора',
+      text: '«Є ще знімок порожнього фасаду. Там навіть афіша видно, тільки рік не прочитати». Вона дістає з торби іншу світлину. «Міллер засмутиться. Вона на тій першій фотографії знала всіх поіменно. Але я ж не збираюся відбирати в неї спогади».',
+      options: [
+        {
+          id: 'nora-cinema-facade-detail',
+          label: '«А що написати під порожнім кінотеатром?»',
+          next: 'nora-cinema-facade-detail',
+        },
+      ],
+    },
+    {
+      id: 'nora-cinema-facade-detail',
+      speaker: 'Нора',
+      text: '«“Кінотеатр Беллвіка. Дата зйомки невідома”. І маленьку стрілку до віконця, де продавали квитки». Нора сміється. «Я там одного разу загубила рукавицю. Продавець повернув її разом із квитком на зовсім інший фільм».',
+      options: [
+        {
+          id: 'nora-cinema-facade-back',
+          label: '«Рамка не пропаде. Покажи знімок, коли повісиш»',
+          next: 'hello',
+          grants: ['nora_cinema_exhibit_discussed', 'nora_cinema_exhibit_facade'],
+        },
+      ],
+    },
+    {
+      id: 'nora-cinema-ask',
+      speaker: 'Нора',
+      text: '«Одній людині я вже написала. Відповіді немає. Міллер каже, що колись усі позували охоче, але це було колись». Нора дивиться на конверт. «Якщо мені відмовлять, я не буду вмовляти. Просто доведеться знайти іншу фотографію».',
+      options: [
+        {
+          id: 'nora-cinema-ask-detail',
+          label: '«Можеш хоча б розповісти, що було на відкритті?»',
+          next: 'nora-cinema-ask-detail',
+        },
+      ],
+    },
+    {
+      id: 'nora-cinema-ask-detail',
+      speaker: 'Нора',
+      text: '«Міллер пам’ятає, як зламався апарат і всі двадцять хвилин співали. Елеонора каже, що співали через дощ, а апарат працював». Нора знизує плечима. «Може, обидві праві. Я тоді ще навіть не народилася».',
+      options: [
+        {
+          id: 'nora-cinema-ask-back',
+          label: '«Краще дочекайся відповіді»',
+          next: 'hello',
+          grants: ['nora_cinema_exhibit_discussed', 'nora_cinema_exhibit_consent_pending'],
+        },
+      ],
+    },
+    {
+      id: 'nora-cinema-pause',
+      speaker: 'Нора',
+      text: '«Тоді я залишу рамку в коморі. Вона вже третя за місяць. Директор думає, що я збираю приватну галерею». Нора ховає фото. «Шкода, звісно. Люди питали про виставку. Але завтра в центрі все одно буде читання».',
+      options: [
+        {
+          id: 'nora-cinema-pause-detail',
+          label: '«Можна виставити книжки про старі кінотеатри»',
+          next: 'nora-cinema-pause-detail',
+        },
+      ],
+    },
+    {
+      id: 'nora-cinema-pause-detail',
+      speaker: 'Нора',
+      text: '«О, це можна. У нас є каталог старих афіш, який ніхто не відкривав із минулої зими». Вона усміхається. «А якщо Міллер прийде сперечатися про дату, посаджу її біля чайника. Вона завжди починає з нього».',
+      options: [
+        {
+          id: 'nora-cinema-pause-back',
+          label: '«Звучить як непоганий план на суботу»',
+          next: 'hello',
+          grants: ['nora_cinema_exhibit_discussed', 'nora_cinema_exhibit_paused'],
         },
       ],
     },
