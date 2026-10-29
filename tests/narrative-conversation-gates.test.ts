@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { annaVisit } from '../src/content/anna';
+import { bookClub } from '../src/content/book-club';
 import { leoVisit } from '../src/content/leo';
 import { irisVisit } from '../src/content/iris';
 import { thomasVisit } from '../src/content/thomas';
@@ -251,4 +252,30 @@ describe('conversational pacing and continuity', () => {
       expect(availableOptions(story, at(story, hub, [flag])).length).toBeGreaterThan(0);
     }
   });
+  it.each([
+    ['books', 'books-argument', 'argument'],
+    ['argument', 'argument-anna', 'argument-anna'],
+    ['argument', 'argument-miller', 'argument-miller'],
+    ['mara', 'mara-change', 'mara-buns'],
+    ['mara', 'mara-disagree', 'mara-disagree'],
+    ['mara-disagree', 'mara-disagree-push', 'mara-disagree-more'],
+  ] as const)('book club %s -> %s reaches its authored conversation', (hub, option, target) => {
+    const state = at(bookClub, hub);
+    expect(options(bookClub, hub)).toContain(option);
+    expect(selectOption(bookClub, state, option).node).toBe(target);
+    expect(currentNode(bookClub, at(bookClub, target)).text.length).toBeGreaterThan(60);
+  });
+
+  it.each([
+    ['argument-anna', 'argument-anna-back', 'club_argued_about_characters'],
+    ['argument-miller', 'argument-miller-back', 'club_argued_about_characters'],
+    ['mara-buns', 'mara-buns-back', 'club_shared_bakery_joke'],
+    ['mara-disagree', 'mara-disagree-back', 'club_mara_disagreed'],
+    ['mara-disagree-more', 'mara-disagree-more-back', 'club_mara_disagreed'],
+  ] as const)('book club %s remembers its optional conversation', (hub, option, flag) => {
+    const state = selectOption(bookClub, at(bookClub, hub), option);
+    expect(state.node).toBe('welcome');
+    expect(state.flags).toContain(flag);
+  });
+
 });
