@@ -39,3 +39,17 @@ Documentation: `docs/design/CANON-AUDIT-CHARACTER-LOCK-v0.1.md`, `ELEANOR-NORA-T
 ## Current status
 
 **Inventory complete; reconciliation not yet performed.** This document is an integration checklist, not a claim that conflicts are resolved.
+
+## Editorial comparison — second pass
+
+- **Mara:** all original voice-branch replacements are superseded by more specific bookshop scenes (free pastries, Leo's railway obsession, disagreements about fictional romance). Retain current dialogue.
+- **Nora:** all original replacements are superseded by grounded tram, community-centre and town gossip anecdotes. Retain current dialogue and its confidentiality boundary.
+- **Leo:** all original replacements are superseded by concrete Mara/Iris conversations and ticket/letter continuity. Retain current dialogue and its refusal-to-pressure-Iris boundary.
+- **Iris:** seven voice-branch replacements applied; one original line had already diverged and was deliberately retained.
+- **Eleanor, Thomas, Anna:** all matching voice-branch text changes applied.
+- **Letter continuity:** test now accepts both established consent phrasings.
+- **Character Voice Bible:** imported unchanged.
+
+The three fully divergent character files must not be overwritten with the shorter voice-branch versions. No gameplay flags or dialogue destinations were changed in this reconciliation pass.
+
+**Remaining:** run formatting, type checking, Vitest, build and browser QA on this integration branch; inspect any failures and confirm both branch heads before merging.
