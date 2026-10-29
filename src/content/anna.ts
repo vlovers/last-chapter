@@ -76,6 +76,13 @@ export const annaVisit: DialogueStory = {
           label: '«А діти колись ставили виставу за книжкою?»',
           next: 'anna-school-theater',
         },
+        {
+          id: 'anna-thomas-chairs-followup',
+          label: '«Томас згадував про стільці для шкільного читання»',
+          next: 'anna-thomas-chairs-followup',
+          requires: ['thomas_chairs_discussed'],
+          unless: ['anna_thomas_chairs_followup_discussed'],
+        },
         { id: 'school', label: '«Що люблять читати ваші учні?»', next: 'school' },
         {
           id: 'anna-school-funny',
@@ -132,6 +139,68 @@ export const annaVisit: DialogueStory = {
           label: 'Повернутися до розмови з Анною',
           next: 'hello',
           grants: ['anna_book_disagreement_discussed'],
+        },
+      ],
+    },
+    {
+      id: 'anna-thomas-chairs-followup',
+      speaker: 'Анна',
+      text: 'Анна піднімає очі від списку. «О, стільці. Я тягла їх на другий поверх, а пан Міллер стояв унизу й давав поради щодо постави. Дякую, пане Міллере». Вона зітхає. «Томас обіцяв допомогти. Мене розсердили не стільці. Він навіть не попередив».',
+      textWhen: [
+        {
+          requires: ['thomas_chairs_owned_mistake'],
+          text: '«Він подзвонив мені. Сказав, що забув, і запитав, чи ще потрібна допомога. Я відповіла: сьогодні вже ні. Але наступного разу хай дзвонить до того, як я почну тягнути меблі сходами». Анна знизує плечима. «Це не кінець сварки. Та принаймні ми говорили».',
+        },
+        {
+          requires: ['thomas_chairs_avoided_conversation'],
+          text: '«Він приніс нові стільці. Нові! У нас старі цілком справні. Я не знала, сміятися чи сердитися». Анна проводить пальцем по списку. «І досі не знаю, чому він не може просто сказати, що забув».',
+        },
+      ],
+      options: [
+        {
+          id: 'anna-chairs-defend',
+          label: '«Він, мабуть, намагався допомогти по-своєму»',
+          next: 'anna-thomas-chairs-response',
+          grants: ['anna_chairs_player_defended_thomas'],
+        },
+        {
+          id: 'anna-chairs-listen',
+          label: '«Тобі довелося робити все самій. Розумію, чому ти сердишся»',
+          next: 'anna-thomas-chairs-response',
+          grants: ['anna_chairs_player_heard_anna'],
+        },
+        {
+          id: 'anna-chairs-change-topic',
+          label: '«Не хочу вирішувати за вас. Як минуло читання?»',
+          next: 'anna-thomas-chairs-response',
+          grants: ['anna_chairs_player_changed_topic'],
+        },
+      ],
+    },
+    {
+      id: 'anna-thomas-chairs-response',
+      speaker: 'Анна',
+      text: '«Добре, що ти не намагаєшся нас помирити за три хвилини. У нас самих на це піде довше».',
+      textWhen: [
+        {
+          requires: ['anna_chairs_player_defended_thomas'],
+          text: '«Він часто намагається допомогти. Я це знаю». Анна закриває зошит. «Але іноді мені хочеться, щоб хтось спочатку почув мене, а вже потім пояснював Томаса». Вона не підвищує голосу, та розмова стає коротшою.',
+        },
+        {
+          requires: ['anna_chairs_player_heard_anna'],
+          text: '«Дякую. Я не хочу, щоб ти сварився з Томасом замість мене. Просто вчора було важко». Вона нарешті усміхається. «Зате Емма принесла печиво, і діти влаштували голосування за найкращу книжкову сварку».',
+        },
+        {
+          requires: ['anna_chairs_player_changed_topic'],
+          text: '«Гучно. Джуліан заявив, що маяк у фіналі мав вибухнути, а Емма назвала це дешевим трюком». Анна сміється. «Вони посперечалися ще дорогою додому. Я вирішила не втручатися».',
+        },
+      ],
+      options: [
+        {
+          id: 'anna-chairs-back',
+          label: '«Повернімося до книжок»',
+          next: 'hello',
+          grants: ['anna_thomas_chairs_followup_discussed'],
         },
       ],
     },
