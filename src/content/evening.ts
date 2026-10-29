@@ -72,7 +72,7 @@ export const firstEvening: DialogueStory = {
         { id: 'receipt-back', label: 'Повернутися до коробки', next: 'box' },
         {
           id: 'receipt-conclude',
-          label: 'Зробити висновок',
+          label: 'Занотувати, що вдалося встановити',
           next: 'deduction',
           requires: ['saw_envelope'],
         },
@@ -107,14 +107,14 @@ export const firstEvening: DialogueStory = {
         { id: 'letter-back', label: 'Покласти лист назад', next: 'box' },
         {
           id: 'letter-open',
-          label: 'Порушити печатку й прочитати лист',
+          label: 'Розірвати печатку й прочитати чужий лист',
           unless: ['opened_private_letter'],
           next: 'opened',
           grants: ['opened_private_letter'],
         },
         {
           id: 'letter-conclude',
-          label: 'Зробити висновок',
+          label: 'Записати, що означає знайдений конверт',
           next: 'deduction',
           requires: ['saw_receipt'],
         },
