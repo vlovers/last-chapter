@@ -199,7 +199,7 @@ describe('conversational pacing and continuity', () => {
     ['Leo remembers uncertainty', leoVisit, 'greet', 'leo_reflected_on_uncertainty', 'потяги'],
     ['Iris remembers privacy', irisVisit, 'welcome', 'iris_boundary_respected', 'Дякую'],
     ['Iris remembers sketches', irisVisit, 'welcome', 'iris_reflected_on_identity', 'ескізи'],
-    ['Thomas remembers listening', thomasVisit, 'greet', 'thomas_listening_discussed', 'Анна'],
+    ['Thomas remembers listening', thomasVisit, 'greet', 'thomas_listening_discussed', 'думаю'],
     [
       'Thomas remembers responsibility',
       thomasVisit,
