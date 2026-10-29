@@ -87,6 +87,22 @@ describe('paper study: manuscript custody and consent', () => {
     expect(currentNode(finalReading, state).text).not.toContain('номер сімнадцять');
   });
 
+  it('does not disclose Eleanor private ledger when requesting Iris permission', () => {
+    const state = play(
+      [
+        ...evidence,
+        'final_manuscript_provenance_decided',
+        'final_provenance_iris_custody',
+        'final_ledger_record_private',
+      ],
+      ['paper-study-permission'],
+    );
+    const text = currentNode(finalReading, state).text;
+    expect(text).toContain('не дістає приватний журнал');
+    expect(text).not.toContain('про журнал, який Елеонора');
+    expect(text).not.toContain('номер сімнадцять');
+  });
+
   it('persists consent through the entire examination and records it in the epilogue', () => {
     const state = play(
       [...evidence, 'final_manuscript_provenance_decided', 'final_provenance_iris_custody'],
