@@ -78,34 +78,25 @@ describe('under the lamp: manuscript comparison', () => {
       'paper-decision-iris',
     );
 
-    const declined = play(investigation, [
+    const declined = atGathering([
       ...evidence,
       'final_ledger_iris_told',
       'final_case_iris_declined',
     ]);
     expect(availableOptions(finalReading, declined).map((option) => option.id)).not.toContain(
-      'paper-decision-iris',
+      'paper-study',
     );
   });
 
-  it('does not ask Iris to guess an author after she declined the case discussion', () => {
-    const state = play(
-      ['paper-study', 'paper-study-voices'],
-      [...evidence, 'final_ledger_iris_told', 'final_case_iris_declined'],
-    );
-    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
-      'paper-voices-iris',
-    );
-  });
-
-  it('lets Iris refuse to participate after a letter breach', () => {
-    const state = play(
-      ['paper-study', 'paper-study-voices', 'paper-voices-iris'],
-      [...evidence, 'final_ledger_iris_told', 'final_letter_breach_disclosed'],
-    );
-    expect(currentNode(finalReading, state).text).toContain('відкрив мій лист');
-    expect(currentNode(finalReading, state).text).not.toContain('пробач');
-  });
+  it.each(['final_case_iris_declined', 'final_letter_breach_disclosed'])(
+    'does not reopen the manuscript after %s',
+    (boundary) => {
+      const state = atGathering([...evidence, 'final_ledger_iris_told', boundary]);
+      expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+        'paper-study',
+      );
+    },
+  );
 
   it('does not reveal a private ledger while examining the pages', () => {
     const state = play(['paper-study'], [...evidence, 'final_ledger_record_private']);
