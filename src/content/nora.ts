@@ -21,7 +21,11 @@ export const noraVisit: DialogueStory = {
           next: 'nora-tea',
           unless: ['nora_tea_pause_heard'],
         },
-        { id: 'books', label: '«Тоді пошукаємо щось легше за поради про продуктивність»', next: 'books' },
+        {
+          id: 'books',
+          label: '«Тоді пошукаємо щось легше за поради про продуктивність»',
+          next: 'books',
+        },
         {
           id: 'nora-v3-conversation',
           label: '«Що там за плутанина з датою відкриття кінотеатру?»',
@@ -49,7 +53,14 @@ export const noraVisit: DialogueStory = {
       id: 'nora-tea',
       speaker: 'Нора',
       text: '«О, це найкраща пропозиція за сьогодні». Вона сідає ближче до вікна. «У центрі сьогодні знову загубили ключ від шафи. Знайшли в самій шафі. І так щовівторка».',
-      options: [{ id: 'nora-tea-back', label: '«Залишимо шафу в спокої. Яку книжку тобі показати?»', next: 'hello', grants: ['nora_tea_pause_heard'] }],
+      options: [
+        {
+          id: 'nora-tea-back',
+          label: '«Залишимо шафу в спокої. Яку книжку тобі показати?»',
+          next: 'hello',
+          grants: ['nora_tea_pause_heard'],
+        },
+      ],
     },
     {
       id: 'books',

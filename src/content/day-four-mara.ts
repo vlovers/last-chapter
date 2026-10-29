@@ -49,7 +49,14 @@ export const maraDecision: DialogueStory = {
       id: 'mara-rest',
       speaker: 'Мара',
       text: 'Мара сідає й розв’язує стрічку на пакеті. «Тільки п’ять хвилин. Якщо я зараз встану, знову знайду собі якусь роботу». Вона підсуває тобі булочку. «Цю я точно не надкусила».',
-      options: [{ id: 'mara-rest-back', label: '«Домовилися. Розкажеш, як минув день?»', next: 'greet', grants: ['mara_day_four_rest_heard'] }],
+      options: [
+        {
+          id: 'mara-rest-back',
+          label: '«Домовилися. Розкажеш, як минув день?»',
+          next: 'greet',
+          grants: ['mara_day_four_rest_heard'],
+        },
+      ],
     },
     {
       id: 'mara-own-story',

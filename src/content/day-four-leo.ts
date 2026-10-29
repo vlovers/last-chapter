@@ -21,7 +21,12 @@ export const leoDecision: DialogueStory = {
           next: 'leo-ticket-feeling',
           unless: ['leo_day_four_ticket_feeling_heard'],
         },
-        { id: 'leo-future', label: '«То що сталося з тим квитком?»', next: 'leo-future', unless: ['leo_day_four_future_heard'] },
+        {
+          id: 'leo-future',
+          label: '«То що сталося з тим квитком?»',
+          next: 'leo-future',
+          unless: ['leo_day_four_future_heard'],
+        },
         { id: 'mara', label: '«Як ви з Марою?»', next: 'mara' },
         { id: 'trains', label: '«Досі любиш старі станції?»', next: 'trains' },
         { id: 'past', label: '«Ти хотів би поговорити з Айріс?»', next: 'past' },
@@ -44,7 +49,14 @@ export const leoDecision: DialogueStory = {
       id: 'leo-ticket-feeling',
       speaker: 'Лео',
       text: '«Так. Мара навіть не запитала, чому я його зберігаю. А я вже вигадав цілу сварку, де вона ображається, а я захищаюся». Лео крутить ґудзик куртки. «Дурна звичка — сперечатися з людьми, поки вони мовчать».',
-      options: [{ id: 'leo-ticket-feeling-back', label: '«Може, варто поговорити з нею, а не з уявною сваркою?»', next: 'welcome', grants: ['leo_day_four_ticket_feeling_heard'] }],
+      options: [
+        {
+          id: 'leo-ticket-feeling-back',
+          label: '«Може, варто поговорити з нею, а не з уявною сваркою?»',
+          next: 'welcome',
+          grants: ['leo_day_four_ticket_feeling_heard'],
+        },
+      ],
     },
     {
       id: 'leo-future',
