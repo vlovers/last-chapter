@@ -12,6 +12,7 @@ import { maraWindowFinalNodes } from './mara-window-table';
 import { leoNightCourseFinalNodes, leoNightCourseFinalOption } from './leo-night-course-final';
 import { irisCoverFinalNodes, irisCoverFinalOption } from './iris-cover-final';
 import { irisEvidenceFinalNodes, irisEvidenceFinalOption } from './iris-evidence-final';
+import { eleanorMemoryFinalNodes, eleanorMemoryFinalOption } from './eleanor-memory-final';
 
 /** Фінальний день першого сезону. Рішення людей важливіші за чужу цікавість. */
 export const finalReading: DialogueStory = {
@@ -155,6 +156,7 @@ export const finalReading: DialogueStory = {
         leoNightCourseFinalOption,
         irisCoverFinalOption,
         irisEvidenceFinalOption,
+        eleanorMemoryFinalOption,
         {
           id: 'final-v3-leo-option',
           label: '«Ви з Марою нарешті домовилися про вихідні?»',
@@ -2356,6 +2358,7 @@ export const finalReading: DialogueStory = {
     ...leoNightCourseFinalNodes,
     ...irisCoverFinalNodes,
     ...irisEvidenceFinalNodes,
+    ...eleanorMemoryFinalNodes,
     {
       id: 'final-v3-leo',
       speaker: 'Лео',
