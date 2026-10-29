@@ -83,10 +83,10 @@ describe('Iris evidence follow-up: trust, consent and uncertain clues', () => {
   });
 
   it('records the privacy choice without granting manuscript custody', () => {
-    const state = follow([...discovered, 'iris_letter_breach_admitted'], [
-      'final-iris-evidence-private',
-      'final-iris-evidence-private-back',
-    ]);
+    const state = follow(
+      [...discovered, 'iris_letter_breach_admitted'],
+      ['final-iris-evidence-private', 'final-iris-evidence-private-back'],
+    );
     expect(state.flags).toContain('final_iris_evidence_private_notes');
     expect(state.flags).not.toContain('final_paper_iris_lent_originals');
     expect(state.flags).not.toContain('final_iris_evidence_public_catalog_requested');
