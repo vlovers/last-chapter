@@ -25,7 +25,7 @@ export const eleanorVisit: DialogueStory = {
         },
       ],
       options: [
-        { id: 'eleanor-shelf', label: '«А куди б ви переставили ту полицю?»', next: 'shop' },
+        { id: 'eleanor-shelf', label: '«То що думаєте про теперішнє розташування полиць?»', next: 'shop' },
         {
           id: 'eleanor-tea',
           label: '«Спершу чай. А потім можете покритикувати все»',
