@@ -73,6 +73,16 @@ describe('paper study: manuscript custody and consent', () => {
     },
   );
 
+  it.each(['final_letter_breach_disclosed', 'final_case_iris_declined'])(
+    'blocks the original examination before custody when %s',
+    (boundary) => {
+      const state = play([...evidence, boundary], []);
+      expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+        'paper-study',
+      );
+    },
+  );
+
   it('keeps a private ledger private even when Iris lends the originals', () => {
     const state = play(
       [
