@@ -59,6 +59,7 @@ export const thomasVisit: DialogueStory = {
           next: 'thomas-reading-challenge',
           unless: ['thomas_reading_challenge_discussed'],
         },
+        { id: 'thomas-repair-funny', label: '«Що найдивніше тобі доводилося лагодити?»', next: 'thomas-repair-funny' },
         { id: 'books', label: '«Ви любите читати?»', next: 'books' },
         { id: 'anna', label: '«Анна заходила до нас»', next: 'anna' },
         {
@@ -254,6 +255,21 @@ export const thomasVisit: DialogueStory = {
       speaker: 'Томас',
       text: '«Це не ваша справа». Він говорить тихо, але твердо. «Я полагоджу лампу. А про решту прошу не запитувати».',
       options: [{ id: 'push-end', label: 'Завершити розмову', next: 'end' }],
+    },
+    {
+      id: 'thomas-repair-funny',
+      speaker: 'Томас',
+      text: '«Музичну скриньку, яка грала тільки коли її трясли. Власник сказав, що це сімейна реліквія й що так було завжди». Томас зітхає. «Я відкрив кришку. Усередині лежала монета, два ґудзики й записка: “Не чіпати механізм”».',
+      options: [
+        { id: 'thomas-repair-funny-note', label: '«І ти послухався записки?»', next: 'thomas-repair-funny-note' },
+        { id: 'thomas-repair-funny-back', label: '«Краще повернімося до лампи»', next: 'greet', grants: ['thomas_music_box_story_heard'] },
+      ],
+    },
+    {
+      id: 'thomas-repair-funny-note',
+      speaker: 'Томас',
+      text: '«Ні. Виявилося, що записку залишив я сам десять років тому». Він усміхається краєчком рота. «Поставив нову пружину. Тепер скринька грає без струсів, але власник каже, що сумує за старим способом».',
+      options: [{ id: 'thomas-repair-funny-note-back', label: '«Деяким речам краще залишатися дивними»', next: 'greet', grants: ['thomas_music_box_story_heard'] }],
     },
     {
       id: 'end',
