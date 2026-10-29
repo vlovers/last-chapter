@@ -51,9 +51,16 @@ describe('Phaser bookshop tomorrow integration', () => {
       '__more_choices',
     ]);
     expect(entry.choices).toHaveLength(4);
-    expect(
-      story.choose('__more_choices').choices.some((option) => option.id === 'tomorrow-later'),
-    ).toBe(true);
+    let foundLater = false;
+    for (let page = 0; page < 10; page++) {
+      const choices = story.choose('__more_choices').choices;
+      expect(choices.length).toBeLessThanOrEqual(4);
+      if (choices.some((option) => option.id === 'tomorrow-later')) {
+        foundLater = true;
+        break;
+      }
+    }
+    expect(foundLater).toBe(true);
 
     story.choose('tomorrow-cards');
     story.choose('tomorrow-cards-box');
