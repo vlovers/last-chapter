@@ -25,13 +25,15 @@ describe('after-case tea: quiet consequences', () => {
     expect(state.node).toBe('gathering');
     expect(state.flags).toContain(flag);
     expect(seasonEnding({ flags: state.flags }).epilogue).toContain(
-      ({
-        final_after_case_notes_separated: 'різні картки',
-        final_after_case_nora_owns_notes: 'власні нотатки',
-        final_after_case_mara_book_reserved: 'роман без детективної загадки',
-        final_after_case_mara_space: 'не складав за неї розклад',
-        final_after_case_quiet_shared: 'вимили чашки',
-      } as Record<string, string>)[flag],
+      (
+        {
+          final_after_case_notes_separated: 'різні картки',
+          final_after_case_nora_owns_notes: 'власні нотатки',
+          final_after_case_mara_book_reserved: 'роман без детективної загадки',
+          final_after_case_mara_space: 'не складав за неї розклад',
+          final_after_case_quiet_shared: 'вимили чашки',
+        } as Record<string, string>
+      )[flag],
     );
     expect(state.flags).toContain('final_after_case_tea_done');
     expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
