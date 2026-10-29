@@ -34,6 +34,11 @@ export const leoVisit: DialogueStory = {
           next: 'leo-station-funny',
         },
         {
+          id: 'leo-platform-music',
+          label: '«А що люди слухають на пероні, коли чекають потяг?»',
+          next: 'leo-platform-music',
+        },
+        {
           id: 'leo-books',
           label: '«Що тобі подобається в Беллвіку, крім залізниці?»',
           next: 'town',
@@ -484,5 +489,34 @@ export const leoVisit: DialogueStory = {
         },
       ],
     },
+    {
+      id: 'leo-platform-music',
+      speaker: 'Лео',
+      text: '«Одного разу чоловік грав на гармошці, а жінка поруч переконувала його, що це не та пісня». Лео сміється. «Потім вони почали співати разом. Увесь перон чекав, чим закінчиться концерт».',
+      options: [
+        { id: 'leo-music-join', label: '«А ти підспівував?»', next: 'leo-music-join' },
+        { id: 'leo-music-train', label: '«А потяг тим часом прибув?»', next: 'leo-music-train' },
+        { id: 'leo-music-mara', label: '«Мара була б у захваті»', next: 'leo-music-mara' },
+      ],
+    },
+    {
+      id: 'leo-music-join',
+      speaker: 'Лео',
+      text: '«Ні. Я намагався оголосити посадку». Він знічується. «Але потім хтось попросив мене заспівати приспів у мікрофон. Начальник досі згадує».',
+      options: [{ id: 'leo-music-join-back', label: '«Хочу почути запис»', next: 'greet', grants: ['leo_platform_singing_heard'] }],
+    },
+    {
+      id: 'leo-music-train',
+      speaker: 'Лео',
+      text: '«На сім хвилин раніше. Люди навіть образилися». Лео розводить руками. «Єдиний випадок у моїй кар’єрі, коли пунктуальність усім зіпсувала настрій».',
+      options: [{ id: 'leo-music-train-back', label: '«Наступного разу затримай його заради бісу»', next: 'greet', grants: ['leo_platform_concert_heard'] }],
+    },
+    {
+      id: 'leo-music-mara',
+      speaker: 'Лео',
+      text: '«Мара б принесла булочки й почала продавати квитки». Він усміхається. «Вона завжди бачить можливість там, де я бачу порушення розкладу».',
+      options: [{ id: 'leo-music-mara-back', label: '«Може, запросиш її на наступний концерт?»', next: 'greet', grants: ['leo_mara_platform_idea_heard'] }],
+    },
+
   ],
 };
