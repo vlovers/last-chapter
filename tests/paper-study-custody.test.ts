@@ -129,6 +129,43 @@ describe('paper study: manuscript custody and consent', () => {
     );
   });
 
+  it('does not allow a public method report after Iris grants private-only access', () => {
+    const state = play(
+      [...evidence, 'final_manuscript_provenance_decided', 'final_provenance_iris_custody'],
+      [
+        'paper-study-permission',
+        'paper-permission-lend',
+        'paper-study-edges',
+        'paper-edges-back',
+        'paper-study-ink',
+        'paper-ink-back',
+        'paper-study-voices',
+        'paper-voices-back',
+        'paper-study-conclude',
+      ],
+    );
+    const options = availableOptions(finalReading, state).map((option) => option.id);
+    expect(options).not.toContain('paper-decision-neutral');
+    expect(options).toContain('paper-decision-private');
+    expect(options).toContain('paper-decision-defer');
+  });
+
+  it('retains the method-only report option before manuscript custody', () => {
+    const state = play(evidence, [
+      'paper-study',
+      'paper-study-edges',
+      'paper-edges-back',
+      'paper-study-ink',
+      'paper-ink-back',
+      'paper-study-voices',
+      'paper-voices-back',
+      'paper-study-conclude',
+    ]);
+    expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(
+      'paper-decision-neutral',
+    );
+  });
+
   it('limits all consent nodes to four choices and resolves their destinations', () => {
     const nodes = finalReading.nodes.filter(
       (node) =>
