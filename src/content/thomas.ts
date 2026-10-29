@@ -26,6 +26,12 @@ export const thomasVisit: DialogueStory = {
       ],
       options: [
         {
+          id: 'repair',
+          label: 'Повернутися до ремонту лампи',
+          next: 'repair',
+          repeatability: 'repeatable',
+        },
+        {
           id: 'thomas-lamp-first',
           label: '«Можеш ще раз перевірити вимикач?»',
           next: 'repair',
