@@ -18,10 +18,7 @@ describe('Day five: real dialogue traversal and consequence gating', () => {
         let state = {
           ...base,
           node: 'bookshop-tomorrow',
-          flags: [
-            'final_ledger_scene_complete',
-            'final_manuscript_provenance_decided',
-          ],
+          flags: ['final_ledger_scene_complete', 'final_manuscript_provenance_decided'],
         };
         const entry = `tomorrow-${activity}-new`;
         expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(entry);
@@ -33,7 +30,9 @@ describe('Day five: real dialogue traversal and consequence gating', () => {
         expect(state.node).toBe('gathering');
         expect(state.flags).toContain(`final_tomorrow_${activity}_done`);
         const revisit = { ...state, node: 'bookshop-tomorrow' };
-        expect(availableOptions(finalReading, revisit).map((option) => option.id)).not.toContain(entry);
+        expect(availableOptions(finalReading, revisit).map((option) => option.id)).not.toContain(
+          entry,
+        );
       });
     }
   }
