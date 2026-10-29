@@ -72,6 +72,7 @@ describe('Iris evidence follow-up: trust, consent and uncertain clues', () => {
   ])('keeps the chosen evidence treatment distinct: %s', (option, flag, text) => {
     const state = follow(discovered, ['final-iris-evidence-ask', option]);
     expect(state.flags).toContain(flag);
+    expect(state.flags).not.toContain('final_paper_iris_lent_originals');
     expect(currentNode(finalReading, state).text).toContain(text);
     const returned = selectOption(finalReading, state, 'final-iris-evidence-result-back');
     expect(returned.node).toBe('gathering');
