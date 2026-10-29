@@ -1,4 +1,5 @@
 import type { DialogueStory } from '../game/dialogue';
+import { maraWindowTableNodes } from './mara-window-table';
 
 /** День 1, друга відвідувачка. Український сценарний фрагмент. */
 export const maraVisit: DialogueStory = {
@@ -425,6 +426,12 @@ export const maraVisit: DialogueStory = {
           label: '«А якщо Сем займе стіл своїми коробками?»',
           next: 'mara-own-doubt',
         },
+        {
+          id: 'mara-dream-window-menu',
+          label: '«А що б ти подавала за тим столиком?»',
+          next: 'mara-window-table',
+          unless: ['mara_window_plan_discussed'],
+        },
       ],
     },
     {
@@ -626,6 +633,7 @@ export const maraVisit: DialogueStory = {
         },
       ],
     },
+    ...maraWindowTableNodes,
     {
       id: 'end',
       speaker: 'Оповідач',
