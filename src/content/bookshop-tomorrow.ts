@@ -45,7 +45,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
       },
       {
         id: 'tomorrow-later',
-        label: 'Повернутися до гостей — полиця почекає',
+        label: 'Повернутися до гостей, а полицю залишити на ранок',
         next: 'gathering',
         suspend: true,
       },
@@ -58,13 +58,13 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'tomorrow-shelf-argue',
-        label: 'Запропонувати читачам сперечатися про фінали',
+        label: 'Запропонувати поставити дві різні кінцівки поруч',
         next: 'bookshop-tomorrow-shelf-result',
         grants: ['final_bookshop_debate_shelf'],
       },
       {
         id: 'tomorrow-shelf-surprise',
-        label: 'Дозволити Норі поставити книжку-сюрприз',
+        label: 'Попросити Нору вибрати одну книжку навмання',
         next: 'bookshop-tomorrow-shelf-result',
         grants: ['final_bookshop_surprise_shelf'],
       },
