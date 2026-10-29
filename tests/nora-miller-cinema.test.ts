@@ -70,7 +70,7 @@ const millerRoutes = [
   ],
 ] as const;
 
-function finalAtGathering(flags: string[]) {
+function finalAtGathering(flags: readonly string[]): DialogueState {
   return { ...startDialogue(finalReading), node: 'gathering', flags };
 }
 
