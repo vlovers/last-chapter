@@ -272,4 +272,19 @@ describe('complete optional narrative journeys', () => {
       availableOptions(quietEvening, startDialogue(quietEvening)).map((option) => option.id),
     ).not.toContain('closing-book-club-cleanup');
   });
+  it('quiet evening never shows more than four actions, including after book club', () => {
+    for (const flags of [
+      [],
+      ['book_club_started'],
+      ['book_club_started', 'club_bad_romance_debated'],
+      ['book_club_started', 'club_bookmarks_saved'],
+    ]) {
+      const state = { ...startDialogue(quietEvening), flags };
+      const choices = availableOptions(quietEvening, state);
+      expect(choices.length).toBeLessThanOrEqual(4);
+      expect(new Set(choices.map((option) => option.id)).size).toBe(choices.length);
+      expect(choices.some((option) => option.id === 'tidy-books')).toBe(true);
+    }
+  });
+
 });
