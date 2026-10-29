@@ -39,12 +39,14 @@ export const annaVisit: DialogueStory = {
           id: 'anna-v3-conversation',
           label: '«А що ти кажеш, коли діти питають щось, чого сама не знаєш?»',
           next: 'anna-v3-conversation',
+          requires: ['anna_book_disagreement_discussed'],
           unless: ['anna_uncertainty_discussed'],
         },
         {
           id: 'anna-reflection',
           label: '«А якщо дитина взагалі відмовиться читати вголос?»',
           next: 'anna-reflection',
+          requires: ['anna_book_disagreement_discussed'],
           unless: ['anna_reflected_on_care'],
         },
         {
