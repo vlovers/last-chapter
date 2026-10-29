@@ -9,9 +9,9 @@ function enter(flags: string[] = []) {
   const start = { ...startDialogue(finalReading), flags: [...prerequisites, ...flags] };
   const gathering = selectOption(finalReading, start, 'open');
   expect(availableOptions(finalReading, gathering).map((option) => option.id)).toContain(
-    'final-couple-anna-thomas',
+    'final-couple-anna-thomas-option',
   );
-  return selectOption(finalReading, gathering, 'final-couple-anna-thomas');
+  return selectOption(finalReading, gathering, 'final-couple-anna-thomas-option');
 }
 
 describe('Anna and Thomas final reading continuity', () => {
@@ -69,7 +69,7 @@ describe('Anna and Thomas final reading continuity', () => {
         : 'Анна забрала додому малюнки',
     );
     expect(availableOptions(finalReading, back).map((option) => option.id)).not.toContain(
-      'final-couple-anna-thomas',
+      'final-couple-anna-thomas-option',
     );
   });
 
