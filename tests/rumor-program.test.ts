@@ -11,14 +11,43 @@ const eligible = [
 
 describe('false printed finale: a consequence-driven rumor scene', () => {
   it.each([
-    ['rumor-correct-card', 'rumor-corrected-finish', 'final_rumor_program_corrected', 'коротке виправлення'],
-    ['rumor-remove-stack', 'rumor-withdrawn-finish', 'final_rumor_program_withdrawn', 'нероздані програмки'],
-    ['rumor-miller-speaks', 'rumor-miller-corrects-finish', 'final_rumor_program_miller_spoke', 'визнала власну помилку'],
-    ['rumor-ignore-stack', 'rumor-unchecked-finish', 'final_rumor_program_unchecked', 'чутка отримала ще кілька'],
+    [
+      'rumor-correct-card',
+      'rumor-corrected-finish',
+      'final_rumor_program_corrected',
+      'коротке виправлення',
+    ],
+    [
+      'rumor-remove-stack',
+      'rumor-withdrawn-finish',
+      'final_rumor_program_withdrawn',
+      'нероздані програмки',
+    ],
+    [
+      'rumor-miller-speaks',
+      'rumor-miller-corrects-finish',
+      'final_rumor_program_miller_spoke',
+      'визнала власну помилку',
+    ],
+    [
+      'rumor-ignore-stack',
+      'rumor-unchecked-finish',
+      'final_rumor_program_unchecked',
+      'чутка отримала ще кілька',
+    ],
   ])('plays the %s route and persists its epilogue', (choice, finish, flag, expected) => {
     let state = { ...startDialogue(finalReading), node: 'gathering', flags: eligible };
-    for (const id of ['rumor-program', 'rumor-decide-direct', choice, finish, 'rumor-finish-back']) {
-      expect(availableOptions(finalReading, state).map((option) => option.id), id).toContain(id);
+    for (const id of [
+      'rumor-program',
+      'rumor-decide-direct',
+      choice,
+      finish,
+      'rumor-finish-back',
+    ]) {
+      expect(
+        availableOptions(finalReading, state).map((option) => option.id),
+        id,
+      ).toContain(id);
       state = selectOption(finalReading, state, id);
     }
     expect(state.node).toBe('gathering');
