@@ -68,7 +68,7 @@ export const noraVisit: DialogueStory = {
       text: '«Читаю по п’ять сторінок у трамваї. Учора заснула над детективом і прокинулася біля ринку». Нора всміхається. «Тож бажано щось без двадцяти підозрюваних».',
       options: [
         { id: 'books-ask', label: '«Можливо, вам підійде збірка листів?»', next: 'letters' },
-        { id: 'books-back', label: '«А окрім книжок — як там справи в центрі?»', next: 'hello' },
+        { id: 'books-back', label: '«А окрім книжок — як там справи в центрі?»', next: 'work' },
       ],
     },
     {
@@ -97,7 +97,7 @@ export const noraVisit: DialogueStory = {
         {
           id: 'work-back',
           label: '«У вас там, бачу, майстри без роботи не залишаться»',
-          next: 'hello',
+          next: 'bellwick',
         },
       ],
     },
@@ -154,7 +154,7 @@ export const noraVisit: DialogueStory = {
         {
           id: 'boundary-back',
           label: '«Є одна смішна історія про сусідів і яблуню»',
-          next: 'hello',
+          next: 'letters',
         },
       ],
     },
