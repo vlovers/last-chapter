@@ -62,6 +62,29 @@ describe('Anna and Thomas chairs continuity', () => {
     expect(listened.flags).toContain('thomas_chairs_owned_mistake');
   });
 
+  it.each([
+    ['anna_chairs_player_defended_thomas', 'Ти мене захищав?'],
+    ['anna_chairs_player_heard_anna', 'Ти її вислухав?'],
+    ['anna_chairs_player_changed_topic', 'Ви говорили про читання?'],
+  ])('carries Anna conversation stance into Thomas dialogue: %s', (flag, expected) => {
+    const start = {
+      ...startDialogue(thomasVisit),
+      flags: ['anna_thomas_chairs_followup_discussed', flag],
+    };
+    const greet = selectOption(thomasVisit, start, 'greet');
+    const followup = selectOption(thomasVisit, greet, 'thomas-anna-chairs-reaction');
+    expect(currentNode(thomasVisit, followup).text).toContain(expected);
+    const response = selectOption(thomasVisit, followup, 'thomas-anna-chairs-direct');
+    expect(response.flags).toContain('thomas_anna_chairs_direct_talk');
+    const returned = selectOption(thomasVisit, response, 'thomas-anna-chairs-back');
+    expect(returned.flags).toContain('thomas_anna_chairs_reaction_discussed');
+    expect(
+      availableOptions(thomasVisit, returned).some(
+        (option) => option.id === 'thomas-anna-chairs-reaction',
+      ),
+    ).toBe(false);
+  });
+
   it('keeps Thomas ownership and avoidance options available in his own scene', () => {
     const ids = thomasVisit.nodes
       .find((node) => node.id === 'thomas-chairs')
