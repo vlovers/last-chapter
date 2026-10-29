@@ -30,12 +30,14 @@ describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
 
   it('lets the player postpone tidying without consuming the conversation', () => {
     const scene = selectOption(finalReading, gathering(), 'bookshop-tomorrow');
-    expect(choices(scene)).toEqual(expect.arrayContaining([
-      'tomorrow-shelf',
-      'tomorrow-cards',
-      'tomorrow-tea',
-      'tomorrow-later',
-    ]));
+    expect(choices(scene)).toEqual(
+      expect.arrayContaining([
+        'tomorrow-shelf',
+        'tomorrow-cards',
+        'tomorrow-tea',
+        'tomorrow-later',
+      ]),
+    );
     const postponed = selectOption(finalReading, scene, 'tomorrow-later');
     expect(postponed.flags).not.toContain('final_bookshop_tomorrow_done');
     expect(choices(postponed)).toContain('bookshop-tomorrow');
