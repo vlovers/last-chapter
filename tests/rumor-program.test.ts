@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, currentNode, selectOption, startDialogue, type DialogueState } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  type DialogueState,
+} from '../src/game/dialogue';
 import { seasonEnding } from '../src/game/endings';
 
 const eligible = [
