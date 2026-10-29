@@ -110,7 +110,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'paper-thomas-back',
-        label: 'Запитати Томаса, чи бачив він саме ці аркуші',
+        label: 'Занотувати розповідь Томаса про мокрі книжки',
         next: 'paper-study',
         grants: ['final_paper_edges_checked'],
       },
@@ -159,7 +159,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'paper-mara-back',
-        label: 'Запитати Мару, чи має вона хоч один доказ про фінал',
+        label: 'Записати, який фінал обрала Мара, не роблячи висновків про автора',
         next: 'paper-study',
         grants: ['final_paper_ink_checked'],
       },
