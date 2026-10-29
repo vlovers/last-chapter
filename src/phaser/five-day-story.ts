@@ -347,7 +347,9 @@ export class FiveDayStory {
       this.choicePageKey = pageKey;
       this.choicePage = 0;
     }
-    const totalPages = choices.length <= 4 ? 1 : Math.ceil(choices.length / 3);
+    // Keep topic navigation from crowding out a direct reply to the current line.
+    // Show three conversation choices and one stable pagination control.
+    const totalPages = choices.length <= 3 ? 1 : Math.ceil(choices.length / 3);
     this.choicePage = Math.min(this.choicePage, totalPages - 1);
     const visibleChoices =
       totalPages === 1
