@@ -21,7 +21,7 @@ Do not merge PR #30 wholesale into the production branch. The source and destina
 - Before this port, CI run #40895700326 passed quality and all four browser QA suites.
 - The first post-port run #40897826346 exposed one outdated string assertion in `tests/letter-continuity.test.ts` (1280/1281 tests passed).
 - The assertion was corrected in commit `11e62317a14d21b0d8342737814552b4b77af05c`.
-- Revalidation: https://github.com/vlovers/last-chapter/actions/runs/40898109134 (check live conclusion before closing the source PR).
+- Revalidation: [CI run #40898109134](https://github.com/vlovers/last-chapter/actions/runs/40898109134) (check live conclusion before closing the source PR).
 
 ## Completion criteria
 
