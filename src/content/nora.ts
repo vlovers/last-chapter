@@ -38,7 +38,7 @@ export const noraVisit: DialogueStory = {
         },
         {
           id: 'nora-v3-conversation',
-          label: '«Що там за плутанина з датою відкриття кінотеатру?»',
+          label: '«Ти згадувала старий кінотеатр. Що там із датою відкриття?»',
           next: 'nora-v3-conversation',
           requires: ['nora_tea_pause_heard'],
           unless: ['nora_archive_ethics_discussed'],
