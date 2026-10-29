@@ -13,7 +13,11 @@ import { leoNightCourseFinalNodes, leoNightCourseFinalOption } from './leo-night
 import { irisCoverFinalNodes, irisCoverFinalOption } from './iris-cover-final';
 import { irisEvidenceFinalNodes, irisEvidenceFinalOption } from './iris-evidence-final';
 import { eleanorMemoryFinalNodes, eleanorMemoryFinalOption } from './eleanor-memory-final';
-import { noraMillerCinemaFinalNodes, noraMillerCinemaFinalOption, millerCinemaFinalOption } from './nora-miller-cinema-final';
+import {
+  noraMillerCinemaFinalNodes,
+  noraMillerCinemaFinalOption,
+  millerCinemaFinalOption,
+} from './nora-miller-cinema-final';
 
 /** Фінальний день першого сезону. Рішення людей важливіші за чужу цікавість. */
 export const finalReading: DialogueStory = {
