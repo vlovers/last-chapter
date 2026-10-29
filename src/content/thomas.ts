@@ -268,7 +268,7 @@ export const thomasVisit: DialogueStory = {
       options: [
         {
           id: 'thomas-reflect-question',
-          label: '«А що для тебе в цьому найважче?»',
+          label: '«І що ти їй тоді відповів?»',
           next: 'thomas-reflection-deep',
         },
         {
@@ -308,7 +308,7 @@ export const thomasVisit: DialogueStory = {
         },
         {
           id: 'thomas-workshop-fear',
-          label: '«Чому тобі так важливо все виправити?»',
+          label: '«Ти завжди повертаєшся до роботи, навіть коли вже пізно?»',
           next: 'thomas-reflection-fear',
           grants: ['thomas_admitted_fear_of_rejection'],
         },
