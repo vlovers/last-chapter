@@ -48,12 +48,6 @@ export const lastCopyNodes: readonly DialogueNode[] = [
         next: 'last-copy-decision',
         requires: ['final_last_copy_anna_heard', 'final_last_copy_miller_heard'],
       },
-      {
-        id: 'last-copy-pause',
-        label: 'Повернутися до гостей і подумати',
-        next: 'gathering',
-        suspend: true,
-      },
     ],
   },
   {
