@@ -67,12 +67,6 @@ export const irisEvidenceFinalNodes: readonly DialogueNode[] = [
         next: 'final-iris-evidence-accountability',
         requires: ['iris_letter_breach_admitted'],
       },
-      {
-        id: 'final-iris-evidence-leave',
-        label: '«Вибач, сьогодні краще поговоримо про книжки»',
-        next: 'gathering',
-        grants: ['final_iris_evidence_conversation_done', 'final_iris_evidence_space_respected'],
-      },
     ],
   },
   {
