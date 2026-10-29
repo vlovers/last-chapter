@@ -108,10 +108,10 @@ export const maraVisit: DialogueStory = {
         { id: 'fiction', label: 'Про книжкових героїв, яких важко любити', next: 'fiction' },
         { id: 'bakery', label: 'Про пекарню й маленькі катастрофи', next: 'bakery' },
         { id: 'town-life', label: 'Про життя, де всі всіх знають', next: 'town-life' },
-        { id: 'trust', label: 'Про довіру та другі шанси', next: 'trust-question' },
+        { id: 'trust', label: 'Розпитати про те, що сталося після сварки', next: 'trust-question' },
         {
           id: 'mara-own-morning',
-          label: '«А коли ти востаннє робила щось тільки для себе?»',
+          label: '«А ти взагалі встигаєш кудись вибратися після зміни?»',
           next: 'mara-own-morning',
           unless: ['mara_own_morning_heard'],
         },
@@ -401,7 +401,7 @@ export const maraVisit: DialogueStory = {
       options: [
         {
           id: 'mara-dream-ask',
-          label: '«Чому ти досі не зробила цього?»',
+          label: '«Що тобі заважає спробувати вже цими вихідними?»',
           next: 'mara-own-obstacle',
         },
         {
