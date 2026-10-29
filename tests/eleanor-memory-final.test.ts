@@ -129,7 +129,12 @@ describe('Eleanor: flood memory and unresolved evidence', () => {
   it('does not turn an offer to ask Iris into permission or manuscript custody', () => {
     const state = play(
       [gate, 'final_case_iris_declined', 'final_letter_breach_disclosed'],
-      [topic, 'final-eleanor-memory-box', 'final-eleanor-memory-box-ask', 'final-eleanor-memory-box-back'],
+      [
+        topic,
+        'final-eleanor-memory-box',
+        'final-eleanor-memory-box-ask',
+        'final-eleanor-memory-box-back',
+      ],
     );
     expect(state.flags).toContain('final_eleanor_memory_permission_suggested');
     expect(state.flags).not.toContain('final_paper_iris_lent_originals');
