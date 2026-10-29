@@ -126,8 +126,11 @@ describe('Phaser Lost Pages case conclusion', () => {
       'case-timeline-letter',
       'case-timeline-shelves',
       'case-timeline-thomas',
-      'case-timeline-back',
+      '__more_choices',
     ]);
+    expect(timeline.choices).toHaveLength(4);
+    expect(story.choose('__more_choices').choices.some((option) => option.id === 'case-timeline-back')).toBe(true);
+
     expect(timeline.choices).toHaveLength(4);
 
     story.choose('case-timeline-thomas');
