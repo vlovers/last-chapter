@@ -27,13 +27,13 @@ export const thomasVisit: DialogueStory = {
         },
         {
           id: 'thomas-v3-conversation',
-          label: '«Чи можна полагодити образу, як лампу?»',
+          label: '«А з людьми в тебе так само добре виходить, як із лампами?»',
           next: 'thomas-v3-conversation',
           unless: ['thomas_listening_discussed'],
         },
         {
           id: 'thomas-reflection',
-          label: '«Чому тобі легше лагодити речі, ніж говорити?»',
+          label: '«Коли треба вибачитися, теж берешся спершу за інструменти?»',
           next: 'thomas-reflection',
           unless: ['thomas_reflected_on_responsibility'],
         },
