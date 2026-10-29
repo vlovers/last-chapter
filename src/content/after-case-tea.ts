@@ -41,7 +41,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'after-nora-facts',
-        label: 'Розкласти факти й припущення окремо',
+        label: 'Розкласти записи Нори на дві купки: бачили й припускаємо',
         next: 'after-case-finish',
         grants: ['final_after_case_notes_separated'],
       },
@@ -66,7 +66,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
       },
       {
         id: 'after-mara-space',
-        label: 'Не планувати її ранок замість неї',
+        label: 'Запитати Мару, чи хоче вона провести ранок сама',
         next: 'after-case-finish',
         grants: ['final_after_case_mara_space'],
       },
