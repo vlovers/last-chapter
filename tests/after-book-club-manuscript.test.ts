@@ -5,7 +5,7 @@ import {
   startChapter,
   chooseChapterOption,
 } from '../src/game/chapter';
-import { startDialogue, currentNode } from '../src/game/dialogue';
+import { startDialogue, currentNode, availableOptions, selectOption } from '../src/game/dialogue';
 import { bookClub } from '../src/content/book-club';
 import { quietEvening } from '../src/content/quiet-evening';
 import { decodeSave, encodeSave } from '../src/game/save';
@@ -38,6 +38,23 @@ describe('manuscript route after book club', () => {
     expect(restored?.flags).toContain('book_club_started');
     expect(restored?.flags).toContain('quiet_evening_page_found');
     expect(finishThirdDay(restored!).stage).toBe('day3-complete');
+  });
+
+  it('keeps the evening entrance compact and the forgotten book reachable via Frank', () => {
+    const start = { ...startDialogue(quietEvening), flags: ['book_club_started'] };
+    const closing = availableOptions(quietEvening, start).map((option) => option.id);
+    expect(closing).toHaveLength(4);
+    expect(closing).toContain('closing-book-club-cleanup');
+    const withFrank = selectOption(quietEvening, start, 'sit-frank');
+    const frankOptions = availableOptions(quietEvening, withFrank).map((option) => option.id);
+    expect(frankOptions).toContain('closing-leftovers');
+    expect(frankOptions.length).toBeLessThanOrEqual(4);
+    const lostBook = selectOption(quietEvening, withFrank, 'closing-leftovers');
+    expect(lostBook.node).toBe('closing-leftovers');
+    const shelved = selectOption(quietEvening, lostBook, 'closing-leftovers-save');
+    const finished = selectOption(quietEvening, shelved, 'closing-leftovers-save-books');
+    expect(finished.flags).toContain('quiet_evening_lost_book_shelved');
+    expect(finished.node).toBe('manuscript');
   });
 
   it('still allows ending the day directly after the club', () => {
