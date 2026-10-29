@@ -13,6 +13,7 @@ import { leoNightCourseFinalNodes, leoNightCourseFinalOption } from './leo-night
 import { irisCoverFinalNodes, irisCoverFinalOption } from './iris-cover-final';
 import { irisEvidenceFinalNodes, irisEvidenceFinalOption } from './iris-evidence-final';
 import { eleanorMemoryFinalNodes, eleanorMemoryFinalOption } from './eleanor-memory-final';
+import { noraMillerCinemaFinalNodes, noraMillerCinemaFinalOption, millerCinemaFinalOption } from './nora-miller-cinema-final';
 
 /** Фінальний день першого сезону. Рішення людей важливіші за чужу цікавість. */
 export const finalReading: DialogueStory = {
@@ -157,6 +158,8 @@ export const finalReading: DialogueStory = {
         irisCoverFinalOption,
         irisEvidenceFinalOption,
         eleanorMemoryFinalOption,
+        noraMillerCinemaFinalOption,
+        millerCinemaFinalOption,
         {
           id: 'final-v3-leo-option',
           label: '«Ви з Марою нарешті домовилися про вихідні?»',
@@ -2359,6 +2362,7 @@ export const finalReading: DialogueStory = {
     ...irisCoverFinalNodes,
     ...irisEvidenceFinalNodes,
     ...eleanorMemoryFinalNodes,
+    ...noraMillerCinemaFinalNodes,
     {
       id: 'final-v3-leo',
       speaker: 'Лео',
