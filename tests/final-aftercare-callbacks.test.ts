@@ -1,3 +1,4 @@
+import type { DialogueState } from '../src/game/dialogue';
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import {
@@ -46,7 +47,7 @@ describe('Final-night aftercare callbacks: traversal, save reload, and exclusivi
           entry,
         );
 
-        let dialogue = { ...base, flags: [route.earlier] };
+        let dialogue: DialogueState = { ...base, flags: [route.earlier] };
         expect(availableOptions(finalReading, dialogue).map((option) => option.id)).toContain(
           entry,
         );
@@ -94,7 +95,7 @@ describe('Final-night aftercare callbacks: traversal, save reload, and exclusivi
   }
 
   it('preserves independently unlocked callbacks when one character conversation closes', () => {
-    let dialogue = {
+    let dialogue: DialogueState = {
       ...startDialogue(finalReading),
       node: 'gathering',
       flags: routes.map((route) => route.earlier),
