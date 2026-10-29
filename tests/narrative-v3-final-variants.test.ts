@@ -25,8 +25,9 @@ describe('Narrative V3 finale variants', () => {
       expect(option?.requires).toHaveLength(1);
       expect(option?.unless).toEqual([`final_v3_${name}_heard`]);
       const ending = finalReading.nodes.find((entry) => entry.id === `final-v3-${name}`);
-      expect(ending?.options[0]?.grants).toContain(`final_v3_${name}_heard`);
-      expect(ending?.options[0]?.next).toBe('gathering');
+      const returnOption = ending?.options.find((entry) => entry.id === `final-v3-${name}-back`);
+      expect(returnOption?.grants).toContain(`final_v3_${name}_heard`);
+      expect(returnOption?.next).toBe('gathering');
     }
   });
 
