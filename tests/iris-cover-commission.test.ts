@@ -113,6 +113,7 @@ describe('Iris independent illustration commission', () => {
     const callback = selectOption(
       finalReading,
       from(finalReading, 'gathering', [
+        'iris_cover_commission_discussed',
         'iris_cover_day_four_followup',
         'iris_cover_negotiation_chosen',
       ]),
@@ -142,6 +143,7 @@ describe('Iris independent illustration commission', () => {
 
   it('does not claim permission to display a draft after the player keeps distance', () => {
     const state = from(finalReading, 'gathering', [
+      'iris_cover_commission_discussed',
       'iris_cover_day_four_followup',
       'iris_cover_revisions_chosen',
     ]);
