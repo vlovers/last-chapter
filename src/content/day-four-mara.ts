@@ -143,7 +143,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'mara-own-story-back',
-          label: '«А книжку для Лео вже загорнула?»',
+          label: '«То коли плануєш вручити Лео книжку?»',
           next: 'book',
           grants: ['mara_day_four_own_story_heard'],
         },
