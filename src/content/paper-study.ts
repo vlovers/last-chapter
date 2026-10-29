@@ -245,7 +245,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
         label: 'Віддати Айріс список запитань без вимоги відповіді',
         next: 'paper-study-outcome',
         requires: ['final_ledger_iris_told'],
-        unless: ['final_case_iris_declined'],
+        unless: ['final_case_iris_declined', 'final_letter_breach_disclosed'],
         grants: ['final_paper_iris_questions'],
       },
       {
