@@ -31,7 +31,7 @@ export const irisDecision: DialogueStory = {
       options: [
         {
           id: 'iris-letter-feeling',
-          label: '«Хочеш, я просто приберу конверт із прилавка?»',
+          label: '«Хочеш, я поки покладу конверт під альбом?»',
           next: 'iris-letter-feeling',
           unless: ['iris_day_four_letter_feeling_heard'],
         },
