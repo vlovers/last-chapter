@@ -108,7 +108,9 @@ describe('Mara: bakery authorship and her own plans', () => {
       expect(availableOptions(finalReading, offered).map((o) => o.id)).not.toContain(
         'final-mara-window-ask',
       );
-      expect(seasonEnding({ flags: offered.flags }).epilogue).toContain('дегустації');
+      expect(seasonEnding({ flags: offered.flags }).epilogue).toContain(
+        flag === 'mara_window_private_suggested' ? 'поки не погодилася' : 'дегустації',
+      );
     },
   );
 
