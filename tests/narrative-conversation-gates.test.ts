@@ -105,19 +105,55 @@ describe('conversational pacing and continuity', () => {
     );
   });
   it.each([
-    ['Mara', maraDecision, 'greet', 'mara_letter_pressured', 'mara_letter_privacy_respected', 'спочатку обіцяв'],
-    ['Leo', leoDecision, 'welcome', 'leo_letter_pressured_day4', 'leo_letter_consent_respected', 'спершу сказав'],
-    ['Iris', irisDecision, 'welcome', 'iris_letter_pressured_day4', 'iris_letter_choice_respected', 'знову почав'],
-    ['Anna', annaVisit, 'hello', 'anna_rumor_pressed', 'anna_rumor_boundary', 'все одно повернувся'],
-    ['Nora', noraVisit, 'hello', 'nora_confidentiality_pressed', 'nora_confidentiality_respected', 'потім передумав'],
-  ] as const)('%s notices conflicting player choices rather than forgetting them', (
-    _name, story, hub, pressure, respect, phrase,
-  ) => {
-    const pressured = currentNode(story, at(story, hub, [pressure])).text;
-    const mixed = currentNode(story, at(story, hub, [pressure, respect])).text;
-    expect(mixed).toContain(phrase);
-    expect(mixed).not.toBe(pressured);
-  });
+    [
+      'Mara',
+      maraDecision,
+      'greet',
+      'mara_letter_pressured',
+      'mara_letter_privacy_respected',
+      'спочатку обіцяв',
+    ],
+    [
+      'Leo',
+      leoDecision,
+      'welcome',
+      'leo_letter_pressured_day4',
+      'leo_letter_consent_respected',
+      'спершу сказав',
+    ],
+    [
+      'Iris',
+      irisDecision,
+      'welcome',
+      'iris_letter_pressured_day4',
+      'iris_letter_choice_respected',
+      'знову почав',
+    ],
+    [
+      'Anna',
+      annaVisit,
+      'hello',
+      'anna_rumor_pressed',
+      'anna_rumor_boundary',
+      'все одно повернувся',
+    ],
+    [
+      'Nora',
+      noraVisit,
+      'hello',
+      'nora_confidentiality_pressed',
+      'nora_confidentiality_respected',
+      'потім передумав',
+    ],
+  ] as const)(
+    '%s notices conflicting player choices rather than forgetting them',
+    (_name, story, hub, pressure, respect, phrase) => {
+      const pressured = currentNode(story, at(story, hub, [pressure])).text;
+      const mixed = currentNode(story, at(story, hub, [pressure, respect])).text;
+      expect(mixed).toContain(phrase);
+      expect(mixed).not.toBe(pressured);
+    },
+  );
 
   it.each([
     ['Mara', maraDecision, 'greet'],
@@ -128,9 +164,7 @@ describe('conversational pacing and continuity', () => {
   ] as const)('%s has no duplicate condition sets for the same hub', (_name, story, hub) => {
     const node = story.nodes.find((entry) => entry.id === hub);
     expect(node).toBeDefined();
-    const conditions = (node!.textWhen ?? []).map((entry) =>
-      [...entry.requires].sort().join('|'),
-    );
+    const conditions = (node!.textWhen ?? []).map((entry) => [...entry.requires].sort().join('|'));
     expect(new Set(conditions).size).toBe(conditions.length);
   });
 
@@ -150,14 +184,15 @@ describe('conversational pacing and continuity', () => {
     ['Iris', irisVisit, 'welcome', 'iris-unprinted', 'art'],
     ['Thomas', thomasVisit, 'greet', 'thomas-lamp-first', 'repair'],
     ['Eleanor', eleanorVisit, 'greet', 'eleanor-shelf', 'shop'],
-  ] as const)('%s opens the scene promised by the first conversation option', (
-    _name, story, hub, option, destination,
-  ) => {
-    const chosen = availableOptions(story, at(story, hub)).find((entry) => entry.id === option);
-    expect(chosen?.next).toBe(destination);
-    const next = selectOption(story, at(story, hub), option);
-    expect(next.node).toBe(destination);
-  });
+  ] as const)(
+    '%s opens the scene promised by the first conversation option',
+    (_name, story, hub, option, destination) => {
+      const chosen = availableOptions(story, at(story, hub)).find((entry) => entry.id === option);
+      expect(chosen?.next).toBe(destination);
+      const next = selectOption(story, at(story, hub), option);
+      expect(next.node).toBe(destination);
+    },
+  );
 
   it.each([
     ['Leo remembers honesty', leoVisit, 'greet', 'leo_honesty_discussed', 'Марі'],
@@ -165,14 +200,25 @@ describe('conversational pacing and continuity', () => {
     ['Iris remembers privacy', irisVisit, 'welcome', 'iris_boundary_respected', 'Дякую'],
     ['Iris remembers sketches', irisVisit, 'welcome', 'iris_reflected_on_identity', 'ескізи'],
     ['Thomas remembers listening', thomasVisit, 'greet', 'thomas_listening_discussed', 'Анна'],
-    ['Thomas remembers responsibility', thomasVisit, 'greet', 'thomas_reflected_on_responsibility', 'лампочку'],
+    [
+      'Thomas remembers responsibility',
+      thomasVisit,
+      'greet',
+      'thomas_reflected_on_responsibility',
+      'лампочку',
+    ],
     ['Eleanor allows changes', eleanorVisit, 'greet', 'eleanor_will_allow_change', 'інакше'],
-    ['Eleanor remembers the old sign', eleanorVisit, 'greet', 'eleanor_reflected_on_legacy', 'таблички'],
+    [
+      'Eleanor remembers the old sign',
+      eleanorVisit,
+      'greet',
+      'eleanor_reflected_on_legacy',
+      'таблички',
+    ],
   ] as const)('%s changes the returning greeting', (_name, story, hub, flag, phrase) => {
     const original = currentNode(story, at(story, hub)).text;
     const returning = currentNode(story, at(story, hub, [flag])).text;
     expect(returning).toContain(phrase);
     expect(returning).not.toBe(original);
   });
-
 });
