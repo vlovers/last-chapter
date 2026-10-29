@@ -79,7 +79,7 @@ export const irisDecision: DialogueStory = {
         {
           id: 'iris-letter-feeling-return',
           label: '«Гаразд. А що ти малювала всю ніч?»',
-          next: 'welcome',
+          next: 'art',
           grants: ['iris_day_four_letter_feeling_heard'],
         },
       ],
@@ -92,7 +92,7 @@ export const irisDecision: DialogueStory = {
         {
           id: 'iris-letter-ask-return',
           label: '«Якщо хтось запитає, скажу, що ми пили чай»',
-          next: 'welcome',
+          next: 'iris-boundaries',
           grants: ['iris_day_four_letter_fear_heard'],
         },
       ],
@@ -218,7 +218,7 @@ export const irisDecision: DialogueStory = {
         {
           id: 'art-back',
           label: '«Тут завжди знайдеться місце для твоїх малюнків»',
-          next: 'welcome',
+          next: 'iris-exhibition-plan',
           grants: ['iris_offered_exhibition'],
         },
       ],
