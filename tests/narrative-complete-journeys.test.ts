@@ -307,5 +307,4 @@ describe('complete optional narrative journeys', () => {
     expect(state.flags).toContain(flag);
     expect(availableOptions(bookClub, state).some((option) => option.id === 'close')).toBe(true);
   });
-
 });

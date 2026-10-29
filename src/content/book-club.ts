@@ -70,28 +70,61 @@ export const bookClub: DialogueStory = {
       speaker: 'Анна',
       text: 'Анна розгортає записку, знайдену між сторінками роману: «Мені соромно приходити на зустрічі. Я читаю повільно, плутаю імена й іноді кидаю книжки на середині. Чи можна просто посидіти?» Міллер відсуває окуляри. «Хто це написав? Я хочу сказати людині, що сама забуваю імена навіть у детективах». Мара хитає головою: «Не треба шукати автора. Краще відповімо».',
       options: [
-        { id: 'club-letter-welcome', label: '«Напишімо, що тут можна просто слухати»', next: 'club-letter-welcome' },
-        { id: 'club-letter-honest', label: '«Скажімо чесно: ми теж не завжди дочитуємо»', next: 'club-letter-honest' },
-        { id: 'club-letter-private', label: '«Не читаймо чужу записку вголос далі»', next: 'club-letter-private' },
+        {
+          id: 'club-letter-welcome',
+          label: '«Напишімо, що тут можна просто слухати»',
+          next: 'club-letter-welcome',
+        },
+        {
+          id: 'club-letter-honest',
+          label: '«Скажімо чесно: ми теж не завжди дочитуємо»',
+          next: 'club-letter-honest',
+        },
+        {
+          id: 'club-letter-private',
+          label: '«Не читаймо чужу записку вголос далі»',
+          next: 'club-letter-private',
+        },
       ],
     },
     {
       id: 'club-letter-welcome',
       speaker: 'Мара',
       text: '«І що не треба відповідати на запитання, якщо не хочеться», — додає Мара. Анна пише великими літерами: «Приходьте. Можна мовчати. Чай є». Міллер підсовує їй ручку: «Додай про булочки». Мара піднімає брови. «Вони не завжди є». — «Отже, людина повинна знати про ризики».',
-      options: [{ id: 'club-letter-welcome-back', label: 'Повісити запрошення біля дверей', next: 'welcome', grants: ['club_open_invitation_posted'] }],
+      options: [
+        {
+          id: 'club-letter-welcome-back',
+          label: 'Повісити запрошення біля дверей',
+          next: 'welcome',
+          grants: ['club_open_invitation_posted'],
+        },
+      ],
     },
     {
       id: 'club-letter-honest',
       speaker: 'Пані Міллер',
       text: '«Я вчора заснула на сороковій сторінці й прокинулася на сто десятій», — каже Міллер. Анна сміється: «Це як?» — «Френк перегорнув. Я не стверджую, що він зрозумів сюжет». Мара зітхає: «А я двічі купувала одну книжку, бо забула обкладинку». Ви пишете на звороті: «Тут ніхто не складає іспитів».',
-      options: [{ id: 'club-letter-honest-back', label: 'Залишити відповідь на полиці рекомендацій', next: 'welcome', grants: ['club_reading_pressure_lifted'] }],
+      options: [
+        {
+          id: 'club-letter-honest-back',
+          label: 'Залишити відповідь на полиці рекомендацій',
+          next: 'welcome',
+          grants: ['club_reading_pressure_lifted'],
+        },
+      ],
     },
     {
       id: 'club-letter-private',
       speaker: 'Анна',
       text: 'Анна складає записку навпіл. «Ти маєш рацію. Ми вже прочитали достатньо». Міллер не сперечається, тільки підсуває порожній конверт. Мара дістає чисту картку: «Можемо написати загальне оголошення. Нехай людина сама вирішить, чи це для неї». Анна усміхається: «І без імен».',
-      options: [{ id: 'club-letter-private-back', label: 'Підготувати загальне запрошення без подробиць', next: 'welcome', grants: ['club_letter_privacy_respected'] }],
+      options: [
+        {
+          id: 'club-letter-private-back',
+          label: 'Підготувати загальне запрошення без подробиць',
+          next: 'welcome',
+          grants: ['club_letter_privacy_respected'],
+        },
+      ],
     },
     {
       id: 'books',
