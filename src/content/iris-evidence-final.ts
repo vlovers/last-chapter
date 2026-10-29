@@ -62,10 +62,58 @@ export const irisEvidenceFinalNodes: readonly DialogueNode[] = [
         grants: ['final_iris_evidence_rumor_seeded'],
       },
       {
+        id: 'final-iris-evidence-accountability',
+        label: '«Я відкрив лист без дозволу. Можу виправити те, що зробив?»',
+        next: 'final-iris-evidence-accountability',
+        requires: ['iris_letter_breach_admitted'],
+      },
+      {
         id: 'final-iris-evidence-leave',
         label: '«Вибач, сьогодні краще поговоримо про книжки»',
         next: 'gathering',
         grants: ['final_iris_evidence_conversation_done', 'final_iris_evidence_space_respected'],
+      },
+    ],
+  },
+  {
+    id: 'final-iris-evidence-accountability',
+    speaker: 'Айріс',
+    text: '«Ти вже вибачався. Я почула». Айріс обережно закриває альбом. «Але мені досі неприємно, що хтось читав мої слова раніше за мене. Якщо хочеш щось виправити, не розповідай іншим, що там було».',
+    options: [
+      {
+        id: 'final-iris-evidence-own-to-nora',
+        label: 'Сказати Норі лише про порушену печатку, без змісту листа',
+        next: 'final-iris-evidence-accountability-result',
+        grants: ['final_iris_evidence_breach_owned_with_nora'],
+      },
+      {
+        id: 'final-iris-evidence-stop-asking',
+        label: '«Я більше не проситиму в тебе жодних паперів»',
+        next: 'final-iris-evidence-accountability-result',
+        grants: ['final_iris_evidence_breach_boundary_kept'],
+      },
+    ],
+  },
+  {
+    id: 'final-iris-evidence-accountability-result',
+    speaker: 'Айріс',
+    text: '«Гаразд». Вона повертається до гостей. Розмова не стала легшою, але принаймні цього разу ти не просив її нічого віддати.',
+    textWhen: [
+      {
+        requires: ['final_iris_evidence_breach_owned_with_nora'],
+        text: 'Нора підходить із книжкою в руках. Ти кажеш лише, що відкрив чужий лист без дозволу, і просиш не користуватися жодними твоїми нотатками з нього. Нора коротко киває. Айріс не дякує і не пробачає — вона просто повертається до гостей.',
+      },
+      {
+        requires: ['final_iris_evidence_breach_boundary_kept'],
+        text: '«Тоді на сьогодні досить», — каже Айріс. Вона поправляє картку біля малюнка. «Можеш допомогти Марі з чашками. Вона вже втретє намагається забрати їх у Френка».',
+      },
+    ],
+    options: [
+      {
+        id: 'final-iris-evidence-accountability-back',
+        label: 'Повернутися до вечора читання',
+        next: 'gathering',
+        grants: ['final_iris_evidence_conversation_done'],
       },
     ],
   },
