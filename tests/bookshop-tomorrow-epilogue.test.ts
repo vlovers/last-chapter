@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import { bookshopTomorrowNodes, bookshopTomorrowOption } from '../src/content/bookshop-tomorrow';
-import {
-  availableOptions,
-  selectOption,
-  startDialogue,
-  validateDialogue,
-} from '../src/game/dialogue';
+import { validateDialogue } from '../src/game/dialogue';
 
 describe('Five optional bookshop epilogue activities', () => {
   const groups = [
