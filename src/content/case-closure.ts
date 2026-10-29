@@ -65,7 +65,7 @@ export const caseClosureNodes: readonly DialogueNode[] = [
     text: '«Сім років тому вода дісталася нижніх полиць. Я сушила окремі аркуші в нашій коробці номер сімнадцять і записала це в журнал. Олівцева цифра на сторінці — моя». Вона зітхає. «Потім ми поспішали повернути романи на місце. Як саме аркуш опинився між ними, я не бачила. І не стану казати, що бачила».',
     textWhen: [
       {
-        requires: ['final_workshop_photo_complete'],
+        requires: ['final_workshop_photo_reviewed'],
         text: '«Сім років тому я сушила аркуші в коробці сімнадцять тут, у книгарні, — каже Елеонора. — Це є в журналі, і цифру на сторінці писала я. А на світлині майстерні була сімка з подряпиною. Ми майже склали з двох різних місць одну красиву неправду».',
       },
     ],
@@ -80,6 +80,11 @@ export const caseClosureNodes: readonly DialogueNode[] = [
         id: 'case-timeline-shelves',
         label: '«Чому аркуш міг опинитися між романами?»',
         next: 'case-closure-shelves',
+      },
+      {
+        id: 'case-timeline-thomas',
+        label: 'Запитати Томаса, що він бачив під час затоплення',
+        next: 'case-closure-thomas',
       },
       {
         id: 'case-timeline-back',
@@ -116,6 +121,37 @@ export const caseClosureNodes: readonly DialogueNode[] = [
     ],
   },
   {
+    id: 'case-closure-thomas',
+    speaker: 'Томас',
+    text: 'Томас зупиняється з двома складеними стільцями. «Я носив книжки з мокрої кімнати в читальню. На сходах було слизько, усі кричали, щоб я не впустив коробки». Він дивиться на олівцеву цифру. «Номер сімнадцять пам’ятаю з журналу, не з тієї ночі. Не просіть мене згадати те, чого я не бачив».',
+    options: [
+      {
+        id: 'case-thomas-ask',
+        label: '«А ти бачив, хто поклав аркуш у роман?»',
+        next: 'case-closure-thomas-answer',
+      },
+      {
+        id: 'case-thomas-back',
+        label: 'Записати, що Томас не був свідком знахідки',
+        next: 'case-closure',
+        grants: ['final_case_timeline_heard', 'final_case_thomas_limit_recorded'],
+      },
+    ],
+  },
+  {
+    id: 'case-closure-thomas-answer',
+    speaker: 'Томас',
+    text: '«Ні. Я навіть двічі заніс той самий стос не в ту кімнату», — зізнається Томас. Нора тягнеться до блокнота, але він зупиняє її: «Можеш записати, що я допомагав після повені. Не записуй, що я бачив цей аркуш». Елеонора простягає йому чашку: «Нарешті хтось у нас просить менше слави».',
+    options: [
+      {
+        id: 'case-thomas-answer-back',
+        label: 'Не перетворювати його спогад на доказ',
+        next: 'case-closure',
+        grants: ['final_case_timeline_heard', 'final_case_thomas_limit_recorded'],
+      },
+    ],
+  },
+  {
     id: 'case-closure-authors',
     speaker: 'Нора',
     text: '«Один уривок закінчується поверненням, інший — від’їздом. На одному край обрізаний ножицями, на другому рівний. Я вже тричі придумала, як це пояснити». Вона стукає олівцем по столу. «І всі три рази вийшло цікавіше, ніж правдоподібніше. Ми не знаємо, чи це два фінали, чи дві сцени, чи взагалі двоє авторів».',
@@ -124,6 +160,11 @@ export const caseClosureNodes: readonly DialogueNode[] = [
         id: 'case-authors-mara',
         label: 'Запитати Мару, чому їй так сподобався уривок про від’їзд',
         next: 'case-closure-mara',
+      },
+      {
+        id: 'case-authors-nora',
+        label: 'Попросити Нору показати її чорновий підпис',
+        next: 'case-closure-nora',
       },
       {
         id: 'case-authors-back',
@@ -143,6 +184,25 @@ export const caseClosureNodes: readonly DialogueNode[] = [
         label: 'Залишити літературну суперечку літературною',
         next: 'case-closure',
         grants: ['final_case_authors_heard'],
+      },
+    ],
+  },
+  {
+    id: 'case-closure-nora',
+    speaker: 'Нора',
+    text: 'Нора неохоче показує картку: «Загублений фінал відомої авторки». «Відомої кому?» — питає Мара. «Мені, — бурмоче Нора. — Я вже вигадала заголовок, а тепер маю вигадати, як його викинути». Вона перевертає картку. «Можна написати, що уривки різні. А можна взагалі не робити підпису. Що виберемо?»',
+    options: [
+      {
+        id: 'case-nora-annotate',
+        label: 'Позначити невідоме авторство прямо в приватному описі',
+        next: 'case-closure',
+        grants: ['final_case_authors_heard', 'final_case_nora_uncertainty_labeled'],
+      },
+      {
+        id: 'case-nora-private',
+        label: 'Не робити нового підпису до чужих сторінок',
+        next: 'case-closure',
+        grants: ['final_case_authors_heard', 'final_case_nora_claim_withheld'],
       },
     ],
   },
@@ -167,6 +227,11 @@ export const caseClosureNodes: readonly DialogueNode[] = [
         id: 'case-people-leo',
         label: 'Послухати, що думає Лео про чужі рішення',
         next: 'case-closure-leo',
+      },
+      {
+        id: 'case-people-anna',
+        label: 'Послухати, про що Анна говорила з дітьми',
+        next: 'case-closure-anna',
       },
       {
         id: 'case-people-back',
@@ -205,6 +270,25 @@ export const caseClosureNodes: readonly DialogueNode[] = [
         label: 'Допомогти скласти останній стілець',
         next: 'case-closure',
         grants: ['final_case_people_heard'],
+      },
+    ],
+  },
+  {
+    id: 'case-closure-anna',
+    speaker: 'Анна',
+    text: 'Анна забирає зі столу дитячі малюнки. «На гуртку мене спитали, чи можна не знати кінця історії. Я сказала: можна, але тоді книжку важче обговорювати». Вона зупиняється. «А потім подумала: ми ж не на уроці. Чиясь сім’я не повинна відповідати на питання заради гарної дискусії». Френк торкається лапою дракона на закладці.',
+    options: [
+      {
+        id: 'case-anna-bookmark',
+        label: 'Залишити дітям питання про вигадані фінали',
+        next: 'case-closure',
+        grants: ['final_case_people_heard', 'final_case_anna_story_question'],
+      },
+      {
+        id: 'case-anna-privacy',
+        label: 'Не переносити чужу таємницю на дитячий гурток',
+        next: 'case-closure',
+        grants: ['final_case_people_heard', 'final_case_anna_private_classroom'],
       },
     ],
   },
@@ -248,6 +332,14 @@ export const caseClosureNodes: readonly DialogueNode[] = [
     speaker: 'Айріс',
     text: 'Айріс слухає, не сідаючи за стіл. «Я хочу побачити, що ви записали. Але це не означає, що я дозволяю читати мамині аркуші всім підряд». Вона дивиться на конверт. «І не пишіть там, ніби ми вже знаємо, чий другий уривок».',
     textWhen: [
+      {
+        requires: ['final_letter_breach_disclosed', 'final_miller_ledger_rumor_seeded'],
+        text: 'Айріс стоїть біля дверей із конвертом. «Після листа й чутки я не готова довірити вам ще одну історію для гостей. Можу перевірити список фактів, але не обіцяю розмови. І сьогодні його ніхто інший не побачить». Нора не намагається її затримати.',
+      },
+      {
+        requires: ['final_letter_breach_disclosed'],
+        text: 'Айріс тримає конверт, не випускаючи його з рук. «Ти визнав, що відкрив мій лист. Це не означає, що ми помирилися». Вона киває на список. «Можу подивитися на факти, але не дозволяю розповідати їх від мого імені».',
+      },
       {
         requires: ['final_miller_ledger_rumor_seeded'],
         text: 'Айріс залишається біля дверей. «Після того, що розповідала Міллер, я не готова довірити вам ще одну версію для гостей». Вона киває на конверт. «Можете показати мені список фактів. Але я сама вирішу, чи хтось іще його побачить».',

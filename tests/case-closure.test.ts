@@ -86,7 +86,7 @@ describe('five-day case closure: proof, uncertainty and consent', () => {
     expect(currentNode(finalReading, timeline).text).not.toContain('подряпиною');
     const checked = selectOption(
       finalReading,
-      gathering([...prerequisites, 'final_workshop_photo_complete']),
+      gathering([...prerequisites, 'final_workshop_photo_complete', 'final_workshop_photo_reviewed']),
       'case-closure',
     );
     const checkedTimeline = selectOption(finalReading, checked, 'case-topic-timeline');

@@ -115,7 +115,7 @@ export const workshopPhotoNodes: readonly DialogueNode[] = [
         id: 'photo-result-finish',
         label: 'Повернутися до гостей',
         next: 'gathering',
-        grants: ['final_workshop_photo_complete'],
+        grants: ['final_workshop_photo_complete', 'final_workshop_photo_reviewed'],
       },
     ],
   },

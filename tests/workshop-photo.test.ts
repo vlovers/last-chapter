@@ -85,6 +85,9 @@ describe('workshop photograph: a fair false lead, not a second revelation', () =
       expect(done.node).toBe('gathering');
       expect(done.flags).toContain(flag);
       expect(done.flags).toContain('final_workshop_photo_complete');
+      expect(done.flags.includes('final_workshop_photo_reviewed')).toBe(
+        flag !== 'final_workshop_photo_deferred',
+      );
       expect(options(done)).not.toContain('workshop-photo');
       expect(seasonEnding({ flags: done.flags }).epilogue).toContain(text);
     });
