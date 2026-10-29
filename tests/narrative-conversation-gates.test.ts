@@ -300,4 +300,17 @@ describe('conversational pacing and continuity', () => {
       expect(back.flags).not.toContain('rumor_amplified');
     }
   });
+  it.each([
+    ['Anna', annaVisit, 'hello', 'anna-school-funny', 'anna-school-funny', 'anna-school-funny-work', 'anna-school-funny-work-back', 'anna_classroom_joke_heard'],
+    ['Leo', leoVisit, 'greet', 'leo-station-funny', 'leo-station-funny', 'leo-station-funny-boss', 'leo-station-funny-boss-return', 'leo_station_moon_story_heard'],
+  ] as const)('%s has a complete optional everyday story', (_name, story, hub, option, scene, followup, finish, flag) => {
+    const start = at(story, hub);
+    const entered = selectOption(story, start, option);
+    expect(entered.node).toBe(scene);
+    const detail = selectOption(story, entered, followup);
+    const returned = selectOption(story, detail, finish);
+    expect(returned.node).toBe(hub);
+    expect(returned.flags).toContain(flag);
+  });
+
 });
