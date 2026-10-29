@@ -176,6 +176,45 @@ describe('paper study: manuscript custody and consent', () => {
     );
   });
 
+  it('does not offer Iris a manuscript questionnaire after a disclosed letter breach', () => {
+    const state = play(
+      [...evidence, 'final_ledger_iris_told', 'final_letter_breach_disclosed'],
+      [
+        'paper-study',
+        'paper-study-edges',
+        'paper-edges-back',
+        'paper-study-ink',
+        'paper-ink-back',
+        'paper-study-voices',
+        'paper-voices-back',
+        'paper-study-conclude',
+      ],
+    );
+    const options = availableOptions(finalReading, state).map((option) => option.id);
+    expect(options).not.toContain('paper-decision-iris');
+    expect(options).toContain('paper-decision-private');
+    expect(options).toContain('paper-decision-defer');
+  });
+
+  it('allows Iris to receive the question list when her trust boundary is intact', () => {
+    const state = play(
+      [...evidence, 'final_ledger_iris_told'],
+      [
+        'paper-study',
+        'paper-study-edges',
+        'paper-edges-back',
+        'paper-study-ink',
+        'paper-ink-back',
+        'paper-study-voices',
+        'paper-voices-back',
+        'paper-study-conclude',
+      ],
+    );
+    expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(
+      'paper-decision-iris',
+    );
+  });
+
   it('limits all consent nodes to four choices and resolves their destinations', () => {
     const nodes = finalReading.nodes.filter(
       (node) =>
