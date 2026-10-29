@@ -10,10 +10,7 @@ import {
 import { seasonEnding } from '../src/game/endings';
 import { decodeSave, encodeSave } from '../src/game/save';
 
-const prerequisites = [
-  'final_ledger_scene_complete',
-  'final_manuscript_provenance_decided',
-];
+const prerequisites = ['final_ledger_scene_complete', 'final_manuscript_provenance_decided'];
 
 function atCase(flags: string[] = prerequisites) {
   const start = { ...startDialogue(finalReading), flags };
@@ -149,9 +146,7 @@ describe('three bookmarks: witnesses, readers and privacy', () => {
 
   it('validates all dialogue edges and caps every case scene at four choices', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
-    for (const node of finalReading.nodes.filter((node) =>
-      node.id.startsWith('case-closure'),
-    )) {
+    for (const node of finalReading.nodes.filter((node) => node.id.startsWith('case-closure'))) {
       expect(node.options.length, node.id).toBeLessThanOrEqual(4);
     }
   });
