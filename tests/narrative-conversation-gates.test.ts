@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { annaVisit } from '../src/content/anna';
+import { leoVisit } from '../src/content/leo';
+import { irisVisit } from '../src/content/iris';
+import { thomasVisit } from '../src/content/thomas';
+import { eleanorVisit } from '../src/content/eleanor';
 import { irisDecision } from '../src/content/day-four-iris';
 import { noraVisit } from '../src/content/nora';
 import { maraDecision } from '../src/content/day-four-mara';
@@ -139,6 +143,20 @@ describe('conversational pacing and continuity', () => {
     );
     expect(pressured.text).toContain('не розповідатиму');
     expect(mixed.text).toContain('потім передумав');
+  });
+
+  it.each([
+    ['Leo', leoVisit, 'greet', 'leo-books', 'town'],
+    ['Iris', irisVisit, 'welcome', 'iris-unprinted', 'art'],
+    ['Thomas', thomasVisit, 'greet', 'thomas-lamp-first', 'repair'],
+    ['Eleanor', eleanorVisit, 'greet', 'eleanor-shelf', 'shop'],
+  ] as const)('%s opens the scene promised by the first conversation option', (
+    _name, story, hub, option, destination,
+  ) => {
+    const chosen = availableOptions(story, at(story, hub)).find((entry) => entry.id === option);
+    expect(chosen?.next).toBe(destination);
+    const next = selectOption(story, at(story, hub), option);
+    expect(next.node).toBe(destination);
   });
 
 });
