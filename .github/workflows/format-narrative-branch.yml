@@ -31,15 +31,27 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci --no-audit --no-fund
-      - run: npm run format
-      - name: Commit formatted files
+      - name: Format and push on the latest branch head
         run: |
-          if git diff --quiet; then
-            echo "No formatting changes"
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -u
-          git commit -m "style: normalize narrative branch formatting"
-          git push origin HEAD:feat/narrative-production-v1-20261025
+          for attempt in 1 2 3 4 5; do
+            # A content agent may push while this job is running. Always
+            # reformat the newest remote tree instead of pushing a stale SHA.
+            git fetch origin feat/narrative-production-v1-20261025
+            git reset --hard FETCH_HEAD
+            npm run format
+            if git diff --quiet; then
+              echo "No formatting changes"
+              exit 0
+            fi
+            git add -u
+            git commit -m "style: normalize narrative branch formatting"
+            if git push origin HEAD:feat/narrative-production-v1-20261025; then
+              exit 0
+            fi
+            echo "Remote advanced during formatting (attempt ${attempt}); retrying"
+            sleep "$((attempt * 2))"
+          done
+          echo "Unable to publish formatting after 5 retries" >&2
+          exit 1
