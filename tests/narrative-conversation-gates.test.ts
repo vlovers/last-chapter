@@ -100,4 +100,19 @@ describe('conversational pacing and continuity', () => {
       currentNode(story, at(story, hub)).text,
     );
   });
+  it.each([
+    ['Mara', maraDecision, 'greet', 'mara_letter_pressured', 'mara_letter_privacy_respected', 'спочатку обіцяв'],
+    ['Leo', leoDecision, 'welcome', 'leo_letter_pressured_day4', 'leo_letter_consent_respected', 'спершу сказав'],
+    ['Iris', irisDecision, 'welcome', 'iris_letter_pressured_day4', 'iris_letter_choice_respected', 'знову почав'],
+    ['Anna', annaVisit, 'hello', 'anna_rumor_pressed', 'anna_rumor_boundary', 'все одно повернувся'],
+    ['Nora', noraVisit, 'hello', 'nora_confidentiality_pressed', 'nora_confidentiality_respected', 'потім передумав'],
+  ] as const)('%s notices conflicting player choices rather than forgetting them', (
+    _name, story, hub, pressure, respect, phrase,
+  ) => {
+    const pressured = currentNode(story, at(story, hub, [pressure])).text;
+    const mixed = currentNode(story, at(story, hub, [pressure, respect])).text;
+    expect(mixed).toContain(phrase);
+    expect(mixed).not.toBe(pressured);
+  });
+
 });
