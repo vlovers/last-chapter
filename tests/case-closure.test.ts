@@ -26,8 +26,8 @@ function options(state: ReturnType<typeof startDialogue>) {
 function reviewed(flags: string[] = [...prerequisites]) {
   let state = selectOption(finalReading, gathering(flags), 'case-closure');
   state = selectOption(finalReading, state, 'case-topic-timeline');
-  state = selectOption(finalReading, state, 'case-timeline-letter');
-  state = selectOption(finalReading, state, 'case-letter-back');
+  state = selectOption(finalReading, state, 'case-timeline-shelves');
+  state = selectOption(finalReading, state, 'case-shelves-back');
   state = selectOption(finalReading, state, 'case-topic-authors');
   state = selectOption(finalReading, state, 'case-authors-mara');
   state = selectOption(finalReading, state, 'case-mara-back');
@@ -58,6 +58,25 @@ describe('five-day case closure: proof, uncertainty and consent', () => {
     state = selectOption(finalReading, state, 'case-topic-timeline');
     state = selectOption(finalReading, state, 'case-timeline-back');
     expect(options(state)).toEqual(['case-topic-finish']);
+  });
+
+  it('only discusses the hidden letter when the player actually saw its envelope', () => {
+    const unknown = selectOption(finalReading, gathering(), 'case-closure');
+    const timeline = selectOption(finalReading, unknown, 'case-topic-timeline');
+    expect(options(timeline)).not.toContain('case-timeline-letter');
+    expect(options(timeline)).toContain('case-timeline-shelves');
+
+    const known = selectOption(
+      finalReading,
+      gathering([...prerequisites, 'saw_envelope']),
+      'case-closure',
+    );
+    const knownTimeline = selectOption(finalReading, known, 'case-topic-timeline');
+    expect(options(knownTimeline)).toContain('case-timeline-letter');
+    const letter = selectOption(finalReading, knownTimeline, 'case-timeline-letter');
+    expect(currentNode(finalReading, letter).text).toContain('один вечір');
+    const returned = selectOption(finalReading, letter, 'case-letter-back');
+    expect(returned.flags).toContain('final_case_timeline_heard');
   });
 
   it('does not turn the workshop photograph into proven evidence before review', () => {

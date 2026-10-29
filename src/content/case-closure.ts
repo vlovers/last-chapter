@@ -74,6 +74,12 @@ export const caseClosureNodes: readonly DialogueNode[] = [
         id: 'case-timeline-letter',
         label: '«А лист і сторінки загубилися разом?»',
         next: 'case-closure-letter',
+        requires: ['saw_envelope'],
+      },
+      {
+        id: 'case-timeline-shelves',
+        label: '«Чому аркуш міг опинитися між романами?»',
+        next: 'case-closure-shelves',
       },
       {
         id: 'case-timeline-back',
@@ -91,6 +97,19 @@ export const caseClosureNodes: readonly DialogueNode[] = [
       {
         id: 'case-letter-back',
         label: 'Повернутися до трьох закладок',
+        next: 'case-closure',
+        grants: ['final_case_timeline_heard'],
+      },
+    ],
+  },
+  {
+    id: 'case-closure-shelves',
+    speaker: 'Елеонора',
+    text: '«Коли вода зійшла, ми ставили сухі книжки на полиці якнайшвидше. Я бачила, як люди носили стоси з кімнати в кімнату. Але ніхто не бачив, коли саме цей аркуш потрапив між сторінками роману». Нора знизує плечима: «Тобто в нас є правдоподібне пояснення, а не свідок». «Саме так», — відповідає Елеонора.',
+    options: [
+      {
+        id: 'case-shelves-back',
+        label: 'Не вигадувати свідка, якого не було',
         next: 'case-closure',
         grants: ['final_case_timeline_heard'],
       },

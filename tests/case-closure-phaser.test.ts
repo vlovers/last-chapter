@@ -45,6 +45,7 @@ describe('Phaser Lost Pages case conclusion', () => {
       'final_ledger_iris_told',
       'final_miller_ledger_rumor_seeded',
       'final_miller_rumor_corrected_publicly',
+      'saw_envelope',
     ];
     const story = loadFinale(flags);
     const entry = story.choose('case-closure');
