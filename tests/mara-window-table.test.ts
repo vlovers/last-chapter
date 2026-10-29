@@ -118,6 +118,16 @@ describe('Mara: bakery authorship and her own plans', () => {
     );
   });
 
+  it('does not turn an offered tasting into consent when Mara kept the recipe private', () => {
+    const state = play(
+      finalReading,
+      ['mara_own_morning_heard', 'mara_window_plan_discussed', 'mara_window_private_suggested'],
+      ['open', 'final-v3-mara-option', 'final-mara-window-ask', 'final-mara-window-offer'],
+    );
+    expect(currentNode(finalReading, state).text).toContain('Сьогодні хочу залишити його в себе');
+    expect(seasonEnding({ flags: state.flags }).epilogue).toContain('поки не погодилася');
+  });
+
   it('lets the player respect Mara privacy and carries that choice to the epilogue', () => {
     const state = play(
       finalReading,
