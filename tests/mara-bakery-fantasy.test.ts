@@ -4,7 +4,7 @@ import { availableOptions, selectOption, startDialogue, validateDialogue } from 
 
 const enterTopics = () => {
   let state = startDialogue(maraVisit);
-  for (const id of ['greet', 'thank', 'talk']) {
+  for (const id of ['hello', 'thank', 'talk']) {
     state = selectOption(maraVisit, state, id);
   }
   return state;
