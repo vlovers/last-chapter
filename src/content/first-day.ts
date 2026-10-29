@@ -51,7 +51,7 @@ export const millerVisit: DialogueStory = {
         { id: 'what-saw', label: '«А що саме ви бачили?»', next: 'sighting' },
         {
           id: 'no-rumors',
-          label: '«Я не хочу обговорювати людей за їхньої відсутності»',
+          label: '«Давайте не вирішувати за Томаса, поки його тут немає»',
           next: 'boundary',
         },
       ],
@@ -63,13 +63,13 @@ export const millerVisit: DialogueStory = {
       options: [
         {
           id: 'challenge',
-          label: '«Але це нічого не доводить»',
+          label: '«А ви самі це бачили чи вам розповіли?»',
           next: 'boundary',
           grants: ['rumor_heard', 'rumor_challenged'],
         },
         {
           id: 'speculate',
-          label: '«Напевно, Томас щось приховує від Анни»',
+          label: '«А може, Томас не хоче, щоб Анна дізналася?»',
           next: 'speculation',
           grants: ['rumor_heard', 'rumor_amplified'],
         },
@@ -88,7 +88,7 @@ export const millerVisit: DialogueStory = {
       options: [
         {
           id: 'speculation-reconsider',
-          label: '«Я поквапився з висновком. Це лише здогад»',
+          label: '«Я вже нафантазував зайвого. Забудьте, що сказав»',
           next: 'order',
           grants: ['rumor_amplification_reconsidered'],
         },
