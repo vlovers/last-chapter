@@ -42,7 +42,11 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
       'чутка отримала ще кілька',
     ],
   ])('plays the %s route and persists its epilogue', (choice, finish, flag, expected) => {
-    let state: DialogueState = { ...startDialogue(finalReading), node: 'gathering', flags: eligible };
+    let state: DialogueState = {
+      ...startDialogue(finalReading),
+      node: 'gathering',
+      flags: eligible,
+    };
     for (const id of [
       'rumor-program',
       'rumor-decide-direct',
@@ -122,7 +126,11 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
       ],
     ],
   ])('plays %s and survives save restoration', (_name, route) => {
-    let state: DialogueState = { ...startDialogue(finalReading), node: 'gathering', flags: eligible };
+    let state: DialogueState = {
+      ...startDialogue(finalReading),
+      node: 'gathering',
+      flags: eligible,
+    };
     for (const id of route) {
       expect(
         availableOptions(finalReading, state).map((option) => option.id),

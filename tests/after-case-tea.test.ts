@@ -22,7 +22,11 @@ describe('after-case tea: quiet consequences', () => {
     ['after-tea-mara', 'after-mara-space', 'final_after_case_mara_space'],
     ['after-tea-quiet', 'after-quiet-finish', 'final_after_case_quiet_shared'],
   ])('keeps the %s / %s route reachable and persistent', (first, second, flag) => {
-    let state: DialogueState = { ...startDialogue(finalReading), node: 'gathering', flags: entryFlags };
+    let state: DialogueState = {
+      ...startDialogue(finalReading),
+      node: 'gathering',
+      flags: entryFlags,
+    };
     for (const id of ['after-case-tea', first, second, 'after-tea-return']) {
       expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(id);
       state = selectOption(finalReading, state, id);
