@@ -32,6 +32,20 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('final_nora_miller_cinema_done')
+      ? [
+          flags.has('final_nora_miller_notes_compared')
+            ? 'Нора занотувала спогади Міллер про кінотеатр окремо від перевірених дат. Листівка залишилася в Міллер, а невідомий рік так і не перетворився на факт.'
+            : flags.has('final_nora_miller_caption_drafted')
+              ? 'Нора й Міллер підготували чернетку підпису до порожнього фасаду кінотеатру. Портрети людей не виставляли, а дату зйомки залишили невідомою.'
+              : 'Нора відклала світлини в теку, а Міллер забрала свою листівку додому. Виставку не оголосили відкритою лише тому, що хтось дуже хотів згадати точний рік.',
+        ]
+      : []),
+    ...(flags.has('final_nora_miller_reading_invited')
+      ? [
+          'Нора й Міллер отримали запрошення поговорити про старі фільми в книгарні. Обидві зацікавилися, але дату нової зустрічі ще не призначили.',
+        ]
+      : []),
     ...(flags.has('final_eleanor_memory_done')
       ? [
           flags.has('final_eleanor_memory_gap_recorded')
