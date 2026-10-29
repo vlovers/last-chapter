@@ -1,4 +1,5 @@
 import type { DialogueStory } from '../game/dialogue';
+import { rumorProgramNodes, rumorProgramOption } from './rumor-program';
 import { afterCaseTeaNodes, afterCaseTeaOption } from './after-case-tea';
 import { bookshopTomorrowNodes, bookshopTomorrowOption } from './bookshop-tomorrow';
 import { caseClosureNodes, caseClosureOption } from './case-closure';
@@ -266,6 +267,7 @@ export const finalReading: DialogueStory = {
         bookshopTomorrowOption,
         workshopPhotoOption,
         caseClosureOption,
+        rumorProgramOption,
         afterCaseTeaOption,
         {
           id: 'archive-handover',
@@ -2558,6 +2560,7 @@ export const finalReading: DialogueStory = {
     ...bookshopTomorrowNodes,
     ...workshopPhotoNodes,
     ...caseClosureNodes,
+    ...rumorProgramNodes,
     ...afterCaseTeaNodes,
     {
       id: 'end',
