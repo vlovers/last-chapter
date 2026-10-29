@@ -1,5 +1,6 @@
 import type { DialogueStory } from '../game/dialogue';
 import { paperStudyNodes, paperStudyOption } from './paper-study';
+import { paperStudyConsentNodes, paperStudyConsentOption } from './paper-study-consent';
 import { ledgerGapNodes, ledgerGapOption } from './ledger-gap';
 import { rumorProgramNodes, rumorProgramOption } from './rumor-program';
 import { lastCopyNodes, lastCopyOption } from './last-copy';
@@ -271,6 +272,7 @@ export const finalReading: DialogueStory = {
         workshopPhotoOption,
         caseClosureOption,
         paperStudyOption,
+        paperStudyConsentOption,
         ledgerGapOption,
         rumorProgramOption,
         afterCaseTeaOption,
@@ -2567,6 +2569,7 @@ export const finalReading: DialogueStory = {
     ...workshopPhotoNodes,
     ...caseClosureNodes,
     ...paperStudyNodes,
+    ...paperStudyConsentNodes,
     ...ledgerGapNodes,
     ...rumorProgramNodes,
     ...afterCaseTeaNodes,
