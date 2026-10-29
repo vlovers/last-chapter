@@ -15,7 +15,8 @@ describe('Bellwick everyday stories', () => {
       ['anna-theater-mess', 'anna-theater-mess-back', 'anna_school_theater_ending_heard'],
     ] as const) {
       let state = startDialogue(annaVisit);
-      for (const id of ['hello', 'anna-school-theater', choice, back]) state = selectOption(annaVisit, state, id);
+      for (const id of ['hello', 'anna-school-theater', choice, back])
+        state = selectOption(annaVisit, state, id);
       expect(state.node).toBe('hello');
       expect(state.flags).toContain(flag);
     }
@@ -27,7 +28,8 @@ describe('Bellwick everyday stories', () => {
       ['nora-umbrella-mystery', 'nora-umbrella-mystery-back', 'nora_umbrella_mystery_joked'],
     ] as const) {
       let state = startDialogue(noraVisit);
-      for (const id of ['hello', 'nora-lost-umbrella', choice, back]) state = selectOption(noraVisit, state, id);
+      for (const id of ['hello', 'nora-lost-umbrella', choice, back])
+        state = selectOption(noraVisit, state, id);
       expect(state.node).toBe('hello');
       expect(state.flags).toContain(flag);
     }
