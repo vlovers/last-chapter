@@ -15,6 +15,12 @@ export const maraDecision: DialogueStory = {
       speaker: 'Мара',
       text: '«Я принесла булочки. Тільки не питай, чому в пакеті одна надкушена». Мара кладе пакунок на прилавок. «У мене був довгий день. Можна хвилинку посидіти?»',
       options: [
+        {
+          id: 'mara-rest',
+          label: '«Звісно. Сідай, я поки зроблю чай»',
+          next: 'mara-rest',
+          unless: ['mara_day_four_rest_heard'],
+        },
         { id: 'work', label: '«Ти змогла відмовитися від зайвої зміни?»', next: 'work' },
         { id: 'book', label: '«Ти вже подарувала Лео книжку?»', next: 'book' },
         {
@@ -38,6 +44,12 @@ export const maraDecision: DialogueStory = {
         },
         { id: 'finish', label: 'Побажати Марі гарного вечора', next: 'end' },
       ],
+    },
+    {
+      id: 'mara-rest',
+      speaker: 'Мара',
+      text: 'Мара сідає й розв’язує стрічку на пакеті. «Тільки п’ять хвилин. Якщо я зараз встану, знову знайду собі якусь роботу». Вона підсуває тобі булочку. «Цю я точно не надкусила».',
+      options: [{ id: 'mara-rest-back', label: '«Домовилися. Розкажеш, як минув день?»', next: 'greet', grants: ['mara_day_four_rest_heard'] }],
     },
     {
       id: 'mara-own-story',
