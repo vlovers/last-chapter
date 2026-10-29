@@ -4,13 +4,13 @@ import { thomasVisit } from '../src/content/thomas';
 import {
   availableOptions,
   currentNode,
-  initialDialogueState,
+  startDialogue,
   selectOption,
 } from '../src/game/dialogue';
 
 describe('Anna and Thomas chairs continuity', () => {
   const at = (story: typeof annaVisit, flags: string[]) => {
-    const start = initialDialogueState(story, flags);
+    const start = { ...startDialogue(story), flags };
     return selectOption(story, start, 'hello');
   };
 
