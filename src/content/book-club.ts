@@ -16,7 +16,11 @@ export const bookClub: DialogueStory = {
       text: '«Я попросила учнів придумати запитання до історії. Найкраще було таке: якщо герой помиляється, чи мусимо ми перестати його любити?» Мара ставить тарілку посеред столу. «Сподіваюся, ні. Інакше мої булочки залишаться без друзів».',
       textWhen: [
         {
-          requires: ['anna_classroom_joke_heard', 'miller_bakery_story_heard', 'leo_station_moon_story_heard'],
+          requires: [
+            'anna_classroom_joke_heard',
+            'miller_bakery_story_heard',
+            'leo_station_moon_story_heard',
+          ],
           text: 'Анна розкладає дитячі малюнки дракона й картонного місяця. «Після вистави діти вирішили, що дракон працює нічним сторожем на Місяці». Міллер бере булочку. «Якщо йому платять корицею, я б теж звільнилася». Мара обурено зводить брови: «Ви знову про мою корицю?» — «А ти знову принесла найсмачніші булочки».',
         },
         {
@@ -74,7 +78,11 @@ export const bookClub: DialogueStory = {
           label: '«А якщо головний герой просто жахлива людина?»',
           next: 'argument',
         },
-        { id: 'books-bad-review', label: '«А хтось узагалі дочитував книжку, яка всіх розлютила?»', next: 'books-bad-review' },
+        {
+          id: 'books-bad-review',
+          label: '«А хтось узагалі дочитував книжку, яка всіх розлютила?»',
+          next: 'books-bad-review',
+        },
         { id: 'books-back', label: 'Повернутися до інших гостей', next: 'welcome' },
       ],
     },
@@ -239,28 +247,61 @@ export const bookClub: DialogueStory = {
       speaker: 'Мара',
       text: '«Я дочитала роман, у якому герой тричі тікав від власного весілля. На четвертий раз наречена відкрила кав’ярню й вийшла заміж за кондитера». Анна піднімає брови: «І ти все одно дочитала?» — «Звісно. Я чекала, коли наречена нарешті зрозуміє, що їй потрібен нормальний сніданок». Міллер фиркає: «А я за героя. Може, в нього була алергія на весілля».',
       options: [
-        { id: 'books-bad-review-mara', label: '«Я на боці нареченої. Досить уже чекати»', next: 'books-bad-review-mara' },
-        { id: 'books-bad-review-miller', label: '«Міллер, ви серйозно його захищаєте?»', next: 'books-bad-review-miller' },
-        { id: 'books-bad-review-anna', label: '«Анно, а ти б дочитала таке?»', next: 'books-bad-review-anna' },
+        {
+          id: 'books-bad-review-mara',
+          label: '«Я на боці нареченої. Досить уже чекати»',
+          next: 'books-bad-review-mara',
+        },
+        {
+          id: 'books-bad-review-miller',
+          label: '«Міллер, ви серйозно його захищаєте?»',
+          next: 'books-bad-review-miller',
+        },
+        {
+          id: 'books-bad-review-anna',
+          label: '«Анно, а ти б дочитала таке?»',
+          next: 'books-bad-review-anna',
+        },
       ],
     },
     {
       id: 'books-bad-review-mara',
       speaker: 'Мара',
       text: '«От! А ще вона могла б залишити собі кав’ярню й ні за кого не виходити». Міллер обурено хитає головою: «Тоді навіщо нам узагалі остання глава?» Мара сміється: «Щоб дізнатися, чи добрий у них круасан».',
-      options: [{ id: 'books-bad-review-mara-back', label: '«Гаразд, тепер я хочу прочитати цю книжку»', next: 'welcome', grants: ['club_bad_romance_debated'] }],
+      options: [
+        {
+          id: 'books-bad-review-mara-back',
+          label: '«Гаразд, тепер я хочу прочитати цю книжку»',
+          next: 'welcome',
+          grants: ['club_bad_romance_debated'],
+        },
+      ],
     },
     {
       id: 'books-bad-review-miller',
       speaker: 'Пані Міллер',
       text: '«Ні, звісно. Але якщо всі погоджуватимуться з Марою, навіщо я сюди приходжу?» Вона бере ще одну булочку. «Між іншим, я б на місці нареченої поїхала в Лісабон. Там хоча б тепло».',
-      options: [{ id: 'books-bad-review-miller-back', label: '«Добре, без вас клуб був би нуднішим»', next: 'welcome', grants: ['club_bad_romance_debated'] }],
+      options: [
+        {
+          id: 'books-bad-review-miller-back',
+          label: '«Добре, без вас клуб був би нуднішим»',
+          next: 'welcome',
+          grants: ['club_bad_romance_debated'],
+        },
+      ],
     },
     {
       id: 'books-bad-review-anna',
       speaker: 'Анна',
       text: '«Дочитала б. Мені треба знати, чим закінчуються погані рішення». Вона посміхається. «А потім дала б книжку старшокласникам і попросила написати відгук. Уявляєш, скільки вони б знайшли причин не йти на те весілля?»',
-      options: [{ id: 'books-bad-review-anna-back', label: '«Це було б цікавіше за сам роман»', next: 'welcome', grants: ['club_bad_romance_debated'] }],
+      options: [
+        {
+          id: 'books-bad-review-anna-back',
+          label: '«Це було б цікавіше за сам роман»',
+          next: 'welcome',
+          grants: ['club_bad_romance_debated'],
+        },
+      ],
     },
     {
       id: 'end',

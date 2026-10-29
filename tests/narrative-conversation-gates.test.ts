@@ -400,10 +400,10 @@ describe('conversational pacing and continuity', () => {
   });
 
   it('book club combines Iris and Nora memories when both were heard', () => {
-    const line = currentNode(bookClub, at(bookClub, 'welcome', [
-      'iris_fox_story_heard',
-      'nora_newspaper_story_heard',
-    ])).text;
+    const line = currentNode(
+      bookClub,
+      at(bookClub, 'welcome', ['iris_fox_story_heard', 'nora_newspaper_story_heard']),
+    ).text;
     expect(line).toContain('лисиці');
     expect(line).toContain('хору');
   });
@@ -415,7 +415,9 @@ describe('conversational pacing and continuity', () => {
       const optionIds = node.options.map((option) => option.id);
       expect(new Set(optionIds).size).toBe(optionIds.length);
       for (const option of node.options) {
-        expect(nodes.has(option.next), node.id + ' -> ' + option.id + ' -> ' + option.next).toBe(true);
+        expect(nodes.has(option.next), node.id + ' -> ' + option.id + ' -> ' + option.next).toBe(
+          true,
+        );
       }
     }
   });
@@ -424,12 +426,14 @@ describe('conversational pacing and continuity', () => {
     ['books-bad-review-mara', 'books-bad-review-mara-back'],
     ['books-bad-review-miller', 'books-bad-review-miller-back'],
     ['books-bad-review-anna', 'books-bad-review-anna-back'],
-  ] as const)('book club disagreement %s resolves without blocking the meeting', (choice, finish) => {
-    let state = selectOption(bookClub, at(bookClub, 'books'), 'books-bad-review');
-    state = selectOption(bookClub, state, choice);
-    state = selectOption(bookClub, state, finish);
-    expect(state.node).toBe('welcome');
-    expect(state.flags).toContain('club_bad_romance_debated');
-  });
-
+  ] as const)(
+    'book club disagreement %s resolves without blocking the meeting',
+    (choice, finish) => {
+      let state = selectOption(bookClub, at(bookClub, 'books'), 'books-bad-review');
+      state = selectOption(bookClub, state, choice);
+      state = selectOption(bookClub, state, finish);
+      expect(state.node).toBe('welcome');
+      expect(state.flags).toContain('club_bad_romance_debated');
+    },
+  );
 });
