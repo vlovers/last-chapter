@@ -52,11 +52,6 @@ export const quietEvening: DialogueStory = {
             'club_frank_cleaning_attempt',
           ],
         },
-        {
-          id: 'closing-leftovers',
-          label: 'Знайти, хто забув на столі книжку',
-          next: 'closing-leftovers',
-        },
       ],
     },
     {
@@ -126,6 +121,11 @@ export const quietEvening: DialogueStory = {
       text: 'Френк торкається лапою твоєї руки, ніби перевіряє, чи ти справді залишаєшся. Потім вмощується поряд. Тут нарешті можна нікуди не поспішати.',
       options: [
         { id: 'frank-books', label: 'Повернутися до книжок', next: 'manuscript' },
+        {
+          id: 'closing-leftovers',
+          label: 'Знайти, хто забув на столі книжку',
+          next: 'closing-leftovers',
+        },
         { id: 'frank-toy', label: 'Дістати Френкову іграшку з-під прилавка', next: 'frank-toy' },
         {
           id: 'frank-treat',
