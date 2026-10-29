@@ -245,4 +245,24 @@ describe('complete optional narrative journeys', () => {
       ),
     ).toBe(true);
   });
+  it.each([
+    ['closing-cleanup-bookmarks', 'closing-cleanup-bookmarks-back', 'club_bookmarks_saved'],
+    ['closing-cleanup-note', 'closing-cleanup-note-back', 'club_reading_list_joke_seen'],
+    ['closing-cleanup-frank', 'closing-cleanup-frank-back', 'club_frank_cleaning_attempt'],
+  ] as const)('book club cleanup %s resolves once and leaves the evening open', (choice, finish, flag) => {
+    let state = { ...startDialogue(quietEvening), flags: ['book_club_started'] };
+    state = selectOption(quietEvening, state, 'closing-book-club-cleanup');
+    state = selectOption(quietEvening, state, choice);
+    state = selectOption(quietEvening, state, finish);
+    expect(state.node).toBe('closing');
+    expect(state.flags).toContain(flag);
+    expect(availableOptions(quietEvening, state).map((option) => option.id)).not.toContain('closing-book-club-cleanup');
+    state = selectOption(quietEvening, state, 'tidy-books');
+    expect(state.node).toBe('manuscript');
+  });
+
+  it('club cleanup is not offered if the club did not happen', () => {
+    expect(availableOptions(quietEvening, startDialogue(quietEvening)).map((option) => option.id)).not.toContain('closing-book-club-cleanup');
+  });
+
 });
