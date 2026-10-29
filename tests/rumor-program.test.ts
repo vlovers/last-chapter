@@ -139,6 +139,15 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
     expect(text).toContain('старим заголовком');
   });
 
+  it('keeps the printed correction independent of the private manuscript', () => {
+    const state = { ...startDialogue(finalReading), node: 'rumor-corrected', flags: eligible };
+    const text = currentNode(finalReading, state).text;
+    expect(text).toContain('ОСТАННЮ СТОРІНКУ НЕ ЗНАЙДЕНО');
+    expect(text).not.toContain('коробка');
+    expect(text).not.toContain('Айріс');
+    expect(text).not.toContain('автор');
+  });
+
   it('caps each new node at four authored options', () => {
     for (const node of finalReading.nodes.filter((node) => node.id.startsWith('rumor-'))) {
       expect(node.options.length, node.id).toBeLessThanOrEqual(4);
