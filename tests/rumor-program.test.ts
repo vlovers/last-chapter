@@ -27,7 +27,7 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
       'rumor-remove-stack',
       'rumor-withdrawn-finish',
       'final_rumor_program_withdrawn',
-      'нероздані програмки',
+      'Нероздані програмки',
     ],
     [
       'rumor-miller-speaks',
