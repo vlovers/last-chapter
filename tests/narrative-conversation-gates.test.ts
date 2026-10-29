@@ -100,5 +100,4 @@ describe('conversational pacing and continuity', () => {
       currentNode(story, at(story, hub)).text,
     );
   });
-
 });
