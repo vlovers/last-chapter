@@ -1,4 +1,5 @@
 import type { DialogueStory } from '../game/dialogue';
+import { leoNightCourseNodes, leoNightCourseOption } from './leo-night-course';
 
 /** День другий: Лео має власне життя й не є нагородою за розгадану таємницю. */
 export const leoVisit: DialogueStory = {
@@ -80,6 +81,7 @@ export const leoVisit: DialogueStory = {
       text: '«Передбачуваність. Ти знаєш, де маєш бути. А потім на колії з’являється туман — і розумієш, що навіть точний розклад не пояснює всього».',
       options: [
         { id: 'trains-follow', label: '«А куди ви самі хотіли б поїхати?»', next: 'journey' },
+        leoNightCourseOption,
         { id: 'trains-back', label: '«Про що ще поговоримо?»', next: 'greet' },
       ],
     },
@@ -493,6 +495,7 @@ export const leoVisit: DialogueStory = {
         },
       ],
     },
+    ...leoNightCourseNodes,
     {
       id: 'leo-platform-music',
       speaker: 'Лео',
