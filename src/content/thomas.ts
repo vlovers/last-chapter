@@ -60,6 +60,13 @@ export const thomasVisit: DialogueStory = {
           unless: ['thomas_chairs_discussed'],
         },
         {
+          id: 'thomas-anna-chairs-reaction',
+          label: '«Анна згадала про стільці після читання»',
+          next: 'thomas-anna-chairs-reaction',
+          requires: ['anna_thomas_chairs_followup_discussed'],
+          unless: ['thomas_anna_chairs_reaction_discussed'],
+        },
+        {
           id: 'thomas-reading-challenge',
           label: '«Ти коли-небудь сперечався з кінцівкою книжки?»',
           next: 'thomas-reading-challenge',
@@ -125,6 +132,62 @@ export const thomasVisit: DialogueStory = {
           label: 'Повернутися до розмови',
           next: 'greet',
           grants: ['thomas_chairs_discussed'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-anna-chairs-reaction',
+      speaker: 'Томас',
+      text: 'Томас не відразу відповідає. «Вона розповіла тобі про стільці? Ну, це справедливо. Я обіцяв і не прийшов». Він кладе викрутку поруч із лампою. «Не знаю, що саме ти їй сказав, але тепер принаймні розумію, чому вона сердилася».',
+      textWhen: [
+        {
+          requires: ['anna_chairs_player_defended_thomas'],
+          text: '«Ти мене захищав?» Томас дивиться на тебе здивовано. «Дякую, але Анна не просила адвоката. Я теж не просив». Він закриває ящик. «Мабуть, мені варто сказати їй це самому, а не через тебе».',
+        },
+        {
+          requires: ['anna_chairs_player_heard_anna'],
+          text: '«Ти її вислухав? Добре». Томас крутить у пальцях гвинтик. «Вона не любить, коли хтось одразу починає пояснювати, чому я так учинив. Я теж іноді це роблю. Особливо коли винен».',
+        },
+        {
+          requires: ['anna_chairs_player_changed_topic'],
+          text: '«Ви говорили про читання? Напевно, Анна знову розповідала про Емму та Джуліана». Він усміхається. «Вона сміється, коли згадує їхні суперечки. Я давно не чув цього сміху вдома».',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-anna-chairs-direct',
+          label: '«Краще поговори з нею сам, не через мене»',
+          next: 'thomas-anna-chairs-result',
+          grants: ['thomas_anna_chairs_direct_talk'],
+        },
+        {
+          id: 'thomas-anna-chairs-no-pressure',
+          label: '«Я не збираюся втручатися у вашу розмову»',
+          next: 'thomas-anna-chairs-result',
+          grants: ['thomas_anna_chairs_player_kept_distance'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-anna-chairs-result',
+      speaker: 'Томас',
+      text: '«Добре. Мені ще треба знайти слова. І, мабуть, не починати з переліку того, що я встиг полагодити».',
+      textWhen: [
+        {
+          requires: ['thomas_anna_chairs_direct_talk'],
+          text: '«Подзвоню після роботи. Якщо вона не захоче говорити — не наполягатиму. Але хоча б запитаю, коли їй буде зручно». Він дістає телефон, потім кладе його назад. «Після роботи. Не посеред твоєї книгарні».',
+        },
+        {
+          requires: ['thomas_anna_chairs_player_kept_distance'],
+          text: '«Правильно. Ми з Анною самі маємо розібратися». Томас піднімає викрутку. «Тільки не дивуйся, якщо я ще раз прийду поговорити про книжки. З ними в мене поки виходить простіше».',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-anna-chairs-back',
+          label: 'Повернутися до інших тем',
+          next: 'greet',
+          grants: ['thomas_anna_chairs_reaction_discussed'],
         },
       ],
     },
