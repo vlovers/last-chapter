@@ -11,7 +11,8 @@ describe('Five after-case conversations and fifteen endings', () => {
     miller: ['apology', 'cups', 'cake'],
     iris: ['weather', 'book', 'silence'],
   } as const;
-  it('keeps the complete final-day graph valid', () => expect(validateDialogue(finalReading)).toEqual([]));
+  it('keeps the complete final-day graph valid', () =>
+    expect(validateDialogue(finalReading)).toEqual([]));
   for (const [character, endings] of Object.entries(groups)) {
     for (const ending of endings) {
       it(`links ${character}/${ending} back into the existing tea conclusion`, () => {
@@ -19,7 +20,9 @@ describe('Five after-case conversations and fifteen endings', () => {
         const option = hub?.options.find((item) => item.id === `after-tea-${character}-new`);
         expect(option).toBeDefined();
         const scene = afterCaseTeaNodes.find((node) => node.id === option?.next);
-        const choice = scene?.options.find((item) => item.id === `after-${character}-${ending}-new`);
+        const choice = scene?.options.find(
+          (item) => item.id === `after-${character}-${ending}-new`,
+        );
         expect(choice).toBeDefined();
         const outcome = afterCaseTeaNodes.find((node) => node.id === choice?.next);
         expect(outcome?.options[0]?.next).toBe('after-case-finish');
