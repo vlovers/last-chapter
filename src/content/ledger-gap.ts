@@ -77,7 +77,7 @@ export const ledgerGapNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'ledger-gap-thomas-back',
-        label: 'Не вигадувати підпис Томаса',
+        label: 'Залишити графу без підпису Томаса',
         next: 'ledger-gap',
         grants: ['final_ledger_gap_checked', 'final_ledger_gap_thomas_limit'],
       },
@@ -90,7 +90,7 @@ export const ledgerGapNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'ledger-gap-listen',
-        label: '«Не виправляйте минуле новим вигаданим записом»',
+        label: '«Не вписуйте ім’я зараз. Ми ж не знаємо, хто забрав коробку»',
         next: 'ledger-gap',
         grants: ['final_ledger_gap_eleanor_heard', 'final_ledger_gap_eleanor_listened'],
       },
@@ -115,7 +115,7 @@ export const ledgerGapNodes: readonly DialogueNode[] = [
     options: [
       {
         id: 'ledger-gap-iris-back',
-        label: 'Не просити Айріс назвати невідомого отримувача',
+        label: 'Запитати Айріс, чи вона взагалі бачила отримувача',
         next: 'ledger-gap',
         grants: ['final_ledger_gap_iris_heard'],
       },
@@ -148,7 +148,7 @@ export const ledgerGapNodes: readonly DialogueNode[] = [
       },
       {
         id: 'ledger-gap-publish',
-        label: 'Дозволити Норі надрукувати версію про «зниклого отримувача»',
+        label: 'Запропонувати Норі надрукувати неперевірену версію про отримувача',
         next: 'ledger-gap-outcome',
         grants: ['final_ledger_gap_speculation_printed'],
       },
