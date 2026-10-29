@@ -64,38 +64,35 @@ describe('the last copy: a bookshop conflict with lasting costs', () => {
       'final_last_copy_promise_broken',
       'більше не покладалася',
     ],
-  ])(
-    '%s',
-    (_name, anna, miller, decision, finish, outcome, expectedEpilogue) => {
-      const route = [
-        'last-copy',
-        'last-copy-ask-anna',
-        ...anna,
-        'last-copy-ask-miller',
-        ...miller,
-        'last-copy-choose',
-        decision,
-        finish,
-      ];
-      const state = play(route);
-      expect(state.node).toBe('gathering');
-      expect(state.flags).toContain('final_last_copy_done');
-      expect(state.flags).toContain(outcome);
-      expect(seasonEnding({ flags: state.flags }).epilogue).toContain(expectedEpilogue);
-      expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
-        'last-copy',
-      );
-      const outcomes = [
-        'final_last_copy_anna_kept',
-        'final_last_copy_delayed_gift',
-        'final_last_copy_second_ordered',
-        'final_last_copy_promise_broken',
-      ];
-      expect(outcomes.filter((flag) => state.flags.includes(flag))).toEqual([outcome]);
-      expect(state.flags).not.toContain('final_ledger_iris_told');
-      expect(state.flags).not.toContain('final_case_closure_complete');
-    },
-  );
+  ])('%s', (_name, anna, miller, decision, finish, outcome, expectedEpilogue) => {
+    const route = [
+      'last-copy',
+      'last-copy-ask-anna',
+      ...anna,
+      'last-copy-ask-miller',
+      ...miller,
+      'last-copy-choose',
+      decision,
+      finish,
+    ];
+    const state = play(route);
+    expect(state.node).toBe('gathering');
+    expect(state.flags).toContain('final_last_copy_done');
+    expect(state.flags).toContain(outcome);
+    expect(seasonEnding({ flags: state.flags }).epilogue).toContain(expectedEpilogue);
+    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+      'last-copy',
+    );
+    const outcomes = [
+      'final_last_copy_anna_kept',
+      'final_last_copy_delayed_gift',
+      'final_last_copy_second_ordered',
+      'final_last_copy_promise_broken',
+    ];
+    expect(outcomes.filter((flag) => state.flags.includes(flag))).toEqual([outcome]);
+    expect(state.flags).not.toContain('final_ledger_iris_told');
+    expect(state.flags).not.toContain('final_case_closure_complete');
+  });
 
   it('cannot decide before hearing Anna and Miller', () => {
     let state = play(['last-copy']);
@@ -125,9 +122,7 @@ describe('the last copy: a bookshop conflict with lasting costs', () => {
 
   it('does not need any manuscript clues to play a separate everyday story', () => {
     const state = atGathering();
-    expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(
-      'last-copy',
-    );
+    expect(availableOptions(finalReading, state).map((option) => option.id)).toContain('last-copy');
   });
 
   it('lets Eleanor own the double booking and Frank find the dated slip', () => {
