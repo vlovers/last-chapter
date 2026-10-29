@@ -52,7 +52,7 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'leo-ticket-feeling-back',
-          label: '«Може, варто поговорити з нею, а не з уявною сваркою?»',
+          label: '«І як довго ти збирався з нею сперечатися подумки?»',
           next: 'welcome',
           grants: ['leo_day_four_ticket_feeling_heard'],
         },
@@ -94,7 +94,7 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'leo-future-followup-direct',
-          label: '«Запитай Мару, замість гадати за неї»',
+          label: '«Ти хоч раз спитав Мару, що вона про це думає?»',
           next: 'leo-future-followup',
           grants: ['leo_day_four_followup_direct'],
         },
@@ -123,7 +123,7 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'leo-future-back',
-          label: '«Побачимося, Лео»',
+          label: '«Якщо запізнишся до пекарні, Мара знову все з’їсть»',
           next: 'welcome',
           grants: ['leo_day_four_future_heard'],
         },
@@ -136,7 +136,7 @@ export const leoDecision: DialogueStory = {
       options: [
         {
           id: 'mara-kind',
-          label: '«Головне, щоб Мара не проспала відправлення»',
+          label: '«То обери потяг, на який вам не доведеться бігти сонними»',
           next: 'welcome',
           grants: ['leo_respected_mara_relationship'],
         },
@@ -148,7 +148,7 @@ export const leoDecision: DialogueStory = {
       speaker: 'Лео',
       text: '«Колись я пропустив потяг, бо десять хвилин звіряв два розклади». Лео сміється. «Мара тоді просто сіла на наступний. А я біг за нею з валізою».',
       options: [
-        { id: 'trains-back', label: '«Тільки наступного разу не пропусти потяг»', next: 'welcome' },
+        { id: 'trains-back', label: '«Мара, мабуть, досі згадує твою валізу»', next: 'welcome' },
       ],
     },
     {
