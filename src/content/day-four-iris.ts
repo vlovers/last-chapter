@@ -1,4 +1,5 @@
 import type { DialogueStory } from '../game/dialogue';
+import { irisCoverDayFourNodes, irisCoverDayFourOption } from './iris-cover-commission';
 
 /** День четвертий: право Айріс вирішувати, що станеться з її листом. */
 export const irisDecision: DialogueStory = {
@@ -65,6 +66,7 @@ export const irisDecision: DialogueStory = {
           next: 'iris-exhibition-plan',
           unless: ['iris_exhibition_plan_heard'],
         },
+        irisCoverDayFourOption,
         { id: 'art', label: '«Розкажи про свої малюнки»', next: 'art' },
         {
           id: 'quiet-star',
@@ -97,6 +99,7 @@ export const irisDecision: DialogueStory = {
         { id: 'leave', label: '«Не поспішай із рішенням»', next: 'end' },
       ],
     },
+    ...irisCoverDayFourNodes,
     {
       id: 'iris-letter-feeling',
       speaker: 'Айріс',

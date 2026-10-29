@@ -1,4 +1,5 @@
 import type { DialogueStory } from '../game/dialogue';
+import { irisCoverCommissionNodes, irisCoverCommissionOption } from './iris-cover-commission';
 
 /** День другий: Айріс не є загадкою, яку треба «розв'язати». */
 export const irisVisit: DialogueStory = {
@@ -47,6 +48,7 @@ export const irisVisit: DialogueStory = {
           next: 'iris-reflection',
           unless: ['iris_reflected_on_identity'],
         },
+        irisCoverCommissionOption,
         {
           id: 'iris-sketch-mishap',
           label: '«А був малюнок, який зовсім не вдався?»',
@@ -287,6 +289,7 @@ export const irisVisit: DialogueStory = {
         },
       ],
     },
+    ...irisCoverCommissionNodes,
     {
       id: 'iris-v3-conversation',
       speaker: 'Айріс',

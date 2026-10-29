@@ -32,6 +32,20 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('iris_cover_commission_discussed')
+      ? [
+          flags.has('iris_cover_revisions_chosen')
+            ? 'Айріс підготувала версію обкладинки з веселкою. Видавництво ще не підписало договір, а човен поки залишився всередині книжки.'
+            : flags.has('iris_cover_negotiation_chosen')
+              ? 'Айріс запропонувала видавництву залишити човен на обкладинці. Редактор погодився розглянути тестовий друк, але остаточного рішення ще немає.'
+              : 'Айріс відмовилася від замовлення й почала власну маленьку книжку про лиса. Поки це чотири сторінки, а не готове видання.',
+          ...(flags.has('final_iris_cover_portfolio_offered')
+            ? ['У книгарні запропонували місце для її робіт, але Айріс сама вирішить, чи приносити книжку і чи виставляти цінник.']
+            : flags.has('final_iris_cover_space_respected')
+              ? ['Айріс пішла з вечора з власними ескізами, без домовленостей про їхній показ і без чужих рукописів у руках.']
+              : []),
+        ]
+      : []),
     ...(flags.has('final_iris_exhibition')
       ? ['На стіні біля вікна з’явилася серія малюнків Айріс — «Вікна Беллвіка».']
       : []),
