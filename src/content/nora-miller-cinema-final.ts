@@ -15,12 +15,36 @@ export const noraMillerCinemaFinalOption: DialogueOption = {
 export const millerCinemaFinalOption: DialogueOption = {
   id: 'final-miller-cinema-topic',
   label: 'Запитати Міллер про світлину старого кінотеатру',
-  next: 'final-nora-miller-cinema',
+  next: 'final-miller-cinema-intro',
   requires: ['miller_cinema_photo_discussed'],
-  unless: ['nora_cinema_exhibit_discussed', 'final_nora_miller_cinema_done'],
+  unless: ['final_nora_miller_cinema_done'],
 };
 
 export const noraMillerCinemaFinalNodes: readonly DialogueNode[] = [
+  {
+    id: 'final-miller-cinema-intro',
+    speaker: 'Пані Міллер',
+    text: '«У Нори знову цілий стіл фотографій. Я принесла листівку, але вона залишиться в мене». Міллер озирається на гостей. «Якщо вже говоритимемо про старий кінотеатр, давайте без мікрофона. Я не збираюся сперечатися з усім містом».',
+    textWhen: [
+      {
+        requires: ['miller_cinema_family_story_private'],
+        text: '«Я принесла листівку, але історію про брата розповідати всім не буду», — каже Міллер. «Нора знає, що вона приватна. Можемо поговорити про сам кінотеатр, якщо без чужих біографій».',
+      },
+    ],
+    options: [
+      {
+        id: 'final-miller-cinema-open',
+        label: '«Покличмо Нору, поговоримо за чаєм»',
+        next: 'final-nora-miller-cinema',
+      },
+      {
+        id: 'final-miller-cinema-later',
+        label: '«Можемо повернутися до цього пізніше»',
+        next: 'gathering',
+        suspend: true,
+      },
+    ],
+  },
   {
     id: 'final-nora-miller-cinema',
     speaker: 'Оповідач',
