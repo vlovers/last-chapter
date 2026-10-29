@@ -374,7 +374,7 @@ export class FiveDayStory {
     const restarting = id === '__restart' && this.stage === 'season-complete';
     if (id === '__restart' && this.stage === 'season-complete') this.chapter = startChapter();
     else if (id === '__more_choices') {
-      const options = this.open().choices;
+      this.open();
       const pageCount = availableOptions(stageStory(this.stage), this.chapter.dialogue).length;
       const pages = pageCount <= 3 ? 1 : Math.ceil(pageCount / 3);
       this.choicePage = this.choicePage < pages - 1 ? this.choicePage + 1 : 0;
