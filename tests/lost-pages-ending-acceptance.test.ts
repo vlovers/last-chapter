@@ -69,7 +69,9 @@ describe('lost pages ending acceptance: evidence, consent and chronology', () =>
         entry.id.startsWith('bookshop-tomorrow') ||
         ['archive-handover', 'miller-rumor-aftermath'].includes(entry.id),
     )) {
-      expect(node.options.length, node.id).toBeLessThanOrEqual(4);
+      expect(new Set(node.options.map((option) => option.id)).size, node.id).toBe(
+        node.options.length,
+      );
     }
   });
 });
