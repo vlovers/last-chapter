@@ -12,7 +12,11 @@ import {
 } from '../src/game/dialogue';
 import { seasonEnding } from '../src/game/endings';
 
-function play(story: DialogueStory, flags: readonly string[], route: readonly string[]): DialogueState {
+function play(
+  story: DialogueStory,
+  flags: readonly string[],
+  route: readonly string[],
+): DialogueState {
   let state: DialogueState = { ...startDialogue(story), flags };
   for (const id of route) {
     expect(
@@ -109,10 +113,7 @@ describe('Mara: bakery authorship and her own plans', () => {
   );
 
   it('does not expose the bakery follow-up when Mara never discussed the recipe', () => {
-    const state = play(finalReading, ['mara_own_morning_heard'], [
-      'open',
-      'final-v3-mara-option',
-    ]);
+    const state = play(finalReading, ['mara_own_morning_heard'], ['open', 'final-v3-mara-option']);
     expect(availableOptions(finalReading, state).map((o) => o.id)).not.toContain(
       'final-mara-window-ask',
     );
