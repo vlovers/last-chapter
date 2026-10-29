@@ -586,7 +586,9 @@ class Bookshop extends Phaser.Scene {
       if (this.orderApproach && this.roaming.path.length && !document.hidden) {
         updateCharacter(
           mara,
-          this.reduced ? { ...this.roaming.path.at(-1) } : this.follow(mara, this.roaming.path, amount * 0.7),
+          this.reduced
+            ? { ...this.roaming.path.at(-1) }
+            : this.follow(mara, this.roaming.path, amount * 0.7),
           this.reduced,
         );
         if (this.reduced) this.roaming.path = [];
