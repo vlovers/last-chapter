@@ -32,6 +32,23 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('final_eleanor_memory_done')
+      ? [
+          flags.has('final_eleanor_memory_gap_recorded')
+            ? 'Елеонора залишила в теці дві дати й порожній рядок про дзвінок Лео. Ніхто не підписав його чужим ім’ям.'
+            : flags.has('final_eleanor_memory_public_accusation')
+              ? 'Ти пригрозив назвати Елеонору винною перед гостями, хоча журнал не підтверджував ані дзвінка, ані приховування. Вона відмовилася віддати його для такого оголошення.'
+              : flags.has('final_eleanor_memory_privacy_kept')
+                ? 'Елеонора прибрала теку із записами після затоплення. Приватні папери Айріс залишилися поза чужими руками.'
+                : flags.has('final_eleanor_memory_permission_suggested')
+                  ? 'Елеонора погодилася запитати Айріс про старий опис наодинці. Згоди на перегляд ніхто не отримував і не вимагав.'
+                  : flags.has('final_eleanor_memory_witness_lead')
+                    ? 'Елеонора пообіцяла пошукати адресу майстра, який лагодив проводку. Це лише можливий свідок аварії, а не доказ того, кому телефонували.'
+                    : flags.has('final_eleanor_memory_pie_story')
+                      ? 'Замість суперечки про журнал Елеонора розповіла про перший грушевий пиріг Мари. Мара обурилася, що історія досі живе, але попросила повторити її ще раз.'
+                      : 'Елеонора відклала старі записи й залишилася на вечорі читання. Френк тим часом зайняв її стілець.',
+        ]
+      : []),
     ...(flags.has('iris_cover_commission_discussed')
       ? [
           flags.has('iris_cover_revisions_chosen')
