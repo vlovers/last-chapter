@@ -27,13 +27,13 @@ export const annaVisit: DialogueStory = {
         },
         {
           id: 'anna-v3-conversation',
-          label: '«Чи повинна вчителька завжди знати відповідь?»',
+          label: '«А що ти кажеш, коли діти питають щось, чого сама не знаєш?»',
           next: 'anna-v3-conversation',
           unless: ['anna_uncertainty_discussed'],
         },
         {
           id: 'anna-reflection',
-          label: '«А як навчити дітей не боятися власної думки?»',
+          label: '«А якщо дитина взагалі відмовиться читати вголос?»',
           next: 'anna-reflection',
           unless: ['anna_reflected_on_care'],
         },
@@ -62,13 +62,13 @@ export const annaVisit: DialogueStory = {
       options: [
         {
           id: 'anna-disagreement-debate',
-          label: '«Нехай сперечаються. Тільки без образ»',
+          label: '«Можеш дати їм по три хвилини на захист своїх героїв»',
           next: 'anna-book-disagreement-result',
           grants: ['anna_classroom_debate_encouraged'],
         },
         {
           id: 'anna-disagreement-quiet',
-          label: '«А може, кожен напише свою версію кінцівки?»',
+          label: '«А якщо попросити їх переписати фінал кожного по-своєму?»',
           next: 'anna-book-disagreement-result',
           grants: ['anna_classroom_alternate_endings'],
         },
@@ -109,8 +109,8 @@ export const annaVisit: DialogueStory = {
     {
       id: 'classroom',
       speaker: 'Анна',
-      text: '«Запитую, що вони відчули, а не чи правильно зрозуміли. Іноді найкраща розмова починається зі слів: “Мені цей герой зовсім не подобається”».',
-      options: [{ id: 'classroom-back', label: '«Це гарний підхід»', next: 'hello' }],
+      text: '«Минулого разу Джуліан заявив, що головний герой — боягуз. Емма обурилася й принесла цитати на трьох сторінках». Анна сміється. «Я тільки встигала стежити, щоб вони не перекинули стіл».',
+      options: [{ id: 'classroom-back', label: '«І хто переміг у суперечці — Емма чи Джуліан?»', next: 'hello' }],
     },
     {
       id: 'teacher',
@@ -140,7 +140,7 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Тут усе поруч: школа, пекарня, книгарня. Іноді навіть чужі висновки — надто поруч. Я люблю це місто, але хотіла б, щоб люди частіше запитували, перш ніж вирішувати за інших».',
       options: [
-        { id: 'town-back', label: '«Розумію. Що ще?»', next: 'hello' },
+        { id: 'town-back', label: '«У Беллвіку новини й справді розходяться швидше за пошту»', next: 'hello' },
         { id: 'town-books', label: '«Підберемо книжку для класу»', next: 'books' },
       ],
     },
