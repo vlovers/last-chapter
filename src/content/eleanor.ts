@@ -251,7 +251,7 @@ export const eleanorVisit: DialogueStory = {
       options: [
         {
           id: 'eleanor-reflect-question',
-          label: '«А що для тебе в цьому найважче?»',
+          label: '«А за якою дрібницею тут найбільше сумуєте?»',
           next: 'eleanor-reflection-deep',
         },
         {
@@ -285,7 +285,7 @@ export const eleanorVisit: DialogueStory = {
       options: [
         {
           id: 'eleanor-key-memory',
-          label: '«Залишимо полицю для спільної пам’яті»',
+          label: '«Можемо залишити одну полицю для старих фотографій і записок»',
           next: 'eleanor-reflection-memory',
           grants: ['eleanor_will_keep_shared_memory'],
         },
