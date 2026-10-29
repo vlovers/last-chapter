@@ -1,3 +1,4 @@
+import type { DialogueState } from '../src/game/dialogue';
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import { availableOptions, selectOption, startDialogue } from '../src/game/dialogue';
@@ -15,7 +16,7 @@ describe('Day five: real dialogue traversal and consequence gating', () => {
     for (const ending of endings) {
       it(`plays ${activity} / ${ending} through the real dialogue engine`, () => {
         const base = startDialogue(finalReading);
-        let state = {
+        let state: DialogueState = {
           ...base,
           node: 'bookshop-tomorrow',
           flags: ['final_ledger_scene_complete', 'final_manuscript_provenance_decided'],
@@ -26,7 +27,7 @@ describe('Day five: real dialogue traversal and consequence gating', () => {
         state = selectOption(finalReading, state, `tomorrow-${activity}-${ending}-new`);
         const finish = availableOptions(finalReading, state)[0];
         expect(finish?.grants).toContain(`final_tomorrow_${activity}_done`);
-        state = selectOption(finalReading, state, finish.id);
+        state = selectOption(finalReading, state, finish!.id);
         expect(state.node).toBe('gathering');
         expect(state.flags).toContain(`final_tomorrow_${activity}_done`);
         const revisit = { ...state, node: 'bookshop-tomorrow' };
