@@ -9,6 +9,7 @@ import { bookshopTomorrowNodes, bookshopTomorrowOption } from './bookshop-tomorr
 import { caseClosureNodes, caseClosureOption } from './case-closure';
 import { workshopPhotoNodes, workshopPhotoOption } from './workshop-photo';
 import { maraWindowFinalNodes } from './mara-window-table';
+import { leoNightCourseFinalNodes, leoNightCourseFinalOption } from './leo-night-course-final';
 
 /** Фінальний день першого сезону. Рішення людей важливіші за чужу цікавість. */
 export const finalReading: DialogueStory = {
@@ -149,6 +150,7 @@ export const finalReading: DialogueStory = {
           requires: ['mara_own_morning_heard'],
           unless: ['final_v3_mara_heard'],
         },
+        leoNightCourseFinalOption,
         {
           id: 'final-v3-leo-option',
           label: '«Ви з Марою нарешті домовилися про вихідні?»',
@@ -2347,6 +2349,7 @@ export const finalReading: DialogueStory = {
       ],
     },
     ...maraWindowFinalNodes,
+    ...leoNightCourseFinalNodes,
     {
       id: 'final-v3-leo',
       speaker: 'Лео',
