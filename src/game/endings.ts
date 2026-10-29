@@ -38,6 +38,15 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
     ...(flags.has('mara_future_supported')
       ? ['Мара почала шукати місце для маленького столика з кавою та книжками біля пекарні.']
       : []),
+    ...(flags.has('final_anna_thomas_school_space_offered')
+      ? [
+          'Анна записала в блокнот пропозицію провести наступне дитяче читання в книгарні. Спершу вона спитає батьків і перевірить, чи вистачить місця. Томас пообіцяв нічого не переносити без дозволу.',
+        ]
+      : flags.has('final_anna_thomas_school_story_heard')
+        ? [
+            'Анна забрала додому малюнки дітей зі шкільного читання. На одному Томас стоїть на палубі паперового корабля, тримаючи годинник, щоб наступного разу не запізнитися.',
+          ]
+        : []),
     ...(flags.has('final_quiet_manuscript_returned')
       ? ['Айріс забрала сторінку додому. Вона сама вирішить, чи повертатися до пошуків.']
       : flags.has('final_quiet_manuscript_archived')
