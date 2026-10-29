@@ -67,6 +67,27 @@ describe('under the lamp: manuscript comparison', () => {
     expect(seasonEnding({ flags: state.flags }).epilogue).toContain('не давала дозволу');
   });
 
+  it('gates Iris access at the final decision rather than granting implied consent', () => {
+    const withoutDisclosure = play(investigation);
+    expect(availableOptions(finalReading, withoutDisclosure).map((option) => option.id)).not.toContain(
+      'paper-decision-iris',
+    );
+
+    const disclosed = play(investigation, [...evidence, 'final_ledger_iris_told']);
+    expect(availableOptions(finalReading, disclosed).map((option) => option.id)).toContain(
+      'paper-decision-iris',
+    );
+
+    const declined = play(investigation, [
+      ...evidence,
+      'final_ledger_iris_told',
+      'final_case_iris_declined',
+    ]);
+    expect(availableOptions(finalReading, declined).map((option) => option.id)).not.toContain(
+      'paper-decision-iris',
+    );
+  });
+
   it('does not ask Iris to guess an author after she declined the case discussion', () => {
     const state = play(
       ['paper-study', 'paper-study-voices'],
