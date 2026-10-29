@@ -6,7 +6,8 @@ import { selectOption, startDialogue, validateDialogue } from '../src/game/dialo
 
 describe('Bellwick station, bakery and old bookshop memories', () => {
   it('keeps every dialogue graph valid', () => {
-    for (const story of [leoVisit, thomasVisit, eleanorVisit]) expect(validateDialogue(story)).toEqual([]);
+    for (const story of [leoVisit, thomasVisit, eleanorVisit])
+      expect(validateDialogue(story)).toEqual([]);
   });
   it('supports all station concert responses', () => {
     for (const [choice, back, flag] of [
@@ -15,7 +16,8 @@ describe('Bellwick station, bakery and old bookshop memories', () => {
       ['leo-music-mara', 'leo-music-mara-back', 'leo_mara_platform_idea_heard'],
     ] as const) {
       let state = startDialogue(leoVisit);
-      for (const id of ['greet', 'leo-platform-music', choice, back]) state = selectOption(leoVisit, state, id);
+      for (const id of ['greet', 'leo-platform-music', choice, back])
+        state = selectOption(leoVisit, state, id);
       expect(state.node).toBe('greet');
       expect(state.flags).toContain(flag);
     }
@@ -27,7 +29,8 @@ describe('Bellwick station, bakery and old bookshop memories', () => {
       ['thomas-shelf-ask', 'thomas-shelf-ask-back', 'thomas_bakery_cat_heard'],
     ] as const) {
       let state = startDialogue(thomasVisit);
-      for (const id of ['greet', 'thomas-crooked-shelf', choice, back]) state = selectOption(thomasVisit, state, id);
+      for (const id of ['greet', 'thomas-crooked-shelf', choice, back])
+        state = selectOption(thomasVisit, state, id);
       expect(state.node).toBe('greet');
       expect(state.flags).toContain(flag);
     }
@@ -36,10 +39,15 @@ describe('Bellwick station, bakery and old bookshop memories', () => {
     for (const [choice, back, flag] of [
       ['eleanor-receipts-search', 'eleanor-receipts-search-back', 'eleanor_lost_key_story_heard'],
       ['eleanor-receipts-keep', 'eleanor-receipts-keep-back', 'eleanor_book_ephemera_discussed'],
-      ['eleanor-receipts-frank', 'eleanor-receipts-frank-back', 'eleanor_frank_detective_joke_heard'],
+      [
+        'eleanor-receipts-frank',
+        'eleanor-receipts-frank-back',
+        'eleanor_frank_detective_joke_heard',
+      ],
     ] as const) {
       let state = startDialogue(eleanorVisit);
-      for (const id of ['greet', 'eleanor-old-receipts', choice, back]) state = selectOption(eleanorVisit, state, id);
+      for (const id of ['greet', 'eleanor-old-receipts', choice, back])
+        state = selectOption(eleanorVisit, state, id);
       expect(state.node).toBe('greet');
       expect(state.flags).toContain(flag);
     }

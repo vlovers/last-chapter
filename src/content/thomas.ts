@@ -70,7 +70,11 @@ export const thomasVisit: DialogueStory = {
           label: '«Що найдивніше тобі доводилося лагодити?»',
           next: 'thomas-repair-funny',
         },
-        { id: 'thomas-crooked-shelf', label: '«А яка полиця в місті найбільше тебе дратує?»', next: 'thomas-crooked-shelf' },
+        {
+          id: 'thomas-crooked-shelf',
+          label: '«А яка полиця в місті найбільше тебе дратує?»',
+          next: 'thomas-crooked-shelf',
+        },
         { id: 'books', label: '«Ви любите читати?»', next: 'books' },
         { id: 'anna', label: '«Анна заходила до нас»', next: 'anna' },
         {
@@ -470,28 +474,56 @@ export const thomasVisit: DialogueStory = {
       text: '«У пекарні. Третя від дверей. Крива на два сантиметри». Томас замовкає. «Мара каже, що я перебільшую. Але вона ставить на неї пироги, а вони повільно їдуть ліворуч».',
       options: [
         { id: 'thomas-shelf-fix', label: '«То чому не полагодиш?»', next: 'thomas-shelf-fix' },
-        { id: 'thomas-shelf-joke', label: '«Може, пироги просто тікають?»', next: 'thomas-shelf-joke' },
-        { id: 'thomas-shelf-ask', label: '«А Мара дозволить тобі торкнутися полиці?»', next: 'thomas-shelf-ask' },
+        {
+          id: 'thomas-shelf-joke',
+          label: '«Може, пироги просто тікають?»',
+          next: 'thomas-shelf-joke',
+        },
+        {
+          id: 'thomas-shelf-ask',
+          label: '«А Мара дозволить тобі торкнутися полиці?»',
+          next: 'thomas-shelf-ask',
+        },
       ],
     },
     {
       id: 'thomas-shelf-fix',
       speaker: 'Томас',
       text: '«Я запропонував. Мара сказала: якщо полагоджу полицю, доведеться полагодити весь світ». Томас усміхається. «Я не проти. Але почав би з тієї полиці».',
-      options: [{ id: 'thomas-shelf-fix-back', label: '«Візьми рівень і почни з малого»', next: 'greet', grants: ['thomas_bakery_shelf_fix_discussed'] }],
+      options: [
+        {
+          id: 'thomas-shelf-fix-back',
+          label: '«Візьми рівень і почни з малого»',
+          next: 'greet',
+          grants: ['thomas_bakery_shelf_fix_discussed'],
+        },
+      ],
     },
     {
       id: 'thomas-shelf-joke',
       speaker: 'Томас',
       text: '«Тоді вони дуже повільні втікачі». Томас дістає з ящика маленький рівень. «Хочеш вір, хочеш ні, я ношу це із собою не через пироги».',
-      options: [{ id: 'thomas-shelf-joke-back', label: '«Звісно, зовсім не через пироги»', next: 'greet', grants: ['thomas_bakery_shelf_joke_heard'] }],
+      options: [
+        {
+          id: 'thomas-shelf-joke-back',
+          label: '«Звісно, зовсім не через пироги»',
+          next: 'greet',
+          grants: ['thomas_bakery_shelf_joke_heard'],
+        },
+      ],
     },
     {
       id: 'thomas-shelf-ask',
       speaker: 'Томас',
       text: '«Тільки якщо прийду до відкриття. І не розбуджу кота, який спить під вітриною». Він хитає головою. «Не знаю, хто там головний — Мара чи той кіт».',
-      options: [{ id: 'thomas-shelf-ask-back', label: '«Судячи з усього, кіт»', next: 'greet', grants: ['thomas_bakery_cat_heard'] }],
+      options: [
+        {
+          id: 'thomas-shelf-ask-back',
+          label: '«Судячи з усього, кіт»',
+          next: 'greet',
+          grants: ['thomas_bakery_cat_heard'],
+        },
+      ],
     },
-
   ],
 };

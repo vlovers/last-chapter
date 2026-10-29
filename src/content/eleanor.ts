@@ -54,7 +54,11 @@ export const eleanorVisit: DialogueStory = {
           requires: ['saw_receipt', 'saw_repair_note'],
           unless: ['eleanor_timeline_checked'],
         },
-        { id: 'eleanor-old-receipts', label: '«А що ви знаходили між сторінками старих книжок?»', next: 'eleanor-old-receipts' },
+        {
+          id: 'eleanor-old-receipts',
+          label: '«А що ви знаходили між сторінками старих книжок?»',
+          next: 'eleanor-old-receipts',
+        },
         { id: 'flood', label: '«Розкажіть про затоплення»', next: 'flood' },
         {
           id: 'ledger',
@@ -415,28 +419,56 @@ export const eleanorVisit: DialogueStory = {
       text: '«Список покупок, квиток на концерт і листівку з моря». Елеонора усміхається. «А одного разу — записку: “Не забудь повернути ключ”. Ключа не було. Я перевірила всі шухляди».',
       options: [
         { id: 'eleanor-receipts-search', label: '«І знайшли?»', next: 'eleanor-receipts-search' },
-        { id: 'eleanor-receipts-keep', label: '«Ви зберігали всі ці дрібниці?»', next: 'eleanor-receipts-keep' },
-        { id: 'eleanor-receipts-frank', label: '«Френк би знайшов ключ швидше»', next: 'eleanor-receipts-frank' },
+        {
+          id: 'eleanor-receipts-keep',
+          label: '«Ви зберігали всі ці дрібниці?»',
+          next: 'eleanor-receipts-keep',
+        },
+        {
+          id: 'eleanor-receipts-frank',
+          label: '«Френк би знайшов ключ швидше»',
+          next: 'eleanor-receipts-frank',
+        },
       ],
     },
     {
       id: 'eleanor-receipts-search',
       speaker: 'Елеонора',
       text: '«Ні. Зате знайшла окуляри, які шукала три місяці». Вона поправляє оправу. «Виявилося, що я мала дві пари. Тепер маю три — на випадок наступної загадки».',
-      options: [{ id: 'eleanor-receipts-search-back', label: '«У вас був дуже практичний детектив»', next: 'greet', grants: ['eleanor_lost_key_story_heard'] }],
+      options: [
+        {
+          id: 'eleanor-receipts-search-back',
+          label: '«У вас був дуже практичний детектив»',
+          next: 'greet',
+          grants: ['eleanor_lost_key_story_heard'],
+        },
+      ],
     },
     {
       id: 'eleanor-receipts-keep',
       speaker: 'Елеонора',
       text: '«Деякі. Квиток я поклала назад у книжку, де він лежав. Людина могла повернутися за ним». Вона знизує плечима. «А список покупок викинула. Картопля й мило не здавалися особливо таємничими».',
-      options: [{ id: 'eleanor-receipts-keep-back', label: '«Може, то був секретний рецепт»', next: 'greet', grants: ['eleanor_book_ephemera_discussed'] }],
+      options: [
+        {
+          id: 'eleanor-receipts-keep-back',
+          label: '«Може, то був секретний рецепт»',
+          next: 'greet',
+          grants: ['eleanor_book_ephemera_discussed'],
+        },
+      ],
     },
     {
       id: 'eleanor-receipts-frank',
       speaker: 'Елеонора',
       text: 'Френк саме штовхає зі столу олівець. Елеонора дивиться, як той котиться під шафу. «Так. Він би знайшов ключ. А потім заховав би його краще за мене».',
-      options: [{ id: 'eleanor-receipts-frank-back', label: '«Справедливо. Це його метод»', next: 'greet', grants: ['eleanor_frank_detective_joke_heard'] }],
+      options: [
+        {
+          id: 'eleanor-receipts-frank-back',
+          label: '«Справедливо. Це його метод»',
+          next: 'greet',
+          grants: ['eleanor_frank_detective_joke_heard'],
+        },
+      ],
     },
-
   ],
 };
