@@ -123,11 +123,10 @@ describe('Iris evidence follow-up: trust, consent and uncertain clues', () => {
       'перестав просити',
     ],
   ])('lets the player own a breach without restoring access: %s', (option, flag, epilogue) => {
-    const state = follow([...discovered, 'iris_letter_breach_admitted'], [
-      'final-iris-evidence-accountability',
-      option,
-      'final-iris-evidence-accountability-back',
-    ]);
+    const state = follow(
+      [...discovered, 'iris_letter_breach_admitted'],
+      ['final-iris-evidence-accountability', option, 'final-iris-evidence-accountability-back'],
+    );
     expect(state.flags).toContain(flag);
     expect(state.flags).not.toContain('final_paper_iris_lent_originals');
     expect(state.flags).not.toContain('final_iris_evidence_public_catalog_requested');
