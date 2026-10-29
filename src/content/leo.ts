@@ -17,6 +17,8 @@ export const leoVisit: DialogueStory = {
       speaker: 'Лео',
       text: '«Я Лео. Працюю на залізниці. Іноді заходжу в книгарні, щоб нагадати собі: у світі існують історії без розкладу». Він усміхається. «Хоча це трохи лякає».',
       options: [
+        { id: 'leo-schedule', label: '«А що не так з історіями без розкладу?»', next: 'trains' },
+        { id: 'leo-books', label: '«Яку книжку шукає людина з залізниці?»', next: 'town' },
         {
           id: 'leo-reflection',
           label: '«Чому тобі так важливо все передбачити?»',
@@ -29,9 +31,7 @@ export const leoVisit: DialogueStory = {
           next: 'leo-honest-talk',
           unless: ['leo_honesty_discussed'],
         },
-        { id: 'trains', label: '«Що вам подобається в потягах?»', next: 'trains' },
         { id: 'mara', label: '«Ви знайомі з Марою з пекарні?»', next: 'mara' },
-        { id: 'town', label: '«Давно живете в Беллвіку?»', next: 'town' },
         {
           id: 'letter',
           label: '«Я знайшов старий лист на ваше ім’я»',
