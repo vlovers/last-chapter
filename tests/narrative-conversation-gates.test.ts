@@ -469,5 +469,4 @@ describe('conversational pacing and continuity', () => {
     expect(state.node).toBe('after-case-finish');
     expect(state.flags).toContain(flag);
   });
-
 });
