@@ -15,7 +15,7 @@ describe('Day 3 book club', () => {
       ['club-villain-argue', 'club-villain-argue-back'],
       ['club-villain-admit', 'club-villain-admit-back'],
       ['club-villain-ask-anna', 'club-villain-anna-back'],
-    ]) {
+    ] as const) {
       const scene = selectOption(bookClub, arrival, 'club-villain-defense');
       const answer = selectOption(bookClub, scene, choice);
       const returned = selectOption(bookClub, answer, back);
@@ -29,7 +29,7 @@ describe('Day 3 book club', () => {
       ['club-loan-protect', 'club-loan-protect-back', 'club_nora_privacy_respected'],
       ['club-loan-joke', 'club-loan-joke-back', 'club_book_loan_joke_heard'],
       ['club-loan-ask', 'club-loan-ask-back', 'club_nora_boundary_heard'],
-    ]) {
+    ] as const) {
       const scene = selectOption(bookClub, arrival, 'club-book-loan');
       const answer = selectOption(bookClub, scene, choice);
       const returned = selectOption(bookClub, answer, back);
