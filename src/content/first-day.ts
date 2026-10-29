@@ -220,6 +220,12 @@ export const millerVisit: DialogueStory = {
           label: 'А може, вам цікаві самі люди?',
           next: 'detective-people',
         },
+        {
+          id: 'miller-cinema-photo',
+          label: '«А Нора казала, що ви пам’ятаєте старий кінотеатр»',
+          next: 'miller-cinema-photo',
+          unless: ['miller_cinema_photo_discussed'],
+        },
         { id: 'detective-back', label: 'Про що ще поговоримо?', next: 'topics' },
       ],
     },
@@ -334,6 +340,103 @@ export const millerVisit: DialogueStory = {
       speaker: 'Оповідач',
       text: 'Коли двері зачинилися, дзвіночок пролунав лише раз. За вікном пані Міллер махнула вам порожньою банкою. Перша книжка продана. Містечко вже почало розповідати свої історії.',
       options: [],
+    },
+    {
+      id: 'miller-cinema-photo',
+      speaker: 'Пані Міллер',
+      text: '«Нора знову шукає рік відкриття? Я їй уже тричі сказала: це було влітку». Міллер витягає з торби стару листівку. «Бачите? Я написала “літо”. Щоправда, не тоді, а років за двадцять. На фотографії я стою біля дверей, а мій брат тримає букет. Він завжди купував квіти не тій людині».',
+      options: [
+        {
+          id: 'miller-cinema-summer',
+          label: '«Ви впевнені, що це саме червень?»',
+          next: 'miller-cinema-summer',
+        },
+        {
+          id: 'miller-cinema-check',
+          label: '«Може, варто звірити спогад із афішею?»',
+          next: 'miller-cinema-check',
+        },
+        {
+          id: 'miller-cinema-brother',
+          label: '«А кому ваш брат ніс квіти?»',
+          next: 'miller-cinema-brother',
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-summer',
+      speaker: 'Пані Міллер',
+      text: '«У червні я носила зелену сукню. На фото вона зелена, хоч цього й не видно». Міллер підсуває листівку. «Але, здається, ту сукню я носила аж до жовтня. От же ж. Не дивіться так радісно — ви мене не впіймали, я сама себе впіймала».',
+      options: [
+        {
+          id: 'miller-cinema-summer-answer',
+          label: '«Можна пам’ятати вечір, не пам’ятаючи дати»',
+          next: 'miller-cinema-summer-answer',
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-summer-answer',
+      speaker: 'Пані Міллер',
+      text: '«Тоді Норі доведеться писати “пані Міллер майже певна”. Не надто урочисто для музейної таблички». Вона пирхає. «Але краще так, ніж поставити мене на стенд поруч із вигаданим червнем».',
+      options: [
+        {
+          id: 'miller-cinema-summer-back',
+          label: 'Повернутися до розмови про книжки',
+          next: 'topics',
+          grants: ['miller_cinema_photo_discussed', 'miller_cinema_date_uncertain'],
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-check',
+      speaker: 'Пані Міллер',
+      text: '«Афішу шукають відтоді, як я посивіла». Міллер ховає листівку. «Я могла б дати Норі її переписати. Але оригінал залишу вдома. У мене там на звороті рецепт млинців, і він мені потрібен більше за будь-який музей».',
+      options: [
+        {
+          id: 'miller-cinema-check-answer',
+          label: '«Може, Норі вистачить вашого опису?»',
+          next: 'miller-cinema-check-answer',
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-check-answer',
+      speaker: 'Пані Міллер',
+      text: '«Опис я дам. І додам, що не знаю точного року. А листівку покажу тільки їй, без фотографування». Міллер усміхається. «Ще чого, розмістять мій рецепт млинців під портретом мера».',
+      options: [
+        {
+          id: 'miller-cinema-check-back',
+          label: '«Так і домовилися»',
+          next: 'topics',
+          grants: ['miller_cinema_photo_discussed', 'miller_cinema_description_offered'],
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-brother',
+      speaker: 'Пані Міллер',
+      text: '«Касирці. Він два тижні збирався її запросити на танці, а в день відкриття переплутав чергу й подарував букет контролерці». Міллер сміється так голосно, що з полиці зсувається закладка. «Вони потім сорок років прожили разом. А касирка вийшла за продавця квитків».',
+      options: [
+        {
+          id: 'miller-cinema-brother-answer',
+          label: '«Ви хочете, щоб Нора записала цю історію?»',
+          next: 'miller-cinema-brother-answer',
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-brother-answer',
+      speaker: 'Пані Міллер',
+      text: '«Поки ні. Це наша сімейна байка. Може, колись я сама розповім її на вечорі історій». Вона розгладжує рукав. «А зараз давайте той детектив, де хоча б хтось знає, хто кому подарував квіти».',
+      options: [
+        {
+          id: 'miller-cinema-brother-back',
+          label: 'Показати полиці з детективами',
+          next: 'topics',
+          grants: ['miller_cinema_photo_discussed', 'miller_cinema_family_story_private'],
+        },
+      ],
     },
   ],
 };
