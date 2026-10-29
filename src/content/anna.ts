@@ -51,7 +51,7 @@ export const annaVisit: DialogueStory = {
         },
         {
           id: 'anna-book-disagreement',
-          label: '«А якщо двоє дітей ненавидять улюблену книжку одне одного?»',
+          label: '«Ти згадала дитячу змову. А вони хоч між собою домовляються, що читати?»',
           next: 'anna-book-disagreement',
           unless: ['anna_book_disagreement_discussed'],
         },
