@@ -207,7 +207,7 @@ export const finalReading: DialogueStory = {
         },
         {
           id: 'leo-reflection-callback',
-          label: 'Запитати Лео, чи навчився він залишати людям вибір',
+          label: 'Запитати Лео, чи вдалося поговорити з Марою без суперечки',
           next: 'leo-reflection-callback',
           requires: ['leo_reflected_on_uncertainty'],
           unless: ['final_leo_reflection_heard'],
@@ -235,7 +235,7 @@ export const finalReading: DialogueStory = {
         },
         {
           id: 'nora-reflection-callback',
-          label: 'Поговорити з Норою про межі архіву',
+          label: 'Запитати Нору, які документи вона може показати гостям',
           next: 'nora-reflection-callback',
           requires: ['nora_reflected_on_uncertainty'],
           unless: ['final_nora_reflection_heard'],
@@ -738,7 +738,7 @@ export const finalReading: DialogueStory = {
       options: [
         {
           id: 'aftercare-apology-back',
-          label: 'Не вимагати негайного прощення',
+          label: 'Не тиснути на Айріс й повернутися до гостей',
           next: 'ledger-aftercare-end',
         },
       ],
@@ -1860,7 +1860,7 @@ export const finalReading: DialogueStory = {
         },
         {
           id: 'repair-trust',
-          label: 'Визнати порушення довіри й залишити рішення Айріс',
+          label: 'Сказати Айріс, що розповів про лист, і не виправдовуватися',
           next: 'repair-trust',
           requires: ['iris_letter_breach_admitted'],
         },
