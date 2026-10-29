@@ -397,7 +397,9 @@ describe('conversational pacing and continuity', () => {
     expect(line).toContain('дракона');
     expect(line).toContain('місяця');
     expect(line).toContain('корицю');
-    expect(line).not.toBe(currentNode(bookClub, at(bookClub, 'welcome', ['anna_classroom_joke_heard'])).text);
+    expect(line).not.toBe(
+      currentNode(bookClub, at(bookClub, 'welcome', ['anna_classroom_joke_heard'])).text,
+    );
   });
 
   it('book club combines Iris and Nora memories when both were heard', () => {
