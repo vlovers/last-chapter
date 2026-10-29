@@ -69,9 +69,9 @@ describe('under the lamp: manuscript comparison', () => {
 
   it('gates Iris access at the final decision rather than granting implied consent', () => {
     const withoutDisclosure = play(investigation);
-    expect(availableOptions(finalReading, withoutDisclosure).map((option) => option.id)).not.toContain(
-      'paper-decision-iris',
-    );
+    expect(
+      availableOptions(finalReading, withoutDisclosure).map((option) => option.id),
+    ).not.toContain('paper-decision-iris');
 
     const disclosed = play(investigation, [...evidence, 'final_ledger_iris_told']);
     expect(availableOptions(finalReading, disclosed).map((option) => option.id)).toContain(
