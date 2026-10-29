@@ -71,7 +71,7 @@ export const maraDecision: DialogueStory = {
         },
         {
           id: 'mara-own-story-love',
-          label: '«З Лео ти теж так робиш?»',
+          label: '«І що, віддала їй печиво заради миру?»',
           next: 'mara-own-story-choice',
           grants: ['mara_day_four_named_own_needs'],
         },
@@ -88,7 +88,7 @@ export const maraDecision: DialogueStory = {
         },
         {
           requires: ['mara_day_four_named_own_needs'],
-          text: '«Іноді. Він питає, куди я хочу поїхати, а я відповідаю: куди ти хочеш. Потім злюся, що він не здогадався». Мара закочує очі. «Чудова система, правда?»',
+          text: '«Так, ще й загорнула печиво в серветку». Мара пирхає. «А вона повернулася за годину й купила ще шість булочок. Я досі не знаю, хто кого переграв».',
         },
       ],
       options: [
@@ -100,7 +100,7 @@ export const maraDecision: DialogueStory = {
         },
         {
           id: 'mara-own-story-followup-joke',
-          label: '«Може, потренуєшся казати “ні”?»',
+          label: '«Наступного разу видаси їй печиво з рахунком?»',
           next: 'mara-own-story-followup',
           grants: ['mara_day_four_followup_joke'],
         },
@@ -117,13 +117,13 @@ export const maraDecision: DialogueStory = {
         },
         {
           requires: ['mara_day_four_followup_joke'],
-          text: '«Ні», — урочисто каже Мара. Потім підсуває тобі пакет. «От бачиш, уже виходить. Булочку все одно бери».',
+          text: '«Впишу окремим рядком: “за душевні страждання пекарки”». Мара сміється. «Начальниця, звісно, мене вб’є. Але уявити приємно».',
         },
       ],
       options: [
         {
           id: 'mara-own-story-back',
-          label: '«Гаразд. А як там книжка для Лео?»',
+          label: '«Тепер розумію, чому ти принесла дві торби. А що з книжкою для Лео?»',
           next: 'greet',
           grants: ['mara_day_four_own_story_heard'],
         },
@@ -136,7 +136,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'work-back',
-          label: '«Сподіваюся, книжка виявиться цікавою»',
+          label: '«Що читатимеш у свій перший вільний недільний ранок?»',
           next: 'greet',
           grants: ['mara_supported_independence'],
         },
