@@ -91,6 +91,7 @@ export const caseClosureNodes: readonly DialogueNode[] = [
         label: 'Занотувати лише підтверджену хронологію',
         next: 'case-closure',
         grants: ['final_case_timeline_heard'],
+        repeatability: 'repeatable',
       },
     ],
   },
