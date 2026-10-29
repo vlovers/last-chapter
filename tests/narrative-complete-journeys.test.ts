@@ -226,4 +226,15 @@ describe('complete optional narrative journeys', () => {
     }
   });
 
+  it.each([
+    [['book_club_started', 'club_bad_romance_debated'], 'весілля'],
+    [['book_club_started', 'club_recommended_easy_reading'], 'коміксів'],
+    [['book_club_started', 'club_argued_about_characters'], 'злодій'],
+    [['book_club_started', 'club_bad_romance_debated', 'club_recommended_easy_reading'], 'рецептами'],
+  ] as const)('quiet evening remembers book club outcome %j', (flags, phrase) => {
+    const scene = currentNode(quietEvening, { ...startDialogue(quietEvening), flags });
+    expect(scene.text).toContain(phrase);
+    expect(availableOptions(quietEvening, { ...startDialogue(quietEvening), flags }).some((o) => o.id === 'sit-frank')).toBe(true);
+  });
+
 });
