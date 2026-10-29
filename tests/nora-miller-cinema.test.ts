@@ -199,6 +199,33 @@ describe('Nora and Miller: cinema photo and private memories', () => {
     );
   });
 
+  it('carries all nine combinations of first-day memories into the final evening', () => {
+    for (const noraRoute of noraRoutes) {
+      for (const millerRoute of millerRoutes) {
+        const nora = play(noraVisit, [...noraStart, ...noraRoute.slice(0, 3)]);
+        const miller = play(millerVisit, [...millerStart, ...millerRoute.slice(0, 3)]);
+        const flags = [...new Set([...nora.flags, ...miller.flags])];
+        let finale = finalAtGathering(flags);
+        for (const id of [
+          'final-nora-miller-cinema-topic',
+          'final-nora-miller-compare',
+          'final-nora-miller-compare-detail',
+          'final-nora-miller-compare-back',
+        ]) {
+          expect(availableOptions(finalReading, finale).map((option) => option.id)).toContain(id);
+          finale = selectOption(finalReading, finale, id);
+        }
+        expect(finale.node).toBe('gathering');
+        expect(finale.flags).toContain(noraRoute[3]);
+        expect(finale.flags).toContain(millerRoute[3]);
+        expect(finale.flags).toContain('final_nora_miller_cinema_done');
+        expect(seasonEnding({ flags: finale.flags }).epilogue).toContain(
+          'невідомий рік так і не перетворився на факт',
+        );
+      }
+    }
+  });
+
   it('keeps all newly introduced choice lists at four options or fewer', () => {
     const newNodes = [
       ...noraVisit.nodes.filter((node) => node.id.startsWith('nora-cinema-')),
