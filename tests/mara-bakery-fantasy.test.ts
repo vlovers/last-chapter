@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { maraVisit } from '../src/content/mara';
 import {
-  availableOptions,
   selectOption,
   startDialogue,
   validateDialogue,
