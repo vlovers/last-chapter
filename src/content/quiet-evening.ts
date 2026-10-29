@@ -42,6 +42,13 @@ export const quietEvening: DialogueStory = {
         },
         { id: 'tidy-books', label: 'Розібрати книжки на столі', next: 'manuscript' },
         {
+          id: 'closing-club-followups',
+          label: 'Переглянути записки, які гості залишили після розмов',
+          next: 'closing-club-followups',
+          requires: ['book_club_started'],
+          unless: ['club_followups_evening_done'],
+        },
+        {
           id: 'closing-book-club-cleanup',
           label: 'Розібрати записки й чашки після книжкового клубу',
           next: 'closing-book-club-cleanup',
@@ -303,6 +310,41 @@ export const quietEvening: DialogueStory = {
           grants: ['quiet_evening_margin_warning_seen'],
         },
       ],
+    },
+    {
+      id: 'closing-club-followups',
+      speaker: 'Оповідач',
+      text: 'На столі лежать чужі нотатки, загублена закладка й порожній пакет із-під булочок. Ти збираєш усе докупи. На звороті програми книжкового клубу хтось написав: «Наступного разу не забути сказати те, що не наважився сьогодні».',
+      options: [
+        { id: 'closing-followups-nora', label: 'Залишити Норі чисту закладку', next: 'closing-followups-nora', requires: ['club_nora_trust_deepened'] },
+        { id: 'closing-followups-leo', label: 'Приготувати два місця біля вікна', next: 'closing-followups-leo', requires: ['club_mara_leo_concert_supported'] },
+        { id: 'closing-followups-anna', label: 'Знайти коробку для шкільних декорацій', next: 'closing-followups-anna', requires: ['club_school_play_sequel_invited'] },
+        { id: 'closing-followups-everyone', label: 'Залишити записку для наступного клубу', next: 'closing-followups-everyone' },
+      ],
+    },
+    {
+      id: 'closing-followups-nora',
+      speaker: 'Оповідач',
+      text: 'Ти кладеш між сторінками чисту закладку й підписуєш лише ім’я Нори. Без запитань і натяків. Френк обнюхує папір і йде далі: цього разу йому нічого скидати зі столу.',
+      options: [{ id: 'closing-followups-nora-back', label: 'Повернутися до вечірніх справ', next: 'closing', grants: ['club_followups_evening_done', 'club_nora_bookmark_left'] }],
+    },
+    {
+      id: 'closing-followups-leo',
+      speaker: 'Оповідач',
+      text: 'Ти ставиш два стільці біля вікна, де зазвичай сидить Френк. Кіт негайно займає один. Доведеться пояснити Лео й Марі, що на їхньому побаченні буде третій гість.',
+      options: [{ id: 'closing-followups-leo-back', label: 'Залишити Френку його місце', next: 'closing', grants: ['club_followups_evening_done', 'club_mara_leo_window_seats_ready'] }],
+    },
+    {
+      id: 'closing-followups-anna',
+      speaker: 'Оповідач',
+      text: 'Під прилавком знаходиться велика коробка. На ній ти пишеш: «Для дракона, який був деревом». Френк пробує залізти всередину ще до того, як ти встигаєш покласти туди кольоровий папір.',
+      options: [{ id: 'closing-followups-anna-back', label: 'Закрити коробку, залишивши щілину для Френка', next: 'closing', grants: ['club_followups_evening_done', 'club_anna_stage_box_prepared'] }],
+    },
+    {
+      id: 'closing-followups-everyone',
+      speaker: 'Оповідач',
+      text: 'Ти пишеш на дошці: «Наступна зустріч — наступного четверга. Можна прийти без прочитаної книжки». Підписувати не доводиться. Усі й так знають, чия це книгарня.',
+      options: [{ id: 'closing-followups-everyone-back', label: 'Вимкнути лампу над дошкою', next: 'closing', grants: ['club_followups_evening_done', 'club_next_meeting_posted'] }],
     },
     {
       id: 'end',
