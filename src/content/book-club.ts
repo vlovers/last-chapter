@@ -16,7 +16,7 @@ export const bookClub: DialogueStory = {
       text: '«Я попросила учнів придумати запитання до історії. Найкраще було таке: якщо герой помиляється, чи мусимо ми перестати його любити?» Мара ставить тарілку посеред столу. «Сподіваюся, ні. Інакше мої булочки залишаться без друзів».',
       options: [
         { id: 'discuss-books', label: '«Поговорімо про книжки»', next: 'books' },
-        { id: 'ask-mara', label: '«Марo, що для тебе добра кінцівка?»', next: 'mara' },
+        { id: 'ask-mara', label: '«Марo, яку кінцівку ти б переписала власноруч?»', next: 'mara' },
         { id: 'ask-miller', label: '«Пані Міллер, ви знайшли нову загадку?»', next: 'miller' },
         { id: 'close', label: 'Подякувати всім і завершити зустріч', next: 'end' },
       ],
@@ -28,13 +28,13 @@ export const bookClub: DialogueStory = {
       options: [
         {
           id: 'maps-follow',
-          label: '«Іноді дорогу обираємо самі»',
+          label: '«А герой хоч раз питав, чого хоче вона?»',
           next: 'maps',
           requires: ['anna_chose_maps'],
         },
         {
           id: 'mystery-follow',
-          label: '«У детективі важливо не плутати здогад із доказом»',
+          label: '«А де в книжці хоч один доказ, крім його слів?»',
           next: 'mystery',
           requires: ['anna_chose_mystery'],
         },
@@ -75,7 +75,7 @@ export const bookClub: DialogueStory = {
       options: [
         {
           id: 'stories-back',
-          label: '«У нас є місце для таких історій»',
+          label: '«Розповідай. Ми ще нікуди не поспішаємо»',
           next: 'welcome',
           grants: ['club_made_space'],
         },
@@ -88,7 +88,7 @@ export const bookClub: DialogueStory = {
       options: [
         {
           id: 'mara-listen',
-          label: '«Тут можна говорити без поспіху»',
+          label: '«Можеш почати з початку. Чай ще гарячий»',
           next: 'welcome',
           grants: ['club_made_space'],
         },
