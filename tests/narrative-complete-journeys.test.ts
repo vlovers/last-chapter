@@ -297,4 +297,15 @@ describe('complete optional narrative journeys', () => {
       true,
     );
   });
+  it.each([
+    ['club-letter-welcome', 'club-letter-welcome-back', 'club_open_invitation_posted'],
+    ['club-letter-honest', 'club-letter-honest-back', 'club_reading_pressure_lifted'],
+    ['club-letter-private', 'club-letter-private-back', 'club_letter_privacy_respected'],
+  ] as const)('anonymous reader letter %s resolves from actual arrival', (choice, finish, flag) => {
+    const state = follow(bookClub, ['welcome', 'club-reader-letter', choice, finish]);
+    expect(state.node).toBe('welcome');
+    expect(state.flags).toContain(flag);
+    expect(availableOptions(bookClub, state).some((option) => option.id === 'close')).toBe(true);
+  });
+
 });
