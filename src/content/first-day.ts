@@ -147,7 +147,11 @@ export const millerVisit: DialogueStory = {
         { id: 'detectives', label: 'Чому ви любите детективи?', next: 'detectives' },
         { id: 'jam', label: 'Навіщо вам порожня банка?', next: 'jam' },
         { id: 'loneliness', label: 'Як вам живеться в Беллвіку?', next: 'loneliness' },
-        { id: 'miller-neighbors', label: '«А хто в місті найкраще пече?»', next: 'miller-neighbors' },
+        {
+          id: 'miller-neighbors',
+          label: '«А хто в місті найкраще пече?»',
+          next: 'miller-neighbors',
+        },
         { id: 'memory', label: 'Чи завжди можна довіряти спогадам?', next: 'memory' },
         {
           repeatability: 'repeatable',
@@ -162,8 +166,16 @@ export const millerVisit: DialogueStory = {
       speaker: 'Пані Міллер',
       text: '«Мара, звісно. Хоча вона кладе забагато кориці. Я їй про це кажу щочетверга, а щоп’ятниці все одно купую дві булочки». Міллер постукує пальцем по порожній банці. «А ще Томас колись спік пиріг. Ми досі не знаємо, чи то був пиріг, чи будівельний матеріал».',
       options: [
-        { id: 'miller-neighbors-mara', label: '«То навіщо купуєте, якщо кориці забагато?»', next: 'miller-neighbors-mara' },
-        { id: 'miller-neighbors-thomas', label: '«Що сталося з пирогом Томаса?»', next: 'miller-neighbors-thomas' },
+        {
+          id: 'miller-neighbors-mara',
+          label: '«То навіщо купуєте, якщо кориці забагато?»',
+          next: 'miller-neighbors-mara',
+        },
+        {
+          id: 'miller-neighbors-thomas',
+          label: '«Що сталося з пирогом Томаса?»',
+          next: 'miller-neighbors-thomas',
+        },
         { id: 'miller-neighbors-back', label: 'Повернутися до чаю', next: 'topics' },
       ],
     },
@@ -171,13 +183,27 @@ export const millerVisit: DialogueStory = {
       id: 'miller-neighbors-mara',
       speaker: 'Пані Міллер',
       text: '«Бо вона пам’ятає, що я не люблю родзинки, — відказує Міллер. — І що в мене день народження в листопаді. Не треба робити з цього велику історію. Просто приємно, коли хтось пам’ятає». Вона швидко додає: «А кориці все одно забагато».',
-      options: [{ id: 'miller-neighbors-mara-back', label: '«Гаразд, передам їй вашу скаргу»', next: 'topics', grants: ['miller_bakery_story_heard'] }],
+      options: [
+        {
+          id: 'miller-neighbors-mara-back',
+          label: '«Гаразд, передам їй вашу скаргу»',
+          next: 'topics',
+          grants: ['miller_bakery_story_heard'],
+        },
+      ],
     },
     {
       id: 'miller-neighbors-thomas',
       speaker: 'Пані Міллер',
       text: '«Він хотів зробити сюрприз Анні. Забув розпушувач, а потім намагався підпиляти скоринку». Міллер сміється. «Не дивіться так, я не вигадую. Принаймні про пилку. Можливо, це був ніж».',
-      options: [{ id: 'miller-neighbors-thomas-back', label: '«Схоже, йому краще лагодити лампи»', next: 'topics', grants: ['miller_thomas_baking_story_heard'] }],
+      options: [
+        {
+          id: 'miller-neighbors-thomas-back',
+          label: '«Схоже, йому краще лагодити лампи»',
+          next: 'topics',
+          grants: ['miller_thomas_baking_story_heard'],
+        },
+      ],
     },
     {
       id: 'detectives',

@@ -287,7 +287,11 @@ describe('conversational pacing and continuity', () => {
     );
     for (const [choice, returnChoice, flag] of [
       ['miller-neighbors-mara', 'miller-neighbors-mara-back', 'miller_bakery_story_heard'],
-      ['miller-neighbors-thomas', 'miller-neighbors-thomas-back', 'miller_thomas_baking_story_heard'],
+      [
+        'miller-neighbors-thomas',
+        'miller-neighbors-thomas-back',
+        'miller_thomas_baking_story_heard',
+      ],
     ] as const) {
       const branch = selectOption(millerVisit, state, choice);
       const back = selectOption(millerVisit, branch, returnChoice);
@@ -296,5 +300,4 @@ describe('conversational pacing and continuity', () => {
       expect(back.flags).not.toContain('rumor_amplified');
     }
   });
-
 });

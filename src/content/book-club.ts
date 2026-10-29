@@ -39,7 +39,11 @@ export const bookClub: DialogueStory = {
           requires: ['anna_chose_mystery'],
         },
         { id: 'books-general', label: '«Яку історію ви хотіли б почути?»', next: 'stories' },
-        { id: 'books-argument', label: '«А якщо головний герой просто жахлива людина?»', next: 'argument' },
+        {
+          id: 'books-argument',
+          label: '«А якщо головний герой просто жахлива людина?»',
+          next: 'argument',
+        },
         { id: 'books-back', label: 'Повернутися до інших гостей', next: 'welcome' },
       ],
     },
@@ -94,7 +98,11 @@ export const bookClub: DialogueStory = {
           grants: ['club_made_space'],
         },
         { id: 'mara-change', label: '«Яка булочка сьогодні найкраща?»', next: 'mara-buns' },
-        { id: 'mara-disagree', label: '«А мені подобаються кінцівки, де ніхто нікого не пробачає»', next: 'mara-disagree' },
+        {
+          id: 'mara-disagree',
+          label: '«А мені подобаються кінцівки, де ніхто нікого не пробачає»',
+          next: 'mara-disagree',
+        },
       ],
     },
     {
@@ -117,7 +125,11 @@ export const bookClub: DialogueStory = {
       text: '«У нас у класі через це ледь не посварилися, — сміється Анна. — Емма каже, що поганому героєві не місце на обкладинці. А Макс відповів: тоді половину бібліотеки доведеться викинути». Міллер піднімає руку. «Я голосую за Макса. З негідників виходять найкращі підозрювані».',
       options: [
         { id: 'argument-anna', label: '«І що ти відповіла дітям?»', next: 'argument-anna' },
-        { id: 'argument-miller', label: '«Міллер, а у вас є улюблений книжковий негідник?»', next: 'argument-miller' },
+        {
+          id: 'argument-miller',
+          label: '«Міллер, а у вас є улюблений книжковий негідник?»',
+          next: 'argument-miller',
+        },
         { id: 'argument-back', label: 'Повернутися до інших книжок', next: 'books' },
       ],
     },
@@ -125,34 +137,71 @@ export const bookClub: DialogueStory = {
       id: 'argument-anna',
       speaker: 'Анна',
       text: '«Що можна любити книжку й не виправдовувати її героя. Але Макс спитав, чи тоді можна любити історію про пірата». Вона зітхає. «Я попросила його спершу дописати домашнє завдання. Він сказав, що це цензура».',
-      options: [{ id: 'argument-anna-back', label: '«Макс звучить як майбутній письменник»', next: 'welcome', grants: ['club_argued_about_characters'] }],
+      options: [
+        {
+          id: 'argument-anna-back',
+          label: '«Макс звучить як майбутній письменник»',
+          next: 'welcome',
+          grants: ['club_argued_about_characters'],
+        },
+      ],
     },
     {
       id: 'argument-miller',
       speaker: 'Пані Міллер',
       text: '«Та сама тітка з роману, що всім усміхалася й підміняла заповіти. Вона принаймні була ввічлива». Мара пирхає: «Це дуже низька планка». «А в Беллвіку, люба, іноді й такої не дістанеш».',
-      options: [{ id: 'argument-miller-back', label: 'Повернутися до клубу', next: 'welcome', grants: ['club_argued_about_characters'] }],
+      options: [
+        {
+          id: 'argument-miller-back',
+          label: 'Повернутися до клубу',
+          next: 'welcome',
+          grants: ['club_argued_about_characters'],
+        },
+      ],
     },
     {
       id: 'mara-buns',
       speaker: 'Мара',
       text: '«З корицею. Але не кажіть цього пані Міллер: вона наполягає, що макові кращі, і щоразу купує по три». Міллер обурено піднімає чашку. «Я підтримую місцевого виробника!»',
-      options: [{ id: 'mara-buns-back', label: '«Тоді залиш мені одну з корицею»', next: 'welcome', grants: ['club_shared_bakery_joke'] }],
+      options: [
+        {
+          id: 'mara-buns-back',
+          label: '«Тоді залиш мені одну з корицею»',
+          next: 'welcome',
+          grants: ['club_shared_bakery_joke'],
+        },
+      ],
     },
     {
       id: 'mara-disagree',
       speaker: 'Мара',
       text: '«О, це я розумію. Не кожен заслуговує на другий шанс лише тому, що автору захотілося щасливого фіналу». Вона відламує шматочок булочки. «Але якщо персонаж бодай спробував щось виправити, я готова дочитати ще одну главу».',
       options: [
-        { id: 'mara-disagree-push', label: '«А якщо він знову все зіпсує?»', next: 'mara-disagree-more' },
-        { id: 'mara-disagree-back', label: '«Гаразд, про цю книжку ми ще посперечаємося»', next: 'welcome', grants: ['club_mara_disagreed'] },
+        {
+          id: 'mara-disagree-push',
+          label: '«А якщо він знову все зіпсує?»',
+          next: 'mara-disagree-more',
+        },
+        {
+          id: 'mara-disagree-back',
+          label: '«Гаразд, про цю книжку ми ще посперечаємося»',
+          next: 'welcome',
+          grants: ['club_mara_disagreed'],
+        },
       ],
     },
     {
       id: 'mara-disagree-more',
       speaker: 'Мара',
       text: '«Тоді я жбурну книжку в стіну. Не цю, — вона швидко забирає роман зі столу. — Вдома маю спеціальну, у м’якій обкладинці». Анна сміється: «Нарешті хтось чесно розповів, як працює книжковий клуб».',
-      options: [{ id: 'mara-disagree-more-back', label: 'Повернутися до гостей', next: 'welcome', grants: ['club_mara_disagreed'] }],
+      options: [
+        {
+          id: 'mara-disagree-more-back',
+          label: 'Повернутися до гостей',
+          next: 'welcome',
+          grants: ['club_mara_disagreed'],
+        },
+      ],
     },
     {
       id: 'end',
