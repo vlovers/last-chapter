@@ -147,7 +147,7 @@ export const annaVisit: DialogueStory = {
       speaker: 'Анна',
       text: '«Так. Хоча сьогодні я витратила сорок хвилин, пояснюючи, чому клей не є повноцінним обідом». Вона сміється. «Але бувають дні, коли дитина вперше читає вголос без страху. Заради цього варто прокидатися».',
       options: [
-        { id: 'teacher-rest', label: '«А коли ви відпочиваєте?»', next: 'rest' },
+        { id: 'teacher-rest', label: '«У тебе хоч один вільний вечір цього тижня буде?»', next: 'rest' },
         { id: 'teacher-back', label: '«Повернімося до книжок»', next: 'books' },
       ],
     },
@@ -276,7 +276,7 @@ export const annaVisit: DialogueStory = {
       options: [
         {
           id: 'anna-reflect-question',
-          label: '«А що для тебе в цьому найважче?»',
+          label: '«Що тебе найбільше виснажило цього тижня?»',
           next: 'anna-reflection-deep',
         },
         {
