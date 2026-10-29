@@ -40,7 +40,10 @@ describe('Iris evidence follow-up: trust, consent and uncertain clues', () => {
     expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(
       'final-iris-evidence-topic',
     );
-    const completed = follow(discovered, ['final-iris-evidence-leave']);
+    const completed = follow(discovered, [
+      'final-iris-evidence-private',
+      'final-iris-evidence-private-back',
+    ]);
     expect(completed.flags).toContain('final_iris_evidence_conversation_done');
     expect(availableOptions(finalReading, completed).map((option) => option.id)).not.toContain(
       'final-iris-evidence-topic',
@@ -58,7 +61,7 @@ describe('Iris evidence follow-up: trust, consent and uncertain clues', () => {
     const ids = availableOptions(finalReading, state).map((option) => option.id);
     expect(ids).not.toContain('final-iris-evidence-ask');
     expect(ids).toContain('final-iris-evidence-private');
-    expect(ids).toContain('final-iris-evidence-leave');
+    expect(ids).toContain('final-iris-evidence-private');
     expect(currentNode(finalReading, state).text).not.toContain('Можна спитати Нору');
   });
 
@@ -108,9 +111,34 @@ describe('Iris evidence follow-up: trust, consent and uncertain clues', () => {
     expect(seasonEnding({ flags: state.flags }).epilogue).toContain(epilogue);
   });
 
+  it.each([
+    [
+      'final-iris-evidence-own-to-nora',
+      'final_iris_evidence_breach_owned_with_nora',
+      'не використовувати нотатки',
+    ],
+    [
+      'final-iris-evidence-stop-asking',
+      'final_iris_evidence_breach_boundary_kept',
+      'перестав просити',
+    ],
+  ])('lets the player own a breach without restoring access: %s', (option, flag, epilogue) => {
+    const state = follow([...discovered, 'iris_letter_breach_admitted'], [
+      'final-iris-evidence-accountability',
+      option,
+      'final-iris-evidence-accountability-back',
+    ]);
+    expect(state.flags).toContain(flag);
+    expect(state.flags).not.toContain('final_paper_iris_lent_originals');
+    expect(state.flags).not.toContain('final_iris_evidence_public_catalog_requested');
+    expect(seasonEnding({ flags: state.flags }).epilogue).toContain(epilogue);
+  });
+
   it('does not create more than four choices in any new dialogue node', () => {
     const ids = [
       'final-iris-evidence',
+      'final-iris-evidence-accountability',
+      'final-iris-evidence-accountability-result',
       'final-iris-evidence-source',
       'final-iris-evidence-private',
       'final-iris-evidence-rumor',
