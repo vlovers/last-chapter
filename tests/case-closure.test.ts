@@ -80,7 +80,7 @@ describe('five-day case closure: proof, uncertainty and consent', () => {
     expect(state.flags).toContain('final_case_authors_heard');
     expect(state.flags).toContain('final_case_people_heard');
     const decision = selectOption(finalReading, state, 'case-topic-finish');
-    expect(currentNode(finalReading, decision).text).toContain('не знаємо');
+    expect(currentNode(finalReading, decision).text).toContain('Не знаємо');
     expect(options(decision)).not.toContain('case-decision-iris');
   });
 
