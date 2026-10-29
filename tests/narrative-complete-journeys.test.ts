@@ -293,7 +293,8 @@ describe('complete optional narrative journeys', () => {
     const state = follow(bookClub, ['welcome', 'ask-miller', 'miller-spoiler', choice, finish]);
     expect(state.node).toBe('welcome');
     expect(state.flags).toContain(flag);
-    expect(availableOptions(bookClub, state).some((option) => option.id === 'discuss-books')).toBe(true);
+    expect(availableOptions(bookClub, state).some((option) => option.id === 'discuss-books')).toBe(
+      true,
+    );
   });
-
 });
