@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { annaVisit } from '../src/content/anna';
+import { irisDecision } from '../src/content/day-four-iris';
 import { noraVisit } from '../src/content/nora';
 import { maraDecision } from '../src/content/day-four-mara';
 import { leoDecision } from '../src/content/day-four-leo';
@@ -85,4 +86,19 @@ describe('conversational pacing and continuity', () => {
       );
     }
   });
+  it.each([
+    ['Mara pressured', maraDecision, 'greet', 'mara_letter_pressured', 'не проси'],
+    ['Mara respected', maraDecision, 'greet', 'mara_letter_privacy_respected', 'Дякую'],
+    ['Leo pressured', leoDecision, 'welcome', 'leo_letter_pressured_day4', 'не передавай'],
+    ['Leo respected', leoDecision, 'welcome', 'leo_letter_consent_respected', 'Дякую'],
+    ['Iris breach', irisDecision, 'welcome', 'iris_letter_breach_admitted', 'не розповідати'],
+    ['Anna pressured', annaVisit, 'hello', 'anna_rumor_pressed', 'Томаса'],
+    ['Nora pressured', noraVisit, 'hello', 'nora_confidentiality_pressed', 'не розповідатиму'],
+  ] as const)('%s changes the next everyday conversation', (_name, story, hub, flag, phrase) => {
+    expect(currentNode(story, at(story, hub, [flag])).text).toContain(phrase);
+    expect(currentNode(story, at(story, hub, [flag])).text).not.toBe(
+      currentNode(story, at(story, hub)).text,
+    );
+  });
+
 });
