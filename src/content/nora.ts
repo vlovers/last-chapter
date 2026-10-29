@@ -67,6 +67,7 @@ export const noraVisit: DialogueStory = {
           label: '«Тобі траплялися смішні помилки в старих газетах?»',
           next: 'nora-newspaper',
         },
+        { id: 'nora-lost-umbrella', label: '«Що у вас найчастіше гублять у центрі?»', next: 'nora-lost-umbrella' },
         { id: 'work', label: '«Як вам працюється в громадському центрі?»', next: 'work' },
         { id: 'bellwick', label: '«Що вам подобається в Беллвіку?»', next: 'bellwick' },
         {
@@ -396,5 +397,34 @@ export const noraVisit: DialogueStory = {
         },
       ],
     },
+    {
+      id: 'nora-lost-umbrella',
+      speaker: 'Нора',
+      text: '«Парасолі. І терпіння». Нора зітхає. «У нас є шафа з двадцятьма сімома парасолями. Ніхто не визнає жодної своєю. Зате кожен переконаний, що ми вкрали саме його».',
+      options: [
+        { id: 'nora-umbrella-label', label: '«Може, підписати кожну?»', next: 'nora-umbrella-label' },
+        { id: 'nora-umbrella-exhibit', label: '«Влаштуйте виставку загублених парасоль»', next: 'nora-umbrella-exhibit' },
+        { id: 'nora-umbrella-mystery', label: '«А раптом хтось спеціально їх залишає?»', next: 'nora-umbrella-mystery' },
+      ],
+    },
+    {
+      id: 'nora-umbrella-label',
+      speaker: 'Нора',
+      text: '«Ми спробували. Тепер маємо три парасолі з написом “Моя” і одну з написом “Не чіпати”». Вона піднімає палець. «Вгадаєш, яку взяли першою?»',
+      options: [{ id: 'nora-umbrella-label-back', label: '«Звісно, “Не чіпати”»', next: 'hello', grants: ['nora_umbrella_label_story_heard'] }],
+    },
+    {
+      id: 'nora-umbrella-exhibit',
+      speaker: 'Нора',
+      text: '«Томас запропонував те саме. Навіть намалював афішу: “Парасолі без господарів”». Нора сміється. «На відкриття прийшло двоє людей. Один забрав чужу парасолю».',
+      options: [{ id: 'nora-umbrella-exhibit-back', label: '«Це вже перформанс»', next: 'hello', grants: ['nora_umbrella_exhibit_heard'] }],
+    },
+    {
+      id: 'nora-umbrella-mystery',
+      speaker: 'Нора',
+      text: '«Якщо це змова, то дуже мокра». Нора дивиться у вікно. «Знаєш, найбільша загадка — чому всі залишають чорні парасолі, а шукають червоні».',
+      options: [{ id: 'nora-umbrella-mystery-back', label: '«Не кожна загадка потребує розслідування»', next: 'hello', grants: ['nora_umbrella_mystery_joked'] }],
+    },
+
   ],
 };
