@@ -184,7 +184,7 @@ export const paperStudyNodes: readonly DialogueNode[] = [
       },
       {
         id: 'paper-voices-back',
-        label: 'Запитати Міллер, хто був поруч, коли вона це почула',
+        label: 'Записати розбіжності у спогадах, не роблячи висновків',
         next: 'paper-study',
         grants: ['final_paper_voices_heard'],
       },
