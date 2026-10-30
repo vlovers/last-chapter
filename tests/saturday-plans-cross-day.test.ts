@@ -220,6 +220,7 @@ describe('Saturday plans: cross-day consequences without involuntary commitments
       }
     }
   });
+
   it('does not invent a Saturday event when the shared topic was never played', () => {
     const result = seasonEnding({
       flags: [...earlier, 'mara_window_bookshop_suggested', 'leo_night_course_deferred'],
@@ -227,5 +228,4 @@ describe('Saturday plans: cross-day consequences without involuntary commitments
     expect(result.epilogue).not.toContain('Суботній календар книгарні');
     expect(result.epilogue).not.toContain('жодної зустрічі ще не призначили');
   });
-
 });
