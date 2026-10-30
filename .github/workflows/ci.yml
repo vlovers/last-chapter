@@ -52,6 +52,8 @@ jobs:
             command: node scripts/qa-frank-overhaul.mjs
           - name: finale
             command: node scripts/qa-finale-matrix.mjs
+          - name: performance
+            command: node scripts/qa-bookshop-performance.mjs
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
@@ -92,5 +94,12 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: finale-matrix-browser-qa
+          path: /tmp/last-chapter-qa
+          if-no-files-found: ignore
+      - name: Upload performance measurements
+        if: always() && matrix.suite.name == 'performance'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mobile-performance-browser-qa
           path: /tmp/last-chapter-qa
           if-no-files-found: ignore
