@@ -32,6 +32,27 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('final_reader_romance_two_books')
+      ? ['Мара залишила біля вікна два романи з несхожими фіналами. Міллер узяла другий додому, не зрікшись першого.']
+      : flags.has('final_reader_romance_miller_heard')
+        ? ['Міллер розповіла про Артура й поїзди. Анна так і не пробачила авторові, що він пропустив найцікавішу частину примирення.']
+        : flags.has('final_reader_romance_side_character')
+          ? ['На картці рекомендацій з’явився жарт про подругу героїні й зниклий диван. Лео пообіцяв не складати для нього розклад.']
+          : []),
+    ...(flags.has('final_reader_audio_choices')
+      ? ['Біля каталогу залишили картку з побажаннями щодо аудіокнижок, великого шрифту й коротких історій. Наявність видань ще потрібно перевірити.']
+      : flags.has('final_reader_audio_ruth_story')
+        ? ['Рут записала назву морської збірки, але спершу перевірить, чи існує аудіоверсія. Замовлення ніхто не оформлював.']
+        : flags.has('final_reader_audio_class_idea')
+          ? ['Анна занотувала ідеї для уроку: читати по ролях, слухати уривки й малювати човни. Дітям залишили вибір.']
+          : []),
+    ...(flags.has('final_reader_villain_no_spoilers')
+      ? ['Міллер закрила детектив до того, як назвала вбивцю. На столі залишилася закладка без спойлерів, а суперечка про лиходія — незакінченою.']
+      : flags.has('final_reader_villain_nora_view')
+        ? ['Нора й Айріс намалювали на серветці обкладинку для вигаданої героїні, якій у романі не дали власного розділу. Це не стало новою справою для архіву.']
+        : flags.has('final_reader_villain_iris_sketch')
+          ? ['Нора записала ідею виставки вигаданих лиходіїв. Айріс не обіцяла малюнків і не отримала нового замовлення без згоди.']
+          : []),
     ...(flags.has('final_frank_shop_spare_bookmark')
       ? ['Анна взяла чисту закладку, а Френк залишив собі картонну рибку до ранку.']
       : flags.has('final_frank_shop_waited_for_cat')
