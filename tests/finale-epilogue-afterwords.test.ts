@@ -50,11 +50,7 @@ describe('Composed finale afterwords', () => {
   });
 
   it('retains established rumor and exhibition endings alongside case consequences', () => {
-    const text = endingWith(
-      'final_repaired_rumor',
-      'final_iris_exhibition',
-      'final_case_sealed',
-    );
+    const text = endingWith('final_repaired_rumor', 'final_iris_exhibition', 'final_case_sealed');
     expect(text).toContain('Пані Міллер першою вибачається');
     expect(text).toContain('зв’язку з рукописом ніхто не довів');
   });
@@ -68,38 +64,49 @@ describe('Composed finale afterwords', () => {
   it('keeps all closing callbacks independent of authored narration priority', () => {
     const story: DialogueStory = {
       start: 'end',
-      nodes: [{
-        id: 'end',
-        speaker: 'Оповідач',
-        text: 'Початок',
-        textWhen: [{ requires: ['letter'], text: 'Лист залишається приватним' }],
-        variantSelection: 'authored',
-        afterwordWhen: [
-          { requires: ['calendar'], text: 'Календар порожній' },
-          { requires: ['cinema'], unless: ['consent_missing'], text: 'Світлина в теці' },
-        ],
-        options: [],
-      }],
+      nodes: [
+        {
+          id: 'end',
+          speaker: 'Оповідач',
+          text: 'Початок',
+          textWhen: [{ requires: ['letter'], text: 'Лист залишається приватним' }],
+          variantSelection: 'authored',
+          afterwordWhen: [
+            { requires: ['calendar'], text: 'Календар порожній' },
+            { requires: ['cinema'], unless: ['consent_missing'], text: 'Світлина в теці' },
+          ],
+          options: [],
+        },
+      ],
     };
-    expect(currentNode(story, { node: 'end', history: [], flags: ['letter', 'calendar', 'cinema'] }).text)
-      .toBe('Лист залишається приватним\n\nКалендар порожній\n\nСвітлина в теці');
-    expect(currentNode(story, { node: 'end', history: [], flags: ['letter', 'cinema', 'consent_missing'] }).text)
-      .toBe('Лист залишається приватним');
+    expect(
+      currentNode(story, { node: 'end', history: [], flags: ['letter', 'calendar', 'cinema'] })
+        .text,
+    ).toBe('Лист залишається приватним\n\nКалендар порожній\n\nСвітлина в теці');
+    expect(
+      currentNode(story, {
+        node: 'end',
+        history: [],
+        flags: ['letter', 'cinema', 'consent_missing'],
+      }).text,
+    ).toBe('Лист залишається приватним');
   });
 
   it('validates impossible and empty afterword rules', () => {
     const story: DialogueStory = {
       start: 'end',
-      nodes: [{
-        id: 'end',
-        speaker: 'Оповідач',
-        text: 'Кінець',
-        afterwordWhen: [
-          { requires: [], text: '' },
-          { requires: ['a', 'a'], unless: ['a'], text: 'Не буде показано' },
-        ],
-        options: [],
-      }],
+      nodes: [
+        {
+          id: 'end',
+          speaker: 'Оповідач',
+          text: 'Кінець',
+          afterwordWhen: [
+            { requires: [], text: '' },
+            { requires: ['a', 'a'], unless: ['a'], text: 'Не буде показано' },
+          ],
+          options: [],
+        },
+      ],
     };
     const errors = validateDialogue(story);
     expect(errors).toContain('Empty afterword: end');
