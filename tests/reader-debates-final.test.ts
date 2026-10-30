@@ -12,15 +12,69 @@ import {
 import { seasonEnding } from '../src/game/endings';
 
 const routes = [
-  ['reader-romance', 'romance-two-books', 'romance-two-back', 'final_reader_romance_two_books', 'два романи'],
-  ['reader-romance', 'romance-defend', 'romance-defend-back', 'final_reader_romance_miller_heard', 'Артура й поїзди'],
-  ['reader-romance', 'romance-furniture', 'romance-furniture-back', 'final_reader_romance_side_character', 'зниклий диван'],
-  ['reader-audio', 'audio-choices', 'audio-choices-back', 'final_reader_audio_choices', 'аудіокнижок'],
-  ['reader-audio', 'audio-ask-ruth', 'audio-ruth-back', 'final_reader_audio_ruth_story', 'морської збірки'],
-  ['reader-audio', 'audio-ask-anna', 'audio-anna-back', 'final_reader_audio_class_idea', 'малювати човни'],
-  ['reader-villain', 'villain-no-spoilers', 'villain-spoilers-back', 'final_reader_villain_no_spoilers', 'закладка без спойлерів'],
-  ['reader-villain', 'villain-nora', 'villain-nora-back', 'final_reader_villain_nora_view', 'на серветці'],
-  ['reader-villain', 'villain-iris', 'villain-iris-back', 'final_reader_villain_iris_sketch', 'не обіцяла малюнків'],
+  [
+    'reader-romance',
+    'romance-two-books',
+    'romance-two-back',
+    'final_reader_romance_two_books',
+    'два романи',
+  ],
+  [
+    'reader-romance',
+    'romance-defend',
+    'romance-defend-back',
+    'final_reader_romance_miller_heard',
+    'Артура й поїзди',
+  ],
+  [
+    'reader-romance',
+    'romance-furniture',
+    'romance-furniture-back',
+    'final_reader_romance_side_character',
+    'зниклий диван',
+  ],
+  [
+    'reader-audio',
+    'audio-choices',
+    'audio-choices-back',
+    'final_reader_audio_choices',
+    'аудіокнижок',
+  ],
+  [
+    'reader-audio',
+    'audio-ask-ruth',
+    'audio-ruth-back',
+    'final_reader_audio_ruth_story',
+    'морської збірки',
+  ],
+  [
+    'reader-audio',
+    'audio-ask-anna',
+    'audio-anna-back',
+    'final_reader_audio_class_idea',
+    'малювати човни',
+  ],
+  [
+    'reader-villain',
+    'villain-no-spoilers',
+    'villain-spoilers-back',
+    'final_reader_villain_no_spoilers',
+    'закладка без спойлерів',
+  ],
+  [
+    'reader-villain',
+    'villain-nora',
+    'villain-nora-back',
+    'final_reader_villain_nora_view',
+    'на серветці',
+  ],
+  [
+    'reader-villain',
+    'villain-iris',
+    'villain-iris-back',
+    'final_reader_villain_iris_sketch',
+    'не обіцяла малюнків',
+  ],
 ] as const;
 
 const topics = ['reader-romance', 'reader-audio', 'reader-villain'] as const;
@@ -43,17 +97,20 @@ describe('final reader debates', () => {
     }
   });
 
-  it.each(routes)('remembers only the chosen %s / %s route', (topic, choice, back, flag, fragment) => {
-    let state = atHub();
-    for (const id of [topic, choice, back]) state = selectOption(finalReading, state, id);
-    expect(state.node).toBe('final-reader-debates-hub');
-    expect(state.flags).toContain(flag);
-    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(topic);
-    const epilogue = seasonEnding({ flags: state.flags }).epilogue;
-    expect(epilogue).toContain(fragment);
-    expect(seasonEnding({ flags: [] }).epilogue).not.toContain(fragment);
-    expect(state.flags.some((f) => f.includes('ledger') || f.includes('manuscript'))).toBe(false);
-  });
+  it.each(routes)(
+    'remembers only the chosen %s / %s route',
+    (topic, choice, back, flag, fragment) => {
+      let state = atHub();
+      for (const id of [topic, choice, back]) state = selectOption(finalReading, state, id);
+      expect(state.node).toBe('final-reader-debates-hub');
+      expect(state.flags).toContain(flag);
+      expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(topic);
+      const epilogue = seasonEnding({ flags: state.flags }).epilogue;
+      expect(epilogue).toContain(fragment);
+      expect(seasonEnding({ flags: [] }).epilogue).not.toContain(fragment);
+      expect(state.flags.some((f) => f.includes('ledger') || f.includes('manuscript'))).toBe(false);
+    },
+  );
 
   it('can finish all three topics in any order, with no repeatable completed topics', () => {
     let state = atHub();
@@ -67,7 +124,8 @@ describe('final reader debates', () => {
       'reader-audio',
       'audio-ask-anna',
       'audio-anna-back',
-    ]) state = selectOption(finalReading, state, id);
+    ])
+      state = selectOption(finalReading, state, id);
     expect(availableOptions(finalReading, state).map((o) => o.id)).toEqual([
       'reader-debates-close',
     ]);

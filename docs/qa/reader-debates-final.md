@@ -4,17 +4,17 @@
 
 ## Дев'ять окремих результатів
 
-| Тема | Рішення | Факт для епілогу |
-| --- | --- | --- |
-| Романтичні фінали | Поставити два романи поруч | `final_reader_romance_two_books` |
-| Романтичні фінали | Вислухати Міллер | `final_reader_romance_miller_heard` |
+| Тема              | Рішення                      | Факт для епілогу                      |
+| ----------------- | ---------------------------- | ------------------------------------- |
+| Романтичні фінали | Поставити два романи поруч   | `final_reader_romance_two_books`      |
+| Романтичні фінали | Вислухати Міллер             | `final_reader_romance_miller_heard`   |
 | Романтичні фінали | Запитати про подругу героїні | `final_reader_romance_side_character` |
-| Аудіокнижки | Порівняти формати | `final_reader_audio_choices` |
-| Аудіокнижки | Розпитати Рут | `final_reader_audio_ruth_story` |
-| Аудіокнижки | Розпитати Анну | `final_reader_audio_class_idea` |
-| Лиходії | Не розкривати фінал | `final_reader_villain_no_spoilers` |
-| Лиходії | Вислухати Нору | `final_reader_villain_nora_view` |
-| Лиходії | Запитати Айріс про малюнок | `final_reader_villain_iris_sketch` |
+| Аудіокнижки       | Порівняти формати            | `final_reader_audio_choices`          |
+| Аудіокнижки       | Розпитати Рут                | `final_reader_audio_ruth_story`       |
+| Аудіокнижки       | Розпитати Анну               | `final_reader_audio_class_idea`       |
+| Лиходії           | Не розкривати фінал          | `final_reader_villain_no_spoilers`    |
+| Лиходії           | Вислухати Нору               | `final_reader_villain_nora_view`      |
+| Лиходії           | Запитати Айріс про малюнок   | `final_reader_villain_iris_sketch`    |
 
 ## Прогін у грі
 
