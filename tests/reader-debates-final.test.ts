@@ -100,14 +100,14 @@ describe('final reader debates', () => {
   it.each(routes)(
     'remembers only the chosen %s / %s route',
     (topic, choice, back, flag, fragment) => {
-      let state = atHub();
-      for (const id of [topic, choice, back]) state = selectOption(finalReading, state, id);
-      expect(state.node).toBe('final-reader-debates-hub');
-      expect(state.flags).toContain(flag);
-      expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(topic);
-      const epilogue = seasonEnding({ flags: state.flags }).epilogue;
-      expect(epilogue).toContain(fragment);
-      expect(seasonEnding({ flags: [] }).epilogue).not.toContain(fragment);
+        let state = atHub();
+        for (const id of [topic, choice, back]) state = selectOption(finalReading, state, id);
+        expect(state.node).toBe('final-reader-debates-hub');
+        expect(state.flags).toContain(flag);
+        expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(topic);
+        const epilogue = seasonEnding({ flags: state.flags }).epilogue;
+        expect(epilogue).toContain(fragment);
+        expect(seasonEnding({ flags: [] }).epilogue).not.toContain(fragment);
       expect(state.flags.some((f) => f.includes('ledger') || f.includes('manuscript'))).toBe(false);
     },
   );
