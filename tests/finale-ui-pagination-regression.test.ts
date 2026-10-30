@@ -73,6 +73,17 @@ describe('Finale UI pagination and save regression', () => {
     });
   }
 
+  it('rejects pagination after the final reply, without advancing the story', () => {
+    const { story } = savedFinale([]);
+    story.choose('close');
+    expect(story.open().choices.map((choice) => choice.id)).toEqual(['__advance']);
+    expect(() => story.choose('__more_choices')).toThrow('No additional dialogue choices');
+    expect(story.stage).toBe('day5-reading');
+    story.choose('__advance');
+    expect(story.stage).toBe('season-complete');
+    expect(() => story.choose('__more_choices')).toThrow('No additional dialogue choices');
+  });
+
   it('restores the first page without losing dialogue flags or the closing action', () => {
     const { local, story, initial } = savedFinale(allPrerequisites);
     const firstPage = story.open().choices.map((choice) => choice.id);
