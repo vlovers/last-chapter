@@ -32,6 +32,27 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('final_counter_ruth_preferences')
+      ? ['Рут пішла з трьома запитаннями для матері. Подарунок вона обере після розмови, а не замість неї.']
+      : flags.has('final_counter_ruth_large_print_checked')
+        ? ['Рут записала назви видань із великим шрифтом. Наявність у книгарні ще належить перевірити.']
+        : flags.has('final_counter_ruth_shortlist')
+          ? ['Рут забрала список коротких історій про море, щоб показати матері. Покупки ще не було.']
+          : []),
+    ...(flags.has('final_counter_sam_dough')
+      ? ['Сем купив початкову книжку про тісто. Мара пожартувала, що наступного разу він таки дочитає розділ про дріжджі.']
+      : flags.has('final_counter_sam_memoir')
+        ? ['Сем забрав додому кумедні спогади пекаря. Жодних додаткових змін чи уроків Мара йому не обіцяла.']
+        : flags.has('final_counter_sam_asked_first')
+          ? ['Сем вирішив запитати Мару про навчання пізніше. Вона не погоджувалася на урок, але порадила сторінку про дріжджі.']
+          : []),
+    ...(flags.has('final_counter_reed_note')
+      ? ['Пан Рід сам запечатав чужу записку в конверт для знахідок. Її не читали вголос і не виставляли.']
+      : flags.has('final_counter_reed_book_kept')
+        ? ['Пан Рід залишив стару книжку собі, не розгортаючи чужу записку. Він повернувся до детективу про велосипед.']
+        : flags.has('final_counter_reed_deferred')
+          ? ['Пан Рід забрав книжку додому й вирішив не поспішати із запискою. Ніхто не вирішував за нього.']
+          : []),
     ...(flags.has('final_saturday_plans_done')
       ? [
           flags.has('final_saturday_calendar_offered')

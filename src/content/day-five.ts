@@ -11,6 +11,7 @@ import { workshopPhotoNodes, workshopPhotoOption } from './workshop-photo';
 import { maraWindowFinalNodes } from './mara-window-table';
 import { leoNightCourseFinalNodes, leoNightCourseFinalOption } from './leo-night-course-final';
 import { saturdayPlansNodes, saturdayPlansOption } from './saturday-plans-final';
+import { counterEncountersNodes, counterEncountersOption } from './counter-encounters';
 import { irisCoverFinalNodes, irisCoverFinalOption } from './iris-cover-final';
 import { irisEvidenceFinalNodes, irisEvidenceFinalOption } from './iris-evidence-final';
 import { eleanorMemoryFinalNodes, eleanorMemoryFinalOption } from './eleanor-memory-final';
@@ -161,6 +162,7 @@ export const finalReading: DialogueStory = {
         },
         leoNightCourseFinalOption,
         saturdayPlansOption,
+        counterEncountersOption,
         irisCoverFinalOption,
         irisEvidenceFinalOption,
         eleanorMemoryFinalOption,
@@ -2366,6 +2368,7 @@ export const finalReading: DialogueStory = {
     ...maraWindowFinalNodes,
     ...leoNightCourseFinalNodes,
     ...saturdayPlansNodes,
+    ...counterEncountersNodes,
     ...irisCoverFinalNodes,
     ...irisEvidenceFinalNodes,
     ...eleanorMemoryFinalNodes,
