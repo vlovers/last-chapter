@@ -10,6 +10,7 @@ import { caseClosureNodes, caseClosureOption } from './case-closure';
 import { workshopPhotoNodes, workshopPhotoOption } from './workshop-photo';
 import { maraWindowFinalNodes } from './mara-window-table';
 import { leoNightCourseFinalNodes, leoNightCourseFinalOption } from './leo-night-course-final';
+import { saturdayPlansNodes, saturdayPlansOption } from './saturday-plans-final';
 import { irisCoverFinalNodes, irisCoverFinalOption } from './iris-cover-final';
 import { irisEvidenceFinalNodes, irisEvidenceFinalOption } from './iris-evidence-final';
 import { eleanorMemoryFinalNodes, eleanorMemoryFinalOption } from './eleanor-memory-final';
@@ -159,6 +160,7 @@ export const finalReading: DialogueStory = {
           unless: ['final_v3_mara_heard'],
         },
         leoNightCourseFinalOption,
+        saturdayPlansOption,
         irisCoverFinalOption,
         irisEvidenceFinalOption,
         eleanorMemoryFinalOption,
@@ -2363,6 +2365,7 @@ export const finalReading: DialogueStory = {
     },
     ...maraWindowFinalNodes,
     ...leoNightCourseFinalNodes,
+    ...saturdayPlansNodes,
     ...irisCoverFinalNodes,
     ...irisEvidenceFinalNodes,
     ...eleanorMemoryFinalNodes,
