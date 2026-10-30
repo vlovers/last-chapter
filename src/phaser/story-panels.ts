@@ -69,7 +69,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         }
         evidence.append(card);
       }
-      if (!story.evidence.length) evidence.append(element('p', 'Огляньте кота, полиці й прилавок, щоб знайти зачіпки.'));
+      if (!story.evidence.length)
+        evidence.append(element('p', 'Огляньте кота, полиці й прилавок, щоб знайти зачіпки.'));
       panel.append(evidence);
       const notes = element('ul', '', 'story-notes');
       for (const note of story.notes) notes.append(element('li', note));
