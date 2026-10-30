@@ -4,9 +4,15 @@ import { inspectShopSpot, shopSpots } from '../src/game/exploration';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 describe('bookshop exploration', () => {
-  it('provides four distinct, accessible object descriptions', () => {
-    expect(shopSpots.map((spot) => spot.id)).toEqual(['shelves', 'window', 'counter', 'plant']);
-    expect(new Set(shopSpots.map((spot) => spot.discoveryFlag)).size).toBe(4);
+  it('provides five distinct, accessible objects including Frank', () => {
+    expect(shopSpots.map((spot) => spot.id)).toEqual([
+      'frank',
+      'shelves',
+      'window',
+      'counter',
+      'plant',
+    ]);
+    expect(new Set(shopSpots.map((spot) => spot.discoveryFlag)).size).toBe(5);
     for (const spot of shopSpots) {
       expect(spot.title.length).toBeGreaterThan(0);
       expect(spot.detail.length).toBeGreaterThan(40);
@@ -20,6 +26,16 @@ describe('bookshop exploration', () => {
     expect(visited.dialogue.flags).toContain('explored_shelves');
     expect(inspectShopSpot(visited, 'shelves')).toBe(visited);
   });
+  it('remembers meeting Frank without advancing the story or repeating discovery', () => {
+    const initial = startChapter();
+    const metFrank = inspectShopSpot(initial, 'frank');
+    expect(metFrank.flags).toContain('met_frank');
+    expect(metFrank.dialogue.flags).toContain('met_frank');
+    expect(metFrank.dialogue.node).toBe(initial.dialogue.node);
+    expect(inspectShopSpot(metFrank, 'frank')).toBe(metFrank);
+    expect(decodeSave(encodeSave(metFrank))).toEqual(metFrank);
+  });
+
   it('persists exploration and supports discovering multiple objects', () => {
     const state = inspectShopSpot(inspectShopSpot(startChapter(), 'window'), 'counter');
     expect(decodeSave(encodeSave(state))).toEqual(state);
