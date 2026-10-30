@@ -27,6 +27,16 @@ describe('bookshop exploration', () => {
     expect(visited.dialogue.flags).toContain('explored_shelves');
     expect(inspectShopSpot(visited, 'shelves')).toBe(visited);
   });
+  it('remembers meeting Frank without advancing the story or repeating discovery', () => {
+    const initial = startChapter();
+    const metFrank = inspectShopSpot(initial, 'frank');
+    expect(metFrank.flags).toContain('met_frank');
+    expect(metFrank.dialogue.flags).toContain('met_frank');
+    expect(metFrank.dialogue.node).toBe(initial.dialogue.node);
+    expect(inspectShopSpot(metFrank, 'frank')).toBe(metFrank);
+    expect(decodeSave(encodeSave(metFrank))).toEqual(metFrank);
+  });
+
   it('persists exploration and supports discovering multiple objects', () => {
     const state = inspectShopSpot(inspectShopSpot(startChapter(), 'window'), 'counter');
     expect(decodeSave(encodeSave(state))).toEqual(state);
