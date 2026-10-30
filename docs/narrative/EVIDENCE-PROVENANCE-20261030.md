@@ -34,3 +34,10 @@ The ledger can resolve **what the number of a bookshop box was** without resolvi
 **Editorial rule:** if a future scene claims that the pencilled number proves the box's provenance, that the workshop photo says 17, that a blank ledger cell identifies a person, or that two stars establish authorship, it needs genuinely new on-screen evidence and explicit tests. Do not infer those conclusions from the existing flags.
 
 The draft PR still needs normal integration and browser QA before merge; this document is not a release approval.
+
+## Manual QA scenarios
+
+- Open the case review without Iris's two observations: the box can be checked, but the star comparison must be absent.
+- Learn both observations, then disclose the letter breach: the crosscheck may use existing notes, never new originals or implied permission.
+- Publish the unsupported missing-recipient headline before the case review, then request a correction: the epilogue must describe an unanswered request, not a confirmed retraction.
+- Finish the audit and return to the authorship topic: the completed crosscheck must disappear while the ordinary case conclusion remains available.
