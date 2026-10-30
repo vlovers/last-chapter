@@ -4,7 +4,7 @@ import { inspectShopSpot, shopSpots } from '../src/game/exploration';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 describe('bookshop exploration', () => {
-  it('provides five distinct, accessible objects including Frank', () => {
+  it('provides five distinct, accessible object descriptions', () => {
     expect(shopSpots.map((spot) => spot.id)).toEqual([
       'frank',
       'shelves',
@@ -13,6 +13,7 @@ describe('bookshop exploration', () => {
       'plant',
     ]);
     expect(new Set(shopSpots.map((spot) => spot.discoveryFlag)).size).toBe(5);
+    expect(shopSpots.find((spot) => spot.id === 'frank')?.discoveryFlag).toBe('met_frank');
     for (const spot of shopSpots) {
       expect(spot.title.length).toBeGreaterThan(0);
       expect(spot.detail.length).toBeGreaterThan(40);

@@ -133,7 +133,7 @@ function render(): void {
   // Preserve the immersive scene while letting keyboard users discover the controls.
   const sceneHint = document.createElement('p');
   sceneHint.className = 'scene-hint';
-  sceneHint.textContent = 'Огляньте книгарню: полиці, вікно, прилавок, рослину та Френка';
+  sceneHint.textContent = 'Огляньте книгарню: полиці, вікно, прилавок, рослину і Френка';
   illustration.append(sceneHint);
 
   const heading = document.createElement('h1');
