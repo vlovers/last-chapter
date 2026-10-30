@@ -114,6 +114,7 @@ function render(): void {
       window: '☂',
       counter: '✉',
       plant: '✿',
+      frank: '🐈',
     };
     button.textContent = spotGlyphs[spot.id];
     button.title = spot.description;
@@ -132,7 +133,7 @@ function render(): void {
   // Preserve the immersive scene while letting keyboard users discover the controls.
   const sceneHint = document.createElement('p');
   sceneHint.className = 'scene-hint';
-  sceneHint.textContent = 'Огляньте книгарню: полиці, вікно, прилавок і рослину';
+  sceneHint.textContent = 'Огляньте книгарню: полиці, вікно, прилавок, рослину та Френка';
   illustration.append(sceneHint);
 
   const heading = document.createElement('h1');
