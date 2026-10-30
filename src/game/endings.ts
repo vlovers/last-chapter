@@ -32,6 +32,29 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('final_saturday_plans_done')
+      ? [
+          flags.has('final_saturday_calendar_offered')
+            ? 'Після вечора в книгарні залишився чистий аркуш для суботніх пропозицій. Ніхто не записав Мару, Лео чи Джун без їхньої згоди; жодної зустрічі ще не призначили.'
+            : flags.has('final_saturday_plans_separate')
+              ? 'Суботній календар книгарні залишився порожнім. Мара й Лео пішли зі своїми планами, і ніхто не оголосив їх спільним заходом.'
+              : 'Мара й Лео поговорили про наступну суботу, але не стали обіцяти ні випічки, ні вільних змін. Книгарня залишила для них місце без готового розкладу.',
+          ...(flags.has('final_saturday_mara_tasting_discussed')
+            ? ['Мара не відкинула маленьку дегустацію, але спершу має сама домовитися про духовку. Афішу без неї не друкували.']
+            : flags.has('final_saturday_mara_credit_respected')
+              ? ['Ім’я Мари залишилося на табличці в пекарні; її рецепт ніхто не виставляв на чужій полиці без дозволу.']
+              : flags.has('final_saturday_mara_private_respected')
+                ? ['Мара забрала домашній рецепт із собою. Ні фотографій, ні оголошення про дегустацію не з’явилося.']
+                : []),
+          ...(flags.has('final_saturday_leo_wait_respected')
+            ? ['Лео продовжив чекати відповіді з Грейфорда, не обіцяючи колегам чи Марі ще не погоджених вечорів.']
+            : flags.has('final_saturday_leo_shifts_unconfirmed')
+              ? ['Лео не записав Джун на другу підміну. Розклад залишився відкритим до розмови з нею та Гаррісом.']
+              : flags.has('final_saturday_leo_rest_respected')
+                ? ['Лео залишив собі право провести вихідний із книжкою. Це не стало ні відмовою від Мари, ні обіцянкою нового курсу.']
+                : []),
+        ]
+      : []),
     ...(flags.has('final_case_evidence_audit_done')
       ? [
           flags.has('final_case_audit_correction_requested')
