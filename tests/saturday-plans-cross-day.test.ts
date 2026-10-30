@@ -18,14 +18,30 @@ import { seasonEnding } from '../src/game/endings';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 const maraPaths = [
-  ['mara_window_bookshop_suggested', 'saturday-mara-tasting', 'final_saturday_mara_tasting_discussed'],
+  [
+    'mara_window_bookshop_suggested',
+    'saturday-mara-tasting',
+    'final_saturday_mara_tasting_discussed',
+  ],
   ['mara_window_credit_encouraged', 'saturday-mara-credit', 'final_saturday_mara_credit_respected'],
-  ['mara_window_private_suggested', 'saturday-mara-private', 'final_saturday_mara_private_respected'],
+  [
+    'mara_window_private_suggested',
+    'saturday-mara-private',
+    'final_saturday_mara_private_respected',
+  ],
 ] as const;
 
 const leoPaths = [
-  ['leo_night_course_application_planned', 'saturday-leo-application', 'final_saturday_leo_wait_respected'],
-  ['leo_night_course_shift_request_planned', 'saturday-leo-shifts', 'final_saturday_leo_shifts_unconfirmed'],
+  [
+    'leo_night_course_application_planned',
+    'saturday-leo-application',
+    'final_saturday_leo_wait_respected',
+  ],
+  [
+    'leo_night_course_shift_request_planned',
+    'saturday-leo-shifts',
+    'final_saturday_leo_shifts_unconfirmed',
+  ],
   ['leo_night_course_deferred', 'saturday-leo-rest', 'final_saturday_leo_rest_respected'],
 ] as const;
 
@@ -49,11 +65,7 @@ function choose(state: DialogueState, ...route: string[]): DialogueState {
 describe('Saturday plans: cross-day consequences without involuntary commitments', () => {
   it('unlocks only after both independent conversations and does not replace existing callbacks', () => {
     const topic = 'final-saturday-plans-topic';
-    for (const flags of [
-      [],
-      ['mara_window_plan_discussed'],
-      ['leo_night_course_discussed'],
-    ]) {
+    for (const flags of [[], ['mara_window_plan_discussed'], ['leo_night_course_discussed']]) {
       expect(optionIds(gathering(flags))).not.toContain(topic);
     }
     const flags = [...earlier, 'mara_own_morning_heard'];
@@ -87,50 +99,60 @@ describe('Saturday plans: cross-day consequences without involuntary commitments
     expect(scenes.size).toBe(9);
   });
 
-  it.each(maraPaths)('honors Mara route %s without exposing a private recipe', (flag, choice, outcome) => {
-    const state = choose(
-      gathering([...earlier, flag, 'leo_night_course_deferred']),
-      'final-saturday-plans-topic',
-      'saturday-talk-mara',
-    );
-    const allowed = optionIds(state);
-    expect(allowed).toContain(choice);
-    for (const [, other] of maraPaths) {
-      if (other !== choice) expect(allowed).not.toContain(other);
-    }
-    const done = choose(state, choice, 'saturday-mara-result-back', 'saturday-finish');
-    expect(done.flags).toContain(outcome);
-    expect(done.flags).toContain('final_saturday_plans_done');
-    const ending = seasonEnding({ flags: done.flags }).epilogue;
-    if (flag === 'mara_window_private_suggested') {
-      expect(ending).toContain('Ні фотографій, ні оголошення');
-      expect(ending).not.toContain('Мара не відкинула маленьку дегустацію');
-    }
-    if (flag === 'mara_window_bookshop_suggested') {
-      expect(ending).toContain('спершу має сама домовитися');
-    }
-  });
+  it.each(maraPaths)(
+    'honors Mara route %s without exposing a private recipe',
+    (flag, choice, outcome) => {
+      const state = choose(
+        gathering([...earlier, flag, 'leo_night_course_deferred']),
+        'final-saturday-plans-topic',
+        'saturday-talk-mara',
+      );
+      const allowed = optionIds(state);
+      expect(allowed).toContain(choice);
+      for (const [, other] of maraPaths) {
+        if (other !== choice) expect(allowed).not.toContain(other);
+      }
+      const done = choose(state, choice, 'saturday-mara-result-back', 'saturday-finish');
+      expect(done.flags).toContain(outcome);
+      expect(done.flags).toContain('final_saturday_plans_done');
+      const ending = seasonEnding({ flags: done.flags }).epilogue;
+      if (flag === 'mara_window_private_suggested') {
+        expect(ending).toContain('Ні фотографій, ні оголошення');
+        expect(ending).not.toContain('Мара не відкинула маленьку дегустацію');
+      }
+      if (flag === 'mara_window_bookshop_suggested') {
+        expect(ending).toContain('спершу має сама домовитися');
+      }
+    },
+  );
 
-  it.each(leoPaths)('honors Leo route %s without assigning June a shift', (flag, choice, outcome) => {
-    const state = choose(
-      gathering([...earlier, 'mara_window_bookshop_suggested', flag]),
-      'final-saturday-plans-topic',
-      'saturday-talk-leo',
-    );
-    const allowed = optionIds(state);
-    expect(allowed).toContain(choice);
-    for (const [, other] of leoPaths) {
-      if (other !== choice) expect(allowed).not.toContain(other);
-    }
-    const done = choose(state, choice, 'saturday-leo-result-back', 'saturday-finish');
-    expect(done.flags).toContain(outcome);
-    const ending = seasonEnding({ flags: done.flags }).epilogue;
-    expect(ending).toContain('Лео');
-    expect(ending).not.toContain('Джун погодилася на другу');
-  });
+  it.each(leoPaths)(
+    'honors Leo route %s without assigning June a shift',
+    (flag, choice, outcome) => {
+      const state = choose(
+        gathering([...earlier, 'mara_window_bookshop_suggested', flag]),
+        'final-saturday-plans-topic',
+        'saturday-talk-leo',
+      );
+      const allowed = optionIds(state);
+      expect(allowed).toContain(choice);
+      for (const [, other] of leoPaths) {
+        if (other !== choice) expect(allowed).not.toContain(other);
+      }
+      const done = choose(state, choice, 'saturday-leo-result-back', 'saturday-finish');
+      expect(done.flags).toContain(outcome);
+      const ending = seasonEnding({ flags: done.flags }).epilogue;
+      expect(ending).toContain('Лео');
+      expect(ending).not.toContain('Джун погодилася на другу');
+    },
+  );
 
   it('keeps a proposed calendar separate from a confirmed event', () => {
-    const flags = [...earlier, 'mara_window_bookshop_suggested', 'leo_night_course_shift_request_planned'];
+    const flags = [
+      ...earlier,
+      'mara_window_bookshop_suggested',
+      'leo_night_course_shift_request_planned',
+    ];
     const offered = choose(
       gathering(flags),
       'final-saturday-plans-topic',
@@ -140,7 +162,9 @@ describe('Saturday plans: cross-day consequences without involuntary commitments
       'saturday-finish',
     );
     expect(offered.flags).toContain('final_saturday_calendar_offered');
-    expect(seasonEnding({ flags: offered.flags }).epilogue).toContain('жодної зустрічі ще не призначили');
+    expect(seasonEnding({ flags: offered.flags }).epilogue).toContain(
+      'жодної зустрічі ще не призначили',
+    );
     const separate = choose(
       gathering(flags),
       'final-saturday-plans-topic',
