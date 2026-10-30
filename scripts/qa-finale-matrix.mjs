@@ -46,8 +46,7 @@ try {
   const matrix = await page.evaluate(async () => {
     const { chooseChapterOption, finishSeason, startFifthDay } =
       await import('/src/game/chapter.ts');
-    const { availableOptions, currentNode, startDialogue } =
-      await import('/src/game/dialogue.ts');
+    const { availableOptions, currentNode, startDialogue } = await import('/src/game/dialogue.ts');
     const { seasonEnding } = await import('/src/game/endings.ts');
     const { decodeSave, encodeSave } = await import('/src/game/save.ts');
     const { finalReading } = await import('/src/content/day-five.ts');
@@ -62,29 +61,65 @@ try {
       'nora_cinema_exhibit_discussed',
     ];
     const cases = [
-      ['sealed', ['case-decision-seal'], 'final_case_sealed',
-        'зв’язку з рукописом ніхто не довів', 'Після вечора Нора залишила'],
-      ['Iris declined', ['case-decision-iris', 'case-iris-decline'],
-        'final_case_iris_declined', 'дозволу на публікацію ніхто не давав',
-        'Айріс відмовилася обговорювати підсумок'],
+      [
+        'sealed',
+        ['case-decision-seal'],
+        'final_case_sealed',
+        'зв’язку з рукописом ніхто не довів',
+        'Після вечора Нора залишила',
+      ],
+      [
+        'Iris declined',
+        ['case-decision-iris', 'case-iris-decline'],
+        'final_case_iris_declined',
+        'дозволу на публікацію ніхто не давав',
+        'Айріс відмовилася обговорювати підсумок',
+      ],
     ];
     const calendars = [
-      ['offered', 'saturday-calendar-offer', 'final_saturday_calendar_offered',
-        'лише Елеонорина примітка купити чай', 'жодної зустрічі ще не призначили'],
-      ['separate', 'saturday-calendar-separate', 'final_saturday_plans_separate',
-        'не записує їх у розклад книгарні', 'Суботній календар книгарні залишився порожнім'],
+      [
+        'offered',
+        'saturday-calendar-offer',
+        'final_saturday_calendar_offered',
+        'лише Елеонорина примітка купити чай',
+        'жодної зустрічі ще не призначили',
+      ],
+      [
+        'separate',
+        'saturday-calendar-separate',
+        'final_saturday_plans_separate',
+        'не записує їх у розклад книгарні',
+        'Суботній календар книгарні залишився порожнім',
+      ],
     ];
     const cinemas = [
-      ['compared', 'final-nora-miller-compare', 'final-nora-miller-compare-detail',
-        'final-nora-miller-compare-back', 'final_nora_miller_notes_compared',
+      [
+        'compared',
+        'final-nora-miller-compare',
+        'final-nora-miller-compare-detail',
+        'final-nora-miller-compare-back',
+        'final_nora_miller_notes_compared',
         'сімейну листівку Міллер забрала додому',
-        'невідомий рік так і не перетворився на факт'],
-      ['caption', 'final-nora-miller-caption', 'final-nora-miller-caption-detail',
-        'final-nora-miller-caption-back', 'final_nora_miller_caption_drafted',
-        'Рік зйомки ще не встановили', 'Портрети людей не виставляли'],
-      ['deferred', 'final-nora-miller-defer', 'final-nora-miller-defer-detail',
-        'final-nora-miller-defer-back', 'final_nora_miller_exhibit_deferred',
-        'ніхто не друкує афішу', 'Виставку не оголосили відкритою'],
+        'невідомий рік так і не перетворився на факт',
+      ],
+      [
+        'caption',
+        'final-nora-miller-caption',
+        'final-nora-miller-caption-detail',
+        'final-nora-miller-caption-back',
+        'final_nora_miller_caption_drafted',
+        'Рік зйомки ще не встановили',
+        'Портрети людей не виставляли',
+      ],
+      [
+        'deferred',
+        'final-nora-miller-defer',
+        'final-nora-miller-defer-detail',
+        'final-nora-miller-defer-back',
+        'final_nora_miller_exhibit_deferred',
+        'ніхто не друкує афішу',
+        'Виставку не оголосили відкритою',
+      ],
     ];
     const summaries = [];
     const fixtures = [];
@@ -98,16 +133,31 @@ try {
             dialogue: { ...startDialogue(finalReading), flags },
           });
           const steps = [
-            'open', 'case-closure', 'case-topic-timeline', 'case-timeline-back',
-            'case-topic-authors', 'case-authors-back', 'case-topic-people',
-            'case-people-back', 'case-topic-finish', ...caseRoute[1],
-            'case-result-finish', 'final-saturday-plans-topic',
-            'saturday-talk-calendar', calendar[1], 'saturday-calendar-result-back',
-            'saturday-finish', 'final-nora-miller-cinema-topic',
-            cinema[1], cinema[2], cinema[3],
+            'open',
+            'case-closure',
+            'case-topic-timeline',
+            'case-timeline-back',
+            'case-topic-authors',
+            'case-authors-back',
+            'case-topic-people',
+            'case-people-back',
+            'case-topic-finish',
+            ...caseRoute[1],
+            'case-result-finish',
+            'final-saturday-plans-topic',
+            'saturday-talk-calendar',
+            calendar[1],
+            'saturday-calendar-result-back',
+            'saturday-finish',
+            'final-nora-miller-cinema-topic',
+            cinema[1],
+            cinema[2],
+            cinema[3],
           ];
           for (const id of steps) {
-            if (!availableOptions(finalReading, state.dialogue).some((option) => option.id === id)) {
+            if (
+              !availableOptions(finalReading, state.dialogue).some((option) => option.id === id)
+            ) {
               throw new Error('Unavailable choice ' + id + ' at ' + state.dialogue.node);
             }
             const next = chooseChapterOption(state, id);
@@ -195,7 +245,9 @@ try {
     output + '/results.json',
     JSON.stringify({ matrix: matrix.summaries, results, errors }, null, 2),
   );
-  console.log(JSON.stringify({ routes: matrix.summaries.length, results, errors, output }, null, 2));
+  console.log(
+    JSON.stringify({ routes: matrix.summaries.length, results, errors, output }, null, 2),
+  );
 } catch (error) {
   if (page && !page.isClosed()) {
     await page.screenshot({ path: output + '/failure.png', fullPage: true }).catch(() => {});
