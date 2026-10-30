@@ -32,6 +32,15 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('final_case_evidence_audit_done')
+      ? [
+          flags.has('final_case_audit_correction_requested')
+            ? 'Після перевірки журналу Нора попросила редактора зупинити неперевірену замітку про «зниклого отримувача». Відповіді ще не було; порожня графа так і не назвала людину.'
+            : flags.has('final_case_audit_accusation_attempted')
+              ? 'Ти наполіг, що цифри доводять приховування. Нора відмовилася друкувати звинувачення, а Елеонора забрала журнал. Зв’язок числа на аркуші з коробкою не підтвердили.'
+              : 'Нора залишила у приватній теці три окремі картки: запис журналу про коробку №17, спогади свідків і неперевірені здогади. Жодна з них не назвала автора рукопису.',
+        ]
+      : []),
     ...(flags.has('final_nora_miller_cinema_done')
       ? [
           flags.has('final_nora_miller_notes_compared')
