@@ -42,7 +42,26 @@ async function openMara(page) {
 }
 async function choose(page, id) {
   await page.waitForTimeout(250);
-  await page.locator(`#choices button[data-choice="${id}"]`).click();
+  const choice = page.locator(`#choices button[data-choice="${id}"]`);
+  const visitedPages = new Set();
+  // The playable UI shows three replies and a fourth pagination button.
+  // Walk real pages instead of assuming every engine option is rendered at once.
+  for (let attempt = 0; attempt < 40; attempt++) {
+    if (await choice.isVisible()) {
+      await choice.click();
+      return;
+    }
+    const visibleIds = await page
+      .locator('#choices button[data-choice]')
+      .evaluateAll((buttons) => buttons.map((button) => button.dataset.choice));
+    const signature = visibleIds.join(',');
+    if (visitedPages.has(signature)) break;
+    visitedPages.add(signature);
+    const nextPage = page.locator('#choices button[data-choice="__more_choices"]');
+    if (!(await nextPage.isVisible())) break;
+    await nextPage.click();
+  }
+  throw new Error(`Choice "${id}" is not reachable through UI pages: ${[...visitedPages].join(' -> ')}`);
 }
 async function layout(page) {
   await page.waitForTimeout(300);
