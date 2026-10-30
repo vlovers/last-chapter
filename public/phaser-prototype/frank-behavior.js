@@ -178,10 +178,17 @@ export function reactFrank(cat, action, player) {
           ? 'Френк старанно вмивається, а тоді на мить завмирає з піднятою лапою.'
           : 'Френк повертає голову до вікна. Кінчик хвоста повільно рухається по підлозі.';
   if (action === 'feed' || action === 'tree') {
+    if (sleeping && action === 'tree')
+      return 'Френк спить. На дерево він підніметься, коли сам захоче.';
     const target = action === 'feed' ? BOWL : TREE;
-    goTo(cat, target);
+    // A blocked route must not erase the cat's current activity or queue a
+    // delayed arrival animation. Commit the new intention only on success.
+    const path = findPath(cat, target);
+    if (!path.length) return 'Френк поки не може пройти. Звільніть прохід.';
+    cat.path = path;
+    cat.activity = 'walking';
+    cat.remaining = 5000;
     cat.afterArrival = action === 'feed' ? 'eating' : 'climbing';
-    if (!cat.path.length) return 'Френк поки не може пройти. Звільніть прохід.';
     cat.cooldowns[action] = action === 'feed' ? 180000 : 45000;
     if (action === 'feed') cat.meals++;
     return action === 'feed'
@@ -189,6 +196,7 @@ export function reactFrank(cat, action, player) {
       : 'Френк оглядає дерево й неквапливо підходить до нижньої платформи.';
   }
   if (action === 'play') {
+    if (sleeping) return 'Френк спить, згорнувшись клубочком. Стрічка почекає.';
     cat.path = [];
     cat.activity = 'playing';
     cat.remaining = 6500;

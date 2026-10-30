@@ -87,6 +87,29 @@ describe('Frank ambient resident', () => {
     expect(cat.path.length).toBeGreaterThan(0);
     expect(initialFrank()).toEqual(initialFrank());
   });
+  it('lets Frank sleep instead of forcing play or a tree climb', () => {
+    const cat = initialFrank();
+    cat.activity = 'sleeping';
+    const before = structuredClone(cat);
+    const player = frankApproach(cat);
+    expect(reactFrank(cat, 'play', player)).toContain('Стрічка почекає');
+    expect(reactFrank(cat, 'tree', player)).toContain('коли сам захоче');
+    expect(cat).toEqual(before);
+    expect(cat.games).toBe(0);
+    expect(cat.cooldowns).toEqual({});
+  });
+
+  it('keeps the current activity and counters if the bowl route is blocked', () => {
+    const cat = initialFrank();
+    cat.x = 0;
+    cat.y = 0;
+    cat.activity = 'grooming';
+    const before = structuredClone(cat);
+    expect(reactFrank(cat, 'feed', { x: 0, y: 0 })).toContain('не може пройти');
+    expect(cat).toEqual(before);
+    expect(cat.meals).toBe(0);
+  });
+
   it('draws distinct native pixel poses with no fractional geometry', () => {
     const poses = new Set();
     for (const activity of [
