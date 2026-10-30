@@ -50,6 +50,8 @@ jobs:
             command: npm run test:browser:mobile
           - name: frank
             command: node scripts/qa-frank-overhaul.mjs
+          - name: finale
+            command: node scripts/qa-finale-matrix.mjs
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
@@ -84,4 +86,11 @@ jobs:
         with:
           name: vite-log-${{ matrix.suite.name }}
           path: /tmp/last-chapter-vite.log
+          if-no-files-found: ignore
+      - name: Upload finale matrix evidence
+        if: always() && matrix.suite.name == 'finale'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: finale-matrix-browser-qa
+          path: /tmp/last-chapter-qa
           if-no-files-found: ignore
