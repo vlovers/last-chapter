@@ -408,9 +408,16 @@ class Bookshop extends Phaser.Scene {
             if (!this.story)
               $('#objective').textContent = 'Допоможіть Марі обрати книжку на подарунок.';
           }
-        } else if (this.story &&
+        } else if (
+          this.story &&
           this.state.mara === 'ready' &&
-          shouldBrowse(this.roaming, this.state.mode, this.state.visitorVisible !== false, this.reduced)) {
+          shouldBrowse(
+            this.roaming,
+            this.state.mode,
+            this.state.visitorVisible !== false,
+            this.reduced,
+          )
+        ) {
           if (this.reduced) {
             updateCharacter(mara, mara, true);
           } else if (this.roaming.path.length) {
@@ -419,7 +426,9 @@ class Bookshop extends Phaser.Scene {
             if (!this.roaming.path.length) {
               this.roaming.pause = 4800;
               mara.direction = this.roaming.goal?.facing ?? 'up';
-              this.toast(this.story.visitor + ' ' + (this.roaming.goal?.label ?? 'оглядає книгарню') + '.');
+              this.toast(
+                this.story.visitor + ' ' + (this.roaming.goal?.label ?? 'оглядає книгарню') + '.',
+              );
             }
           } else {
             updateCharacter(mara, mara, false);
@@ -459,7 +468,8 @@ class Bookshop extends Phaser.Scene {
             dialogueNode(this.activeDialogue, this.state)?.mood === 'warm',
         );
       }
-      const speaking = this.story && this.state.mode === 'dialogue' && this.activeDialogue?.kind === 'story';
+      const speaking =
+        this.story && this.state.mode === 'dialogue' && this.activeDialogue?.kind === 'story';
       const stationary = this.state.mara === 'ready' && !this.roaming.path.length;
       if (this.story && stationary && this.state.visitorVisible !== false) {
         const reaction = visitorReaction(mara, player, speaking, time, this.reduced);
@@ -472,9 +482,15 @@ class Bookshop extends Phaser.Scene {
       }
       this.visitorBook.update(
         mara,
-        Boolean(this.story && this.state.mode === 'explore' && !this.roaming.engaged &&
-          this.state.mara === 'ready' && this.roaming.path.length === 0 &&
-          this.roaming.goal?.prop === 'book' && this.roaming.pause > 0),
+        Boolean(
+          this.story &&
+          this.state.mode === 'explore' &&
+          !this.roaming.engaged &&
+          this.state.mara === 'ready' &&
+          this.roaming.path.length === 0 &&
+          this.roaming.goal?.prop === 'book' &&
+          this.roaming.pause > 0,
+        ),
         time,
         this.reduced,
       );

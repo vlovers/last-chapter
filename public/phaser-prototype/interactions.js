@@ -11,7 +11,12 @@ export class Interactions {
       ...HOTSPOTS,
       ...(includePlant
         ? [
-            { id: 'frank', label: 'Погладити Френка', rect: { x: 463, y: 171, w: 34, h: 29 }, approach: { x: 477, y: 216 } },
+            {
+              id: 'frank',
+              label: 'Погладити Френка',
+              rect: { x: 463, y: 171, w: 34, h: 29 },
+              approach: { x: 477, y: 216 },
+            },
             {
               id: 'plant',
               label: 'Рослина біля вікна',

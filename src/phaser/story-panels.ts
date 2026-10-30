@@ -51,6 +51,27 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     panel.replaceChildren();
     if (mode === 'journal') {
       panel.append(element('h2', 'Нотатник книгаря'));
+      panel.append(element('h3', 'Дошка знахідок'));
+      const evidence = element('div', '', 'story-book-grid');
+      for (const clue of story.evidence) {
+        const card = element('article', '', 'story-book');
+        card.append(element('h3', clue.label));
+        if (clue.collected) card.append(element('p', clue.detail));
+        else {
+          card.append(element('p', 'Знахідка доступна для дослідження.'));
+          const gather = element('button', 'Дослідити');
+          gather.type = 'button';
+          gather.addEventListener('click', () => {
+            story.gatherEvidence(clue.id);
+            refresh();
+          });
+          card.append(gather);
+        }
+        evidence.append(card);
+      }
+      if (!story.evidence.length)
+        evidence.append(element('p', 'Огляньте кота, полиці й прилавок, щоб знайти зачіпки.'));
+      panel.append(evidence);
       const notes = element('ul', '', 'story-notes');
       for (const note of story.notes) notes.append(element('li', note));
       if (!story.notes.length) notes.append(element('li', 'Поки що тут немає записів.'));
