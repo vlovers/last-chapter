@@ -46,13 +46,16 @@ describe('case evidence audit: distinct sources, consent and consequences', () =
     expect(options(state)).not.toContain('case-audit-stars');
     expect(options(state)).not.toContain('case-audit-recipient');
     expect(options(state)).not.toContain('case-audit-decide');
-    const finished = play([], [
-      'case-audit-box',
-      'case-audit-box-back',
-      'case-audit-decide',
-      'case-audit-private',
-      'case-audit-finish',
-    ]);
+    const finished = play(
+      [],
+      [
+        'case-audit-box',
+        'case-audit-box-back',
+        'case-audit-decide',
+        'case-audit-private',
+        'case-audit-finish',
+      ],
+    );
     expect(finished.node).toBe('case-closure-authors');
     expect(finished.flags).toContain('final_case_evidence_audit_done');
     expect(options(finished)).not.toContain('case-authors-crosscheck');
@@ -107,13 +110,16 @@ describe('case evidence audit: distinct sources, consent and consequences', () =
   });
 
   it('preserves a previously seeded false headline and permits a correction request', () => {
-    const state = play(['final_ledger_gap_done', 'final_ledger_gap_speculation_printed'], [
-      'case-audit-box',
-      'case-audit-box-back',
-      'case-audit-recipient',
-      'case-audit-recipient-back',
-      'case-audit-decide',
-    ]);
+    const state = play(
+      ['final_ledger_gap_done', 'final_ledger_gap_speculation_printed'],
+      [
+        'case-audit-box',
+        'case-audit-box-back',
+        'case-audit-recipient',
+        'case-audit-recipient-back',
+        'case-audit-decide',
+      ],
+    );
     expect(options(state)).toContain('case-audit-correct');
     const requested = selectOption(finalReading, state, 'case-audit-correct');
     expect(requested.flags).toContain('final_case_audit_correction_requested');
@@ -133,13 +139,10 @@ describe('case evidence audit: distinct sources, consent and consequences', () =
     ['case-audit-private', 'final_case_audit_private_summary', 'приватній теці'],
     ['case-audit-accuse', 'final_case_audit_accusation_attempted', 'відмовилася друкувати'],
   ])('carries %s into the epilogue without inventing an author', (choice, flag, excerpt) => {
-    const state = play([], [
-      'case-audit-box',
-      'case-audit-box-back',
-      'case-audit-decide',
-      choice,
-      'case-audit-finish',
-    ]);
+    const state = play(
+      [],
+      ['case-audit-box', 'case-audit-box-back', 'case-audit-decide', choice, 'case-audit-finish'],
+    );
     expect(state.flags).toContain(flag);
     expect(state.flags).toContain('final_case_evidence_audit_done');
     const ending = seasonEnding({ flags: state.flags });
@@ -186,7 +189,9 @@ describe('case evidence audit: distinct sources, consent and consequences', () =
 
   it('validates all audit destinations and keeps each node at four choices or fewer', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
-    for (const node of finalReading.nodes.filter((entry) => entry.id.startsWith('case-evidence-'))) {
+    for (const node of finalReading.nodes.filter((entry) =>
+      entry.id.startsWith('case-evidence-'),
+    )) {
       expect(node.options.length, node.id).toBeLessThanOrEqual(4);
       for (const option of node.options) {
         expect(finalReading.nodes.some((destination) => destination.id === option.next)).toBe(true);
