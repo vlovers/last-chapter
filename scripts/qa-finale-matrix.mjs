@@ -162,7 +162,7 @@ try {
             }
             const next = chooseChapterOption(state, id);
             const restored = decodeSave(encodeSave(next));
-            if (!restored || JSON.stringify(restored) !== JSON.stringify(next)) {
+            if (!restored || encodeSave(restored) !== encodeSave(next)) {
               throw new Error('Save roundtrip changed ' + id);
             }
             state = restored;
