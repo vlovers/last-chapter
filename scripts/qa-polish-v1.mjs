@@ -60,6 +60,8 @@ async function choose(page, id) {
     const nextPage = page.locator('#choices button[data-choice="__more_choices"]');
     if (!(await nextPage.isVisible())) break;
     await nextPage.click();
+    // Dialogue buttons intentionally ignore clicks during their first 220 ms.
+    await page.waitForTimeout(250);
   }
   throw new Error(
     `Choice "${id}" is not reachable through UI pages: ${[...visitedPages].join(' -> ')}`,
