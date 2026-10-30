@@ -21,11 +21,14 @@ const epilogueCases = [
 ] as const;
 
 describe('counter encounters epilogue and save restoration', () => {
-  it.each(epilogueCases)('renders only an earned ordinary-life outcome for %s', (flag, fragment) => {
-    const epilogue = seasonEnding({ flags: [flag] }).epilogue;
-    expect(epilogue).toContain(fragment);
-    expect(seasonEnding({ flags: [] }).epilogue).not.toContain(fragment);
-  });
+  it.each(epilogueCases)(
+    'renders only an earned ordinary-life outcome for %s',
+    (flag, fragment) => {
+      const epilogue = seasonEnding({ flags: [flag] }).epilogue;
+      expect(epilogue).toContain(fragment);
+      expect(seasonEnding({ flags: [] }).epilogue).not.toContain(fragment);
+    },
+  );
 
   it('restores unfinished counter visits without inventing completed choices', () => {
     let state = startDialogue(finalReading);
