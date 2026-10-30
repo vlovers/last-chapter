@@ -39,12 +39,18 @@ try {
       }
 
       assert.deepEqual(pageErrors, [], `Browser errors under ${rate}x CPU throttling`);
-      assert.ok(samples.every((sample) => sample.failed === false), 'Bookshop scene failed');
+      assert.ok(
+        samples.every((sample) => sample.failed === false),
+        'Bookshop scene failed',
+      );
       assert.ok(
         samples.every((sample) => Number.isFinite(sample.fps) && sample.fps > 0),
         'Every frame-rate sample must be a positive finite number',
       );
-      assert.ok(samples.every((sample) => sample.nodes > 0), 'Scene must contain rendered objects');
+      assert.ok(
+        samples.every((sample) => sample.nodes > 0),
+        'Scene must contain rendered objects',
+      );
       assert.equal(
         new Set(samples.map((sample) => sample.nodes)).size,
         1,

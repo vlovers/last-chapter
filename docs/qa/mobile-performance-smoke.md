@@ -26,9 +26,9 @@ On 2026-10-31 (Kyiv time), the first performance job completed successfully
 in [Actions #41142450489](https://github.com/vlovers/last-chapter/actions/runs/41142450489).
 
 | CPU simulation | Minimum FPS | Median FPS | Maximum FPS | Scene objects |
-| --- | ---: | ---: | ---: | ---: |
-| Normal | 29.65 | 33.90 | 49.31 | 31 |
-| 4× throttled | 26.67 | 30.73 | 39.14 | 31 |
+| -------------- | ----------: | ---------: | ----------: | ------------: |
+| Normal         |       29.65 |      33.90 |       49.31 |            31 |
+| 4× throttled   |       26.67 |      30.73 |       39.14 |            31 |
 
 These numbers describe **one headless CI run only**. The test does not measure
 battery usage, thermals, input latency, memory growth across long sessions,
