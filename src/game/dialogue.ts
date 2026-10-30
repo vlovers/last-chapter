@@ -23,6 +23,12 @@ export interface DialogueNode {
   readonly text: string;
   /** Most specific matching flag-dependent narration replaces the default text. */
   readonly textWhen?: readonly { readonly requires: readonly string[]; readonly text: string }[];
+  /** Independent closing callbacks follow the selected narration without replacing it. */
+  readonly afterwordWhen?: readonly {
+    readonly requires: readonly string[];
+    readonly unless?: readonly string[];
+    readonly text: string;
+  }[];
   readonly options: readonly DialogueOption[];
   readonly hub?: boolean;
   /** Some endings have an authored ethical priority independent of flag count. */
@@ -62,7 +68,16 @@ export function currentNode(story: DialogueStory, state: DialogueState): Dialogu
     },
     undefined,
   );
-  return variant ? { ...node, text: variant.text } : node;
+  const afterwords = (node.afterwordWhen ?? [])
+    .filter(
+      (entry) =>
+        entry.requires.every((flag) => state.flags.includes(flag)) &&
+        !(entry.unless ?? []).some((flag) => state.flags.includes(flag)),
+    )
+    .map((entry) => entry.text);
+  return variant || afterwords.length
+    ? { ...node, text: [variant?.text ?? node.text, ...afterwords].join('\n\n') }
+    : node;
 }
 
 function completionKey(node: DialogueNode, option: DialogueOption, flags: readonly string[]) {
@@ -174,6 +189,22 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
       }
       if (new Set(variant.requires).size !== variant.requires.length) {
         errors.push(`Duplicate conditional flag: ${node.id}`);
+      }
+    }
+    for (const entry of node.afterwordWhen ?? []) {
+      if (!entry.text.trim()) errors.push(`Empty afterword: ${node.id}`);
+      if (entry.requires.length === 0) errors.push(`Unconditional afterword: ${node.id}`);
+      for (const field of ['requires', 'unless'] as const) {
+        const flags = entry[field] ?? [];
+        if (flags.some((flag) => !flag.trim())) {
+          errors.push(`Blank afterword ${field}: ${node.id}`);
+        }
+        if (new Set(flags).size !== flags.length) {
+          errors.push(`Duplicate afterword ${field}: ${node.id}`);
+        }
+      }
+      if (entry.requires.some((flag) => (entry.unless ?? []).includes(flag))) {
+        errors.push(`Impossible afterword condition: ${node.id}`);
       }
     }
     const options = new Set<string>();
