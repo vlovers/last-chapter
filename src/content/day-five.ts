@@ -13,6 +13,7 @@ import { leoNightCourseFinalNodes, leoNightCourseFinalOption } from './leo-night
 import { saturdayPlansNodes, saturdayPlansOption } from './saturday-plans-final';
 import { counterEncountersNodes, counterEncountersOption } from './counter-encounters';
 import { frankShopNodes, frankShopOption } from './frank-shop-evening';
+import { readerDebatesNodes, readerDebatesOption } from './reader-debates-final';
 import { irisCoverFinalNodes, irisCoverFinalOption } from './iris-cover-final';
 import { irisEvidenceFinalNodes, irisEvidenceFinalOption } from './iris-evidence-final';
 import { eleanorMemoryFinalNodes, eleanorMemoryFinalOption } from './eleanor-memory-final';
@@ -165,6 +166,7 @@ export const finalReading: DialogueStory = {
         saturdayPlansOption,
         counterEncountersOption,
         frankShopOption,
+        readerDebatesOption,
         irisCoverFinalOption,
         irisEvidenceFinalOption,
         eleanorMemoryFinalOption,
@@ -2372,6 +2374,7 @@ export const finalReading: DialogueStory = {
     ...saturdayPlansNodes,
     ...counterEncountersNodes,
     ...frankShopNodes,
+    ...readerDebatesNodes,
     ...irisCoverFinalNodes,
     ...irisEvidenceFinalNodes,
     ...eleanorMemoryFinalNodes,
