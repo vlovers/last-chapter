@@ -11,17 +11,17 @@ It is not a new ending to the manuscript mystery. It gives two ordinary lives a 
 
 ## Nine cross-day combinations
 
-| Mara's earlier decision | Leo's earlier decision | Final conversation |
-| --- | --- | --- |
-| Bookshop trial | Application | Small batch possible, admission pending |
-| Bookshop trial | Shift negotiation | Oven and June's second shift unconfirmed |
-| Bookshop trial | Postponement | Two trial rolls, Leo's seaside rest |
-| Recipe credit | Application | Mara's printed name, Leo's pending answer |
-| Recipe credit | Shift negotiation | Bakery sign versus June's shift request |
-| Recipe credit | Postponement | Bakery sign and Leo's seaside postcard |
-| Private recipe | Application | Neither plan is announced publicly |
-| Private recipe | Shift negotiation | Private recipe, no unapproved shift |
-| Private recipe | Postponement | Mara's recipe and Leo's weekend remain theirs |
+| Mara's earlier decision | Leo's earlier decision | Final conversation                            |
+| ----------------------- | ---------------------- | --------------------------------------------- |
+| Bookshop trial          | Application            | Small batch possible, admission pending       |
+| Bookshop trial          | Shift negotiation      | Oven and June's second shift unconfirmed      |
+| Bookshop trial          | Postponement           | Two trial rolls, Leo's seaside rest           |
+| Recipe credit           | Application            | Mara's printed name, Leo's pending answer     |
+| Recipe credit           | Shift negotiation      | Bakery sign versus June's shift request       |
+| Recipe credit           | Postponement           | Bakery sign and Leo's seaside postcard        |
+| Private recipe          | Application            | Neither plan is announced publicly            |
+| Private recipe          | Shift negotiation      | Private recipe, no unapproved shift           |
+| Private recipe          | Postponement           | Mara's recipe and Leo's weekend remain theirs |
 
 All nine variants use the same optional topic but different spoken text. The player can separately discuss Mara's recipe, Leo's timetable, and the bookshop's blank calendar. Finishing the conversation removes only this topic; the individual Mara and Leo callbacks remain available.
 
