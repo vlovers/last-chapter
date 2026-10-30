@@ -61,7 +61,9 @@ async function choose(page, id) {
     if (!(await nextPage.isVisible())) break;
     await nextPage.click();
   }
-  throw new Error(`Choice "${id}" is not reachable through UI pages: ${[...visitedPages].join(' -> ')}`);
+  throw new Error(
+    `Choice "${id}" is not reachable through UI pages: ${[...visitedPages].join(' -> ')}`,
+  );
 }
 async function layout(page) {
   await page.waitForTimeout(300);
