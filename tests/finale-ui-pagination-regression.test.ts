@@ -21,9 +21,7 @@ function storage() {
 const gathering = finalReading.nodes.find((node) => node.id === 'gathering');
 if (!gathering) throw new Error('Missing final gathering');
 
-const allPrerequisites = [
-  ...new Set(gathering.options.flatMap((option) => option.requires ?? [])),
-];
+const allPrerequisites = [...new Set(gathering.options.flatMap((option) => option.requires ?? []))];
 
 function savedFinale(flags: readonly string[]) {
   const local = storage();
