@@ -175,7 +175,12 @@ try {
     await page.keyboard.press('Escape');
     // Optional topic finishes once; the day-unlocked next topic replaces it.
     await openMara(page);
-    await page.getByRole('heading', { name: 'Книжкові суперечки з Марою', exact: true }).waitFor();
+    // The panel heading is now generic; the selected topic lives in its details summary.
+    await page.getByRole('heading', { name: 'Розмова з Марою', exact: true }).waitFor();
+    assert.match(
+      (await page.locator('.conversation-topics summary').textContent()) ?? '',
+      /Книжкові суперечки з Марою/,
+    );
     await page.getByRole('button', { name: 'Повернімося до роботи', exact: true }).click();
     assert.equal(
       await page.getByRole('button', { name: 'Книжкові суперечки з Марою', exact: true }).count(),
