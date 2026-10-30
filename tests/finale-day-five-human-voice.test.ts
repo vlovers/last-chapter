@@ -30,7 +30,9 @@ describe('Day-five human-scale conversations', () => {
       expect(availableOptions(finalReading, returned).map((option) => option.id)).not.toContain(
         'bookseller-reflection',
       );
-      expect(availableOptions(finalReading, returned).map((option) => option.id)).toContain('close');
+      expect(availableOptions(finalReading, returned).map((option) => option.id)).toContain(
+        'close',
+      );
     }
   });
 
