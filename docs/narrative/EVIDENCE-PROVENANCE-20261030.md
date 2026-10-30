@@ -4,14 +4,14 @@ This is a continuity contract for the five-day manuscript investigation. It is n
 
 ## What the story establishes
 
-| Source | Supported observation | What it **does not** establish |
-| --- | --- | --- |
-| Eleanor's bookshop ledger | A box numbered 17 was used for drying papers after the flood. The recipient field was left blank. | Who received the box, who placed a sheet inside a novel, or whether the pencilled 17 on a found page identifies that box. |
-| Workshop photograph | The workshop shelf bears a **7** with a nearby scratch; it is not evidence of a workshop box numbered 17. | Manuscript custody, theft, or authorship. |
-| Iris's remembered illustration | The found page has two stars, while Iris remembers a three-star mark associated with her mother's work. | A handwriting match, the identity of the writer, or consent to inspect Iris's private originals. |
-| Thomas's flood account | Thomas carried wet books during the flood. | That he witnessed the manuscript being placed in a novel or knows the box recipient. |
-| Two manuscript fragments | The endings and paper edges differ. | That they are alternate endings of one work or by the same writer. |
-| Missing ledger recipient | No recipient name was recorded. | A deliberately concealed recipient, a crime, or the absence of a recipient. |
+| Source                         | Supported observation                                                                                     | What it **does not** establish                                                                                            |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Eleanor's bookshop ledger      | A box numbered 17 was used for drying papers after the flood. The recipient field was left blank.         | Who received the box, who placed a sheet inside a novel, or whether the pencilled 17 on a found page identifies that box. |
+| Workshop photograph            | The workshop shelf bears a **7** with a nearby scratch; it is not evidence of a workshop box numbered 17. | Manuscript custody, theft, or authorship.                                                                                 |
+| Iris's remembered illustration | The found page has two stars, while Iris remembers a three-star mark associated with her mother's work.   | A handwriting match, the identity of the writer, or consent to inspect Iris's private originals.                          |
+| Thomas's flood account         | Thomas carried wet books during the flood.                                                                | That he witnessed the manuscript being placed in a novel or knows the box recipient.                                      |
+| Two manuscript fragments       | The endings and paper edges differ.                                                                       | That they are alternate endings of one work or by the same writer.                                                        |
+| Missing ledger recipient       | No recipient name was recorded.                                                                           | A deliberately concealed recipient, a crime, or the absence of a recipient.                                               |
 
 The ledger can resolve **what the number of a bookshop box was** without resolving **what the same-looking number on the manuscript means**. Those are separate propositions. Likewise, a private recollection may be narratively meaningful without becoming publicly admissible evidence.
 
