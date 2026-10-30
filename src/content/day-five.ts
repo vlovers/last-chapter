@@ -12,6 +12,7 @@ import { maraWindowFinalNodes } from './mara-window-table';
 import { leoNightCourseFinalNodes, leoNightCourseFinalOption } from './leo-night-course-final';
 import { saturdayPlansNodes, saturdayPlansOption } from './saturday-plans-final';
 import { counterEncountersNodes, counterEncountersOption } from './counter-encounters';
+import { frankShopNodes, frankShopOption } from './frank-shop-evening';
 import { irisCoverFinalNodes, irisCoverFinalOption } from './iris-cover-final';
 import { irisEvidenceFinalNodes, irisEvidenceFinalOption } from './iris-evidence-final';
 import { eleanorMemoryFinalNodes, eleanorMemoryFinalOption } from './eleanor-memory-final';
@@ -163,6 +164,7 @@ export const finalReading: DialogueStory = {
         leoNightCourseFinalOption,
         saturdayPlansOption,
         counterEncountersOption,
+        frankShopOption,
         irisCoverFinalOption,
         irisEvidenceFinalOption,
         eleanorMemoryFinalOption,
@@ -2369,6 +2371,7 @@ export const finalReading: DialogueStory = {
     ...leoNightCourseFinalNodes,
     ...saturdayPlansNodes,
     ...counterEncountersNodes,
+    ...frankShopNodes,
     ...irisCoverFinalNodes,
     ...irisEvidenceFinalNodes,
     ...eleanorMemoryFinalNodes,

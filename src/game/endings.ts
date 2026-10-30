@@ -32,6 +32,27 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('final_frank_shop_spare_bookmark')
+      ? ['Анна взяла чисту закладку, а Френк залишив собі картонну рибку до ранку.']
+      : flags.has('final_frank_shop_waited_for_cat')
+        ? ['Анна вирішила почекати, доки Френк прокинеться, й забрати свою закладку іншим разом.']
+        : flags.has('final_frank_shop_anna_laughed')
+          ? ['Анна залишила біля каси картку для директора з питань дрімоти. Френк не з’явився на власне призначення.']
+          : []),
+    ...(flags.has('final_frank_shop_box_offered')
+      ? ['Під вікном залишили коробку з чистим рушником. Френк сам вирішив, що вона йому підходить.']
+      : flags.has('final_frank_shop_quiet_corner')
+        ? ['Гості прибрали чашки з підвіконня, і Френк проспав решту вечора без метушні.']
+        : flags.has('final_frank_shop_rest_left')
+          ? ['Френк сам обрав місце під прилавком, а люди продовжили свій книжковий вечір.']
+          : []),
+    ...(flags.has('final_frank_shop_sign_drafted')
+      ? ['Біля каси з’явилася картка з проханням не годувати й не будити Френка.']
+      : flags.has('final_frank_shop_visitor_note')
+        ? ['Анна запропонувала дітям намалювати ще один малюнок Френка, але нічого за них не обіцяла.']
+        : flags.has('final_frank_shop_no_promise')
+          ? ['Френк не став частиною програми вечора. Мара залишила афішу для книжок, а не для котячого виступу.']
+          : []),
     ...(flags.has('final_counter_ruth_preferences')
       ? [
           'Рут пішла з трьома запитаннями для матері. Подарунок вона обере після розмови, а не замість неї.',
