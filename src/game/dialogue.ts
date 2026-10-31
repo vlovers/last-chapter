@@ -103,7 +103,9 @@ export function restoreDialogueProgress(story: DialogueStory, state: DialogueSta
     const node = currentNode(story, replay);
     const option = node.options.find((o) => o.id === id);
     if (!option) break;
-    replay = applyOption(story, replay, node, option);
+    // Legacy replay only needs flags and completion ledgers. Rebuilding a
+    // growing history array on every edge makes long migrations quadratic.
+    replay = applyOption(story, replay, node, option, false);
   }
   const restored = { ...state, completed: replay.completed ?? [], pending: replay.pending ?? [] };
   let byStory = legacyReplayCache.get(state);
@@ -153,6 +155,7 @@ function applyOption(
   state: DialogueState,
   node: DialogueNode,
   option: DialogueOption,
+  recordHistory = true,
 ): DialogueState {
   let pending = [...(state.pending ?? [])];
   const returning = pending.some((p) => p.hub === option.next);
@@ -180,7 +183,7 @@ function applyOption(
   return {
     node: option.next,
     flags: [...new Set([...state.flags, ...(option.grants ?? [])])],
-    history: [...state.history, option.id],
+    history: recordHistory ? [...state.history, option.id] : state.history,
     completed: [...completed],
     pending: remaining,
   };
