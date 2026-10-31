@@ -78,6 +78,47 @@ describe('dialogue save ledger integrity', () => {
     ).toThrow('Save cannot be restored');
   });
 
+  it.each([
+    ['duplicate completion entries', { completed: ['topic', 'topic'], pending: [] }],
+    ['missing pending list', { completed: [], pending: undefined }],
+    ['null pending list', { completed: [], pending: null }],
+    ['null completion list', { completed: null, pending: [] }],
+    ['empty pending hub', { completed: [], pending: [{ hub: '', key: 'topic' }] }],
+    ['non-string pending hub', { completed: [], pending: [{ hub: 42, key: 'topic' }] }],
+    ['non-string pending key', { completed: [], pending: [{ hub: 'arrival', key: 42 }] }],
+    ['oversized completion key', { completed: ['x'.repeat(1001)], pending: [] }],
+    ['oversized pending hub', { completed: [], pending: [{ hub: 'x'.repeat(121), key: 'topic' }] }],
+    ['oversized pending key', { completed: [], pending: [{ hub: 'arrival', key: 'x'.repeat(1001) }] }],
+  ])('rejects %s in an untrusted ledger', (_reason, invalid) => {
+    const original = encodeSave(checkpoint('miller'));
+    const malformed = { ...JSON.parse(original), ...invalid };
+    expect(decodeSave(JSON.stringify(malformed))).toBeNull();
+    expect(decodeSave(original)).not.toBeNull();
+  });
+
+  it('rejects ledgers exceeding their entry budgets', () => {
+    const original = JSON.parse(encodeSave(checkpoint('miller')));
+    expect(
+      decodeSave(
+        JSON.stringify({
+          ...original,
+          completed: Array.from({ length: 8193 }, (_, i) => `topic-${i}`),
+        }),
+      ),
+    ).toBeNull();
+    expect(
+      decodeSave(
+        JSON.stringify({
+          ...original,
+          pending: Array.from({ length: 1025 }, (_, i) => ({
+            hub: 'arrival',
+            key: `topic-${i}`,
+          })),
+        }),
+      ),
+    ).toBeNull();
+  });
+
   it('keeps distinct pending topics under one hub', () => {
     const state = checkpoint('miller');
     const dialogue = {
