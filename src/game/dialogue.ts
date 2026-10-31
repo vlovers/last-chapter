@@ -81,11 +81,11 @@ export function currentNode(story: DialogueStory, state: DialogueState): Dialogu
     : node;
 }
 
-function completionKey(node: DialogueNode, option: DialogueOption, flags: readonly string[]) {
+function completionKey(node: DialogueNode, option: DialogueOption, flags: ReadonlySet<string>) {
   return JSON.stringify([
     node.id,
     option.id,
-    (option.reopensWhen ?? []).filter((f) => flags.includes(f)),
+    (option.reopensWhen ?? []).filter((f) => flags.has(f)),
   ]);
 }
 
@@ -133,7 +133,7 @@ export function availableOptions(
       (option.requires ?? []).every((flag) => flags.has(flag)) &&
       !(option.unless ?? []).some((flag) => flags.has(flag)) &&
       (option.repeatability === 'repeatable' ||
-        !completed.has(completionKey(node, option, state.flags))),
+        !completed.has(completionKey(node, option, flags))),
   );
 }
 
@@ -169,8 +169,9 @@ function applyOption(
     if (index >= 0) pending = pending.slice(0, index);
   }
   const completed = new Set(state.completed ?? []);
+  const flags = new Set(state.flags);
   if (option.repeatability !== 'repeatable' && !option.suspend && !returning) {
-    const key = completionKey(node, option, state.flags);
+    const key = completionKey(node, option, flags);
     if (!pending.some((p) => p.key === key)) pending.push({ hub: node.id, key });
   }
   const destination = story.nodes.find((n) => n.id === option.next)!;
@@ -185,9 +186,10 @@ function applyOption(
     if (finishes) completed.add(p.key);
     return !finishes;
   });
+  for (const flag of option.grants ?? []) flags.add(flag);
   return {
     node: option.next,
-    flags: [...new Set([...state.flags, ...(option.grants ?? [])])],
+    flags: [...flags],
     history: recordHistory ? [...state.history, option.id] : state.history,
     completed: [...completed],
     pending: remaining,
@@ -204,14 +206,24 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
     if (!node.speaker.trim()) errors.push(`Empty speaker: ${node.id}`);
     if (!node.text.trim()) errors.push(`Empty text: ${node.id}`);
     const conditionalFlagSets = new Set<string>();
+    const earlierAuthoredConditions: string[][] = [];
     for (const variant of node.textWhen ?? []) {
       // The engine chooses only one narration. A later variant with the same
       // prerequisites (even reordered) can never be displayed.
       const condition = JSON.stringify([...variant.requires].sort());
-      if (conditionalFlagSets.has(condition)) {
-        errors.push(`Duplicate conditional variant: ${node.id}`);
+      const duplicate = conditionalFlagSets.has(condition);
+      if (duplicate) errors.push(`Duplicate conditional variant: ${node.id}`);
+      if (
+        !duplicate &&
+        node.variantSelection === 'authored' &&
+        earlierAuthoredConditions.some((earlier) =>
+          earlier.every((flag) => variant.requires.includes(flag)),
+        )
+      ) {
+        errors.push(`Shadowed authored variant: ${node.id}`);
       }
       conditionalFlagSets.add(condition);
+      earlierAuthoredConditions.push([...variant.requires]);
       if (!variant.text.trim()) errors.push(`Empty conditional text: ${node.id}`);
       if (variant.requires.length === 0) errors.push(`Unconditional text variant: ${node.id}`);
       if (variant.requires.some((flag) => !flag.trim())) {
