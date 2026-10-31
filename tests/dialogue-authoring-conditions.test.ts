@@ -96,6 +96,52 @@ describe('Dialogue conditional authoring guards', () => {
     expect(validateDialogue(story)).toEqual([]);
   });
 
+  it('rejects an authored narration that an earlier broad condition always masks', () => {
+    const story = storyWith({
+      variantSelection: 'authored',
+      textWhen: [
+        { requires: ['letter_seen'], text: 'Лист на столі.' },
+        { requires: ['letter_seen', 'leo_heard'], text: 'Лео побачив лист.' },
+      ],
+    });
+    expect(validateDialogue(story)).toContain('Shadowed authored variant: begin');
+  });
+
+  it('accepts authored priority when the specific condition comes first', () => {
+    const story = storyWith({
+      variantSelection: 'authored',
+      textWhen: [
+        { requires: ['letter_seen', 'leo_heard'], text: 'Лео побачив лист.' },
+        { requires: ['letter_seen'], text: 'Лист на столі.' },
+      ],
+    });
+    expect(validateDialogue(story)).toEqual([]);
+    expect(
+      currentNode(story, {
+        node: 'begin',
+        flags: ['letter_seen', 'leo_heard'],
+        history: [],
+      }).text,
+    ).toBe('Лео побачив лист.');
+  });
+
+  it('keeps generic-first conditions valid when specificity chooses the winner', () => {
+    const story = storyWith({
+      textWhen: [
+        { requires: ['letter_seen'], text: 'Лист на столі.' },
+        { requires: ['letter_seen', 'leo_heard'], text: 'Лео побачив лист.' },
+      ],
+    });
+    expect(validateDialogue(story)).toEqual([]);
+    expect(
+      currentNode(story, {
+        node: 'begin',
+        flags: ['letter_seen', 'leo_heard'],
+        history: [],
+      }).text,
+    ).toBe('Лео побачив лист.');
+  });
+
   it('keeps the day-five letter scene reachable with the joint Mara/Leo callback', () => {
     const letter = finalReading.nodes.find((node) => node.id === 'letter');
     expect(letter).toBeDefined();
