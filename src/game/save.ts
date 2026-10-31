@@ -139,8 +139,7 @@ export function decodeSave(raw: string): ChapterState | null {
           (obj.pending as { hub: string; key: string }[]).map(({ hub, key }) =>
             JSON.stringify([hub, key]),
           ),
-        ).size !== obj.pending.length
-      )
+        ).size !== obj.pending.length)
     )
       return null;
     const dialogue = {
