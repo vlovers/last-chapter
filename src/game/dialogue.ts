@@ -58,11 +58,12 @@ export function startDialogue(story: DialogueStory): DialogueState {
 export function currentNode(story: DialogueStory, state: DialogueState): DialogueNode {
   const node = story.nodes.find((entry) => entry.id === state.node);
   if (!node) throw new Error('Missing dialogue node');
+  const flags = new Set(state.flags);
   // Prefer the most specific matching narration. A generic one-flag variant
   // must not hide a later two-flag variant when both conditions are true.
   const variant = node.textWhen?.reduce<NonNullable<DialogueNode['textWhen']>[number] | undefined>(
     (best, entry) => {
-      if (!entry.requires.every((flag) => state.flags.includes(flag))) return best;
+      if (!entry.requires.every((flag) => flags.has(flag))) return best;
       if (node.variantSelection === 'authored') return best ?? entry;
       return !best || entry.requires.length > best.requires.length ? entry : best;
     },
@@ -71,8 +72,8 @@ export function currentNode(story: DialogueStory, state: DialogueState): Dialogu
   const afterwords = (node.afterwordWhen ?? [])
     .filter(
       (entry) =>
-        entry.requires.every((flag) => state.flags.includes(flag)) &&
-        !(entry.unless ?? []).some((flag) => state.flags.includes(flag)),
+        entry.requires.every((flag) => flags.has(flag)) &&
+        !(entry.unless ?? []).some((flag) => flags.has(flag)),
     )
     .map((entry) => entry.text);
   return variant || afterwords.length
@@ -123,12 +124,16 @@ export function availableOptions(
 ): readonly DialogueOption[] {
   const progress = restoreDialogueProgress(story, state);
   const node = currentNode(story, state);
+  // The final gathering may expose dozens of callbacks backed by a long save
+  // ledger. Build membership indexes once rather than scanning for each option.
+  const flags = new Set(state.flags);
+  const completed = new Set(progress.completed ?? []);
   return node.options.filter(
     (option) =>
-      (option.requires ?? []).every((flag) => state.flags.includes(flag)) &&
-      !(option.unless ?? []).some((flag) => state.flags.includes(flag)) &&
+      (option.requires ?? []).every((flag) => flags.has(flag)) &&
+      !(option.unless ?? []).some((flag) => flags.has(flag)) &&
       (option.repeatability === 'repeatable' ||
-        !progress.completed?.includes(completionKey(node, option, state.flags))),
+        !completed.has(completionKey(node, option, state.flags))),
   );
 }
 
