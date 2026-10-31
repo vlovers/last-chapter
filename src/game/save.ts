@@ -140,6 +140,7 @@ export function decodeSave(raw: string): ChapterState | null {
             JSON.stringify([hub, key]),
           ),
         ).size !== obj.pending.length
+      )
     )
       return null;
     const dialogue = {
