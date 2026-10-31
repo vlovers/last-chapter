@@ -37,6 +37,7 @@ import { castMember } from '../game/cast';
 import { seasonEnding } from '../game/endings';
 import { inspectShopSpot, shopSpots, type ShopSpotId } from '../game/exploration';
 import { completedOrders } from '../game/service';
+import { discardOrphanedOptionalProgress } from './optional-progress';
 import { storyProgress } from '../game/progress';
 import { catalogEntries, type CatalogFilter } from '../game/catalog';
 import { journalFacts, journalEvidence } from './journal-facts';
@@ -120,8 +121,9 @@ export class FiveDayStory {
         /* optional */
       }
     } else {
-      // Service attempts belong to the narrative save. Without a valid chapter,
-      // discard orphaned recommendations before a new playthrough can inherit them.
+      // Optional conversations, personal notes and service attempts belong to
+      // the chapter save. Never inherit them after a missing/corrupt save.
+      discardOrphanedOptionalProgress();
       this.persistService();
     }
   }

@@ -1,5 +1,6 @@
 import { evidenceKindLabels } from './journal-facts';
 import { discoveredPeopleAtStage } from './discovered-people';
+import { OPTIONAL_PROGRESS_KEYS } from './optional-progress';
 import type { FiveDayStory } from './five-day-story';
 import {
   answerConversation,
@@ -38,13 +39,13 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   journal.setAttribute('aria-label', 'Нотатник');
   catalog.setAttribute('aria-label', 'Каталог книжок');
   let mode: 'journal' | 'catalog' | 'conversation' | null = null;
-  const conversationKey = 'last-chapter:conversation:mara:v1';
+  const conversationKey = OPTIONAL_PROGRESS_KEYS.bookClub;
   let selectedTopic = maraBookClub;
-  const letterKey = 'last-chapter:conversation:mara:letter:v1';
+  const letterKey = OPTIONAL_PROGRESS_KEYS.letter;
   let letterDecision: ConversationSession = startConversation(maraLetterDecision);
-  const returnKey = 'last-chapter:conversation:mara:return:v1';
+  const returnKey = OPTIONAL_PROGRESS_KEYS.returnVisit;
   let returnVisit: ConversationSession = startConversation(maraReturnVisit);
-  const afterHoursKey = 'last-chapter:conversation:mara:after-hours:v1';
+  const afterHoursKey = OPTIONAL_PROGRESS_KEYS.afterHours;
   let conversation: ConversationSession = startConversation(maraBookClub);
   let afterHours: ConversationSession = startConversation(maraAfterHours);
   const sharedMemories = () =>
@@ -91,7 +92,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   let returnFocus: HTMLElement | null = null;
   let personalNotes = '';
   try {
-    personalNotes = (localStorage.getItem('last-chapter:notes:v1') ?? '').slice(0, 4000);
+    personalNotes = (localStorage.getItem(OPTIONAL_PROGRESS_KEYS.notes) ?? '').slice(0, 4000);
   } catch {
     /* optional */
   }
@@ -413,7 +414,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         notes.addEventListener('input', () => {
           personalNotes = notes.value;
           try {
-            localStorage.setItem('last-chapter:notes:v1', personalNotes);
+            localStorage.setItem(OPTIONAL_PROGRESS_KEYS.notes, personalNotes);
           } catch {
             /* optional */
           }
@@ -606,7 +607,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     mode = null;
     personalNotes = '';
     try {
-      localStorage.setItem('last-chapter:notes:v1', '');
+      localStorage.setItem(OPTIONAL_PROGRESS_KEYS.notes, '');
     } catch {
       /* optional */
     }
