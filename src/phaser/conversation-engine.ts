@@ -106,6 +106,10 @@ export function validateTopic(topic: ConversationTopic): string[] {
       if (choice.suspend && choice.next !== '__exit') {
         errors.push('Suspension must exit: ' + node.id + '/' + choice.id);
       }
+      // answerConversation deliberately leaves memories untouched on deferral.
+      if (choice.suspend && choice.remember !== undefined) {
+        errors.push('Suspension cannot remember: ' + node.id + '/' + choice.id);
+      }
       if (choices.has(choice.id)) errors.push('Duplicate choice: ' + node.id);
       choices.add(choice.id);
       if (choice.next !== '__exit' && !ids.has(choice.next))

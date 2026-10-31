@@ -105,6 +105,26 @@ describe('Mara conversation routes and mobile choice budget', () => {
     );
   });
 
+  it('rejects a deferral that silently promises a memory', () => {
+    const topic = topicWithChoices([
+      { id: 'later', label: 'Пізніше', next: '__exit', suspend: true, remember: 'mara:later' },
+      { id: 'finish', label: 'До зустрічі', next: '__exit' },
+    ]);
+    expect(validateTopic(topic)).toContain('Suspension cannot remember: start/later');
+  });
+
+  it('preserves existing memories without marking a deferral as finished', () => {
+    const topic = topicWithChoices([
+      { id: 'later', label: 'Пізніше', next: '__exit', suspend: true },
+      { id: 'finish', label: 'До зустрічі', next: '__exit' },
+    ]);
+    const session = answerConversation(topic, startConversation(topic, ['mara:known']), 'later');
+    expect(session.memories).toEqual(['mara:known']);
+    expect(session.node).toBe('start');
+    expect(session.suspended).toBe(true);
+    expect(session.finished).toBe(false);
+  });
+
   it('accepts a real exit alongside a deferral', () => {
     const topic = topicWithChoices([
       { id: 'later', label: 'Пізніше', next: '__exit', suspend: true },
