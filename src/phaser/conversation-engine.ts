@@ -101,9 +101,9 @@ export function validateTopic(topic: ConversationTopic): string[] {
   return errors;
 }
 export function normalizeMemories(memories: readonly string[]): string[] {
-  return [...new Set(memories.filter((memory) => memory.trim().length > 0 && memory.length <= 120))].slice(
-    -80,
-  );
+  return [
+    ...new Set(memories.filter((memory) => memory.trim().length > 0 && memory.length <= 120)),
+  ].slice(-80);
 }
 
 export function startConversation(
@@ -132,8 +132,7 @@ export function conversationView(topic: ConversationTopic, session: Conversation
       (c) =>
         (!c.requires || memories.has(c.requires)) &&
         (!c.excludes || !memories.has(c.excludes)) &&
-        (c.repeatability === 'repeatable' ||
-          !completed.has(JSON.stringify([node.id, c.id]))),
+        (c.repeatability === 'repeatable' || !completed.has(JSON.stringify([node.id, c.id]))),
     ),
   };
 }

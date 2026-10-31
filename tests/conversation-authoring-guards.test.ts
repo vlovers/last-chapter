@@ -82,9 +82,7 @@ describe('optional conversation authoring and save consistency', () => {
       validateTopic(
         withEntry({
           ...entry,
-          choices: [
-            { id: 'leave', label: 'Вийти', next: '__exit', requires: 'x', excludes: 'x' },
-          ],
+          choices: [{ id: 'leave', label: 'Вийти', next: '__exit', requires: 'x', excludes: 'x' }],
         }),
       ),
     ).toContain('Impossible choice condition: entry');
@@ -95,9 +93,7 @@ describe('optional conversation authoring and save consistency', () => {
     const errors = validateTopic(
       withEntry({
         ...entry,
-        choices: [
-          { id: ' ', label: 'Вийти', next: '__exit', requires: ' ', excludes: ' ' },
-        ],
+        choices: [{ id: ' ', label: 'Вийти', next: '__exit', requires: ' ', excludes: ' ' }],
       }),
     );
     expect(errors).toContain('Empty choice ID: entry');
@@ -108,9 +104,9 @@ describe('optional conversation authoring and save consistency', () => {
   it('rejects blank authoring metadata', () => {
     expect(validateTopic({ ...topic, id: ' ' })).toContain('Empty topic ID');
     expect(validateTopic({ ...topic, title: ' ' })).toContain('Empty topic title');
-    expect(
-      validateTopic(withEntry({ ...topic.nodes[0]!, speaker: ' ' })),
-    ).toContain('Empty speaker: entry');
+    expect(validateTopic(withEntry({ ...topic.nodes[0]!, speaker: ' ' }))).toContain(
+      'Empty speaker: entry',
+    );
   });
 
   it('drops whitespace-only memories while retaining exact meaningful flags', () => {
@@ -136,9 +132,7 @@ describe('optional conversation authoring and save consistency', () => {
       excludes: index % 3 === 0 ? 'blocked' : undefined,
     }));
     const largeTopic = withEntry({ ...topic.nodes[0]!, choices });
-    const completed = choices.slice(0, 256).map((choice) =>
-      JSON.stringify(['entry', choice.id]),
-    );
+    const completed = choices.slice(0, 256).map((choice) => JSON.stringify(['entry', choice.id]));
     const session = {
       ...startConversation(largeTopic, ['allowed']),
       completed,
