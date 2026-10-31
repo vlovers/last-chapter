@@ -187,5 +187,4 @@ describe('hotspot rendering on the Phaser animation loop', () => {
     expect(Interactions.prototype.cycle.call(f.interaction)).toBeNull();
     expect(f.interaction.selected).toBeNull();
   });
-
 });
