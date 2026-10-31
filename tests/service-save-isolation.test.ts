@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { startChapter } from '../src/game/chapter';
+import { stageStory, startChapter } from '../src/game/chapter';
+import { startDialogue } from '../src/game/dialogue';
 import { SERVICE_KEY } from '../src/game/recommendation';
 import { decodeSave, encodeSave, SAVE_KEY } from '../src/game/save';
 import { FiveDayStory } from '../src/phaser/five-day-story';
@@ -99,5 +100,56 @@ describe('optional progress follows the narrative save', () => {
     }
     story.choose('greet');
     expect(decodeSave(values.get(SAVE_KEY)!)).not.toBeNull();
+  });
+});
+
+describe('restarting the season without a mounted journal', () => {
+  function completedSeasonSave() {
+    return encodeSave({
+      ...startChapter(),
+      stage: 'season-complete',
+      dialogue: startDialogue(stageStory('season-complete')),
+    });
+  }
+
+  it('clears optional conversations and personal notes even without the DOM event listener', () => {
+    const values = storageWith(completedSeasonSave());
+    seedOptionalProgress(values);
+    const story = new FiveDayStory();
+    expect(story.stage).toBe('season-complete');
+    expect(values.get(OPTIONAL_PROGRESS_KEYS.notes)).toBe(
+      `stale:${OPTIONAL_PROGRESS_KEYS.notes}`,
+    );
+
+    story.choose('__restart');
+
+    expect(story.stage).toBe('miller');
+    expect(decodeSave(values.get(SAVE_KEY)!)?.stage).toBe('miller');
+    expect(JSON.parse(values.get(SERVICE_KEY)!)).toEqual(emptyService);
+    for (const key of Object.values(OPTIONAL_PROGRESS_KEYS)) {
+      expect(values.has(key)).toBe(false);
+    }
+  });
+
+  it('falls back to overwriting optional progress when deletion is denied on restart', () => {
+    const values = storageWith(completedSeasonSave());
+    seedOptionalProgress(values);
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        values.set(key, value);
+      },
+      removeItem: () => {
+        throw new Error('Deletion denied');
+      },
+    });
+
+    const story = new FiveDayStory();
+    story.choose('__restart');
+
+    expect(decodeSave(values.get(SAVE_KEY)!)?.stage).toBe('miller');
+    for (const key of Object.values(OPTIONAL_PROGRESS_KEYS)) {
+      expect(values.get(key)).toBe('');
+    }
   });
 });

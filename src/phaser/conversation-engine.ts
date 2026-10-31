@@ -162,16 +162,22 @@ export function restoreConversation(
       typeof s.finished !== 'boolean' ||
       !Array.isArray(s.memories) ||
       s.memories.length > 80 ||
-      !s.memories.every((m: unknown) => typeof m === 'string' && m.length <= 120) ||
+      !s.memories.every(
+        (m: unknown) => typeof m === 'string' && m.trim().length > 0 && m.length <= 120,
+      ) ||
       new Set(s.memories).size !== s.memories.length ||
       !topic.nodes.some((n) => n.id === s.node)
     )
       return null;
+    // A partial ledger must not silently lose unfinished conversations.
+    if (s.pending !== undefined && s.completed === undefined) return null;
     if (
       s.completed !== undefined &&
       (!Array.isArray(s.completed) ||
         s.completed.length > 256 ||
-        !s.completed.every((v: unknown) => typeof v === 'string' && v.length <= 300) ||
+        !s.completed.every(
+          (v: unknown) => typeof v === 'string' && v.trim().length > 0 && v.length <= 300,
+        ) ||
         !Array.isArray(s.pending) ||
         s.pending.length > 128 ||
         !s.pending.every(
@@ -179,11 +185,24 @@ export function restoreConversation(
             !!v &&
             typeof v === 'object' &&
             typeof (v as Record<string, unknown>).node === 'string' &&
+            topic.nodes.some((node) => node.id === (v as Record<string, unknown>).node) &&
             typeof (v as Record<string, unknown>).key === 'string' &&
+            String((v as Record<string, unknown>).key).trim().length > 0 &&
             String((v as Record<string, unknown>).key).length <= 300,
         ))
     )
       return null;
+    if (s.completed !== undefined) {
+      const completed = new Set(s.completed as string[]);
+      const pending = s.pending as { node: string; key: string }[];
+      if (
+        completed.size !== (s.completed as string[]).length ||
+        new Set(pending.map(({ key }) => key)).size !== pending.length ||
+        pending.some(({ key }) => completed.has(key)) ||
+        (s.finished && pending.length > 0)
+      )
+        return null;
+    }
     return {
       topic: topic.id,
       node: s.node,

@@ -405,6 +405,9 @@ export class FiveDayStory {
     }
     this.persist();
     if (restarting) {
+      // Restart must clear the previous run even when the DOM journal has not
+      // mounted (or its new-game event listener has already been removed).
+      discardOrphanedOptionalProgress();
       this.service = restoreService('');
       this.persistService();
     }
