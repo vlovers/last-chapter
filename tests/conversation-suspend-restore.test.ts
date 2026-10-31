@@ -28,7 +28,7 @@ const interruptions: readonly {
     choices: ['tamlin', 'motives', 'exit'],
     node: 'motives',
   },
-  { name: 'return visit', topic: maraReturnVisit, choices: ['busy'], node: 'opening' },
+  { name: 'return visit', topic: maraReturnVisit, choices: ['busy'], node: 'arrival' },
   { name: 'letter decision', topic: maraLetterDecision, choices: ['later'], node: 'arrival' },
 ];
 
