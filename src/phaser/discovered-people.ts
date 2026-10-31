@@ -40,6 +40,8 @@ const lastVisitor: Record<ChapterStage, number> = {
   'season-complete': 7,
 };
 
-export function discoveredPeopleAtStage(stage: ChapterStage): readonly (readonly [string, string])[] {
+export function discoveredPeopleAtStage(
+  stage: ChapterStage,
+): readonly (readonly [string, string])[] {
   return visitors.slice(0, lastVisitor[stage] + 1);
 }
