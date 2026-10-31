@@ -132,8 +132,7 @@ export function availableOptions(
     (option) =>
       (option.requires ?? []).every((flag) => flags.has(flag)) &&
       !(option.unless ?? []).some((flag) => flags.has(flag)) &&
-      (option.repeatability === 'repeatable' ||
-        !completed.has(completionKey(node, option, flags))),
+      (option.repeatability === 'repeatable' || !completed.has(completionKey(node, option, flags))),
   );
 }
 
