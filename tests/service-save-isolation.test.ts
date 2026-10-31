@@ -117,9 +117,7 @@ describe('restarting the season without a mounted journal', () => {
     seedOptionalProgress(values);
     const story = new FiveDayStory();
     expect(story.stage).toBe('season-complete');
-    expect(values.get(OPTIONAL_PROGRESS_KEYS.notes)).toBe(
-      `stale:${OPTIONAL_PROGRESS_KEYS.notes}`,
-    );
+    expect(values.get(OPTIONAL_PROGRESS_KEYS.notes)).toBe(`stale:${OPTIONAL_PROGRESS_KEYS.notes}`);
 
     story.choose('__restart');
 
