@@ -118,7 +118,9 @@ export function decodeSave(raw: string): ChapterState | null {
       obj.completed !== undefined &&
       (!Array.isArray(obj.completed) ||
         obj.completed.length > SAVE_LIMITS.completed ||
-        !obj.completed.every((v: unknown) => typeof v === 'string' && v.length > 0 && v.length <= 1000) ||
+        !obj.completed.every(
+          (v: unknown) => typeof v === 'string' && v.length > 0 && v.length <= 1000,
+        ) ||
         new Set(obj.completed).size !== obj.completed.length ||
         !Array.isArray(obj.pending) ||
         obj.pending.length > SAVE_LIMITS.pending ||
