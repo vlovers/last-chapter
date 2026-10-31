@@ -35,7 +35,10 @@ export interface ConversationSession {
 // Authored topics are treated as immutable. Index the first definition of each
 // node once per topic so dialogue views and save restoration do not repeatedly
 // scan a potentially large conversation graph.
-const conversationNodeIndexes = new WeakMap<ConversationTopic, ReadonlyMap<string, ConversationNode>>();
+const conversationNodeIndexes = new WeakMap<
+  ConversationTopic,
+  ReadonlyMap<string, ConversationNode>
+>();
 
 function conversationNodes(topic: ConversationTopic): ReadonlyMap<string, ConversationNode> {
   let nodes = conversationNodeIndexes.get(topic);

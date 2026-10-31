@@ -91,12 +91,14 @@ describe('optional conversation runtime indexing', () => {
       ],
     };
     expect(validateTopic(topic)).toContain('Duplicate node IDs');
-    expect(conversationView(topic, {
-      topic: topic.id,
-      node: topic.entry,
-      memories: [],
-      finished: false,
-    }).text).toBe('Перша репліка.');
+    expect(
+      conversationView(topic, {
+        topic: topic.id,
+        node: topic.entry,
+        memories: [],
+        finished: false,
+      }).text,
+    ).toBe('Перша репліка.');
   });
 
   it('does not reuse an index from another topic with identical node IDs', () => {
@@ -105,12 +107,14 @@ describe('optional conversation runtime indexing', () => {
       id: 'mara.other',
       title: 'Інша розмова',
       entry: 'scene-0',
-      nodes: [{
-        id: 'scene-0',
-        speaker: 'Мара',
-        text: 'Інший початок.',
-        choices: [{ id: 'leave', label: 'Вийти', next: '__exit' }],
-      }],
+      nodes: [
+        {
+          id: 'scene-0',
+          speaker: 'Мара',
+          text: 'Інший початок.',
+          choices: [{ id: 'leave', label: 'Вийти', next: '__exit' }],
+        },
+      ],
     };
     expect(conversationView(first, startConversation(first)).text).toBe('Розмова 0.');
     expect(conversationView(second, startConversation(second)).text).toBe('Інший початок.');
@@ -121,10 +125,15 @@ describe('optional conversation runtime indexing', () => {
     const topic = longTopic(3);
     const active = answerConversation(topic, startConversation(topic), 'next');
     expect(restoreConversation(topic, JSON.stringify({ ...active, node: 'missing' }))).toBeNull();
-    expect(restoreConversation(topic, JSON.stringify({
-      ...active,
-      pending: [{ node: 'missing', key: JSON.stringify(['missing', 'next']) }],
-    }))).toBeNull();
+    expect(
+      restoreConversation(
+        topic,
+        JSON.stringify({
+          ...active,
+          pending: [{ node: 'missing', key: JSON.stringify(['missing', 'next']) }],
+        }),
+      ),
+    ).toBeNull();
   });
 
   it('keeps all four Mara conversations restorable and their dialogue available', () => {
