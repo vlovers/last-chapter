@@ -22,6 +22,37 @@ describe('narrative persistence availability', () => {
     expect(story.isProgressSaved).toBe(false);
     expect(story.open().choices.length).toBeGreaterThan(0);
   });
+  it('restarts safely after a corrupted topic ledger and replaces it on the next choice', () => {
+    const saved = new Map<string, string>();
+    saved.set(
+      SAVE_KEY,
+      JSON.stringify({
+        version: 1,
+        stage: 'miller',
+        node: 'arrival',
+        flags: [],
+        history: [],
+        pending: [{ hub: 'arrival', key: 'unfinished-topic' }],
+      }),
+    );
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => saved.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        saved.set(key, value);
+      },
+    });
+
+    const story = new FiveDayStory();
+    expect(story.stage).toBe('miller');
+    expect(story.open().choices.some((choice) => choice.id === 'greet')).toBe(true);
+    story.choose('greet');
+
+    const recovered = new FiveDayStory();
+    expect(recovered.stage).toBe('miller');
+    expect(recovered.open().choices.some((choice) => choice.id === 'greet')).toBe(false);
+    expect(saved.get(SAVE_KEY)).not.toContain('unfinished-topic');
+  });
+
   it('reports a blocked save and recovers when storage becomes writable', () => {
     const saved = new Map<string, string>();
     let blocked = true;
