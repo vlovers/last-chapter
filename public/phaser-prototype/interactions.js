@@ -8,6 +8,7 @@ export class Interactions {
     this.root = document.querySelector('#hotspots');
     this.hint = document.querySelector('#context-action');
     this.outline = scene.add.graphics().setDepth(900);
+    this.outlineSignature = null;
     this.spots = [
       ...HOTSPOTS.filter(
         (spot) => includePlant || !['chair', 'cat-tree', 'bowl'].includes(spot.id),
@@ -116,30 +117,47 @@ export class Interactions {
         projected.y > this.scene.scale.height ||
         !available;
       if (button.hidden !== hidden) button.hidden = hidden;
-      button.classList.toggle('nearby', spot === this.nearest);
-      button.classList.toggle('visited', state.inspected.includes(spot.id));
-      const title = spot.label + (state.inspected.includes(spot.id) ? ' · Уже оглянуто' : '');
+      const nearby = spot === this.nearest;
+      const visited = state.inspected.includes(spot.id);
+      if (button.classList.contains('nearby') !== nearby)
+        button.classList.toggle('nearby', nearby);
+      if (button.classList.contains('visited') !== visited)
+        button.classList.toggle('visited', visited);
+      const title = spot.label + (visited ? ' · Уже оглянуто' : '');
       if (button.title !== title) button.title = title;
     }
-    this.hint.hidden = !this.nearest || state.mode !== 'explore';
-    if (this.nearest) this.hint.textContent = `Е · ${this.nearest.label}`;
-    this.outline.clear();
+    const hintHidden = !this.nearest || state.mode !== 'explore';
+    if (this.hint.hidden !== hintHidden) this.hint.hidden = hintHidden;
+    if (this.nearest) {
+      const label = `Е · ${this.nearest.label}`;
+      if (this.hint.textContent !== label) this.hint.textContent = label;
+    }
     const highlighted = this.hovered ?? this.selected ?? this.nearest;
-    if (
+    const active =
       highlighted &&
       state.mode === 'explore' &&
-      (highlighted.id !== 'mara' || (state.mara === 'ready' && state.visitorVisible !== false))
-    ) {
-      const rect = highlighted.rect;
-      this.outline.lineStyle(1, 0xf0bd7e, eligible(player, highlighted, state) ? 0.9 : 0.45);
-      for (const [x, y, dx, dy] of [
-        [rect.x - 2, rect.y - 2, 1, 1],
-        [rect.x + rect.w + 2, rect.y - 2, -1, 1],
-        [rect.x - 2, rect.y + rect.h + 2, 1, -1],
-        [rect.x + rect.w + 2, rect.y + rect.h + 2, -1, -1],
-      ]) {
-        this.outline.lineBetween(x, y, x + dx * 5, y);
-        this.outline.lineBetween(x, y, x, y + dy * 5);
+      (highlighted.id !== 'mara' || (state.mara === 'ready' && state.visitorVisible !== false));
+    const rect = active ? highlighted.rect : null;
+    const canInteract = active && eligible(player, highlighted, state);
+    // The scene calls update every frame. Redrawing unchanged corners forces
+    // Phaser graphics geometry work even while the player stands still.
+    const signature = rect
+      ? `${highlighted.id}:${rect.x}:${rect.y}:${rect.w}:${rect.h}:${canInteract}`
+      : '';
+    if (signature !== this.outlineSignature) {
+      this.outlineSignature = signature;
+      this.outline.clear();
+      if (rect) {
+        this.outline.lineStyle(1, 0xf0bd7e, canInteract ? 0.9 : 0.45);
+        for (const [x, y, dx, dy] of [
+          [rect.x - 2, rect.y - 2, 1, 1],
+          [rect.x + rect.w + 2, rect.y - 2, -1, 1],
+          [rect.x - 2, rect.y + rect.h + 2, 1, -1],
+          [rect.x + rect.w + 2, rect.y + rect.h + 2, -1, -1],
+        ]) {
+          this.outline.lineBetween(x, y, x + dx * 5, y);
+          this.outline.lineBetween(x, y, x, y + dy * 5);
+        }
       }
     }
   }
