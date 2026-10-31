@@ -119,8 +119,7 @@ export class Interactions {
       if (button.hidden !== hidden) button.hidden = hidden;
       const nearby = spot === this.nearest;
       const visited = state.inspected.includes(spot.id);
-      if (button.classList.contains('nearby') !== nearby)
-        button.classList.toggle('nearby', nearby);
+      if (button.classList.contains('nearby') !== nearby) button.classList.toggle('nearby', nearby);
       if (button.classList.contains('visited') !== visited)
         button.classList.toggle('visited', visited);
       const title = spot.label + (visited ? ' · Уже оглянуто' : '');
