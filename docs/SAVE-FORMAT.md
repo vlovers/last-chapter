@@ -34,7 +34,10 @@ Ledger entries are validated before a story graph is opened: completion keys
 must be nonempty strings of at most 1,000 characters, pending hubs must be
 nonempty strings of at most 120 characters, and pending keys have the same
 1,000-character limit. Duplicate completion entries and malformed pending
-records are rejected. At most 8,192 completed entries and 1,024 pending
+records are rejected. A pending topic cannot already be completed, and its
+completion key cannot be pending under two different hubs. Whitespace-only
+identifiers in flags, history, or ledgers are rejected without trimming valid
+story IDs. At most 8,192 completed entries and 1,024 pending
 entries can be restored; larger saves are treated as invalid. These limits
 prevent corrupted browser storage from being mistaken for playable progress.
 

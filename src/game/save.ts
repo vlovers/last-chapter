@@ -108,8 +108,8 @@ export function decodeSave(raw: string): ChapterState | null {
       return null;
     // Save data is untrusted: validate it before loading dialogue content.
     if (new Set(obj.flags).size !== obj.flags.length) return null;
-    if (obj.flags.some((flag: string) => !flag || flag.length > 120)) return null;
-    if (obj.history.some((id: string) => !id || id.length > 120)) return null;
+    if (obj.flags.some((flag: string) => !flag.trim() || flag.length > 120)) return null;
+    if (obj.history.some((id: string) => !id.trim() || id.length > 120)) return null;
     // A pending ledger without its completed counterpart cannot be replayed
     // reliably; do not silently discard half of a save's topic progress.
     if (obj.pending !== undefined && obj.completed === undefined) return null;
@@ -119,7 +119,7 @@ export function decodeSave(raw: string): ChapterState | null {
       (!Array.isArray(obj.completed) ||
         obj.completed.length > SAVE_LIMITS.completed ||
         !obj.completed.every(
-          (v: unknown) => typeof v === 'string' && v.length > 0 && v.length <= 1000,
+          (v: unknown) => typeof v === 'string' && v.trim().length > 0 && v.length <= 1000,
         ) ||
         new Set(obj.completed).size !== obj.completed.length ||
         !Array.isArray(obj.pending) ||
@@ -129,10 +129,10 @@ export function decodeSave(raw: string): ChapterState | null {
             !!v &&
             typeof v === 'object' &&
             typeof (v as Record<string, unknown>).hub === 'string' &&
-            String((v as Record<string, unknown>).hub).length > 0 &&
+            String((v as Record<string, unknown>).hub).trim().length > 0 &&
             String((v as Record<string, unknown>).hub).length <= 120 &&
             typeof (v as Record<string, unknown>).key === 'string' &&
-            String((v as Record<string, unknown>).key).length > 0 &&
+            String((v as Record<string, unknown>).key).trim().length > 0 &&
             String((v as Record<string, unknown>).key).length <= 1000,
         ) ||
         new Set(
@@ -142,6 +142,14 @@ export function decodeSave(raw: string): ChapterState | null {
         ).size !== obj.pending.length)
     )
       return null;
+    // A pending topic cannot also be completed. Completion keys include the
+    // originating hub, so the same key cannot be pending in two different hubs.
+    if (obj.completed !== undefined) {
+      const completed = new Set(obj.completed as string[]);
+      const pending = obj.pending as { hub: string; key: string }[];
+      if (pending.some(({ key }) => completed.has(key))) return null;
+      if (new Set(pending.map(({ key }) => key)).size !== pending.length) return null;
+    }
     const dialogue = {
       node: obj.node,
       flags: obj.flags as string[],
