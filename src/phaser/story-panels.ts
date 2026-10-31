@@ -1,4 +1,5 @@
 import { evidenceKindLabels } from './journal-facts';
+import { discoveredPeopleAtStage } from './discovered-people';
 import type { FiveDayStory } from './five-day-story';
 import {
   answerConversation,
@@ -94,40 +95,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   } catch {
     /* optional */
   }
-  const discoveredPeople = () => {
-    const visits = [
-      ['miller', 'Пані Міллер'],
-      ['mara', 'Мара'],
-      ['iris', 'Айріс'],
-      ['anna', 'Анна'],
-      ['leo', 'Лео'],
-      ['eleanor', 'Елеонора'],
-      ['thomas', 'Томас'],
-      ['nora', 'Нора'],
-    ];
-    const stages = [
-      'miller',
-      'mara',
-      'evening',
-      'complete',
-      'iris',
-      'anna',
-      'leo',
-      'day2-complete',
-      'eleanor',
-      'thomas',
-      'nora',
-      'book-club',
-      'day3-complete',
-      'day4-iris',
-      'day4-mara',
-      'day4-leo',
-      'day4-complete',
-      'day5-reading',
-      'season-complete',
-    ];
-    return visits.filter(([stage]) => stages.indexOf(stage!) <= stages.indexOf(story.stage));
-  };
+  const discoveredPeople = () => discoveredPeopleAtStage(story.stage);
   const element = <K extends keyof HTMLElementTagNameMap>(
     tag: K,
     text: string,
