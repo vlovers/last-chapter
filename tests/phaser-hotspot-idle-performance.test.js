@@ -178,6 +178,27 @@ describe('hotspot rendering on the Phaser animation loop', () => {
     expect(next.id).toBe('counter');
   });
 
+  it('cycles only onscreen mobile targets and drops selection after camera movement', () => {
+    const f = fixture();
+    f.interaction.scene.cameras.main.zoom = 2;
+    f.interaction.scene.scale.width = 390;
+    f.interaction.scene.scale.height = 844;
+    f.interaction.scene.cameras.main.scrollX = 80;
+    f.update(player, visitor, ready());
+
+    expect(f.buttons.get('counter').hidden).toBe(false);
+    expect(f.buttons.get('mara').hidden).toBe(true);
+    expect(Interactions.prototype.cycle.call(f.interaction)?.id).toBe('counter');
+    f.interaction.hovered = f.interaction.selected;
+
+    f.interaction.scene.cameras.main.scrollX = 300;
+    f.update(player, visitor, ready());
+    expect(f.buttons.get('counter').hidden).toBe(true);
+    expect(f.interaction.selected).toBeNull();
+    expect(f.interaction.hovered).toBeNull();
+    expect(Interactions.prototype.cycle.call(f.interaction)).toBeNull();
+  });
+
   it('returns no keyboard target while the shop is in dialogue mode', () => {
     const f = fixture();
     f.interaction.selected = f.interaction.spots[0];
