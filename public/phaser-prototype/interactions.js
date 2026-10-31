@@ -125,13 +125,9 @@ export class Interactions {
       const title = spot.label + (visited ? ' · Уже оглянуто' : '');
       if (button.title !== title) button.title = title;
     }
-    // A visitor can leave while its hotspot is selected or hovered. Hidden
-    // controls must not remain actionable through keyboard navigation or outlines.
-    if (
-      this.selected &&
-      (this.buttons.get(this.selected.id)?.hidden ||
-        this.buttons.get(this.selected.id)?.dataset.available !== 'true')
-    )
+    // Keep offscreen objects keyboard-accessible: the camera only hides pointer
+    // hit targets. Drop a selection when its story state makes it unavailable.
+    if (this.selected && this.buttons.get(this.selected.id)?.dataset.available !== 'true')
       this.selected = null;
     if (this.hovered && this.buttons.get(this.hovered.id)?.hidden) this.hovered = null;
     const hintHidden = !this.nearest || state.mode !== 'explore';
@@ -172,7 +168,8 @@ export class Interactions {
   cycle() {
     const spots = this.spots.filter((spot) => {
       const button = this.buttons.get(spot.id);
-      return button && !button.hidden && button.dataset.available === 'true';
+      // Offscreen controls are hidden from pointer input, not from R/Enter.
+      return button && button.dataset.available === 'true';
     });
     if (!spots.length) {
       this.selected = null;
