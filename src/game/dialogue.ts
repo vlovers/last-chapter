@@ -251,7 +251,18 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
         errors.push(`Duplicate conditional flag: ${node.id}`);
       }
     }
+    const afterwordConditions = new Set<string>();
     for (const entry of node.afterwordWhen ?? []) {
+      // Each matching callback is appended to the ending. Duplicate gates
+      // would repeat a consequence even when authors reorder the flag lists.
+      const condition = JSON.stringify([
+        [...entry.requires].sort(),
+        [...(entry.unless ?? [])].sort(),
+      ]);
+      if (afterwordConditions.has(condition)) {
+        errors.push(`Duplicate afterword condition: ${node.id}`);
+      }
+      afterwordConditions.add(condition);
       if (!entry.text.trim()) errors.push(`Empty afterword: ${node.id}`);
       if (entry.requires.length === 0) errors.push(`Unconditional afterword: ${node.id}`);
       for (const field of ['requires', 'unless'] as const) {
