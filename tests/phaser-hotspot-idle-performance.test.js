@@ -159,4 +159,33 @@ describe('hotspot rendering on the Phaser animation loop', () => {
     expect(counter.hidden).toBe(false);
     expect(f.outline.clear).toHaveBeenCalledTimes(outlineCalls);
   });
+  it('clears stale keyboard and hover targets when a visitor leaves the shop', () => {
+    const f = fixture();
+    const mara = f.interaction.spots.find((spot) => spot.id === 'mara');
+    f.interaction.selected = mara;
+    f.interaction.hovered = mara;
+    f.update(player, visitor, ready());
+    expect(f.interaction.selected).toBe(mara);
+    expect(f.interaction.hovered).toBe(mara);
+
+    f.update(player, visitor, { ...ready(), visitorVisible: false });
+    expect(f.buttons.get('mara').dataset.available).toBe('false');
+    expect(f.buttons.get('mara').hidden).toBe(true);
+    expect(f.interaction.selected).toBeNull();
+    expect(f.interaction.hovered).toBeNull();
+
+    const next = Interactions.prototype.cycle.call(f.interaction);
+    expect(next.id).toBe('counter');
+  });
+
+  it('returns no keyboard target while the shop is in dialogue mode', () => {
+    const f = fixture();
+    f.interaction.selected = f.interaction.spots[0];
+    f.update(player, visitor, { ...ready(), mode: 'dialogue' });
+
+    expect(f.interaction.selected).toBeNull();
+    expect(Interactions.prototype.cycle.call(f.interaction)).toBeNull();
+    expect(f.interaction.selected).toBeNull();
+  });
+
 });
