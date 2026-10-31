@@ -36,7 +36,8 @@ export function validateTopic(topic: ConversationTopic): string[] {
   const errors: string[] = [];
   if (!topic.id.trim()) errors.push('Empty topic ID');
   if (!topic.title.trim()) errors.push('Empty topic title');
-  const ids = new Set(topic.nodes.map((node) => node.id));
+  const nodesById = new Map(topic.nodes.map((node) => [node.id, node] as const));
+  const ids = new Set(nodesById.keys());
   if (ids.size !== topic.nodes.length) errors.push('Duplicate node IDs');
   if (!ids.has(topic.entry)) errors.push('Missing entry');
   for (const node of topic.nodes) {
@@ -48,6 +49,7 @@ export function validateTopic(topic: ConversationTopic): string[] {
     for (const variant of node.variants ?? []) {
       if (!variant.text.trim()) errors.push('Empty variant: ' + node.id);
       if (!variant.when.trim()) errors.push('Empty variant condition: ' + node.id);
+      if (variant.when.length > 120) errors.push('Oversized variant condition: ' + node.id);
       if (variantConditions.has(variant.when)) {
         errors.push('Duplicate variant condition: ' + node.id);
       }
@@ -57,11 +59,20 @@ export function validateTopic(topic: ConversationTopic): string[] {
     for (const choice of node.choices) {
       if (!choice.id.trim()) errors.push('Empty choice ID: ' + node.id);
       if (!choice.label.trim()) errors.push('Empty choice label: ' + node.id);
+      if (choice.remember !== undefined && (!choice.remember.trim() || choice.remember.length > 120)) {
+        errors.push('Invalid remembered memory: ' + node.id);
+      }
       if (choice.requires !== undefined && !choice.requires.trim()) {
         errors.push('Empty required memory: ' + node.id);
       }
+      if (choice.requires !== undefined && choice.requires.length > 120) {
+        errors.push('Oversized required memory: ' + node.id);
+      }
       if (choice.excludes !== undefined && !choice.excludes.trim()) {
         errors.push('Empty excluded memory: ' + node.id);
+      }
+      if (choice.excludes !== undefined && choice.excludes.length > 120) {
+        errors.push('Oversized excluded memory: ' + node.id);
       }
       if (choice.requires !== undefined && choice.requires === choice.excludes) {
         errors.push('Impossible choice condition: ' + node.id);
@@ -72,14 +83,20 @@ export function validateTopic(topic: ConversationTopic): string[] {
         errors.push('Missing target: ' + choice.next);
     }
   }
+  // Iterative traversal avoids stack overflows and repeated node scans in long
+  // authored graphs; both reachability passes are linear in nodes and choices.
   const reached = new Set<string>();
-  const walk = (id: string) => {
-    if (reached.has(id) || !ids.has(id)) return;
+  const toVisit = [topic.entry];
+  while (toVisit.length) {
+    const id = toVisit.pop()!;
+    if (reached.has(id)) continue;
+    const node = nodesById.get(id);
+    if (!node) continue;
     reached.add(id);
-    for (const c of topic.nodes.find((n) => n.id === id)!.choices)
-      if (c.next !== '__exit') walk(c.next);
-  };
-  walk(topic.entry);
+    for (const choice of node.choices) {
+      if (choice.next !== '__exit') toVisit.push(choice.next);
+    }
+  }
   for (const id of ids) if (!reached.has(id)) errors.push('Unreachable node: ' + id);
   const exitReachable = new Set<string>();
   const reverse = new Map<string, string[]>();
