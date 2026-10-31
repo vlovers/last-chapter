@@ -133,4 +133,31 @@ describe('hotspot rendering on the Phaser animation loop', () => {
     f.update(player, { x: 570, y: 221 }, ready());
     expect(f.outline.clear).toHaveBeenCalledTimes(original + 3);
   });
+
+  it('hides offscreen mobile hit targets and restores them after camera movement', () => {
+    const f = fixture();
+    f.interaction.scene.cameras.main.zoom = 2;
+    f.interaction.scene.scale.width = 390;
+    f.interaction.scene.scale.height = 844;
+    f.interaction.scene.cameras.main.scrollX = 300;
+    f.update(player, visitor, ready());
+
+    const counter = f.buttons.get('counter');
+    expect(counter.hidden).toBe(true);
+    expect(counter.dataset.available).toBe('true');
+    const offscreenGeometry = counter.dataset.geometry;
+
+    f.interaction.scene.cameras.main.scrollX = 80;
+    f.update(player, visitor, ready());
+    expect(counter.hidden).toBe(false);
+    expect(counter.dataset.geometry).not.toBe(offscreenGeometry);
+    const onscreenGeometry = counter.dataset.geometry;
+    const outlineCalls = f.outline.clear.mock.calls.length;
+
+    for (let frame = 0; frame < 120; frame++) f.update(player, visitor, ready());
+    expect(counter.dataset.geometry).toBe(onscreenGeometry);
+    expect(counter.hidden).toBe(false);
+    expect(f.outline.clear).toHaveBeenCalledTimes(outlineCalls);
+  });
+
 });
