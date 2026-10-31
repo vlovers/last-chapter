@@ -77,9 +77,7 @@ describe('Dialogue conditional authoring guards', () => {
     ['duplicate', ['new_fact', 'new_fact'], 'Duplicate reopensWhen flag: begin/continue'],
   ] as const)('rejects %s reopening prerequisites', (_label, flags, expected) => {
     const story = storyWith({
-      options: [
-        { id: 'continue', label: 'Далі', next: 'end', reopensWhen: flags },
-      ],
+      options: [{ id: 'continue', label: 'Далі', next: 'end', reopensWhen: flags }],
     });
     expect(validateDialogue(story)).toContain(expected);
   });
