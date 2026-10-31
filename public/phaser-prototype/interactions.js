@@ -125,6 +125,11 @@ export class Interactions {
       const title = spot.label + (visited ? ' · Уже оглянуто' : '');
       if (button.title !== title) button.title = title;
     }
+    // A visitor can leave while its hotspot is selected or hovered. Hidden
+    // controls must not remain actionable through keyboard navigation or outlines.
+    if (this.selected && this.buttons.get(this.selected.id)?.dataset.available !== 'true')
+      this.selected = null;
+    if (this.hovered && this.buttons.get(this.hovered.id)?.hidden) this.hovered = null;
     const hintHidden = !this.nearest || state.mode !== 'explore';
     if (this.hint.hidden !== hintHidden) this.hint.hidden = hintHidden;
     if (this.nearest) {
