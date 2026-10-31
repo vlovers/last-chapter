@@ -88,9 +88,16 @@ function completionKey(node: DialogueNode, option: DialogueOption, flags: readon
   ]);
 }
 
+// Legacy histories can contain thousands of edges. A single immutable dialogue
+// snapshot is queried repeatedly by the journal, guidance and dialogue UI, so
+// replay its history only once per graph. Weak keys avoid retaining old scenes.
+const legacyReplayCache = new WeakMap<DialogueState, WeakMap<DialogueStory, DialogueState>>();
+
 /** Reconstruct legacy progress from its recorded edges, never from flags alone. */
 export function restoreDialogueProgress(story: DialogueStory, state: DialogueState): DialogueState {
   if (state.completed !== undefined) return state;
+  const cached = legacyReplayCache.get(state)?.get(story);
+  if (cached) return cached;
   let replay = startDialogue(story);
   for (const id of state.history) {
     const node = currentNode(story, replay);
@@ -98,7 +105,14 @@ export function restoreDialogueProgress(story: DialogueStory, state: DialogueSta
     if (!option) break;
     replay = applyOption(story, replay, node, option);
   }
-  return { ...state, completed: replay.completed ?? [], pending: replay.pending ?? [] };
+  const restored = { ...state, completed: replay.completed ?? [], pending: replay.pending ?? [] };
+  let byStory = legacyReplayCache.get(state);
+  if (!byStory) {
+    byStory = new WeakMap<DialogueStory, DialogueState>();
+    legacyReplayCache.set(state, byStory);
+  }
+  byStory.set(story, restored);
+  return restored;
 }
 
 export function availableOptions(
