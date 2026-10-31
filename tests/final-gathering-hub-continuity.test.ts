@@ -64,11 +64,7 @@ const cases = [
     entry: 'final-reader-debates',
     hub: 'final-reader-debates-hub',
     routes: readerRoutes,
-    done: [
-      'final_reader_romance_done',
-      'final_reader_audio_done',
-      'final_reader_villain_done',
-    ],
+    done: ['final_reader_romance_done', 'final_reader_audio_done', 'final_reader_villain_done'],
     markers: ['Мара повертає роман', 'Рут прибирає навушники', 'Міллер закриває детектив'],
     genericEnd: 'За столом стихли три суперечки',
     specificEnd: 'Без спойлерів',
@@ -107,7 +103,11 @@ describe('Final gathering: returning to ordinary conversations', () => {
     });
 
     it(`${group.name}: partial returns acknowledge exactly the topics played`, () => {
-      for (const [first, second] of [[0, 1], [0, 2], [1, 2]] as const) {
+      for (const [first, second] of [
+        [0, 1],
+        [0, 2],
+        [1, 2],
+      ] as const) {
         let state = openHub(group.entry);
         state = play(state, group.routes[first]![1]);
         state = play(state, group.routes[second]![2]);
