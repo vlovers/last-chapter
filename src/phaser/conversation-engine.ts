@@ -148,6 +148,21 @@ export function answerConversation(
     finished: choice.next === '__exit',
   };
 }
+/** Ledger keys are produced by JSON.stringify([nodeId, choiceId]). */
+function isChoiceLedgerKey(key: string): boolean {
+  try {
+    const parsed: unknown = JSON.parse(key);
+    return (
+      Array.isArray(parsed) &&
+      parsed.length === 2 &&
+      parsed.every((part) => typeof part === 'string' && part.trim().length > 0) &&
+      JSON.stringify(parsed) === key
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function restoreConversation(
   topic: ConversationTopic,
   raw: string,
@@ -160,6 +175,8 @@ export function restoreConversation(
       s.topic !== topic.id ||
       typeof s.node !== 'string' ||
       typeof s.finished !== 'boolean' ||
+      (s.suspended !== undefined && typeof s.suspended !== 'boolean') ||
+      (s.finished && s.suspended === true) ||
       !Array.isArray(s.memories) ||
       s.memories.length > 80 ||
       !s.memories.every(
@@ -176,7 +193,7 @@ export function restoreConversation(
       (!Array.isArray(s.completed) ||
         s.completed.length > 256 ||
         !s.completed.every(
-          (v: unknown) => typeof v === 'string' && v.trim().length > 0 && v.length <= 300,
+          (v: unknown) => typeof v === 'string' && v.length <= 300 && isChoiceLedgerKey(v),
         ) ||
         !Array.isArray(s.pending) ||
         s.pending.length > 128 ||
@@ -187,8 +204,10 @@ export function restoreConversation(
             typeof (v as Record<string, unknown>).node === 'string' &&
             topic.nodes.some((node) => node.id === (v as Record<string, unknown>).node) &&
             typeof (v as Record<string, unknown>).key === 'string' &&
-            String((v as Record<string, unknown>).key).trim().length > 0 &&
-            String((v as Record<string, unknown>).key).length <= 300,
+            String((v as Record<string, unknown>).key).length <= 300 &&
+            isChoiceLedgerKey(String((v as Record<string, unknown>).key)) &&
+            JSON.parse(String((v as Record<string, unknown>).key))[0] ===
+              (v as Record<string, unknown>).node,
         ))
     )
       return null;
@@ -208,6 +227,7 @@ export function restoreConversation(
       node: s.node,
       finished: s.finished,
       memories: [...s.memories],
+      ...(s.suspended === true ? { suspended: true } : {}),
       ...(s.completed !== undefined
         ? {
             completed: [...(s.completed as string[])],
