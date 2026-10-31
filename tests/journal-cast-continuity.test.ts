@@ -26,7 +26,7 @@ const expectedByStage: readonly (readonly [ChapterStage, number])[] = [
 ];
 
 describe('journal cast continuity', () => {
-  it.each(expectedByStage)('keeps %i discovered visitors at %s', (stage, count) => {
+  it.each(expectedByStage)('at %s shows %i visitors', (stage, count) => {
     expect(discoveredPeopleAtStage(stage)).toHaveLength(count);
   });
 
@@ -40,7 +40,7 @@ describe('journal cast continuity', () => {
     ]);
   });
 
-  it('preserves the full cast on both Day 3 evening routes and after restoring checkpoints', () => {
+  it('preserves the full cast across optional evenings and checkpoints', () => {
     const expected = discoveredPeopleAtStage('nora');
     for (const stage of [
       'book-club',
