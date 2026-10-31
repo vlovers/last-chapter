@@ -22,6 +22,14 @@ reset. Each stage has its own graph and ledger; day transitions retain the
 existing story facts. Bounds and basic structure are checked at the save boundary.
 As before, this is client-controlled progress, not a tamper-proof event log.
 
+A save with a completion ledger must include both `completed` and `pending`.
+The decoder rejects an orphan `pending` array, empty completion or pending
+keys, and repeated `(hub, key)` pending pairs instead of silently dropping or
+replaying ambiguous topic progress. Distinct pending topics in the same hub
+remain valid. Legacy saves with neither ledger field are still supported.
+Save/load regression tests cover all 20 chapter stages, including the optional
+quiet evening and completed checkpoints.
+
 The four optional Mara sessions keep their existing storage keys. Their ledgers
 track completed return loops; only an actual exit finishes the topic. Explicit
 “later” choices now suspend at the current node. Completed sessions are removed
