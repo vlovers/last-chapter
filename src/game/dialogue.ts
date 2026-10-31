@@ -198,7 +198,15 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
     if (!node.id.trim()) errors.push('Empty node id');
     if (!node.speaker.trim()) errors.push(`Empty speaker: ${node.id}`);
     if (!node.text.trim()) errors.push(`Empty text: ${node.id}`);
+    const conditionalFlagSets = new Set<string>();
     for (const variant of node.textWhen ?? []) {
+      // The engine chooses only one narration. A later variant with the same
+      // prerequisites (even reordered) can never be displayed.
+      const condition = JSON.stringify([...variant.requires].sort());
+      if (conditionalFlagSets.has(condition)) {
+        errors.push(`Duplicate conditional variant: ${node.id}`);
+      }
+      conditionalFlagSets.add(condition);
       if (!variant.text.trim()) errors.push(`Empty conditional text: ${node.id}`);
       if (variant.requires.length === 0) errors.push(`Unconditional text variant: ${node.id}`);
       if (variant.requires.some((flag) => !flag.trim())) {
@@ -244,6 +252,12 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
       }
       if (new Set(option.grants ?? []).size !== (option.grants ?? []).length) {
         errors.push(`Duplicate granted flag: ${node.id}/${option.id}`);
+      }
+      if ((option.reopensWhen ?? []).some((flag) => !flag.trim())) {
+        errors.push(`Blank reopensWhen flag: ${node.id}/${option.id}`);
+      }
+      if (new Set(option.reopensWhen ?? []).size !== (option.reopensWhen ?? []).length) {
+        errors.push(`Duplicate reopensWhen flag: ${node.id}/${option.id}`);
       }
       if ((option.requires ?? []).some((flag) => (option.unless ?? []).includes(flag))) {
         errors.push(`Impossible option condition: ${node.id}/${option.id}`);
