@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { millerVisit } from '../src/content/first-day';
 import {
   availableOptions,
+  type DialogueStory,
   restoreDialogueProgress,
   selectOption,
   startDialogue,
@@ -64,5 +65,46 @@ describe('legacy dialogue replay performance', () => {
     expect(modern.completed).toBeDefined();
     expect(restoreDialogueProgress(millerVisit, modern)).toBe(modern);
     expect(restoreDialogueProgress(millerVisit, modern)).toBe(modern);
+  });
+
+  it('restores a full-length legacy route without changing the saved history', () => {
+    const story: DialogueStory = {
+      start: 'hub',
+      nodes: [
+        {
+          id: 'hub',
+          speaker: 'Оповідач',
+          text: 'Книгарня відкрита.',
+          hub: true,
+          options: [
+            { id: 'open', label: 'Почати розмову', next: 'topic' },
+            { id: 'idle', label: 'Оглянути кімнату', next: 'hub', repeatability: 'repeatable' },
+          ],
+        },
+        {
+          id: 'topic',
+          speaker: 'Гість',
+          text: 'Поговорімо.',
+          options: [{ id: 'return', label: 'Повернутися', next: 'hub' }],
+        },
+      ],
+    };
+    // Stay below the save format's 16,384-edge budget, but stress the
+    // old quadratic replay path with thousands of repeatable interactions.
+    const history = ['open', 'return', ...Array<string>(16_000).fill('idle')];
+    const legacy = { node: 'hub', flags: [], history };
+
+    const restored = restoreDialogueProgress(story, legacy);
+    expect(restored.completed).toEqual([JSON.stringify(['hub', 'open', []])]);
+    expect(restored.pending).toEqual([]);
+    expect(restored.history).toBe(history);
+    expect(availableOptions(story, legacy).map((option) => option.id)).toEqual(['idle']);
+
+    // A real new choice still records its edge; only internal replay skips it.
+    const next = selectOption(story, legacy, 'idle');
+    expect(next.history).toHaveLength(history.length + 1);
+    expect(next.history.at(-1)).toBe('idle');
+    expect(next.completed).toEqual(restored.completed);
+    expect(legacy).not.toHaveProperty('completed');
   });
 });
