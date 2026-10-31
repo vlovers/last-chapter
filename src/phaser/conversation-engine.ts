@@ -32,6 +32,24 @@ export interface ConversationSession {
   pending?: { node: string; key: string }[];
   suspended?: boolean;
 }
+// Authored topics are treated as immutable. Index the first definition of each
+// node once per topic so dialogue views and save restoration do not repeatedly
+// scan a potentially large conversation graph.
+const conversationNodeIndexes = new WeakMap<ConversationTopic, ReadonlyMap<string, ConversationNode>>();
+
+function conversationNodes(topic: ConversationTopic): ReadonlyMap<string, ConversationNode> {
+  let nodes = conversationNodeIndexes.get(topic);
+  if (!nodes) {
+    const index = new Map<string, ConversationNode>();
+    for (const node of topic.nodes) {
+      if (!index.has(node.id)) index.set(node.id, node);
+    }
+    nodes = index;
+    conversationNodeIndexes.set(topic, nodes);
+  }
+  return nodes;
+}
+
 export function validateTopic(topic: ConversationTopic): string[] {
   const errors: string[] = [];
   if (!topic.id.trim()) errors.push('Empty topic ID');
@@ -140,7 +158,7 @@ export function startConversation(
 }
 export function conversationView(topic: ConversationTopic, session: ConversationSession) {
   if (session.topic !== topic.id || session.finished) throw new Error('Conversation not active');
-  const node = topic.nodes.find((item) => item.id === session.node);
+  const node = conversationNodes(topic).get(session.node);
   if (!node) throw new Error('Invalid conversation node');
   const memories = new Set(session.memories);
   const completed = new Set(session.completed ?? []);
@@ -213,6 +231,7 @@ export function restoreConversation(
     const x: unknown = JSON.parse(raw);
     if (!x || typeof x !== 'object') return null;
     const s = x as Record<string, unknown>;
+    const nodes = conversationNodes(topic);
     if (
       s.topic !== topic.id ||
       typeof s.node !== 'string' ||
@@ -225,7 +244,7 @@ export function restoreConversation(
         (m: unknown) => typeof m === 'string' && m.trim().length > 0 && m.length <= 120,
       ) ||
       new Set(s.memories).size !== s.memories.length ||
-      !topic.nodes.some((n) => n.id === s.node)
+      !nodes.has(s.node as string)
     )
       return null;
     // A partial ledger must not silently lose unfinished conversations.
@@ -244,7 +263,7 @@ export function restoreConversation(
             !!v &&
             typeof v === 'object' &&
             typeof (v as Record<string, unknown>).node === 'string' &&
-            topic.nodes.some((node) => node.id === (v as Record<string, unknown>).node) &&
+            nodes.has((v as Record<string, unknown>).node as string) &&
             typeof (v as Record<string, unknown>).key === 'string' &&
             String((v as Record<string, unknown>).key).length <= 300 &&
             isChoiceLedgerKey(String((v as Record<string, unknown>).key)) &&
