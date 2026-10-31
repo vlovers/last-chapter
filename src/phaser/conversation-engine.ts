@@ -101,6 +101,11 @@ export function validateTopic(topic: ConversationTopic): string[] {
       if (choice.requires !== undefined && choice.requires === choice.excludes) {
         errors.push('Impossible choice condition: ' + node.id);
       }
+      // Suspension closes the panel without following the declared target.
+      // A misleading target can make scenes appear reachable only on paper.
+      if (choice.suspend && choice.next !== '__exit') {
+        errors.push('Suspension must exit: ' + node.id + '/' + choice.id);
+      }
       if (choices.has(choice.id)) errors.push('Duplicate choice: ' + node.id);
       choices.add(choice.id);
       if (choice.next !== '__exit' && !ids.has(choice.next))
@@ -118,7 +123,7 @@ export function validateTopic(topic: ConversationTopic): string[] {
     if (!node) continue;
     reached.add(id);
     for (const choice of node.choices) {
-      if (choice.next !== '__exit') toVisit.push(choice.next);
+      if (!choice.suspend && choice.next !== '__exit') toVisit.push(choice.next);
     }
   }
   for (const id of ids) if (!reached.has(id)) errors.push('Unreachable node: ' + id);
@@ -126,6 +131,8 @@ export function validateTopic(topic: ConversationTopic): string[] {
   const reverse = new Map<string, string[]>();
   for (const node of topic.nodes) {
     for (const choice of node.choices) {
+      // A suspended choice does not finish the topic or reach its target.
+      if (choice.suspend) continue;
       const parents = reverse.get(choice.next) ?? [];
       parents.push(node.id);
       reverse.set(choice.next, parents);
