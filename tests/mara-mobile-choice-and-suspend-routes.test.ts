@@ -26,9 +26,10 @@ function topicWithChoices(
 describe('Mara conversation routes and mobile choice budget', () => {
   it.each(topics)('keeps every choice screen within four replies: $id', (topic) => {
     for (const node of topic.nodes) {
-      expect(node.choices.length, `${topic.id}/${node.id} has too many replies`).toBeLessThanOrEqual(
-        4,
-      );
+      expect(
+        node.choices.length,
+        `${topic.id}/${node.id} has too many replies`,
+      ).toBeLessThanOrEqual(4);
     }
   });
 
@@ -100,10 +101,7 @@ describe('Mara conversation routes and mobile choice budget', () => {
       ],
     };
     expect(validateTopic(topic)).toEqual(
-      expect.arrayContaining([
-        'Suspension must exit: start/later',
-        'Unreachable node: hidden',
-      ]),
+      expect.arrayContaining(['Suspension must exit: start/later', 'Unreachable node: hidden']),
     );
   });
 
