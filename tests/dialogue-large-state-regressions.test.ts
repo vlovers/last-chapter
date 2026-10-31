@@ -3,6 +3,7 @@ import { finalReading } from '../src/content/day-five';
 import {
   availableOptions,
   currentNode,
+  selectOption,
   type DialogueState,
   type DialogueStory,
 } from '../src/game/dialogue';
@@ -59,6 +60,42 @@ describe('large dialogue state regressions', () => {
     expect(flagsIncludes).not.toHaveBeenCalled();
     expect(completedIncludes).not.toHaveBeenCalled();
     expect(state.completed).toHaveLength(8192);
+  });
+
+  it('indexes reopening flags across a large menu and preserves completion keys', () => {
+    const story: DialogueStory = {
+      start: 'hub',
+      nodes: [
+        {
+          id: 'hub',
+          speaker: 'Оповідач',
+          text: 'Гості збираються.',
+          options: Array.from({ length: 96 }, (_, index) => ({
+            id: `topic-${index}`,
+            label: `Тема ${index}`,
+            next: 'end',
+            reopensWhen: ['new_fact', 'other_fact'],
+          })),
+        },
+        { id: 'end', speaker: 'Оповідач', text: 'До зустрічі.', options: [] },
+      ],
+    };
+    const flags = ['new_fact', ...Array.from({ length: 1023 }, (_, i) => `memory_${i}`)];
+    const includes = vi.spyOn(flags, 'includes');
+    const state: DialogueState = {
+      node: 'hub',
+      flags,
+      history: [],
+      completed: [key('hub', 'topic-0', ['new_fact'])],
+      pending: [],
+    };
+
+    expect(availableOptions(story, state)).toHaveLength(95);
+    expect(includes).not.toHaveBeenCalled();
+    const next = selectOption(story, state, 'topic-1');
+    expect(next.completed).toContain(key('hub', 'topic-1', ['new_fact']));
+    expect(next.flags).toEqual(flags);
+    expect(includes).not.toHaveBeenCalled();
   });
 
   it('reopens a completed topic when a new fact changes its completion key', () => {
