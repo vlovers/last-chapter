@@ -34,17 +34,38 @@ export interface ConversationSession {
 }
 export function validateTopic(topic: ConversationTopic): string[] {
   const errors: string[] = [];
+  if (!topic.id.trim()) errors.push('Empty topic ID');
+  if (!topic.title.trim()) errors.push('Empty topic title');
   const ids = new Set(topic.nodes.map((node) => node.id));
   if (ids.size !== topic.nodes.length) errors.push('Duplicate node IDs');
   if (!ids.has(topic.entry)) errors.push('Missing entry');
   for (const node of topic.nodes) {
+    if (!node.id.trim()) errors.push('Empty node ID');
+    if (!node.speaker.trim()) errors.push('Empty speaker: ' + node.id);
     if (!node.choices.length) errors.push('Dead end: ' + node.id);
     if (!node.text.trim()) errors.push('Empty text: ' + node.id);
-    for (const variant of node.variants ?? [])
+    const variantConditions = new Set<string>();
+    for (const variant of node.variants ?? []) {
       if (!variant.text.trim()) errors.push('Empty variant: ' + node.id);
+      if (!variant.when.trim()) errors.push('Empty variant condition: ' + node.id);
+      if (variantConditions.has(variant.when)) {
+        errors.push('Duplicate variant condition: ' + node.id);
+      }
+      variantConditions.add(variant.when);
+    }
     const choices = new Set<string>();
     for (const choice of node.choices) {
+      if (!choice.id.trim()) errors.push('Empty choice ID: ' + node.id);
       if (!choice.label.trim()) errors.push('Empty choice label: ' + node.id);
+      if (choice.requires !== undefined && !choice.requires.trim()) {
+        errors.push('Empty required memory: ' + node.id);
+      }
+      if (choice.excludes !== undefined && !choice.excludes.trim()) {
+        errors.push('Empty excluded memory: ' + node.id);
+      }
+      if (choice.requires !== undefined && choice.requires === choice.excludes) {
+        errors.push('Impossible choice condition: ' + node.id);
+      }
       if (choices.has(choice.id)) errors.push('Duplicate choice: ' + node.id);
       choices.add(choice.id);
       if (choice.next !== '__exit' && !ids.has(choice.next))
@@ -80,7 +101,7 @@ export function validateTopic(topic: ConversationTopic): string[] {
   return errors;
 }
 export function normalizeMemories(memories: readonly string[]): string[] {
-  return [...new Set(memories.filter((memory) => memory.length > 0 && memory.length <= 120))].slice(
+  return [...new Set(memories.filter((memory) => memory.trim().length > 0 && memory.length <= 120))].slice(
     -80,
   );
 }
@@ -101,16 +122,18 @@ export function conversationView(topic: ConversationTopic, session: Conversation
   if (session.topic !== topic.id || session.finished) throw new Error('Conversation not active');
   const node = topic.nodes.find((item) => item.id === session.node);
   if (!node) throw new Error('Invalid conversation node');
-  const variant = node.variants?.find((v) => session.memories.includes(v.when));
+  const memories = new Set(session.memories);
+  const completed = new Set(session.completed ?? []);
+  const variant = node.variants?.find((v) => memories.has(v.when));
   return {
     ...node,
     text: variant?.text ?? node.text,
     choices: node.choices.filter(
       (c) =>
-        (!c.requires || session.memories.includes(c.requires)) &&
-        (!c.excludes || !session.memories.includes(c.excludes)) &&
+        (!c.requires || memories.has(c.requires)) &&
+        (!c.excludes || !memories.has(c.excludes)) &&
         (c.repeatability === 'repeatable' ||
-          !session.completed?.includes(JSON.stringify([node.id, c.id]))),
+          !completed.has(JSON.stringify([node.id, c.id]))),
     ),
   };
 }
