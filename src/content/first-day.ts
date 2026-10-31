@@ -51,7 +51,7 @@ export const millerVisit: DialogueStory = {
         { id: 'what-saw', label: '«А що саме ви бачили?»', next: 'sighting' },
         {
           id: 'no-rumors',
-          label: '«Я не хочу обговорювати людей за їхньої відсутності»',
+          label: '«Давайте не вирішувати за Томаса, поки його тут немає»',
           next: 'boundary',
         },
       ],
@@ -63,9 +63,15 @@ export const millerVisit: DialogueStory = {
       options: [
         {
           id: 'challenge',
-          label: '«Але це нічого не доводить»',
+          label: '«Ви бачили, про що вони говорили, чи тільки як виходили?»',
           next: 'boundary',
           grants: ['rumor_heard', 'rumor_challenged'],
+        },
+        {
+          id: 'speculate',
+          label: '«А може, Томас не хоче, щоб Анна дізналася?»',
+          next: 'speculation',
+          grants: ['rumor_heard', 'rumor_amplified'],
         },
         {
           id: 'acknowledge',
@@ -76,9 +82,29 @@ export const millerVisit: DialogueStory = {
       ],
     },
     {
+      id: 'speculation',
+      speaker: 'Пані Міллер',
+      text: '«От бачите, я й сама не хотіла цього казати». Вона на мить замовкає. «Хоча ні. Хотіла. Але ж ми не знаємо, хто та жінка і про що вони говорили. А Анна потім почує вже зовсім іншу історію».',
+      options: [
+        {
+          id: 'speculation-reconsider',
+          label: '«Я вже нафантазував зайвого. Забудьте, що сказав»',
+          next: 'order',
+          grants: ['rumor_amplification_reconsidered'],
+        },
+        { id: 'speculation-move-on', label: '«Повернімося до книжок»', next: 'order' },
+      ],
+    },
+    {
       id: 'boundary',
       speaker: 'Пані Міллер',
       text: 'Звісно, люба, звісно. Я ж і не казала, що щось доводить. Просто містечко маленьке, а очі в мене ще добрі. Ну, показуйте свої детективи.',
+      textWhen: [
+        {
+          requires: ['rumor_challenged'],
+          text: 'Пані Міллер уже відкриває рота, щоб додати ще одну деталь, але зупиняється. «Гаразд. Ви маєте рацію: я бачила, як вони виходили, а решту вже домалювала сама. Не обіцяю, що перестану цікавитися сусідами, але принаймні не називатиму здогад фактом». Вона поправляє список покупок. «А тепер покажіть детективи — бажано такі, де винний справді винен».',
+        },
+      ],
       options: [{ id: 'boundary-order', label: 'Показати детективи', next: 'order' }],
     },
     {
@@ -114,13 +140,69 @@ export const millerVisit: DialogueStory = {
     },
     {
       id: 'topics',
+      hub: true,
       speaker: 'Пані Міллер',
       text: '«Час? Люба, я маю цілий список справ, які чудово почекають. Чай у вас є? Бо в Елеонори завжди був. Що цікавить?»',
       options: [
         { id: 'detectives', label: 'Чому ви любите детективи?', next: 'detectives' },
         { id: 'jam', label: 'Навіщо вам порожня банка?', next: 'jam' },
         { id: 'loneliness', label: 'Як вам живеться в Беллвіку?', next: 'loneliness' },
-        { id: 'miller-order', label: 'Повернутися до вибору книжки', next: 'order' },
+        {
+          id: 'miller-neighbors',
+          label: '«А хто в місті найкраще пече?»',
+          next: 'miller-neighbors',
+        },
+        { id: 'memory', label: 'Чи завжди можна довіряти спогадам?', next: 'memory' },
+        {
+          repeatability: 'repeatable',
+          id: 'miller-order',
+          label: 'Повернутися до вибору книжки',
+          next: 'order',
+        },
+      ],
+    },
+    {
+      id: 'miller-neighbors',
+      speaker: 'Пані Міллер',
+      text: '«Мара, звісно. Хоча вона кладе забагато кориці. Я їй про це кажу щочетверга, а щоп’ятниці все одно купую дві булочки». Міллер постукує пальцем по порожній банці. «А ще Томас колись спік пиріг. Ми досі не знаємо, чи то був пиріг, чи будівельний матеріал».',
+      options: [
+        {
+          id: 'miller-neighbors-mara',
+          label: '«То навіщо купуєте, якщо кориці забагато?»',
+          next: 'miller-neighbors-mara',
+        },
+        {
+          id: 'miller-neighbors-thomas',
+          label: '«Що сталося з пирогом Томаса?»',
+          next: 'miller-neighbors-thomas',
+        },
+        { id: 'miller-neighbors-back', label: 'Повернутися до чаю', next: 'topics' },
+      ],
+    },
+    {
+      id: 'miller-neighbors-mara',
+      speaker: 'Пані Міллер',
+      text: '«Бо вона пам’ятає, що я не люблю родзинки, — відказує Міллер. — І що в мене день народження в листопаді. Не треба робити з цього велику історію. Просто приємно, коли хтось пам’ятає». Вона швидко додає: «А кориці все одно забагато».',
+      options: [
+        {
+          id: 'miller-neighbors-mara-back',
+          label: '«Гаразд, передам їй вашу скаргу»',
+          next: 'topics',
+          grants: ['miller_bakery_story_heard'],
+        },
+      ],
+    },
+    {
+      id: 'miller-neighbors-thomas',
+      speaker: 'Пані Міллер',
+      text: '«Він хотів зробити сюрприз Анні. Забув розпушувач, а потім намагався підпиляти скоринку». Міллер сміється. «Не дивіться так, я не вигадую. Принаймні про пилку. Можливо, це був ніж».',
+      options: [
+        {
+          id: 'miller-neighbors-thomas-back',
+          label: '«Схоже, йому краще лагодити лампи»',
+          next: 'topics',
+          grants: ['miller_thomas_baking_story_heard'],
+        },
       ],
     },
     {
@@ -137,6 +219,12 @@ export const millerVisit: DialogueStory = {
           id: 'detective-people',
           label: 'А може, вам цікаві самі люди?',
           next: 'detective-people',
+        },
+        {
+          id: 'miller-cinema-photo',
+          label: '«А Нора казала, що ви пам’ятаєте старий кінотеатр»',
+          next: 'miller-cinema-photo',
+          unless: ['miller_cinema_photo_discussed'],
         },
         { id: 'detective-back', label: 'Про що ще поговоримо?', next: 'topics' },
       ],
@@ -228,10 +316,127 @@ export const millerVisit: DialogueStory = {
       ],
     },
     {
+      id: 'memory',
+      speaker: 'Пані Міллер',
+      text: 'Я колись думала, що сусідка мене навмисне не привітала. А вона просто загубила окуляри. Я пам’ятала подію правильно, але причину вигадала сама.',
+      options: [
+        {
+          id: 'memory-fact',
+          label: '«Тобто факт і пояснення — не те саме?»',
+          next: 'memory-answer',
+          grants: ['miller_observation_distinguished'],
+        },
+        { id: 'memory-return', label: '«Дякую. Повернімося до книжок»', next: 'order' },
+      ],
+    },
+    {
+      id: 'memory-answer',
+      speaker: 'Пані Міллер',
+      text: 'Саме так. Іноді ми настільки віримо у власну версію, що забуваємо запитати іншу людину. Ну що, покажете мені детективи?',
+      options: [{ id: 'memory-answer-order', label: 'Показати детективи', next: 'order' }],
+    },
+    {
       id: 'end',
       speaker: 'Оповідач',
       text: 'Коли двері зачинилися, дзвіночок пролунав лише раз. За вікном пані Міллер махнула вам порожньою банкою. Перша книжка продана. Містечко вже почало розповідати свої історії.',
       options: [],
+    },
+    {
+      id: 'miller-cinema-photo',
+      speaker: 'Пані Міллер',
+      text: '«Нора знову шукає рік відкриття? Я їй уже тричі сказала: це було влітку». Міллер витягає з торби стару листівку. «Бачите? Я написала “літо”. Щоправда, не тоді, а років за двадцять. На фотографії я стою біля дверей, а мій брат тримає букет. Він завжди купував квіти не тій людині».',
+      options: [
+        {
+          id: 'miller-cinema-summer',
+          label: '«Ви впевнені, що це саме червень?»',
+          next: 'miller-cinema-summer',
+        },
+        {
+          id: 'miller-cinema-check',
+          label: '«Може, варто звірити спогад із афішею?»',
+          next: 'miller-cinema-check',
+        },
+        {
+          id: 'miller-cinema-brother',
+          label: '«А кому ваш брат ніс квіти?»',
+          next: 'miller-cinema-brother',
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-summer',
+      speaker: 'Пані Міллер',
+      text: '«У червні я носила зелену сукню. На фото вона зелена, хоч цього й не видно». Міллер підсуває листівку. «Але, здається, ту сукню я носила аж до жовтня. От же ж. Не дивіться так радісно — ви мене не впіймали, я сама себе впіймала».',
+      options: [
+        {
+          id: 'miller-cinema-summer-answer',
+          label: '«Можна пам’ятати вечір, не пам’ятаючи дати»',
+          next: 'miller-cinema-summer-answer',
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-summer-answer',
+      speaker: 'Пані Міллер',
+      text: '«Тоді Норі доведеться писати “пані Міллер майже певна”. Не надто урочисто для музейної таблички». Вона пирхає. «Але краще так, ніж поставити мене на стенд поруч із вигаданим червнем».',
+      options: [
+        {
+          id: 'miller-cinema-summer-back',
+          label: 'Повернутися до розмови про книжки',
+          next: 'topics',
+          grants: ['miller_cinema_photo_discussed', 'miller_cinema_date_uncertain'],
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-check',
+      speaker: 'Пані Міллер',
+      text: '«Афішу шукають відтоді, як я посивіла». Міллер ховає листівку. «Я могла б дати Норі її переписати. Але оригінал залишу вдома. У мене там на звороті рецепт млинців, і він мені потрібен більше за будь-який музей».',
+      options: [
+        {
+          id: 'miller-cinema-check-answer',
+          label: '«Може, Норі вистачить вашого опису?»',
+          next: 'miller-cinema-check-answer',
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-check-answer',
+      speaker: 'Пані Міллер',
+      text: '«Опис я дам. І додам, що не знаю точного року. А листівку покажу тільки їй, без фотографування». Міллер усміхається. «Ще чого, розмістять мій рецепт млинців під портретом мера».',
+      options: [
+        {
+          id: 'miller-cinema-check-back',
+          label: '«Так і домовилися»',
+          next: 'topics',
+          grants: ['miller_cinema_photo_discussed', 'miller_cinema_description_offered'],
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-brother',
+      speaker: 'Пані Міллер',
+      text: '«Касирці. Він два тижні збирався її запросити на танці, а в день відкриття переплутав чергу й подарував букет контролерці». Міллер сміється так голосно, що з полиці зсувається закладка. «Вони потім сорок років прожили разом. А касирка вийшла за продавця квитків».',
+      options: [
+        {
+          id: 'miller-cinema-brother-answer',
+          label: '«Ви хочете, щоб Нора записала цю історію?»',
+          next: 'miller-cinema-brother-answer',
+        },
+      ],
+    },
+    {
+      id: 'miller-cinema-brother-answer',
+      speaker: 'Пані Міллер',
+      text: '«Поки ні. Це наша сімейна байка. Може, колись я сама розповім її на вечорі історій». Вона розгладжує рукав. «А зараз давайте той детектив, де хоча б хтось знає, хто кому подарував квіти».',
+      options: [
+        {
+          id: 'miller-cinema-brother-back',
+          label: 'Показати полиці з детективами',
+          next: 'topics',
+          grants: ['miller_cinema_photo_discussed', 'miller_cinema_family_story_private'],
+        },
+      ],
     },
   ],
 };

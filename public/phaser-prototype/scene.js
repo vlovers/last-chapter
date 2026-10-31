@@ -1,3 +1,6 @@
+import { createActorActions, cueActor } from './actor-actions.js';
+import { createFrameBudget } from './performance.js';
+import { viewportPlan, frameWorld } from './viewport.js';
 import { WIDTH, HEIGHT, SPEED } from './config.js';
 import { validateManifest, ASSET_MANIFEST } from './assets.js';
 import { drawEnvironment } from './environment.js';
@@ -14,8 +17,9 @@ import { visitorEntrance } from './visitor-entrances.js';
 import { browsingRoute, visitorApproach, browsingAction } from './visitor-roaming.js';
 import { pauseVisitor, resumeVisitor, shouldBrowse } from './visitor-lifecycle.js';
 import { createVisitorBook } from './visitor-book.js';
-import { visitorReaction } from './visitor-reactions.js';
+import { visitorReaction, facingToward } from './visitor-reactions.js';
 import { createFrank } from './frank.js';
+import { FRANK_ACTIONS, frankApproach } from './frank-behavior.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -47,9 +51,16 @@ class Bookshop extends Phaser.Scene {
     this.audio = new BookshopAudio();
     this.lights = drawEnvironment(this);
     this.frank = this.story ? createFrank(this) : null;
-    this.atmosphere = createAtmosphere(this, this.lights, () => this.reduced);
+    this.frameBudget = createFrameBudget((navigator.hardwareConcurrency ?? 8) <= 4);
+    this.atmosphere = createAtmosphere(
+      this,
+      this.lights,
+      () => this.reduced,
+      () => this.frameBudget.reduced,
+    );
     this.characters = createCharacters(this, this.story ? ['player', ...VISITOR_IDS] : undefined);
     this.visitorBook = createVisitorBook(this);
+    this.actorActions = createActorActions(this);
     this.lastStoryActor = this.story ? null : 'mara';
     this.lastStoryDay = null;
     this.dialogue = new DialogueUI(
@@ -60,17 +71,62 @@ class Bookshop extends Phaser.Scene {
     this.interactions.update(this.characters.player, this.characters.mara, this.state);
     this.refreshStory();
     this.bindControls();
+    this.viewportObserver = new ResizeObserver(() => this.resizeViewport());
+    this.resizeViewport();
+    this.viewportObserver.observe($('#game'));
     this.events.once('shutdown', () => this.cleanup());
     this.events.once('destroy', () => this.cleanup());
     $('#loading-message').textContent = 'Дощ залишиться за дверима. Книжки вже чекають.';
     $('#enter').disabled = false;
     $('#enter').focus();
   }
+  resizeViewport() {
+    const host = $('#game');
+    const width = Math.floor(host.clientWidth),
+      height = Math.floor(host.clientHeight);
+    if (!width || !height) return;
+    this.scale.resize(width, height);
+    const plan = viewportPlan(width, height);
+    this.cameras.main.setOrigin(0, 0).setZoom(plan.zoom).removeBounds();
+    this.frameCamera();
+    this.interactions.resize();
+  }
+  frameCamera() {
+    const camera = this.cameras.main,
+      player = this.characters.player;
+    const width = camera.width / camera.zoom,
+      height = camera.height / camera.zoom;
+    const targetX = this.cameraLook?.x ?? player.x;
+    const frame = frameWorld({ x: targetX, y: player.y }, width, height);
+    camera.scrollX = frame.x;
+    const sheet = this.state.mode === 'dialogue' ? $('#dialogue').offsetHeight || 0 : 0;
+    // Reading is a camera composition change only: viewport size and zoom stay fixed.
+    camera.scrollY = Math.round(
+      sheet ? player.y - Math.max(65, (camera.height - sheet - 24) * 0.7) / camera.zoom : frame.y,
+    );
+  }
   refreshStory() {
     if (!this.story) return;
+    this.state = {
+      ...this.state,
+      inspected: [...new Set([...this.state.inspected, ...this.story.inspectedSpots])],
+    };
     const actor = this.story.actor;
     if (actor !== this.lastStoryActor) {
       const visitor = this.characters.mara;
+      if (this.lastStoryActor && visitor.sprite.visible) {
+        this.departing?.sprite.destroy();
+        this.departing?.shadow.destroy();
+        this.departing = {
+          name: visitor.name,
+          x: visitor.x,
+          y: visitor.y,
+          direction: 'right',
+          sprite: this.add.sprite(visitor.x, visitor.y + 1, visitor.name, 12).setOrigin(0.5, 1),
+          shadow: this.add.ellipse(visitor.x, visitor.y - 1, 23, 7, 0x201b27, 0.25),
+          path: findPath(visitor, { x: 590, y: 221 }),
+        };
+      }
       this.lastStoryActor = actor;
       if (actor) {
         visitor.name = actor;
@@ -80,7 +136,10 @@ class Bookshop extends Phaser.Scene {
         visitor.x = 590;
         visitor.y = 221;
         const entrance = visitorEntrance(actor);
-        this.arrival = [{ x: entrance.x, y: entrance.y }];
+        // Visitors enter through the door, then walk into the shop before dialogue.
+        // Keep the per-character entrance as a safe fallback if pathfinding fails.
+        const welcomePath = findPath(visitor, { x: 240, y: 235 });
+        this.arrival = welcomePath.length ? welcomePath : [{ x: entrance.x, y: entrance.y }];
         this.visitorPace = entrance.pace;
         this.state = { ...this.state, mara: 'arriving' };
         this.roaming = { path: [], pause: 1800, step: 0, engaged: false, goal: null };
@@ -100,10 +159,12 @@ class Bookshop extends Phaser.Scene {
     const spot = this.interactions.spots.find((item) => item.id === 'mara');
     if (spot) {
       spot.label = `Поговорити · ${this.story.visitor}`;
-      this.interactions.buttons.get('mara')?.setAttribute('aria-label', spot.label);
+      const target = this.interactions.buttons.get('mara');
+      target?.setAttribute('aria-label', spot.label);
+      const label = target?.querySelector('span');
+      if (label) label.textContent = spot.label;
     }
-    $('#objective').textContent =
-      `День ${this.story.day} · ${this.story.visitor}. Ваші рішення зберігаються.`;
+    $('#objective').textContent = `День ${this.story.day} · ${this.story.guidance.text}`;
     const eyebrow = document.querySelector('.masthead .eyebrow');
     if (eyebrow) eyebrow.textContent = `Беллвік · День ${this.story.day}`;
     $('#stage').dataset.day = String(this.story.day);
@@ -112,6 +173,16 @@ class Bookshop extends Phaser.Scene {
   openStory() {
     if (!this.story || !this.canExplore()) return;
     this.roaming = pauseVisitor(this.roaming);
+    if (this.story.actor && distance(this.characters.mara, this.characters.player) > 80) {
+      const route = findPath(this.characters.mara, { x: 240, y: 235 });
+      this.roaming.path = route;
+      this.orderApproach = route.length > 0;
+      // Conversation may open while the visitor is still entering the shop.
+      // The conversation route takes priority over the entrance animation.
+      if (this.orderApproach) this.state = { ...this.state, mara: 'ready' };
+    }
+    this.characters.player.direction = facingToward(this.characters.player, this.characters.mara);
+    cueActor(this.characters.mara, 'greet', this.time.now);
     this.activeDialogue = { kind: 'story' };
     this.state = transition(this.state, { type: 'open' });
     this.keys.clear();
@@ -127,6 +198,7 @@ class Bookshop extends Phaser.Scene {
     this.listen($('#enter'), 'click', () => {
       this.started = true;
       $('#loading').hidden = true;
+      window.__lastChapterRefresh?.();
       for (const selector of ['#game', '#hotspots', '.hud', '#context-action'])
         $(selector).inert = false;
       $('#game').focus();
@@ -207,6 +279,7 @@ class Bookshop extends Phaser.Scene {
           ? 'Увімкнути звук'
           : 'Вимкнути звук'
         : 'Звук недоступний';
+      $('#mute').setAttribute('aria-label', $('#mute').textContent);
       $('#mute').setAttribute('aria-pressed', String(this.audio.muted));
       $('#audio-status').textContent = !available
         ? 'Браузер не підтримує звук. Можна спокійно грати далі.'
@@ -242,22 +315,51 @@ class Bookshop extends Phaser.Scene {
     this.listen($('#settings'), 'close', () => $('#game').focus());
     if (this.story) {
       this.listen(window, 'last-chapter:continue', () => this.openStory());
+      this.listen(window, 'last-chapter:order-catalog', () => {
+        this.closeDialogue();
+        window.dispatchEvent(new Event('last-chapter:catalog-open'));
+      });
+      this.listen(window, 'last-chapter:recommendation', (event) => {
+        const { accepted, text } = event.detail;
+        this.keys.clear();
+        this.path = [];
+        this.pending = null;
+        this.roaming = pauseVisitor(this.roaming);
+        this.roaming.path = findPath(this.characters.mara, { x: 240, y: 235 });
+        this.orderApproach = true;
+        this.lights.parcel.setVisible(true);
+        this.handoffUntil = this.time.now + 7000;
+        cueActor(this.characters.player, 'give', this.time.now, 4000);
+        cueActor(this.characters.mara, 'receive', this.time.now, 6000);
+        this.toast(text);
+        this.audio.play('book');
+        if (accepted) this.refreshStory();
+      });
     }
     this.input.on('pointerdown', (pointer) => {
       if (!this.canExplore()) return;
       $('#game').focus();
-      const goal = { x: pointer.worldX, y: pointer.worldY };
+      this.cameraLook = null;
+      const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+      const goal = { x: world.x, y: world.y };
       if (!canStand(goal)) {
         this.toast('Тут стоять меблі. Оберіть вільне місце поруч.');
         return;
       }
+      this.cameraLook = null;
       this.pending = null;
       this.path = findPath(this.characters.player, goal);
       if (!this.path.length) this.toast('Сюди поки не пройти. Спробуйте підійти з іншого боку.');
     });
   }
   canExplore() {
-    return this.started && !this.failed && this.state.mode === 'explore' && !$('#settings').open;
+    return (
+      this.started &&
+      !this.failed &&
+      this.state.mode === 'explore' &&
+      !$('#settings').open &&
+      !document.body.classList.contains('reading')
+    );
   }
   toast(text) {
     if ($('#toast').textContent !== text) $('#toast').textContent = text;
@@ -274,6 +376,7 @@ class Bookshop extends Phaser.Scene {
       this.interact(spot);
       return;
     }
+    this.cameraLook = null;
     this.path = findPath(this.characters.player, spot.approach);
     this.pending = this.path.length ? spot : null;
     if (!this.path.length) this.toast('Сюди поки не пройти. Спробуйте підійти з іншого боку.');
@@ -281,7 +384,45 @@ class Bookshop extends Phaser.Scene {
   }
   interact(spot) {
     if (!eligible(this.characters.player, spot, this.state)) return;
+    if (spot.id === 'chair') {
+      cueActor(this.characters.player, 'sit', this.time.now, 60000);
+      this.characters.player.direction = 'down';
+      this.toast('Можна побути з книжкою. Торкніться підлоги, щоб підвестися.');
+      return;
+    }
     if (this.story && spot.id === 'mara') {
+      this.openStory();
+      return;
+    }
+    if (['frank', 'bowl', 'cat-tree'].includes(spot.id) && this.frank) {
+      this.story?.inspect('frank');
+      this.state = transition(this.state, { type: 'inspect', id: 'frank' });
+      this.activeDialogue = {
+        kind: 'frank',
+        note: {
+          speaker: 'Френк',
+          text:
+            this.frank.state.activity === 'sleeping'
+              ? 'Френк згорнувся клубочком. Великі вуха ледь здригаються уві сні.'
+              : 'Маленький сірий девон-рекс повертає до вас великі вуха. Він нікуди не поспішає.',
+          choices:
+            spot.id === 'bowl'
+              ? FRANK_ACTIONS.filter((a) => ['feed', 'leave'].includes(a.id))
+              : spot.id === 'cat-tree'
+                ? FRANK_ACTIONS.filter((a) => ['tree', 'leave'].includes(a.id))
+                : FRANK_ACTIONS,
+        },
+      };
+      this.state = transition(this.state, { type: 'open' });
+      this.keys.clear();
+      this.path = [];
+      this.pending = null;
+      this.showDialogue();
+      return;
+    }
+    // In story mode the visitor hotspot must open the current authored scene,
+    // not the legacy standalone Mara greeting graph.
+    if (spot.id === 'mara' && this.story) {
       this.openStory();
       return;
     }
@@ -304,7 +445,7 @@ class Bookshop extends Phaser.Scene {
     const node =
       this.activeDialogue?.kind === 'story'
         ? this.story.open()
-        : this.activeDialogue?.kind === 'story-object'
+        : ['story-object', 'frank'].includes(this.activeDialogue?.kind)
           ? this.activeDialogue.note
           : dialogueNode(this.activeDialogue, this.state);
     if (!node) throw new Error('Missing dialogue node');
@@ -321,6 +462,23 @@ class Bookshop extends Phaser.Scene {
     );
   }
   choose(id) {
+    if (this.activeDialogue?.kind === 'frank') {
+      const text = this.frank.react(id, this.characters.player);
+      if (!text) return;
+      if (id === 'leave') {
+        this.closeDialogue();
+        return;
+      }
+      this.activeDialogue.note = { speaker: 'Френк', text, choices: [] };
+      if (['pet', 'play'].includes(id)) {
+        this.characters.player.direction =
+          this.frank.state.x > this.characters.player.x ? 'right' : 'left';
+        cueActor(this.characters.player, 'pet', this.time.now, 2000);
+      }
+      this.audio.play(id === 'feed' ? 'book' : 'dialogue');
+      this.showDialogue();
+      return;
+    }
     if (this.activeDialogue?.kind === 'story') {
       this.story.choose(id);
       this.audio.play('dialogue');
@@ -382,14 +540,71 @@ class Bookshop extends Phaser.Scene {
     return next;
   }
   update(time, delta) {
-    if (this.failed || !this.characters) return;
+    if (this.failed || !this.characters || document.hidden) return;
     try {
+      this.frameBudget.sample(delta);
       this.atmosphere.update(time, Math.min(delta, 50));
       if (!this.started) return;
       const amount = (SPEED * Math.min(delta, 50)) / 1000;
       const { player, mara } = this.characters;
+      if (this.departing) {
+        updateCharacter(
+          this.departing,
+          this.follow(this.departing, this.departing.path, amount * 0.8),
+          this.reduced,
+        );
+        if (!this.departing.path.length) {
+          this.departing.sprite.destroy();
+          this.departing.shadow.destroy();
+          this.departing = null;
+        }
+      }
+      if (document.body.classList.contains('reading')) {
+        this.keys.clear();
+        this.path = [];
+        this.pending = null;
+      }
+      if (this.frank) {
+        this.frank.state.held = this.pending?.id === 'frank';
+        this.frank.update(delta, player, {
+          paused:
+            !this.canExplore() &&
+            !(
+              this.activeDialogue?.kind === 'frank' && this.activeDialogue.note.choices.length === 0
+            ),
+          reduced: this.reduced,
+        });
+        const spot = this.interactions.spots.find((s) => s.id === 'frank');
+        spot.rect = {
+          x: this.frank.state.x - 21,
+          y: this.frank.state.y - this.frank.state.elevation - 34,
+          w: 42,
+          h: 35,
+        };
+        spot.approach = frankApproach(this.frank.state);
+      }
+      if (this.orderApproach && this.roaming.path.length && !document.hidden) {
+        updateCharacter(
+          mara,
+          this.reduced
+            ? { ...this.roaming.path.at(-1) }
+            : this.follow(mara, this.roaming.path, amount * 0.7),
+          this.reduced,
+        );
+        if (this.reduced) this.roaming.path = [];
+        if (!this.roaming.path.length) {
+          this.orderApproach = false;
+          mara.direction = facingToward(mara, this.characters.player);
+        }
+      }
+      if (this.handoffUntil && time > this.handoffUntil) {
+        this.lights.parcel.setVisible(false);
+        this.handoffUntil = null;
+      }
       if (this.canExplore()) {
-        if (this.state.mara === 'arriving') {
+        if (this.orderApproach) {
+          /* counter handoff owns visitor movement */
+        } else if (this.state.mara === 'arriving') {
           const next = this.reduced
             ? { ...this.arrival[0] }
             : this.follow(mara, this.arrival, amount * this.visitorPace);
@@ -451,6 +666,7 @@ class Bookshop extends Phaser.Scene {
             ? moveWithCollision(player, (dx / scale) * amount, (dy / scale) * amount)
             : this.follow(player, this.path, amount);
         const walking = distance(player, next) > 0.01;
+        if (walking) player.cue = null;
         updateCharacter(player, next, this.reduced);
         this.audio.update(time, walking);
         if (this.pending && !this.path.length) {
@@ -460,13 +676,14 @@ class Bookshop extends Phaser.Scene {
         }
       } else {
         updateCharacter(player, player, this.reduced);
-        updateCharacter(
-          mara,
-          mara,
-          this.reduced,
-          this.activeDialogue?.kind === 'mara' &&
-            dialogueNode(this.activeDialogue, this.state)?.mood === 'warm',
-        );
+        if (!this.orderApproach)
+          updateCharacter(
+            mara,
+            mara,
+            this.reduced,
+            this.activeDialogue?.kind === 'mara' &&
+              dialogueNode(this.activeDialogue, this.state)?.mood === 'warm',
+          );
       }
       const speaking =
         this.story && this.state.mode === 'dialogue' && this.activeDialogue?.kind === 'story';
@@ -494,6 +711,8 @@ class Bookshop extends Phaser.Scene {
         time,
         this.reduced,
       );
+      this.actorActions.update([player, mara], time, this.reduced, speaking ? mara : null);
+      this.frameCamera();
       this.interactions.update(player, mara, this.state);
     } catch (error) {
       this.fail(error);
@@ -512,8 +731,14 @@ class Bookshop extends Phaser.Scene {
     $('#enter').hidden = true;
   }
   cleanup() {
+    this.departing?.sprite.destroy();
+    this.departing?.shadow.destroy();
+    this.departing = null;
+    this.viewportObserver?.disconnect();
     this.lifecycle?.abort();
+    this.frank?.destroy();
     this.visitorBook?.destroy();
+    this.actorActions?.destroy();
     this.dialogue?.destroy();
     this.interactions?.destroy();
     void this.audio?.dispose();
@@ -528,7 +753,7 @@ export const game = new Phaser.Game({
   pixelArt: true,
   roundPixels: true,
   backgroundColor: '#201b27',
-  scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
+  scale: { mode: Phaser.Scale.NONE },
   scene: [Bookshop],
   render: { antialias: false },
   audio: { noAudio: true },

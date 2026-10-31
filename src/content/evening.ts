@@ -7,7 +7,7 @@ export const firstEvening: DialogueStory = {
     {
       id: 'box',
       speaker: 'Оповідач',
-      text: 'Книгарня спорожніла. Дощ розмиває вогні за шибкою. Під прилавком стоїть коробка з написом «Бронювання. Сім років тому». Ви нарешті піднімаєте кришку.',
+      text: 'Книгарня спорожніла. Дощ розмиває вогні за шибкою. До п’ятого дня треба підготувати відкрите читання й вирішити, які старі речі книгарні можна показати гостям. Елеонора попросила вас розібрати коробку з написом «Бронювання. Сім років тому». Ви нарешті піднімаєте кришку.',
       options: [
         {
           id: 'receipt',
@@ -72,7 +72,7 @@ export const firstEvening: DialogueStory = {
         { id: 'receipt-back', label: 'Повернутися до коробки', next: 'box' },
         {
           id: 'receipt-conclude',
-          label: 'Зробити висновок',
+          label: 'Занотувати, що вдалося встановити',
           next: 'deduction',
           requires: ['saw_envelope'],
         },
@@ -107,14 +107,14 @@ export const firstEvening: DialogueStory = {
         { id: 'letter-back', label: 'Покласти лист назад', next: 'box' },
         {
           id: 'letter-open',
-          label: 'Порушити печатку й прочитати лист',
+          label: 'Розірвати печатку й прочитати чужий лист',
           unless: ['opened_private_letter'],
           next: 'opened',
           grants: ['opened_private_letter'],
         },
         {
           id: 'letter-conclude',
-          label: 'Зробити висновок',
+          label: 'Зіставити конверт із карткою бронювання',
           next: 'deduction',
           requires: ['saw_receipt'],
         },
@@ -130,6 +130,12 @@ export const firstEvening: DialogueStory = {
       id: 'deduction',
       speaker: 'Оповідач',
       text: 'Бронювання для Лео не забрали. Лист від Айріс залишився в книжці. Це означає, що повідомлення могло не дійти до адресата. Але поки що це лише припущення.',
+      textWhen: [
+        {
+          requires: ['miller_observation_distinguished'],
+          text: 'Ви пригадуєте слова пані Міллер: подія і пояснення — не те саме. Бронювання Лео залишилося, лист Айріс не забрали. Це ви бачите на власні очі. Чому повідомлення не дійшло — поки лише припущення.',
+        },
+      ],
       options: [
         {
           id: 'keep-safe',

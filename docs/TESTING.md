@@ -38,3 +38,37 @@ The runner owns its Chrome server and allows five seconds for graceful shutdown,
 then terminates only that fixture if the installed browser stalls during cleanup.
 
 See [V1 QA record](qa/PHASER-VERTICAL-SLICE-V1.md) for the checks actually executed.
+
+## Gameplay polish V1
+
+`npm run test:browser:polish` runs the canonical five-day UI at desktop, compact
+desktop, tablet and mobile sizes. It verifies optional completion across reload,
+Frank's real movement and petting, pause behavior, no document scrolling, canvas
+alignment and all 19 story stages. See [the QA record](qa/polish-v1/README.md).
+Unit regressions cover nested completion, legacy saves, suspended letter returns,
+conditional reopening and ten minutes of collision-checked cat movement.
+
+## Mobile bookshop overhaul
+
+`npm run test:browser:mobile` checks all five requested screen sizes plus phone
+landscape, touch and keyboard movement, viewport stability under all overlays,
+search, journal privacy, focus restoration, live orientation changes and the
+five-day story with three saved catalog purchases.
+`node scripts/qa-frank-overhaul.mjs` exercises the cat and reading-chair UI.
+`node scripts/qa-bookshop-performance.mjs` samples scene FPS and object counts at
+normal speed and 4× CPU throttling. These runners use the same optional Playwright
+setup and environment variables as the browser smoke tests. See the
+[implementation, screenshots and limitations](qa/mobile-overhaul/README.md).
+
+## Stabilization and integration readiness
+
+`npm run test:browser:stabilization` covers first-use guidance, all fifteen real
+customer/book pairs, reload and receipt idempotence, actual journal provenance,
+120 overlay cycles with listener/object counts, long-text scrolling, rotation,
+reduced motion and a larger compatible save. Cat waits observe simulated time
+with a separate wall watchdog; cleanup tests prove assertions retain a failing
+exit code even when the browser transport never closes.
+
+See the [executed test/UX report](qa/stabilization/README.md) and
+[narrative integration plan](integration/NARRATIVE-READINESS.md). Future content
+proposals are not counted as implemented scenes.

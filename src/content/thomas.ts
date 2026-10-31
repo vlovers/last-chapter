@@ -14,8 +14,74 @@ export const thomasVisit: DialogueStory = {
       id: 'greet',
       speaker: 'Томас',
       text: '«Томас. Покажіть, що з лампою». Він ставить ящик на підлогу й прислухається. «Так, контакт поганий. Можна розібрати?»',
+      textWhen: [
+        {
+          requires: ['thomas_listening_discussed'],
+          text: 'Томас ставить ящик із інструментами біля дверей. «Я досі думаю над тим, що ти сказав про вміння слухати». Він криво усміхається. «Не знаю, чи це прогрес, але принаймні сьогодні я не перебивав нікого в черзі».',
+        },
+        {
+          requires: ['thomas_reflected_on_responsibility'],
+          text: 'Томас обережно кладе на стіл запасну лампочку. «Я приніс її про запас. Ні, це не вибачення замість розмови». Він зітхає. «Хоча було б значно простіше».',
+        },
+      ],
       options: [
-        { id: 'repair', label: '«Так, покажу вимикач»', next: 'repair' },
+        {
+          id: 'repair',
+          label: 'Повернутися до ремонту лампи',
+          next: 'repair',
+          repeatability: 'repeatable',
+        },
+        {
+          id: 'thomas-lamp-first',
+          label: '«Можеш ще раз перевірити вимикач?»',
+          next: 'repair',
+        },
+        {
+          id: 'thomas-lamp-joke',
+          label: '«А якщо чемно попросити — точно не допоможе?»',
+          next: 'repair',
+        },
+        {
+          id: 'thomas-v3-conversation',
+          label: '«А з людьми в тебе так само добре виходить, як із лампами?»',
+          next: 'thomas-v3-conversation',
+          unless: ['thomas_listening_discussed'],
+        },
+        {
+          id: 'thomas-reflection',
+          label: '«Коли треба вибачитися, теж берешся спершу за інструменти?»',
+          next: 'thomas-reflection',
+          unless: ['thomas_reflected_on_responsibility'],
+        },
+        {
+          id: 'thomas-chairs',
+          label: '«Ти встиг занести стільці на шкільне читання?»',
+          next: 'thomas-chairs',
+          unless: ['thomas_chairs_discussed'],
+        },
+        {
+          id: 'thomas-anna-chairs-reaction',
+          label: '«Анна згадала про стільці після читання»',
+          next: 'thomas-anna-chairs-reaction',
+          requires: ['anna_thomas_chairs_followup_discussed'],
+          unless: ['thomas_anna_chairs_reaction_discussed'],
+        },
+        {
+          id: 'thomas-reading-challenge',
+          label: '«Ти коли-небудь сперечався з кінцівкою книжки?»',
+          next: 'thomas-reading-challenge',
+          unless: ['thomas_reading_challenge_discussed'],
+        },
+        {
+          id: 'thomas-repair-funny',
+          label: '«Що найдивніше тобі доводилося лагодити?»',
+          next: 'thomas-repair-funny',
+        },
+        {
+          id: 'thomas-crooked-shelf',
+          label: '«А яка полиця в місті найбільше тебе дратує?»',
+          next: 'thomas-crooked-shelf',
+        },
         { id: 'books', label: '«Ви любите читати?»', next: 'books' },
         { id: 'anna', label: '«Анна заходила до нас»', next: 'anna' },
         {
@@ -28,9 +94,149 @@ export const thomasVisit: DialogueStory = {
       ],
     },
     {
+      id: 'thomas-chairs',
+      speaker: 'Томас',
+      text: 'Томас завмирає з викруткою в руці. «Стільці. Я обіцяв Анні занести їх до класу. Вчора взяв термінове замовлення й навіть не подзвонив. Вона сама носила їх сходами». Він дивиться на годинник. «Я вже не виправлю вчора, але можу хоча б не робити вигляд, що нічого не сталося».',
+      options: [
+        {
+          id: 'thomas-chairs-own',
+          label: '«Скажи Анні правду й запитай, як можеш допомогти тепер»',
+          next: 'thomas-chairs-result',
+          grants: ['thomas_chairs_owned_mistake'],
+        },
+        {
+          id: 'thomas-chairs-fix',
+          label: '«Може, просто принести нові стільці?»',
+          next: 'thomas-chairs-result',
+          grants: ['thomas_chairs_avoided_conversation'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-chairs-result',
+      speaker: 'Томас',
+      text: '«Я не люблю, коли через мене хтось мусить робити зайву роботу». Він складає інструменти.',
+      textWhen: [
+        {
+          requires: ['thomas_chairs_owned_mistake'],
+          text: '«Подзвоню їй зараз. Не щоб мене похвалили за вибачення. Просто вона має знати, що я пам’ятаю свою обіцянку». Він дістає телефон і відходить до вікна.',
+        },
+        {
+          requires: ['thomas_chairs_avoided_conversation'],
+          text: '«Можу принести хоч десять нових стільців. Але це не поверне Анні вечір, який вона витратила через мене». Томас відкладає телефон. Схоже, розмова знову почекає.',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-chairs-back',
+          label: 'Повернутися до розмови',
+          next: 'greet',
+          grants: ['thomas_chairs_discussed'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-anna-chairs-reaction',
+      speaker: 'Томас',
+      text: 'Томас не відразу відповідає. «Вона розповіла тобі про стільці? Ну, це справедливо. Я обіцяв і не прийшов». Він кладе викрутку поруч із лампою. «Не знаю, що саме ти їй сказав, але тепер принаймні розумію, чому вона сердилася».',
+      textWhen: [
+        {
+          requires: ['anna_chairs_player_defended_thomas'],
+          text: '«Ти мене захищав?» Томас дивиться на тебе здивовано. «Дякую, але Анна не просила адвоката. Я теж не просив». Він закриває ящик. «Мабуть, мені варто сказати їй це самому, а не через тебе».',
+        },
+        {
+          requires: ['anna_chairs_player_heard_anna'],
+          text: '«Ти її вислухав? Добре». Томас крутить у пальцях гвинтик. «Вона не любить, коли хтось одразу починає пояснювати, чому я так учинив. Я теж іноді це роблю. Особливо коли винен».',
+        },
+        {
+          requires: ['anna_chairs_player_changed_topic'],
+          text: '«Ви говорили про читання? Напевно, Анна знову розповідала про Емму та Джуліана». Він усміхається. «Вона сміється, коли згадує їхні суперечки. Я давно не чув цього сміху вдома».',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-anna-chairs-direct',
+          label: '«Краще поговори з нею сам, не через мене»',
+          next: 'thomas-anna-chairs-result',
+          grants: ['thomas_anna_chairs_direct_talk'],
+        },
+        {
+          id: 'thomas-anna-chairs-no-pressure',
+          label: '«Я не збираюся втручатися у вашу розмову»',
+          next: 'thomas-anna-chairs-result',
+          grants: ['thomas_anna_chairs_player_kept_distance'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-anna-chairs-result',
+      speaker: 'Томас',
+      text: '«Добре. Мені ще треба знайти слова. І, мабуть, не починати з переліку того, що я встиг полагодити».',
+      textWhen: [
+        {
+          requires: ['thomas_anna_chairs_direct_talk'],
+          text: '«Подзвоню після роботи. Якщо вона не захоче говорити — не наполягатиму. Але хоча б запитаю, коли їй буде зручно». Він дістає телефон, потім кладе його назад. «Після роботи. Не посеред твоєї книгарні».',
+        },
+        {
+          requires: ['thomas_anna_chairs_player_kept_distance'],
+          text: '«Правильно. Ми з Анною самі маємо розібратися». Томас піднімає викрутку. «Тільки не дивуйся, якщо я ще раз прийду поговорити про книжки. З ними в мене поки виходить простіше».',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-anna-chairs-back',
+          label: 'Повернутися до інших тем',
+          next: 'greet',
+          grants: ['thomas_anna_chairs_reaction_discussed'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-reading-challenge',
+      speaker: 'Томас',
+      text: '«Анна дала мені роман про чоловіка, який двадцять років ремонтував човен, замість вийти в море. Я дочитав і розлютився. Не на нього навіть — на автора. Навіщо писати стільки сторінок про людину, яка нічого не робить?» Він перевіряє контакт у лампі. «А потім подумав, що я сам третій місяць відкладаю одну розмову».',
+      options: [
+        {
+          id: 'thomas-reading-defend',
+          label: '«Можливо, книжка й не зобов’язана показувати героя сміливим»',
+          next: 'thomas-reading-result',
+          grants: ['thomas_book_ambiguity_accepted'],
+        },
+        {
+          id: 'thomas-reading-argue',
+          label: '«Я теж розлютився б. Читачеві хочеться дії»',
+          next: 'thomas-reading-result',
+          grants: ['thomas_book_ending_disputed'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-reading-result',
+      speaker: 'Томас',
+      text: '«Може, Анна мала рацію: книжки часом корисніші за інструкції. Хоча інструкція хоча б не закінчується на найцікавішому місці».',
+      textWhen: [
+        {
+          requires: ['thomas_book_ambiguity_accepted'],
+          text: '«Знаєш, я хотів, щоб він нарешті поплив. А може, він і не мусив. Просто я не люблю впізнавати себе в героях, які стоять на березі». Томас усміхається без особливої радості.',
+        },
+        {
+          requires: ['thomas_book_ending_disputed'],
+          text: '«От! Я дочитав двісті сторінок, щоб побачити, як він знову фарбує борт. Але тепер мені цікаво, чи Анна захищатиме таку кінцівку. Схоже, у нас буде про що посперечатися за вечерею».',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-reading-back',
+          label: 'Повернутися до розмови про лампу',
+          next: 'greet',
+          grants: ['thomas_reading_challenge_discussed'],
+        },
+      ],
+    },
+    {
       id: 'repair',
       speaker: 'Томас',
-      text: '«Контакт старий. Нічого страшного, заміню». Він дістає ліхтарик. «От за це й люблю ремонти: бачиш, що зламалося. З людьми не так просто». ',
+      text: '«Контакт старий. Нічого страшного, заміню». Він дістає ліхтарик. «От за це й люблю ремонти: бачиш, що зламалося. З людьми не так просто».',
       options: [
         { id: 'repair-follow', label: '«Важко, коли не знаєш причини?»', next: 'work' },
         { id: 'repair-back', label: '«Що ще?»', next: 'greet' },
@@ -83,6 +289,14 @@ export const thomasVisit: DialogueStory = {
       text: 'Він кладе викрутку. «Я чув. Мені неприємно, що люди вирішили: вони знають усе, побачивши мене на вулиці».',
       options: [
         {
+          id: 'rumor-own-words',
+          label: '«Я теж зробив висновок без доказів. Вибач»',
+          next: 'rumor-own-words',
+          requires: ['rumor_amplified'],
+          unless: ['thomas_heard_rumor_apology'],
+          grants: ['thomas_heard_rumor_apology'],
+        },
+        {
           id: 'rumor-boundary',
           label: '«Я не буду поширювати неперевірене»',
           next: 'boundary',
@@ -93,6 +307,18 @@ export const thomasVisit: DialogueStory = {
           label: '«Тоді поясніть, із ким ви зустрічалися»',
           next: 'push',
           grants: ['thomas_privacy_pressed'],
+        },
+      ],
+    },
+    {
+      id: 'rumor-own-words',
+      speaker: 'Томас',
+      text: '«Дякую, що сказали це мені, а не комусь за моєю спиною». Він обережно кладе викрутку. «Але Анна могла почути вашу першу версію. Я не можу зробити вигляд, що її не було».',
+      options: [
+        {
+          id: 'rumor-own-words-back',
+          label: '«Розумію. Більше не повторюватиму цього»',
+          next: 'greet',
         },
       ],
     },
@@ -109,10 +335,258 @@ export const thomasVisit: DialogueStory = {
       options: [{ id: 'push-end', label: 'Завершити розмову', next: 'end' }],
     },
     {
+      id: 'thomas-repair-funny',
+      speaker: 'Томас',
+      text: '«Музичну скриньку, яка грала тільки коли її трясли. Власник сказав, що це сімейна реліквія й що так було завжди». Томас зітхає. «Я відкрив кришку. Усередині лежала монета, два ґудзики й записка: “Не чіпати механізм”».',
+      options: [
+        {
+          id: 'thomas-repair-funny-note',
+          label: '«І ти послухався записки?»',
+          next: 'thomas-repair-funny-note',
+        },
+        {
+          id: 'thomas-repair-funny-back',
+          label: '«Краще повернімося до лампи»',
+          next: 'greet',
+          grants: ['thomas_music_box_story_heard'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-repair-funny-note',
+      speaker: 'Томас',
+      text: '«Ні. Виявилося, що записку залишив я сам десять років тому». Він усміхається краєчком рота. «Поставив нову пружину. Тепер скринька грає без струсів, але власник каже, що сумує за старим способом».',
+      options: [
+        {
+          id: 'thomas-repair-funny-note-back',
+          label: '«Деяким речам краще залишатися дивними»',
+          next: 'greet',
+          grants: ['thomas_music_box_story_heard'],
+        },
+      ],
+    },
+    {
       id: 'end',
       speaker: 'Оповідач',
       text: 'Томас закручує кришку вимикача. Світло більше не миготить. За дверима книгарні знову чути голоси перехожих, але тепер ви знаєте, що чутки — не те саме, що факти.',
       options: [],
+    },
+    {
+      id: 'thomas-reflection',
+      speaker: 'Томас',
+      text: '«Лампочку замінити просто. А от виправити те, що хтось про тебе подумав, — ні».',
+      options: [
+        {
+          id: 'thomas-reflect-question',
+          label: '«І що ти їй тоді відповів?»',
+          next: 'thomas-reflection-deep',
+        },
+        {
+          id: 'thomas-reflect-return',
+          label: '«Дякую, що поділився цим»',
+          next: 'thomas-reflection-end',
+        },
+      ],
+    },
+    {
+      id: 'thomas-reflection-deep',
+      speaker: 'Томас',
+      text: '«Якщо я зробив щось корисне, це не означає, що мені пробачили».',
+      options: [
+        {
+          id: 'thomas-reflect-continue',
+          label: '«І що ти хочеш змінити?»',
+          next: 'thomas-reflection-workshop',
+        },
+        {
+          id: 'thomas-reflect-listen',
+          label: '«Можна просто побути з цим»',
+          next: 'thomas-reflection-workshop',
+        },
+      ],
+    },
+    {
+      id: 'thomas-reflection-workshop',
+      speaker: 'Томас',
+      text: '«Я полагодив удома шафу, хоча Анна просила мене просто послухати. Я думав, що зробив добру справу. А вона сказала: ти знову не почув, чого я потребую».',
+      options: [
+        {
+          id: 'thomas-workshop-ask',
+          label: '«Спробуй спочатку запитати»',
+          next: 'thomas-reflection-ask',
+          grants: ['thomas_will_ask_before_helping'],
+        },
+        {
+          id: 'thomas-workshop-fear',
+          label: '«Ти завжди повертаєшся до роботи, навіть коли вже пізно?»',
+          next: 'thomas-reflection-fear',
+          grants: ['thomas_admitted_fear_of_rejection'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-reflection-ask',
+      speaker: 'Томас',
+      text: '«Можу запитати: тобі потрібна порада, допомога чи щоб я просто побув поруч? Тільки доведеться прийняти будь-яку відповідь».',
+      options: [{ id: 'thomas-ask-back', label: 'Послухати далі', next: 'thomas-reflection-end' }],
+    },
+    {
+      id: 'thomas-reflection-fear',
+      speaker: 'Томас',
+      text: '«Коли я корисний, мені здається, що мене не залишать. Неприємно визнавати, що іноді я допомагаю й потай чекаю за це любові».',
+      options: [{ id: 'thomas-fear-back', label: 'Послухати далі', next: 'thomas-reflection-end' }],
+    },
+    {
+      id: 'thomas-reflection-end',
+      speaker: 'Томас',
+      text: '«Можливо, іноді краще запитати, що потрібно іншому, ніж одразу братися ремонтувати».',
+      textWhen: [
+        {
+          requires: ['thomas_will_ask_before_helping'],
+          text: '«Завтра спитаю Анну, що їй потрібно. І прийму відповідь, навіть якщо мої інструменти цього разу не знадобляться».',
+        },
+        {
+          requires: ['thomas_admitted_fear_of_rejection'],
+          text: '«Я скажу їй, що боюся стати зайвим. Це страшніше за будь-яку поломку, але мовчання вже нічого не лагодить».',
+        },
+      ],
+      options: [
+        {
+          id: 'thomas-reflect-finish',
+          label: 'Повернутися до розмови',
+          next: 'greet',
+          grants: ['thomas_reflected_on_responsibility'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation',
+      speaker: 'Томас',
+      text: '«Коли Анна мовчить, я починаю шукати, що ще полагодити вдома. Так легше, ніж спитати, що сталося».',
+      options: [
+        {
+          id: 'thomas-v3-ask',
+          label: '«Ти запитував, чого вона хоче?»',
+          next: 'thomas-v3-conversation-question',
+        },
+        {
+          id: 'thomas-v3-short',
+          label: '«Можемо не продовжувати»',
+          next: 'thomas-v3-conversation-end',
+        },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation-question',
+      speaker: 'Томас',
+      text: '«Ні. Боюся почути: нічого. І тоді мені доведеться просто сидіти поруч, не будучи корисним».',
+      options: [
+        {
+          id: 'thomas-v3-challenge',
+          label: '«А хіба присутність — не дія?»',
+          next: 'thomas-v3-conversation-counter',
+        },
+        {
+          id: 'thomas-v3-listen',
+          label: '«Залишимо питання відкритим»',
+          next: 'thomas-v3-conversation-end',
+        },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation-counter',
+      speaker: 'Томас',
+      text: '«Найскладніша. З інструментом я знаю, куди подіти руки. Без нього доводиться слухати».',
+      options: [
+        {
+          id: 'thomas-v3-follow',
+          label: '«І що ти хочеш зробити?»',
+          next: 'thomas-v3-conversation-choice',
+        },
+        {
+          id: 'thomas-v3-pause',
+          label: '«Не обов’язково вирішувати сьогодні»',
+          next: 'thomas-v3-conversation-end',
+        },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation-choice',
+      speaker: 'Томас',
+      text: '«Спробую не виправляти її настрій. Просто запитаю, чи можна побути поряд».',
+      options: [
+        { id: 'thomas-v3-accept', label: '«Це твій вибір»', next: 'thomas-v3-conversation-end' },
+      ],
+    },
+    {
+      id: 'thomas-v3-conversation-end',
+      speaker: 'Томас',
+      text: '«Гаразд. Піду перевірю ту лампу, поки вона знову не почала сваритися зі мною». Він підхоплює ящик, але цього разу не поспішає до дверей.',
+      options: [
+        {
+          id: 'thomas-v3-return',
+          label: 'Повернутися до інших тем',
+          next: 'greet',
+          grants: ['thomas_listening_discussed'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-crooked-shelf',
+      speaker: 'Томас',
+      text: '«У пекарні. Третя від дверей. Крива на два сантиметри». Томас замовкає. «Мара каже, що я перебільшую. Але вона ставить на неї пироги, а вони повільно їдуть ліворуч».',
+      options: [
+        { id: 'thomas-shelf-fix', label: '«То чому не полагодиш?»', next: 'thomas-shelf-fix' },
+        {
+          id: 'thomas-shelf-joke',
+          label: '«Може, пироги просто тікають?»',
+          next: 'thomas-shelf-joke',
+        },
+        {
+          id: 'thomas-shelf-ask',
+          label: '«А Мара дозволить тобі торкнутися полиці?»',
+          next: 'thomas-shelf-ask',
+        },
+      ],
+    },
+    {
+      id: 'thomas-shelf-fix',
+      speaker: 'Томас',
+      text: '«Я запропонував. Мара сказала: якщо полагоджу полицю, доведеться полагодити весь світ». Томас усміхається. «Я не проти. Але почав би з тієї полиці».',
+      options: [
+        {
+          id: 'thomas-shelf-fix-back',
+          label: '«Візьми рівень і почни з малого»',
+          next: 'greet',
+          grants: ['thomas_bakery_shelf_fix_discussed'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-shelf-joke',
+      speaker: 'Томас',
+      text: '«Тоді вони дуже повільні втікачі». Томас дістає з ящика маленький рівень. «Хочеш вір, хочеш ні, я ношу це із собою не через пироги».',
+      options: [
+        {
+          id: 'thomas-shelf-joke-back',
+          label: '«Звісно, зовсім не через пироги»',
+          next: 'greet',
+          grants: ['thomas_bakery_shelf_joke_heard'],
+        },
+      ],
+    },
+    {
+      id: 'thomas-shelf-ask',
+      speaker: 'Томас',
+      text: '«Тільки якщо прийду до відкриття. І не розбуджу кота, який спить під вітриною». Він хитає головою. «Не знаю, хто там головний — Мара чи той кіт».',
+      options: [
+        {
+          id: 'thomas-shelf-ask-back',
+          label: '«Судячи з усього, кіт»',
+          next: 'greet',
+          grants: ['thomas_bakery_cat_heard'],
+        },
+      ],
     },
   ],
 };

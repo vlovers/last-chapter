@@ -18,7 +18,12 @@ describe('Day 4: Mara has her own story', () => {
   it('has a valid graph', () => expect(validateDialogue(maraDecision)).toEqual([]));
   it('only refers to the specific gift when that book was sold', () => {
     const greet = selectOption(maraDecision, startDialogue(maraDecision), 'greet');
-    const book = selectOption(maraDecision, greet, 'book');
+    const rested = selectOption(maraDecision, greet, 'mara-rest');
+    const story = selectOption(maraDecision, rested, 'mara-rest-back');
+    const choice = selectOption(maraDecision, story, 'mara-own-story-work');
+    const result = selectOption(maraDecision, choice, 'mara-own-story-followup-direct');
+    const ready = selectOption(maraDecision, result, 'mara-own-story-back');
+    const book = selectOption(maraDecision, ready, 'book');
     expect(availableOptions(maraDecision, book).map((option) => option.id)).not.toContain(
       'station',
     );

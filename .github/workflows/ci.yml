@@ -35,8 +35,25 @@ jobs:
         run: npm audit --audit-level=high
 
   browser:
+    name: Browser QA / ${{ matrix.suite.name }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - name: standard
+            command: npm run test:browser
+          - name: five-day
+            command: npm run test:browser:v5
+          - name: mobile
+            command: npm run test:browser:mobile
+          - name: frank
+            command: node scripts/qa-frank-overhaul.mjs
+          - name: finale
+            command: node scripts/qa-finale-matrix.mjs
+          - name: performance
+            command: node scripts/qa-bookshop-performance.mjs
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
@@ -48,20 +65,41 @@ jobs:
           node-version-file: .nvmrc
       - name: Install reproducibly
         run: npm ci --no-audit --no-fund
-      - name: Install optional browser tooling
+      - name: Install browser tooling
         run: |
           npm install --no-save --package-lock=false playwright@1.56.0
           npx playwright install --with-deps chromium
-      - name: Browser QA
-        env:
-          BROWSER_CHANNEL: chromium
-          QA_OUTPUT: /tmp/last-chapter-qa
+      - name: Start game server
         run: |
           npm run dev -- --host 127.0.0.1 > /tmp/last-chapter-vite.log 2>&1 &
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:5173/ > /dev/null; then break; fi
             sleep 1
           done
-          curl --fail http://127.0.0.1:5173/
-          npm run test:browser
-          npm run test:browser:v5
+          curl --fail --silent --show-error http://127.0.0.1:5173/ > /dev/null
+      - name: Run ${{ matrix.suite.name }} browser checks
+        env:
+          BROWSER_CHANNEL: chromium
+          QA_OUTPUT: /tmp/last-chapter-qa
+        run: ${{ matrix.suite.command }}
+      - name: Upload server log on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: vite-log-${{ matrix.suite.name }}
+          path: /tmp/last-chapter-vite.log
+          if-no-files-found: ignore
+      - name: Upload finale matrix evidence
+        if: always() && matrix.suite.name == 'finale'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: finale-matrix-browser-qa
+          path: /tmp/last-chapter-qa
+          if-no-files-found: ignore
+      - name: Upload performance measurements
+        if: always() && matrix.suite.name == 'performance'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mobile-performance-browser-qa
+          path: /tmp/last-chapter-qa
+          if-no-files-found: ignore

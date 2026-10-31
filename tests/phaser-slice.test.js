@@ -171,14 +171,14 @@ describe('movement and spatial interactions', () => {
     expect(intersects({ x: 0, y: 0, w: 10, h: 10 }, { x: 9, y: 9, w: 2, h: 2 })).toBe(true);
     for (const rect of FURNITURE)
       expect(canStand({ x: rect.x + rect.w / 2, y: rect.y + rect.h / 2 })).toBe(false);
-    expect(canStand({ x: 160, y: 240 })).toBe(false);
-    expect(canStand({ x: 160, y: 239 })).toBe(true);
+    expect(canStand({ x: 160, y: 250 })).toBe(false);
+    expect(canStand({ x: 160, y: 249 })).toBe(true);
   });
 
   it('does not tunnel through the counter or bounds even with large movement deltas', () => {
     const start = { x: 160, y: 210 };
     const next = moveWithCollision(start, 0, 140);
-    expect(next.y).toBeLessThanOrEqual(239);
+    expect(next.y).toBeLessThanOrEqual(249);
     expect(canStand(next)).toBe(true);
     expect(start).toEqual({ x: 160, y: 210 });
     expect(moveWithCollision({ x: 300, y: 210 }, 1000, 0).x).toBeLessThanOrEqual(610);

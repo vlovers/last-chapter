@@ -27,7 +27,7 @@ export const maraLetterDecision: ConversationTopic = {
       choices: [
         { id: 'ask', label: 'Розкажеш, якщо хочеш?', next: 'decision' },
         { id: 'cat', label: 'Спершу Френк перевірить твій настрій', next: 'frank' },
-        { id: 'later', label: 'Можемо поговорити пізніше', next: '__exit' },
+        { id: 'later', label: 'Можемо поговорити пізніше', next: '__exit', suspend: true },
       ],
     },
     {
@@ -43,7 +43,7 @@ export const maraLetterDecision: ConversationTopic = {
       choices: [
         { id: 'decision', label: 'То що ти вирішила?', next: 'decision' },
         { id: 'quiet', label: 'Можемо просто погладити Френка', next: 'quiet' },
-        { id: 'exit', label: 'Повернімося до цього іншим разом', next: '__exit' },
+        { id: 'exit', label: 'Повернімося до цього іншим разом', next: '__exit', suspend: true },
       ],
     },
     {
@@ -139,7 +139,7 @@ export const maraLetterDecision: ConversationTopic = {
           next: 'closing',
           remember: 'letter:book-comfort',
         },
-        { id: 'exit', label: 'Підберемо книжку іншим разом', next: '__exit' },
+        { id: 'exit', label: 'Підберемо книжку іншим разом', next: '__exit', suspend: true },
       ],
     },
     {

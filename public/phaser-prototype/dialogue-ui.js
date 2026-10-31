@@ -14,6 +14,19 @@ export class DialogueUI {
     this.mood = document.querySelector('#mood');
     this.close = document.querySelector('#close-dialogue');
     this.onChoose = onChoose;
+    this.skip = document.createElement('button');
+    this.skip.type = 'button';
+    this.skip.id = 'typewriter-skip';
+    this.skip.textContent = 'Показати весь текст';
+    this.skip.addEventListener('click', () => this.finishTyping(), options);
+    this.element.querySelector('.dialogue-title').insertBefore(this.skip, this.close);
+    document.addEventListener(
+      'visibilitychange',
+      () => {
+        if (document.hidden) this.finishTyping();
+      },
+      options,
+    );
     this.close.addEventListener('click', onClose, options);
     this.portrait.addEventListener(
       'error',
@@ -32,7 +45,11 @@ export class DialogueUI {
           onClose();
           return;
         }
-        const buttons = [...this.choices.querySelectorAll('button'), this.close];
+        const buttons = [
+          ...this.choices.querySelectorAll('button'),
+          ...(!this.skip.hidden ? [this.skip] : []),
+          this.close,
+        ];
         const index = buttons.indexOf(document.activeElement);
         if (['ArrowDown', 'ArrowUp', 'Tab'].includes(event.code)) {
           event.preventDefault();
@@ -54,6 +71,7 @@ export class DialogueUI {
     this.element.hidden = false;
     this.element.closest('#stage').classList.add('talking');
     this.element.classList.toggle('object-note', !isMara);
+    this.element.classList.toggle('compact', node.choices.length <= 2 && node.text.length < 550);
     const emotion = normalizeEmotion(node.mood);
     this.element.dataset.mood = emotion;
     this.mood.textContent = emotionLabel(emotion);
@@ -61,15 +79,41 @@ export class DialogueUI {
     const visitorNames = {
       'Пані Міллер': 'miller',
       Мара: 'mara',
-      Ірис: 'iris',
+      Айріс: 'iris',
       Анна: 'anna',
       Лео: 'leo',
       Елеонора: 'eleanor',
       Томас: 'thomas',
       Нора: 'nora',
     };
-    this.element.dataset.visitor = actor ?? visitorNames[node.speaker] ?? 'narrator';
-    this.text.textContent = node.text;
+    this.element.dataset.visitor =
+      visitorNames[node.speaker] ??
+      (node.speaker === 'Оповідач' ? 'narrator' : (actor ?? 'narrator'));
+    this.finishTyping();
+    this.fullText = node.text;
+    this.text.replaceChildren();
+    const accessible = document.createElement('span');
+    accessible.className = 'sr-only';
+    accessible.textContent = node.text;
+    this.visualText = document.createElement('span');
+    this.visualText.setAttribute('aria-hidden', 'true');
+    this.text.append(accessible, this.visualText);
+    this.skip.hidden = reduced;
+    this.text.style.minHeight = '';
+    this.visualText.textContent = node.text;
+    const maxTextHeight = Number.parseFloat(getComputedStyle(this.text).maxHeight);
+    this.text.style.minHeight = `${Math.min(this.text.scrollHeight, maxTextHeight || this.text.scrollHeight)}px`;
+    if (!reduced) this.visualText.textContent = '';
+    if (reduced) this.visualText.textContent = node.text;
+    else {
+      const characters = Array.from(node.text);
+      let shown = 0;
+      this.typing = window.setInterval(() => {
+        shown = Math.min(characters.length, shown + Math.max(2, Math.ceil(characters.length / 38)));
+        this.visualText.textContent = characters.slice(0, shown).join('');
+        if (shown === characters.length) this.finishTyping();
+      }, 24);
+    }
     const visitor = this.element.dataset.visitor;
     const image = isMara ? portraitDataUrl(visitor, emotion) : null;
     if (image) {
@@ -80,12 +124,23 @@ export class DialogueUI {
     } else {
       this.useFallback('object', node.speaker);
     }
-    this.close.textContent = '×';
+    this.close.textContent = node.choices.length ? 'Пізніше' : '×';
     this.close.setAttribute(
       'aria-label',
       node.choices.length ? 'Продовжити пізніше' : 'Закрити розмову',
     );
     this.choices.replaceChildren();
+    this.element.querySelector('#browse-order')?.remove();
+    if (node.canRecommend) {
+      const browse = document.createElement('button');
+      browse.id = 'browse-order';
+      browse.type = 'button';
+      browse.textContent = 'Обрати книжку в каталозі';
+      browse.addEventListener('click', () =>
+        window.dispatchEvent(new Event('last-chapter:order-catalog')),
+      );
+      this.choices.append(browse);
+    }
     const opened = performance.now();
     this.readyAt = opened + 220;
     for (const choice of node.choices) {
@@ -104,13 +159,25 @@ export class DialogueUI {
         reader.textContent = `Чому підходить: ${choice.book.readerFit}`;
         const impact = document.createElement('span');
         impact.textContent = `Що може змінитися: ${choice.book.possibleImpact}`;
-        detail.append(name, meta, summary, reader, impact);
+        detail.append(name, meta);
         button.append(detail);
         button.setAttribute('aria-label', `${choice.label}: ${choice.book.title}`);
       } else button.textContent = choice.label;
+      button.dataset.choice = choice.id;
       button.addEventListener('click', () => {
-        if (performance.now() - opened < 220) return;
-        this.onChoose(choice.id);
+        if (button.disabled || performance.now() - opened < 220) return;
+        // A rapid second tap can arrive after the first choice has replaced
+        // this button. Never replay a stale dialogue action.
+        button.disabled = true;
+        button.dataset.selected = 'true';
+        this.finishTyping();
+        try {
+          this.onChoose(choice.id);
+        } catch (error) {
+          button.disabled = false;
+          delete button.dataset.selected;
+          throw error;
+        }
       });
       this.choices.append(button);
     }
@@ -125,14 +192,27 @@ export class DialogueUI {
     }
     this.element.classList.toggle('still', reduced);
     (this.choices.querySelector('button') ?? this.close).focus({ preventScroll: true });
-    this.element.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+    this.element.scrollTop = 0;
+  }
+  finishTyping() {
+    window.clearInterval(this.typing);
+    this.typing = null;
+    if (this.visualText) this.visualText.textContent = this.fullText;
+    if (this.skip) {
+      const focused = document.activeElement === this.skip;
+      this.skip.hidden = true;
+      if (focused)
+        (this.choices.querySelector('button') ?? this.close).focus({ preventScroll: true });
+    }
   }
   hide() {
+    this.finishTyping();
     this.element.hidden = true;
     this.element.closest('#stage').classList.remove('talking');
   }
   destroy() {
     this.lifecycle.abort();
+    this.skip.remove();
     this.hide();
   }
 }

@@ -29,7 +29,8 @@ describe('Mara return visit', () => {
   });
   it('allows the player to leave without deciding for Mara', () => {
     const s = answerConversation(maraReturnVisit, startConversation(maraReturnVisit), 'busy');
-    expect(s.finished).toBe(true);
+    expect(s.finished).toBe(false);
+    expect(s.suspended).toBe(true);
   });
   it('remembers a boundary-supporting answer', () => {
     let s = startConversation(maraReturnVisit);

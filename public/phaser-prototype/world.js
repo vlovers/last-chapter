@@ -1,9 +1,10 @@
 // Feet coordinates, with a 14×8 collision body. All geometry uses native pixels.
 export const BOUNDS = { left: 30, right: 610, top: 166, bottom: 335 };
 export const FURNITURE = [
-  { id: 'counter', x: 70, y: 243, w: 180, h: 73 },
-  { id: 'table', x: 313, y: 244, w: 104, h: 47 },
-  { id: 'chair', x: 457, y: 247, w: 54, h: 58 },
+  { id: 'counter', x: 92, y: 253, w: 128, h: 42 },
+  { id: 'table', x: 329, y: 254, w: 72, h: 32 },
+  { id: 'chair', x: 466, y: 267, w: 36, h: 36 },
+  { id: 'cat-tree', x: 422, y: 176, w: 34, h: 24 },
   { id: 'crate', x: 546, y: 289, w: 58, h: 30 },
   { id: 'plant', x: 541, y: 179, w: 30, h: 26 },
   { id: 'box', x: 33, y: 280, w: 44, h: 27 },
@@ -12,6 +13,24 @@ export const FURNITURE = [
   { id: 'lamp', x: 514, y: 299, w: 20, h: 6 },
 ];
 export const HOTSPOTS = [
+  {
+    id: 'chair',
+    label: 'Посидіти з книжкою',
+    rect: { x: 466, y: 263, w: 36, h: 40 },
+    approach: { x: 484, y: 320 },
+  },
+  {
+    id: 'cat-tree',
+    label: 'Котяче дерево Френка',
+    rect: { x: 418, y: 115, w: 42, h: 85 },
+    approach: { x: 411, y: 217 },
+  },
+  {
+    id: 'bowl',
+    label: 'Насипати корм Френкові',
+    rect: { x: 502, y: 181, w: 22, h: 16 },
+    approach: { x: 490, y: 217 },
+  },
   {
     id: 'shelves',
     label: 'Книжкові полиці',
@@ -27,13 +46,13 @@ export const HOTSPOTS = [
   {
     id: 'counter',
     label: 'Прилавок',
-    rect: { x: 70, y: 223, w: 180, h: 93 },
+    rect: { x: 92, y: 235, w: 128, h: 60 },
     approach: { x: 160, y: 222 },
   },
   {
     id: 'table',
     label: 'Читацький столик',
-    rect: { x: 313, y: 238, w: 104, h: 53 },
+    rect: { x: 329, y: 240, w: 72, h: 46 },
     approach: { x: 365, y: 222 },
   },
 ];

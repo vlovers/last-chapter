@@ -30,6 +30,23 @@ describe('day one vertical slice', () => {
     expect(state.stage).toBe('complete');
   });
 
+  it('advances after all one-time box choices are completed, even when the node has authored options', () => {
+    const state = {
+      ...startChapter(),
+      stage: 'evening' as const,
+      dialogue: {
+        node: 'box',
+        flags: [] as string[],
+        history: [] as string[],
+        completed: firstEvening.nodes
+          .find((node) => node.id === 'box')!
+          .options.map((option) => JSON.stringify(['box', option.id, []])),
+      },
+    };
+    expect(currentNode(firstEvening, state.dialogue).options.length).toBeGreaterThan(0);
+    expect(advanceChapter(state).stage).toBe('complete');
+  });
+
   it('cannot skip an unfinished conversation', () => {
     expect(() => advanceChapter(startChapter())).toThrow();
   });

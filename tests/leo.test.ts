@@ -18,7 +18,7 @@ describe('Leo visit', () => {
   });
   it('supports a personal conversation without mentioning the letter', () => {
     let state = startDialogue(leoVisit);
-    for (const id of ['greet', 'trains', 'trains-follow', 'journey-back', 'finish'])
+    for (const id of ['greet', 'leo-schedule', 'trains-follow', 'journey-back', 'finish'])
       state = selectOption(leoVisit, state, id);
     expect(currentNode(leoVisit, state).id).toBe('end');
     expect(state.flags).toContain('leo_shared_future_plan');

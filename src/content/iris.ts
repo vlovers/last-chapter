@@ -1,4 +1,5 @@
 import type { DialogueStory } from '../game/dialogue';
+import { irisCoverCommissionNodes, irisCoverCommissionOption } from './iris-cover-commission';
 
 /** День другий: Айріс не є загадкою, яку треба «розв'язати». */
 export const irisVisit: DialogueStory = {
@@ -14,9 +15,45 @@ export const irisVisit: DialogueStory = {
       id: 'welcome',
       speaker: 'Айріс',
       text: '«Не знаю. Колись я тут проводила майже кожну суботу. А потім сім років не могла змусити себе зайти». Вона усміхається. «Я Айріс. Малюю книжки, які іноді ніхто не друкує».',
+      textWhen: [
+        {
+          requires: ['iris_boundary_respected'],
+          text: 'Айріс розгортає альбом, але залишає одну сторінку прикритою долонею. «Дякую, що не вимагав пояснень про кожен малюнок». Вона показує інший ескіз. «А цей можеш критикувати скільки завгодно».',
+        },
+        {
+          requires: ['iris_reflected_on_identity'],
+          text: "Айріс витягає з сумки два ескізи. «Один підписала своїм ім'ям, другий — ні. Вгадаєш, який мені більше подобається?» Вона усміхається. «Підказка: не той, за який заплатили».",
+        },
+      ],
       options: [
-        { id: 'ask-art', label: '«Розкажете про ілюстрації?»', next: 'art' },
-        { id: 'ask-return', label: '«Що привело вас назад?»', next: 'return' },
+        {
+          id: 'iris-seven-years',
+          label: '«Що ти найбільше пам’ятаєш із тих субот у книгарні?»',
+          next: 'return',
+        },
+        {
+          id: 'iris-unprinted',
+          label: '«А покажете книжку, яку так і не надрукували?»',
+          next: 'art',
+        },
+        {
+          id: 'iris-v3-conversation',
+          label: '«А що кажеш людям, які вимагають пояснити кожен малюнок?»',
+          next: 'iris-v3-conversation',
+          unless: ['iris_art_boundaries_discussed'],
+        },
+        {
+          id: 'iris-reflection',
+          label: '«Буває, що малюнок тобі подобається, а пояснювати його зовсім не хочеться?»',
+          next: 'iris-reflection',
+          unless: ['iris_reflected_on_identity'],
+        },
+        irisCoverCommissionOption,
+        {
+          id: 'iris-sketch-mishap',
+          label: '«А був малюнок, який зовсім не вдався?»',
+          next: 'iris-sketch-mishap',
+        },
         { id: 'ask-old', label: '«Ви знали колишню власницю?»', next: 'eleanor' },
         {
           id: 'ask-letter',
@@ -32,7 +69,7 @@ export const irisVisit: DialogueStory = {
       speaker: 'Айріс',
       text: '«Найскладніше намалювати тишу. Не порожнечу — саме тишу, коли двоє людей сидять поруч і їм не потрібно нічого доводити». Вона торкається корінця книжки. «Колись я хотіла зробити цілу історію без слів».',
       options: [
-        { id: 'art-more', label: '«А чому не зробили?»', next: 'art-more' },
+        { id: 'art-more', label: '«Щось завадило чи просто передумала?»', next: 'art-more' },
         { id: 'art-back', label: '«Про що ще поговоримо?»', next: 'welcome' },
       ],
     },
@@ -126,10 +163,190 @@ export const irisVisit: DialogueStory = {
       options: [{ id: 'respect-back', label: '«Буду радий бачити вас»', next: 'end' }],
     },
     {
+      id: 'iris-sketch-mishap',
+      speaker: 'Айріс',
+      text: '«Якось намалювала для дитячої книжки лисицю. Редактор написав: “Чудовий борсук”. Я три дні доводила, що це лисиця». Айріс сміється. «На четвертий домалювала їй табличку з написом “ЛИСИЦЯ”. Редактор попросив прибрати зайвий текст».',
+      options: [
+        {
+          id: 'iris-sketch-mishap-fix',
+          label: '«То як ти вийшла з цієї ситуації?»',
+          next: 'iris-sketch-mishap-fix',
+        },
+        {
+          id: 'iris-sketch-mishap-back',
+          label: '«Покажеш інший малюнок?»',
+          next: 'welcome',
+          grants: ['iris_fox_story_heard'],
+        },
+      ],
+    },
+    {
+      id: 'iris-sketch-mishap-fix',
+      speaker: 'Айріс',
+      text: '«Намалювала ще одну лисицю. Вона була схожа на собаку». Айріс знизує плечима. «Книжку надрукували з першою. Тепер діти питають, чому борсук живе в лисячій норі. Мені подобається, що вони помічають».',
+      options: [
+        {
+          id: 'iris-sketch-mishap-fix-back',
+          label: '«Звучить як найкраща частина книжки»',
+          next: 'welcome',
+          grants: ['iris_fox_story_heard'],
+        },
+      ],
+    },
+    {
       id: 'end',
       speaker: 'Оповідач',
       text: 'Айріс залишає на прилавку маленьку закладку з намальованим вікном. На звороті — адреса майстерні. Це не обіцянка, лише можливість продовжити розмову.',
       options: [],
+    },
+    {
+      id: 'iris-reflection',
+      speaker: 'Айріс',
+      text: '«Колись я малювала вікна, щоб уявляти життя по той бік скла».',
+      options: [
+        {
+          id: 'iris-reflect-question',
+          label: '«А на якій сторінці ти зазвичай застрягаєш?»',
+          next: 'iris-reflection-deep',
+        },
+        {
+          id: 'iris-reflect-return',
+          label: '«Дякую, що поділився цим»',
+          next: 'iris-reflection-end',
+        },
+      ],
+    },
+    {
+      id: 'iris-reflection-deep',
+      speaker: 'Айріс',
+      text: '«Не кожне питання потребує відповіді саме зараз. І не кожна відповідь належить тому, хто питає».',
+      options: [
+        {
+          id: 'iris-reflect-continue',
+          label: '«І що ти хочеш змінити?»',
+          next: 'iris-reflection-memory',
+        },
+        {
+          id: 'iris-reflect-listen',
+          label: '«Можна просто побути з цим»',
+          next: 'iris-reflection-memory',
+        },
+      ],
+    },
+    {
+      id: 'iris-reflection-memory',
+      speaker: 'Айріс',
+      text: '«Я знайшла ескіз із датою, яку сім років не наважувалася підписати. Боюся, що люди побачать малюнок і вирішать, ніби тепер знають усе про мій від’їзд. Наче мистецтво — це пояснювальна записка до життя».',
+      options: [
+        {
+          id: 'iris-memory-art',
+          label: '«Твоя робота не зобов’язана пояснювати тебе»',
+          next: 'iris-reflection-art',
+          grants: ['iris_chose_open_art'],
+        },
+        {
+          id: 'iris-memory-private',
+          label: '«Можеш показати малюнки без власної біографії»',
+          next: 'iris-reflection-private',
+          grants: ['iris_chose_private_art'],
+        },
+      ],
+    },
+    {
+      id: 'iris-reflection-art',
+      speaker: 'Айріс',
+      text: '«Тоді залишу незакінчене вікно. Раніше соромилася, що не знаю, що за ним. Тепер думаю: незнання теж частина картини».',
+      options: [{ id: 'iris-art-continue', label: 'Послухати далі', next: 'iris-reflection-end' }],
+    },
+    {
+      id: 'iris-reflection-private',
+      speaker: 'Айріс',
+      text: '«Так. Без підпису про моє повернення дрібним шрифтом. Нехай люди говорять про кольори, а не про те, чи я вже все пробачила».',
+      options: [
+        { id: 'iris-private-continue', label: 'Послухати далі', next: 'iris-reflection-end' },
+      ],
+    },
+    {
+      id: 'iris-reflection-end',
+      speaker: 'Айріс',
+      text: '«Можна повернутися до місця й не повертатися до себе колишньої».',
+      textWhen: [
+        {
+          requires: ['iris_chose_open_art'],
+          text: '«Я залишу малюнок незавершеним. Не кожна відкрита робота — запрошення розпитувати про моє минуле».',
+        },
+        {
+          requires: ['iris_chose_private_art'],
+          text: '«Я покажу малюнки, але залишу деякі спогади при собі. Це не втеча, а межа, яку я сама обрала».',
+        },
+      ],
+      options: [
+        {
+          id: 'iris-reflect-finish',
+          label: 'Повернутися до розмови',
+          next: 'welcome',
+          grants: ['iris_reflected_on_identity'],
+        },
+      ],
+    },
+    ...irisCoverCommissionNodes,
+    {
+      id: 'iris-v3-conversation',
+      speaker: 'Айріс',
+      text: '«Я малюю вікна. Люди бачать світло й відразу питають, хто живе за склом. Але я не знаю. І не хочу вигадувати чуже життя».',
+      options: [
+        { id: 'iris-v3-ask', label: '«Тоді чому саме вікна?»', next: 'iris-v3-question' },
+        { id: 'iris-v3-short', label: '«Можемо не говорити про це»', next: 'iris-v3-end' },
+      ],
+    },
+    {
+      id: 'iris-v3-question',
+      speaker: 'Айріс',
+      text: '«Бо світло справжнє. Але моє право його намалювати не дає мені права розповідати, що відчуває людина всередині».',
+      options: [
+        {
+          id: 'iris-v3-challenge',
+          label: '«А якщо глядач упізнає власний дім?»',
+          next: 'iris-v3-counter',
+        },
+        {
+          id: 'iris-v3-listen',
+          label: '«Не кожна картина потребує пояснення»',
+          next: 'iris-v3-end',
+        },
+      ],
+    },
+    {
+      id: 'iris-v3-counter',
+      speaker: 'Айріс',
+      text: '«Тоді я вислухаю його. Не обов’язково знищу малюнок, але точно не назву його реакцію помилкою. Я теж хочу, щоб мене слухали».',
+      options: [
+        { id: 'iris-v3-follow', label: '«Що ти хочеш показати зараз?»', next: 'iris-v3-choice' },
+        {
+          id: 'iris-v3-pause',
+          label: '«Можемо залишити це питання відкритим»',
+          next: 'iris-v3-end',
+        },
+      ],
+    },
+    {
+      id: 'iris-v3-choice',
+      speaker: 'Айріс',
+      text: '«Нову роботу. Без підпису, який пояснює моє минуле. Нехай люди сперечаються про світло, а не про те, чому я колись поїхала».',
+      options: [{ id: 'iris-v3-accept', label: '«Це твоя історія»', next: 'iris-v3-end' }],
+    },
+    {
+      id: 'iris-v3-end',
+      speaker: 'Айріс',
+      text: '«Дякую. Тут можна говорити про мистецтво й не перетворювати художницю на загадку».',
+      options: [
+        {
+          id: 'iris-v3-return',
+          label: 'Повернутися до інших тем',
+          next: 'welcome',
+          grants: ['iris_art_boundaries_discussed'],
+        },
+      ],
     },
   ],
 };

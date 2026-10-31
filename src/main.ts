@@ -19,6 +19,8 @@ import {
   advanceToNora,
   finishThirdDay,
   startBookClub,
+  exploreAfterBookClub,
+  skipBookClub,
   startFourthDay,
   finishFourthDay,
   advanceToDayFourMara,
@@ -40,6 +42,8 @@ let previewBook: Book | null = null;
 let activeSpot: ShopSpotId | null = null;
 let catalogFilter: CatalogFilter = 'all';
 let journalOpen = false;
+let dialoguePage = 0;
+let dialoguePageKey = '';
 
 function restoreChapter() {
   try {
@@ -70,6 +74,7 @@ const stageNames = {
   thomas: 'День третій · Томас',
   nora: 'День третій · Нора',
   'book-club': 'День третій · Книжковий клуб',
+  'quiet-evening': 'День третій · Тихий вечір у книгарні',
   'day3-complete': 'Кінець третього дня',
   'day4-iris': 'День четвертий · Айріс',
   'day4-mara': 'День четвертий · Мара',
@@ -159,7 +164,9 @@ function render(): void {
         : chapter.stage === 'day2-complete'
           ? 'Другий день завершено. Наступного ранку до книгарні завітає Елеонора.'
           : chapter.stage === 'day3-complete'
-            ? 'Книжковий клуб завершився. Наступного ранку Айріс повернеться до книгарні.'
+            ? chapter.flags.includes('book_club_started')
+              ? 'Книжковий клуб завершився. Наступного ранку Айріс повернеться до книгарні.'
+              : 'Тихий вечір у книгарні завершився. Наступного ранку Айріс повернеться до книгарні.'
             : chapter.stage === 'day4-complete'
               ? 'Четвертий день завершено. Завтра книгарня запросить сусідів на спільне читання.'
               : seasonEnding(chapter).letter;
@@ -317,17 +324,102 @@ function render(): void {
       }
       actions.append(shelf);
     } else {
-      for (const option of availableOptions(story, chapter.dialogue)) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = option.label;
-        button.addEventListener('click', () => {
-          chapter = chooseChapterOption(chapter, option.id);
-          previewBook = null;
-          persistChapter();
+      const available = availableOptions(story, chapter.dialogue);
+      const pageKey =
+        chapter.stage +
+        ':' +
+        chapter.dialogue.node +
+        ':' +
+        available.map((option) => option.id).join(',');
+      if (pageKey !== dialoguePageKey) {
+        dialoguePageKey = pageKey;
+        dialoguePage = 0;
+      }
+      const pageSize = 3;
+      const totalPages = Math.max(1, Math.ceil(available.length / pageSize));
+      dialoguePage = Math.min(dialoguePage, totalPages - 1);
+      const visible = available.slice(dialoguePage * pageSize, (dialoguePage + 1) * pageSize);
+      const groups =
+        node.id === 'gathering'
+          ? [
+              {
+                title: 'Люди та стосунки',
+                matches: (id: string) =>
+                  id.includes('couple') ||
+                  [
+                    'final-v3-mara-option',
+                    'final-v3-leo-option',
+                    'final-v3-anna-option',
+                    'final-v3-thomas-option',
+                  ].includes(id),
+              },
+              {
+                title: 'Довіра, таємниці й мистецтво',
+                matches: (id: string) =>
+                  id.includes('iris') ||
+                  id.includes('letter') ||
+                  id.includes('rumor') ||
+                  id.includes('privacy') ||
+                  id.includes('trust'),
+              },
+              {
+                title: 'Історії книгарні та спільноти',
+                matches: (id: string) =>
+                  id !== 'close' &&
+                  !id.includes('couple') &&
+                  ![
+                    'final-v3-mara-option',
+                    'final-v3-leo-option',
+                    'final-v3-anna-option',
+                    'final-v3-thomas-option',
+                  ].includes(id) &&
+                  !id.includes('iris') &&
+                  !id.includes('letter') &&
+                  !id.includes('rumor') &&
+                  !id.includes('privacy') &&
+                  !id.includes('trust'),
+              },
+              { title: 'Завершення вечора', matches: (id: string) => id === 'close' },
+            ]
+          : [{ title: '', matches: () => true }];
+      for (const group of groups) {
+        const options = visible.filter((option) => group.matches(option.id));
+        if (options.length === 0) continue;
+        const section = document.createElement('section');
+        section.className = 'dialogue-options-group';
+        if (group.title) {
+          const heading = document.createElement('h3');
+          heading.className = 'dialogue-options-group__title';
+          heading.textContent = group.title;
+          section.append(heading);
+        }
+        for (const option of options) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = option.label;
+          button.addEventListener('click', () => {
+            chapter = chooseChapterOption(chapter, option.id);
+            previewBook = null;
+            persistChapter();
+            render();
+          });
+          section.append(button);
+        }
+        actions.append(section);
+      }
+      if (totalPages > 1) {
+        const pager = document.createElement('div');
+        pager.className = 'dialogue-options-group';
+        const navigation = document.createElement('button');
+        navigation.type = 'button';
+        navigation.textContent =
+          dialoguePage < totalPages - 1 ? 'Інші варіанти →' : '← Попередні варіанти';
+        navigation.addEventListener('click', () => {
+          dialoguePage = dialoguePage < totalPages - 1 ? dialoguePage + 1 : 0;
           render();
         });
-        actions.append(button);
+        pager.append(navigation);
+        actions.append(pager);
       }
     }
     if (node.options.length === 0) {
@@ -349,7 +441,7 @@ function render(): void {
                     ? 'Зустріти Нору →'
                     : chapter.stage === 'nora'
                       ? 'Відкрити книжковий клуб →'
-                      : chapter.stage === 'book-club'
+                      : chapter.stage === 'book-club' || chapter.stage === 'quiet-evening'
                         ? 'Завершити третій день →'
                         : chapter.stage === 'day4-iris'
                           ? 'Зустріти Мару →'
@@ -374,7 +466,7 @@ function render(): void {
                     ? advanceToNora(chapter)
                     : chapter.stage === 'nora'
                       ? startBookClub(chapter)
-                      : chapter.stage === 'book-club'
+                      : chapter.stage === 'book-club' || chapter.stage === 'quiet-evening'
                         ? finishThirdDay(chapter)
                         : chapter.stage === 'day4-iris'
                           ? advanceToDayFourMara(chapter)
@@ -389,6 +481,28 @@ function render(): void {
         render();
       });
       actions.append(next);
+      if (chapter.stage === 'book-club') {
+        const exploreButton = document.createElement('button');
+        exploreButton.type = 'button';
+        exploreButton.textContent = 'Прибрати після клубу й оглянути книгарню →';
+        exploreButton.addEventListener('click', () => {
+          chapter = exploreAfterBookClub(chapter);
+          persistChapter();
+          render();
+        });
+        actions.append(exploreButton);
+      }
+      if (chapter.stage === 'nora') {
+        const quietButton = document.createElement('button');
+        quietButton.type = 'button';
+        quietButton.textContent = 'Залишитися у книгарні на тихий вечір →';
+        quietButton.addEventListener('click', () => {
+          chapter = skipBookClub(chapter);
+          persistChapter();
+          render();
+        });
+        actions.append(quietButton);
+      }
     }
   }
 

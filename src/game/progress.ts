@@ -9,7 +9,7 @@ export interface DayProgress {
 const stages: readonly (readonly ChapterStage[])[] = [
   ['miller', 'mara', 'evening', 'complete'],
   ['iris', 'anna', 'leo', 'day2-complete'],
-  ['eleanor', 'thomas', 'nora', 'book-club', 'day3-complete'],
+  ['eleanor', 'thomas', 'nora', 'book-club', 'quiet-evening', 'day3-complete'],
   ['day4-iris', 'day4-mara', 'day4-leo', 'day4-complete'],
   ['day5-reading', 'season-complete'],
 ];
