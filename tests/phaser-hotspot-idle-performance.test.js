@@ -178,7 +178,7 @@ describe('hotspot rendering on the Phaser animation loop', () => {
     expect(next.id).toBe('counter');
   });
 
-  it('cycles only onscreen mobile targets and drops selection after camera movement', () => {
+  it('keeps offscreen hotspots keyboard-accessible without exposing pointer targets', () => {
     const f = fixture();
     f.interaction.scene.cameras.main.zoom = 2;
     f.interaction.scene.scale.width = 390;
@@ -194,9 +194,12 @@ describe('hotspot rendering on the Phaser animation loop', () => {
     f.interaction.scene.cameras.main.scrollX = 300;
     f.update(player, visitor, ready());
     expect(f.buttons.get('counter').hidden).toBe(true);
-    expect(f.interaction.selected).toBeNull();
+    expect(f.interaction.selected?.id).toBe('counter');
     expect(f.interaction.hovered).toBeNull();
-    expect(Interactions.prototype.cycle.call(f.interaction)).toBeNull();
+    // The hidden DOM button is not clickable, but keyboard-only players can
+    // still reach the visitor and return to the shelf as the camera moves.
+    expect(Interactions.prototype.cycle.call(f.interaction)?.id).toBe('mara');
+    expect(Interactions.prototype.cycle.call(f.interaction)?.id).toBe('counter');
   });
 
   it('returns no keyboard target while the shop is in dialogue mode', () => {
