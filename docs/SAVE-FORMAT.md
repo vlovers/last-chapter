@@ -30,6 +30,14 @@ remain valid. Legacy saves with neither ledger field are still supported.
 Save/load regression tests cover all 20 chapter stages, including the optional
 quiet evening and completed checkpoints.
 
+Ledger entries are validated before a story graph is opened: completion keys
+must be nonempty strings of at most 1,000 characters, pending hubs must be
+nonempty strings of at most 120 characters, and pending keys have the same
+1,000-character limit. Duplicate completion entries and malformed pending
+records are rejected. At most 8,192 completed entries and 1,024 pending
+entries can be restored; larger saves are treated as invalid. These limits
+prevent corrupted browser storage from being mistaken for playable progress.
+
 The four optional Mara sessions keep their existing storage keys. Their ledgers
 track completed return loops; only an actual exit finishes the topic. Explicit
 “later” choices now suspend at the current node. Completed sessions are removed
