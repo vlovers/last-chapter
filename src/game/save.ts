@@ -110,12 +110,15 @@ export function decodeSave(raw: string): ChapterState | null {
     if (new Set(obj.flags).size !== obj.flags.length) return null;
     if (obj.flags.some((flag: string) => !flag || flag.length > 120)) return null;
     if (obj.history.some((id: string) => !id || id.length > 120)) return null;
+    // A pending ledger without its completed counterpart cannot be replayed
+    // reliably; do not silently discard half of a save's topic progress.
+    if (obj.pending !== undefined && obj.completed === undefined) return null;
     const stage = obj.stage as ChapterStage;
     if (
       obj.completed !== undefined &&
       (!Array.isArray(obj.completed) ||
         obj.completed.length > SAVE_LIMITS.completed ||
-        !obj.completed.every((v: unknown) => typeof v === 'string' && v.length <= 1000) ||
+        !obj.completed.every((v: unknown) => typeof v === 'string' && v.length > 0 && v.length <= 1000) ||
         new Set(obj.completed).size !== obj.completed.length ||
         !Array.isArray(obj.pending) ||
         obj.pending.length > SAVE_LIMITS.pending ||
@@ -127,8 +130,14 @@ export function decodeSave(raw: string): ChapterState | null {
             String((v as Record<string, unknown>).hub).length > 0 &&
             String((v as Record<string, unknown>).hub).length <= 120 &&
             typeof (v as Record<string, unknown>).key === 'string' &&
+            String((v as Record<string, unknown>).key).length > 0 &&
             String((v as Record<string, unknown>).key).length <= 1000,
-        ))
+        ) ||
+        new Set(
+          (obj.pending as { hub: string; key: string }[]).map(({ hub, key }) =>
+            JSON.stringify([hub, key]),
+          ),
+        ).size !== obj.pending.length
     )
       return null;
     const dialogue = {
