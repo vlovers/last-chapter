@@ -169,6 +169,10 @@ export class Interactions {
     const spots = this.spots.filter(
       (spot) => this.buttons.get(spot.id).dataset.available === 'true',
     );
+    if (!spots.length) {
+      this.selected = null;
+      return null;
+    }
     this.selected = spots[(spots.indexOf(this.selected) + 1) % spots.length];
     return this.selected;
   }
