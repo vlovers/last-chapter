@@ -67,6 +67,12 @@ function dialogueNode(story: DialogueStory, id: SceneId): DialogueNode | undefin
   return index.get(id);
 }
 
+function requiredDialogueNode(story: DialogueStory, id: SceneId): DialogueNode {
+  const node = dialogueNode(story, id);
+  if (!node) throw new Error('Missing dialogue node');
+  return node;
+}
+
 export function startDialogue(story: DialogueStory): DialogueState {
   if (!dialogueNode(story, story.start)) {
     throw new Error('Missing start node');
@@ -75,8 +81,7 @@ export function startDialogue(story: DialogueStory): DialogueState {
 }
 
 export function currentNode(story: DialogueStory, state: DialogueState): DialogueNode {
-  const node = dialogueNode(story, state.node);
-  if (!node) throw new Error('Missing dialogue node');
+  const node = requiredDialogueNode(story, state.node);
   const flags = new Set(state.flags);
   // Prefer the most specific matching narration. A generic one-flag variant
   // must not hide a later two-flag variant when both conditions are true.
@@ -120,7 +125,7 @@ export function restoreDialogueProgress(story: DialogueStory, state: DialogueSta
   if (cached) return cached;
   let replay = startDialogue(story);
   for (const id of state.history) {
-    const node = currentNode(story, replay);
+    const node = requiredDialogueNode(story, replay.node);
     const option = node.options.find((o) => o.id === id);
     if (!option) break;
     // Legacy replay only needs flags and completion ledgers. Rebuilding a
@@ -142,7 +147,9 @@ export function availableOptions(
   state: DialogueState,
 ): readonly DialogueOption[] {
   const progress = restoreDialogueProgress(story, state);
-  const node = currentNode(story, state);
+  // Only the authored choices are needed here: resolving conditional narration
+  // for each UI options read would repeatedly scan every afterword callback.
+  const node = requiredDialogueNode(story, state.node);
   // The final gathering may expose dozens of callbacks backed by a long save
   // ledger. Build membership indexes once rather than scanning for each option.
   const flags = new Set(state.flags);
@@ -168,7 +175,7 @@ export function selectOption(
   return applyOption(
     story,
     restoreDialogueProgress(story, state),
-    currentNode(story, state),
+    requiredDialogueNode(story, state.node),
     option,
   );
 }
