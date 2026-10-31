@@ -35,6 +35,17 @@ describe('optional conversation save ledger integrity', () => {
     ).toBeNull();
   });
 
+  it('rejects a completed ledger whose pending counterpart is missing', () => {
+    expect(restore({ ...active(), pending: undefined })).toBeNull();
+  });
+
+  it('rejects an oversized pending completion key', () => {
+    const session = active();
+    expect(
+      restore({ ...session, pending: [{ ...session.pending![0]!, key: 'x'.repeat(301) }] }),
+    ).toBeNull();
+  });
+
   it('rejects a pending choice that was already completed', () => {
     const session = active();
     expect(restore({ ...session, completed: [session.pending![0]!.key] })).toBeNull();
