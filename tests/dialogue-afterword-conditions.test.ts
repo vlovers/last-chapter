@@ -104,9 +104,7 @@ describe('Conditional finale afterwords: authoring and runtime', () => {
       ],
     );
     expect(validateDialogue(story)).toEqual([]);
-    expect(narration(story, ['mara', 'leo'])).toBe(
-      'Мара й Лео лишилися.\n\nЛео зачинив вікно.',
-    );
+    expect(narration(story, ['mara', 'leo'])).toBe('Мара й Лео лишилися.\n\nЛео зачинив вікно.');
   });
 
   it('still rejects impossible and malformed afterword conditions', () => {
