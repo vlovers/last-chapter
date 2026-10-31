@@ -286,13 +286,20 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
       if (!ids.has(option.next)) errors.push(`Missing destination: ${option.next}`);
     }
   }
+  // Index the first definition of each node, matching the original lookup
+  // semantics even when duplicate IDs are reported above. A cursor-based queue
+  // keeps validation linear for long authored routes and large final gatherings.
+  const nodesById = new Map<string, DialogueNode>();
+  for (const node of story.nodes) {
+    if (!nodesById.has(node.id)) nodesById.set(node.id, node);
+  }
   const reachable = new Set<string>();
   const queue = [story.start];
-  while (queue.length > 0) {
-    const id = queue.shift();
+  for (let cursor = 0; cursor < queue.length; cursor++) {
+    const id = queue[cursor]!;
     if (!id || reachable.has(id)) continue;
     reachable.add(id);
-    const node = story.nodes.find((entry) => entry.id === id);
+    const node = nodesById.get(id);
     for (const option of node?.options ?? []) {
       if (ids.has(option.next) && !reachable.has(option.next)) queue.push(option.next);
     }
