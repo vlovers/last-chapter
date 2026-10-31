@@ -57,6 +57,40 @@ try {
         'Ambient animation must reuse scene objects',
       );
 
+      // Idle-only measurements miss camera and hotspot regressions. Exercise
+      // actual keyboard movement on the mobile viewport, including under CPU throttling.
+      const snapshot = () =>
+        page.evaluate(async () => {
+          const { game } = await import('/phaser-prototype/scene.js');
+          const scene = game.scene.getScene('bookshop');
+          return {
+            playerX: scene.characters.player.x,
+            cameraX: scene.cameras.main.scrollX,
+            nodes: scene.children.length,
+            failed: scene.failed,
+          };
+        });
+      const beforeMove = await snapshot();
+      await page.locator('#game').focus();
+      await page.keyboard.down('ArrowRight');
+      try {
+        await page.waitForTimeout(2500);
+      } finally {
+        await page.keyboard.up('ArrowRight');
+      }
+      const afterMove = await snapshot();
+      assert.equal(afterMove.failed, false, 'Scene failed during keyboard navigation');
+      assert.ok(
+        afterMove.playerX > beforeMove.playerX + 10,
+        'Player must move right using keyboard navigation',
+      );
+      assert.ok(
+        afterMove.cameraX > beforeMove.cameraX,
+        'Mobile camera must follow the moving player',
+      );
+      assert.equal(afterMove.nodes, beforeMove.nodes, 'Movement must reuse scene objects');
+      assert.deepEqual(pageErrors, [], 'No browser errors during navigation');
+
       const fps = samples.map((sample) => sample.fps).sort((a, b) => a - b);
       results.push({
         cpuThrottle: rate,
@@ -66,6 +100,7 @@ try {
         minFps: fps[0],
         medianFps: fps[5],
         maxFps: fps.at(-1),
+        navigation: { before: beforeMove, after: afterMove },
         samples,
       });
     } finally {
