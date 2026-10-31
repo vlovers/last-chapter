@@ -127,7 +127,11 @@ export class Interactions {
     }
     // A visitor can leave while its hotspot is selected or hovered. Hidden
     // controls must not remain actionable through keyboard navigation or outlines.
-    if (this.selected && this.buttons.get(this.selected.id)?.dataset.available !== 'true')
+    if (
+      this.selected &&
+      (this.buttons.get(this.selected.id)?.hidden ||
+        this.buttons.get(this.selected.id)?.dataset.available !== 'true')
+    )
       this.selected = null;
     if (this.hovered && this.buttons.get(this.hovered.id)?.hidden) this.hovered = null;
     const hintHidden = !this.nearest || state.mode !== 'explore';
@@ -166,9 +170,10 @@ export class Interactions {
     }
   }
   cycle() {
-    const spots = this.spots.filter(
-      (spot) => this.buttons.get(spot.id).dataset.available === 'true',
-    );
+    const spots = this.spots.filter((spot) => {
+      const button = this.buttons.get(spot.id);
+      return button && !button.hidden && button.dataset.available === 'true';
+    });
     if (!spots.length) {
       this.selected = null;
       return null;
