@@ -159,5 +159,4 @@ describe('hotspot rendering on the Phaser animation loop', () => {
     expect(counter.hidden).toBe(false);
     expect(f.outline.clear).toHaveBeenCalledTimes(outlineCalls);
   });
-
 });
