@@ -48,15 +48,34 @@ export interface DialogueState {
   readonly pending?: readonly { hub: string; key: string }[];
 }
 
+// Authored dialogue graphs are immutable. Share a first-definition index across
+// UI reads, selections and legacy-save replay instead of scanning every scene
+// for every choice. Weak keys release indexes with their story definitions.
+const dialogueNodeIndexes = new WeakMap<DialogueStory, ReadonlyMap<SceneId, DialogueNode>>();
+
+function dialogueNode(story: DialogueStory, id: SceneId): DialogueNode | undefined {
+  let index = dialogueNodeIndexes.get(story);
+  if (!index) {
+    const nodes = new Map<SceneId, DialogueNode>();
+    for (const node of story.nodes) {
+      // Keep the original Array.find semantics for invalid duplicate IDs.
+      if (!nodes.has(node.id)) nodes.set(node.id, node);
+    }
+    index = nodes;
+    dialogueNodeIndexes.set(story, index);
+  }
+  return index.get(id);
+}
+
 export function startDialogue(story: DialogueStory): DialogueState {
-  if (!story.nodes.some((node) => node.id === story.start)) {
+  if (!dialogueNode(story, story.start)) {
     throw new Error('Missing start node');
   }
   return { node: story.start, flags: [], history: [] };
 }
 
 export function currentNode(story: DialogueStory, state: DialogueState): DialogueNode {
-  const node = story.nodes.find((entry) => entry.id === state.node);
+  const node = dialogueNode(story, state.node);
   if (!node) throw new Error('Missing dialogue node');
   const flags = new Set(state.flags);
   // Prefer the most specific matching narration. A generic one-flag variant
@@ -143,7 +162,7 @@ export function selectOption(
 ): DialogueState {
   const option = availableOptions(story, state).find((item) => item.id === optionId);
   if (!option) throw new Error('Option unavailable');
-  if (!story.nodes.some((node) => node.id === option.next)) {
+  if (!dialogueNode(story, option.next)) {
     throw new Error('Missing destination node');
   }
   return applyOption(
@@ -173,7 +192,7 @@ function applyOption(
     const key = completionKey(node, option, flags);
     if (!pending.some((p) => p.key === key)) pending.push({ hub: node.id, key });
   }
-  const destination = story.nodes.find((n) => n.id === option.next)!;
+  const destination = dialogueNode(story, option.next)!;
   // Merely opening or suspending a topic does not consume it. Returning to its
   // hub, reaching a terminal or explicitly leaving the hub region does.
   const remaining = pending.filter((p) => {
