@@ -145,4 +145,40 @@ describe('optional conversation authoring and save consistency', () => {
     expect(available[0]?.id).toBe('choice-256');
     expect(available.at(-1)?.id).toBe('choice-511');
   });
+  it('keeps repeatable choices available after restoring a completed ledger', () => {
+    const repeatableTopic = withEntry({
+      ...topic.nodes[0]!,
+      choices: [{ id: 'leave', label: 'До зустрічі', next: '__exit', repeatability: 'repeatable' }],
+    });
+    const session = {
+      ...startConversation(repeatableTopic),
+      completed: [JSON.stringify(['entry', 'leave'])],
+      pending: [],
+    };
+    const restored = restoreConversation(repeatableTopic, JSON.stringify(session));
+    expect(restored).toEqual(session);
+    expect(conversationView(repeatableTopic, restored!).choices.map((choice) => choice.id)).toEqual([
+      'leave',
+    ]);
+  });
+
+  it('applies memory gates without losing conditional narration', () => {
+    const gatedTopic = withEntry({
+      ...topic.nodes[0]!,
+      choices: [
+        { id: 'remember', label: 'Пам’ятаю', next: '__exit', requires: 'remembered' },
+        { id: 'forget', label: 'Не пам’ятаю', next: '__exit', excludes: 'remembered' },
+      ],
+    });
+    const remembered = startConversation(gatedTopic, ['remembered']);
+    const forgotten = startConversation(gatedTopic);
+    expect(conversationView(gatedTopic, remembered).text).toBe('Знову привіт.');
+    expect(conversationView(gatedTopic, remembered).choices.map((choice) => choice.id)).toEqual([
+      'remember',
+    ]);
+    expect(conversationView(gatedTopic, forgotten).choices.map((choice) => choice.id)).toEqual([
+      'forget',
+    ]);
+  });
+
 });
