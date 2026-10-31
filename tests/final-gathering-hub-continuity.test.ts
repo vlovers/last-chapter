@@ -95,13 +95,13 @@ describe('Final gathering: returning to ordinary conversations', () => {
       const initial = openHub(group.entry);
       const opening = currentNode(finalReading, initial).text;
       for (let i = 0; i < 3; i++) {
-        const returned = play(openHub(group.entry), group.routes[i][1]);
+        const returned = play(openHub(group.entry), group.routes[i]![1]);
         expect(returned.node).toBe(group.hub);
         expect(returned.flags).toContain(group.done[i]);
         expect(currentNode(finalReading, returned).text).not.toBe(opening);
         expect(currentNode(finalReading, returned).text).toContain(group.markers[i]);
         expect(availableOptions(finalReading, returned).map((option) => option.id)).not.toContain(
-          group.routes[i][0][0],
+          group.routes[i]![0][0],
         );
       }
     });
@@ -109,8 +109,8 @@ describe('Final gathering: returning to ordinary conversations', () => {
     it(`${group.name}: partial returns acknowledge exactly the topics played`, () => {
       for (const [first, second] of [[0, 1], [0, 2], [1, 2]] as const) {
         let state = openHub(group.entry);
-        state = play(state, group.routes[first][1]);
-        state = play(state, group.routes[second][2]);
+        state = play(state, group.routes[first]![1]);
+        state = play(state, group.routes[second]![2]);
         const narration = currentNode(finalReading, state).text;
         expect(state.node).toBe(group.hub);
         expect(state.flags).toContain(group.done[first]);
@@ -119,7 +119,7 @@ describe('Final gathering: returning to ordinary conversations', () => {
         expect(narration).not.toContain(group.genericEnd);
         expect(narration).not.toContain(group.specificEnd);
         const remaining = availableOptions(finalReading, state).map((option) => option.id);
-        expect(remaining).toContain(group.routes[3 - first - second][0][0]);
+        expect(remaining).toContain(group.routes[3 - first - second]![0][0]);
       }
     });
 
@@ -128,9 +128,9 @@ describe('Final gathering: returning to ordinary conversations', () => {
         for (let second = 0; second < 3; second++) {
           for (let third = 0; third < 3; third++) {
             let state = openHub(group.entry);
-            state = play(state, group.routes[0][first]);
-            state = play(state, group.routes[1][second]);
-            state = play(state, group.routes[2][third]);
+            state = play(state, group.routes[0][first]!);
+            state = play(state, group.routes[1][second]!);
+            state = play(state, group.routes[2][third]!);
             const text = currentNode(finalReading, state).text;
             const canonical = first === 0 && second === 0 && third === 0;
             expect(state.node).toBe(group.hub);
