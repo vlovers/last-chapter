@@ -88,7 +88,10 @@ describe('dialogue save ledger integrity', () => {
     ['non-string pending key', { completed: [], pending: [{ hub: 'arrival', key: 42 }] }],
     ['oversized completion key', { completed: ['x'.repeat(1001)], pending: [] }],
     ['oversized pending hub', { completed: [], pending: [{ hub: 'x'.repeat(121), key: 'topic' }] }],
-    ['oversized pending key', { completed: [], pending: [{ hub: 'arrival', key: 'x'.repeat(1001) }] }],
+    [
+      'oversized pending key',
+      { completed: [], pending: [{ hub: 'arrival', key: 'x'.repeat(1001) }] },
+    ],
   ])('rejects %s in an untrusted ledger', (_reason, invalid) => {
     const original = encodeSave(checkpoint('miller'));
     const malformed = { ...JSON.parse(original), ...invalid };
