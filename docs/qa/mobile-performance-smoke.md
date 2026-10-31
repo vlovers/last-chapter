@@ -33,3 +33,17 @@ in [Actions #41142450489](https://github.com/vlovers/last-chapter/actions/runs/4
 These numbers describe **one headless CI run only**. The test does not measure
 battery usage, thermals, input latency, memory growth across long sessions,
 or performance on an actual phone. Those remain manual release checks.
+
+## Hotspot rendering regression (2026-10-31)
+
+The Phaser scene calls `Interactions.update()` every frame. The hotspot layer now
+avoids redundant DOM class changes, repeated hint text assignments, and Phaser
+outline geometry redraws when the highlighted world-space target has not
+changed. Screen-space hit areas still update when the camera moves, and moving
+visitors or dialogue transitions invalidate the outline cache.
+
+`tests/phaser-hotspot-idle-performance.test.js` covers 120 idle frames,
+camera movement, moving visitor targets, and entering/leaving dialogue. These
+are **operation-count regression tests**, not FPS measurements; the existing
+Chromium smoke and a real-device playtest are still required to evaluate
+perceived performance and input responsiveness.
