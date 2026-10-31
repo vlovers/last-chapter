@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { finalReading } from '../src/content/day-five';
 import {
   availableOptions,
   currentNode,
@@ -126,5 +127,25 @@ describe('dialogue runtime indexing and save replay', () => {
     expect(() =>
       selectOption(missingDestination, startDialogue(missingDestination), 'continue'),
     ).toThrow('Missing destination node');
+  });
+
+  it('preserves real day-five callback completion through indexed scene navigation', () => {
+    const find = vi.spyOn(finalReading.nodes, 'find');
+    const state = {
+      node: 'gathering',
+      flags: ['mara_own_morning_heard', 'leo_honesty_discussed', 'mara_discussed_change'],
+      history: [] as string[],
+    };
+    const entered = selectOption(finalReading, state, 'final-couple-conversation-option');
+    expect(currentNode(finalReading, entered).id).toBe('final-couple-conversation');
+    const respected = selectOption(finalReading, entered, 'final-couple-respect');
+    const returned = selectOption(finalReading, respected, 'final-couple-close-back');
+    expect(returned.node).toBe('gathering');
+    expect(returned.flags).toContain('final_couple_conversation_heard');
+    expect(availableOptions(finalReading, returned).map((option) => option.id)).not.toContain(
+      'final-couple-conversation-option',
+    );
+    expect(find).not.toHaveBeenCalled();
+    find.mockRestore();
   });
 });
