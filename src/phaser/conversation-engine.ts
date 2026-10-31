@@ -59,7 +59,10 @@ export function validateTopic(topic: ConversationTopic): string[] {
     for (const choice of node.choices) {
       if (!choice.id.trim()) errors.push('Empty choice ID: ' + node.id);
       if (!choice.label.trim()) errors.push('Empty choice label: ' + node.id);
-      if (choice.remember !== undefined && (!choice.remember.trim() || choice.remember.length > 120)) {
+      if (
+        choice.remember !== undefined &&
+        (!choice.remember.trim() || choice.remember.length > 120)
+      ) {
         errors.push('Invalid remembered memory: ' + node.id);
       }
       if (choice.requires !== undefined && !choice.requires.trim()) {
