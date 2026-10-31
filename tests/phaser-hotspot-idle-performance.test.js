@@ -64,7 +64,16 @@ function fixture() {
   };
   const update = (player, visitorPosition, state) =>
     Interactions.prototype.update.call(interaction, player, visitorPosition, state);
-  return { interaction, buttons, outline, hint, get hintWrites() { return hintWrites; }, update };
+  return {
+    interaction,
+    buttons,
+    outline,
+    hint,
+    get hintWrites() {
+      return hintWrites;
+    },
+    update,
+  };
 }
 
 const ready = () => ({ ...initialState(), mara: 'ready', visitorVisible: true });
@@ -75,7 +84,9 @@ describe('hotspot rendering on the Phaser animation loop', () => {
   it('does not rewrite unchanged DOM classes, hint text, or outline on idle frames', () => {
     const f = fixture();
     f.update(player, visitor, ready());
-    const toggles = [...f.buttons.values()].map((button) => button.classList.toggle.mock.calls.length);
+    const toggles = [...f.buttons.values()].map(
+      (button) => button.classList.toggle.mock.calls.length,
+    );
     const geometry = [...f.buttons.values()].map((button) => button.dataset.geometry);
     const initialHintWrites = f.hintWrites;
     expect(f.outline.clear).toHaveBeenCalledTimes(1);
@@ -87,7 +98,9 @@ describe('hotspot rendering on the Phaser animation loop', () => {
     expect(f.outline.clear).toHaveBeenCalledTimes(1);
     expect(f.outline.lineBetween).toHaveBeenCalledTimes(8);
     expect(f.hintWrites).toBe(initialHintWrites);
-    expect([...f.buttons.values()].map((button) => button.classList.toggle.mock.calls.length)).toEqual(toggles);
+    expect(
+      [...f.buttons.values()].map((button) => button.classList.toggle.mock.calls.length),
+    ).toEqual(toggles);
     expect([...f.buttons.values()].map((button) => button.dataset.geometry)).toEqual(geometry);
   });
 
@@ -114,8 +127,7 @@ describe('hotspot rendering on the Phaser animation loop', () => {
     f.update(player, { x: 570, y: 221 }, talking);
     expect(f.outline.clear).toHaveBeenCalledTimes(original + 2);
     expect(f.hint.hidden).toBe(true);
-    for (let frame = 0; frame < 30; frame++)
-      f.update(player, { x: 570, y: 221 }, talking);
+    for (let frame = 0; frame < 30; frame++) f.update(player, { x: 570, y: 221 }, talking);
     expect(f.outline.clear).toHaveBeenCalledTimes(original + 2);
 
     f.update(player, { x: 570, y: 221 }, ready());
