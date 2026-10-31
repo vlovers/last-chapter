@@ -157,9 +157,9 @@ describe('optional conversation authoring and save consistency', () => {
     };
     const restored = restoreConversation(repeatableTopic, JSON.stringify(session));
     expect(restored).toEqual(session);
-    expect(conversationView(repeatableTopic, restored!).choices.map((choice) => choice.id)).toEqual([
-      'leave',
-    ]);
+    expect(conversationView(repeatableTopic, restored!).choices.map((choice) => choice.id)).toEqual(
+      ['leave'],
+    );
   });
 
   it('applies memory gates without losing conditional narration', () => {
@@ -180,5 +180,4 @@ describe('optional conversation authoring and save consistency', () => {
       'forget',
     ]);
   });
-
 });
