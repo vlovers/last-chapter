@@ -98,9 +98,7 @@ describe('dialogue runtime indexing and save replay', () => {
     const first = longStory(3);
     const second: DialogueStory = {
       start: 'scene-0',
-      nodes: [
-        { id: 'scene-0', speaker: 'Мара', text: 'Інша розмова.', options: [] },
-      ],
+      nodes: [{ id: 'scene-0', speaker: 'Мара', text: 'Інша розмова.', options: [] }],
     };
     expect(currentNode(first, startDialogue(first)).text).toBe('Сторінка 0.');
     expect(currentNode(second, startDialogue(second)).text).toBe('Інша розмова.');
@@ -125,8 +123,8 @@ describe('dialogue runtime indexing and save replay', () => {
         },
       ],
     };
-    expect(() => selectOption(missingDestination, startDialogue(missingDestination), 'continue')).toThrow(
-      'Missing destination node',
-    );
+    expect(() =>
+      selectOption(missingDestination, startDialogue(missingDestination), 'continue'),
+    ).toThrow('Missing destination node');
   });
 });
