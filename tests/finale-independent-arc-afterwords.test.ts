@@ -117,6 +117,26 @@ describe('Independent character callbacks at the final gathering', () => {
     expect(currentNode(finalReading, book).text).toContain('Роман про морський маяк');
   });
 
+  it.each(irisOutcomes)(
+    'introduces the separate book before Iris reserves it on both routes: %s',
+    (flag) => {
+      const opening = selectOption(
+        finalReading,
+        gathering(['iris_cover_day_four_followup', flag]),
+        'final-iris-cover-topic',
+      );
+      const directShelf = selectOption(finalReading, opening, 'final-iris-cover-offer-shelf');
+      const next = selectOption(finalReading, opening, 'final-iris-cover-ask-next');
+      expect(currentNode(finalReading, next).text).toContain('потертий роман');
+      const laterShelf = selectOption(finalReading, next, 'final-iris-cover-next-offer');
+      for (const shelf of [directShelf, laterShelf]) {
+        const narration = currentNode(finalReading, shelf).text;
+        expect(narration).toContain('тонкий роман у синій обкладинці');
+        expect(narration).toContain('відкласти');
+      }
+    },
+  );
+
   it('keeps the complete final dialogue graph valid', () => {
     expect(validateDialogue(finalReading)).toEqual([]);
   });
