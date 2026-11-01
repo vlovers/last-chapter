@@ -19,6 +19,13 @@ describe('Day five: after-case relationship choices are playable', () => {
           node: 'after-case-tea',
           flags: ['final_case_closure_complete'],
         };
+        const group =
+          person === 'anna' || person === 'miller'
+            ? 'after-tea-help-group'
+            : person === 'iris'
+              ? 'after-tea-corner-group'
+              : 'after-tea-talk-group';
+        state = selectOption(finalReading, state, group);
         const entry = `after-tea-${person}-new`;
         expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(entry);
         state = selectOption(finalReading, state, entry);
