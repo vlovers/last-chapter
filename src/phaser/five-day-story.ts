@@ -243,11 +243,13 @@ export class FiveDayStory {
     const reaction = assessRecommendation(this.stage, bookId);
     if (!reaction) return null;
     const choice = this.recommendationChoices.find((option) => option.bookId === bookId);
+    // Commit the chapter choice first: a failed save must not leave a durable
+    // recommendation receipt pointing at a chapter that never advanced.
+    if (choice) this.choose(choice.id);
     this.service.attempts = [...this.service.attempts, { stage: this.stage, book: bookId }].slice(
       -30,
     );
     this.persistService();
-    if (choice) this.choose(choice.id);
     if (typeof window !== 'undefined')
       window.dispatchEvent(
         new CustomEvent('last-chapter:recommendation', {
@@ -296,7 +298,7 @@ export class FiveDayStory {
   }
   private persistService() {
     // An unreadable or newer chapter may own previous recommendation history.
-    if (this.saveRecoveryPending) return;
+    if (this.saveRecoveryPending || !this.saveAvailable) return;
     try {
       localStorage.setItem(SERVICE_KEY, JSON.stringify(this.service));
     } catch {
@@ -325,6 +327,7 @@ export class FiveDayStory {
         return;
       }
       localStorage.setItem(SAVE_KEY, encodeSave(this.chapter));
+      this.saveAvailable = true;
       if (this.saveRecoveryPending) {
         // Storage recovered and there was no earlier chapter to preserve.
         // Only now is it safe to discard orphaned optional progress.
@@ -333,7 +336,6 @@ export class FiveDayStory {
         this.service = restoreService('');
         this.persistService();
       }
-      this.saveAvailable = true;
     } catch {
       // Continue playing, but expose the failure so the UI can warn the player.
       this.saveAvailable = false;
