@@ -153,9 +153,18 @@ export function validateTopic(topic: ConversationTopic): string[] {
   return errors;
 }
 export function normalizeMemories(memories: readonly string[]): string[] {
-  return [
-    ...new Set(memories.filter((memory) => memory.trim().length > 0 && memory.length <= 120)),
-  ].slice(-80);
+  // A repeated memory is a fresh reminder, not an old entry. Deduplicating
+  // from the beginning could evict a recently reaffirmed choice once the
+  // 80-memory budget fills up, changing subsequent conditional dialogue.
+  const seen = new Set<string>();
+  const recent: string[] = [];
+  for (let index = memories.length - 1; index >= 0 && recent.length < 80; index--) {
+    const memory = memories[index]!;
+    if (!memory.trim() || memory.length > 120 || seen.has(memory)) continue;
+    seen.add(memory);
+    recent.push(memory);
+  }
+  return recent.reverse();
 }
 
 export function startConversation(
