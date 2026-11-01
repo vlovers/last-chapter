@@ -149,7 +149,9 @@ describe('Final gathering: callbacks after ordinary conversations', () => {
           ]),
         );
         expect(state.flags.includes('final_reader_romance_two_books')).toBe(readerChoices[0] === 0);
-        expect(state.flags.includes('final_counter_ruth_preferences')).toBe(counterChoices[0] === 0);
+        expect(state.flags.includes('final_counter_ruth_preferences')).toBe(
+          counterChoices[0] === 0,
+        );
         const options = availableOptions(finalReading, state).map((option) => option.id);
         expect(options).not.toContain('final-reader-debates');
         expect(options).not.toContain('final-counter-encounters');
@@ -167,13 +169,7 @@ describe('Final gathering: callbacks after ordinary conversations', () => {
       [1, 2, 1],
       'reader-debates-close',
     );
-    state = finishHub(
-      state,
-      'final-counter-encounters',
-      counterRoutes,
-      [2, 1, 0],
-      'counter-close',
-    );
+    state = finishHub(state, 'final-counter-encounters', counterRoutes, [2, 1, 0], 'counter-close');
     state = {
       ...state,
       flags: [...state.flags, 'final_repaired_rumor', 'final_iris_exhibition'],
