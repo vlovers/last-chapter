@@ -43,10 +43,67 @@ describe('Final evening evidence and memory boundaries', () => {
     }
   });
 
-  it('keeps each character conversation within four choices', () => {
-    // The gathering is a topic catalogue, not a dialogue choice screen.
-    for (const node of finalReading.nodes.filter((node) => node.id !== 'gathering')) {
-      expect(node.options.length, `Too many options at ${node.id}`).toBeLessThanOrEqual(4);
+  it('never shows more than four compatible choices in a character conversation', () => {
+    // A node can author five alternatives without displaying all five at once:
+    // e.g. the sealed-letter scene has mutually exclusive consent/breach routes.
+    // The gathering is a topic catalogue, not a character choice screen.
+    for (const node of finalReading.nodes) {
+      if (node.id === 'gathering' || node.hub || node.options.length <= 4) continue;
+
+      const canShowFive = (
+        index: number,
+        selected: number,
+        required: ReadonlySet<string>,
+        excluded: ReadonlySet<string>,
+      ): boolean => {
+        if (selected === 5) return true;
+        if (node.options.length - index < 5 - selected) return false;
+        for (let i = index; i < node.options.length; i++) {
+          const option = node.options[i]!;
+          const needs = option.requires ?? [];
+          const forbids = option.unless ?? [];
+          if (needs.some((flag) => excluded.has(flag))) continue;
+          if (forbids.some((flag) => required.has(flag))) continue;
+          if (
+            canShowFive(
+              i + 1,
+              selected + 1,
+              new Set([...required, ...needs]),
+              new Set([...excluded, ...forbids]),
+            )
+          ) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      expect(
+        canShowFive(0, 0, new Set<string>(), new Set<string>()),
+        `Five simultaneously available choices at ${node.id}`,
+      ).toBe(false);
+    }
+  });
+
+  it('offers no more than four letter choices across consent and breach histories', () => {
+    for (const flags of [
+      [],
+      ['iris_letter_choice_respected', 'leo_open_to_conversation'],
+      ['opened_private_letter'],
+      ['opened_private_letter', 'iris_letter_breach_admitted'],
+      ['opened_private_letter', 'final_letter_breach_disclosed'],
+    ]) {
+      const state = { ...gathering(flags), node: 'letter' };
+      const choices = availableOptions(finalReading, state).map((option) => option.id);
+      expect(choices.length, `Letter choices with flags: ${flags.join(', ')}`).toBeLessThanOrEqual(
+        4,
+      );
+      if (flags.includes('opened_private_letter')) {
+        expect(choices).not.toContain('mutual');
+      }
+      if (flags.includes('iris_letter_breach_admitted')) {
+        expect(choices).not.toContain('admit-breach-now');
+      }
     }
   });
 
