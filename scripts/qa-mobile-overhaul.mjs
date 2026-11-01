@@ -54,6 +54,7 @@ try {
     [1440, 900],
     [844, 390],
   ]) {
+    console.log(`Mobile QA viewport: ${width}x${height}`);
     page = await browser.newPage({ viewport: { width, height }, hasTouch: width < 900 });
     page.on('pageerror', (e) => errors.push(String(e)));
     await page.goto(base);
@@ -255,6 +256,7 @@ try {
       throw Error('Missing route ' + stage);
     });
     visited.push(plan.stage);
+    console.log(`Mobile QA story checkpoint ${step + 1}/19: ${plan.stage}`);
     for (const id of plan.route) await choose(page, id);
     if (plan.service) {
       await page.locator('#browse-order').click();
