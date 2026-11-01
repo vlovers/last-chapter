@@ -24,7 +24,12 @@ function setup() {
   story.choose('books');
   expect(story.request).not.toBeNull();
   expect(story.isProgressSaved).toBe(true);
-  return { story, values, denyWrites: () => (denyChapterWrites = true) };
+  return {
+    story,
+    values,
+    denyWrites: () => (denyChapterWrites = true),
+    allowWrites: () => (denyChapterWrites = false),
+  };
 }
 
 afterEach(() => vi.unstubAllGlobals());
@@ -56,6 +61,23 @@ describe('recommendation history stays consistent with durable chapter progress'
     story.clarifyRequest();
     expect(values.get(SAVE_KEY)).toBe(chapterBefore);
     expect(values.get(SERVICE_KEY)).toBe(emptyService);
+  });
+
+  it('flushes a pending recommendation after the chapter becomes durable again', () => {
+    const { story, values, denyWrites, allowWrites } = setup();
+    denyWrites();
+    expect(story.recommend('orchard')?.accepted).toBe(true);
+    expect(values.get(SERVICE_KEY)).toBe(emptyService);
+
+    allowWrites();
+    story.choose('leave-orchard');
+    expect(story.isProgressSaved).toBe(true);
+    expect(decodeSave(values.get(SAVE_KEY)!)?.dialogue.node).toBe('end');
+    expect(JSON.parse(values.get(SERVICE_KEY)!)).toEqual({
+      version: 1,
+      asked: [],
+      attempts: [{ stage: 'miller', book: 'orchard' }],
+    });
   });
 
   it('still persists the service attempt after a successful accepted chapter choice', () => {

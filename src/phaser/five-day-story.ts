@@ -124,6 +124,7 @@ export class FiveDayStory {
   private service = restoreService('');
   private saveAvailable = true;
   private saveRecoveryPending = false;
+  private serviceDirty = false;
   private choicePage = 0;
   private choicePageKey = '';
   constructor() {
@@ -298,11 +299,16 @@ export class FiveDayStory {
   }
   private persistService() {
     // An unreadable or newer chapter may own previous recommendation history.
-    if (this.saveRecoveryPending || !this.saveAvailable) return;
+    if (this.saveRecoveryPending || !this.saveAvailable) {
+      this.serviceDirty = true;
+      return;
+    }
     try {
       localStorage.setItem(SERVICE_KEY, JSON.stringify(this.service));
+      this.serviceDirty = false;
     } catch {
-      /* optional */
+      // Retry when the next chapter write succeeds.
+      this.serviceDirty = true;
     }
   }
   get orders() {
@@ -334,6 +340,9 @@ export class FiveDayStory {
         this.saveRecoveryPending = false;
         discardOrphanedOptionalProgress();
         this.service = restoreService('');
+        this.persistService();
+      } else if (this.serviceDirty) {
+        // A previously unsaved recommendation can now follow its durable chapter.
         this.persistService();
       }
     } catch {
