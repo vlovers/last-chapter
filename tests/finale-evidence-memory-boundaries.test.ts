@@ -22,7 +22,7 @@ describe('Final evening evidence and memory boundaries', () => {
     const choices = availableOptions(finalReading, state).map((option) => option.id);
     expect(choices).not.toContain('final-iris-evidence-ask');
     expect(choices).toContain('final-iris-evidence-private');
-    expect(currentNode(finalReading, state).text).toContain('вона досі не чула від вас');
+    expect(currentNode(finalReading, state).text).toContain('Айріс досі не знає');
     expect(choices).not.toContain('final-iris-evidence-accountability');
   });
 
