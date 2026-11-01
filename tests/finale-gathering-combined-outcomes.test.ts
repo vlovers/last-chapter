@@ -16,7 +16,8 @@ describe('Final gathering acknowledges combined consequences', () => {
 
   it('recognizes respected privacy and Iris autonomy together', () => {
     const text = gatheringWith('final_respected_privacy', 'final_supported_iris');
-    expect(text).toContain('чи можна поставити біля них лампу');
+    expect(text).toContain('лише ті малюнки, які сама вирішила показати');
+    expect(text).toContain('Лампа не заважатиме?');
     expect(text).toContain('Айріс');
   });
 
