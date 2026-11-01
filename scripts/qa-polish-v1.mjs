@@ -107,6 +107,7 @@ try {
     ['mobile', 390, 844],
     ['compact', 1280, 720],
   ]) {
+    console.log(`Polish QA device: ${device} (${width}x${height})`);
     const page = await browser.newPage({ viewport: { width, height } });
     currentPage = page;
     page.on('pageerror', (error) => errors.push(`${device}: ${error}`));
@@ -123,6 +124,7 @@ try {
       const samples = [];
       // Safe simulation substeps are capped at 50ms. Slow software-rendered CI
       // must get the same amount of game time, rather than a fixed wall-clock race.
+      console.log('Polish QA: checking Frank ambient simulation on desktop');
       const deadline = Date.now() + 45000;
       while (
         (samples.at(-1)?.simulationMs ?? initial.simulationMs) - initial.simulationMs < 7000 &&
