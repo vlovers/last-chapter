@@ -115,9 +115,7 @@ function paginateChoices<T extends { readonly id: string }>(
   const pageable = pinnedClose ? choices.filter((choice) => choice.id !== 'close') : choices;
   const firstPageSize = pinnedClose ? 2 : 3;
   const pageCount =
-    pageable.length <= firstPageSize
-      ? 1
-      : 1 + Math.ceil((pageable.length - firstPageSize) / 3);
+    pageable.length <= firstPageSize ? 1 : 1 + Math.ceil((pageable.length - firstPageSize) / 3);
   return { pinnedClose, pageable, firstPageSize, pageCount };
 }
 
@@ -387,8 +385,7 @@ export class FiveDayStory {
         ? [
             {
               id: '__more_choices',
-              label:
-                this.choicePage < pageCount - 1 ? 'Інші варіанти →' : '↩ На початок списку',
+              label: this.choicePage < pageCount - 1 ? 'Інші варіанти →' : '↩ На початок списку',
             },
           ]
         : []),
