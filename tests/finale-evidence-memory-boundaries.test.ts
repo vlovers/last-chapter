@@ -79,6 +79,24 @@ describe('Final evening evidence and memory boundaries', () => {
     );
   });
 
+  it('keeps Iris refusal to investigate above competing letter-history flags', () => {
+    const state = selectOption(
+      finalReading,
+      gathering([
+        'iris_quiet_page_discussed',
+        'iris_margin_note_discussed',
+        'opened_private_letter',
+        'iris_letter_breach_admitted',
+        'final_case_iris_declined',
+      ]),
+      'final-iris-evidence-topic',
+    );
+    expect(currentNode(finalReading, state).text).toContain('сьогодні не шукатиму нових доказів');
+    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+      'final-iris-evidence-ask',
+    );
+  });
+
   it('lets Iris reject an invented box discovery without endorsing the rumor', () => {
     let state = selectOption(
       finalReading,
