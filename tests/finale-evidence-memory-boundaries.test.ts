@@ -193,6 +193,93 @@ describe('Final evening evidence and memory boundaries', () => {
     );
   });
 
+  it('keeps all three Iris public-catalogue outcomes distinct', () => {
+    for (const [choice, expected] of [
+      ['final-iris-evidence-catalog', 'Адреса є'],
+      ['final-iris-evidence-uncertain', 'авторство не встановлено'],
+      ['final-iris-evidence-wait', 'Я не програю'],
+    ]) {
+      let state = selectOption(
+        finalReading,
+        gathering(['iris_quiet_page_discussed', 'iris_margin_note_discussed']),
+        'final-iris-evidence-topic',
+      );
+      state = selectOption(finalReading, state, 'final-iris-evidence-ask');
+      state = selectOption(finalReading, state, choice);
+      expect(currentNode(finalReading, state).text).toContain(expected);
+      state = selectOption(finalReading, state, 'final-iris-evidence-result-back');
+      expect(state.node).toBe('gathering');
+      expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+        'final-iris-evidence-topic',
+      );
+    }
+  });
+
+  it('resolves both accountability choices without revealing Iris private letter', () => {
+    for (const [choice, expected] of [
+      ['final-iris-evidence-own-to-nora', 'Нора підходить'],
+      ['final-iris-evidence-stop-asking', 'на сьогодні досить'],
+    ]) {
+      let state = selectOption(
+        finalReading,
+        gathering([
+          'iris_quiet_page_discussed',
+          'iris_margin_note_discussed',
+          'opened_private_letter',
+          'iris_letter_breach_admitted',
+        ]),
+        'final-iris-evidence-topic',
+      );
+      state = selectOption(finalReading, state, 'final-iris-evidence-accountability');
+      state = selectOption(finalReading, state, choice);
+      expect(currentNode(finalReading, state).text).toContain(expected);
+      state = selectOption(finalReading, state, 'final-iris-evidence-accountability-back');
+      expect(state.node).toBe('gathering');
+      expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+        'final-iris-evidence-topic',
+      );
+    }
+  });
+
+  it('keeps Eleanor flood-box permission and privacy routes separate', () => {
+    for (const [choice, expected] of [
+      ['final-eleanor-memory-box-private', 'Домовилися'],
+      ['final-eleanor-memory-box-ask', 'не сьогодні при всіх'],
+    ]) {
+      let state = selectOption(
+        finalReading,
+        gathering(['eleanor_timeline_checked', 'final_ledger_record_private']),
+        'final-eleanor-memory-topic',
+      );
+      state = selectOption(finalReading, state, 'final-eleanor-memory-box');
+      expect(currentNode(finalReading, state).text).toContain('приватні записи');
+      state = selectOption(finalReading, state, choice);
+      expect(currentNode(finalReading, state).text).toContain(expected);
+      state = selectOption(finalReading, state, 'final-eleanor-memory-box-back');
+      expect(state.node).toBe('gathering');
+    }
+  });
+
+  it('keeps Leo application and shift-request outcomes unconfirmed', () => {
+    for (const [flag, expected] of [
+      ['leo_night_course_application_planned', 'Відповіді поки немає'],
+      ['leo_night_course_shift_request_planned', 'Це ще не згода'],
+    ]) {
+      let state = selectOption(
+        finalReading,
+        gathering(['leo_night_course_discussed', flag]),
+        'final-leo-night-course',
+      );
+      expect(currentNode(finalReading, state).text).toContain(expected);
+      state = selectOption(finalReading, state, 'final-leo-course-ask-book');
+      state = selectOption(finalReading, state, 'final-leo-course-book-next');
+      state = selectOption(finalReading, state, 'final-leo-course-notebook');
+      expect(currentNode(finalReading, state).text).toContain('без напису');
+      state = selectOption(finalReading, state, 'final-leo-course-return');
+      expect(state.node).toBe('gathering');
+    }
+  });
+
   it('does not mistake Eleanor missing phone records for proof of a call', () => {
     let state = selectOption(
       finalReading,
