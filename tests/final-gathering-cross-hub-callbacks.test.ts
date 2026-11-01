@@ -99,13 +99,7 @@ describe('Final gathering: callbacks after ordinary conversations', () => {
     }
     state = selectOption(finalReading, state, 'reader-debates-close');
     state = JSON.parse(JSON.stringify(state)) as DialogueState;
-    state = finishHub(
-      state,
-      'final-counter-encounters',
-      counterRoutes,
-      [2, 0, 1],
-      'counter-close',
-    );
+    state = finishHub(state, 'final-counter-encounters', counterRoutes, [2, 0, 1], 'counter-close');
     expect(state.flags).toContain('final_reader_audio_done');
     expect(state.flags).not.toContain('final_reader_romance_done');
     expect(state.flags).not.toContain('final_reader_villain_done');
