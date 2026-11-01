@@ -280,6 +280,74 @@ describe('Final evening evidence and memory boundaries', () => {
     }
   });
 
+  it('preserves Eleanor witnesses and pie story as different memories', () => {
+    for (const [choice, expected] of [
+      ['final-eleanor-memory-witness', 'стару адресу майстра'],
+      ['final-eleanor-memory-tea', 'Грушевий'],
+    ]) {
+      let state = selectOption(
+        finalReading,
+        gathering(['eleanor_timeline_checked']),
+        'final-eleanor-memory-topic',
+      );
+      state = selectOption(finalReading, state, 'final-eleanor-memory-people');
+      state = selectOption(finalReading, state, choice);
+      expect(currentNode(finalReading, state).text).toContain(expected);
+      state = selectOption(finalReading, state, 'final-eleanor-memory-people-back');
+      expect(state.node).toBe('gathering');
+      expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+        'final-eleanor-memory-topic',
+      );
+    }
+  });
+
+  it('does not treat an unverified phone call as proof when accused publicly', () => {
+    let state = selectOption(
+      finalReading,
+      gathering(['eleanor_timeline_checked', 'eleanor_timeline_assumed_guilt']),
+      'final-eleanor-memory-topic',
+    );
+    expect(currentNode(finalReading, state).text).toContain('нібито наміри');
+    state = selectOption(finalReading, state, 'final-eleanor-memory-dates');
+    state = selectOption(finalReading, state, 'final-eleanor-memory-accuse');
+    expect(currentNode(finalReading, state).text).toContain('ми не знаємо, чи був дзвінок');
+    state = selectOption(finalReading, state, 'final-eleanor-memory-dates-back');
+    expect(state.node).toBe('gathering');
+  });
+
+  it('keeps Iris rumor correction and defense outcomes distinct', () => {
+    for (const [choice, expected] of [
+      ['final-iris-evidence-rumor-own', 'зупинилися'],
+      ['final-iris-evidence-rumor-deflect', 'Нехай цікавляться книжкою'],
+    ]) {
+      let state = selectOption(
+        finalReading,
+        gathering(['iris_quiet_page_discussed', 'iris_margin_note_discussed']),
+        'final-iris-evidence-topic',
+      );
+      state = selectOption(finalReading, state, 'final-iris-evidence-rumor');
+      state = selectOption(finalReading, state, choice);
+      expect(currentNode(finalReading, state).text).toContain(expected);
+      state = selectOption(finalReading, state, 'final-iris-evidence-rumor-back');
+      expect(state.node).toBe('gathering');
+    }
+  });
+
+  it('lets Leo keep his own space without a notebook purchase', () => {
+    let state = selectOption(
+      finalReading,
+      gathering(['leo_night_course_discussed', 'leo_night_course_deferred']),
+      'final-leo-night-course',
+    );
+    state = selectOption(finalReading, state, 'final-leo-course-ask-book');
+    expect(currentNode(finalReading, state).text).toContain('морський маяк');
+    state = selectOption(finalReading, state, 'final-leo-course-book-next');
+    state = selectOption(finalReading, state, 'final-leo-course-space');
+    expect(currentNode(finalReading, state).text).toContain('Піду допоможу Елеонорі');
+    state = selectOption(finalReading, state, 'final-leo-course-return');
+    expect(state.node).toBe('gathering');
+  });
+
   it('does not mistake Eleanor missing phone records for proof of a call', () => {
     let state = selectOption(
       finalReading,
