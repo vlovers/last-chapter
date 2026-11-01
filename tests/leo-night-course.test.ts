@@ -35,7 +35,7 @@ const routes = [
       'leo-course-negotiate-colleague',
     ],
     decision: 'leo_night_course_shift_request_planned',
-    final: 'Я поговорив із Джун',
+    final: 'Джун може підмінити мене одного вечора',
     epilogue: 'поговорив із Джун',
   },
   {
