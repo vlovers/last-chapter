@@ -92,6 +92,32 @@ describe('Final gathering: callbacks after ordinary conversations', () => {
     expect(state.flags).not.toContain('final_counter_ruth_done');
   });
 
+  it('does not invent unplayed reader topics after completing all counter visitors', () => {
+    let state = selectOption(finalReading, gathering(), 'final-reader-debates');
+    for (const option of readerRoutes[1][2]) {
+      state = selectOption(finalReading, state, option);
+    }
+    state = selectOption(finalReading, state, 'reader-debates-close');
+    state = JSON.parse(JSON.stringify(state)) as DialogueState;
+    state = finishHub(
+      state,
+      'final-counter-encounters',
+      counterRoutes,
+      [2, 0, 1],
+      'counter-close',
+    );
+    expect(state.flags).toContain('final_reader_audio_done');
+    expect(state.flags).not.toContain('final_reader_romance_done');
+    expect(state.flags).not.toContain('final_reader_villain_done');
+    expect(state.flags).toContain('final_counter_reed_done');
+    const text = currentNode(finalReading, state).text;
+    expect(text).toContain(readerCallback);
+    expect(text).toContain(counterCallback);
+    const options = availableOptions(finalReading, state).map((option) => option.id);
+    expect(options).not.toContain('final-reader-debates');
+    expect(options).not.toContain('final-counter-encounters');
+  });
+
   for (const order of ['reader-first', 'counter-first'] as const) {
     it(`preserves both hubs and save/restore across 27 endings (${order})`, () => {
       for (let index = 0; index < 27; index++) {
