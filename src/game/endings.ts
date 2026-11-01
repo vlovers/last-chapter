@@ -39,6 +39,19 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('final_school_chairs_time_agreed')
+      ? [
+          'Анна й Томас домовилися поговорити вдома після читання. Він вимкнув звук робочих дзвінків. Стільці не стали приводом купувати ще одну річ замість розмови.',
+        ]
+      : flags.has('final_school_chairs_space_kept')
+        ? [
+            'Анна й Томас залишилися обирати книжку. Ти не домовлявся за них про примирення або нове шкільне читання.',
+          ]
+        : flags.has('final_school_chairs_followup_done')
+          ? [
+              'Анна показала, як діти влаштували книжковий пікнік. Її розмова з Томасом про невиконану обіцянку залишилася незакінченою.',
+            ]
+          : []),
     ...(flags.has('final_reading_program_done')
       ? [
           flags.has('final_reading_station')

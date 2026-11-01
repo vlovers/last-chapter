@@ -91,6 +91,26 @@ mutual conversation is not performed twice at closing. Eleanor catches her own
 old ownership habit. Miller responds to the actual book sold on day one. The
 shared-table discussion no longer reopens a letter decision already completed.
 
+## E — Ordinary lives and reachable callbacks
+
+A new optional school conversation follows the actual day-three Thomas visit.
+Previously Anna's chair response was in her day-two graph behind a flag first
+earned on day three, so the natural journey could never reach it. The day-five
+follow-up hears both characters, distinguishes defending/listening/book talk,
+and lets them agree a time or keep their own space. New final-scene flags are
+separate from legacy visit flags. The old graph and identifiers remain available
+for existing saves.
+
+Mara and Leo plan their walk after the final reading; optional callbacks no
+longer send them away and immediately summon them back. Iris chooses her own
+exit after the last passage. Frank's after-case exit accounts for his actual
+location without taking a towel from a cat already asleep in a box or lap.
+Miller's private family story stays private in the cinema comparison. The last
+copy can be collected after the school reading ends, not when it starts. Nora
+can argue about a fictional character without treating the fictional woman as a
+real person who must consent to a novel. Iris's own August purchase is no longer
+accidentally sold to her a second time.
+
 ## Compatibility and validation
 
 Existing stage, node, option and consequence flag identifiers are retained.

@@ -1,5 +1,6 @@
 import type { DialogueStory } from '../game/dialogue';
 import { readingProgramNodes, readingProgramOption } from './reading-program';
+import { schoolReadingFollowupNodes, schoolReadingFollowupOption } from './school-reading-followup';
 import { paperStudyNodes, paperStudyOption } from './paper-study';
 import { paperStudyConsentNodes, paperStudyConsentOption } from './paper-study-consent';
 import { ledgerGapNodes, ledgerGapOption } from './ledger-gap';
@@ -138,6 +139,7 @@ export const finalReading: DialogueStory = {
       ],
       options: [
         readingProgramOption,
+        schoolReadingFollowupOption,
         {
           id: 'final-town-frank-option',
           label: 'Запитати Елеонору, чому Френк сьогодні такий сонний',
@@ -2897,6 +2899,7 @@ export const finalReading: DialogueStory = {
     ...paperStudyConsentNodes,
     ...ledgerGapNodes,
     ...readingProgramNodes,
+    ...schoolReadingFollowupNodes,
     ...rumorProgramNodes,
     ...afterCaseTeaNodes,
     ...lastCopyNodes,
@@ -3352,7 +3355,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'final-aftercare-leo',
       speaker: 'Оповідач',
-      text: 'Лео тримає парасолю, а Мара — коробку з булочками. «Ми просто йдемо в один бік», — каже він, хоча ніхто нічого не питав. Мара сміється: «Тоді чому ти досі стоїш у дверях?»',
+      text: 'Лео шукає парасолю, а Мара перекладає булочки в коробку. «Ми після читання разом ідемо», — каже він. Вона сміється: «Я знаю. Залишилося знайти, під чим». Парасоля стоїть за його ж пальтом',
       options: [
         {
           id: 'final-aftercare-leo-wish',
@@ -3374,7 +3377,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'final-aftercare-leo-wish-result',
       speaker: 'Оповідач',
-      text: '«Дякую», — каже Мара й бере Лео під руку. Він нарешті перестає дивитися на годинник. За дверима чути, як вони сперечаються про маршрут.',
+      text: '«Дякую», — каже Мара й бере Лео під руку. «Тільки спочатку дослухаємо Анну». Вони повертаються до столу. Лео ставить парасолю так, щоб бачити її зі стільця. Мара пересуває на неї свою коробку: «Тепер точно не забудеш»',
       options: [
         {
           id: 'final-aftercare-leo-wish-back',
@@ -3387,7 +3390,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'final-aftercare-leo-umbrella-result',
       speaker: 'Оповідач',
-      text: '«Вона велика», — заперечує Лео. Мара нахиляє її над собою: «Тепер уже не дуже». Вони виходять, сміючись, поки дощ стукає по козирку.',
+      text: '«Вона велика», — заперечує Лео. Мара нахиляє парасолю над собою: «Тепер уже не дуже». Ви смієтеся й просите скласти її до кінця читання. Мара залишає її біля пальт: «Потім перевіримо, хто з нас намокне першим»',
       options: [
         {
           id: 'final-aftercare-leo-umbrella-back',
@@ -3400,7 +3403,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'final-aftercare-leo-space-result',
       speaker: 'Оповідач',
-      text: 'Ти повертаєшся до каси. За хвилину дзвіночок над дверима стихає, а на столі залишається коробка з двома булочками для тебе.',
+      text: 'Ви повертаєтеся до каси. Мара й Лео знаходять парасолю, лишають коробку з двома булочками для вас і сідають дослухати читання. Про маршрут вони ще сперечатимуться дорогою',
       options: [
         {
           id: 'final-aftercare-leo-space-back',
@@ -3570,7 +3573,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'final-aftercare-iris-return-result',
       speaker: 'Оповідач',
-      text: '«Може, зайду», — відповідає Айріс. «Тільки без обов’язкових зустрічей». Ти киваєш. Вона перевіряє, чи не залишила рукавички, і йде до дверей.',
+      text: '«Може, зайду», — відповідає Айріс. «Тільки без обов’язкових зустрічей». Ви киваєте. Вона вкладає покупку до торби й сідає ближче до лампи дослухати Анну',
       options: [
         {
           id: 'final-aftercare-iris-return-back',
@@ -3583,7 +3586,7 @@ export const finalReading: DialogueStory = {
     {
       id: 'final-aftercare-iris-quiet-result',
       speaker: 'Оповідач',
-      text: 'Айріс поправляє ремінець торби. «І тобі». На порозі вона зупиняється й махає рукою Френкові. Кіт зайнятий шнурком і не відповідає.',
+      text: 'Айріс поправляє ремінець торби. «І тобі». Вона махає Френкові, який грається шнурком під стільцем. Кіт не відповідає. Айріс сідає скраю — щоб після останнього уривка вийти, нікого не піднімаючи',
       options: [
         {
           id: 'final-aftercare-iris-quiet-back',

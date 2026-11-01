@@ -76,7 +76,16 @@ export const journalFacts: readonly (readonly [string, string])[] = [
   ['saw_envelope', 'У книжці знайдено запечатаний лист від Айріс до Лео.'],
   ['opened_private_letter', 'Ви розкрили приватного листа без дозволу.'],
   ['letter_secured', 'Лист залишився у безпечному місці.'],
-  ['ask_eleanor_next_day', 'Завтра слід запитати Елеонору про закриття книгарні.'],
+  ['ask_eleanor_next_day', 'Запитати Елеонору про старі бронювання й закриття книгарні.'],
+  [
+    'iris_letter_breach_admitted',
+    'Айріс почула, що ви відкрили її лист без дозволу. Це не стало пробаченням.',
+  ],
+  [
+    'final_reading_program_done',
+    'Для спільного читання обрано видану книжку. Приватні матеріали до програми не потрапили.',
+  ],
+  ['final_school_chairs_time_agreed', 'Анна й Томас домовилися поговорити вдома після читання.'],
 ];
 
 /** Provenance for already-authored, already-heard journal facts. No new discoveries. */
