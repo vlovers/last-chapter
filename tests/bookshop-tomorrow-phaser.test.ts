@@ -45,9 +45,9 @@ describe('Phaser bookshop tomorrow integration', () => {
     expect(found).toBe(true);
     const entry = story.choose('bookshop-tomorrow');
     expect(entry.choices.map((option) => option.id)).toEqual([
-      'tomorrow-shelf',
-      'tomorrow-cards',
-      'tomorrow-tea',
+      'tomorrow-books-group',
+      'tomorrow-neighbors-group',
+      'tomorrow-room-group',
       '__more_choices',
     ]);
     expect(entry.choices).toHaveLength(4);
@@ -62,6 +62,9 @@ describe('Phaser bookshop tomorrow integration', () => {
     }
     expect(foundLater).toBe(true);
 
+    story.choose('__more_choices');
+    story.choose('tomorrow-books-group');
+    expect(story.open().choices.length).toBeLessThanOrEqual(4);
     story.choose('tomorrow-cards');
     story.choose('tomorrow-cards-box');
     story.choose('tomorrow-cards-finish');
