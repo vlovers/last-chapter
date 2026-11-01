@@ -29,6 +29,35 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
     ],
     options: [
       {
+        id: 'tomorrow-books-group',
+        label: 'Підготувати книжки, картки й вітрину',
+        next: 'bookshop-tomorrow-books',
+      },
+      {
+        id: 'tomorrow-neighbors-group',
+        label: 'Допомогти сусідам і поговорити з Айріс',
+        next: 'bookshop-tomorrow-neighbors',
+      },
+      {
+        id: 'tomorrow-room-group',
+        label: 'Залишитися з Марою або подбати про Френка',
+        next: 'bookshop-tomorrow-room',
+      },
+      {
+        id: 'tomorrow-later',
+        label: 'Повернутися до гостей, а полицю залишити на ранок',
+        next: 'gathering',
+        suspend: true,
+        repeatability: 'repeatable',
+      },
+    ],
+  },
+  {
+    id: 'bookshop-tomorrow-books',
+    speaker: 'Елеонора',
+    text: 'Елеонора звільняє місце біля вікна. Нора тримає два романи, Анна розкладає дитячі картки. «Полиця, картки, вітрина, — рахує Елеонора. — Що робимо спершу?»',
+    options: [
+      {
         id: 'tomorrow-shelf',
         label: 'Допомогти Норі вибрати книжки для вітрини',
         next: 'bookshop-tomorrow-shelf',
@@ -39,16 +68,25 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
         next: 'bookshop-tomorrow-cards',
       },
       {
-        id: 'tomorrow-tea',
-        label: 'Залишитися з Марою біля чайника',
-        next: 'bookshop-tomorrow-tea',
-      },
-      {
         id: 'tomorrow-window-new',
         label: 'Вибрати оформлення вітрини на ранок',
         next: 'bookshop-tomorrow-window-new',
         unless: ['final_tomorrow_window_done'],
       },
+      {
+        id: 'tomorrow-books-back',
+        label: 'Повернутися до спільного столу',
+        next: 'bookshop-tomorrow',
+        suspend: true,
+        repeatability: 'repeatable',
+      },
+    ],
+  },
+  {
+    id: 'bookshop-tomorrow-neighbors',
+    speaker: 'Оповідач',
+    text: 'Пані Міллер тримає чистий аркуш для оголошення. Айріс дивиться у вікно, а біля дверей сусіди сперечаються, чи поміститься ще одна полиця. Ніхто не вимагає рішення просто зараз.',
+    options: [
       {
         id: 'tomorrow-miller-new',
         label: 'Допомогти Міллер із завтрашнім оголошенням',
@@ -62,21 +100,40 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
         unless: ['final_tomorrow_iris_done'],
       },
       {
-        id: 'tomorrow-frank-new',
-        label: 'Підготувати Френкові місце на завтра',
-        next: 'bookshop-tomorrow-frank-new',
-        unless: ['final_tomorrow_frank_done'],
-      },
-      {
         id: 'tomorrow-neighbors-new',
         label: 'Підготувати невеличку полицю для сусідів',
         next: 'bookshop-tomorrow-neighbors-new',
         unless: ['final_tomorrow_neighbors_done'],
       },
       {
-        id: 'tomorrow-later',
-        label: 'Повернутися до гостей, а полицю залишити на ранок',
-        next: 'gathering',
+        id: 'tomorrow-neighbors-back',
+        label: 'Повернутися до спільного столу',
+        next: 'bookshop-tomorrow',
+        suspend: true,
+        repeatability: 'repeatable',
+      },
+    ],
+  },
+  {
+    id: 'bookshop-tomorrow-room',
+    speaker: 'Мара',
+    text: 'Мара нарешті знімає паперовий бант із Френка. «Чайник ще теплий, а він уже шукає нову коробку», — каже вона. Кіт дивиться на вас так, ніби має власний план на ранок.',
+    options: [
+      {
+        id: 'tomorrow-tea',
+        label: 'Залишитися з Марою біля чайника',
+        next: 'bookshop-tomorrow-tea',
+      },
+      {
+        id: 'tomorrow-frank-new',
+        label: 'Підготувати Френкові місце на завтра',
+        next: 'bookshop-tomorrow-frank-new',
+        unless: ['final_tomorrow_frank_done'],
+      },
+      {
+        id: 'tomorrow-room-back',
+        label: 'Повернутися до спільного столу',
+        next: 'bookshop-tomorrow',
         suspend: true,
         repeatability: 'repeatable',
       },
