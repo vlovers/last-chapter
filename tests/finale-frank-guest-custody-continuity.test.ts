@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import {
-  currentNode,
-  selectOption,
-  startDialogue,
-  type DialogueState,
-} from '../src/game/dialogue';
+import { currentNode, selectOption, startDialogue, type DialogueState } from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 const visitors = {
