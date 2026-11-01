@@ -75,6 +75,21 @@ export const finalReading: DialogueStory = {
           requires: ['final_counter_evening_done'],
           text: 'Елеонора залишає блокнот біля каси. «Якщо хтось ще підійде, запишемо замовлення», — каже вона. Френк уже заглядає в порожній пакет.',
         },
+        {
+          requires: ['final_counter_evening_done', 'final_counter_reed_note'],
+          unless: ['final_counter_reed_book_kept', 'final_counter_reed_deferred'],
+          text: 'Елеонора перевіряє шухляду знахідок. Запечатаний конверт пана Ріда лежить там, де його залишили. «Без дозволу нічого не відкриватимемо», — каже вона.',
+        },
+        {
+          requires: ['final_counter_evening_done', 'final_counter_reed_book_kept'],
+          unless: ['final_counter_reed_note', 'final_counter_reed_deferred'],
+          text: 'Пан Рід забрав свою книжку разом із нерозгорнутою запискою. «Добре, що не стали читати чуже», — тихо каже Елеонора.',
+        },
+        {
+          requires: ['final_counter_evening_done', 'final_counter_reed_deferred'],
+          unless: ['final_counter_reed_note', 'final_counter_reed_book_kept'],
+          text: 'Елеонора прибирає порожній конверт із прилавка. «Пан Рід забрав книжку й вирішить удома, що робити із запискою», — каже вона.',
+        },
       ],
       options: [
         {
