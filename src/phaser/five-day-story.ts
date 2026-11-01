@@ -420,6 +420,7 @@ export class FiveDayStory {
   }
   choose(id: string) {
     const restarting = id === '__restart' && this.stage === 'season-complete';
+    const chapterBeforeRestart = restarting ? this.chapter : null;
     if (id === '__restart' && this.stage === 'season-complete') this.chapter = startChapter();
     else if (id === '__more_choices') {
       const visible = this.open().choices;
@@ -450,6 +451,12 @@ export class FiveDayStory {
       this.chapter = chooseChapterOption(this.chapter, id);
     }
     this.persist();
+    if (restarting && !this.saveAvailable) {
+      // The previous run still owns its optional progress. Stay on the finale
+      // and let the player retry rather than erasing an unsaved replacement.
+      this.chapter = chapterBeforeRestart!;
+      return this.open();
+    }
     if (restarting) {
       // Restart must clear the previous run even when the DOM journal has not
       // mounted (or its new-game event listener has already been removed).
