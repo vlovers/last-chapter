@@ -98,7 +98,7 @@ export const readerDebatesNodes: readonly DialogueNode[] = [
       {
         requires: ['final_reader_villain_done', 'final_reader_villain_nora_view'],
         unless: ['final_reader_villain_no_spoilers', 'final_reader_villain_iris_sketch'],
-        text: 'Нора кладе серветку з порожнім кріслом до читацьких жартів, а не до архіву. Міллер обіцяє поглянути на історію ошуканої героїні.',
+        text: 'Серветка з порожнім кріслом, яке намалювала Айріс, лежить серед читацьких жартів, а не в архіві. Міллер обіцяє поглянути на історію ошуканої героїні.',
       },
       {
         requires: ['final_reader_villain_done', 'final_reader_villain_iris_sketch'],
