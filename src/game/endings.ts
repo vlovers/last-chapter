@@ -51,7 +51,7 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
         ]
       : flags.has('final_reader_audio_ruth_story')
         ? [
-            'Рут записала назву морської збірки, але спершу перевірить, чи існує аудіоверсія. Замовлення ніхто не оформлював.',
+            'Рут сфотографувала назву морської збірки, але спершу перевірить, чи існує аудіоверсія. Замовлення ніхто не оформлював.',
           ]
         : flags.has('final_reader_audio_class_idea')
           ? [
@@ -64,7 +64,7 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
         ]
       : flags.has('final_reader_villain_nora_view')
         ? [
-            'Нора й Айріс намалювали на серветці обкладинку для вигаданої героїні, якій у романі не дали власного розділу. Це не стало новою справою для архіву.',
+            'Айріс намалювала на серветці порожнє крісло для історії ошуканої героїні. Серветку залишили серед читацьких жартів, не в архіві.',
           ]
         : flags.has('final_reader_villain_iris_sketch')
           ? [
@@ -110,7 +110,7 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
           ]
         : flags.has('final_counter_ruth_shortlist')
           ? [
-              'Рут забрала список коротких історій про море, щоб показати матері. Покупки ще не було.',
+              'Рут сфотографувала обкладинки коротких історій про море, щоб показати матері. Покупки ще не було.',
             ]
           : []),
     ...(flags.has('final_counter_sam_dough')
