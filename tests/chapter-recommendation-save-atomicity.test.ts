@@ -41,7 +41,7 @@ describe('recommendation history stays consistent with durable chapter progress'
     expect(story.isProgressSaved).toBe(false);
     expect(values.get(SAVE_KEY)).toBe(chapterBefore);
     expect(values.get(SERVICE_KEY)).toBe(emptyService);
-    expect(decodeSave(values.get(SAVE_KEY)!)?.dialogue.node).toBe('books');
+    expect(decodeSave(values.get(SAVE_KEY)!)?.dialogue.node).toBe('order');
   });
 
   it('does not persist a clarification after the chapter has become unsaved', () => {
@@ -49,9 +49,9 @@ describe('recommendation history stays consistent with durable chapter progress'
     const chapterBefore = values.get(SAVE_KEY);
     denyWrites();
 
-    // A rejected catalog suggestion does not change the dialogue, but the
-    // chapter write must still be the gate for durable service diagnostics.
-    story.choose('orchard');
+    // Inspecting the shop changes chapter flags without closing the order.
+    // Service diagnostics must remain in memory while that chapter write fails.
+    story.inspect('counter');
     expect(story.isProgressSaved).toBe(false);
     story.clarifyRequest();
     expect(values.get(SAVE_KEY)).toBe(chapterBefore);
@@ -64,7 +64,7 @@ describe('recommendation history stays consistent with durable chapter progress'
     expect(story.recommend('orchard')?.accepted).toBe(true);
 
     expect(story.isProgressSaved).toBe(true);
-    expect(decodeSave(values.get(SAVE_KEY)!)?.dialogue.node).not.toBe('books');
+    expect(decodeSave(values.get(SAVE_KEY)!)?.dialogue.node).not.toBe('order');
     expect(JSON.parse(values.get(SERVICE_KEY)!)).toEqual({
       version: 1,
       asked: ['miller'],
