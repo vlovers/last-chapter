@@ -103,7 +103,8 @@ describe('Independent character callbacks at the final gathering', () => {
     state = selectOption(finalReading, state, 'final-iris-cover-shelf-back');
     expect(state.node).toBe('gathering');
     expect(currentNode(finalReading, state).text).toContain('Хочу ще домалювати берег');
-    expect(currentNode(finalReading, state).text).toContain('сама виберу');
+    expect(currentNode(finalReading, state).text).toContain('оберу сама');
+    expect(currentNode(finalReading, state).text).toContain('Полиця почекає');
     expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
       'final-iris-cover-topic',
     );
@@ -127,7 +128,7 @@ describe('Independent character callbacks at the final gathering', () => {
       );
       const directShelf = selectOption(finalReading, opening, 'final-iris-cover-offer-shelf');
       const next = selectOption(finalReading, opening, 'final-iris-cover-ask-next');
-      expect(currentNode(finalReading, next).text).toContain('потертий роман');
+      expect(currentNode(finalReading, next).text).toContain('потерту книжку');
       const laterShelf = selectOption(finalReading, next, 'final-iris-cover-next-offer');
       for (const shelf of [directShelf, laterShelf]) {
         const narration = currentNode(finalReading, shelf).text;
