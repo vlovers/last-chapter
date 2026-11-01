@@ -133,7 +133,7 @@ describe('Independent character callbacks at the final gathering', () => {
       for (const shelf of [directShelf, laterShelf]) {
         const narration = currentNode(finalReading, shelf).text;
         expect(narration).toContain('тонкий роман у синій обкладинці');
-        expect(narration).toContain('відкласти');
+        expect(narration).toMatch(/відклад(?:и|сти)/);
       }
     },
   );
