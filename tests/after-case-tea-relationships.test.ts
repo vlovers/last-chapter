@@ -16,7 +16,15 @@ describe('Five after-case conversations and fifteen endings', () => {
   for (const [character, endings] of Object.entries(groups)) {
     for (const ending of endings) {
       it(`links ${character}/${ending} back into the existing tea conclusion`, () => {
-        const hub = afterCaseTeaNodes.find((node) => node.id === 'after-case-tea');
+        const groupId =
+          character === 'anna' || character === 'miller'
+            ? 'after-case-tea-help'
+            : character === 'iris'
+              ? 'after-case-tea-corner'
+              : 'after-case-tea-talk';
+        const root = afterCaseTeaNodes.find((node) => node.id === 'after-case-tea');
+        expect(root?.options.some((item) => item.next === groupId)).toBe(true);
+        const hub = afterCaseTeaNodes.find((node) => node.id === groupId);
         const option = hub?.options.find((item) => item.id === `after-tea-${character}-new`);
         expect(option).toBeDefined();
         const scene = afterCaseTeaNodes.find((node) => node.id === option?.next);
