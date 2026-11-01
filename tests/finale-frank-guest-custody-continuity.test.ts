@@ -79,7 +79,7 @@ describe('Final evening: Frank guest dialogue respects counter custody and purch
     chooseAndRestore('frank-shop-guests');
 
     const text = currentNode(finalReading, state).text;
-    expect(text).toContain('Рут із Семом уже закінчили розмови біля каси');
+    expect(text).toContain('Рут і Сем уже закінчили розмови біля каси');
     expect(text).toContain(custodyTexts[custody]);
     for (const [index, phrase] of custodyTexts.entries()) {
       if (index !== custody) expect(text).not.toContain(phrase);
@@ -106,7 +106,7 @@ describe('Final evening: Frank guest dialogue respects counter custody and purch
       state = selectOption(finalReading, state, id);
     }
     const text = currentNode(finalReading, state).text;
-    expect(text).toContain('Рут із Семом уже закінчили розмови біля каси');
+    expect(text).toContain('Рут і Сем уже закінчили розмови біля каси');
     for (const phrase of custodyTexts) expect(text).not.toContain(phrase);
   });
 
