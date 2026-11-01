@@ -10,11 +10,18 @@ export interface SeasonEnding {
 /** Deterministic, spoiler-safe epilogue computed from the player's actual choices. */
 export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   const flags = new Set(state.flags);
-  const letter = flags.has('final_mutual_conversation')
-    ? 'Айріс і Лео поговорили наодинці. Що саме вони сказали, залишається їхньою історією.'
-    : flags.has('final_letter_kept_private')
-      ? 'Айріс залишила лист у себе. Ніхто не вимагав відповіді раніше, ніж вона буде готова.'
-      : 'Старий лист не став публічним видовищем. Його майбутнє залишається відкритим.';
+  const letter =
+    flags.has('final_accepted_consequences') || flags.has('final_letter_breach_disclosed')
+      ? 'Айріс забрала лист. Вона знає, що ти відкрив його без дозволу, й не обіцяла пробачення. Лео не отримав конверта від тебе.'
+      : flags.has('iris_letter_breach_admitted')
+        ? 'Айріс знає, що ти відкрив її лист. Визнання не повернуло довіру автоматично; вона сама вирішить, що робити з конвертом.'
+        : flags.has('opened_private_letter')
+          ? 'Ти відкрив лист Айріс без дозволу й не зізнався їй. Її рішення про майбутнє листа не скасовує того, що ти прочитав чужі слова.'
+          : flags.has('final_mutual_conversation')
+            ? 'Айріс і Лео поговорили наодинці. Що саме вони сказали, залишається їхньою історією.'
+            : flags.has('final_letter_kept_private')
+              ? 'Айріс залишила лист у себе. Ніхто не вимагав відповіді раніше, ніж вона буде готова.'
+              : 'Старий лист не став публічним видовищем. Його майбутнє залишається відкритим.';
   const pressedPrivacy = [
     'anna_rumor_pressed',
     'thomas_privacy_pressed',
@@ -32,6 +39,29 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
   // Independent plans can coexist: supporting Iris must not erase Mara's future,
   // and neither choice should remove the bookstore's next book-club meeting.
   const epilogue = [
+    ...(flags.has('final_reading_program_done')
+      ? [
+          flags.has('final_reading_station')
+            ? 'На вечорі читали «Скляну станцію». Елеонора згадала станційний чай, а Лео залишив закладку на сторінці з порожньою лавою.'
+            : flags.has('final_reading_roads')
+              ? 'Після «Мап незавершених доріг» Нора записала уривок у список наступних читань. Томас ще дорогою додому сперечався з Анною про міст.'
+              : 'Під час «Листів до незнайомця» пані Міллер сміялася з історії про парасолю. Приватний лист Айріс до програми не потрапив.',
+        ]
+      : []),
+    ...(flags.has('rumor_amplified')
+      ? [
+          flags.has('final_player_rumor_owned')
+            ? 'Анна й Томас почули, що ти сам підтримав чутку. Вони не просили посередника; наступну розмову залишили собі.'
+            : flags.has('anna_heard_rumor_admission') || flags.has('thomas_heard_rumor_apology')
+              ? 'Ти вибачився за власні здогади перед тим, до кого звернувся. Це не означає, що Анна й Томас уже почули однакову версію або мають тобі довіряти.'
+              : 'Ти підтримав припущення про Томаса, не маючи доказів зради. За ці слова ще доведеться відповідати; чуже виправлення не стало твоїм вибаченням.',
+        ]
+      : []),
+    ...(flags.has('mara_door_joke_shared')
+      ? [
+          'Мара принесла обіцяний клинець. Двері більше не зачиняються від протягу, і тепер дзвіночок дзвенить тільки тоді, коли хтось заходить.',
+        ]
+      : []),
     ...(flags.has('final_reader_romance_two_books')
       ? [
           'Мара залишила біля вікна два романи з несхожими фіналами. Міллер узяла другий додому, не зрікшись першого.',
@@ -267,7 +297,11 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
                   ]
                 : []),
     ...(flags.has('final_iris_exhibition')
-      ? ['На стіні біля вікна з’явилася серія малюнків Айріс — «Вікна Беллвіка».']
+      ? [
+          flags.has('iris_exhibition_private_choice')
+            ? 'На стіні біля вікна з’явився один малюнок Айріс із назвою «Вікна Беллвіка». Решта залишилися в альбомі, як вона й вирішила.'
+            : 'На стіні біля вікна з’явилися роботи, які Айріс сама обрала для виставки «Вікна Беллвіка».',
+        ]
       : []),
     ...(flags.has('mara_future_supported')
       ? ['Мара почала шукати місце для маленького столика з кавою та книжками біля пекарні.']
@@ -323,7 +357,7 @@ export function seasonEnding(state: Pick<ChapterState, 'flags'>): SeasonEnding {
               : []),
     ...(flags.has('final_chapter_home_version_read')
       ? [
-          'Айріс залишила на поличці копію уривка про повернення. Вона ще не вирішила, чи це справжній фінал.',
+          'Айріс прочитала уривок про повернення. Це не стало дозволом залишити копію на загальній полиці; вона ще не знає, чи це справжній фінал.',
         ]
       : flags.has('final_chapter_departure_version_read')
         ? [

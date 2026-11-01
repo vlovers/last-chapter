@@ -75,6 +75,22 @@ records the card observation. Questions wait for Eleanor's actual third-day
 visit. The workshop star has no invented prior-day observation or visible glue
 side at night.
 
+## D — Final gathering and epilogues
+
+The final day now explicitly moves from morning preparation to evening guests.
+The reading program offers three published books with different ensemble
+responses and epilogues. It needs no investigation flags and can be deferred,
+resumed and completed once. Neither the private letter nor manuscript is put in
+the public program. Older saves can still close the evening directly.
+
+The season summary now retains both concealed and admitted letter breaches and
+the player's own rumor responsibility. A later good deed does not erase either.
+Iris's one-picture decision survives the general exhibition scene and epilogue;
+reading a manuscript passage no longer invents a publicly shelved copy. The
+mutual conversation is not performed twice at closing. Eleanor catches her own
+old ownership habit. Miller responds to the actual book sold on day one. The
+shared-table discussion no longer reopens a letter decision already completed.
+
 ## Compatibility and validation
 
 Existing stage, node, option and consequence flag identifiers are retained.
