@@ -73,7 +73,11 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
     speaker: 'Мара',
     text: 'Мара ставить чайник на підставку. Лео вже взяв собі чашку, а Елеонора шукає чисті ложки. «Усі тут, ніхто нікуди не поспішає», — каже Мара. «Ну, майже ніхто».',
     options: [
-      { id: 'after-tea-mara', label: 'Запитати Мару про завтрашній ранок', next: 'after-case-mara' },
+      {
+        id: 'after-tea-mara',
+        label: 'Запитати Мару про завтрашній ранок',
+        next: 'after-case-mara',
+      },
       {
         id: 'after-tea-leo-new',
         label: 'Запитати Лео, чи не запізнився його останній потяг',
