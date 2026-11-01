@@ -2,11 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { counterEncountersNodes } from '../src/content/counter-encounters';
 import { finalReading } from '../src/content/day-five';
 import { readerDebatesNodes } from '../src/content/reader-debates-final';
-import {
-  selectOption,
-  startDialogue,
-  type DialogueState,
-} from '../src/game/dialogue';
+import { selectOption, startDialogue, type DialogueState } from '../src/game/dialogue';
 import { seasonEnding } from '../src/game/endings';
 import { decodeSave, encodeSave } from '../src/game/save';
 
