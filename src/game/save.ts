@@ -5,7 +5,7 @@ import { noraVisit } from '../content/nora';
 import { quietEvening } from '../content/quiet-evening';
 
 export const SAVE_KEY = 'last-chapter:save:v1';
-const VERSION = 1;
+export const SAVE_VERSION = 1;
 // Bounded payloads support long authored routes without discarding valid progress.
 export const SAVE_LIMITS = {
   bytes: 1_048_576,
@@ -30,6 +30,18 @@ function exceedsSaveLimit(raw: string): boolean {
   if (raw.length > SAVE_LIMITS.bytes) return true;
   const byteLength = new TextEncoder().encode(raw).byteLength;
   return byteLength > SAVE_LIMITS.bytes;
+}
+
+/** Preserve saves written by a newer game build instead of treating them as empty. */
+export function isNewerSaveVersion(raw: string): boolean {
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return false;
+    const version = (parsed as { version?: unknown }).version;
+    return typeof version === 'number' && Number.isSafeInteger(version) && version > SAVE_VERSION;
+  } catch {
+    return false;
+  }
 }
 
 const stages: readonly ChapterStage[] = [
@@ -70,7 +82,7 @@ export function encodeSave(state: ChapterState): string {
     }
   }
   const save: SavedChapter = {
-    version: VERSION,
+    version: SAVE_VERSION,
     stage: state.stage,
     node: state.dialogue.node,
     // Preserve world discoveries and flags produced in the active dialogue.
@@ -99,7 +111,7 @@ export function decodeSave(raw: string): ChapterState | null {
     const data: unknown = JSON.parse(raw);
     if (!data || typeof data !== 'object') return null;
     const obj = data as Record<string, unknown>;
-    if (obj.version !== VERSION || !stages.includes(obj.stage as ChapterStage)) return null;
+    if (obj.version !== SAVE_VERSION || !stages.includes(obj.stage as ChapterStage)) return null;
     if (typeof obj.node !== 'string' || !Array.isArray(obj.flags) || !Array.isArray(obj.history))
       return null;
     if (!obj.flags.every((value: unknown) => typeof value === 'string')) return null;

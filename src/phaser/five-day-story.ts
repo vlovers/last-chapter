@@ -32,7 +32,7 @@ import {
   type ChapterStage,
 } from '../game/chapter';
 import { availableOptions, currentNode } from '../game/dialogue';
-import { decodeSave, encodeSave, SAVE_KEY } from '../game/save';
+import { decodeSave, encodeSave, isNewerSaveVersion, SAVE_KEY } from '../game/save';
 import { castMember } from '../game/cast';
 import { seasonEnding } from '../game/endings';
 import { inspectShopSpot, shopSpots, type ShopSpotId } from '../game/exploration';
@@ -123,17 +123,23 @@ export class FiveDayStory {
   private chapter: ChapterState;
   private service = restoreService('');
   private saveAvailable = true;
-  private saveReadFailed = false;
+  private saveRecoveryPending = false;
   private choicePage = 0;
   private choicePageKey = '';
   constructor() {
     let saved: ChapterState | null = null;
     try {
-      saved = decodeSave(localStorage.getItem(SAVE_KEY) ?? '');
+      const raw = localStorage.getItem(SAVE_KEY);
+      saved = decodeSave(raw ?? '');
+      if (!saved && raw && isNewerSaveVersion(raw)) {
+        // An older game build must not overwrite a save from a newer build.
+        this.saveAvailable = false;
+        this.saveRecoveryPending = true;
+      }
     } catch {
       // Reading may be blocked before the first player choice.
       this.saveAvailable = false;
-      this.saveReadFailed = true;
+      this.saveRecoveryPending = true;
     }
     this.chapter = saved ?? startChapter();
     if (saved) {
@@ -142,7 +148,7 @@ export class FiveDayStory {
       } catch {
         /* optional */
       }
-    } else if (!this.saveReadFailed) {
+    } else if (!this.saveRecoveryPending) {
       // Optional conversations, personal notes and service attempts belong to
       // the chapter save. Never inherit them after a missing/corrupt save.
       discardOrphanedOptionalProgress();
@@ -289,8 +295,8 @@ export class FiveDayStory {
     };
   }
   private persistService() {
-    // A denied chapter read may hide an older run's recommendation history.
-    if (this.saveReadFailed) return;
+    // An unreadable or newer chapter may own previous recommendation history.
+    if (this.saveRecoveryPending) return;
     try {
       localStorage.setItem(SERVICE_KEY, JSON.stringify(this.service));
     } catch {
@@ -312,17 +318,17 @@ export class FiveDayStory {
   }
   private persist(): void {
     try {
-      if (this.saveReadFailed && localStorage.getItem(SAVE_KEY) !== null) {
-        // A failed read is not proof of a missing save. Never overwrite an
+      if (this.saveRecoveryPending && localStorage.getItem(SAVE_KEY) !== null) {
+        // A failed read or unsupported version is not a missing save. Never overwrite an
         // existing chapter after starting a temporary in-memory fallback.
         this.saveAvailable = false;
         return;
       }
       localStorage.setItem(SAVE_KEY, encodeSave(this.chapter));
-      if (this.saveReadFailed) {
+      if (this.saveRecoveryPending) {
         // Storage recovered and there was no earlier chapter to preserve.
         // Only now is it safe to discard orphaned optional progress.
-        this.saveReadFailed = false;
+        this.saveRecoveryPending = false;
         discardOrphanedOptionalProgress();
         this.service = restoreService('');
         this.persistService();
