@@ -20,6 +20,18 @@ function choices(state: ReturnType<typeof startDialogue>) {
   return availableOptions(finalReading, state).map((option) => option.id);
 }
 
+function enterActivity(state: ReturnType<typeof startDialogue>, entry: string) {
+  const group =
+    entry === 'tomorrow-tea' || entry === 'tomorrow-frank-new'
+      ? 'tomorrow-room-group'
+      : entry === 'tomorrow-miller-new' ||
+          entry === 'tomorrow-iris-new' ||
+          entry === 'tomorrow-neighbors-new'
+        ? 'tomorrow-neighbors-group'
+        : 'tomorrow-books-group';
+  return selectOption(finalReading, selectOption(finalReading, state, group), entry);
+}
+
 describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
   it('does not interrupt the investigation before the box and custody decisions', () => {
     for (const flags of [[], [resolved[0]], [resolved[1]]]) {
@@ -32,9 +44,9 @@ describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
     const scene = selectOption(finalReading, gathering(), 'bookshop-tomorrow');
     expect(choices(scene)).toEqual(
       expect.arrayContaining([
-        'tomorrow-shelf',
-        'tomorrow-cards',
-        'tomorrow-tea',
+        'tomorrow-books-group',
+        'tomorrow-neighbors-group',
+        'tomorrow-room-group',
         'tomorrow-later',
       ]),
     );
@@ -88,7 +100,7 @@ describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
     ],
   ])('persists %s / %s as a one-shot consequence', (entry, choice, finish, flag, epilogue) => {
     const scene = selectOption(finalReading, gathering(), 'bookshop-tomorrow');
-    const branch = selectOption(finalReading, scene, entry);
+    const branch = enterActivity(scene, entry);
     const response = selectOption(finalReading, branch, choice);
     const completed = selectOption(finalReading, response, finish);
     expect(completed.node).toBe('gathering');
@@ -105,7 +117,7 @@ describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
     const flags = [...resolved, 'final_miller_ledger_rumor_seeded'];
     const scene = selectOption(finalReading, gathering(flags), 'bookshop-tomorrow');
     expect(currentNode(finalReading, scene).text).toContain('Айріс не підходить');
-    const shelf = selectOption(finalReading, scene, 'tomorrow-shelf');
+    const shelf = enterActivity(scene, 'tomorrow-shelf');
     const result = selectOption(finalReading, shelf, 'tomorrow-shelf-argue');
     const done = selectOption(finalReading, result, 'tomorrow-shelf-finish');
     expect(seasonEnding({ flags: done.flags }).community).toContain('чутка');
@@ -124,7 +136,7 @@ describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
 
   it('keeps the scene completed after save and reload', () => {
     const scene = selectOption(finalReading, gathering(), 'bookshop-tomorrow');
-    const tea = selectOption(finalReading, scene, 'tomorrow-tea');
+    const tea = enterActivity(scene, 'tomorrow-tea');
     const result = selectOption(finalReading, tea, 'tomorrow-tea-rest');
     const done = selectOption(finalReading, result, 'tomorrow-tea-finish');
     const restored = decodeSave(
@@ -143,6 +155,7 @@ describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
       expect(new Set(node.options.map((option) => option.id)).size, node.id).toBe(
         node.options.length,
       );
+      expect(node.options.length, node.id).toBeLessThanOrEqual(4);
     }
   });
 });
