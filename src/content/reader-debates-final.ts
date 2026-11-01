@@ -78,17 +78,17 @@ export const readerDebatesNodes: readonly DialogueNode[] = [
       {
         requires: ['final_reader_audio_done', 'final_reader_audio_choices'],
         unless: ['final_reader_audio_ruth_story', 'final_reader_audio_class_idea'],
-        text: 'Рут дописує до картки «аудіо, великий шрифт, короткі історії». Анна кладе її біля каталогу: «Перевіримо, які видання справді є, перш ніж щось обіцяти». Френк дрімає під столом.',
+        text: 'Рут дописує до картки «аудіо, великий шрифт, короткі історії». Анна кладе її біля каталогу: «Перевіримо, які видання справді є, перш ніж щось обіцяти».',
       },
       {
         requires: ['final_reader_audio_done', 'final_reader_audio_ruth_story'],
         unless: ['final_reader_audio_choices', 'final_reader_audio_class_idea'],
-        text: 'Рут фотографує назву морської збірки й прибирає навушники. «Вдома перевірю, чи є аудіоверсія», — каже вона. Анна підсуває їй чай, а Френк дрімає під столом.',
+        text: 'Рут фотографує назву морської збірки й прибирає навушники. «Вдома перевірю, чи є аудіоверсія», — каже вона. Анна підсуває їй чай.',
       },
       {
         requires: ['final_reader_audio_done', 'final_reader_audio_class_idea'],
         unless: ['final_reader_audio_choices', 'final_reader_audio_ruth_story'],
-        text: 'Анна занотовує ідею для наступного уроку: діти зможуть слухати, читати вголос або малювати човни. «А хто вирішить, як правильно?» — питає Нора. «Самі діти», — усміхається Анна. Френк дрімає під столом.',
+        text: 'Анна занотовує ідею для наступного уроку: діти зможуть слухати, читати вголос або малювати човни. «А хто вирішить, як правильно?» — питає Нора. «Самі діти», — усміхається Анна.',
       },
       {
         requires: ['final_reader_villain_done', 'final_reader_villain_no_spoilers'],
