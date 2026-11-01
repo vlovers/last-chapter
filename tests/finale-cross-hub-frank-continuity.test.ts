@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
-import { availableOptions, currentNode, selectOption, type DialogueState } from '../src/game/dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  type DialogueState,
+} from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
 const readerRoutes = [
