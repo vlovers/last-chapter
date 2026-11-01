@@ -253,6 +253,57 @@ try {
     await page.screenshot({ path: output + '/finale-' + (index + 1) + '.png', fullPage: true });
     results.push({ width, height, saved: true, callbacks: fixtureCase.afterwords.length });
   }
+  // Cross-hub mobile journey: an unfinished counter visit must survive reload,
+  // remain acknowledged at the gathering and not suppress a later book debate.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate((save) => {
+    localStorage.setItem('last-chapter:save:v1', save);
+  }, matrix.fixtures[1].save);
+  await page.reload();
+  await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+  await page.locator('#story-continue').click();
+  await page.locator('#dialogue:not([hidden])').waitFor();
+  await chooseAcrossPages('final-counter-encounters');
+  await chooseAcrossPages('counter-ruth');
+  await chooseAcrossPages('ruth-ask');
+  await chooseAcrossPages('ruth-ask-back');
+  assert.ok(
+    (await page.evaluate(() => window.__lastChapterStory.open().text)).includes(
+      'Рут ховає записку для матері',
+    ),
+    'Counter hub must acknowledge Ruth before leaving',
+  );
+  await chooseAcrossPages('counter-close');
+  const counterCallback = 'Елеонора залишає блокнот біля каси.';
+  const readerCallback = 'Мара відсуває книжки, звільняючи місце для чаю.';
+  assert.ok(
+    (await page.evaluate(() => window.__lastChapterStory.open().text)).includes(counterCallback),
+    'Counter callback missing after returning to gathering',
+  );
+  const counterSave = await page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
+  await page.reload();
+  await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+  await page.locator('#story-continue').click();
+  await page.locator('#dialogue:not([hidden])').waitFor();
+  assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), counterSave);
+  assert.ok(
+    (await page.evaluate(() => window.__lastChapterStory.open().text)).includes(counterCallback),
+    'Counter callback must survive reload',
+  );
+  await chooseAcrossPages('final-reader-debates');
+  await chooseAcrossPages('reader-romance');
+  await chooseAcrossPages('romance-two-books');
+  await chooseAcrossPages('romance-two-back');
+  await chooseAcrossPages('reader-debates-close');
+  const gatheringText = await page.evaluate(() => window.__lastChapterStory.open().text);
+  assert.ok(gatheringText.includes(counterCallback));
+  assert.ok(gatheringText.includes(readerCallback));
+  await chooseAcrossPages('close');
+  await chooseAcrossPages('__advance');
+  assert.equal(await page.evaluate(() => window.__lastChapterStory.stage), 'season-complete');
+  await page.screenshot({ path: output + '/finale-cross-hub-mobile.png', fullPage: true });
+  results.push({ width: 390, height: 844, saved: true, callbacks: 2, route: 'cross-hub-mobile' });
+
   assert.deepEqual(errors, []);
   await writeFile(
     output + '/results.json',

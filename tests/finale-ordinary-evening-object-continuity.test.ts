@@ -21,7 +21,7 @@ const counterRoutes = [
 ] as const;
 
 function enter(option: string): DialogueState {
-  let state = selectOption(finalReading, startDialogue(finalReading), 'open');
+  const state = selectOption(finalReading, startDialogue(finalReading), 'open');
   return selectOption(finalReading, state, option);
 }
 
