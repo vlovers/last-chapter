@@ -224,6 +224,19 @@ try {
     assert.equal(await page.evaluate(() => window.__lastChapterStory.stage), 'day5-reading');
     await page.locator('#story-continue').click();
     await page.locator('#dialogue:not([hidden])').waitFor();
+    // The finale has dozens of optional callbacks. Finishing the evening must
+    // remain available on the first mobile page without losing any choices.
+    assert.ok((await page.locator('#choices button').count()) <= 4);
+    assert.equal(await page.locator('#choices button[data-choice="close"]').count(), 1);
+    const beforePaging = await page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
+    if (index === 1) {
+      await page.locator('#choices button[data-choice="__more_choices"]').click();
+      assert.equal(await page.locator('#choices button[data-choice="close"]').count(), 0);
+      assert.equal(
+        await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')),
+        beforePaging,
+      );
+    }
     await chooseAcrossPages('close');
     await page.locator('#choices button[data-choice="__advance"]').waitFor();
     const afterword = await page.evaluate(() => window.__lastChapterStory.open().text);
