@@ -2,13 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import { availableOptions, currentNode, selectOption, startDialogue } from '../src/game/dialogue';
 
-const gathering = (flags: string[]) => ({ ...startDialogue(finalReading), node: 'gathering', flags });
+const gathering = (flags: string[]) => ({
+  ...startDialogue(finalReading),
+  node: 'gathering',
+  flags,
+});
 
 describe('Final evening evidence and memory boundaries', () => {
   it('does not offer Iris public-record research after a private-letter breach', () => {
     const state = selectOption(
       finalReading,
-      gathering(['iris_quiet_page_discussed', 'iris_margin_note_discussed', 'opened_private_letter']),
+      gathering([
+        'iris_quiet_page_discussed',
+        'iris_margin_note_discussed',
+        'opened_private_letter',
+      ]),
       'final-iris-evidence-topic',
     );
     const choices = availableOptions(finalReading, state).map((option) => option.id);
