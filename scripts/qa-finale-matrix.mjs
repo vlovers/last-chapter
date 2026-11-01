@@ -285,7 +285,10 @@ try {
   await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
   await page.locator('#story-continue').click();
   await page.locator('#dialogue:not([hidden])').waitFor();
-  assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), counterSave);
+  assert.equal(
+    await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')),
+    counterSave,
+  );
   assert.ok(
     (await page.evaluate(() => window.__lastChapterStory.open().text)).includes(counterCallback),
     'Counter callback must survive reload',
