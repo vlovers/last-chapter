@@ -123,6 +123,7 @@ export class FiveDayStory {
   private chapter: ChapterState;
   private service = restoreService('');
   private saveAvailable = true;
+  private saveReadFailed = false;
   private choicePage = 0;
   private choicePageKey = '';
   constructor() {
@@ -132,6 +133,7 @@ export class FiveDayStory {
     } catch {
       // Reading may be blocked before the first player choice.
       this.saveAvailable = false;
+      this.saveReadFailed = true;
     }
     this.chapter = saved ?? startChapter();
     if (saved) {
@@ -140,7 +142,7 @@ export class FiveDayStory {
       } catch {
         /* optional */
       }
-    } else {
+    } else if (!this.saveReadFailed) {
       // Optional conversations, personal notes and service attempts belong to
       // the chapter save. Never inherit them after a missing/corrupt save.
       discardOrphanedOptionalProgress();
@@ -308,7 +310,21 @@ export class FiveDayStory {
   }
   private persist(): void {
     try {
+      if (this.saveReadFailed && localStorage.getItem(SAVE_KEY) !== null) {
+        // A failed read is not proof of a missing save. Never overwrite an
+        // existing chapter after starting a temporary in-memory fallback.
+        this.saveAvailable = false;
+        return;
+      }
       localStorage.setItem(SAVE_KEY, encodeSave(this.chapter));
+      if (this.saveReadFailed) {
+        // Storage recovered and there was no earlier chapter to preserve.
+        // Only now is it safe to discard orphaned optional progress.
+        this.saveReadFailed = false;
+        discardOrphanedOptionalProgress();
+        this.service = restoreService('');
+        this.persistService();
+      }
       this.saveAvailable = true;
     } catch {
       // Continue playing, but expose the failure so the UI can warn the player.
