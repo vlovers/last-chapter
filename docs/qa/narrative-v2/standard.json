@@ -1,0 +1,26 @@
+{
+  "base": "http://127.0.0.1:5187",
+  "browser": "156.0.8078.74",
+  "results": [
+    {
+      "test": "desktop, movement, objects, resume, privacy, station ending, audio, save isolation",
+      "status": "passed"
+    },
+    {
+      "test": "tablet, reduced motion, keyboard-only selection, roads ending, text wrapping",
+      "status": "passed"
+    },
+    {
+      "test": "missing portrait, unavailable Web Audio, confidentiality boundary",
+      "status": "passed"
+    },
+    {
+      "test": "missing initialization module produces Ukrainian recovery message",
+      "status": "passed"
+    },
+    {
+      "test": "canonical root still loads; isolated prototype leaves five-day save unchanged",
+      "status": "passed"
+    }
+  ]
+}

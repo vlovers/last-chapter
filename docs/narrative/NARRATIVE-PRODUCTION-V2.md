@@ -55,9 +55,9 @@ Existing return/decline choices remain valid throughout.
 
 ## C — Days three and four
 
-Eleanor's responsibility now distinguishes the failed telephone during the flood
-from her later failure to check the boxes. Her shelf conversation responds to
-the new layout, and her reflection uses the morning routine, photographs and a
+Eleanor's responsibility distinguishes her uncertain memory of the telephone
+during the flood from her later failure to check the boxes. Her shelf
+conversation responds to the new layout, and her reflection uses the morning routine, photographs and a
 specific table. Thomas discusses uneven work and money in his own terms without
 disclosing consultations. Nora does not claim knowledge of Thomas's conversation
 with the player. Her photograph, private letters and publication work remain
@@ -108,8 +108,31 @@ location without taking a towel from a cat already asleep in a box or lap.
 Miller's private family story stays private in the cinema comparison. The last
 copy can be collected after the school reading ends, not when it starts. Nora
 can argue about a fictional character without treating the fictional woman as a
-real person who must consent to a novel. Iris's own August purchase is no longer
-accidentally sold to her a second time.
+real person who must consent to a novel. During reconciliation, the newer base's
+separate blue bookstore volume was retained alongside Iris's older personal
+purchase; her older book is not sold to her a second time.
+
+## Ensemble review
+
+| Character | Concrete work and independent life                                | Continuity boundary checked                                                                                    |
+| --------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Mara      | Bakery shift, buns, door wedge, window table, reader disagreement | Her trip ticket is separate from Leo's old Iris ticket; no automatic departure before the reading.             |
+| Leo       | Railway shift, course, colleague June, his own reading choice     | A request becomes a sent message only in the scene that sends it; he leaves with his own parcel.               |
+| Eleanor   | Key handover, catalogues, repairs, ledger and box cleanup         | Responsibility for missed follow-up is distinct from uncertain telephone memory and unidentified pencil marks. |
+| Iris      | Illustration contract, cover revisions, personal book, exhibition | Authorship, custody, breach knowledge and permission for each material remain separate.                        |
+| Anna      | Classroom reading, recommendations, children, school chairs       | Tomorrow on day two becomes today on day three; a reachable final follow-up hears her own account.             |
+| Thomas    | Electrical work, missed school promise, bills, reading            | No counseling disclosure is inferred from another person's testimony; later repair is his choice.              |
+| Nora      | Tea, cinema photo, borrowed books, professional boundaries        | She does not inherit Thomas's conversation or secret letter knowledge.                                         |
+| Miller    | Mystery taste, club, borrowed jar, cinema memories, program       | A private family story is not automatically retold; a new rumor cannot precede its source.                     |
+| Frank     | Optional attention, food, play, tree, bookmarks and boxes         | Narrative movements are explicit; later hub callbacks do not restore a superseded position.                    |
+| Ruth      | A readable book for her mother                                    | A shortlist and a stock check do not promise a sale or delivery.                                               |
+| Sam       | Baking book for himself                                           | Asking Mara for lessons does not grant her agreement.                                                          |
+| Mr Reed   | His purchased book and a found note                               | Deferring, keeping or sealing the note does not authenticate it or connect it to the manuscript.               |
+
+The existing counter visitors, course colleague, classroom pupils and mentioned
+relatives retain their established roles; no additional romance or rival was
+introduced. Ruth, Sam and Mr Reed's existing nine outcomes remain covered by
+the counter-encounter regressions and cross-hub Browser QA.
 
 ## Compatibility and validation
 
@@ -124,3 +147,62 @@ and browser evidence are recorded at the end of this document when run.
 
 Narrative review here is an authorial continuity/editing pass. Independent human
 Ukrainian reader testing and a measured episode runtime are not implied.
+
+## F — Integration and regression coverage
+
+The remote target advanced by 21 commits during this pass. All five unpublished
+packages were rebased onto `a598dd9663f55af6cfb1bf32ce498641529d55b8`, then onto
+`dc2b03b` when three test/format commits arrived before publication. Those three
+commits change no game content. Their new boundary regression retains its
+permission checks and distinguishes a concealed breach from an admitted one;
+the Ukrainian reservation matcher now covers both actual grammatical forms. The independent Iris cover, Leo course and location-neutral Frank
+callbacks from that base are retained. Eleanor's uncertain telephone memory and
+the separate blue bookstore volume were explicitly reconciled.
+
+Against the final integration base, **132 existing dialogue nodes changed, 8 were
+added, and none were removed**. There are 847 authored nodes in the combined
+content. The [scene inventory](production-v2-scene-inventory.json) records every
+changed or added node per source file; it excludes unrelated parallel changes.
+
+New deterministic regressions cover discovery order, letter authorship and
+custody, NPC knowledge, same-visit chronology, repeated exhibition decisions,
+reading choices, school outcomes and season-summary consequences. Five complete
+journeys restore after every choice, assert all five days, exercise pagination
+and compare positive and forbidden ending facts. Browser journeys use the same
+route fixture but tap the actual interface and reload at critical points.
+
+`qa-finale-matrix.mjs` now waits for the existing 220 ms stale-button guard before
+its direct pagination probe. Its assertions about choice limits, unchanged save,
+closing access, independent outcomes and restoration remain enabled.
+
+Verification on Node 22.12.0 after reconciliation:
+
+- `npm run check`: 238 test files / 2220 tests passed; format, lint, types and build
+  passed. This includes 52 new regression cases against the reconciled base.
+- `npm audit --audit-level=high`: passed; 11 existing moderate development-tool
+  advisories remain. No dependency upgrade or audit suppression was added.
+- Final gathering matrix: all 12 combinations and three actual UI/save journeys
+  passed, including mobile and unfinished cross-hub callbacks.
+- Standard, five-day, mobile and Frank browser suites passed with no reported
+  page errors.
+- Mobile performance at 390 × 844: median 59.80 FPS at 1× and 60.01 FPS at 4×
+  CPU throttling; all samples positive, 31 scene objects stable, movement and
+  camera follow verified. This is an emulation result on this machine.
+
+The optional school and public-reading scenes use existing conditions and flags.
+Save format remains version 1, with all old stage/node/option IDs retained.
+Older saves can still finish without completing either new optional scene.
+The final cat pass also keeps Frank in his box while cups are cleared and does
+not return him under an atlas bookmark after a later movement scene.
+
+The in-app Browser connection failed because its native bridge was unavailable.
+Local Browser QA therefore uses the repository's Playwright runners with installed
+Chrome. These checks emulate touch viewports; they do not claim physical-device
+or independent human-reader testing. The existing large Phaser bundle warning
+remains visible; no performance or chunk warning thresholds were relaxed.
+
+- Final narrative mobile matrix: all 10 full journeys passed (5 routes × two
+  touch viewports, 360×780 and 390×844), 1128 choices and 42 reloads in total,
+  with no reported browser errors. An additional complete 390 px mutual route
+  verifies long-text scrolling and matching visual/accessibility text.
+  Evidence: [Browser QA](../qa/narrative-v2/README.md).

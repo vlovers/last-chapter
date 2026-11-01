@@ -230,6 +230,8 @@ try {
     assert.equal(await page.locator('#choices button[data-choice="close"]').count(), 1);
     const beforePaging = await page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
     if (index === 1) {
+      // Opening the dialogue starts the same 220 ms stale-button guard as a choice.
+      await page.waitForTimeout(240);
       await page.locator('#choices button[data-choice="__more_choices"]').click();
       assert.equal(await page.locator('#choices button[data-choice="close"]').count(), 0);
       assert.equal(

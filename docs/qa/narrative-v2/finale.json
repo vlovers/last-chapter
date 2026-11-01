@@ -1,0 +1,86 @@
+{
+  "matrix": [
+    {
+      "case": "sealed",
+      "calendar": "offered",
+      "cinema": "compared"
+    },
+    {
+      "case": "sealed",
+      "calendar": "offered",
+      "cinema": "caption"
+    },
+    {
+      "case": "sealed",
+      "calendar": "offered",
+      "cinema": "deferred"
+    },
+    {
+      "case": "sealed",
+      "calendar": "separate",
+      "cinema": "compared"
+    },
+    {
+      "case": "sealed",
+      "calendar": "separate",
+      "cinema": "caption"
+    },
+    {
+      "case": "sealed",
+      "calendar": "separate",
+      "cinema": "deferred"
+    },
+    {
+      "case": "Iris declined",
+      "calendar": "offered",
+      "cinema": "compared"
+    },
+    {
+      "case": "Iris declined",
+      "calendar": "offered",
+      "cinema": "caption"
+    },
+    {
+      "case": "Iris declined",
+      "calendar": "offered",
+      "cinema": "deferred"
+    },
+    {
+      "case": "Iris declined",
+      "calendar": "separate",
+      "cinema": "compared"
+    },
+    {
+      "case": "Iris declined",
+      "calendar": "separate",
+      "cinema": "caption"
+    },
+    {
+      "case": "Iris declined",
+      "calendar": "separate",
+      "cinema": "deferred"
+    }
+  ],
+  "results": [
+    {
+      "width": 1280,
+      "height": 900,
+      "saved": true,
+      "callbacks": 3
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "saved": true,
+      "callbacks": 3
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "saved": true,
+      "callbacks": 2,
+      "route": "cross-hub-mobile"
+    }
+  ],
+  "errors": []
+}

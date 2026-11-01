@@ -34,7 +34,9 @@ try {
   await page.keyboard.press('Escape');
 
   await page.locator('#story-continue').click();
-  await page.getByText('Дзвіночок над дверима озвався двічі.', { exact: false }).waitFor();
+  await page
+    .getByText('Елеонора підпирає двері стосом старих каталогів', { exact: false })
+    .waitFor();
   const firstChoice = page.locator('#choices button').first();
   await page.waitForTimeout(260);
   await firstChoice.click();

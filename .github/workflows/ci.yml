@@ -52,6 +52,8 @@ jobs:
             command: node scripts/qa-frank-overhaul.mjs
           - name: finale
             command: node scripts/qa-finale-matrix.mjs
+          - name: narrative-v2
+            command: node scripts/qa-narrative-v2.mjs
           - name: performance
             command: node scripts/qa-bookshop-performance.mjs
     steps:
@@ -101,5 +103,12 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: mobile-performance-browser-qa
+          path: /tmp/last-chapter-qa
+          if-no-files-found: ignore
+      - name: Upload five-day narrative journeys
+        if: always() && matrix.suite.name == 'narrative-v2'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: narrative-v2-mobile-journeys
           path: /tmp/last-chapter-qa
           if-no-files-found: ignore

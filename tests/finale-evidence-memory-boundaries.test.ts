@@ -22,7 +22,25 @@ describe('Final evening evidence and memory boundaries', () => {
     const choices = availableOptions(finalReading, state).map((option) => option.id);
     expect(choices).not.toContain('final-iris-evidence-ask');
     expect(choices).toContain('final-iris-evidence-private');
-    expect(currentNode(finalReading, state).text).toContain('не мав читати');
+    expect(currentNode(finalReading, state).text).toContain('вона досі не чула від вас');
+    expect(choices).not.toContain('final-iris-evidence-accountability');
+  });
+
+  it('lets Iris refer to a breach only after the player admits it', () => {
+    const state = selectOption(
+      finalReading,
+      gathering([
+        'iris_quiet_page_discussed',
+        'iris_margin_note_discussed',
+        'opened_private_letter',
+        'iris_letter_breach_admitted',
+      ]),
+      'final-iris-evidence-topic',
+    );
+    expect(currentNode(finalReading, state).text).toContain('відкрив його без дозволу');
+    expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(
+      'final-iris-evidence-accountability',
+    );
   });
 
   it('lets Iris reject an invented box discovery without endorsing the rumor', () => {

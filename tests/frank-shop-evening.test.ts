@@ -81,6 +81,25 @@ function atGathering() {
 }
 
 describe('Frank shop evening', () => {
+  it('keeps Frank in the box while cups are cleared and does not return him to the atlas', () => {
+    let state = selectOption(finalReading, atGathering(), 'frank-shop-evening');
+    for (const id of [
+      'frank-shop-bookmark',
+      'frank-shop-bookmark-wait',
+      'frank-shop-bookmark-wait-back',
+      'frank-shop-rest',
+      'frank-shop-rest-cups',
+    ]) {
+      state = selectOption(finalReading, state, id);
+    }
+    expect(currentNode(finalReading, state).text).toContain('хвіст у коробку');
+    expect(currentNode(finalReading, state).text).not.toContain('зі столу');
+    state = selectOption(finalReading, state, 'frank-shop-rest-cups-back');
+    expect(currentNode(finalReading, state).text).not.toContain('досі під Френковою лапою');
+    expect(state.flags).toContain('final_frank_shop_waited_for_cat');
+    expect(state.flags).toContain('final_frank_shop_quiet_corner');
+  });
+
   it('is optional and never blocks the direct finale', () => {
     expect(selectOption(finalReading, atGathering(), 'close').node).toBe('end');
   });
