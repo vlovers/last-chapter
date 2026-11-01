@@ -97,6 +97,22 @@ describe('Final evening evidence and memory boundaries', () => {
     );
   });
 
+  it('does not offer rumor escalation after Iris declines the investigation', () => {
+    const state = selectOption(
+      finalReading,
+      gathering([
+        'iris_quiet_page_discussed',
+        'iris_margin_note_discussed',
+        'final_case_iris_declined',
+      ]),
+      'final-iris-evidence-topic',
+    );
+    const choices = availableOptions(finalReading, state).map((option) => option.id);
+    expect(choices).not.toContain('final-iris-evidence-rumor');
+    expect(choices).not.toContain('final-iris-evidence-ask');
+    expect(choices).toContain('final-iris-evidence-private');
+  });
+
   it('lets Iris reject an invented box discovery without endorsing the rumor', () => {
     let state = selectOption(
       finalReading,
