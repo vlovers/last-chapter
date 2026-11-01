@@ -90,6 +90,47 @@ export const finalReading: DialogueStory = {
           unless: ['final_counter_reed_note', 'final_counter_reed_book_kept'],
           text: 'Елеонора прибирає порожній конверт із прилавка. «Пан Рід забрав книжку й вирішить удома, що робити із запискою», — каже вона.',
         },
+        // Independent character stories retain their outcomes when the player
+        // returns to the shared gathering. Mutually exclusive damaged-save
+        // branches must never narrate two different career/art decisions.
+        {
+          requires: ['final_leo_night_course_done', 'leo_night_course_application_planned'],
+          unless: ['leo_night_course_shift_request_planned', 'leo_night_course_deferred'],
+          text: 'Лео кладе телефон екраном донизу. «Як прийде відповідь із Грейфорда, тоді й говоритиму. Сьогодні я тут».',
+        },
+        {
+          requires: ['final_leo_night_course_done', 'leo_night_course_shift_request_planned'],
+          unless: ['leo_night_course_application_planned', 'leo_night_course_deferred'],
+          text: 'Лео складає розклад. «Джун може підмінити один вечір. За другий ще домовлятимуся».',
+        },
+        {
+          requires: ['final_leo_night_course_done', 'leo_night_course_deferred'],
+          unless: ['leo_night_course_application_planned', 'leo_night_course_shift_request_planned'],
+          text: 'Лео залишає роман про маяк біля чашки. «З курсом зачекаю. А книжку дочитаю сьогодні».',
+        },
+        {
+          requires: ['final_leo_night_course_done', 'final_leo_course_notebook_offered'],
+          text: 'Лео забирає з прилавка куплений синій блокнот, щоб його випадково не поклали до чужого замовлення.',
+        },
+        {
+          requires: ['final_iris_cover_done', 'iris_cover_revisions_chosen'],
+          unless: ['iris_cover_negotiation_chosen', 'iris_cover_independent_chosen'],
+          text: 'Айріс поправляє ескіз у папці. «Веселка поки лишається. Подивимося, що скаже редактор про решту».',
+        },
+        {
+          requires: ['final_iris_cover_done', 'iris_cover_negotiation_chosen'],
+          unless: ['iris_cover_revisions_chosen', 'iris_cover_independent_chosen'],
+          text: 'Айріс ховає відповідь редактора до папки. «Версію з човном ще розглядають. Не квапитиму їх сьогодні».',
+        },
+        {
+          requires: ['final_iris_cover_done', 'iris_cover_independent_chosen'],
+          unless: ['iris_cover_revisions_chosen', 'iris_cover_negotiation_chosen'],
+          text: 'Айріс кладе складену книжечку з лисом у сумку. «Поки не готова її виставляти. Хочу ще домалювати берег».',
+        },
+        {
+          requires: ['final_iris_cover_done', 'final_iris_cover_portfolio_offered'],
+          text: 'Айріс дивиться на вільну полицю: «Якщо щось принесу, сама виберу, які сторінки можна показати».',
+        },
       ],
       options: [
         {
