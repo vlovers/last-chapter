@@ -9,6 +9,22 @@ const gathering = (flags: string[]) => ({
 });
 
 describe('Final evening evidence and memory boundaries', () => {
+  it('shows generic counter narration only when Reed outcome is absent', () => {
+    const generic = 'Елеонора залишає блокнот біля каси';
+    expect(currentNode(finalReading, gathering(['final_counter_evening_done'])).text).toContain(
+      generic,
+    );
+    for (const outcome of [
+      'final_counter_reed_note',
+      'final_counter_reed_book_kept',
+      'final_counter_reed_deferred',
+    ]) {
+      expect(
+        currentNode(finalReading, gathering(['final_counter_evening_done', outcome])).text,
+      ).not.toContain(generic);
+    }
+  });
+
   it('does not expose mutually exclusive Reed outcomes together', () => {
     const outcomes = [
       'final_counter_reed_note',
