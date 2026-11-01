@@ -44,7 +44,7 @@ describe('service memory follows the narrative save', () => {
   });
 
   it('discards service memory when the chapter save is corrupt', () => {
-    const values = storageWith('{"version":999}');
+    const values = storageWith('{"version":1,"stage":"missing"}');
     expect(new FiveDayStory().stage).toBe('miller');
     expect(JSON.parse(values.get(SERVICE_KEY)!)).toEqual(emptyService);
   });
@@ -63,7 +63,7 @@ function seedOptionalProgress(values: Map<string, string>) {
 describe('optional progress follows the narrative save', () => {
   it.each([
     ['missing', undefined],
-    ['corrupt', '{"version":999}'],
+    ['corrupt', '{"version":1,"stage":"missing"}'],
   ])('discards orphaned Mara conversations and notes with a %s chapter save', (_label, save) => {
     const values = storageWith(save);
     seedOptionalProgress(values);
