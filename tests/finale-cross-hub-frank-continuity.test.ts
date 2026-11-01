@@ -76,7 +76,9 @@ describe('Final evening: Frank and counter callbacks agree across hubs', () => {
 
     expect(state.node).toBe('gathering');
     const text = currentNode(finalReading, state).text;
-    expect(text).toContain('Френк не ворушиться зі свого стільця');
+    expect(text).toContain('Мара відсуває книжки');
+    expect(text).toContain('Френк знову перевіряє пакувальний папір');
+    expect(text).not.toContain('Френк не ворушиться зі свого стільця');
     expect(text).toContain('Порожній пакет лежить поряд із блокнотом');
     expect(text).not.toContain('Френк уже заглядає в порожній пакет');
     expect(text).not.toContain('Френк дрімає під столом');
@@ -92,7 +94,9 @@ describe('Final evening: Frank and counter callbacks agree across hubs', () => {
     state = selectOption(finalReading, state, 'final-reader-debates');
     state = selectOption(finalReading, state, 'reader-debates-close');
     const text = currentNode(finalReading, state).text;
-    expect(text).toContain('Френк не ворушиться зі свого стільця');
+    expect(text).toContain('Мара відсуває книжки');
+    expect(text).toContain('Френк знову перевіряє пакувальний папір');
+    expect(text).not.toContain('Френк не ворушиться зі свого стільця');
     expect(text).not.toContain('Порожній пакет лежить поряд із блокнотом');
   });
 });
