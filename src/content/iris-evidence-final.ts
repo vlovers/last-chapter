@@ -14,6 +14,7 @@ export const irisEvidenceFinalNodes: readonly DialogueNode[] = [
     id: 'final-iris-evidence',
     speaker: 'Айріс',
     text: 'Айріс відставляє чашку. «Ти про ті дві зірки? Мама зазвичай малювала три. А сімнадцять — це може бути номер сторінки, коробки або взагалі щось інше». Айріс дивиться на гостей біля вікна. «Давай не вигадуватимемо відповідь раніше, ніж знайдемо її».',
+    variantSelection: 'authored',
     textWhen: [
       {
         requires: ['final_case_iris_declined'],
