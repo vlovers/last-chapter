@@ -62,6 +62,23 @@ describe('Final evening evidence and memory boundaries', () => {
     );
   });
 
+  it('respects Iris day-four refusal even when a private letter remains undisclosed', () => {
+    const state = selectOption(
+      finalReading,
+      gathering([
+        'iris_quiet_page_discussed',
+        'iris_margin_note_discussed',
+        'opened_private_letter',
+        'iris_letter_pressured_day4',
+      ]),
+      'final-iris-evidence-topic',
+    );
+    expect(currentNode(finalReading, state).text).toContain('Сьогодні про рукопис більше не говоритиму');
+    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+      'final-iris-evidence-ask',
+    );
+  });
+
   it('lets Iris reject an invented box discovery without endorsing the rumor', () => {
     let state = selectOption(
       finalReading,
