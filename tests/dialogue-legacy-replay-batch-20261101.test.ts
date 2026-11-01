@@ -128,6 +128,54 @@ describe('Legacy dialogue replay: linear completion and narrative continuity', (
     expect(restored.pending).toEqual([]);
   });
 
+  it('marks all outstanding legacy topics completed on reaching a terminal scene', () => {
+    const story: DialogueStory = {
+      start: 'first',
+      nodes: [
+        {
+          id: 'first',
+          speaker: 'Мара',
+          text: 'Початок.',
+          options: [{ id: 'first-choice', label: 'Далі', next: 'second' }],
+        },
+        {
+          id: 'second',
+          speaker: 'Лео',
+          text: 'Продовження.',
+          options: [{ id: 'second-choice', label: 'Кінець', next: 'end' }],
+        },
+        { id: 'end', speaker: 'Оповідач', text: 'До зустрічі.', options: [] },
+      ],
+    };
+    const restored = restoreDialogueProgress(story, {
+      node: 'end',
+      flags: [],
+      history: ['first-choice', 'second-choice'],
+    });
+    expect(restored.pending).toEqual([]);
+    expect(restored.completed).toHaveLength(2);
+  });
+
+  it('preserves the sealed-letter counter outcome through a legacy save', () => {
+    const route = [
+      'open',
+      'final-counter-encounters',
+      'counter-reed',
+      'reed-envelope',
+      'reed-envelope-back',
+      'counter-close',
+    ];
+    const modern = play(finalReading, route);
+    const restored = restoreDialogueProgress(finalReading, {
+      node: modern.node,
+      flags: modern.flags,
+      history: modern.history,
+    });
+    expect(restored.completed).toEqual(modern.completed);
+    expect(restored.pending).toEqual(modern.pending);
+    expect(restored.flags).toContain('final_counter_reed_note');
+  });
+
   it('does not call non-buying visitors customers or wish Ruth another night shift', () => {
     const hub = counterEncountersNodes.find((node) => node.id === 'final-counter-hub');
     const ruth = counterEncountersNodes.find((node) => node.id === 'final-counter-ruth-short');
