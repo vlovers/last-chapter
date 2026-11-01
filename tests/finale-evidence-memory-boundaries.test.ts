@@ -9,6 +9,28 @@ const gathering = (flags: string[]) => ({
 });
 
 describe('Final evening evidence and memory boundaries', () => {
+  it('keeps every authored final-evening dialogue node within four choices', () => {
+    for (const node of finalReading.nodes) {
+      expect(node.options.length, `Too many options at ${node.id}`).toBeLessThanOrEqual(4);
+    }
+  });
+
+  it('keeps final-evening dialogue option IDs unique within each scene', () => {
+    for (const node of finalReading.nodes) {
+      const ids = node.options.map((option) => option.id);
+      expect(new Set(ids).size, `Duplicate options at ${node.id}`).toBe(ids.length);
+    }
+  });
+
+  it('ensures final-evening dialogue destinations exist', () => {
+    const ids = new Set(finalReading.nodes.map((node) => node.id));
+    for (const node of finalReading.nodes) {
+      for (const option of node.options) {
+        expect(ids.has(option.next), `Missing destination ${node.id} -> ${option.next}`).toBe(true);
+      }
+    }
+  });
+
   it('does not offer Iris public-record research after a private-letter breach', () => {
     const state = selectOption(
       finalReading,
