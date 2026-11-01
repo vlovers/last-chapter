@@ -9,6 +9,24 @@ const gathering = (flags: string[]) => ({
 });
 
 describe('Final evening evidence and memory boundaries', () => {
+  it('does not expose mutually exclusive Reed outcomes together', () => {
+    const outcomes = [
+      'final_counter_reed_note',
+      'final_counter_reed_book_kept',
+      'final_counter_reed_deferred',
+    ];
+    for (const chosen of outcomes) {
+      const state = gathering(['final_counter_evening_done', chosen]);
+      const text = currentNode(finalReading, state).text;
+      const signatures = [
+        'Запечатаний конверт пана Ріда',
+        'Пан Рід забрав свою книжку',
+        'Пан Рід забрав книжку й вирішить удома',
+      ];
+      expect(signatures.filter((signature) => text.includes(signature))).toHaveLength(1);
+    }
+  });
+
   it('keeps each character conversation within four choices', () => {
     // The gathering is a topic catalogue, not a dialogue choice screen.
     for (const node of finalReading.nodes.filter((node) => node.id !== 'gathering')) {
