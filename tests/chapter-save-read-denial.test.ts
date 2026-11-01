@@ -70,6 +70,29 @@ describe('chapter read failures never silently erase existing player progress', 
     expect(values.get(SAVE_KEY)).toBe(oldSave);
   });
 
+  it('keeps old recommendation attempts intact while an unreadable chapter is played in memory', () => {
+    const oldSave = encodeSave(chooseChapterOption(startChapter(), 'greet'));
+    const values = seededStorage(oldSave);
+    let firstRead = true;
+    mockStorage(values, () => {
+      if (!firstRead) return false;
+      firstRead = false;
+      return true;
+    });
+
+    const fallback = new FiveDayStory();
+    fallback.choose('greet');
+    fallback.choose('books');
+    expect(fallback.request).not.toBeNull();
+    fallback.clarifyRequest();
+    expect(values.get(SERVICE_KEY)).toBe(previousService);
+
+    expect(fallback.recommend('orchard')?.accepted).toBe(true);
+    expect(fallback.isProgressSaved).toBe(false);
+    expect(values.get(SAVE_KEY)).toBe(oldSave);
+    expectOptionalUntouched(values);
+  });
+
   it('does not overwrite an unreadable corrupt chapter or clear unrelated progress', () => {
     const oldSave = '{"version":999}';
     const values = seededStorage(oldSave);

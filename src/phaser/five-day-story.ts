@@ -289,6 +289,8 @@ export class FiveDayStory {
     };
   }
   private persistService() {
+    // A denied chapter read may hide an older run's recommendation history.
+    if (this.saveReadFailed) return;
     try {
       localStorage.setItem(SERVICE_KEY, JSON.stringify(this.service));
     } catch {
