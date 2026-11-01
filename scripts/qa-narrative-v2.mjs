@@ -92,6 +92,7 @@ try {
       await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
       await page.locator('#story-continue').click();
       await page.locator('#dialogue:not([hidden])').waitFor();
+      console.log(`Starting narrative QA: ${scenario.id} at ${viewport.width}x${viewport.height}`);
       const stages = [];
       let steps = 0;
       let reloads = 0;
@@ -99,6 +100,7 @@ try {
         const { stage } = await saved(page);
         assert.ok(!stages.includes(stage), 'Stage must not repeat: ' + stage);
         stages.push(stage);
+        console.log(`Narrative QA stage: ${scenario.id} / ${viewport.width}px / ${stage}`);
         const route = scenario.overrides[stage] ?? matrix.common[stage];
         assert.ok(route, 'Missing stage route: ' + stage);
         for (const id of route) {
