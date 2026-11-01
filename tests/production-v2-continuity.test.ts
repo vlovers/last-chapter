@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { annaVisit } from '../src/content/anna';
 import { irisDecision } from '../src/content/day-four-iris';
 import { leoDecision } from '../src/content/day-four-leo';
+import { maraDecision } from '../src/content/day-four-mara';
 import { finalReading } from '../src/content/day-five';
 import { leoVisit } from '../src/content/leo';
 import { maraVisit } from '../src/content/mara';
@@ -146,5 +147,19 @@ describe('Production V2: chronology, letter authorship and evidence boundaries',
     );
     expect(visit.text).toContain('щойно дописала');
     expect(visit.text).not.toContain('Я надрукувала це зранку');
+  });
+
+  it('Mara answers the chosen greeting and remembers the door joke on day four', () => {
+    const joke = follow(maraVisit, ['hello', 'joke']);
+    const thanks = follow(maraVisit, ['hello', 'thank']);
+    expect(joke.text).toContain('клинець');
+    expect(thanks.text).toContain('із корицею');
+    expect(joke.text).not.toBe(thanks.text);
+    const arrival = currentNode(maraDecision, {
+      ...startDialogue(maraDecision),
+      flags: joke.state.flags,
+    });
+    expect(arrival.text).toContain('дістає дерев’яний клинець');
+    expect(currentNode(maraDecision, startDialogue(maraDecision)).text).not.toContain('клинець');
   });
 });

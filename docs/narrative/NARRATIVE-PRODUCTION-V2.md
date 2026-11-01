@@ -38,6 +38,21 @@ conversation. Morning/afternoon/evening changes are authored at stage boundaries
 - Selling Anna's reserved copy to Miller no longer assumes Miller was unaware
   of the competing order she had just discussed.
 
+## B — Days one and two
+
+Eleanor hands over the key through a practical opening action. Frank appears at
+the counter before the mystery begins. Miller's empty jar is a reminder sample,
+not simultaneously the jar she is trying to recover. Her memory anecdote ends
+with a concrete errand rather than a repeated lesson.
+
+Mara reacts separately to the door joke and thanks for the buns; the remembered
+door joke brings a late wooden wedge on day four. Iris actually opens the
+wordless book the player asked to see. Her art conversations concern a specific
+sketch, publisher and caption. Anna's reflection now answers the question about
+reading aloud and follows a concrete classroom mistake. Leo answers the shift
+and town questions with work and local details before discussing uncertainty.
+Existing return/decline choices remain valid throughout.
+
 ## Compatibility and validation
 
 Existing stage, node, option and consequence flag identifiers are retained.
