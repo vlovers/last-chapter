@@ -252,13 +252,16 @@ function isPendingChoiceLedgerKey(
   const [source, choiceId] = JSON.parse(key) as [string, string];
   return (
     source === nodeId &&
-    (nodes.get(nodeId)?.choices.some(
-      (choice) =>
-        choice.id === choiceId &&
-        choice.next !== '__exit' &&
-        choice.repeatability !== 'repeatable' &&
-        !choice.suspend,
-    ) ?? false)
+    (nodes
+      .get(nodeId)
+      ?.choices.some(
+        (choice) =>
+          choice.id === choiceId &&
+          choice.next !== '__exit' &&
+          choice.repeatability !== 'repeatable' &&
+          !choice.suspend,
+      ) ??
+      false)
   );
 }
 
