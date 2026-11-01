@@ -25,22 +25,55 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
       },
     ],
     options: [
+      {
+        id: 'after-tea-help-group',
+        label: 'Допомогти з нотатками, книжками або чашками',
+        next: 'after-case-tea-help',
+      },
+      {
+        id: 'after-tea-talk-group',
+        label: 'Поговорити з Марою, Лео чи Елеонорою',
+        next: 'after-case-tea-talk',
+      },
+      {
+        id: 'after-tea-corner-group',
+        label: 'Зазирнути до Айріс і Френка',
+        next: 'after-case-tea-corner',
+      },
+      { id: 'after-tea-quiet', label: 'Мовчки вимити чашки', next: 'after-case-quiet' },
+    ],
+  },
+  {
+    id: 'after-case-tea-help',
+    speaker: 'Нора',
+    text: 'Нора намагається скласти картки в одну рівну стопку. Анна забирає з краю столу дитячі книжки, а пані Міллер рахує порожні чашки. «Тут роботи на трьох», — каже Нора. «Обирай, із чого почати».',
+    options: [
       { id: 'after-tea-nora', label: 'Допомогти Норі скласти нотатки', next: 'after-case-nora' },
-      {
-        id: 'after-tea-mara',
-        label: 'Запитати Мару про завтрашній ранок',
-        next: 'after-case-mara',
-      },
-      {
-        id: 'after-tea-frank',
-        label: 'Забрати у Френка рушник і запропонувати йому коробку',
-        next: 'after-case-frank',
-      },
       {
         id: 'after-tea-anna-new',
         label: 'Попросити Анну допомогти з дитячими книжками',
         next: 'after-case-anna-new',
       },
+      {
+        id: 'after-tea-miller-new',
+        label: 'Запропонувати пані Міллер допомогу з чашками',
+        next: 'after-case-miller-new',
+      },
+      {
+        id: 'after-tea-help-back',
+        label: 'Повернутися до столу',
+        next: 'after-case-tea',
+        suspend: true,
+        repeatability: 'repeatable',
+      },
+    ],
+  },
+  {
+    id: 'after-case-tea-talk',
+    speaker: 'Мара',
+    text: 'Мара ставить чайник на підставку. Лео вже взяв собі чашку, а Елеонора шукає чисті ложки. «Усі тут, ніхто нікуди не поспішає», — каже Мара. «Ну, майже ніхто».',
+    options: [
+      { id: 'after-tea-mara', label: 'Запитати Мару про завтрашній ранок', next: 'after-case-mara' },
       {
         id: 'after-tea-leo-new',
         label: 'Запитати Лео, чи не запізнився його останній потяг',
@@ -52,16 +85,36 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
         next: 'after-case-eleanor-new',
       },
       {
-        id: 'after-tea-miller-new',
-        label: 'Запропонувати пані Міллер допомогу з чашками',
-        next: 'after-case-miller-new',
+        id: 'after-tea-talk-back',
+        label: 'Повернутися до столу',
+        next: 'after-case-tea',
+        suspend: true,
+        repeatability: 'repeatable',
+      },
+    ],
+  },
+  {
+    id: 'after-case-tea-corner',
+    speaker: 'Оповідач',
+    text: 'Френк зайняв рушник біля вікна й удає, що не бачить порожньої коробки поруч. Айріс стоїть неподалік із чашкою, яку так і не допила. Можна підійти до когось із них або залишити обох у спокої.',
+    options: [
+      {
+        id: 'after-tea-frank',
+        label: 'Забрати у Френка рушник і запропонувати йому коробку',
+        next: 'after-case-frank',
       },
       {
         id: 'after-tea-iris-new',
         label: 'Запитати Айріс, чи хоче вона залишитися на чай',
         next: 'after-case-iris-new',
       },
-      { id: 'after-tea-quiet', label: 'Мовчки вимити чашки', next: 'after-case-quiet' },
+      {
+        id: 'after-tea-corner-back',
+        label: 'Повернутися до столу',
+        next: 'after-case-tea',
+        suspend: true,
+        repeatability: 'repeatable',
+      },
     ],
   },
   {
