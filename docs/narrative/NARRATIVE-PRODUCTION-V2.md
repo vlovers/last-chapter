@@ -53,6 +53,28 @@ reading aloud and follows a concrete classroom mistake. Leo answers the shift
 and town questions with work and local details before discussing uncertainty.
 Existing return/decline choices remain valid throughout.
 
+## C — Days three and four
+
+Eleanor's responsibility now distinguishes the failed telephone during the flood
+from her later failure to check the boxes. Her shelf conversation responds to
+the new layout, and her reflection uses the morning routine, photographs and a
+specific table. Thomas discusses uneven work and money in his own terms without
+disclosing consultations. Nora does not claim knowledge of Thomas's conversation
+with the player. Her photograph, private letters and publication work remain
+separate objects.
+
+Iris's completed exhibition choice cannot be reopened through the art detour to
+acquire both mutually exclusive outcomes. Her marginal-note permission covers
+her own recollection, not ownership of an unidentified found page. Mara answers
+the question about the epistolary gift rather than discussing trains. Leo's tea
+anecdote now accounts for the actual labeled containers.
+
+Rechecked discovery order: reading Eleanor's note before the reservation no
+longer assumes Leo's identity. Opening the letter and then comparing the card
+records the card observation. Questions wait for Eleanor's actual third-day
+visit. The workshop star has no invented prior-day observation or visible glue
+side at night.
+
 ## Compatibility and validation
 
 Existing stage, node, option and consequence flag identifiers are retained.

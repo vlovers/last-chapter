@@ -3,6 +3,7 @@ import { annaVisit } from '../src/content/anna';
 import { irisDecision } from '../src/content/day-four-iris';
 import { leoDecision } from '../src/content/day-four-leo';
 import { maraDecision } from '../src/content/day-four-mara';
+import { firstEvening } from '../src/content/evening';
 import { finalReading } from '../src/content/day-five';
 import { leoVisit } from '../src/content/leo';
 import { maraVisit } from '../src/content/mara';
@@ -162,4 +163,37 @@ describe('Production V2: chronology, letter authorship and evidence boundaries',
     expect(arrival.text).toContain('дістає дерев’яний клинець');
     expect(currentNode(maraDecision, startDialogue(maraDecision)).text).not.toContain('клинець');
   });
+
+  it('notes inspected before the reservation do not assume the player has read Leo’s name', () => {
+    const note = follow(firstEvening, ['eleanor-notes', 'eleanor-memory']);
+    expect(note.text).not.toContain('Лео');
+    const ledger = follow(firstEvening, ['eleanor-notes', 'eleanor-history']);
+    expect(ledger.text).not.toContain('бронювання Лео');
+    const opened = follow(firstEvening, ['letter', 'letter-open', 'opened-conclude']);
+    expect(opened.state.flags).toContain('saw_receipt');
+    expect(opened.text).toContain('картку');
+  });
+
+  it.each(['iris-exhibition-open', 'iris-exhibition-private'])(
+    'art cannot reopen the completed exhibition decision: %s',
+    (choice) => {
+      const visit = follow(irisDecision, [
+        'welcome',
+        'iris-exhibition-plan',
+        choice,
+        'iris-exhibition-result-back',
+        'art',
+      ]);
+      const options = availableOptions(irisDecision, visit.state).map((o) => o.id);
+      expect(options).not.toContain('art-back');
+      expect(options).toContain('art-done-back');
+      const returned = selectOption(irisDecision, visit.state, 'art-done-back');
+      expect(
+        returned.flags.filter((f) =>
+          ['iris_exhibition_artist_controls', 'iris_exhibition_private_choice'].includes(f),
+        ),
+      ).toHaveLength(1);
+      expect(availableOptions(irisDecision, returned).map((o) => o.id)).toContain('leave');
+    },
+  );
 });
