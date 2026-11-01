@@ -59,6 +59,7 @@ export const irisEvidenceFinalNodes: readonly DialogueNode[] = [
         id: 'final-iris-evidence-rumor',
         label: '«А якщо сказати гостям, що коробку сімнадцять уже знайшли?»',
         next: 'final-iris-evidence-rumor',
+        unless: ['final_case_iris_declined'],
         grants: ['final_iris_evidence_rumor_seeded'],
       },
       {
