@@ -21,6 +21,13 @@ describe('Day five: real dialogue traversal and consequence gating', () => {
           node: 'bookshop-tomorrow',
           flags: ['final_ledger_scene_complete', 'final_manuscript_provenance_decided'],
         };
+        const group =
+          activity === 'window'
+            ? 'tomorrow-books-group'
+            : activity === 'frank'
+              ? 'tomorrow-room-group'
+              : 'tomorrow-neighbors-group';
+        state = selectOption(finalReading, state, group);
         const entry = `tomorrow-${activity}-new`;
         expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(entry);
         state = selectOption(finalReading, state, entry);
@@ -30,7 +37,11 @@ describe('Day five: real dialogue traversal and consequence gating', () => {
         state = selectOption(finalReading, state, finish!.id);
         expect(state.node).toBe('gathering');
         expect(state.flags).toContain(`final_tomorrow_${activity}_done`);
-        const revisit = { ...state, node: 'bookshop-tomorrow' };
+        const revisit = { ...state, node: group === 'tomorrow-books-group'
+          ? 'bookshop-tomorrow-books'
+          : group === 'tomorrow-room-group'
+            ? 'bookshop-tomorrow-room'
+            : 'bookshop-tomorrow-neighbors' };
         expect(availableOptions(finalReading, revisit).map((option) => option.id)).not.toContain(
           entry,
         );
@@ -42,7 +53,12 @@ describe('Day five: real dialogue traversal and consequence gating', () => {
     it(`does not offer completed ${activity} again`, () => {
       const state = {
         ...startDialogue(finalReading),
-        node: 'bookshop-tomorrow',
+        node:
+          activity === 'window'
+            ? 'bookshop-tomorrow-books'
+            : activity === 'frank'
+              ? 'bookshop-tomorrow-room'
+              : 'bookshop-tomorrow-neighbors',
         flags: [`final_tomorrow_${activity}_done`],
       };
       expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
