@@ -77,7 +77,7 @@ const cases = [
     done: ['final_counter_ruth_done', 'final_counter_sam_done', 'final_counter_reed_done'],
     markers: ['Рут ховає записку', 'Сем відходить', 'Пан Рід обережно прибирає'],
     genericEnd: 'На прилавку більше немає черги',
-    specificEnd: 'Черга розійшлася, але',
+    specificEnd: 'Черга розійшлася.',
   },
 ] as const;
 
