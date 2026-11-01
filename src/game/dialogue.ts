@@ -123,16 +123,61 @@ export function restoreDialogueProgress(story: DialogueStory, state: DialogueSta
   if (state.completed !== undefined) return state;
   const cached = legacyReplayCache.get(state)?.get(story);
   if (cached) return cached;
-  let replay = startDialogue(story);
+  // Reconstruct legacy completion without copying the growing pending ledger
+  // on every historical edge. Ordinary long routes are linear in history size.
+  const flags = new Set<string>();
+  const completed = new Set<string>();
+  const pendingKeys = new Set<string>();
+  const pendingHubs = new Set<string>();
+  let pending: { hub: string; key: string }[] = [];
+  let nodeId = story.start;
   for (const id of state.history) {
-    const node = requiredDialogueNode(story, replay.node);
-    const option = node.options.find((o) => o.id === id);
+    const node = requiredDialogueNode(story, nodeId);
+    const option = node.options.find((item) => item.id === id);
     if (!option) break;
-    // Legacy replay only needs flags and completion ledgers. Rebuilding a
-    // growing history array on every edge makes long migrations quadratic.
-    replay = applyOption(story, replay, node, option, false);
+    const destination = dialogueNode(story, option.next);
+    if (!destination) break;
+    const returning = pendingHubs.has(option.next);
+    if (option.suspend) {
+      const index = pending.findIndex((item) => item.hub === option.next);
+      if (index >= 0) {
+        pending = pending.slice(0, index);
+        pendingKeys.clear();
+        pendingHubs.clear();
+        for (const item of pending) {
+          pendingKeys.add(item.key);
+          pendingHubs.add(item.hub);
+        }
+      }
+    }
+    if (option.repeatability !== 'repeatable' && !option.suspend && !returning) {
+      const key = completionKey(node, option, flags);
+      if (!pendingKeys.has(key)) {
+        pending.push({ hub: node.id, key });
+        pendingKeys.add(key);
+        pendingHubs.add(node.id);
+      }
+    }
+    if (!option.suspend) {
+      if (!destination.options.length || (option.repeatability === 'repeatable' && node.hub)) {
+        for (const item of pending) completed.add(item.key);
+        pending = [];
+        pendingKeys.clear();
+        pendingHubs.clear();
+      } else if (pendingHubs.has(option.next)) {
+        pending = pending.filter((item) => {
+          if (item.hub !== option.next) return true;
+          completed.add(item.key);
+          pendingKeys.delete(item.key);
+          return false;
+        });
+        pendingHubs.delete(option.next);
+      }
+    }
+    for (const flag of option.grants ?? []) flags.add(flag);
+    nodeId = option.next;
   }
-  const restored = { ...state, completed: replay.completed ?? [], pending: replay.pending ?? [] };
+  const restored = { ...state, completed: [...completed], pending };
   let byStory = legacyReplayCache.get(state);
   if (!byStory) {
     byStory = new WeakMap<DialogueStory, DialogueState>();
