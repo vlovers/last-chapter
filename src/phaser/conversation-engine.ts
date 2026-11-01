@@ -222,6 +222,10 @@ export function answerConversation(
     finished: choice.next === '__exit',
   };
 }
+// Optional conversations have smaller ledgers than the five-day chapter save.
+// Reject oversized UTF-8 payloads before parsing untrusted localStorage data.
+const MAX_CONVERSATION_SAVE_BYTES = 262_144;
+
 /** Ledger keys are produced by JSON.stringify([nodeId, choiceId]). */
 function isChoiceLedgerKey(key: string): boolean {
   try {
@@ -237,11 +241,37 @@ function isChoiceLedgerKey(key: string): boolean {
   }
 }
 
+/** A pending route must still refer to a real, unfinished authored choice.
+ * Retired completed keys remain valid for compatibility with older saves. */
+function isPendingChoiceLedgerKey(
+  nodes: ReadonlyMap<string, ConversationNode>,
+  nodeId: string,
+  key: string,
+): boolean {
+  if (!isChoiceLedgerKey(key)) return false;
+  const [source, choiceId] = JSON.parse(key) as [string, string];
+  return (
+    source === nodeId &&
+    (nodes.get(nodeId)?.choices.some(
+      (choice) =>
+        choice.id === choiceId &&
+        choice.next !== '__exit' &&
+        choice.repeatability !== 'repeatable' &&
+        !choice.suspend,
+    ) ?? false)
+  );
+}
+
 export function restoreConversation(
   topic: ConversationTopic,
   raw: string,
 ): ConversationSession | null {
   try {
+    if (
+      raw.length > MAX_CONVERSATION_SAVE_BYTES ||
+      new TextEncoder().encode(raw).byteLength > MAX_CONVERSATION_SAVE_BYTES
+    )
+      return null;
     const x: unknown = JSON.parse(raw);
     if (!x || typeof x !== 'object') return null;
     const s = x as Record<string, unknown>;
@@ -280,9 +310,11 @@ export function restoreConversation(
             nodes.has((v as Record<string, unknown>).node as string) &&
             typeof (v as Record<string, unknown>).key === 'string' &&
             String((v as Record<string, unknown>).key).length <= 300 &&
-            isChoiceLedgerKey(String((v as Record<string, unknown>).key)) &&
-            JSON.parse(String((v as Record<string, unknown>).key))[0] ===
-              (v as Record<string, unknown>).node,
+            isPendingChoiceLedgerKey(
+              nodes,
+              (v as Record<string, unknown>).node as string,
+              String((v as Record<string, unknown>).key),
+            ),
         ))
     )
       return null;
