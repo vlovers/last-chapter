@@ -44,7 +44,7 @@ describe('Eleanor: flood memory and unresolved evidence', () => {
   });
 
   it.each([
-    ['eleanor_timeline_kept_uncertainty', 'двома колонками'],
+    ['eleanor_timeline_kept_uncertainty', 'що ми знаємо, а чого не знаємо'],
     ['eleanor_timeline_assumed_guilt', 'навмисно сховала'],
   ])('reacts to the earlier timeline conversation: %s', (flag, expected) => {
     const state = play([gate, flag], [topic]);
@@ -145,8 +145,9 @@ describe('Eleanor: flood memory and unresolved evidence', () => {
   it('keeps the confirmed box number separate from the uncertain manuscript marking', () => {
     const state = play([gate], [topic, 'final-eleanor-memory-box']);
     const text = currentNode(finalReading, state).text;
-    expect(text).toContain('Сімнадцять була однією з них');
-    expect(text).toContain('чи стосується її число на знайденому аркуші — я не знаю');
+    expect(text).toContain('У журналі є коробка сімнадцять');
+    expect(text).toContain('чи має вона стосунок до числа на аркуші — гадки не маю');
+    expect(text).not.toContain('доводить авторство');
   });
 
   it('limits each new node to four choices with valid destinations', () => {
