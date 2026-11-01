@@ -145,6 +145,54 @@ describe('Final evening evidence and memory boundaries', () => {
     expect(currentNode(finalReading, state).text).toContain('жодного слова');
   });
 
+  it('prioritizes Iris refusal even with multiple letter flags set', () => {
+    const state = selectOption(
+      finalReading,
+      gathering([
+        'iris_quiet_page_discussed',
+        'iris_margin_note_discussed',
+        'final_case_iris_declined',
+        'iris_letter_breach_admitted',
+        'final_letter_breach_disclosed',
+        'iris_letter_pressured_day4',
+      ]),
+      'final-iris-evidence-topic',
+    );
+    expect(currentNode(finalReading, state).text).toContain('сьогодні не шукатиму нових доказів');
+  });
+
+  it('keeps Iris illustration work separate from the investigation and respects her shelf choice', () => {
+    let state = selectOption(
+      finalReading,
+      gathering(['iris_cover_day_four_followup', 'iris_cover_independent_chosen']),
+      'final-iris-cover-topic',
+    );
+    expect(currentNode(finalReading, state).text).toContain('чотири сторінки');
+    state = selectOption(finalReading, state, 'final-iris-cover-offer-shelf');
+    expect(currentNode(finalReading, state).text).toContain('без цінника');
+    state = selectOption(finalReading, state, 'final-iris-cover-shelf-back');
+    expect(state.node).toBe('gathering');
+    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+      'final-iris-cover-topic',
+    );
+  });
+
+  it('lets Leo defer the course without inventing an application or a confirmed shift', () => {
+    let state = selectOption(
+      finalReading,
+      gathering(['leo_night_course_discussed', 'leo_night_course_deferred']),
+      'final-leo-night-course',
+    );
+    expect(currentNode(finalReading, state).text).toContain('Я не подав заявку');
+    state = selectOption(finalReading, state, 'final-leo-course-ask-jun');
+    expect(currentNode(finalReading, state).text).toContain('листівку');
+    state = selectOption(finalReading, state, 'final-leo-course-jun-back');
+    expect(state.node).toBe('gathering');
+    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+      'final-leo-night-course',
+    );
+  });
+
   it('does not mistake Eleanor missing phone records for proof of a call', () => {
     let state = selectOption(
       finalReading,
