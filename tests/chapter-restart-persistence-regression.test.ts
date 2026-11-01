@@ -78,9 +78,7 @@ describe('season restart keeps the previous save until a replacement is durable'
     expect(story.stage).toBe('miller');
     expect(story.isProgressSaved).toBe(true);
     expect(decodeSave(values.get(SAVE_KEY)!)?.stage).toBe('miller');
-    expect(values.get(SERVICE_KEY)).toBe(
-      JSON.stringify({ version: 1, asked: [], attempts: [] }),
-    );
+    expect(values.get(SERVICE_KEY)).toBe(JSON.stringify({ version: 1, asked: [], attempts: [] }));
     for (const key of Object.values(OPTIONAL_PROGRESS_KEYS)) {
       expect(values.has(key)).toBe(false);
     }
@@ -97,9 +95,7 @@ describe('season restart keeps the previous save until a replacement is durable'
     expect(story.stage).toBe('miller');
     expect(story.isProgressSaved).toBe(true);
     expect(values.get(SAVE_KEY)).not.toBe(oldSave);
-    expect(values.get(SERVICE_KEY)).toBe(
-      JSON.stringify({ version: 1, asked: [], attempts: [] }),
-    );
+    expect(values.get(SERVICE_KEY)).toBe(JSON.stringify({ version: 1, asked: [], attempts: [] }));
     for (const key of Object.values(OPTIONAL_PROGRESS_KEYS)) {
       expect(values.has(key)).toBe(false);
     }
