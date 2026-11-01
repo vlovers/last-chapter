@@ -73,7 +73,7 @@ export const finalReading: DialogueStory = {
         },
         {
           requires: ['final_counter_evening_done'],
-          text: 'Елеонора залишає блокнот біля каси. «Якщо хтось ще підійде, запишемо замовлення», — каже вона. Френк уже заглядає в порожній пакет.',
+          text: 'Елеонора залишає блокнот біля каси. «Якщо хтось ще підійде, запишемо замовлення», — каже вона. Порожній пакет лежить поряд із блокнотом.',
         },
         {
           requires: ['final_counter_evening_done', 'final_counter_reed_note'],
