@@ -63,6 +63,19 @@ export const finalReading: DialogueStory = {
           text: 'Анна розкладає дитячі закладки. На одній намальований дракон, на іншій — кіт у короні. Елеонора піднімає другу. «Це ж Френк?» Анна киває: «Діти сказали, що він тут головний».',
         },
       ],
+      // These callbacks belong to the ordinary evening, not to the manuscript
+      // mystery. They remain visible alongside any higher-priority story variant
+      // and only appear after the player has actually left each optional hub.
+      afterwordWhen: [
+        {
+          requires: ['final_reader_debates_done'],
+          text: 'Мара відсуває книжки, звільняючи місце для чаю. «Можеш ще посидіти з нами», — каже вона. Френк не ворушиться зі свого стільця.',
+        },
+        {
+          requires: ['final_counter_evening_done'],
+          text: 'Елеонора залишає блокнот біля каси. «Якщо хтось ще підійде, запишемо замовлення», — каже вона. Френк уже заглядає в порожній пакет.',
+        },
+      ],
       options: [
         {
           id: 'final-town-frank-option',
