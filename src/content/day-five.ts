@@ -75,6 +75,7 @@ export const finalReading: DialogueStory = {
         },
         {
           requires: ['final_counter_evening_done'],
+          unless: ['final_counter_reed_note', 'final_counter_reed_book_kept', 'final_counter_reed_deferred'],
           text: 'Елеонора залишає блокнот біля каси. «Якщо хтось ще підійде, запишемо замовлення», — каже вона. Порожній пакет лежить поряд із блокнотом.',
         },
         {
