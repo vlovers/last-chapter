@@ -48,24 +48,62 @@ export const readerDebatesNodes: readonly DialogueNode[] = [
         text: 'Мара повертає роман на стіл. «Принаймні тепер ми знаємо, через що сперечалися», — каже Анна. Міллер зітхає, але не сперечається знову. Френк тягнеться до тарілки з булочками.',
       },
       {
-        requires: ['final_reader_audio_done', 'final_reader_audio_choices'],
-        text: 'Рут дописує до картки «аудіо, великий шрифт, короткі історії». Анна кладе її біля каталогу: «Перевіримо, які видання справді є, перш ніж щось обіцяти». Френк дрімає під столом.',
-      },
-      {
-        requires: ['final_reader_audio_done', 'final_reader_audio_ruth_story'],
-        text: 'Рут фотографує назву морської збірки й прибирає навушники. «Вдома перевірю, чи є аудіоверсія», — каже вона. Анна підсуває їй чай, а Френк дрімає під столом.',
-      },
-      {
-        requires: ['final_reader_audio_done', 'final_reader_audio_class_idea'],
-        text: 'Анна занотовує ідею для наступного уроку: діти зможуть слухати, читати вголос або малювати човни. «А хто вирішить, як правильно?» — питає Нора. «Самі діти», — усміхається Анна. Френк дрімає під столом.',
-      },
-      {
         requires: ['final_reader_audio_done'],
         text: 'Рут прибирає навушники. Анна відсуває чашку від книжок, а Нора підсуває чисту картку для наступних читацьких побажань. Френк дрімає під столом.',
       },
       {
         requires: ['final_reader_villain_done'],
         text: 'Міллер закриває детектив і кладе його подалі від чужих чашок. «Я все одно люблю цього лиходія», — попереджає вона. Нора усміхається: «Це ми вже зрозуміли». Айріс повертається до своїх ескізів.',
+      },
+    ],
+    // Each finished debate contributes its own visible consequence, even after
+    // other debates have completed and a more specific hub narration wins.
+    // Conflicting flags from damaged saves never produce two exclusive outcomes.
+    afterwordWhen: [
+      {
+        requires: ['final_reader_romance_done', 'final_reader_romance_two_books'],
+        unless: ['final_reader_romance_miller_heard', 'final_reader_romance_side_character'],
+        text: 'Міллер ще раз перегортає другий роман і нагадує Марі, що забере його після читань. Мара просить тільки не загинати сторінки.',
+      },
+      {
+        requires: ['final_reader_romance_done', 'final_reader_romance_miller_heard'],
+        unless: ['final_reader_romance_two_books', 'final_reader_romance_side_character'],
+        text: 'Міллер згадує Артура й поїзди. Анна сміється: «От про ці поїзди авторові й варто було написати».',
+      },
+      {
+        requires: ['final_reader_romance_done', 'final_reader_romance_side_character'],
+        unless: ['final_reader_romance_two_books', 'final_reader_romance_miller_heard'],
+        text: 'Анна залишає на картці рекомендацій жарт про зниклий диван. Лео обіцяє не шукати вантажівку сьогодні.',
+      },
+      {
+        requires: ['final_reader_audio_done', 'final_reader_audio_choices'],
+        unless: ['final_reader_audio_ruth_story', 'final_reader_audio_class_idea'],
+        text: 'Рут дописує до картки «аудіо, великий шрифт, короткі історії». Анна кладе її біля каталогу: «Перевіримо, які видання справді є, перш ніж щось обіцяти». Френк дрімає під столом.',
+      },
+      {
+        requires: ['final_reader_audio_done', 'final_reader_audio_ruth_story'],
+        unless: ['final_reader_audio_choices', 'final_reader_audio_class_idea'],
+        text: 'Рут фотографує назву морської збірки й прибирає навушники. «Вдома перевірю, чи є аудіоверсія», — каже вона. Анна підсуває їй чай, а Френк дрімає під столом.',
+      },
+      {
+        requires: ['final_reader_audio_done', 'final_reader_audio_class_idea'],
+        unless: ['final_reader_audio_choices', 'final_reader_audio_ruth_story'],
+        text: 'Анна занотовує ідею для наступного уроку: діти зможуть слухати, читати вголос або малювати човни. «А хто вирішить, як правильно?» — питає Нора. «Самі діти», — усміхається Анна. Френк дрімає під столом.',
+      },
+      {
+        requires: ['final_reader_villain_done', 'final_reader_villain_no_spoilers'],
+        unless: ['final_reader_villain_nora_view', 'final_reader_villain_iris_sketch'],
+        text: 'Закладка «Спершу спитай» лежить чистим боком догори. Міллер більше не намагається зачитати останню сторінку.',
+      },
+      {
+        requires: ['final_reader_villain_done', 'final_reader_villain_nora_view'],
+        unless: ['final_reader_villain_no_spoilers', 'final_reader_villain_iris_sketch'],
+        text: 'Нора кладе серветку з порожнім кріслом до читацьких жартів, а не до архіву. Міллер обіцяє поглянути на історію ошуканої героїні.',
+      },
+      {
+        requires: ['final_reader_villain_done', 'final_reader_villain_iris_sketch'],
+        unless: ['final_reader_villain_no_spoilers', 'final_reader_villain_nora_view'],
+        text: 'Айріс повертається до ескізів: виставка лиходіїв лишилася в нотатнику Нори, без жодної обіцянки від художниці.',
       },
     ],
     options: [
