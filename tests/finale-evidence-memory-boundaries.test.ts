@@ -73,7 +73,9 @@ describe('Final evening evidence and memory boundaries', () => {
       ]),
       'final-iris-evidence-topic',
     );
-    expect(currentNode(finalReading, state).text).toContain('Сьогодні про рукопис більше не говоритиму');
+    expect(currentNode(finalReading, state).text).toContain(
+      'Сьогодні про рукопис більше не говоритиму',
+    );
     expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
       'final-iris-evidence-ask',
     );
