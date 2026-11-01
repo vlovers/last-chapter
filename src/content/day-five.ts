@@ -105,7 +105,10 @@ export const finalReading: DialogueStory = {
         },
         {
           requires: ['final_leo_night_course_done', 'leo_night_course_deferred'],
-          unless: ['leo_night_course_application_planned', 'leo_night_course_shift_request_planned'],
+          unless: [
+            'leo_night_course_application_planned',
+            'leo_night_course_shift_request_planned',
+          ],
           text: 'Лео залишає роман про маяк біля чашки. «З курсом зачекаю. А книжку дочитаю сьогодні».',
         },
         {

@@ -36,15 +36,18 @@ describe('Independent character callbacks at the final gathering', () => {
     expect(currentNode(finalReading, gathering([flag])).text).not.toContain(text);
   });
 
-  it.each(irisOutcomes)('remembers Iris illustration outcome %s after her conversation', (flag, text) => {
-    const state = gathering(['final_iris_cover_done', flag]);
-    const narration = currentNode(finalReading, state).text;
-    expect(narration).toContain(text);
-    for (const [otherFlag, otherText] of irisOutcomes) {
-      if (otherFlag !== flag) expect(narration).not.toContain(otherText);
-    }
-    expect(currentNode(finalReading, gathering([flag])).text).not.toContain(text);
-  });
+  it.each(irisOutcomes)(
+    'remembers Iris illustration outcome %s after her conversation',
+    (flag, text) => {
+      const state = gathering(['final_iris_cover_done', flag]);
+      const narration = currentNode(finalReading, state).text;
+      expect(narration).toContain(text);
+      for (const [otherFlag, otherText] of irisOutcomes) {
+        if (otherFlag !== flag) expect(narration).not.toContain(otherText);
+      }
+      expect(currentNode(finalReading, gathering([flag])).text).not.toContain(text);
+    },
+  );
 
   it('composes all nine Leo/Iris outcome pairs without replacing either character', () => {
     for (const [leoFlag, leoText] of leoOutcomes) {
