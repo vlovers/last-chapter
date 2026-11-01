@@ -43,6 +43,25 @@ describe('Final evening evidence and memory boundaries', () => {
     );
   });
 
+  it('acknowledges a disclosed letter breach instead of treating it as a secret', () => {
+    const state = selectOption(
+      finalReading,
+      gathering([
+        'iris_quiet_page_discussed',
+        'iris_margin_note_discussed',
+        'opened_private_letter',
+        'final_letter_breach_disclosed',
+      ]),
+      'final-iris-evidence-topic',
+    );
+    const text = currentNode(finalReading, state).text;
+    expect(text).toContain('Ми вже з’ясували');
+    expect(text).not.toContain('досі не знає');
+    expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
+      'final-iris-evidence-ask',
+    );
+  });
+
   it('lets Iris reject an invented box discovery without endorsing the rumor', () => {
     let state = selectOption(
       finalReading,
