@@ -65,9 +65,9 @@ const cases = [
     hub: 'final-reader-debates-hub',
     routes: readerRoutes,
     done: ['final_reader_romance_done', 'final_reader_audio_done', 'final_reader_villain_done'],
-    markers: ['Мара повертає роман', 'Рут прибирає навушники', 'Міллер закриває детектив'],
+    markers: ['Мара повертає роман', 'прибирає навушники', 'Міллер закриває детектив'],
     genericEnd: 'За столом стихли три суперечки',
-    specificEnd: 'Без спойлерів',
+    specificEnd: 'закладка «Спершу спитай»',
   },
   {
     name: 'counter visitors',

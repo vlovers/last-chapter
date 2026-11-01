@@ -175,7 +175,7 @@ describe('final reader debates', () => {
       ],
       history: [],
     }).text;
-    expect(seen).toContain('Без спойлерів');
+    expect(seen).toContain('закладка «Спершу спитай»');
     expect(seen).not.toBe(baseline);
   });
 
