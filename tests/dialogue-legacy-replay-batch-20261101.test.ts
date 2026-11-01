@@ -59,7 +59,9 @@ describe('Legacy dialogue replay: linear completion and narrative continuity', (
       id: `scene-${index}`,
       speaker: 'Оповідач',
       text: 'Ще одна сторінка.',
-      options: [{ id: 'next', label: 'Далі', next: index === length ? 'end' : `scene-${index + 1}` }],
+      options: [
+        { id: 'next', label: 'Далі', next: index === length ? 'end' : `scene-${index + 1}` },
+      ],
     }));
     nodes.push({ id: 'end', speaker: 'Оповідач', text: 'Кінець.', options: [] });
     const story: DialogueStory = { start: 'scene-0', nodes };
