@@ -99,6 +99,28 @@ const dayOf = (stage: ChapterStage): number =>
           ? 4
           : 5;
 
+/**
+ * Keep the finale's closing action one tap away without hiding optional
+ * conversations. Other dialogue screens retain their three-choice pages.
+ */
+function paginateChoices<T extends { readonly id: string }>(
+  stage: ChapterStage,
+  nodeId: string,
+  choices: readonly T[],
+) {
+  const pinnedClose =
+    stage === 'day5-reading' && nodeId === 'gathering'
+      ? choices.find((choice) => choice.id === 'close')
+      : undefined;
+  const pageable = pinnedClose ? choices.filter((choice) => choice.id !== 'close') : choices;
+  const firstPageSize = pinnedClose ? 2 : 3;
+  const pageCount =
+    pageable.length <= firstPageSize
+      ? 1
+      : 1 + Math.ceil((pageable.length - firstPageSize) / 3);
+  return { pinnedClose, pageable, firstPageSize, pageCount };
+}
+
 export class FiveDayStory {
   private chapter: ChapterState;
   private service = restoreService('');
@@ -349,20 +371,29 @@ export class FiveDayStory {
       this.choicePageKey = pageKey;
       this.choicePage = 0;
     }
-    // Keep topic navigation from crowding out a direct reply to the current line.
-    // Show three conversation choices and one stable pagination control.
-    const totalPages = choices.length <= 3 ? 1 : Math.ceil(choices.length / 3);
-    this.choicePage = Math.min(this.choicePage, totalPages - 1);
-    const visibleChoices =
-      totalPages === 1
-        ? choices
-        : [
-            ...choices.slice(this.choicePage * 3, (this.choicePage + 1) * 3),
+    const { pinnedClose, pageable, firstPageSize, pageCount } = paginateChoices(
+      this.stage,
+      node.id,
+      choices,
+    );
+    this.choicePage = Math.min(this.choicePage, pageCount - 1);
+    const offset = this.choicePage === 0 ? 0 : firstPageSize + (this.choicePage - 1) * 3;
+    const pageSize = this.choicePage === 0 ? firstPageSize : 3;
+    // Never exceed four mobile buttons. Only the gathering pins "finish";
+    // all optional replies remain in their original order on subsequent pages.
+    const visibleChoices = [
+      ...pageable.slice(offset, offset + pageSize),
+      ...(pageCount > 1
+        ? [
             {
               id: '__more_choices',
-              label: this.choicePage < totalPages - 1 ? 'Інші варіанти →' : '← Попередні варіанти',
+              label:
+                this.choicePage < pageCount - 1 ? 'Інші варіанти →' : '↩ На початок списку',
             },
-          ];
+          ]
+        : []),
+      ...(this.choicePage === 0 && pinnedClose ? [pinnedClose] : []),
+    ];
     const member = castMember(node.speaker);
     return {
       speaker: node.speaker,
@@ -379,9 +410,9 @@ export class FiveDayStory {
       const visible = this.open().choices;
       if (!visible.some((choice) => choice.id === '__more_choices'))
         throw new Error('No additional dialogue choices');
-      const pageCount = availableOptions(stageStory(this.stage), this.chapter.dialogue).length;
-      const pages = pageCount <= 3 ? 1 : Math.ceil(pageCount / 3);
-      this.choicePage = this.choicePage < pages - 1 ? this.choicePage + 1 : 0;
+      const options = availableOptions(stageStory(this.stage), this.chapter.dialogue);
+      const { pageCount } = paginateChoices(this.stage, this.chapter.dialogue.node, options);
+      this.choicePage = this.choicePage < pageCount - 1 ? this.choicePage + 1 : 0;
       return this.open();
     } else if (id === '__explore_after_club') {
       this.chapter = exploreAfterBookClub(this.chapter);

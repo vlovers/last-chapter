@@ -290,6 +290,7 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
       if (options.has(option.id)) errors.push(`Duplicate option: ${node.id}/${option.id}`);
       options.add(option.id);
       if (!option.id.trim()) errors.push(`Empty option id: ${node.id}`);
+      if (option.id.startsWith('__')) errors.push(`Reserved option id: ${node.id}/${option.id}`);
       if (!option.next.trim()) errors.push(`Empty destination: ${node.id}/${option.id}`);
       if (!option.label.trim()) errors.push(`Empty option label: ${node.id}/${option.id}`);
       for (const field of ['requires', 'unless', 'grants'] as const) {

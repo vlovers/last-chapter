@@ -28,4 +28,27 @@ describe('Dialogue structural validation', () => {
     };
     expect(validateDialogue(story)).toContain(expected);
   });
+  it('rejects reserved runtime control IDs before they become unselectable UI buttons', () => {
+    const story: DialogueStory = {
+      start: 'start',
+      nodes: [
+        {
+          id: 'start',
+          speaker: 'Оповідач',
+          text: 'Початок',
+          options: [
+            { id: '__more_choices', label: 'Далі', next: 'end' },
+            { id: '__advance', label: 'Закінчити', next: 'end' },
+          ],
+        },
+        { id: 'end', speaker: 'Оповідач', text: 'Кінець', options: [] },
+      ],
+    };
+    expect(validateDialogue(story)).toEqual(
+      expect.arrayContaining([
+        'Reserved option id: start/__more_choices',
+        'Reserved option id: start/__advance',
+      ]),
+    );
+  });
 });
