@@ -59,7 +59,7 @@ describe('conversational pacing and continuity', () => {
     expect(availableOptions(annaVisit, state).map((choice) => choice.id)).toContain(
       'anna-v3-conversation',
     );
-    expect(currentNode(annaVisit, state).text).toContain('Емма');
+    expect(currentNode(annaVisit, state).text).toContain('Еммі');
   });
 
   it('Mara talks about her own future after the bakery anecdote, not immediately', () => {
@@ -98,7 +98,7 @@ describe('conversational pacing and continuity', () => {
     ['Mara respected', maraDecision, 'greet', 'mara_letter_privacy_respected', 'Дякую'],
     ['Leo pressured', leoDecision, 'welcome', 'leo_letter_pressured_day4', 'не передавай'],
     ['Leo respected', leoDecision, 'welcome', 'leo_letter_consent_respected', 'Дякую'],
-    ['Iris breach', irisDecision, 'welcome', 'iris_letter_breach_admitted', 'не розповідати'],
+    ['Iris breach', irisDecision, 'welcome', 'iris_letter_breach_admitted', 'ти відкрив лист'],
     ['Anna pressured', annaVisit, 'hello', 'anna_rumor_pressed', 'Томаса'],
     ['Nora pressured', noraVisit, 'hello', 'nora_confidentiality_pressed', 'не розповідатиму'],
   ] as const)('%s changes the next everyday conversation', (_name, story, hub, flag, phrase) => {

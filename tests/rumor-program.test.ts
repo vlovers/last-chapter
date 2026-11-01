@@ -150,7 +150,7 @@ describe('false printed finale: a consequence-driven rumor scene', () => {
     };
     const text = currentNode(finalReading, state).text;
     expect(text).toContain('вже виправили це вголос');
-    expect(text).toContain('старим заголовком');
+    expect(text).toContain('Той рядок додала щойно');
   });
 
   it('keeps the printed correction independent of the private manuscript', () => {

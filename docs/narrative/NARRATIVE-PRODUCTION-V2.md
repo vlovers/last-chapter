@@ -1,0 +1,53 @@
+# Narrative production V2
+
+This pass continues PR #12 on its existing PR #10 → PR #9 dependency chain.
+Starting head: `e20b7dc4e162b20ee328e566295fbdbec2fdb041`. Work is isolated in a
+new worktree; the original checkout's untracked files are untouched.
+
+## Playable continuity map
+
+| Day | Required visits                                 | Optional life of the shop                                                      | Evidence and unresolved questions                                                                                           |
+| --- | ----------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Miller → Mara → old reservation box             | Book preferences, bakery, cinema memories, Frank                               | Envelope names Iris and Leo; reservation has no collection signature. Opening it is a separate breach.                      |
+| 2   | Iris → Anna → Leo                               | Illustration commission, classroom books, railway training and music           | Iris remembers the closure; Leo describes his own assumptions. Neither can speak for the other's past intentions.           |
+| 3   | Eleanor → Thomas → Nora → club or quiet evening | Lamp repair, school chairs, loaned books, club debates, cat and closing chores | Closure records and missing call confirmation; manuscript page, pencil 17 and workshop window are independent observations. |
+| 4   | Iris → Mara → Leo                               | Exhibition, bakery shift and recipe, travel plans                              | Iris wrote the letter. Offering delivery is not permission. Stars, handwritten warning and box theory remain hypotheses.    |
+| 5   | Reading gathering → closing → season epilogue   | Customer orders, reader debates, character callbacks, school and bakery plans  | Compare fragments/photo/journal; settle custody, public claims and private boundaries without inventing authorship.         |
+
+The manuscript route remains optional whether the club was attended or skipped.
+The letter, rumor, manuscript and ordinary bookshop outcomes are independent.
+An end-of-conversation return does not advance the day or perform an offscreen
+conversation. Morning/afternoon/evening changes are authored at stage boundaries.
+
+## A — Critical corrections
+
+- Removed same-visit reports of completed classroom activities, a new concert
+  invitation, a conversation with Anna and a second umbrella exhibition.
+- Anna's day-two reading is tomorrow; Thomas's day-three missed help is today.
+- Iris's fear concerns rereading her own letter, not discovering another
+  person's handwriting. Admitting opening it does not invent disclosure of its
+  contents. A concealed breach is player knowledge, not automatic NPC knowledge.
+- Day-four exits account for the envelope staying behind the counter and Leo
+  carrying his parcel. The reservation card is not acquired on a skipped topic.
+- The ledger proves that the bookshop used box 17; it does not authenticate the
+  pencil mark on the loose page. This follows the later provenance contract in
+  `EVIDENCE-PROVENANCE-20261030.md`, superseding the older case bible's claim of
+  certain handwriting recognition.
+- Miller adds her unsupported headline to prepared programs after hearing the
+  player's suggestion, not before that evening's conversation exists.
+- Selling Anna's reserved copy to Miller no longer assumes Miller was unaware
+  of the competing order she had just discussed.
+
+## Compatibility and validation
+
+Existing stage, node, option and consequence flag identifiers are retained.
+No save schema change or migration is required for prose corrections. A loaded
+in-progress scene resolves revised narration from the same persisted facts.
+
+Baseline on Node 22.12.0: `npm ci`, then `npm run check` passed (232 test files,
+2148 tests). npm reported the existing eslint-visitor-keys engine range warning
+(22.13+); it did not prevent installation or checks. Subsequent package results
+and browser evidence are recorded at the end of this document when run.
+
+Narrative review here is an authorial continuity/editing pass. Independent human
+Ukrainian reader testing and a measured episode runtime are not implied.

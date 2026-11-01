@@ -22,7 +22,7 @@ describe('lost pages: Eleanor ledger resolution', () => {
     const gathering = openGathering(['final_chapter_reconstruction_done']);
     const ledger = selectOption(finalReading, gathering, 'ledger-resolution');
     expect(currentNode(finalReading, ledger).text).toContain('Коробка сімнадцять');
-    expect(currentNode(finalReading, ledger).text).toContain('Не майстерня');
+    expect(currentNode(finalReading, ledger).text).toContain('Наша книгарня');
     expect(ledger.flags).toContain('final_ledger_resolved_17');
     const question = selectOption(finalReading, ledger, 'ledger-ask-warning');
     expect(currentNode(finalReading, question).text).toContain('не мій почерк');

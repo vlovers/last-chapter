@@ -23,7 +23,7 @@ describe('Character memories of optional Bellwick conversations', () => {
       story: leoVisit,
       path: ['greet'],
       flag: 'leo_mara_platform_idea_heard',
-      excerpt: 'запросив Мару',
+      excerpt: 'покликати Мару',
     },
     {
       story: annaVisit,
@@ -35,7 +35,7 @@ describe('Character memories of optional Bellwick conversations', () => {
       story: noraVisit,
       path: ['hello'],
       flag: 'nora_umbrella_exhibit_heard',
-      excerpt: 'двадцять дев’ять',
+      excerpt: 'Двоє людей',
     },
   ];
   for (const { story, path, flag, excerpt } of cases) {

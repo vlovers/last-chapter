@@ -43,7 +43,7 @@ export const maraDecision: DialogueStory = {
           next: 'mara-rest',
           unless: ['mara_day_four_rest_heard'],
         },
-        { id: 'work', label: '«Ти змогла відмовитися від зайвої зміни?»', next: 'work' },
+        { id: 'work', label: '«Як із твоїм вихідним?»', next: 'work' },
         {
           id: 'book',
           label: '«Ти вже подарувала Лео книжку?»',
@@ -58,7 +58,7 @@ export const maraDecision: DialogueStory = {
         },
         {
           id: 'remember-trust',
-          label: '«Ти після нашої розмови ще бачила Лео?»',
+          label: '«Пам’ятаєш роман, де герой відкупився квітами?»',
           next: 'remember-trust',
           requires: ['mara_discussed_forgiveness'],
         },
@@ -168,7 +168,7 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'work-back',
-          label: '«А що ти взяла почитати на вихідний?»',
+          label: '«А подарунок Лео ти вже вручила?»',
           next: 'book',
           grants: ['mara_supported_independence'],
         },
@@ -203,7 +203,7 @@ export const maraDecision: DialogueStory = {
     {
       id: 'station',
       speaker: 'Мара',
-      text: '«Я сховала в книжці копію квитка з нашої першої спільної поїздки. Оригінал у Лео, він досі зберігає його в шухляді». Мара сміється. «Тільки не кажи йому про сюрприз!»',
+      text: '«Я сховала в книжці копію квитка з нашої першої спільної поїздки. Оригінал у Лео — в тій шухляді ціла колекція, ще з часів до нашого знайомства». Мара сміється. «Тільки не кажи йому про сюрприз!»',
       options: [
         {
           id: 'station-back',
