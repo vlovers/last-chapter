@@ -27,7 +27,14 @@ describe('after-case tea: quiet consequences', () => {
       node: 'gathering',
       flags: entryFlags,
     };
-    for (const id of ['after-case-tea', first, second, 'after-tea-return']) {
+    const group =
+      first === 'after-tea-nora'
+        ? 'after-tea-help-group'
+        : first === 'after-tea-mara'
+          ? 'after-tea-talk-group'
+          : null;
+    const route = ['after-case-tea', ...(group ? [group] : []), first, second, 'after-tea-return'];
+    for (const id of route) {
       expect(availableOptions(finalReading, state).map((option) => option.id)).toContain(id);
       state = selectOption(finalReading, state, id);
     }
@@ -95,6 +102,7 @@ describe('after-case tea: quiet consequences', () => {
       expect(new Set(node.options.map((option) => option.id)).size, node.id).toBe(
         node.options.length,
       );
+      expect(node.options.length, node.id).toBeLessThanOrEqual(4);
     }
   });
 });
