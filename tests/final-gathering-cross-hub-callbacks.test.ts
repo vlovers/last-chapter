@@ -161,7 +161,7 @@ describe('Final gathering: callbacks after ordinary conversations', () => {
         }
         const text = currentNode(finalReading, state).text;
         expect(text.split(readerCallback)).toHaveLength(2);
-        expect(text.split(reedCallbacks[counterChoices[2]!])).toHaveLength(2);
+        expect(text.split(reedCallbacks[counterChoices[2]!]!)).toHaveLength(2);
         expect(text).not.toContain(counterCallback);
         expect(state.flags).toEqual(
           expect.arrayContaining([
