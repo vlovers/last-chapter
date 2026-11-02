@@ -32,3 +32,29 @@ Validation: Node 22.12.0, npm ci; baseline npm run check passed (247 files / 231
 cases). Package A check passed (247 / 2318); real Chrome mobile QA at 390×844
 passed with no browser errors. Existing bounded owned-process teardown was used
 when Chrome did not close gracefully after successful assertions.
+
+## B — Narrative and evidence continuity
+
+The earlier full five-day production pass and its character map remain the
+baseline editorial review; this pass rechecks their transitions and the optional
+finale investigations rather than duplicating those scenes. Revisited letter
+custody, source 17/7, paper ownership, character knowledge, optional hub returns,
+three reading programs and school outcomes. Existing graph/ending tests cover
+all authored stories; new regressions cover the defects below.
+
+- An admitted day-four breach or pressure now blocks both paper-study entry
+  routes. Concealed breaches do not magically become Iris's knowledge. An old
+  save already inside an authorized comparison can still finish it.
+- Paper examination and case closure now agree on one straight cut and one
+  irregular edge. The distinction never becomes proof of an author's identity.
+- Iris gives an actual observation about the recipient and does not claim
+  ownership of Eleanor's journal. The return choice records that answer.
+- Removed an invented yesterday statement by Miller and a promise assigning
+  chairs to Thomas without asking him. Replaced abstract comparisons with
+  concrete actions and bookshop humor; private notes do not erase earlier harm.
+
+Ten existing dialogue nodes revised, no node/option IDs removed and no save
+schema change. Package B npm run check passed: 248 files / 2327 cases. Nine new
+save/knowledge/permission regressions. The lifecycle check now validates earlier
+Iris boundary flags against their actual day-four granting choices as well as
+final-day choices.

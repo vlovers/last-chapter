@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
+import { irisDecision } from '../src/content/day-four-iris';
 import { availableOptions, selectOption, type DialogueState } from '../src/game/dialogue';
 
 const gathering = finalReading.nodes.find((node) => node.id === 'gathering');
@@ -8,7 +9,9 @@ if (!gathering) throw new Error('Missing final gathering');
 describe('Finale optional scene lifecycle', () => {
   it('provides a completion flag for every gated optional scene', () => {
     const grants = new Set(
-      finalReading.nodes.flatMap((node) => node.options.flatMap((option) => option.grants ?? [])),
+      [...finalReading.nodes, ...irisDecision.nodes].flatMap((node) =>
+        node.options.flatMap((option) => option.grants ?? []),
+      ),
     );
     for (const option of gathering.options) {
       if (!option.unless?.length) continue;
