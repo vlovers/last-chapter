@@ -127,7 +127,7 @@ describe('Production V2: chronology, letter authorship and evidence boundaries',
       'iris_margin_note_discussed',
     ];
     const visit = follow(finalReading, ['open', 'final-iris-evidence-topic'], flags);
-    expect(visit.text).toContain('вона досі не чула від вас');
+    expect(visit.text).toContain('Айріс досі не знає, що сталося з листом');
     expect(availableOptions(finalReading, visit.state).map((o) => o.id)).not.toContain(
       'final-iris-evidence-accountability',
     );
