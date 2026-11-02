@@ -232,6 +232,58 @@ try {
       'Closing the journal returns focus to its opener',
     );
     if (width === 390) {
+      // Escape during IME composition must not dismiss the dock or lose input.
+      await page.locator('#catalog-toggle').click();
+      await page.getByRole('searchbox').focus();
+      await page.evaluate(() => {
+        document.querySelector('.catalog-search').dispatchEvent(
+          new KeyboardEvent('keydown', {
+            key: 'Escape',
+            bubbles: true,
+            cancelable: true,
+            isComposing: true,
+          }),
+        );
+      });
+      assert.equal(await page.locator('#story-panel:not([hidden])').count(), 1);
+      await page.getByRole('searchbox').fill('сад');
+      await page.getByRole('button', { name: 'Детективи', exact: true }).click();
+      assert.equal(await page.getByRole('searchbox').inputValue(), 'сад');
+
+      // Starting over must not carry the previous game's search, genre,
+      // journal tab, notes or modal focus destination into a fresh run.
+      await page.evaluate(() => window.dispatchEvent(new Event('last-chapter:new-game')));
+      assert.equal(await page.locator('#story-panel[hidden]').count(), 1);
+      await page.locator('#catalog-toggle').click();
+      assert.equal(await page.getByRole('searchbox').inputValue(), '');
+      assert.equal(await page.locator('.story-book').count(), 5);
+      assert.equal(
+        await page.getByRole('button', { name: 'Усі', exact: true }).getAttribute('aria-pressed'),
+        'true',
+      );
+      await page.keyboard.press('Escape');
+      await page.locator('#journal-toggle').click();
+      assert.equal(
+        await page.getByRole('button', { name: 'Люди', exact: true }).getAttribute('aria-pressed'),
+        'true',
+      );
+      assert.equal(
+        await page.evaluate(() => localStorage.getItem('last-chapter:optional:notes') ?? ''),
+        '',
+      );
+
+      // An opener can become disabled during a story transition. The modal
+      // must restore focus to an available toolbar control instead.
+      await page.evaluate(() => {
+        document.querySelector('#journal-toggle').disabled = true;
+      });
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#catalog-toggle:focus').count(), 1);
+      await page.evaluate(() => {
+        document.querySelector('#journal-toggle').disabled = false;
+      });
+    }
+    if (width === 390) {
       await page.setViewportSize({ width: 844, height: 390 });
       await page.waitForTimeout(350);
       assert.equal((await snapshot(page)).canvas.width, 844);
