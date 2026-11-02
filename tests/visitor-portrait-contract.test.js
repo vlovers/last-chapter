@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cast } from '../src/game/cast';
 import { VISITOR_IDS } from '../public/phaser-prototype/visitor-art.js';
@@ -11,6 +12,16 @@ describe('finale portrait renderer contract', () => {
     expect(cast.map((member) => member.id).sort()).toEqual([...VISITOR_IDS].sort());
     for (const member of cast) {
       expect(PORTRAIT_NAMES[member.id]).toBe(member.name);
+    }
+  });
+
+  it('ships a local 64×80 SVG portrait for every character', () => {
+    for (const member of cast) {
+      const asset = new URL(`../public${member.portrait}`, import.meta.url);
+      const svg = readFileSync(asset, 'utf8');
+      expect(svg).toContain('<svg ');
+      expect(svg).toContain('viewBox="0 0 64 80"');
+      expect(svg).not.toMatch(/<(?:image|script)\b/i);
     }
   });
 
