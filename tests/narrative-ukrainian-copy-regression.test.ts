@@ -95,6 +95,18 @@ describe('Ukrainian scene-copy continuity', () => {
     }
   });
 
+  it('avoids stray punctuation and awkward voice descriptions across all five days', () => {
+    const stages: readonly ChapterStage[] = [...playablePreFinaleStages, 'day5-reading'];
+    for (const stage of stages) {
+      for (const node of stageStory(stage).nodes) {
+        for (const narration of authoredNarration(node)) {
+          expect(narration, `${stage}/${node.id}: extra dot`).not.toMatch(/[?!…]»\./u);
+          expect(narration, `${stage}/${node.id}: lowered voice`).not.toMatch(/знизує голос/u);
+        }
+      }
+    }
+  });
+
   it('preserves valid dialogue links and conditional gates', () => {
     expect(validateDialogue(quietEvening)).toEqual([]);
     expect(validateDialogue(finalReading)).toEqual([]);
