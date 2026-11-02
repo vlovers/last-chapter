@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { DialogueUI } from '../public/phaser-prototype/dialogue-ui.js';
+import { DialogueUI, shouldCompactDialogue } from '../public/phaser-prototype/dialogue-ui.js';
 
 afterEach(() => vi.unstubAllGlobals());
 for (const hasChoice of [false, true]) {
@@ -34,4 +34,26 @@ it('does not move focus when typewriter completion did not hide the active contr
     close: { focus },
   });
   expect(focus).not.toHaveBeenCalled();
+});
+
+it('keeps the conversation dock a stable size across short and long replies', () => {
+  for (const choices of [[], [{ id: 'continue' }], [{ id: 'yes' }, { id: 'no' }]]) {
+    const short = { text: 'Так.', choices };
+    const long = { text: 'Розмова '.repeat(100), choices };
+    expect(shouldCompactDialogue(short, true)).toBe(false);
+    expect(shouldCompactDialogue(long, true)).toBe(false);
+  }
+});
+
+it('allows compact object notes without shrinking character conversations', () => {
+  expect(shouldCompactDialogue({ text: 'Книга на полиці.', choices: [] }, false)).toBe(true);
+  expect(
+    shouldCompactDialogue({ text: 'Опис '.repeat(200), choices: [] }, false),
+  ).toBe(false);
+  expect(
+    shouldCompactDialogue(
+      { text: 'Коротка нотатка.', choices: [{ id: 'a' }, { id: 'b' }, { id: 'c' }] },
+      false,
+    ),
+  ).toBe(false);
 });
