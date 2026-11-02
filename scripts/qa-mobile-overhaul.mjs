@@ -190,6 +190,20 @@ try {
     );
     await shot(page, `${width}-catalog`);
     await page.keyboard.press('Escape');
+    // Order-driven opening does not originate from the catalog toolbar.
+    // Escape must still restore focus to a visible control.
+    await page.evaluate(() => window.dispatchEvent(new Event('last-chapter:catalog-open')));
+    assert.equal(
+      await page.locator('#story-panel .catalog-search:focus').count(),
+      1,
+      'Automatically opened catalog must focus its search field',
+    );
+    await page.keyboard.press('Escape');
+    assert.equal(
+      await page.locator('#catalog-toggle:focus').count(),
+      1,
+      'Closing an automatically opened catalog must restore toolbar focus',
+    );
     await page.locator('#journal-toggle').click();
     await page.getByRole('button', { name: 'Чутки', exact: true }).click();
     assert.equal(await page.getByText('Ви ще не чули чуток.', { exact: true }).count(), 1);
