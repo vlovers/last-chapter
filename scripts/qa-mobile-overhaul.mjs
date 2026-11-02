@@ -148,6 +148,15 @@ try {
     await page.getByRole('searchbox').fill('сад');
     assert.equal(await page.locator('.story-book').count(), 1);
     await page.getByRole('searchbox').fill('');
+    // Shift+Tab from the first control must wrap to the last visible book summary.
+    // Closed <details> content is not a valid keyboard destination.
+    await page.locator('#story-panel .panel-close').focus();
+    await page.keyboard.press('Shift+Tab');
+    assert.equal(
+      await page.evaluate(() => document.activeElement?.tagName),
+      'SUMMARY',
+      'Catalog focus trap must wrap to the last visible book summary',
+    );
     await shot(page, `${width}-catalog`);
     await page.keyboard.press('Escape');
     await page.locator('#journal-toggle').click();
@@ -155,6 +164,13 @@ try {
     assert.equal(await page.getByText('Ви ще не чули чуток.', { exact: true }).count(), 1);
     await page.getByRole('button', { name: 'Мої записи', exact: true }).click();
     await page.getByLabel('Ваші думки й запитання').fill('Перевірити час у журналі ремонту.');
+    await page.locator('#story-panel .panel-close').focus();
+    await page.keyboard.press('Shift+Tab');
+    assert.equal(
+      await page.evaluate(() => document.activeElement?.id),
+      'personal-notes',
+      'Journal focus trap must include the notes textarea',
+    );
     await page.getByRole('button', { name: 'Люди', exact: true }).click();
     assert.equal(
       await page
