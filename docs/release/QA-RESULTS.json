@@ -1,0 +1,654 @@
+{
+  "baseline": "57b0192d6a4727d7bfde85b3ab4b71abe06e668a",
+  "environment": "Node 22.12.0; headless desktop Chrome, touch viewport emulation",
+  "quality": {
+    "files": 251,
+    "tests": 2354,
+    "newCases": 37,
+    "npmCi": true,
+    "check": "passed",
+    "auditHigh": "passed; 11 existing moderate dev advisories"
+  },
+  "narrative": {
+    "graphNodes": 853,
+    "proseNodesRewritten": 10,
+    "assembledNodesChanged": 11,
+    "addedNodes": 0
+  },
+  "journeys": [
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "mutual",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 155,
+      "reloads": 7,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "private-rumor",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "book-club",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 103,
+      "reloads": 3,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "admitted",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 101,
+      "reloads": 6,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "late-confession",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "book-club",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 104,
+      "reloads": 5,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "concealed",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 101,
+      "reloads": 5,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "minimal-evidence",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 69,
+      "reloads": 2,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "optional-completed",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 177,
+      "reloads": 7,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "cooperative",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 181,
+      "reloads": 7,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "maximum-evidence",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 185,
+      "reloads": 7,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 780
+      },
+      "scenario": "confrontational",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 168,
+      "reloads": 7,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "mutual",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 155,
+      "reloads": 7,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "private-rumor",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "book-club",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 103,
+      "reloads": 3,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "admitted",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 101,
+      "reloads": 6,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "late-confession",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "book-club",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 104,
+      "reloads": 5,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "concealed",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 101,
+      "reloads": 5,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "minimal-evidence",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 69,
+      "reloads": 2,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "optional-completed",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 177,
+      "reloads": 7,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "cooperative",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 181,
+      "reloads": 7,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "maximum-evidence",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 185,
+      "reloads": 7,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "confrontational",
+      "stages": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "quiet-evening",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading"
+      ],
+      "steps": 168,
+      "reloads": 7,
+      "errors": []
+    }
+  ],
+  "mobileViewports": [
+    [320, 568],
+    [360, 780],
+    [375, 667],
+    [375, 812],
+    [390, 844],
+    [430, 932],
+    [768, 1024],
+    [1440, 900],
+    [844, 390]
+  ],
+  "frankViewports": [
+    [1440, 900],
+    [320, 568],
+    [390, 844]
+  ],
+  "saveRecovery": ["missing", "corrupt", "future chapter and sidecars", "blocked storage"],
+  "remaining": {
+    "critical": [],
+    "high": [],
+    "medium": [
+      "11 pre-existing moderate development dependency advisories",
+      "Phaser bundle remains over the Vite chunk warning threshold"
+    ],
+    "unverified": [
+      "Physical phones",
+      "Independent blind Ukrainian reader session",
+      "Measured episode duration"
+    ]
+  }
+}

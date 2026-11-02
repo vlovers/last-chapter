@@ -69,6 +69,8 @@ jobs:
             command: QA_WIDTH=360 QA_GROUP=daily node scripts/qa-narrative-v2.mjs
           - name: narrative-v2-390-daily
             command: QA_WIDTH=390 QA_GROUP=daily node scripts/qa-narrative-v2.mjs
+          - name: save-recovery
+            command: npm run test:browser:save-recovery
           - name: performance
             command: node scripts/qa-bookshop-performance.mjs
     steps:
@@ -125,5 +127,12 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: ${{ matrix.suite.name }}-mobile-journeys
+          path: /tmp/last-chapter-qa
+          if-no-files-found: ignore
+      - name: Upload responsive and Frank evidence
+        if: always() && (matrix.suite.name == 'mobile' || matrix.suite.name == 'frank')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: interaction-qa-${{ matrix.suite.name }}
           path: /tmp/last-chapter-qa
           if-no-files-found: ignore

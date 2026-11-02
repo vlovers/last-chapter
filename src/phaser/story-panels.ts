@@ -57,20 +57,26 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       ...letterDecision.memories,
     ]);
   try {
-    const saved = localStorage.getItem(conversationKey);
-    if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
-    const savedAfterHours = localStorage.getItem(afterHoursKey);
-    if (savedAfterHours)
-      afterHours = restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours;
-    const savedReturn = localStorage.getItem(returnKey);
-    if (savedReturn) returnVisit = restoreConversation(maraReturnVisit, savedReturn) ?? returnVisit;
-    const savedLetter = localStorage.getItem(letterKey);
-    if (savedLetter)
-      letterDecision = restoreConversation(maraLetterDecision, savedLetter) ?? letterDecision;
+    if (story.isProgressSaved) {
+      const saved = localStorage.getItem(conversationKey);
+      if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
+      const savedAfterHours = localStorage.getItem(afterHoursKey);
+      if (savedAfterHours)
+        afterHours = restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours;
+      const savedReturn = localStorage.getItem(returnKey);
+      if (savedReturn)
+        returnVisit = restoreConversation(maraReturnVisit, savedReturn) ?? returnVisit;
+      const savedLetter = localStorage.getItem(letterKey);
+      if (savedLetter)
+        letterDecision = restoreConversation(maraLetterDecision, savedLetter) ?? letterDecision;
+    }
   } catch {
     /* storage may be unavailable */
   }
   const saveConversation = () => {
+    // A newer chapter owns its sidecars too. Keep this session in memory until
+    // the current build can persist its own chapter, preserving the newer data.
+    if (!story.isProgressSaved) return;
     try {
       localStorage.setItem(conversationKey, JSON.stringify(conversation));
       localStorage.setItem(afterHoursKey, JSON.stringify(afterHours));
@@ -94,7 +100,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   let returnFocus: HTMLElement | null = null;
   let personalNotes = '';
   try {
-    personalNotes = (localStorage.getItem(OPTIONAL_PROGRESS_KEYS.notes) ?? '').slice(0, 4000);
+    if (story.isProgressSaved)
+      personalNotes = (localStorage.getItem(OPTIONAL_PROGRESS_KEYS.notes) ?? '').slice(0, 4000);
   } catch {
     /* optional */
   }
@@ -432,6 +439,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         notes.value = personalNotes;
         notes.addEventListener('input', () => {
           personalNotes = notes.value;
+          if (!story.isProgressSaved) return;
           try {
             localStorage.setItem(OPTIONAL_PROGRESS_KEYS.notes, personalNotes);
           } catch {

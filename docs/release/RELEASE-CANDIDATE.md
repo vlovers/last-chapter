@@ -94,3 +94,35 @@ restart are asserted. The existing twelve-outcome finale matrix also passed.
 CI splits the ten scenarios into bounded core/investigation/daily groups at both
 widths; its regression checks prove the union executes every scenario exactly
 once per width. No scenario or assertion is disabled to obtain a passing result.
+
+## E — Final integration and acceptance
+
+Integrated the existing quiet-manuscript journal and recovery regressions from
+`audit/quiet-manuscript-journal-20261102` at `c941c86`; this is attribution to
+existing work, not a duplicate implementation. Observations, inferences and
+custody now appear only after their discoveries; authorship stays uncertain.
+
+The recovery browser test waits for the stale-tap guard and proves an actual
+persisted greeting. Its future-save path exposed sidecar data loss: an older
+client could read and overwrite newer notes/conversations even while protecting
+the main chapter. Those sessions now start in memory and avoid writes until the
+chapter is writable. Frank uses the same rule for restoration, care and teardown.
+Valid v1 saves retain their behavior; no schema migration is needed.
+
+Final local verification: npm ci and npm run check passed, 251 files / 2354 cases;
+37 additional deterministic cases against the starting head, including imported
+regressions. Required standard, v5 and mobile browser commands, Frank, the
+12-outcome finale matrix, performance and save recovery passed. Twenty touch
+journeys passed; the nine-viewport mobile suite was repeated after journal/panel
+integration. [QA summary and limits](QA-RESULTS.json). Exact published SHA and CI
+URLs are recorded in PR #12 after those workflows complete.
+
+The 853-node graph and previous complete five-day/character editorial baseline
+were rechecked. This incremental pass rewrote ten prose scenes and changed the
+assembled gathering's paper-access condition. No authored nodes were removed or
+added. No CSS patch stack or parallel test framework was introduced.
+
+No critical/high blockers were found by these checks. Eleven existing moderate
+dev dependency advisories and the large Phaser bundle warning remain. Physical
+phones, an independent blind Ukrainian reader session and measured episode
+runtime are not claimed. RC acceptance does not authorize merge or deployment.

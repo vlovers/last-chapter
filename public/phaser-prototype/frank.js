@@ -95,12 +95,14 @@ export function drawFrank(r, activity, phase, facing) {
 export function createFrank(scene) {
   const state = initialFrank();
   try {
-    Object.assign(state, restoreFrankMemory(localStorage.getItem(FRANK_SAVE_KEY)));
+    if (!scene.story || scene.story.isProgressSaved)
+      Object.assign(state, restoreFrankMemory(localStorage.getItem(FRANK_SAVE_KEY)));
   } catch {
     /* optional storage */
   }
   let disposed = false;
   const persist = () => {
+    if (scene.story && !scene.story.isProgressSaved) return;
     try {
       localStorage.setItem(FRANK_SAVE_KEY, frankMemory(state));
     } catch {

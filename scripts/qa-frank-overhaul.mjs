@@ -80,6 +80,11 @@ try {
     await page.keyboard.press('Escape');
     await page.getByRole('button', { name: 'Побути з Френком', exact: true }).click();
     await page.getByRole('heading', { name: 'Френк', exact: true }).waitFor();
+    await choose('pet');
+    assert.equal((await cat()).pets, 1, 'Repeated petting must not bypass its cooldown');
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Побути з Френком', exact: true }).click();
+    await page.getByRole('heading', { name: 'Френк', exact: true }).waitFor();
     await choose('frank-more');
     assert.equal(await page.locator('#choices button').count(), 4);
     await choose('watch');
