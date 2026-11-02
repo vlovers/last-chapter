@@ -47,13 +47,9 @@ it('keeps the conversation dock a stable size across short and long replies', ()
 
 it('allows compact object notes without shrinking character conversations', () => {
   expect(shouldCompactDialogue({ text: 'Книга на полиці.', choices: [] }, false)).toBe(true);
-  expect(
-    shouldCompactDialogue({ text: 'Опис '.repeat(200), choices: [] }, false),
-  ).toBe(false);
-  expect(
-    shouldCompactDialogue(
-      { text: 'Коротка нотатка.', choices: [{ id: 'a' }, { id: 'b' }, { id: 'c' }] },
-      false,
-    ),
-  ).toBe(false);
+  expect(shouldCompactDialogue({ text: 'Опис '.repeat(200), choices: [] }, false)).toBe(false);
+  const manyChoices = [{ id: 'a' }, { id: 'b' }, { id: 'c' }];
+  expect(shouldCompactDialogue({ text: 'Коротка нотатка.', choices: manyChoices }, false)).toBe(
+    false,
+  );
 });
