@@ -41,7 +41,7 @@ describe('quiet-evening journal coverage', () => {
 
   it('does not attribute unsupported day-two testimony to Iris', () => {
     expect(facts.has('iris_mothers_draft_heard')).toBe(false);
-    expect(evidence.has('iris_mothers_draft_heard')).toBe(false);
+    expect([...evidence.keys()].some((flag) => flag === 'iris_mothers_draft_heard')).toBe(false);
   });
 
   it('distinguishes the observed markings from the window interpretation', () => {
