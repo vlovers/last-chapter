@@ -45,6 +45,31 @@ try {
     console.log(`PASS: ${damage} save recovery`);
     await context.close();
   }
+  // A browser may deny storage reads entirely (privacy settings, sandboxed iframe).
+  // The story must remain interactive and tell the player that progress is unsaved.
+  const blockedContext = await fixture.browser.newContext({ reducedMotion: 'reduce' });
+  try {
+    await blockedContext.addInitScript(() => {
+      Object.defineProperty(window, 'localStorage', {
+        configurable: true,
+        get() { throw new Error('SecurityError: storage blocked'); },
+      });
+    });
+    const page = await blockedContext.newPage();
+    const errors = [];
+    page.on('pageerror', (error) => errors.push(String(error)));
+    await page.goto(base);
+    await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+    await page.locator('#save-warning:not([hidden])').waitFor();
+    await page.locator('#story-continue').click();
+    await page.locator('#choices [data-choice="greet"]').click();
+    await page.locator('#save-warning:not([hidden])').waitFor();
+    assert.deepEqual(errors, [], 'Browser errors with blocked storage');
+    console.log('PASS: blocked storage warns and dialogue remains interactive');
+  } finally {
+    await blockedContext.close();
+  }
+
 } finally {
   await fixture.close();
 }
