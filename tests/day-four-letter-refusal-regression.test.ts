@@ -10,6 +10,7 @@ import {
   startDialogue,
   validateDialogue,
   type DialogueStory,
+  type DialogueState,
 } from '../src/game/dialogue';
 import { decodeSave, encodeSave } from '../src/game/save';
 
@@ -81,7 +82,7 @@ function choices(story: DialogueStory, state: ReturnType<typeof startDialogue>) 
 
 describe('day-four letter refusals remain respected', () => {
   it.each(scenarios)('$name through play, save and reload', (scenario) => {
-    let state = { ...startDialogue(scenario.story), flags: [...scenario.flags] };
+    let state: DialogueState = { ...startDialogue(scenario.story), flags: [...scenario.flags] };
     for (const id of scenario.path) state = selectOption(scenario.story, state, id);
     expect(state.node).toBe(scenario.hub);
     expect(state.flags).toContain(scenario.refusal);
