@@ -33,11 +33,17 @@ try {
       service: localStorage.getItem(serviceKey),
       optional: optionalKeys.map((key) => localStorage.getItem(key)),
     }), { saveKey: SAVE_KEY, serviceKey: SERVICE_KEY, optionalKeys: OPTIONAL_KEYS });
+    // Exercise an actual story write, not just the constructor's storage cleanup.
+    await page.locator('#story-continue').click();
+    await page.locator('#choices [data-choice="greet"]').click();
+    const saveAfterChoice = await page.evaluate((key) => localStorage.getItem(key), SAVE_KEY);
     if (damage === 'future') {
+      assert.equal(saveAfterChoice, actual.save);
       assert.equal(JSON.parse(actual.save).version, 999);
       assert.equal(actual.service, 'old-service-record');
       assert.deepEqual(actual.optional, OPTIONAL_KEYS.map(() => 'old-optional-record'));
     } else {
+      assert.ok(saveAfterChoice, 'A fresh chapter must become persistable after recovery');
       assert.ok(actual.optional.every((value) => value === null || value === ''));
       assert.deepEqual(JSON.parse(actual.service).attempts, []);
     }
@@ -69,7 +75,6 @@ try {
   } finally {
     await blockedContext.close();
   }
-
 } finally {
   await fixture.close();
 }
