@@ -312,7 +312,7 @@ describe('Final evening evidence and memory boundaries', () => {
       ['final-iris-evidence-catalog', 'Адреса є'],
       ['final-iris-evidence-uncertain', 'авторство не встановлено'],
       ['final-iris-evidence-wait', 'Я не програю'],
-    ]) {
+    ] as const) {
       let state = selectOption(
         finalReading,
         gathering(['iris_quiet_page_discussed', 'iris_margin_note_discussed']),
@@ -333,7 +333,7 @@ describe('Final evening evidence and memory boundaries', () => {
     for (const [choice, expected] of [
       ['final-iris-evidence-own-to-nora', 'Нора підходить'],
       ['final-iris-evidence-stop-asking', 'на сьогодні досить'],
-    ]) {
+    ] as const) {
       let state = selectOption(
         finalReading,
         gathering([
@@ -359,7 +359,7 @@ describe('Final evening evidence and memory boundaries', () => {
     for (const [choice, expected] of [
       ['final-eleanor-memory-box-private', 'Домовилися'],
       ['final-eleanor-memory-box-ask', 'не сьогодні при всіх'],
-    ]) {
+    ] as const) {
       let state = selectOption(
         finalReading,
         gathering(['eleanor_timeline_checked', 'final_ledger_record_private']),
@@ -378,7 +378,7 @@ describe('Final evening evidence and memory boundaries', () => {
     for (const [flag, expected] of [
       ['leo_night_course_application_planned', 'Відповіді поки немає'],
       ['leo_night_course_shift_request_planned', 'Це ще не згода'],
-    ]) {
+    ] as const) {
       let state = selectOption(
         finalReading,
         gathering(['leo_night_course_discussed', flag]),
@@ -398,7 +398,7 @@ describe('Final evening evidence and memory boundaries', () => {
     for (const [choice, expected] of [
       ['final-eleanor-memory-witness', 'стару адресу майстра'],
       ['final-eleanor-memory-tea', 'Грушевий'],
-    ]) {
+    ] as const) {
       let state = selectOption(
         finalReading,
         gathering(['eleanor_timeline_checked']),
@@ -433,7 +433,7 @@ describe('Final evening evidence and memory boundaries', () => {
     for (const [choice, expected] of [
       ['final-iris-evidence-rumor-own', 'зупинилися'],
       ['final-iris-evidence-rumor-deflect', 'Нехай цікавляться книжкою'],
-    ]) {
+    ] as const) {
       let state = selectOption(
         finalReading,
         gathering(['iris_quiet_page_discussed', 'iris_margin_note_discussed']),
