@@ -53,7 +53,7 @@ const scenarios = [
 
 describe('Compact finale hubs preserve every original optional route', () => {
   for (const scenario of scenarios) {
-    it(`${scenario.title}: exposes four choices and returns from each group without consuming it`, () => {
+    it(`${scenario.title}: exposes four choices and returns without consuming the group`, () => {
       const gathering = {
         ...startDialogue(finalReading),
         node: 'gathering',
