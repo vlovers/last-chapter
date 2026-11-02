@@ -55,6 +55,37 @@ describe('Day-five Miller rumor continuity after the public gathering', () => {
     expect(text).not.toContain('коробку');
   });
 
+  it('keeps the tea hub consistent with the rumor resolution', () => {
+    const ordinary = currentNode(finalReading, at('after-case-tea', 'none')).text;
+    const open = currentNode(finalReading, at('after-case-tea', 'open')).text;
+    const corrected = currentNode(finalReading, at('after-case-tea', 'corrected')).text;
+    expect(ordinary).toContain('Мара збирає порожні чашки');
+    expect(open).toContain('Слова Міллер досі ходять');
+    expect(open).not.toContain('вже пояснила гостям');
+    expect(corrected).toContain('вже пояснила гостям');
+    expect(corrected).not.toContain('Слова Міллер досі ходять');
+  });
+
+  it('keeps the shop-preparation hub consistent with the rumor resolution', () => {
+    const ordinary = currentNode(finalReading, at('bookshop-tomorrow', 'none')).text;
+    const open = currentNode(finalReading, at('bookshop-tomorrow', 'open')).text;
+    const corrected = currentNode(finalReading, at('bookshop-tomorrow', 'corrected')).text;
+    expect(ordinary).toContain('Гості ще не розійшлися');
+    expect(open).toContain('Після чутки біля каси');
+    expect(open).not.toContain('вже виправила свою вигадку');
+    expect(corrected).toContain('вже виправила свою вигадку');
+    expect(corrected).not.toContain('Після чутки біля каси');
+  });
+
+  it('keeps Nora\'s display-book count consistent between preparation screens', () => {
+    expect(currentNode(finalReading, at('bookshop-tomorrow', 'none')).text).toContain(
+      'Нора тримає три романи',
+    );
+    expect(currentNode(finalReading, at('bookshop-tomorrow-books', 'none')).text).toContain(
+      'Нора тримає три романи',
+    );
+  });
+
   it('shows distinct next-day announcements for open and corrected rumors', () => {
     const open = currentNode(finalReading, at('bookshop-tomorrow-miller-new', 'open')).text;
     const corrected = currentNode(
