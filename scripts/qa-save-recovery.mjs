@@ -139,8 +139,11 @@ try {
         (key) => JSON.parse(localStorage.getItem(key) ?? '{}').node === 'order',
         SAVE_KEY,
       );
-      assert.equal(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)).node, SAVE_KEY), 'order');
-      await page.locator('#save-warning[hidden]').waitFor();
+      assert.equal(
+        await page.evaluate((key) => JSON.parse(localStorage.getItem(key)).node, SAVE_KEY),
+        'order',
+      );
+      await page.locator('#save-warning').waitFor({ state: 'hidden' });
     }
     assert.deepEqual(errors, [], `Browser errors during ${damage} recovery and reload`);
     console.log(`PASS: ${damage} save recovery, reload and resumed choice`);
