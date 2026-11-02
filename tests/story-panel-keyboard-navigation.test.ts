@@ -190,7 +190,7 @@ describe('story panel keyboard navigation', () => {
   });
 
   it('focuses a newly rendered conversation before the close button', () => {
-    const exchange = stop();
+    const exchange = stop({ tabIndex: -1 });
     const close = stop();
     const fallback = stop();
     const root = panel([exchange, close]);
@@ -198,6 +198,14 @@ describe('story panel keyboard navigation', () => {
     expect(exchange.focus).toHaveBeenCalledWith({ preventScroll: true });
     expect(close.focus).not.toHaveBeenCalled();
     expect(fallback.focus).not.toHaveBeenCalled();
+  });
+
+  it('keeps a programmatically focusable exchange ahead of a visible close button', () => {
+    const exchange = stop({ tabIndex: -1 });
+    const close = stop();
+    focusPanelUpdate(panel([close, exchange]), stop());
+    expect(exchange.focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(close.focus).not.toHaveBeenCalled();
   });
 
   it('skips hidden and disabled exchanges when updating conversation focus', () => {
