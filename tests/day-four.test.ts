@@ -64,6 +64,15 @@ describe('Day 4: Iris and the sealed letter', () => {
       expect(() => selectOption(irisDecision, welcome, id)).toThrow('Option unavailable');
     }
     expect(currentNode(irisDecision, welcome).text).not.toMatch(/конверт|лист/u);
+    const restored = decodeSave(encodeSave({ ...dayFour, dialogue: welcome }));
+    expect(restored).not.toBeNull();
+    expect(restored?.flags).not.toContain('saw_envelope');
+    expect(currentNode(irisDecision, restored!.dialogue).text).toBe(
+      currentNode(irisDecision, welcome).text,
+    );
+    expect(availableOptions(irisDecision, restored!.dialogue).map((option) => option.id)).not.toContain(
+      'letter',
+    );
     const end = selectOption(irisDecision, welcome, 'leave');
     expect(currentNode(irisDecision, end).text).not.toContain('Конверт');
     expect(advanceToDayFourMara({ ...dayFour, dialogue: end }).stage).toBe('day4-mara');
