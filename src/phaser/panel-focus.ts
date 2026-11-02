@@ -49,10 +49,15 @@ export function panelTabStops(panel: HTMLElement): HTMLElement[] {
 
 /** Announce a newly selected conversation rather than jumping to the close button. */
 export function focusPanelUpdate(panel: HTMLElement, fallback: HTMLElement): void {
-  const target =
-    panel.querySelector<HTMLElement>('.conversation-exchange') ??
-    panel.querySelector<HTMLElement>('button') ??
-    fallback;
+  const isUsable = (node: HTMLElement): boolean =>
+    node.isConnected &&
+    node.tabIndex >= 0 &&
+    !node.matches(':disabled') &&
+    !node.closest('[hidden], [inert], [aria-hidden="true"]') &&
+    !isHiddenByCollapsedDetails(node) &&
+    isRendered(node);
+  const candidates = panel.querySelectorAll<HTMLElement>('.conversation-exchange, button');
+  const target = Array.from(candidates).find(isUsable) ?? fallback;
   target.focus({ preventScroll: true });
 }
 
