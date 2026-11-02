@@ -210,6 +210,43 @@ describe('Frank interaction lifecycle', () => {
     expect(docSpy).toHaveBeenCalledWith('visibilitychange', expect.any(Function));
   });
 });
+describe('optional clue collection and saved narrative facts', () => {
+  it('unlocks the combined timeline only after all three clues, then restores it on reload', () => {
+    const data = store();
+    const story = new FiveDayStory();
+    expect(story.evidence).toEqual([]);
+    for (const spot of ['window', 'counter', 'shelves']) story.inspect(spot);
+    expect(story.evidence.map((clue) => clue.id)).toEqual(['bookmark', 'stamp', 'shelf']);
+    story.gatherEvidence('bookmark');
+    story.gatherEvidence('stamp');
+    expect(story.evidence.some((clue) => clue.id === 'timeline')).toBe(false);
+    story.gatherEvidence('shelf');
+    expect(story.evidence.map((clue) => clue.id)).toEqual([
+      'bookmark',
+      'stamp',
+      'shelf',
+      'timeline',
+    ]);
+    story.gatherEvidence('timeline');
+    expect(story.evidence.every((clue) => clue.collected)).toBe(true);
+    const saved = data.get(SAVE_KEY);
+    expect(decodeSave(saved).flags).toEqual(
+      expect.arrayContaining(['clue_bookmark', 'clue_stamp', 'clue_shelf', 'clue_timeline']),
+    );
+    const restored = new FiveDayStory();
+    expect(restored.evidence.every((clue) => clue.collected)).toBe(true);
+    expect(data.get(SAVE_KEY)).toBe(saved);
+  });
+
+  it('rejects collecting an undiscovered clue without changing the save', () => {
+    const data = store();
+    const story = new FiveDayStory();
+    const saved = data.get(SAVE_KEY);
+    expect(() => story.gatherEvidence('timeline')).toThrow('Clue is not accessible');
+    expect(data.get(SAVE_KEY)).toBe(saved);
+  });
+});
+
 describe('catalog recommendations preserve narrative and saves', () => {
   it.each([
     ['miller', 'orchard', 'sold_orchard'],

@@ -381,11 +381,22 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         );
         // Available evidence remains an explicit investigation action, separate from discovered cards.
         for (const clue of story.evidence.filter((clue) => !clue.collected)) {
-          const gather = element('button', 'Дослідити знайдений предмет');
+          const gather = element('button', `Дослідити: ${clue.label}`);
           gather.type = 'button';
+          gather.dataset.clueId = clue.id;
           gather.addEventListener('click', () => {
+            // Rebuilding the journal removes the clicked button. Keep keyboard
+            // focus on the next available clue, or the active journal tab.
+            const position = Array.from(
+              panel.querySelectorAll<HTMLButtonElement>('[data-clue-id]'),
+            ).indexOf(gather);
             story.gatherEvidence(clue.id);
             refresh();
+            const remaining = panel.querySelectorAll<HTMLButtonElement>('[data-clue-id]');
+            const target =
+              remaining[Math.min(position, remaining.length - 1)] ??
+              panel.querySelector<HTMLButtonElement>(".journal-tabs [aria-pressed='true']");
+            target?.focus({ preventScroll: true });
           });
           panel.append(gather);
         }

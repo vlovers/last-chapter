@@ -205,6 +205,45 @@ try {
       'Closing an automatically opened catalog must restore toolbar focus',
     );
     await page.locator('#journal-toggle').click();
+    if (width === 390) {
+      // Independently discovered clues need distinct labels and reliable focus.
+      // Collecting a clue rebuilds the journal and removes the clicked button.
+      await page.evaluate(() => {
+        window.__lastChapterStory.inspect('window');
+        window.__lastChapterStory.inspect('counter');
+        window.__lastChapterRefresh?.();
+      });
+      const cluesTab = page.getByRole('button', { name: 'Знахідки', exact: true });
+      await cluesTab.click();
+      const bookmark = page.getByRole('button', {
+        name: 'Дослідити: Закладка біля вікна',
+        exact: true,
+      });
+      const stamp = page.getByRole('button', {
+        name: 'Дослідити: Старий штамп',
+        exact: true,
+      });
+      assert.equal(await bookmark.count(), 1);
+      assert.equal(await stamp.count(), 1);
+      await bookmark.click();
+      assert.equal(
+        await stamp.evaluate((button) => document.activeElement === button),
+        true,
+        'Collecting a clue must focus the next available clue',
+      );
+      await stamp.click();
+      assert.equal(
+        await cluesTab.evaluate((button) => document.activeElement === button),
+        true,
+        'Collecting the last clue must return focus to the active journal tab',
+      );
+      const flags = await page.evaluate(() =>
+        window.__lastChapterStory.evidence
+          .filter((clue) => clue.collected)
+          .map((clue) => clue.id),
+      );
+      assert.deepEqual(flags, ['bookmark', 'stamp']);
+    }
     await page.getByRole('button', { name: 'Чутки', exact: true }).click();
     assert.equal(await page.getByText('Ви ще не чули чуток.', { exact: true }).count(), 1);
     await page.getByRole('button', { name: 'Мої записи', exact: true }).click();
