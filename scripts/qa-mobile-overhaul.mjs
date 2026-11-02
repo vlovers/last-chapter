@@ -188,6 +188,33 @@ try {
       'SUMMARY',
       'Catalog focus trap must wrap to the last visible book summary',
     );
+    // A nested summary is in the DOM but hidden by its outer closed details.
+    // Shift+Tab must wrap to the visible summary, not the invisible descendant.
+    if (width === 390) {
+      await page.evaluate(() => {
+        const outer = document.createElement('details');
+        outer.dataset.qaNestedDetails = 'true';
+        const visibleSummary = document.createElement('summary');
+        visibleSummary.textContent = 'Видимий розділ';
+        const inner = document.createElement('details');
+        const hiddenSummary = document.createElement('summary');
+        hiddenSummary.textContent = 'Прихований розділ';
+        inner.append(hiddenSummary);
+        outer.append(visibleSummary, inner);
+        const shelf = document.querySelector('#story-panel .story-book-grid');
+        if (!shelf) throw new Error('Missing catalog shelf');
+        shelf.append(outer);
+      });
+      await page.locator('#story-panel .panel-close').focus();
+      await page.keyboard.press('Shift+Tab');
+      assert.equal(
+        await page.locator('#story-panel [data-qa-nested-details] > summary:focus').count(),
+        1,
+        'Focus trap must skip a nested summary hidden by an outer closed details group',
+      );
+      await page.evaluate(() => document.querySelector('[data-qa-nested-details]')?.remove());
+      await page.locator('#story-panel .panel-close').focus();
+    }
     await shot(page, `${width}-catalog`);
     await page.keyboard.press('Escape');
     // Order-driven opening does not originate from the catalog toolbar.
