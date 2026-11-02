@@ -1,4 +1,5 @@
 import { evidenceKindLabels } from './journal-facts';
+import { focusPanelUpdate, panelTabStops } from './panel-focus';
 import { discoveredPeopleAtStage } from './discovered-people';
 import { OPTIONAL_PROGRESS_KEYS } from './optional-progress';
 import type { FiveDayStory } from './five-day-story';
@@ -177,7 +178,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     panel.classList.toggle('story-panel--catalog', mode === 'catalog');
     const blocked = mode !== null;
     const talking = document.querySelector('#stage')?.classList.contains('talking');
-    const loading = !document.querySelector<HTMLElement>('#loading')?.hidden;
+    const loadingElement = document.querySelector<HTMLElement>('#loading');
+    const loading = Boolean(loadingElement && !loadingElement.hidden);
     for (const selector of ['#game', '#hotspots', '.hud', '#context-action']) {
       const surface = document.querySelector<HTMLElement>(selector);
       if (surface) surface.inert = blocked || Boolean(talking) || loading;
@@ -217,6 +219,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         button.addEventListener('click', () => {
           selectedTopic = topic;
           refresh();
+          focusPanelUpdate(panel, conversationButton);
         });
         topicSelector.append(button);
       }
@@ -246,6 +249,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
             else conversation = next;
             saveConversation();
             refresh();
+            focusPanelUpdate(panel, conversationButton);
           });
           panel.append(again);
         }
@@ -255,6 +259,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
           memories: sharedMemories(),
         });
         const exchange = element('section', '', 'conversation-exchange');
+        exchange.tabIndex = -1;
+        exchange.setAttribute('aria-live', 'polite');
         exchange.append(element('h3', node.speaker), element('p', node.text));
         panel.append(exchange);
         const replies = element('div', '', 'conversation-replies');
@@ -274,7 +280,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
             saveConversation();
             if (next.suspended) mode = null;
             refresh();
-            (panel.querySelector('button') ?? conversationButton).focus({ preventScroll: true });
+            if (next.suspended) (returnFocus ?? conversationButton).focus({ preventScroll: true });
+            else focusPanelUpdate(panel, conversationButton);
           });
           replies.append(button);
         }
@@ -322,7 +329,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         talk.addEventListener('click', () => {
           mode = 'conversation';
           refresh();
-          panel.querySelector<HTMLButtonElement>('button')?.focus();
+          focusPanelUpdate(panel, conversationButton);
         });
         talk.disabled = story.actor !== 'mara';
         if (discoveredPeople().some(([id]) => id === 'mara')) {
@@ -549,7 +556,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     reaction = next === 'catalog' ? story.lastRecommendation : null;
     mode = mode === next ? null : next;
     refresh();
-    if (mode) (panel.querySelector('button') ?? panel).focus({ preventScroll: true });
+    if (mode) focusPanelUpdate(panel, panel);
   };
   const conversationClick = () => toggle('conversation');
   const journalClick = () => toggle('journal');
@@ -566,10 +573,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   catalog.addEventListener('click', catalogClick);
   continueButton.addEventListener('click', continueClick);
   const panelKeys = (event: KeyboardEvent) => {
+    if (!mode) return;
     if (event.key === 'Tab') {
-      const focusable = Array.from(
-        panel.querySelectorAll<HTMLElement>('button, input, textarea, summary, a[href]'),
-      ).filter((node) => !node.hidden);
+      const focusable = panelTabStops(panel);
       const first = focusable[0],
         last = focusable.at(-1);
       if (event.shiftKey && document.activeElement === first) {
@@ -587,9 +593,11 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     }
     if (
       (event.key === 'ArrowDown' || event.key === 'ArrowUp') &&
-      !['INPUT', 'TEXTAREA'].includes((event.target as HTMLElement).tagName)
+      (event.target as HTMLElement).tagName === 'BUTTON'
     ) {
-      const buttons = Array.from(panel.querySelectorAll<HTMLButtonElement>('button'));
+      const buttons = panelTabStops(panel).filter(
+        (node): node is HTMLButtonElement => node.tagName === 'BUTTON',
+      );
       const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
       event.preventDefault();
       buttons[
@@ -640,6 +648,13 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     panel.replaceChildren();
     document.body.classList.remove('reading');
     const toolbar = root.querySelector<HTMLElement>('.story-toolbar');
-    if (toolbar) toolbar.inert = false;
+    const loadingElement = document.querySelector<HTMLElement>('#loading');
+    const loading = Boolean(loadingElement && !loadingElement.hidden);
+    const talking = Boolean(document.querySelector('#stage')?.classList.contains('talking'));
+    for (const selector of ['#game', '#hotspots', '.hud', '#context-action']) {
+      const surface = document.querySelector<HTMLElement>(selector);
+      if (surface) surface.inert = talking || loading;
+    }
+    if (toolbar) toolbar.inert = loading;
   };
 }
