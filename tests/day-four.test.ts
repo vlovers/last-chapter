@@ -70,9 +70,9 @@ describe('Day 4: Iris and the sealed letter', () => {
     expect(currentNode(irisDecision, restored!.dialogue).text).toBe(
       currentNode(irisDecision, welcome).text,
     );
-    expect(availableOptions(irisDecision, restored!.dialogue).map((option) => option.id)).not.toContain(
-      'letter',
-    );
+    expect(
+      availableOptions(irisDecision, restored!.dialogue).map((option) => option.id),
+    ).not.toContain('letter');
     const end = selectOption(irisDecision, welcome, 'leave');
     expect(currentNode(irisDecision, end).text).not.toContain('Конверт');
     expect(advanceToDayFourMara({ ...dayFour, dialogue: end }).stage).toBe('day4-mara');
