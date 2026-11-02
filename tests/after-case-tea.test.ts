@@ -71,8 +71,10 @@ describe('after-case tea: quiet consequences', () => {
         variant.requires?.includes('final_miller_ledger_rumor_seeded'),
       ),
     ).toBe(true);
-    const rumorVariant = node?.textWhen?.find((variant) =>
-      variant.requires?.includes('final_miller_ledger_rumor_seeded'),
+    const rumorVariant = node?.textWhen?.find(
+      (variant) =>
+        variant.requires.includes('final_miller_ledger_rumor_seeded') &&
+        !variant.requires.includes('final_miller_rumor_corrected_publicly'),
     );
     expect(rumorVariant?.text).toContain('Міллер');
     expect(rumorVariant?.text).not.toContain('пробачила');
@@ -80,12 +82,20 @@ describe('after-case tea: quiet consequences', () => {
 
   it('does not erase Miller rumor consequences with a tidy apology', () => {
     const node = finalReading.nodes.find((item) => item.id === 'after-case-miller-apology-new');
-    const rumorVariant = node?.textWhen?.find((variant) =>
-      variant.requires?.includes('final_miller_ledger_rumor_seeded'),
+    const rumorVariant = node?.textWhen?.find(
+      (variant) =>
+        variant.requires.includes('final_miller_ledger_rumor_seeded') &&
+        !variant.requires.includes('final_miller_rumor_corrected_publicly'),
     );
     expect(rumorVariant?.text).toContain('Нора не відповідає');
     expect(rumorVariant?.text).toContain('Ніхто не називає це вибаченням');
     expect(rumorVariant?.text).not.toContain('влаштовує всіх');
+    const correctedVariant = node?.textWhen?.find((variant) =>
+      variant.requires.includes('final_miller_rumor_corrected_publicly'),
+    );
+    expect(correctedVariant?.text).toContain('вже пояснила всім');
+    expect(correctedVariant?.text).toContain('Ніхто не вимагає від неї пробачення');
+    expect(correctedVariant?.text).not.toContain('Ніхто не називає це вибаченням');
   });
 
   it('does not reveal a ledger that the player kept private', () => {
