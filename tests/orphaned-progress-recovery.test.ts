@@ -48,4 +48,25 @@ describe('orphaned progress recovery', () => {
     story.choose('greet');
     expect(saved.get(SAVE_KEY)).toBe(future);
   });
+  it('keeps optional progress intact while a newer chapter save is protected', () => {
+    const future = JSON.stringify({ version: 999, stage: 'season-complete' });
+    const optionalKey = OPTIONAL_PROGRESS_KEYS.notes;
+    const saved = new Map<string, string>([
+      [SAVE_KEY, future],
+      [optionalKey, 'notes from a future client'],
+      [SERVICE_KEY, 'future service data'],
+    ]);
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => saved.get(key) ?? null,
+      setItem: (key: string, value: string) => { saved.set(key, value); },
+      removeItem: (key: string) => { saved.delete(key); },
+    });
+    const story = new FiveDayStory();
+    story.choose('greet');
+    expect(story.isProgressSaved).toBe(false);
+    expect(saved.get(SAVE_KEY)).toBe(future);
+    expect(saved.get(optionalKey)).toBe('notes from a future client');
+    expect(saved.get(SERVICE_KEY)).toBe('future service data');
+  });
+
 });
