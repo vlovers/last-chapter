@@ -7,6 +7,8 @@ interface StopOptions {
   hidden?: boolean;
   inert?: boolean;
   ariaHidden?: boolean;
+  cssHidden?: boolean;
+  cssInvisible?: boolean;
   connected?: boolean;
   collapsed?: boolean;
   directSummary?: boolean;
@@ -19,6 +21,17 @@ function stop(options: StopOptions = {}): HTMLElement {
     tagName: options.tag ?? 'BUTTON',
     tabIndex: options.tabIndex ?? 0,
     isConnected: options.connected ?? true,
+    ownerDocument:
+      options.cssHidden || options.cssInvisible
+        ? {
+            defaultView: {
+              getComputedStyle: () => ({
+                display: options.cssHidden ? 'none' : 'block',
+                visibility: options.cssInvisible ? 'hidden' : 'visible',
+              }),
+            },
+          }
+        : undefined,
     focus: vi.fn(),
     parentElement: options.directSummary ? closedDetails : null,
     matches: (selector: string) => selector === ':disabled' && Boolean(options.disabled),
@@ -49,6 +62,39 @@ describe('story panel keyboard navigation', () => {
     expect(
       panelTabStops(panel([close, disabled, inert, hidden, ariaHidden, exchange, notes])),
     ).toEqual([close, notes]);
+  });
+
+  it('excludes controls hidden by responsive CSS, even without hidden attributes', () => {
+    const visible = stop();
+    const displayNone = stop({ cssHidden: true });
+    const invisible = stop({ cssInvisible: true });
+    expect(panelTabStops(panel([visible, displayNone, invisible]))).toEqual([visible]);
+  });
+
+  it('does not restore focus to a CSS-hidden opener or its hidden ancestor', () => {
+    const fallback = stop();
+    const hidden = stop({ cssHidden: true });
+    restorePanelFocus(hidden, fallback);
+    expect(hidden.focus).not.toHaveBeenCalled();
+    expect(fallback.focus).toHaveBeenCalledTimes(1);
+
+    const parent = {} as HTMLElement;
+    const child = stop();
+    Object.defineProperty(child, 'parentElement', { value: parent });
+    Object.defineProperty(parent, 'parentElement', { value: null });
+    Object.defineProperty(child, 'ownerDocument', {
+      value: {
+        defaultView: {
+          getComputedStyle: (element: HTMLElement) => ({
+            display: element === parent ? 'none' : 'block',
+            visibility: 'visible',
+          }),
+        },
+      },
+    });
+    restorePanelFocus(child, fallback);
+    expect(child.focus).not.toHaveBeenCalled();
+    expect(fallback.focus).toHaveBeenCalledTimes(2);
   });
 
   it('keeps a collapsed topic summary reachable but not its invisible choices', () => {

@@ -82,6 +82,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   };
   const conversationButton = document.createElement('button');
   conversationButton.type = 'button';
+  conversationButton.className = 'story-talk-toggle';
   conversationButton.textContent = 'Мара · Поговорити';
   conversationButton.setAttribute('aria-label', 'Поговорити з Марою');
   conversationButton.setAttribute('aria-expanded', 'false');

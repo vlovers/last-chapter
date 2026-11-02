@@ -1,3 +1,21 @@
+/** A CSS media query may hide a toolbar button without a hidden attribute.
+ * Such a button must not be a tab stop or receive restored focus. */
+function isRendered(node: HTMLElement): boolean {
+  const view = node.ownerDocument?.defaultView;
+  if (!view) return true;
+  for (let current: HTMLElement | null = node; current; current = current.parentElement) {
+    const style = view.getComputedStyle(current);
+    if (
+      style.display === 'none' ||
+      style.visibility === 'hidden' ||
+      style.visibility === 'collapse'
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 /** Keyboard navigation must ignore controls hidden by a closed <details>, inert
  * overlays, or disabled states; those controls are still found by querySelectorAll. */
 export function panelTabStops(panel: HTMLElement): HTMLElement[] {
@@ -9,7 +27,8 @@ export function panelTabStops(panel: HTMLElement): HTMLElement[] {
     if (
       node.tabIndex < 0 ||
       node.matches(':disabled') ||
-      node.closest('[hidden], [inert], [aria-hidden="true"]')
+      node.closest('[hidden], [inert], [aria-hidden="true"]') ||
+      !isRendered(node)
     ) {
       return false;
     }
@@ -34,7 +53,8 @@ export function restorePanelFocus(preferred: HTMLElement | null, fallback: HTMLE
     preferred?.isConnected &&
     preferred.tabIndex >= 0 &&
     !preferred.matches(':disabled') &&
-    !preferred.closest('[hidden], [inert], [aria-hidden="true"]');
+    !preferred.closest('[hidden], [inert], [aria-hidden="true"]') &&
+    isRendered(preferred);
   const target = usable && preferred ? preferred : fallback;
   target.focus({ preventScroll: true });
 }

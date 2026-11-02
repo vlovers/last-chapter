@@ -1234,8 +1234,18 @@ body.reduced * {
 }
 
 @media (max-width: 600px) {
-  .story-toolbar-actions > button:last-child {
-    display: none;
+  /* The Mara conversation is the last toolbar action. Keep it touch-accessible
+     and shorten only its visual label on narrow screens. */
+  .story-toolbar-actions .story-talk-toggle {
+    font-size: 0;
+    white-space: nowrap;
+  }
+  .story-toolbar-actions .story-talk-toggle::before {
+    content: 'Мара';
+    font-size: 12px;
+  }
+  .story-toolbar-actions .story-talk-toggle[data-new]::after {
+    font-size: 11px;
   }
   #catalog-toggle::before {
     content: '▤ ';

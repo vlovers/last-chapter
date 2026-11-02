@@ -334,6 +334,28 @@ try {
   const visited = [],
     orders = [];
   for (let step = 0; step < 19; step++) {
+    if (await page.evaluate(() => window.__lastChapterStory.actor === 'mara')) {
+      // On phones the Mara button is the final toolbar action. A former
+      // last-child CSS rule hid it entirely, cutting off optional dialogue.
+      const talk = page.getByRole('button', { name: 'Поговорити з Марою' });
+      assert.ok(await talk.isVisible(), 'Mara conversation must be visible on a phone');
+      assert.ok(await talk.isEnabled(), 'Mara conversation must be enabled when she is present');
+      const bounds = await talk.boundingBox();
+      const fits =
+        bounds !== null &&
+        bounds.width >= 44 &&
+        bounds.height >= 44 &&
+        bounds.x >= 0 &&
+        bounds.x + bounds.width <= 390;
+      assert.ok(
+        fits,
+        `Mara touch target must fit inside the 390px viewport: ${JSON.stringify(bounds)}`,
+      );
+      await talk.tap();
+      await page.getByRole('heading', { name: 'Розмова з Марою' }).waitFor();
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#story-panel[hidden]').count(), 1);
+    }
     await page.locator('#story-continue').click();
     const plan = await page.evaluate(async () => {
       const { stageStory, chooseChapterOption } = await import('/src/game/chapter.ts');
