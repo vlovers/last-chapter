@@ -6,7 +6,6 @@ const evidence = new Map(journalEvidence.map((entry) => [entry.flag, entry]));
 
 describe('quiet-evening journal coverage', () => {
   const discovered = [
-    'iris_mothers_draft_heard',
     'quiet_evening_page_found',
     'quiet_evening_page_examined',
     'iris_quiet_page_stars_compared',
@@ -18,11 +17,15 @@ describe('quiet-evening journal coverage', () => {
     expect(evidence.get(flag)?.source.trim().length).toBeGreaterThan(5);
   });
 
+  it('does not attribute unsupported day-two testimony to Iris', () => {
+    expect(facts.has('iris_mothers_draft_heard')).toBe(false);
+    expect(evidence.has('iris_mothers_draft_heard')).toBe(false);
+  });
+
   it('distinguishes the observed markings from the window interpretation', () => {
     expect(evidence.get('quiet_evening_page_examined')?.kind).toBe('observation');
     expect(evidence.get('iris_quiet_page_stars_compared')?.kind).toBe('observation');
     expect(evidence.get('iris_quiet_page_window_theory')?.kind).toBe('inference');
-    expect(evidence.get('iris_mothers_draft_heard')?.kind).toBe('testimony');
   });
 
   it('documents mutually exclusive manuscript custody outcomes without declaring authorship', () => {
