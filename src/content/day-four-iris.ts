@@ -14,7 +14,7 @@ export const irisDecision: DialogueStory = {
     {
       id: 'welcome',
       speaker: 'Айріс',
-      text: 'Ти кладеш перед Айріс знайдений конверт, ім’ям догори. Вона впізнає його й довго розглядає край. «Я писала це Лео сім років тому. Не думала, що знову побачу. Можна він поки полежить тут, біля мене?»',
+      text: 'Ти ставиш перед Айріс чашку чаю. Вона відкриває альбом на сторінці з ескізами вітрини. «Я всю дорогу думала, який малюнок повісити біля вікна. Можна я спершу просто посиджу тут?»',
       textWhen: [
         {
           requires: ['iris_letter_pressured_day4', 'iris_letter_choice_respected'],
@@ -40,16 +40,22 @@ export const irisDecision: DialogueStory = {
           requires: ['iris_day_four_letter_feeling_heard'],
           text: '«Конверт досі тут, бачиш?» Айріс торкається обкладинки альбому. «Але я хоча б перестала дивитися на нього щохвилини. Можемо поговорити про щось приємніше?»',
         },
+        {
+          requires: ['saw_envelope'],
+          text: 'Ти кладеш перед Айріс знайдений конверт, ім’ям догори. Вона впізнає його й довго розглядає край. «Я писала це Лео сім років тому. Не думала, що знову побачу. Можна він поки полежить тут, біля мене?»',
+        },
       ],
       options: [
         {
           id: 'iris-letter-feeling',
+          requires: ['saw_envelope'],
           label: '«Хочеш, я поки покладу конверт під альбом?»',
           next: 'iris-letter-feeling',
           unless: ['iris_day_four_letter_feeling_heard'],
         },
         {
           id: 'iris-letter-ask',
+          requires: ['saw_envelope'],
           label: '«Що саме тебе лякає в цьому конверті?»',
           next: 'iris-letter-ask',
           unless: ['iris_day_four_letter_fear_heard'],
@@ -122,6 +128,14 @@ export const irisDecision: DialogueStory = {
           id: 'iris-letter-ask-return',
           label: '«Якщо хтось запитає, скажу, що ми пили чай»',
           next: 'iris-boundaries',
+          unless: ['iris_day_four_boundary_heard'],
+          grants: ['iris_day_four_letter_fear_heard'],
+        },
+        {
+          id: 'iris-letter-ask-back',
+          label: '«Якщо хтось запитає, скажу, що ми пили чай»',
+          next: 'welcome',
+          requires: ['iris_day_four_boundary_heard'],
           grants: ['iris_day_four_letter_fear_heard'],
         },
       ],
@@ -558,7 +572,13 @@ export const irisDecision: DialogueStory = {
     {
       id: 'end',
       speaker: 'Оповідач',
-      text: 'Айріс прибирає альбом у сумку. «Малюнок вікна поки залишу тут», — каже вона й кладе аркуш подалі від мокрих чашок. Конверт залишається за касою: передавати його Лео вона не просила. Ти зачиняєш шухляду.',
+      text: 'Айріс прибирає альбом у сумку. «Малюнок вікна поки залишу тут», — каже вона й кладе аркуш подалі від мокрих чашок. Ти знаходиш для нього сухе місце біля вітрини.',
+      textWhen: [
+        {
+          requires: ['saw_envelope'],
+          text: 'Айріс прибирає альбом у сумку. «Малюнок вікна поки залишу тут», — каже вона й кладе аркуш подалі від мокрих чашок. Конверт залишається за касою: передавати його Лео вона не просила. Ти зачиняєш шухляду.',
+        },
+      ],
       options: [],
     },
   ],

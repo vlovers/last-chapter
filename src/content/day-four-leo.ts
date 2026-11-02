@@ -183,7 +183,19 @@ export const leoDecision: DialogueStory = {
         {
           id: 'trains-back',
           label: '«І як ви після цього взагалі плануєте подорожі?»',
-          next: 'mara',
+          next: 'trains-followup',
+        },
+      ],
+    },
+    {
+      id: 'trains-followup',
+      speaker: 'Лео',
+      text: '«Тепер Мара вибирає час, а я перевіряю, чи потяг узагалі ходить у неділю». Лео усміхається. «Якщо не домовимося, поїдемо автобусом. Головне — не сваритися з розкладом замість одне одного».',
+      options: [
+        {
+          id: 'trains-followup-back',
+          label: '«Звучить як план»',
+          next: 'welcome',
         },
       ],
     },

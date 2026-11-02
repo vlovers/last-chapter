@@ -8,6 +8,7 @@ import {
 } from '../src/game/chapter';
 import {
   availableOptions,
+  currentNode,
   selectOption,
   startDialogue,
   validateDialogue,
@@ -47,4 +48,58 @@ describe('Day 4: Iris and the sealed letter', () => {
     expect(() => finishFourthDay(state)).toThrow('Finish Leo first');
     expect(decodeSave(encodeSave(state))).toEqual(state);
   });
+  it('does not invent a found envelope when Day 4 begins without one', () => {
+    const previous: ChapterState = {
+      stage: 'day3-complete',
+      dialogue: startDialogue(irisDecision),
+      flags: [],
+    };
+    const dayFour = startFourthDay(previous);
+    const welcome = selectOption(irisDecision, dayFour.dialogue, 'welcome');
+    expect(availableOptions(irisDecision, welcome).map((option) => option.id)).not.toEqual(
+      expect.arrayContaining(['iris-letter-feeling', 'iris-letter-ask', 'letter']),
+    );
+    for (const id of ['iris-letter-feeling', 'iris-letter-ask', 'letter']) {
+      expect(availableOptions(irisDecision, welcome).map((option) => option.id)).not.toContain(id);
+      expect(() => selectOption(irisDecision, welcome, id)).toThrow('Option unavailable');
+    }
+    expect(currentNode(irisDecision, welcome).text).not.toMatch(/конверт|лист/u);
+    const end = selectOption(irisDecision, welcome, 'leave');
+    expect(currentNode(irisDecision, end).text).not.toContain('Конверт');
+    expect(advanceToDayFourMara({ ...dayFour, dialogue: end }).stage).toBe('day4-mara');
+  });
+
+  it('preserves the original envelope scenes when it was actually found', () => {
+    const previous: ChapterState = {
+      stage: 'day3-complete',
+      dialogue: startDialogue(irisDecision),
+      flags: ['saw_envelope'],
+    };
+    const welcome = selectOption(irisDecision, startFourthDay(previous).dialogue, 'welcome');
+    expect(currentNode(irisDecision, welcome).text).toContain('знайдений конверт');
+    for (const id of ['iris-letter-feeling', 'iris-letter-ask', 'letter']) {
+      expect(availableOptions(irisDecision, welcome).map((option) => option.id)).toContain(id);
+    }
+    const end = selectOption(irisDecision, welcome, 'leave');
+    expect(currentNode(irisDecision, end).text).toContain('Конверт залишається за касою');
+  });
+
+  it('does not replay Iris’s completed boundaries scene from a later letter question', () => {
+    const start = {
+      ...startDialogue(irisDecision),
+      flags: ['saw_envelope', 'iris_day_four_boundary_heard'],
+    };
+    const welcome = selectOption(irisDecision, start, 'welcome');
+    const question = selectOption(irisDecision, welcome, 'iris-letter-ask');
+    expect(availableOptions(irisDecision, question).map((option) => option.id)).toEqual([
+      'iris-letter-ask-back',
+    ]);
+    const returned = selectOption(irisDecision, question, 'iris-letter-ask-back');
+    expect(returned.node).toBe('welcome');
+    expect(returned.flags).toContain('iris_day_four_letter_fear_heard');
+    expect(availableOptions(irisDecision, returned).map((option) => option.id)).not.toContain(
+      'iris-boundaries',
+    );
+  });
+
 });
