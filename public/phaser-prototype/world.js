@@ -23,13 +23,14 @@ export const HOTSPOTS = [
     id: 'cat-tree',
     label: 'Котяче дерево Френка',
     rect: { x: 418, y: 115, w: 42, h: 85 },
-    approach: { x: 411, y: 217 },
+    // Stand beside the climbing route, leaving the cat's right of way clear.
+    approach: { x: 466, y: 235 },
   },
   {
     id: 'bowl',
     label: 'Насипати корм Френкові',
     rect: { x: 502, y: 181, w: 22, h: 16 },
-    approach: { x: 490, y: 217 },
+    approach: { x: 542, y: 235 },
   },
   {
     id: 'shelves',

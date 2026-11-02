@@ -46,7 +46,12 @@ function stop(options: StopOptions = {}): HTMLElement {
         : undefined,
     focus: vi.fn(),
     parentElement: options.directSummary ? closedDetails : null,
-    matches: (selector: string) => selector === ':disabled' && Boolean(options.disabled),
+    matches: (selector: string) =>
+      selector === ':disabled' &&
+      ['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'FIELDSET', 'OPTION', 'OPTGROUP'].includes(
+        options.tag ?? 'BUTTON',
+      ) &&
+      Boolean(options.disabled),
     closest: (selector: string) =>
       selector === '[hidden], [inert]' || selector === '[hidden], [inert], [aria-hidden="true"]'
         ? options.hidden || options.inert || options.ariaHidden
@@ -239,7 +244,7 @@ describe('story panel keyboard navigation', () => {
 
   it('skips hidden and disabled exchanges when updating conversation focus', () => {
     const hiddenExchange = stop({ tag: 'SECTION', exchange: true, hidden: true });
-    const disabledExchange = stop({ tag: 'SECTION', exchange: true, disabled: true });
+    const disabledExchange = stop({ tag: 'BUTTON', exchange: true, disabled: true });
     const collapsedExchange = stop({ tag: 'SECTION', exchange: true, collapsed: true });
     const close = stop();
     const fallback = stop();

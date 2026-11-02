@@ -58,3 +58,22 @@ schema change. Package B npm run check passed: 248 files / 2327 cases. Nine new
 save/knowledge/permission regressions. The lifecycle check now validates earlier
 Iris boundary flags against their actual day-four granting choices as well as
 final-day choices.
+
+## C — Small screens and Frank
+
+The existing fixed dialogue layout is retained: no new CSS override was needed.
+The responsive runner now checks 320×568, 360×780, 375×667, 375×812, 390×844,
+430×932, 768×1024, 1440×900 and 844×390. It compares canvas and character-dock
+bounds through four short/long reply transitions at each size, checks 44px
+choices and reachable scrolling, and checks both empty and populated rumor tabs.
+All nine viewport cases and the full story checkpoint loop passed.
+
+A real small-screen feeding failure exposed an interaction placement defect:
+the player stood in Frank's route while dialogue prevented moving away. Bowl and
+tree approach points now leave his path clear. Deterministic simulation checks
+both destinations from all five ambient places and from the other care locations.
+Frank's seven actions are preserved in two four-choice menus; bowl/tree shortcuts
+remain direct. Native touch/browser checks passed at 320×568 and 390×844, plus
+1440×900: pet, feed, play, observation submenu, tree climb, duplicate-care guard,
+reload and new-game reset. The off-camera phone hotspots are approached through
+normal movement; the separate reading-chair regression remains on desktop.

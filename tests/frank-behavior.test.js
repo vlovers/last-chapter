@@ -1,15 +1,49 @@
 import { describe, expect, it } from 'vitest';
 import {
   FRANK_PLACES,
+  FRANK_ACTIONS,
+  FRANK_MAIN_CHOICES,
+  FRANK_MORE_CHOICES,
   initialFrank,
   tickFrank,
   reactFrank,
   frankApproach,
 } from '../public/phaser-prototype/frank-behavior.js';
 import { drawFrank } from '../public/phaser-prototype/frank.js';
-import { canStand, distance, eligible, findPath } from '../public/phaser-prototype/world.js';
+import {
+  canStand,
+  distance,
+  eligible,
+  findPath,
+  HOTSPOTS,
+} from '../public/phaser-prototype/world.js';
 
 describe('Frank ambient resident', () => {
+  it('keeps all seven interactions through two four-choice menus', () => {
+    expect(FRANK_MAIN_CHOICES).toHaveLength(4);
+    expect(FRANK_MORE_CHOICES).toHaveLength(4);
+    const actions = [...FRANK_MAIN_CHOICES, ...FRANK_MORE_CHOICES]
+      .filter((choice) => choice.id !== 'frank-more')
+      .map((choice) => choice.id);
+    expect(actions.sort()).toEqual(FRANK_ACTIONS.map((action) => action.id).sort());
+    expect(new Set(actions).size).toBe(7);
+  });
+  it.each(['feed', 'tree'])('finishes %s while the player waits at its hotspot', (action) => {
+    const player = HOTSPOTS.find(
+      (spot) => spot.id === (action === 'feed' ? 'bowl' : 'cat-tree'),
+    ).approach;
+    expect(canStand(player)).toBe(true);
+    for (const start of [...FRANK_PLACES, { x: 513, y: 211 }, { x: 438, y: 211 }]) {
+      const cat = { ...initialFrank(), x: start.x, y: start.y };
+      expect(reactFrank(cat, action, player)).toBeTruthy();
+      const target = action === 'feed' ? 'eating' : 'resting';
+      for (let frame = 0; frame < 800 && cat.activity !== target; frame++) {
+        tickFrank(cat, 50, player);
+        expect(canStand(cat)).toBe(true);
+      }
+      expect(cat.activity, `Blocked from ${start.x},${start.y}`).toBe(target);
+    }
+  });
   it('visits all five places, pauses, sleeps, and never crosses solids over ten minutes', () => {
     const cat = initialFrank();
     const positions = new Set(),

@@ -18,6 +18,14 @@ export const FRANK_ACTIONS = [
   { id: 'leave', label: 'Дати йому спокій' },
 ];
 export const FRANK_SAVE_KEY = 'last-chapter:frank:v1';
+// Four replies per screen; care hotspots still open their specific action directly.
+export const FRANK_MAIN_CHOICES = [
+  ...FRANK_ACTIONS.filter((action) => ['pet', 'feed', 'play'].includes(action.id)),
+  { id: 'frank-more', label: 'Поспостерігати, покликати або дати відпочити' },
+];
+export const FRANK_MORE_CHOICES = FRANK_ACTIONS.filter((action) =>
+  ['tree', 'watch', 'call', 'leave'].includes(action.id),
+);
 export const BOWL = { x: 513, y: 211 };
 export const TREE = { x: 438, y: 211 };
 export function frankMemory(cat) {

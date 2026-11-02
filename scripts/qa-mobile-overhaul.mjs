@@ -47,7 +47,10 @@ const shot = async (page, name) => {
 let page;
 try {
   const viewports = [
+    [320, 568],
+    [360, 780],
     [375, 667],
+    [375, 812],
     [390, 844],
     [430, 932],
     [768, 1024],
@@ -131,6 +134,10 @@ try {
     await page.keyboard.up('ArrowRight');
     assert.ok((await snapshot(page)).player.x > x);
     const stable = await snapshot(page);
+    await page.locator('#journal-toggle').click();
+    await page.getByRole('button', { name: 'Чутки', exact: true }).click();
+    assert.equal(await page.getByText('Ви ще не чули чуток.', { exact: true }).count(), 1);
+    await page.keyboard.press('Escape');
     await page.locator('#story-continue').click();
     await page.locator('#dialogue:not([hidden])').waitFor();
     assert.deepEqual((await snapshot(page)).canvas, stable.canvas);
@@ -138,8 +145,32 @@ try {
     await shot(page, `${width}-dialogue`);
     await page.keyboard.press('Tab');
     assert.ok(await page.locator('#dialogue :focus').count());
+    // Keep character conversations at a stable size across short and long replies.
+    await choose(page, 'greet');
+    const dock = await page.locator('#dialogue').boundingBox();
+    for (const reply of ['town', 'gossip', 'what-saw', 'challenge']) {
+      await choose(page, reply);
+      const nextDock = await page.locator('#dialogue').boundingBox();
+      assert.deepEqual(
+        (await snapshot(page)).canvas,
+        stable.canvas,
+        'Dialogue must not resize the scene',
+      );
+      assert.deepEqual(nextDock, dock, 'Character dock dimensions must stay stable');
+      const buttons = page.locator('#choices button');
+      assert.ok((await buttons.count()) <= 4);
+      for (const button of await buttons.all()) {
+        await button.scrollIntoViewIfNeeded();
+        const bounds = await button.boundingBox();
+        assert.ok(bounds && bounds.width >= 44 && bounds.height >= 44, '44px touch targets');
+        assert.ok(bounds.x >= -1 && bounds.x + bounds.width <= width + 1, 'No clipped choice');
+        assert.ok(
+          bounds.y >= -1 && bounds.y + bounds.height <= height + 1,
+          'Choice can be reached',
+        );
+      }
+    }
     if (width === 390 || width === 1440) {
-      await choose(page, 'greet');
       await shot(page, `${width}-portrait`);
       assert.deepEqual((await snapshot(page)).canvas, stable.canvas);
     }
@@ -322,7 +353,8 @@ try {
       assert.deepEqual(flags, ['bookmark', 'stamp']);
     }
     await page.getByRole('button', { name: 'Чутки', exact: true }).click();
-    assert.equal(await page.getByText('Ви ще не чули чуток.', { exact: true }).count(), 1);
+    assert.equal(await page.getByText('Ви ще не чули чуток.', { exact: true }).count(), 0);
+    assert.equal(await page.getByText(/Чутка: пані Міллер бачила Томаса/).count(), 1);
     await page.getByRole('button', { name: 'Мої записи', exact: true }).click();
     await page.getByLabel('Ваші думки й запитання').fill('Перевірити час у журналі ремонту.');
     await page.locator('#story-panel .panel-close').focus();

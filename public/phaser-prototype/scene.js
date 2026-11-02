@@ -19,7 +19,12 @@ import { pauseVisitor, resumeVisitor, shouldBrowse } from './visitor-lifecycle.j
 import { createVisitorBook } from './visitor-book.js';
 import { visitorReaction, facingToward } from './visitor-reactions.js';
 import { createFrank } from './frank.js';
-import { FRANK_ACTIONS, frankApproach } from './frank-behavior.js';
+import {
+  FRANK_ACTIONS,
+  FRANK_MAIN_CHOICES,
+  FRANK_MORE_CHOICES,
+  frankApproach,
+} from './frank-behavior.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -410,7 +415,7 @@ class Bookshop extends Phaser.Scene {
               ? FRANK_ACTIONS.filter((a) => ['feed', 'leave'].includes(a.id))
               : spot.id === 'cat-tree'
                 ? FRANK_ACTIONS.filter((a) => ['tree', 'leave'].includes(a.id))
-                : FRANK_ACTIONS,
+                : FRANK_MAIN_CHOICES,
         },
       };
       this.state = transition(this.state, { type: 'open' });
@@ -463,6 +468,14 @@ class Bookshop extends Phaser.Scene {
   }
   choose(id) {
     if (this.activeDialogue?.kind === 'frank') {
+      if (id === 'frank-more') {
+        this.activeDialogue.note = {
+          ...this.activeDialogue.note,
+          choices: FRANK_MORE_CHOICES,
+        };
+        this.showDialogue();
+        return;
+      }
       const text = this.frank.react(id, this.characters.player);
       if (!text) return;
       if (id === 'leave') {
