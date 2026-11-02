@@ -1,11 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
-import { focusPanelUpdate, panelTabStops } from '../src/phaser/panel-focus';
+import { focusPanelUpdate, panelTabStops, restorePanelFocus } from '../src/phaser/panel-focus';
 
 interface StopOptions {
   tag?: string;
   disabled?: boolean;
   hidden?: boolean;
   inert?: boolean;
+  ariaHidden?: boolean;
+  connected?: boolean;
   collapsed?: boolean;
   directSummary?: boolean;
   tabIndex?: number;
@@ -16,11 +18,14 @@ function stop(options: StopOptions = {}): HTMLElement {
   return {
     tagName: options.tag ?? 'BUTTON',
     tabIndex: options.tabIndex ?? 0,
+    isConnected: options.connected ?? true,
+    focus: vi.fn(),
     parentElement: options.directSummary ? closedDetails : null,
     matches: (selector: string) => selector === ':disabled' && Boolean(options.disabled),
     closest: (selector: string) =>
-      selector === '[hidden], [inert]'
-        ? options.hidden || options.inert
+      (selector === '[hidden], [inert]' ||
+        selector === '[hidden], [inert], [aria-hidden="true"]')
+        ? options.hidden || options.inert || options.ariaHidden
           ? ({} as HTMLElement)
           : null
         : selector === 'details:not([open])' && options.collapsed
@@ -39,9 +44,10 @@ describe('story panel keyboard navigation', () => {
     const disabled = stop({ disabled: true });
     const inert = stop({ inert: true });
     const hidden = stop({ hidden: true });
+    const ariaHidden = stop({ ariaHidden: true });
     const exchange = stop({ tabIndex: -1 });
     const notes = stop({ tag: 'TEXTAREA' });
-    expect(panelTabStops(panel([close, disabled, inert, hidden, exchange, notes]))).toEqual([
+    expect(panelTabStops(panel([close, disabled, inert, hidden, ariaHidden, exchange, notes]))).toEqual([
       close,
       notes,
     ]);
@@ -64,6 +70,35 @@ describe('story panel keyboard navigation', () => {
     const summary = stop({ tag: 'SUMMARY' });
     const choice = stop();
     expect(panelTabStops(panel([summary, choice]))).toEqual([summary, choice]);
+  });
+
+  it('restores focus to a connected and enabled opener', () => {
+    const opener = stop();
+    const fallback = stop();
+    restorePanelFocus(opener, fallback);
+    expect(opener.focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(fallback.focus).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['removed', { connected: false }],
+    ['disabled', { disabled: true }],
+    ['hidden', { hidden: true }],
+    ['inert', { inert: true }],
+    ['aria-hidden', { ariaHidden: true }],
+    ['not keyboard reachable', { tabIndex: -1 }],
+  ] as const)('falls back when the original opener is %s', (_reason, options) => {
+    const opener = stop(options);
+    const fallback = stop();
+    restorePanelFocus(opener, fallback);
+    expect(opener.focus).not.toHaveBeenCalled();
+    expect(fallback.focus).toHaveBeenCalledWith({ preventScroll: true });
+  });
+
+  it('falls back when there was no opener', () => {
+    const fallback = stop();
+    restorePanelFocus(null, fallback);
+    expect(fallback.focus).toHaveBeenCalledWith({ preventScroll: true });
   });
 
   it('focuses a newly rendered conversation before the close button', () => {
