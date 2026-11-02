@@ -77,7 +77,7 @@ describe('Day-five Miller rumor continuity after the public gathering', () => {
     expect(corrected).not.toContain('Після чутки біля каси');
   });
 
-  it('keeps Nora\'s display-book count consistent between preparation screens', () => {
+  it("keeps Nora's display-book count consistent between preparation screens", () => {
     expect(currentNode(finalReading, at('bookshop-tomorrow', 'none')).text).toContain(
       'Нора тримає три романи',
     );
