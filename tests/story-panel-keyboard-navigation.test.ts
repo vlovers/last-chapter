@@ -190,32 +190,41 @@ describe('story panel keyboard navigation', () => {
   });
 
   it('focuses a newly rendered conversation before the close button', () => {
-    const exchange = { focus: vi.fn() };
-    const close = { focus: vi.fn() };
-    const fallback = { focus: vi.fn() };
-    const root = {
-      querySelector: (selector: string) =>
-        selector === '.conversation-exchange' ? exchange : close,
-    } as unknown as HTMLElement;
-    focusPanelUpdate(root, fallback as unknown as HTMLElement);
+    const exchange = stop();
+    const close = stop();
+    const fallback = stop();
+    const root = panel([exchange, close]);
+    focusPanelUpdate(root, fallback);
     expect(exchange.focus).toHaveBeenCalledWith({ preventScroll: true });
     expect(close.focus).not.toHaveBeenCalled();
     expect(fallback.focus).not.toHaveBeenCalled();
   });
 
-  it('falls back to close or opener when no conversation remains', () => {
-    const close = { focus: vi.fn() };
-    const fallback = { focus: vi.fn() };
-    const root = {
-      querySelector: (selector: string) => (selector === 'button' ? close : null),
-    } as unknown as HTMLElement;
-    focusPanelUpdate(root, fallback as unknown as HTMLElement);
+  it('skips hidden and disabled exchanges when updating conversation focus', () => {
+    const hiddenExchange = stop({ hidden: true });
+    const disabledExchange = stop({ disabled: true });
+    const collapsedExchange = stop({ collapsed: true });
+    const close = stop();
+    const fallback = stop();
+    focusPanelUpdate(panel([hiddenExchange, disabledExchange, collapsedExchange, close]), fallback);
+    for (const exchange of [hiddenExchange, disabledExchange, collapsedExchange]) {
+      expect(exchange.focus).not.toHaveBeenCalled();
+    }
     expect(close.focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(fallback.focus).not.toHaveBeenCalled();
+  });
 
-    focusPanelUpdate(
-      { querySelector: () => null } as unknown as HTMLElement,
-      fallback as unknown as HTMLElement,
-    );
+  it('falls back to opener when all conversation controls are hidden', () => {
+    const hidden = stop({ cssHidden: true });
+    const fallback = stop();
+    focusPanelUpdate(panel([hidden]), fallback);
+    expect(hidden.focus).not.toHaveBeenCalled();
+    expect(fallback.focus).toHaveBeenCalledWith({ preventScroll: true });
+  });
+
+  it('falls back to opener when no conversation remains', () => {
+    const fallback = stop();
+    focusPanelUpdate(panel([]), fallback);
     expect(fallback.focus).toHaveBeenCalledWith({ preventScroll: true });
   });
 });
