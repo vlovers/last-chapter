@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { DialogueState } from '../src/game/dialogue';
 import { finalReading } from '../src/content/day-five';
 import {
   availableOptions,
@@ -69,7 +70,7 @@ describe('Day-five Miller rumor continuity after the public gathering', () => {
 
   for (const rumor of ['none', 'open', 'corrected'] as const) {
     it(`completes Miller's tea callback with ${rumor} rumor history`, () => {
-      let state = {
+      let state: DialogueState = {
         ...at('after-case-tea', rumor),
         flags: [...flagsFor(rumor), 'final_case_closure_complete'],
       };
@@ -87,7 +88,7 @@ describe('Day-five Miller rumor continuity after the public gathering', () => {
     });
 
     it(`completes Miller's next-day privacy notice with ${rumor} rumor history`, () => {
-      let state = {
+      let state: DialogueState = {
         ...at('bookshop-tomorrow', rumor),
         flags: [
           ...flagsFor(rumor),
