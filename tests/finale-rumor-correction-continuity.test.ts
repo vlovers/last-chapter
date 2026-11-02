@@ -3,11 +3,7 @@ import { finalReading } from '../src/content/day-five';
 import { currentNode, selectOption, startDialogue } from '../src/game/dialogue';
 
 const enterEveningTopic = (topic: string, flags: string[]) => {
-  const evening = selectOption(
-    finalReading,
-    { ...startDialogue(finalReading), flags },
-    'open',
-  );
+  const evening = selectOption(finalReading, { ...startDialogue(finalReading), flags }, 'open');
   return selectOption(finalReading, evening, topic);
 };
 
@@ -25,10 +21,7 @@ describe('Final evening rumor correction continuity', () => {
     expect(tea).toContain('вже пояснила гостям');
     expect(tea).not.toContain('Слова Міллер досі ходять');
 
-    const tomorrow = currentNode(
-      finalReading,
-      enterEveningTopic('bookshop-tomorrow', flags),
-    ).text;
+    const tomorrow = currentNode(finalReading, enterEveningTopic('bookshop-tomorrow', flags)).text;
     expect(tomorrow).toContain('вже виправила свою вигадку');
     expect(tomorrow).not.toContain('Після чутки біля каси ніяково тихо');
   });
