@@ -30,6 +30,17 @@ const cat = () =>
       simulationMs: s.frank.state.elapsed,
     };
   });
+// Frank's in-world hotspot follows a roaming cat. Playwright's default
+// stability wait can time out while the target moves continuously, although
+// it remains visible and interactable. Force skips only that stability wait;
+// the browser still sends a real pointer/touch event to the hotspot.
+const openRoamingFrank = async () => {
+  const hotspot = page.getByRole('button', { name: 'Побути з Френком', exact: true });
+  await hotspot.waitFor({ state: 'visible' });
+  if (touch) await hotspot.tap({ force: true });
+  else await hotspot.click({ force: true });
+  await page.getByRole('heading', { name: 'Френк', exact: true }).waitFor();
+};
 const choose = async (id) => {
   await page.waitForTimeout(250);
   assert.ok((await page.locator('#choices button').count()) <= 4, 'Four Frank choices maximum');
@@ -65,8 +76,7 @@ try {
     console.log(`Frank QA: ${width}x${height}`);
     await page.goto(process.env.BASE_URL || 'http://127.0.0.1:5173');
     await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
-    await page.getByRole('button', { name: 'Побути з Френком', exact: true }).click();
-    await page.getByRole('heading', { name: 'Френк', exact: true }).waitFor();
+    await openRoamingFrank();
     assert.equal(await page.locator('#choices button').count(), 4);
     const paused = await cat();
     await page.waitForTimeout(500);
@@ -78,13 +88,11 @@ try {
     });
     assert.equal((await cat()).pets, 1);
     await page.keyboard.press('Escape');
-    await page.getByRole('button', { name: 'Побути з Френком', exact: true }).click();
-    await page.getByRole('heading', { name: 'Френк', exact: true }).waitFor();
+    await openRoamingFrank();
     await choose('pet');
     assert.equal((await cat()).pets, 1, 'Repeated petting must not bypass its cooldown');
     await page.keyboard.press('Escape');
-    await page.getByRole('button', { name: 'Побути з Френком', exact: true }).click();
-    await page.getByRole('heading', { name: 'Френк', exact: true }).waitFor();
+    await openRoamingFrank();
     await choose('frank-more');
     assert.equal(await page.locator('#choices button').count(), 4);
     await choose('watch');
@@ -104,8 +112,7 @@ try {
     await page.waitForTimeout(1000);
     await page.screenshot({ path: `${output}/frank-eating.png` });
     await page.keyboard.press('Escape');
-    await page.getByRole('button', { name: 'Побути з Френком', exact: true }).click();
-    await page.getByRole('heading', { name: 'Френк', exact: true }).waitFor();
+    await openRoamingFrank();
     await choose('play');
     assert.equal((await cat()).activity, 'playing');
     await page.waitForTimeout(1000);
