@@ -1,19 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { expect, it } from 'vitest';
 
-const workflow = readFileSync(
-  new URL('../.github/workflows/ci.yml', import.meta.url),
-  'utf8',
-);
-const runner = readFileSync(
-  new URL('../scripts/qa-narrative-v2.mjs', import.meta.url),
-  'utf8',
-);
+const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8');
+const runner = readFileSync(new URL('../scripts/qa-narrative-v2.mjs', import.meta.url), 'utf8');
 const journeys = JSON.parse(
-  readFileSync(
-    new URL('./fixtures/production-v2-journeys.json', import.meta.url),
-    'utf8',
-  ),
+  readFileSync(new URL('./fixtures/production-v2-journeys.json', import.meta.url), 'utf8'),
 );
 
 it('runs every narrative route at both mobile widths in separate CI jobs', () => {
