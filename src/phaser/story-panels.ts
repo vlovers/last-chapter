@@ -474,11 +474,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       searchInput.value = search;
       searchInput.addEventListener('input', () => {
         search = searchInput.value;
-        const cursor = searchInput.selectionStart;
-        refresh();
-        const next = panel.querySelector<HTMLInputElement>('.catalog-search');
-        next?.focus();
-        if (cursor !== null) next?.setSelectionRange(cursor, cursor);
+        // Preserve the active search field while filtering. Replacing it on each
+        // keystroke interrupts mobile keyboards and IME composition.
+        renderShelf();
       });
       const filters = element('div', '', 'story-filters');
       const labels: readonly [CatalogFilter, string][] = [
@@ -500,53 +498,57 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       tools.append(searchInput, filters);
       panel.append(tools);
       const shelf = element('div', '', 'story-book-grid');
-      for (const book of story
-        .catalog(filter)
-        .filter((book) =>
-          `${book.title} ${book.genre} ${book.blurb}`
-            .toLocaleLowerCase('uk-UA')
-            .includes(search.toLocaleLowerCase('uk-UA').trim()),
-        )) {
-        const card = element('article', '', 'story-book');
-        const cover = element('div', book.title[0]!, 'book-cover');
-        cover.setAttribute('aria-hidden', 'true');
-        cover.style.setProperty(
-          '--cover',
-          (
-            {
-              orchard: '#697b5e',
-              witnesses: '#736481',
-              station: '#577a83',
-              roads: '#a47755',
-              letters: '#9b6665',
-            } as Record<string, string>
-          )[book.id]!,
-        );
-        card.append(
-          cover,
-          element('h3', book.title),
-          element('small', `${book.genre} · ${book.length}`),
-        );
-        const details = element('details', '');
-        const summary = element('summary', 'Про книжку');
-        details.append(summary, element('p', book.blurb), element('p', book.tone));
-        card.append(details);
-        if (request) {
-          const recommend = element('button', 'Запропонувати книжку');
-          recommend.type = 'button';
-          recommend.setAttribute('aria-label', `Запропонувати «${book.title}»`);
-          recommend.addEventListener('click', () => {
-            reaction = story.recommend(book.id);
-            refresh();
-            panel.scrollTop = 0;
-            panel.querySelector<HTMLButtonElement>('.panel-close')?.focus();
-          });
-          card.append(recommend);
+      const renderShelf = () => {
+        shelf.replaceChildren();
+        for (const book of story
+          .catalog(filter)
+          .filter((book) =>
+            `${book.title} ${book.genre} ${book.blurb}`
+              .toLocaleLowerCase('uk-UA')
+              .includes(search.toLocaleLowerCase('uk-UA').trim()),
+          )) {
+          const card = element('article', '', 'story-book');
+          const cover = element('div', book.title[0]!, 'book-cover');
+          cover.setAttribute('aria-hidden', 'true');
+          cover.style.setProperty(
+            '--cover',
+            (
+              {
+                orchard: '#697b5e',
+                witnesses: '#736481',
+                station: '#577a83',
+                roads: '#a47755',
+                letters: '#9b6665',
+              } as Record<string, string>
+            )[book.id]!,
+          );
+          card.append(
+            cover,
+            element('h3', book.title),
+            element('small', `${book.genre} · ${book.length}`),
+          );
+          const details = element('details', '');
+          const summary = element('summary', 'Про книжку');
+          details.append(summary, element('p', book.blurb), element('p', book.tone));
+          card.append(details);
+          if (request) {
+            const recommend = element('button', 'Запропонувати книжку');
+            recommend.type = 'button';
+            recommend.setAttribute('aria-label', `Запропонувати «${book.title}»`);
+            recommend.addEventListener('click', () => {
+              reaction = story.recommend(book.id);
+              refresh();
+              panel.scrollTop = 0;
+              panel.querySelector<HTMLButtonElement>('.panel-close')?.focus();
+            });
+            card.append(recommend);
+          }
+          shelf.append(card);
         }
-        shelf.append(card);
-      }
-      if (!shelf.children.length)
-        shelf.append(element('p', 'За цим запитом книжок немає. Спробуйте інше слово.'));
+        if (!shelf.children.length)
+          shelf.append(element('p', 'За цим запитом книжок немає. Спробуйте інше слово.'));
+      };
+      renderShelf();
       panel.append(shelf);
     }
   };
