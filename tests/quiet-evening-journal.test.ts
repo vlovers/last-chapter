@@ -65,6 +65,19 @@ describe('quiet-evening journal coverage', () => {
     expect(facts.get('book_club_skipped')).toContain('тихий вечір');
   });
 
+  it('links every evidence entry to an authored journal fact', () => {
+    for (const entry of journalEvidence) {
+      expect(facts.has(entry.flag), `Missing journal fact for ${entry.flag}`).toBe(true);
+    }
+  });
+
+  it('does not confuse manuscript observation with an authorship claim', () => {
+    const discovered = facts.get('quiet_evening_page_found');
+    const examined = facts.get('quiet_evening_page_examined');
+    expect(discovered).toContain('Автора не встановлено');
+    expect(examined).toContain('авторство аркуша не підтверджено');
+  });
+
   it('does not duplicate journal fact flags or evidence provenance', () => {
     expect(new Set(journalFacts.map(([flag]) => flag)).size).toBe(journalFacts.length);
     expect(new Set(journalEvidence.map(({ flag }) => flag)).size).toBe(journalEvidence.length);
