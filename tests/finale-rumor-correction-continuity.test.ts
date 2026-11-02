@@ -34,12 +34,12 @@ describe('Final evening rumor correction continuity', () => {
       'final_miller_ledger_rumor_seeded',
     ];
 
-    expect(
-      currentNode(finalReading, enterEveningTopic('after-case-tea', flags)).text,
-    ).toContain('Слова Міллер досі ходять');
-    expect(
-      currentNode(finalReading, enterEveningTopic('bookshop-tomorrow', flags)).text,
-    ).toContain('Після чутки біля каси ніяково тихо');
+    expect(currentNode(finalReading, enterEveningTopic('after-case-tea', flags)).text).toContain(
+      'Слова Міллер досі ходять',
+    );
+    expect(currentNode(finalReading, enterEveningTopic('bookshop-tomorrow', flags)).text).toContain(
+      'Після чутки біля каси ніяково тихо',
+    );
   });
 
   it('keeps a private ledger separate from an unseeded rumor', () => {
