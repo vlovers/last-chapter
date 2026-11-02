@@ -1,10 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cast } from '../src/game/cast';
 import { VISITOR_IDS } from '../public/phaser-prototype/visitor-art.js';
-import {
-  PORTRAIT_NAMES,
-  portraitDataUrl,
-} from '../public/phaser-prototype/visitor-portraits.js';
+import { PORTRAIT_NAMES, portraitDataUrl } from '../public/phaser-prototype/visitor-portraits.js';
 
 afterEach(() => vi.unstubAllGlobals());
 
