@@ -80,9 +80,7 @@ describe('Finale nested conversation save and suspend', () => {
       const returned = selectOption(finalReading, saved.dialogue, back);
       expect(returned.node).toBe(entry);
       expect(returned.flags).not.toContain(completed);
-      expect(availableOptions(finalReading, returned).map((option) => option.id)).toContain(
-        group,
-      );
+      expect(availableOptions(finalReading, returned).map((option) => option.id)).toContain(group);
     },
   );
 });
