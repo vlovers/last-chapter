@@ -12,11 +12,20 @@ interface StopOptions {
   connected?: boolean;
   collapsed?: boolean;
   directSummary?: boolean;
+  nestedCollapsed?: boolean;
   tabIndex?: number;
 }
 
 function stop(options: StopOptions = {}): HTMLElement {
-  const closedDetails = {} as HTMLElement;
+  const outerDetails = {} as HTMLElement;
+  Object.assign(outerDetails, {
+    closest: (selector: string) =>
+      selector === 'details:not([open])' ? outerDetails : null,
+    parentElement: null,
+  });
+  const closedDetails = {
+    parentElement: options.nestedCollapsed ? outerDetails : null,
+  } as HTMLElement;
   return {
     tagName: options.tag ?? 'BUTTON',
     tabIndex: options.tabIndex ?? 0,
@@ -108,6 +117,42 @@ describe('story panel keyboard navigation', () => {
       summary,
       next,
     ]);
+  });
+
+  it('excludes a nested summary when an outer details group is still collapsed', () => {
+    const close = stop();
+    const outerSummary = stop({ tag: 'SUMMARY', collapsed: true, directSummary: true });
+    const nestedSummary = stop({
+      tag: 'SUMMARY',
+      collapsed: true,
+      directSummary: true,
+      nestedCollapsed: true,
+    });
+    expect(panelTabStops(panel([close, outerSummary, nestedSummary]))).toEqual([
+      close,
+      outerSummary,
+    ]);
+  });
+
+  it('never restores focus to a nested summary hidden by a closed outer group', () => {
+    const nestedSummary = stop({
+      tag: 'SUMMARY',
+      collapsed: true,
+      directSummary: true,
+      nestedCollapsed: true,
+    });
+    const fallback = stop();
+    restorePanelFocus(nestedSummary, fallback);
+    expect(nestedSummary.focus).not.toHaveBeenCalled();
+    expect(fallback.focus).toHaveBeenCalledWith({ preventScroll: true });
+  });
+
+  it('still restores focus to the summary of a single collapsed group', () => {
+    const summary = stop({ tag: 'SUMMARY', collapsed: true, directSummary: true });
+    const fallback = stop();
+    restorePanelFocus(summary, fallback);
+    expect(summary.focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(fallback.focus).not.toHaveBeenCalled();
   });
 
   it('keeps controls inside an expanded topic available', () => {
