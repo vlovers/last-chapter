@@ -6,6 +6,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
 const fixture = await launchQaBrowser(chromium);
 const SAVE_KEY = 'last-chapter:save:v1';
 const SERVICE_KEY = 'last-chapter:service:v1';
+const SEED_MARKER = 'last-chapter:qa:save-recovery-seeded:v1';
 const OPTIONAL_KEYS = [
   'last-chapter:conversation:mara:v1',
   'last-chapter:conversation:mara:after-hours:v1',
@@ -17,14 +18,24 @@ try {
   for (const damage of ['missing', 'corrupt', 'future']) {
     const context = await fixture.browser.newContext({ reducedMotion: 'reduce' });
     await context.addInitScript(
-      ({ damage, saveKey, serviceKey, optionalKeys }) => {
+      ({ damage, saveKey, serviceKey, optionalKeys, seedMarker }) => {
+        // Init scripts run again on reload. Seed only once or a reset would
+        // mask a broken save restore by overwriting the actual browser state.
+        if (sessionStorage.getItem(seedMarker) === 'done') return;
         if (damage === 'corrupt') localStorage.setItem(saveKey, '{broken');
         if (damage === 'future') localStorage.setItem(saveKey, JSON.stringify({ version: 999 }));
         if (damage === 'missing') localStorage.removeItem(saveKey);
         localStorage.setItem(serviceKey, 'old-service-record');
         for (const key of optionalKeys) localStorage.setItem(key, 'old-optional-record');
+        sessionStorage.setItem(seedMarker, 'done');
       },
-      { damage, saveKey: SAVE_KEY, serviceKey: SERVICE_KEY, optionalKeys: OPTIONAL_KEYS },
+      {
+        damage,
+        saveKey: SAVE_KEY,
+        serviceKey: SERVICE_KEY,
+        optionalKeys: OPTIONAL_KEYS,
+        seedMarker: SEED_MARKER,
+      },
     );
     const page = await context.newPage();
     const errors = [];
@@ -101,8 +112,38 @@ try {
       assert.ok(actual.optional.every((value) => value === null || value === ''));
       assert.deepEqual(JSON.parse(actual.service).attempts, []);
     }
-    assert.deepEqual(errors, [], `Browser errors during ${damage} recovery`);
-    console.log(`PASS: ${damage} save recovery`);
+    // A new document must restore the exact durable state, not silently
+    // re-seed a fixture or reset the player to the beginning.
+    await page.reload();
+    const afterReload = await page.evaluate(
+      ({ saveKey, serviceKey, optionalKeys }) => ({
+        save: localStorage.getItem(saveKey),
+        service: localStorage.getItem(serviceKey),
+        optional: optionalKeys.map((key) => localStorage.getItem(key)),
+      }),
+      { saveKey: SAVE_KEY, serviceKey: SERVICE_KEY, optionalKeys: OPTIONAL_KEYS },
+    );
+    assert.deepEqual(afterReload, afterChoice, `${damage} state changed across reload`);
+    await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+    await page.locator('#story-continue').click();
+    await page.waitForTimeout(240);
+    if (damage === 'future') {
+      // The old client must start a disposable chapter, not mutate the future save.
+      await page.locator('#choices [data-choice="greet"]').click();
+      await page.locator('#save-warning:not([hidden])').waitFor();
+      assert.equal(await page.evaluate((key) => localStorage.getItem(key), SAVE_KEY), actual.save);
+    } else {
+      // The saved greeting must resume at Miller's next reply, not replay arrival.
+      await page.locator('#choices [data-choice="books"]').click();
+      await page.waitForFunction(
+        (key) => JSON.parse(localStorage.getItem(key) ?? '{}').node === 'order',
+        SAVE_KEY,
+      );
+      assert.equal(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)).node, SAVE_KEY), 'order');
+      await page.locator('#save-warning[hidden]').waitFor();
+    }
+    assert.deepEqual(errors, [], `Browser errors during ${damage} recovery and reload`);
+    console.log(`PASS: ${damage} save recovery, reload and resumed choice`);
     await context.close();
   }
   // A browser may deny storage reads entirely (privacy settings, sandboxed iframe).
@@ -128,8 +169,16 @@ try {
     await page.locator('#choices [data-choice="greet"]').click();
     await page.getByRole('heading', { name: 'Пані Міллер', exact: true }).waitFor();
     await page.locator('#save-warning:not([hidden])').waitFor();
-    assert.deepEqual(errors, [], 'Browser errors with blocked storage');
-    console.log('PASS: blocked storage warns and dialogue remains interactive');
+    // Denied storage stays denied after a full navigation, without a crash.
+    await page.reload();
+    await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
+    await page.locator('#save-warning:not([hidden])').waitFor();
+    await page.locator('#story-continue').click();
+    await page.waitForTimeout(240);
+    await page.locator('#choices [data-choice="greet"]').click();
+    await page.locator('#save-warning:not([hidden])').waitFor();
+    assert.deepEqual(errors, [], 'Browser errors with blocked storage, including reload');
+    console.log('PASS: blocked storage warns and dialogue remains interactive after reload');
   } finally {
     await blockedContext.close();
   }
