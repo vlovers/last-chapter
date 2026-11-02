@@ -30,16 +30,42 @@ const cat = () =>
       simulationMs: s.frank.state.elapsed,
     };
   });
-// Frank's in-world hotspot follows a roaming cat. Playwright's default
-// stability wait can time out while the target moves continuously, although
-// it remains visible and interactable. Force skips only that stability wait;
-// the browser still sends a real pointer/touch event to the hotspot.
+// The phone camera starts at the counter while Frank may be in another aisle.
+// Offscreen hotspots are deliberately hidden from pointer input, but remain
+// keyboard-selectable. Use the real R/Enter navigation instead of waiting for
+// a roaming cat to wander into view (or mutating scene state in the test).
 const openRoamingFrank = async () => {
   const hotspot = page.getByRole('button', { name: 'Побути з Френком', exact: true });
-  await hotspot.waitFor({ state: 'visible' });
-  if (touch) await hotspot.tap({ force: true });
-  else await hotspot.click({ force: true });
-  await page.getByRole('heading', { name: 'Френк', exact: true }).waitFor();
+  const heading = page.getByRole('heading', { name: 'Френк', exact: true });
+  if (await hotspot.isVisible()) {
+    try {
+      // The in-world button moves with Frank; force skips Playwright's
+      // stability check but still dispatches an actual pointer/touch event.
+      if (touch) await hotspot.tap({ force: true });
+      else await hotspot.click({ force: true });
+      await heading.waitFor({ timeout: 20000 });
+      return;
+    } catch (error) {
+      // Do not mask a broken visible interaction. Only switch navigation
+      // methods if Frank really left the camera while we approached him.
+      if (await hotspot.isVisible()) throw error;
+    }
+  }
+  await page.locator('#game').focus();
+  let selected = null;
+  for (let attempt = 0; attempt < 20; attempt++) {
+    await page.keyboard.press('r');
+    selected = await page.evaluate(async () => {
+      const { game } = await import('/phaser-prototype/scene.js');
+      return game.scene.getScene('bookshop').interactions.selected?.id ?? null;
+    });
+    if (selected === 'frank') break;
+  }
+  assert.equal(selected, 'frank', 'Offscreen Frank must remain keyboard-selectable');
+  console.log('Frank QA: navigating to offscreen Frank with R/Enter');
+  await page.keyboard.press('Enter');
+  // The game must walk the player to the cat and open the real conversation.
+  await heading.waitFor({ timeout: 30000 });
 };
 const choose = async (id) => {
   await page.waitForTimeout(250);
