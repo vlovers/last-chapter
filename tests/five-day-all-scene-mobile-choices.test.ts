@@ -85,9 +85,7 @@ describe('all five days: every authored scene fits four buttons and exposes its 
           expect([...actual].sort(), `${stage}/${node.id}: missing reply`).toEqual(
             [...expected].sort(),
           );
-          expect(values.get(SAVE_KEY), `${stage}/${node.id}: paging wrote a save`).toBe(
-            encoded,
-          );
+          expect(values.get(SAVE_KEY), `${stage}/${node.id}: paging wrote a save`).toBe(encoded);
         }
       }
     });
