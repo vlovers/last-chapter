@@ -61,16 +61,38 @@ describe('all five days: every authored scene fits four buttons and exposes its 
       });
       const graph = stageStory(stage);
       for (const node of graph.nodes) {
-        const variants = new Map<string, readonly string[]>([['[]', []]]);
+        // Check both sides of conditional gates, including already-completed
+        // topics and re-opened topics. A plain required-flags matrix misses
+        // options that should disappear after a choice or an exclusion flag.
+        const variants = new Map<
+          string,
+          { flags: readonly string[]; completed: readonly string[] }
+        >();
+        const addVariant = (flags: readonly string[], completed: readonly string[] = []) => {
+          const uniqueFlags = [...new Set(flags)].sort();
+          const key = JSON.stringify([uniqueFlags, [...completed].sort()]);
+          variants.set(key, { flags: uniqueFlags, completed });
+        };
+        addVariant([]);
         for (const option of node.options) {
-          const flags = option.requires ?? [];
-          variants.set(JSON.stringify([...flags].sort()), flags);
+          const required = option.requires ?? [];
+          addVariant(required);
+          for (const excluded of option.unless ?? []) addVariant([...required, excluded]);
+          for (const reopened of option.reopensWhen ?? []) addVariant([...required, reopened]);
+          if (option.repeatability !== 'repeatable') {
+            const completedKey = JSON.stringify([node.id, option.id, []]);
+            addVariant(required, [completedKey]);
+            if (option.reopensWhen?.length) {
+              addVariant([...required, option.reopensWhen[0]!], [completedKey]);
+            }
+          }
         }
-        for (const flags of variants.values()) {
+        for (const { flags, completed } of variants.values()) {
           const dialogue: DialogueState = {
             ...startDialogue(graph),
             node: node.id,
             flags: [...flags],
+            ...(completed.length ? { completed: [...completed], pending: [] } : {}),
           };
           const encoded = encodeSave({ stage, dialogue, flags });
           values.set(SAVE_KEY, encoded);

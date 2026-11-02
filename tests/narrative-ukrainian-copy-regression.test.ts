@@ -77,6 +77,24 @@ describe('Ukrainian scene-copy continuity', () => {
     }
   });
 
+  it('keeps the fourth-day narrator addressing the player as ти, not Ви', () => {
+    const scenes = [
+      ['day4-iris', 'welcome'],
+      ['day4-iris', 'respect'],
+      ['day4-iris', 'end'],
+      ['day4-mara', 'arrival'],
+    ] as const satisfies readonly (readonly [ChapterStage, string])[];
+    for (const [stage, id] of scenes) {
+      const node = stageStory(stage).nodes.find((entry) => entry.id === id);
+      expect(node, `Missing fourth-day scene: ${stage}/${id}`).toBeDefined();
+      for (const narration of authoredNarration(node!)) {
+        expect(narration, `Formal narrator in ${stage}/${id}`).not.toMatch(
+          /(?<![\p{L}])Ви(?![\p{L}])/u,
+        );
+      }
+    }
+  });
+
   it('preserves valid dialogue links and conditional gates', () => {
     expect(validateDialogue(quietEvening)).toEqual([]);
     expect(validateDialogue(finalReading)).toEqual([]);
