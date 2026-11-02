@@ -48,7 +48,10 @@ describe('Day 4: Leo and mutual consent', () => {
     const greet = selectOption(leoDecision, startDialogue(leoDecision), 'welcome');
     expect(availableOptions(leoDecision, greet).map((option) => option.id)).not.toContain('mara');
     const train = selectOption(leoDecision, greet, 'trains');
-    const followup = selectOption(leoDecision, train, 'trains-back');
+    expect(availableOptions(leoDecision, train).map((option) => option.id)).toEqual([
+      'trains-continue',
+    ]);
+    const followup = selectOption(leoDecision, train, 'trains-continue');
     expect(followup.node).toBe('trains-followup');
     expect(currentNode(leoDecision, followup).text).toContain('Мара вибирає час');
     const returned = selectOption(leoDecision, followup, 'trains-followup-back');
@@ -64,5 +67,16 @@ describe('Day 4: Leo and mutual consent', () => {
     const follow = selectOption(leoDecision, answer, 'leo-future-followup-direct');
     const hub = selectOption(leoDecision, follow, 'leo-future-back');
     expect(availableOptions(leoDecision, hub).map((option) => option.id)).toContain('mara');
+    // Keep the original trains-back edge for old saves that already reached Mara.
+    const oldEdge = leoDecision.nodes
+      .find((node) => node.id === 'trains')
+      ?.options.find((option) => option.id === 'trains-back');
+    expect(oldEdge?.next).toBe('mara');
+    expect(oldEdge?.requires).toEqual(['leo_day_four_ticket_feeling_heard']);
+    const informedTrain = { ...train, flags: ['leo_day_four_ticket_feeling_heard'] };
+    expect(availableOptions(leoDecision, informedTrain).map((option) => option.id)).toEqual([
+      'trains-back',
+    ]);
+    expect(selectOption(leoDecision, informedTrain, 'trains-back').node).toBe('mara');
   });
 });

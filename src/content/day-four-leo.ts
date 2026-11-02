@@ -183,7 +183,14 @@ export const leoDecision: DialogueStory = {
         {
           id: 'trains-back',
           label: '«І як ви після цього взагалі плануєте подорожі?»',
+          next: 'mara',
+          requires: ['leo_day_four_ticket_feeling_heard'],
+        },
+        {
+          id: 'trains-continue',
+          label: '«І як ви після цього взагалі плануєте подорожі?»',
           next: 'trains-followup',
+          unless: ['leo_day_four_ticket_feeling_heard'],
         },
       ],
     },
