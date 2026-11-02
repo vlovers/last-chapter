@@ -232,6 +232,11 @@ try {
       'Closing the journal returns focus to its opener',
     );
     if (width === 390) {
+      // Leave a nondefault journal tab and a personal note in the old game.
+      await page.locator('#journal-toggle').click();
+      await page.getByRole('button', { name: 'Мої записи', exact: true }).click();
+      await page.getByLabel('Ваші думки й запитання').fill('Стара нотатка.');
+      await page.keyboard.press('Escape');
       // Escape during IME composition must not dismiss the dock or lose input.
       await page.locator('#catalog-toggle').click();
       await page.getByRole('searchbox').focus();
@@ -268,7 +273,7 @@ try {
         'true',
       );
       assert.equal(
-        await page.evaluate(() => localStorage.getItem('last-chapter:optional:notes') ?? ''),
+        await page.evaluate(() => localStorage.getItem('last-chapter:notes:v1') ?? ''),
         '',
       );
 
