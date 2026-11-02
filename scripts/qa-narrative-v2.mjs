@@ -9,9 +9,13 @@ const matrix = JSON.parse(
 );
 const base = process.env.BASE_URL || 'http://127.0.0.1:5173';
 const output = resolve(process.env.QA_OUTPUT || '/private/tmp/last-chapter-narrative-v2-qa');
+const grouped = matrix.scenarios.filter(
+  (scenario) => !process.env.QA_GROUP || scenario.group === process.env.QA_GROUP,
+);
+assert.ok(grouped.length > 0, 'Known narrative QA group required');
 const scenarios = process.env.QA_SCENARIO
-  ? matrix.scenarios.filter((scenario) => scenario.id === process.env.QA_SCENARIO)
-  : matrix.scenarios;
+  ? grouped.filter((scenario) => scenario.id === process.env.QA_SCENARIO)
+  : grouped;
 assert.ok(scenarios.length > 0, 'Known narrative scenario required');
 const viewports = [
   { width: 360, height: 780 },
@@ -54,10 +58,17 @@ async function choose(page, id, viewport) {
         'Choice is reachable vertically: ' + id,
       );
       const before = await page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
+      const canvasBefore = await page.locator('#game canvas').boundingBox();
+      assert.ok(canvasBefore, 'Phaser canvas must exist');
       await choice.tap();
       await page.waitForFunction(
         (raw) => localStorage.getItem('last-chapter:save:v1') !== raw,
         before,
+      );
+      assert.deepEqual(
+        await page.locator('#game canvas').boundingBox(),
+        canvasBefore,
+        'A reply must not resize the game scene',
       );
       return;
     }
@@ -186,6 +197,15 @@ try {
         path: `${output}/${viewport.width}-${scenario.id}-ending.png`,
         fullPage: true,
       });
+      await choose(page, '__restart', viewport);
+      const clean = await saved(page);
+      assert.equal(clean.stage, 'miller');
+      assert.deepEqual(clean.flags, []);
+      assert.equal(await page.locator('#day-timeline .day-step--completed').count(), 0);
+      if (await page.locator('#dialogue[hidden]').count())
+        await page.locator('#story-continue').click();
+      await reloadConversation(page);
+      reloads++;
       assert.deepEqual(errors, []);
       results.push({ viewport, scenario: scenario.id, stages, steps, reloads, errors });
       console.log(JSON.stringify(results.at(-1)));

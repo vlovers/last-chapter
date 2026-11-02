@@ -77,3 +77,20 @@ remain direct. Native touch/browser checks passed at 320×568 and 390×844, plus
 1440×900: pet, feed, play, observation submenu, tree climb, duplicate-care guard,
 reload and new-game reset. The off-camera phone hotspots are approached through
 normal movement; the separate reading-chair regression remains on desktop.
+
+## D — Complete journeys and clean restart
+
+The shared deterministic/browser fixture now contains ten actual five-day paths:
+mutual, private rumor, early admission, late confession, concealed breach,
+cooperative, maximum evidence, confrontational, minimal evidence, optional scenes
+completed. Minimal evidence also skips optional conversations. Every deterministic
+choice restores a save; each browser path reloads at critical decisions and after
+a real ending-screen restart. A reply must preserve the actual canvas bounds.
+
+All 20 touch runs passed (ten paths × 360×780 and 390×844): 2688 choices,
+112 reloads, zero console/runtime errors. Completed-topic returns, mutually
+exclusive facts, correct season summaries, five completed days and a clean day-one
+restart are asserted. The existing twelve-outcome finale matrix also passed.
+CI splits the ten scenarios into bounded core/investigation/daily groups at both
+widths; its regression checks prove the union executes every scenario exactly
+once per width. No scenario or assertion is disabled to obtain a passing result.

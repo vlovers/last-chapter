@@ -17,7 +17,7 @@ const journeys = journeyFixture as Journeys;
 
 afterEach(() => vi.unstubAllGlobals());
 
-describe('Production V2: five complete journeys with restoration at every choice', () => {
+describe('Release: ten complete journeys with restoration at every choice', () => {
   it.each(journeys.scenarios)(
     '$id reaches its own ending through actual earlier decisions',
     (scenario) => {
@@ -70,10 +70,18 @@ describe('Production V2: five complete journeys with restoration at every choice
       expect(story.open().text).toContain(scenario.summary);
       expect(
         final.flags.filter((flag) => /^final_reading_(station|roads|letters)$/.test(flag)),
-      ).toHaveLength(1);
+      ).toHaveLength(final.flags.includes('final_reading_program_done') ? 1 : 0);
       expect(
         final.flags.filter((flag) => /^final_school_chairs_(time_agreed|space_kept)$/.test(flag)),
-      ).toHaveLength(1);
+      ).toHaveLength(final.flags.includes('final_school_chairs_followup_done') ? 1 : 0);
+      story.choose('__restart');
+      const clean = decodeSave(storage.get(SAVE_KEY)!)!;
+      expect(clean.stage).toBe('miller');
+      expect(clean.flags).toEqual([]);
+      story = new FiveDayStory();
+      expect(story.day).toBe(1);
+      expect(story.progress.filter((day) => day.status === 'completed')).toHaveLength(0);
+      expect(story.open().text).not.toContain(scenario.summary);
     },
   );
 });

@@ -56,11 +56,19 @@ jobs:
             command: node scripts/qa-frank-overhaul.mjs
           - name: finale
             command: node scripts/qa-finale-matrix.mjs
-          # Each viewport runs all five routes; the combined job exceeded 20 minutes.
-          - name: narrative-v2-360
-            command: QA_WIDTH=360 node scripts/qa-narrative-v2.mjs
-          - name: narrative-v2-390
-            command: QA_WIDTH=390 node scripts/qa-narrative-v2.mjs
+          # Bounded groups: all ten scenarios at both mobile widths.
+          - name: narrative-v2-360-core
+            command: QA_WIDTH=360 QA_GROUP=core node scripts/qa-narrative-v2.mjs
+          - name: narrative-v2-390-core
+            command: QA_WIDTH=390 QA_GROUP=core node scripts/qa-narrative-v2.mjs
+          - name: narrative-v2-360-investigation
+            command: QA_WIDTH=360 QA_GROUP=investigation node scripts/qa-narrative-v2.mjs
+          - name: narrative-v2-390-investigation
+            command: QA_WIDTH=390 QA_GROUP=investigation node scripts/qa-narrative-v2.mjs
+          - name: narrative-v2-360-daily
+            command: QA_WIDTH=360 QA_GROUP=daily node scripts/qa-narrative-v2.mjs
+          - name: narrative-v2-390-daily
+            command: QA_WIDTH=390 QA_GROUP=daily node scripts/qa-narrative-v2.mjs
           - name: performance
             command: node scripts/qa-bookshop-performance.mjs
     steps:

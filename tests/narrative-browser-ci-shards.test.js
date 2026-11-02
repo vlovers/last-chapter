@@ -10,19 +10,40 @@ const journeys = JSON.parse(
 it('runs every narrative route at both mobile widths in separate CI jobs', () => {
   const shards = [
     ...workflow.matchAll(
-      /- name: narrative-v2-(\d+)\r?\n\s+command: QA_WIDTH=(\d+) node scripts\/qa-narrative-v2\.mjs/g,
+      /- name: narrative-v2-(\d+)-(core|investigation|daily)\r?\n\s+command: QA_WIDTH=(\d+) QA_GROUP=(core|investigation|daily) node scripts\/qa-narrative-v2\.mjs/g,
     ),
-  ].map(([, name, width]) => [Number(name), Number(width)]);
-
-  expect(shards).toEqual([
-    [360, 360],
-    [390, 390],
+  ].map(([, name, group, width, commandGroup]) => [
+    Number(name),
+    group,
+    Number(width),
+    commandGroup,
   ]);
+  expect(shards).toEqual([
+    [360, 'core', 360, 'core'],
+    [390, 'core', 390, 'core'],
+    [360, 'investigation', 360, 'investigation'],
+    [390, 'investigation', 390, 'investigation'],
+    [360, 'daily', 360, 'daily'],
+    [390, 'daily', 390, 'daily'],
+  ]);
+  for (const width of [360, 390]) {
+    const executed = shards
+      .filter((s) => s[0] === width)
+      .flatMap((s) =>
+        journeys.scenarios.filter((route) => route.group === s[1]).map((route) => route.id),
+      );
+    expect(executed.sort()).toEqual(journeys.scenarios.map((s) => s.id).sort());
+  }
   expect(journeys.scenarios.map((scenario) => scenario.id).sort()).toEqual([
     'admitted',
     'concealed',
+    'confrontational',
+    'cooperative',
     'late-confession',
+    'maximum-evidence',
+    'minimal-evidence',
     'mutual',
+    'optional-completed',
     'private-rumor',
   ]);
   expect(runner).toContain('matrix.scenarios');
