@@ -51,20 +51,29 @@ export const irisDecision: DialogueStory = {
           requires: ['saw_envelope'],
           label: '«Хочеш, я поки покладу конверт під альбом?»',
           next: 'iris-letter-feeling',
-          unless: ['iris_day_four_letter_feeling_heard'],
+          unless: [
+            'iris_day_four_letter_feeling_heard',
+            'iris_letter_pressured_day4',
+            'iris_letter_breach_admitted',
+          ],
         },
         {
           id: 'iris-letter-ask',
           requires: ['saw_envelope'],
           label: '«Що саме тебе лякає в цьому конверті?»',
           next: 'iris-letter-ask',
-          unless: ['iris_day_four_letter_fear_heard'],
+          unless: [
+            'iris_day_four_letter_fear_heard',
+            'iris_letter_pressured_day4',
+            'iris_letter_breach_admitted',
+          ],
         },
         {
           id: 'letter',
           label: '«Можемо поговорити про лист»',
           next: 'letter',
           requires: ['saw_envelope'],
+          unless: ['iris_letter_pressured_day4', 'iris_letter_breach_admitted'],
         },
         {
           id: 'iris-exhibition-plan',

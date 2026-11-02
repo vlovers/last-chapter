@@ -61,6 +61,7 @@ export const maraDecision: DialogueStory = {
           label: '«Є дещо з минулого, що може стосуватися Лео»',
           next: 'letter',
           requires: ['saw_envelope'],
+          unless: ['mara_letter_pressured'],
         },
         {
           id: 'remember-trust',

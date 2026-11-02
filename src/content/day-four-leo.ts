@@ -73,6 +73,7 @@ export const leoDecision: DialogueStory = {
           label: '«Є лист, який може бути адресований тобі»',
           next: 'letter',
           requires: ['saw_envelope'],
+          unless: ['leo_letter_pressured_day4'],
         },
         { id: 'finish', label: 'Побажати Лео спокійного вечора', next: 'end' },
       ],
