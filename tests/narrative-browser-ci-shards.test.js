@@ -34,3 +34,24 @@ it('keeps separate evidence artifacts for both narrative viewport jobs', () => {
   expect(workflow).toContain("startsWith(matrix.suite.name, 'narrative-v2-')");
   expect(workflow).toContain('name: ${{ matrix.suite.name }}-mobile-journeys');
 });
+
+it('keeps the five narrative routes bounded and their final facts noncontradictory', () => {
+  const seen = new Set();
+  for (const scenario of journeys.scenarios) {
+    expect(seen.has(scenario.id)).toBe(false);
+    seen.add(scenario.id);
+    expect(scenario.expected.length).toBeGreaterThan(0);
+    expect(scenario.absent.length).toBeGreaterThan(0);
+    for (const flag of scenario.expected) expect(scenario.absent).not.toContain(flag);
+    for (const [stage, defaults] of Object.entries(journeys.common)) {
+      const route = scenario.overrides[stage] ?? defaults;
+      expect(route.length, `Empty narrative route at ${scenario.id}/${stage}`).toBeGreaterThan(0);
+      expect(new Set(route).size, `Duplicate choices at ${scenario.id}/${stage}`).toBe(
+        route.length,
+      );
+    }
+    for (const [stage, route] of Object.entries(scenario.overrides)) {
+      expect(route.length, `Empty override at ${scenario.id}/${stage}`).toBeGreaterThan(0);
+    }
+  }
+});
