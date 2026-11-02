@@ -65,5 +65,4 @@ describe('Day 4: Leo and mutual consent', () => {
     const hub = selectOption(leoDecision, follow, 'leo-future-back');
     expect(availableOptions(leoDecision, hub).map((option) => option.id)).toContain('mara');
   });
-
 });

@@ -101,5 +101,4 @@ describe('Day 4: Iris and the sealed letter', () => {
       'iris-boundaries',
     );
   });
-
 });
