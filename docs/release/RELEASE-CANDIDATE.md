@@ -156,3 +156,23 @@ grants and Vitest's mutable `arrayContaining` argument. Fixed in
 normalizer subsequently adjusted the new test's layout in `9ab51ab`.
 **Acceptance of these new tests remains contingent on CI and Browser QA for
 the exact final head.** The PR stays Draft; no merge/deployment is authorized.
+
+## G — Day-four optional-evidence and topic-order audit (2026-11-03)
+
+A valid Day 3 completion can carry no `saw_envelope`. Previously, Iris's
+Day 4 welcome and exit narrated an envelope that the player had not found,
+while two letter questions remained selectable without that evidence. The
+no-envelope route now stays with her drawings; the original letter narration
+and all three letter questions are available only after the discovery.
+
+Two other conversation-order defects were addressed. An Iris letter follow-up
+returns to the hub instead of replaying a completed boundaries conversation.
+Leo's optional train anecdote now has its own response and returns to the hub,
+not to the Mara topic gated behind the ticket conversation.
+
+The Day 4 Iris and Leo regression suites now cover both evidence states, save
+restoration without the letter, completed-topic returns, and the train-to-ticket
+sequence. No existing scene IDs or save schema changed. One train follow-up
+scene and a conditional return choice were added. **CI and Browser QA must
+pass for the final head before this package is accepted.** PR #12 remains Draft;
+no merge or deployment is authorized.
