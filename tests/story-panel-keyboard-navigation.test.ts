@@ -19,8 +19,7 @@ interface StopOptions {
 function stop(options: StopOptions = {}): HTMLElement {
   const outerDetails = {} as HTMLElement;
   Object.assign(outerDetails, {
-    closest: (selector: string) =>
-      selector === 'details:not([open])' ? outerDetails : null,
+    closest: (selector: string) => (selector === 'details:not([open])' ? outerDetails : null),
     parentElement: null,
   });
   const closedDetails = {
