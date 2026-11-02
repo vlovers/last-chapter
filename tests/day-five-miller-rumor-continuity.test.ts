@@ -86,6 +86,16 @@ describe('Day-five Miller rumor continuity after the public gathering', () => {
     );
   });
 
+  it('prioritizes corrected-rumor narration over generic private-ledger context', () => {
+    const state = {
+      ...at('after-case-tea', 'corrected'),
+      flags: [...flagsFor('corrected'), 'final_ledger_record_private'],
+    };
+    const text = currentNode(finalReading, state).text;
+    expect(text).toContain('вже пояснила гостям');
+    expect(text).not.toContain('Не все, що знайшли');
+  });
+
   it('shows distinct next-day announcements for open and corrected rumors', () => {
     const open = currentNode(finalReading, at('bookshop-tomorrow-miller-new', 'open')).text;
     const corrected = currentNode(
