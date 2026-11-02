@@ -59,7 +59,12 @@ try {
         OPTIONAL_KEYS.map(() => 'old-optional-record'),
       );
     } else {
-      assert.ok(afterChoice.save, 'A fresh chapter must become persistable after recovery');
+      assert.ok(
+        afterChoice.save,
+        `A fresh chapter must become persistable after ${damage} recovery; ` +
+          `initial=${JSON.stringify(actual)} afterChoice=${JSON.stringify(afterChoice)} ` +
+          `errors=${JSON.stringify(errors)}`,
+      );
       assert.ok(actual.optional.every((value) => value === null || value === ''));
       assert.deepEqual(JSON.parse(actual.service).attempts, []);
     }
