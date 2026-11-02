@@ -238,6 +238,19 @@ describe('optional clue collection and saved narrative facts', () => {
     expect(data.get(SAVE_KEY)).toBe(saved);
   });
 
+  it('keeps collected clue facts unique when revisiting evidence after reload', () => {
+    const data = store();
+    const story = new FiveDayStory();
+    story.inspect('window');
+    story.gatherEvidence('bookmark');
+    const saved = data.get(SAVE_KEY);
+    story.gatherEvidence('bookmark');
+    expect(data.get(SAVE_KEY)).toBe(saved);
+    expect(decodeSave(saved).flags.filter((flag) => flag === 'clue_bookmark')).toHaveLength(1);
+    const restored = new FiveDayStory();
+    expect(restored.evidence.find((clue) => clue.id === 'bookmark').collected).toBe(true);
+  });
+
   it('rejects collecting an undiscovered clue without changing the save', () => {
     const data = store();
     const story = new FiveDayStory();
