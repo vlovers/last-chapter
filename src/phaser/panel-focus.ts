@@ -6,9 +6,11 @@ export function panelTabStops(panel: HTMLElement): HTMLElement[] {
       'button, input, textarea, select, summary, a[href], [tabindex]:not([tabindex="-1"])',
     ),
   ).filter((node) => {
-    if (node.tabIndex < 0 ||
+    if (
+      node.tabIndex < 0 ||
       node.matches(':disabled') ||
-      node.closest('[hidden], [inert], [aria-hidden="true"]')) {
+      node.closest('[hidden], [inert], [aria-hidden="true"]')
+    ) {
       return false;
     }
     const collapsed = node.closest('details:not([open])');

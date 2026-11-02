@@ -23,8 +23,7 @@ function stop(options: StopOptions = {}): HTMLElement {
     parentElement: options.directSummary ? closedDetails : null,
     matches: (selector: string) => selector === ':disabled' && Boolean(options.disabled),
     closest: (selector: string) =>
-      (selector === '[hidden], [inert]' ||
-        selector === '[hidden], [inert], [aria-hidden="true"]')
+      selector === '[hidden], [inert]' || selector === '[hidden], [inert], [aria-hidden="true"]'
         ? options.hidden || options.inert || options.ariaHidden
           ? ({} as HTMLElement)
           : null
@@ -47,10 +46,9 @@ describe('story panel keyboard navigation', () => {
     const ariaHidden = stop({ ariaHidden: true });
     const exchange = stop({ tabIndex: -1 });
     const notes = stop({ tag: 'TEXTAREA' });
-    expect(panelTabStops(panel([close, disabled, inert, hidden, ariaHidden, exchange, notes]))).toEqual([
-      close,
-      notes,
-    ]);
+    expect(
+      panelTabStops(panel([close, disabled, inert, hidden, ariaHidden, exchange, notes])),
+    ).toEqual([close, notes]);
   });
 
   it('keeps a collapsed topic summary reachable but not its invisible choices', () => {
