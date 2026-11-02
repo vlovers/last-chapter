@@ -234,7 +234,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-anna-new',
-    speaker: 'Оповідач',
+    speaker: 'Анна',
     text: 'Анна стоїть біля столу з дитячими книжками. «Завтра в школі читання, — каже вона. — І я дуже сподіваюся, що ніхто не попросить мене пояснити, як працює дракон із фотосинтезом».',
     options: [
       {
@@ -256,7 +256,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-anna-story-new',
-    speaker: 'Оповідач',
+    speaker: 'Анна',
     text: '«Це небезпечно», — усміхається Анна. «Минулого разу вони придумали шість нових предметів у шкільному розкладі. Але, мабуть, ти маєш рацію. Нехай дракон сам розбереться зі своїм сонцем».',
     options: [
       {
@@ -269,7 +269,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-anna-books-new',
-    speaker: 'Оповідач',
+    speaker: 'Анна',
     text: 'Анна вибирає три збірки й записує назви. «Одну прочитаємо вголос. Другу — по ролях. А третю дам тому, хто завжди каже, що ненавидить читати. Він найкраще сперечається з авторами».',
     options: [
       {
@@ -282,7 +282,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-anna-rest-new',
-    speaker: 'Оповідач',
+    speaker: 'Анна',
     text: 'Анна дивиться на годинник і здивовано зітхає. «Я навіть не помітила, що вже так пізно». Вона складає книжки в торбу. «Добре. Завтра діти отримають учительку, яка пам’ятає власне ім’я».',
     options: [
       {
@@ -295,7 +295,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-leo-new',
-    speaker: 'Оповідач',
+    speaker: 'Лео',
     text: 'Лео дивиться на годинник, а потім ховає його в кишеню. «Сьогодні я вже не на зміні. Мені навіть дозволено не знати, котра година». Мара голосно сміється: «Запишіть дату. Це історичний момент».',
     options: [
       {
@@ -317,7 +317,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-leo-music-new',
-    speaker: 'Оповідач',
+    speaker: 'Лео',
     text: '«Іноді. Я попросив їх попереджати, якщо буде концерт». Лео дивиться на Мару. «Щоб ніхто випадково не пропустив». Вона киває: «І щоб я встигла спекти щось до чаю».',
     options: [
       {
@@ -330,7 +330,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-leo-walk-new',
-    speaker: 'Оповідач',
+    speaker: 'Лео',
     text: '«Я й сама дорогу знаю», — каже Мара. Лео питає: «То ти проти?» Вона сміється й перевіряє кишені пальта. «Не проти. Шукаю парасолю. Після читання знову її забуду». Вони домовляються йти через сквер, а поки повертаються до столу.',
     options: [
       {
@@ -343,7 +343,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-leo-schedule-new',
-    speaker: 'Оповідач',
+    speaker: 'Лео',
     text: 'Лео зображає жах. «Це жорстоко». Мара кладе йому в кишеню паперову серветку з намальованим сонцем. «Ось твій новий розклад. Одна справа на завтра — поснідати».',
     options: [
       {
@@ -356,7 +356,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-eleanor-new',
-    speaker: 'Оповідач',
+    speaker: 'Елеонора',
     text: 'Елеонора перегортає чистий блокнот замовлень. «Я сьогодні згадала, як колись сама відчиняла цю книгарню. Найважчим було не знайти загублену книжку. Найважчим було не купити ще десять».',
     options: [
       {
@@ -378,7 +378,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-eleanor-stock-new',
-    speaker: 'Оповідач',
+    speaker: 'Елеонора',
     text: 'Елеонора бере олівець. «Ось це я розумію — план». Вона записує три імена покупців, а тоді додає: «І не забудь про нову серію для дітей. Анна вже двічі питала».',
     options: [
       {
@@ -391,7 +391,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-eleanor-story-new',
-    speaker: 'Оповідач',
+    speaker: 'Елеонора',
     text: '«Одного разу чоловік попросив книжку, яку читала його дружина. Не пам’ятав ні автора, ні назви. Лише те, що на обкладинці було море». Елеонора сміється. «Знайшли. Через три місяці. Там були гори».',
     options: [
       {
@@ -404,7 +404,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-eleanor-change-new',
-    speaker: 'Оповідач',
+    speaker: 'Елеонора',
     text: 'Елеонора дивиться на стелаж так довго, що ти вже шкодуєш про запитання. «Не проти. Але спочатку покажи, куди саме». Вона усміхається. «Старі звички не зникають за один вечір».',
     options: [
       {
@@ -417,7 +417,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-miller-new',
-    speaker: 'Оповідач',
+    speaker: 'Пані Міллер',
     text: 'Міллер збирає блюдця з виглядом людини, яка прийшла керувати операцією. «Тут три різні сервізи. Хто так накриває стіл?» Мара піднімає руку: «Той, у кого не вистачає однакових чашок».',
     options: [
       {
@@ -439,7 +439,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-miller-apology-new',
-    speaker: 'Оповідач',
+    speaker: 'Пані Міллер',
     text: 'Міллер відкладає блюдце. «Я намагалася». Потім додає: «І не все, що я думаю, варто говорити вголос». Нора киває, не піднімаючи очей від чашки. Розмова на цьому закінчується — і це влаштовує всіх.',
     textWhen: [
       {
@@ -462,7 +462,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-miller-cups-new',
-    speaker: 'Оповідач',
+    speaker: 'Пані Міллер',
     text: 'Міллер береться за справу з несподіваним ентузіазмом. Через хвилину всі чашки стоять ідеальними рядами. «Ось тепер можна працювати», — каже вона. Мара шепоче: «Треба було попросити її ще годину тому».',
     options: [
       {
@@ -475,7 +475,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-miller-cake-new',
-    speaker: 'Оповідач',
+    speaker: 'Пані Міллер',
     text: '«Ні, ні, я не можу». Міллер уже загортає пиріг у серветку. «Хіба що для сусідки». Мара дивиться на неї з підозрою: «Для якої?» — «Для дуже близької».',
     options: [
       {
@@ -488,7 +488,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-iris-new',
-    speaker: 'Оповідач',
+    speaker: 'Айріс',
     text: 'Айріс стоїть біля книжкової полиці, не торкаючись жодної обкладинки. «Я вже втомилася від розмов про минуле», — каже вона. «Можна просто поговорити про погану погоду?»',
     options: [
       {
@@ -510,7 +510,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-iris-weather-new',
-    speaker: 'Оповідач',
+    speaker: 'Айріс',
     text: '«Чудово», — відповідає Айріс. «Тоді в мене буде причина не виходити з дому». Вона всміхається куточком рота. «Або вийти й купити книжку. Ще не вирішила».',
     options: [
       {
@@ -523,7 +523,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-iris-book-new',
-    speaker: 'Оповідач',
+    speaker: 'Айріс',
     text: 'Ти показуєш роман про маленьке приморське містечко. Айріс читає анотацію. «Тут ніхто не шукає старих листів?» — «Тільки загубленого собаку». — «Тоді беру».',
     options: [
       {
@@ -536,7 +536,7 @@ export const afterCaseTeaNodes: readonly DialogueNode[] = [
   },
   {
     id: 'after-case-iris-silence-new',
-    speaker: 'Оповідач',
+    speaker: 'Айріс',
     text: 'Ти стоїш біля вікна, поки Мара й Нора сперечаються про останню чашку. Айріс нарешті сідає. За кілька хвилин вона сама питає, чи можна взяти книжку додому.',
     options: [
       {
