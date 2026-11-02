@@ -85,6 +85,22 @@ describe('native mobile geometry', () => {
     fixture.buttons.get('mara').dataset.available = 'true';
     expect(Interactions.prototype.cycle.call(fixture)).toBe(visitor);
   });
+  it('keeps Frank selectable when the initial 390px camera hides his hotspot', () => {
+    const width = 390;
+    const plan = viewportPlan(width, 732);
+    const camera = frameWorld({ x: 171, y: 204 }, plan.width, plan.height);
+    const frankRect = projectRect(
+      { x: 485 - 21, y: 205 - 34, w: 42, h: 35 },
+      { scrollX: camera.x, scrollY: camera.y, zoom: plan.zoom },
+    );
+    expect(frankRect.x).toBeGreaterThan(width);
+    const frank = { id: 'frank' };
+    const fixture = {
+      spots: [frank],
+      buttons: new Map([['frank', { hidden: true, dataset: { available: 'true' } }]]),
+    };
+    expect(Interactions.prototype.cycle.call(fixture)).toBe(frank);
+  });
   it('keeps feet and head visible at both vertical limits in landscape', () => {
     for (const y of [166, 204, 335]) {
       const frame = frameWorld({ x: 280, y }, 422, 169);
