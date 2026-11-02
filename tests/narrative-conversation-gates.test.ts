@@ -465,7 +465,8 @@ describe('conversational pacing and continuity', () => {
     ['after-frank-lap', 'after-frank-lap-finish', 'final_after_case_frank_lap'],
   ] as const)('Frank after-case branch %s is complete', (choice, finish, flag) => {
     const story: DialogueStory = { start: 'after-case-tea', nodes: afterCaseTeaNodes };
-    let state = selectOption(story, startDialogue(story), 'after-tea-frank');
+    let state = selectOption(story, startDialogue(story), 'after-tea-corner-group');
+    state = selectOption(story, state, 'after-tea-frank');
     state = selectOption(story, state, choice);
     state = selectOption(story, state, finish);
     expect(state.node).toBe('after-case-finish');
