@@ -145,9 +145,40 @@ try {
     await page.locator('#catalog-toggle').click();
     await page.getByRole('heading', { name: 'Книжки на полицях' }).waitFor();
     assert.deepEqual((await snapshot(page)).canvas, stable.canvas);
+    // Search must not replace the focused input: on a phone that dismisses
+    // the virtual keyboard and breaks text composition between keystrokes.
+    await page.evaluate(() => {
+      window.__qaCatalogSearch = document.querySelector('.catalog-search');
+    });
     await page.getByRole('searchbox').fill('сад');
     assert.equal(await page.locator('.story-book').count(), 1);
+    assert.equal(
+      await page.evaluate(
+        () => document.querySelector('.catalog-search') === window.__qaCatalogSearch,
+      ),
+      true,
+      'Filtering must preserve the original catalog search input',
+    );
+    assert.equal(
+      await page.evaluate(() => document.activeElement === window.__qaCatalogSearch),
+      true,
+      'Filtering must keep the mobile search keyboard focused',
+    );
+    await page.getByRole('searchbox').fill('невідома назва');
+    assert.equal(await page.locator('.story-book').count(), 0);
+    assert.equal(
+      await page.getByText('За цим запитом книжок немає. Спробуйте інше слово.').count(),
+      1,
+    );
     await page.getByRole('searchbox').fill('');
+    assert.equal(await page.locator('.story-book').count(), 5);
+    assert.equal(
+      await page.evaluate(
+        () => document.querySelector('.catalog-search') === window.__qaCatalogSearch,
+      ),
+      true,
+      'Clearing search must not replace the field',
+    );
     // Shift+Tab from the first control must wrap to the last visible book summary.
     // Closed <details> content is not a valid keyboard destination.
     await page.locator('#story-panel .panel-close').focus();
