@@ -37,11 +37,15 @@ describe('Day five: real dialogue traversal and consequence gating', () => {
         state = selectOption(finalReading, state, finish!.id);
         expect(state.node).toBe('gathering');
         expect(state.flags).toContain(`final_tomorrow_${activity}_done`);
-        const revisit = { ...state, node: group === 'tomorrow-books-group'
-          ? 'bookshop-tomorrow-books'
-          : group === 'tomorrow-room-group'
-            ? 'bookshop-tomorrow-room'
-            : 'bookshop-tomorrow-neighbors' };
+        const revisit = {
+          ...state,
+          node:
+            group === 'tomorrow-books-group'
+              ? 'bookshop-tomorrow-books'
+              : group === 'tomorrow-room-group'
+                ? 'bookshop-tomorrow-room'
+                : 'bookshop-tomorrow-neighbors',
+        };
         expect(availableOptions(finalReading, revisit).map((option) => option.id)).not.toContain(
           entry,
         );
