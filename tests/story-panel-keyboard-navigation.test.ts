@@ -14,6 +14,7 @@ interface StopOptions {
   directSummary?: boolean;
   nestedCollapsed?: boolean;
   tabIndex?: number;
+  exchange?: boolean;
 }
 
 function stop(options: StopOptions = {}): HTMLElement {
@@ -27,6 +28,7 @@ function stop(options: StopOptions = {}): HTMLElement {
   } as HTMLElement;
   return {
     tagName: options.tag ?? 'BUTTON',
+    className: options.exchange ? 'conversation-exchange' : '',
     tabIndex: options.tabIndex ?? 0,
     isConnected: options.connected ?? true,
     ownerDocument:
@@ -55,7 +57,14 @@ function stop(options: StopOptions = {}): HTMLElement {
 }
 
 function panel(stops: HTMLElement[]): HTMLElement {
-  return { querySelectorAll: () => stops } as unknown as HTMLElement;
+  return {
+    querySelectorAll: (selector: string) =>
+      selector === '.conversation-exchange'
+        ? stops.filter((node) => node.className === 'conversation-exchange')
+        : selector === 'button'
+          ? stops.filter((node) => node.tagName === 'BUTTON')
+          : stops,
+  } as unknown as HTMLElement;
 }
 
 describe('story panel keyboard navigation', () => {
@@ -65,7 +74,7 @@ describe('story panel keyboard navigation', () => {
     const inert = stop({ inert: true });
     const hidden = stop({ hidden: true });
     const ariaHidden = stop({ ariaHidden: true });
-    const exchange = stop({ tabIndex: -1 });
+    const exchange = stop({ tag: 'SECTION', tabIndex: -1, exchange: true });
     const notes = stop({ tag: 'TEXTAREA' });
     expect(
       panelTabStops(panel([close, disabled, inert, hidden, ariaHidden, exchange, notes])),
@@ -209,9 +218,9 @@ describe('story panel keyboard navigation', () => {
   });
 
   it('skips hidden and disabled exchanges when updating conversation focus', () => {
-    const hiddenExchange = stop({ hidden: true });
-    const disabledExchange = stop({ disabled: true });
-    const collapsedExchange = stop({ collapsed: true });
+    const hiddenExchange = stop({ tag: 'SECTION', exchange: true, hidden: true });
+    const disabledExchange = stop({ tag: 'SECTION', exchange: true, disabled: true });
+    const collapsedExchange = stop({ tag: 'SECTION', exchange: true, collapsed: true });
     const close = stop();
     const fallback = stop();
     focusPanelUpdate(panel([hiddenExchange, disabledExchange, collapsedExchange, close]), fallback);
@@ -223,7 +232,7 @@ describe('story panel keyboard navigation', () => {
   });
 
   it('falls back to opener when all conversation controls are hidden', () => {
-    const hidden = stop({ cssHidden: true });
+    const hidden = stop({ tag: 'SECTION', exchange: true, cssHidden: true });
     const fallback = stop();
     focusPanelUpdate(panel([hidden]), fallback);
     expect(hidden.focus).not.toHaveBeenCalled();
