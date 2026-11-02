@@ -35,6 +35,24 @@ describe('Day 4: Mara has her own story', () => {
       'roads',
     );
   });
+  it('does not bypass Mara’s break before discussing Leo’s gift', () => {
+    const greet = selectOption(maraDecision, startDialogue(maraDecision), 'greet');
+    expect(availableOptions(maraDecision, greet).map((option) => option.id)).not.toContain('book');
+    const work = selectOption(maraDecision, greet, 'work');
+    const returned = selectOption(maraDecision, work, 'work-back');
+    expect(returned.node).toBe('greet');
+    expect(returned.flags).toContain('mara_supported_independence');
+    expect(availableOptions(maraDecision, returned).map((option) => option.id)).not.toContain(
+      'book',
+    );
+    const rested = selectOption(maraDecision, returned, 'mara-rest');
+    const story = selectOption(maraDecision, rested, 'mara-rest-back');
+    const choice = selectOption(maraDecision, story, 'mara-own-story-work');
+    const followup = selectOption(maraDecision, choice, 'mara-own-story-followup-direct');
+    const hub = selectOption(maraDecision, followup, 'mara-own-story-back');
+    expect(availableOptions(maraDecision, hub).map((option) => option.id)).toContain('book');
+  });
+
   it('does not expose the private letter before it is discovered', () => {
     const greet = selectOption(maraDecision, startDialogue(maraDecision), 'greet');
     expect(availableOptions(maraDecision, greet).map((option) => option.id)).not.toContain(

@@ -174,8 +174,8 @@ export const maraDecision: DialogueStory = {
       options: [
         {
           id: 'work-back',
-          label: '«А подарунок Лео ти вже вручила?»',
-          next: 'book',
+          label: '«Добре, що ти все-таки матимеш вихідний»',
+          next: 'greet',
           grants: ['mara_supported_independence'],
         },
       ],
