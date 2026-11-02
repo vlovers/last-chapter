@@ -35,5 +35,6 @@ export function restorePanelFocus(preferred: HTMLElement | null, fallback: HTMLE
     preferred.tabIndex >= 0 &&
     !preferred.matches(':disabled') &&
     !preferred.closest('[hidden], [inert], [aria-hidden="true"]');
-  (usable ? preferred : fallback).focus({ preventScroll: true });
+  const target = usable && preferred ? preferred : fallback;
+  target.focus({ preventScroll: true });
 }
