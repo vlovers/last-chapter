@@ -18,11 +18,11 @@ try {
     const context = await fixture.browser.newContext({ reducedMotion: 'reduce' });
     await context.addInitScript(
       ({ damage, saveKey, serviceKey, optionalKeys }) => {
-      if (damage === 'corrupt') localStorage.setItem(saveKey, '{broken');
-      if (damage === 'future') localStorage.setItem(saveKey, JSON.stringify({ version: 999 }));
-      if (damage === 'missing') localStorage.removeItem(saveKey);
-      localStorage.setItem(serviceKey, 'old-service-record');
-      for (const key of optionalKeys) localStorage.setItem(key, 'old-optional-record');
+        if (damage === 'corrupt') localStorage.setItem(saveKey, '{broken');
+        if (damage === 'future') localStorage.setItem(saveKey, JSON.stringify({ version: 999 }));
+        if (damage === 'missing') localStorage.removeItem(saveKey);
+        localStorage.setItem(serviceKey, 'old-service-record');
+        for (const key of optionalKeys) localStorage.setItem(key, 'old-optional-record');
       },
       { damage, saveKey: SAVE_KEY, serviceKey: SERVICE_KEY, optionalKeys: OPTIONAL_KEYS },
     );
@@ -33,9 +33,9 @@ try {
     await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
     const actual = await page.evaluate(
       ({ saveKey, serviceKey, optionalKeys }) => ({
-      save: localStorage.getItem(saveKey),
-      service: localStorage.getItem(serviceKey),
-      optional: optionalKeys.map((key) => localStorage.getItem(key)),
+        save: localStorage.getItem(saveKey),
+        service: localStorage.getItem(serviceKey),
+        optional: optionalKeys.map((key) => localStorage.getItem(key)),
       }),
       { saveKey: SAVE_KEY, serviceKey: SERVICE_KEY, optionalKeys: OPTIONAL_KEYS },
     );
@@ -44,9 +44,9 @@ try {
     await page.locator('#choices [data-choice="greet"]').click();
     const afterChoice = await page.evaluate(
       ({ saveKey, serviceKey, optionalKeys }) => ({
-      save: localStorage.getItem(saveKey),
-      service: localStorage.getItem(serviceKey),
-      optional: optionalKeys.map((key) => localStorage.getItem(key)),
+        save: localStorage.getItem(saveKey),
+        service: localStorage.getItem(serviceKey),
+        optional: optionalKeys.map((key) => localStorage.getItem(key)),
       }),
       { saveKey: SAVE_KEY, serviceKey: SERVICE_KEY, optionalKeys: OPTIONAL_KEYS },
     );
@@ -54,7 +54,10 @@ try {
       assert.equal(afterChoice.save, actual.save);
       assert.equal(JSON.parse(actual.save).version, 999);
       assert.equal(afterChoice.service, 'old-service-record');
-      assert.deepEqual(afterChoice.optional, OPTIONAL_KEYS.map(() => 'old-optional-record'));
+      assert.deepEqual(
+        afterChoice.optional,
+        OPTIONAL_KEYS.map(() => 'old-optional-record'),
+      );
     } else {
       assert.ok(afterChoice.save, 'A fresh chapter must become persistable after recovery');
       assert.ok(actual.optional.every((value) => value === null || value === ''));

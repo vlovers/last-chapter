@@ -45,11 +45,11 @@ describe('orphaned progress recovery', () => {
     vi.stubGlobal('localStorage', {
       getItem: (key: string) => saved.get(key) ?? null,
       setItem: (key: string, value: string) => {
-          saved.set(key, value);
-        },
+        saved.set(key, value);
+      },
       removeItem: (key: string) => {
-          saved.delete(key);
-        },
+        saved.delete(key);
+      },
     });
     const story = new FiveDayStory();
     expect(story.isProgressSaved).toBe(false);
@@ -67,11 +67,11 @@ describe('orphaned progress recovery', () => {
     vi.stubGlobal('localStorage', {
       getItem: (key: string) => saved.get(key) ?? null,
       setItem: (key: string, value: string) => {
-          saved.set(key, value);
-        },
+        saved.set(key, value);
+      },
       removeItem: (key: string) => {
-          saved.delete(key);
-        },
+        saved.delete(key);
+      },
     });
     const story = new FiveDayStory();
     story.choose('greet');
