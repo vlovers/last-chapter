@@ -93,7 +93,7 @@ describe('final gathering: every conditional reply remains reachable on a four-b
       const saved = decodeSave(values.get(SAVE_KEY) ?? '');
       expect(saved?.stage).toBe('day5-reading');
       expect(saved?.dialogue.node).toBe(option.next);
-      expect(saved?.flags).toEqual(expect.arrayContaining(option.grants ?? []));
+      expect(saved?.flags).toEqual(expect.arrayContaining([...(option.grants ?? [])]));
       const restored = new FiveDayStory();
       expect(restored.stage).toBe('day5-reading');
       expect(restored.isProgressSaved).toBe(true);
