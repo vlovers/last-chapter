@@ -126,3 +126,33 @@ No critical/high blockers were found by these checks. Eleven existing moderate
 dev dependency advisories and the large Phaser bundle warning remain. Physical
 phones, an independent blind Ukrainian reader session and measured episode
 runtime are not claimed. RC acceptance does not authorize merge or deployment.
+
+## F — GitHub CI evidence and exhaustive choice-paging audit (2026-11-02)
+
+The published `e2430b2f83a29cfff307a4c17e8323415c21255d` baseline has
+[CI run 41497275031](https://github.com/vlovers/last-chapter/actions/runs/41497275031)
+completed successfully: **14/14 jobs**, including quality, mobile, Frank,
+save-recovery, finale, performance and all six narrative-route shards.
+[Browser QA run 41497275169](https://github.com/vlovers/last-chapter/actions/runs/41497275169)
+also completed successfully. These are SHA-specific GitHub results, not
+a claim that subsequent commits have passed.
+
+Two additional regression suites now exercise the actual `FiveDayStory` UI,
+rather than only validating authored graph metadata:
+
+- `tests/finale-gathering-paged-choices.test.ts` checks each conditional
+  finale-gathering reply under its required flags, full four-button pagination,
+  no duplicated/omitted choices, no save writes while changing pages, and
+  selection + reload with preserved granted flags.
+- `tests/five-day-all-scene-mobile-choices.test.ts` enumerates every authored
+  node in all 15 playable stages, including distinct required-flag variants.
+  It restores each state from a real encoded save, checks all visible pages
+  against the authored available options, enforces at most four buttons and
+  ensures paging does not change the saved chapter.
+
+The first new CI run exposed a test-only TypeScript mismatch between readonly
+grants and Vitest's mutable `arrayContaining` argument. Fixed in
+`bb2089a`; no game behavior or save format changed. The formatting
+normalizer subsequently adjusted the new test's layout in `9ab51ab`.
+**Acceptance of these new tests remains contingent on CI and Browser QA for
+the exact final head.** The PR stays Draft; no merge/deployment is authorized.
