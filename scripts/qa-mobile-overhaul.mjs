@@ -338,6 +338,8 @@ try {
       // On phones the Mara button is the final toolbar action. A former
       // last-child CSS rule hid it entirely, cutting off optional dialogue.
       const talk = page.getByRole('button', { name: 'Поговорити з Марою' });
+      const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+      assert.ok(documentWidth <= 390, `Mobile toolbar overflow: ${documentWidth}px`);
       assert.ok(await talk.isVisible(), 'Mara conversation must be visible on a phone');
       assert.ok(await talk.isEnabled(), 'Mara conversation must be enabled when she is present');
       const bounds = await talk.boundingBox();

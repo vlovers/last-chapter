@@ -40,9 +40,14 @@ async function choose(page, id, viewport) {
       assert.equal(await choice.count(), 1);
       await choice.scrollIntoViewIfNeeded();
       const box = await choice.boundingBox();
+      const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+      assert.ok(
+        documentWidth <= viewport.width + 1,
+        `No horizontal overflow at ${viewport.width}px: document is ${documentWidth}px wide`,
+      );
       assert.ok(
         box && box.x >= -1 && box.x + box.width <= viewport.width + 1,
-        'Choice fits screen horizontally: ' + id,
+        `Choice fits screen horizontally: ${id}, ${JSON.stringify(box)}`,
       );
       assert.ok(
         box.y >= -1 && box.y + box.height <= viewport.height + 1,

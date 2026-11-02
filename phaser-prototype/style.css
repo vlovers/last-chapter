@@ -1247,15 +1247,24 @@ body.reduced * {
   .story-toolbar-actions .story-talk-toggle[data-new]::after {
     font-size: 11px;
   }
-  #catalog-toggle::before {
-    content: '▤ ';
-  }
-  #journal-toggle::before {
-    content: '✎ ';
+  .story-toolbar-actions {
+    min-width: 0;
   }
   #story-continue {
-    max-width: 48%;
-    flex: 1.5;
+    min-width: 0;
+    max-width: 105px;
+  }
+  #catalog-toggle,
+  #journal-toggle {
+    font-size: 0;
+  }
+  #catalog-toggle::before {
+    content: '▤ Книги';
+    font-size: 12px;
+  }
+  #journal-toggle::before {
+    content: '✎ Нотатки';
+    font-size: 12px;
   }
 }
 
