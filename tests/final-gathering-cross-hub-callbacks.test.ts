@@ -48,6 +48,11 @@ type Routes = readonly (readonly (readonly string[])[])[];
 
 const readerCallback = 'Мара відсуває книжки, звільняючи місце для чаю.';
 const counterCallback = 'Елеонора залишає блокнот біля каси.';
+const reedCallbacks = [
+  'Запечатаний конверт пана Ріда',
+  'Пан Рід забрав свою книжку',
+  'Пан Рід забрав книжку й вирішить удома',
+] as const;
 
 function gathering(): DialogueState {
   return selectOption(finalReading, startDialogue(finalReading), 'open');
@@ -106,7 +111,8 @@ describe('Final gathering: callbacks after ordinary conversations', () => {
     expect(state.flags).toContain('final_counter_reed_done');
     const text = currentNode(finalReading, state).text;
     expect(text).toContain(readerCallback);
-    expect(text).toContain(counterCallback);
+    expect(text).toContain(reedCallbacks[1]);
+    expect(text).not.toContain(counterCallback);
     const options = availableOptions(finalReading, state).map((option) => option.id);
     expect(options).not.toContain('final-reader-debates');
     expect(options).not.toContain('final-counter-encounters');
@@ -155,7 +161,8 @@ describe('Final gathering: callbacks after ordinary conversations', () => {
         }
         const text = currentNode(finalReading, state).text;
         expect(text.split(readerCallback)).toHaveLength(2);
-        expect(text.split(counterCallback)).toHaveLength(2);
+        expect(text.split(reedCallbacks[counterChoices[2]!])).toHaveLength(2);
+        expect(text).not.toContain(counterCallback);
         expect(state.flags).toEqual(
           expect.arrayContaining([
             'final_reader_debates_done',
@@ -197,6 +204,7 @@ describe('Final gathering: callbacks after ordinary conversations', () => {
     const text = currentNode(finalReading, state).text;
     expect(text).toContain('Пані Міллер зупиняється біля малюнків Айріс.');
     expect(text).toContain(readerCallback);
-    expect(text).toContain(counterCallback);
+    expect(text).toContain(reedCallbacks[0]);
+    expect(text).not.toContain(counterCallback);
   });
 });
