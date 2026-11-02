@@ -16,6 +16,17 @@ function isRendered(node: HTMLElement): boolean {
   return true;
 }
 
+/** A summary can be visible inside its own closed <details> while the entire
+ * nested group is still hidden by another closed <details> ancestor. */
+function isHiddenByCollapsedDetails(node: HTMLElement): boolean {
+  let collapsed = node.closest('details:not([open])');
+  while (collapsed) {
+    if (node.tagName !== 'SUMMARY' || node.parentElement !== collapsed) return true;
+    collapsed = collapsed.parentElement?.closest('details:not([open])') ?? null;
+  }
+  return false;
+}
+
 /** Keyboard navigation must ignore controls hidden by a closed <details>, inert
  * overlays, or disabled states; those controls are still found by querySelectorAll. */
 export function panelTabStops(panel: HTMLElement): HTMLElement[] {
@@ -32,8 +43,7 @@ export function panelTabStops(panel: HTMLElement): HTMLElement[] {
     ) {
       return false;
     }
-    const collapsed = node.closest('details:not([open])');
-    return !collapsed || (node.tagName === 'SUMMARY' && node.parentElement === collapsed);
+    return !isHiddenByCollapsedDetails(node);
   });
 }
 
@@ -54,6 +64,7 @@ export function restorePanelFocus(preferred: HTMLElement | null, fallback: HTMLE
     preferred.tabIndex >= 0 &&
     !preferred.matches(':disabled') &&
     !preferred.closest('[hidden], [inert], [aria-hidden="true"]') &&
+    !isHiddenByCollapsedDetails(preferred) &&
     isRendered(preferred);
   const target = usable && preferred ? preferred : fallback;
   target.focus({ preventScroll: true });
