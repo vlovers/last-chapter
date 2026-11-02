@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import { availableOptions, selectOption, startDialogue } from '../src/game/dialogue';
+import { decodeSave, encodeSave } from '../src/game/save';
 
 const scenarios = [
   {
@@ -52,6 +53,33 @@ const scenarios = [
 ] as const;
 
 describe('Compact finale hubs preserve every original optional route', () => {
+  it('resumes a nested optional conversation after a save without losing its back route', () => {
+    for (const scenario of scenarios) {
+      const gathering = {
+        ...startDialogue(finalReading),
+        node: 'gathering',
+        flags: [...scenario.flags],
+      };
+      const root = selectOption(finalReading, gathering, scenario.entry);
+      const group = scenario.groups[0];
+      const entered = selectOption(finalReading, root, group.id);
+      const restored = decodeSave(
+        encodeSave({ stage: 'day5-reading', dialogue: entered, flags: entered.flags }),
+      );
+      expect(restored).not.toBeNull();
+      expect(restored?.dialogue.node).toBe(group.node);
+      const options = availableOptions(finalReading, restored!.dialogue);
+      expect(options.map((option) => option.id)).toContain(group.choices[0]);
+      const back = options.find((option) => option.next === scenario.entry);
+      expect(back).toBeDefined();
+      const returned = selectOption(finalReading, restored!.dialogue, back!.id);
+      expect(returned.node).toBe(scenario.entry);
+      expect(availableOptions(finalReading, returned).map((option) => option.id)).toContain(
+        group.id,
+      );
+    }
+  });
+
   for (const scenario of scenarios) {
     it(`${scenario.title}: exposes four choices and returns without consuming the group`, () => {
       const gathering = {
