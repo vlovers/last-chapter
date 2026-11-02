@@ -48,7 +48,7 @@ describe('finale character identity and portrait coverage', () => {
   for (const [speaker, ids] of Object.entries(portraitScenes)) {
     it(`keeps ${speaker} visible throughout the optional conversations`, () => {
       const portrait = castMember(speaker);
-      expect(portrait?.portrait).toMatch(/^\\/art\\/portraits\\/.+\\.svg$/);
+      expect(portrait?.portrait).toMatch(/^\/art\/portraits\/.+\.svg$/);
       for (const id of ids) {
         const node = finalReading.nodes.find((item) => item.id === id);
         expect(node, `Missing scene ${id}`).toBeDefined();
