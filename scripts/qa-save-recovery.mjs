@@ -63,8 +63,12 @@ try {
       assert.ok(actual.optional.every((value) => value === null || value === ''));
       assert.deepEqual(JSON.parse(actual.service).attempts, []);
     }
+    // A recovered save must survive a real reload, while future saves stay untouched.
+    await page.reload();
+    const afterReload = await page.evaluate((key) => localStorage.getItem(key), SAVE_KEY);
+    assert.equal(afterReload, afterChoice.save, `${damage} save changed during reload`);
     assert.deepEqual(errors, [], `Browser errors during ${damage} recovery`);
-    console.log(`PASS: ${damage} save recovery`);
+    console.log(`PASS: ${damage} save recovery and reload`);
     await context.close();
   }
   // A browser may deny storage reads entirely (privacy settings, sandboxed iframe).
