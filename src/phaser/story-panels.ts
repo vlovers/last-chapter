@@ -625,10 +625,13 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     refresh();
   };
   const openOrderCatalog = () => {
+    // The catalog can open from a dialogue event rather than its toolbar
+    // button. Return focus to a visible control when the panel closes.
+    returnFocus = catalog;
     mode = 'catalog';
     reaction = story.lastRecommendation;
     refresh();
-    panel.querySelector<HTMLButtonElement>('button')?.focus();
+    panel.querySelector<HTMLInputElement>('.catalog-search')?.focus({ preventScroll: true });
   };
   window.addEventListener('last-chapter:catalog-open', openOrderCatalog);
   window.addEventListener('last-chapter:new-game', newGame);
