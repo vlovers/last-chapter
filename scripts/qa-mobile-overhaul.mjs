@@ -238,9 +238,7 @@ try {
         'Collecting the last clue must return focus to the active journal tab',
       );
       const flags = await page.evaluate(() =>
-        window.__lastChapterStory.evidence
-          .filter((clue) => clue.collected)
-          .map((clue) => clue.id),
+        window.__lastChapterStory.evidence.filter((clue) => clue.collected).map((clue) => clue.id),
       );
       assert.deepEqual(flags, ['bookmark', 'stamp']);
     }
