@@ -10,7 +10,7 @@ describe('finale portrait renderer contract', () => {
     expect(Object.keys(PORTRAIT_NAMES).sort()).toEqual([...VISITOR_IDS].sort());
     expect(cast.map((member) => member.id).sort()).toEqual([...VISITOR_IDS].sort());
     for (const member of cast) {
-      expect(PORTRAIT_NAMES[member.id], `Portrait name for ${member.id}`).toBe(member.name);
+      expect(PORTRAIT_NAMES[member.id]).toBe(member.name);
     }
   });
 
@@ -38,8 +38,18 @@ describe('finale portrait renderer contract', () => {
       expect(portraitDataUrl(member.id, 'quiet')).toBe('data:image/png;base64,AAAA');
     }
     expect(canvases).toHaveLength(cast.length);
-    expect(canvases.every((canvas) => canvas.width === 64 && canvas.height === 80)).toBe(true);
+    for (const canvas of canvases) {
+      expect(canvas.width).toBe(64);
+      expect(canvas.height).toBe(80);
+    }
     expect(draw.mock.calls.length).toBeGreaterThan(cast.length * 10);
     expect(portraitDataUrl('unknown-character')).toBeNull();
+  });
+
+  it('returns a fallback signal when a canvas context is unavailable', () => {
+    vi.stubGlobal('document', {
+      createElement: () => ({ getContext: () => null }),
+    });
+    expect(portraitDataUrl('iris')).toBeNull();
   });
 });
