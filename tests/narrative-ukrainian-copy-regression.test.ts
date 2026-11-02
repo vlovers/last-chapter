@@ -1,7 +1,25 @@
 import { describe, expect, it } from 'vitest';
 import { finalReading } from '../src/content/day-five';
 import { quietEvening } from '../src/content/quiet-evening';
+import { stageStory, type ChapterStage } from '../src/game/chapter';
 import { validateDialogue, type DialogueNode } from '../src/game/dialogue';
+
+const playablePreFinaleStages = [
+  'miller',
+  'mara',
+  'evening',
+  'iris',
+  'anna',
+  'leo',
+  'eleanor',
+  'thomas',
+  'nora',
+  'book-club',
+  'quiet-evening',
+  'day4-iris',
+  'day4-mara',
+  'day4-leo',
+] as const satisfies readonly ChapterStage[];
 
 const revisedFinaleScenes = [
   'gathering',
@@ -31,6 +49,13 @@ function expectFinishedNarration(node: DialogueNode) {
 }
 
 describe('Ukrainian scene-copy continuity', () => {
+  it('keeps authored narration complete across all four opening days', () => {
+    for (const stage of playablePreFinaleStages) {
+      const graph = stageStory(stage);
+      for (const node of graph.nodes) expectFinishedNarration(node);
+    }
+  });
+
   it('keeps every quiet-evening narration and flag variant complete', () => {
     for (const node of quietEvening.nodes) expectFinishedNarration(node);
   });
