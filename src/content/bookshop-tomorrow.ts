@@ -319,7 +319,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
   },
   {
     id: 'bookshop-tomorrow-miller-new',
-    speaker: 'Оповідач',
+    speaker: 'Пані Міллер',
     text: 'Пані Міллер принесла аркуш із написом «НАДЗВИЧАЙНА ЗУСТРІЧ ЧИТАЧІВ». Нора забирає в неї червоний маркер. «Ми просто обговорюватимемо романи, не евакуюватимемо місто».',
     textWhen: [
       {
@@ -351,7 +351,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
   },
   {
     id: 'bookshop-tomorrow-miller-soft-new',
-    speaker: 'Оповідач',
+    speaker: 'Пані Міллер',
     text: 'Ти переписуєш заголовок: «Чай і розмова про книжки». Міллер незадоволено роздивляється аркуш. «Ніхто не прийде». Через хвилину додає: «Хіба що заради чаю».',
     options: [
       {
@@ -365,7 +365,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
   },
   {
     id: 'bookshop-tomorrow-miller-fun-new',
-    speaker: 'Оповідач',
+    speaker: 'Пані Міллер',
     text: 'Під великими літерами ти пишеш: «Надзвичайно смачне печиво. Звичайні книжкові суперечки». Міллер сміється й погоджується прибрати слово «терміново».',
     options: [
       {
@@ -379,7 +379,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
   },
   {
     id: 'bookshop-tomorrow-miller-privacy-new',
-    speaker: 'Оповідач',
+    speaker: 'Пані Міллер',
     text: '«Добре, — каже Міллер. — Жодних прізвищ і натяків». Нора піднімає брову. «Навіть натяків?» — «Я ж сказала». Міллер перевертає аркуш чистим боком догори.',
     options: [
       {
@@ -393,7 +393,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
   },
   {
     id: 'bookshop-tomorrow-iris-new',
-    speaker: 'Оповідач',
+    speaker: 'Айріс',
     text: 'Айріс стоїть біля вікна з чашкою, до якої майже не торкалася. «Мені не потрібні ще одні запитання про сторінки», — каже вона, перш ніж ти встигаєш заговорити. «Але я б не відмовилася від нормальної книжки».',
     options: [
       {
@@ -415,7 +415,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
   },
   {
     id: 'bookshop-tomorrow-iris-choose-new',
-    speaker: 'Оповідач',
+    speaker: 'Айріс',
     text: 'Айріс довго дивиться на полиці, потім бере короткий роман про двох сестер. «Я прочитаю його вдома», — каже вона. Ти не питаєш, чому саме цей. Вона вдячно киває.',
     options: [
       {
@@ -429,7 +429,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
   },
   {
     id: 'bookshop-tomorrow-iris-tea-new',
-    speaker: 'Оповідач',
+    speaker: 'Айріс',
     text: 'Ти ставиш поруч нову чашку. Айріс мовчить хвилину, а потім питає: «А у вас завжди так шумно?» — «Лише коли всі намагаються бути тихими». Вона усміхається й підсуває стілець ближче до вікна.',
     options: [
       {
@@ -443,7 +443,7 @@ export const bookshopTomorrowNodes: readonly DialogueNode[] = [
   },
   {
     id: 'bookshop-tomorrow-iris-leave-new',
-    speaker: 'Оповідач',
+    speaker: 'Айріс',
     text: '«Дякую. Я піду одразу після останнього уривка — без ще одного чаю й розмов біля дверей». Айріс бере пальто зі спинки стільця й вішає ближче до виходу. «А коли знову зайду, не знаю. Тільки не записуй мене на завтра».',
     options: [
       {
