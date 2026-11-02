@@ -18,8 +18,12 @@ describe('orphaned progress recovery', () => {
       saved.set(SERVICE_KEY, JSON.stringify({ attempts: [{ stale: true }] }));
       vi.stubGlobal('localStorage', {
         getItem: (key: string) => saved.get(key) ?? null,
-        setItem: (key: string, value: string) => { saved.set(key, value); },
-        removeItem: (key: string) => { saved.delete(key); },
+        setItem: (key: string, value: string) => {
+          saved.set(key, value);
+        },
+        removeItem: (key: string) => {
+          saved.delete(key);
+        },
       });
 
       const story = new FiveDayStory();
@@ -40,8 +44,12 @@ describe('orphaned progress recovery', () => {
     const saved = new Map([[SAVE_KEY, future]]);
     vi.stubGlobal('localStorage', {
       getItem: (key: string) => saved.get(key) ?? null,
-      setItem: (key: string, value: string) => { saved.set(key, value); },
-      removeItem: (key: string) => { saved.delete(key); },
+      setItem: (key: string, value: string) => {
+          saved.set(key, value);
+        },
+      removeItem: (key: string) => {
+          saved.delete(key);
+        },
     });
     const story = new FiveDayStory();
     expect(story.isProgressSaved).toBe(false);
@@ -58,8 +66,12 @@ describe('orphaned progress recovery', () => {
     ]);
     vi.stubGlobal('localStorage', {
       getItem: (key: string) => saved.get(key) ?? null,
-      setItem: (key: string, value: string) => { saved.set(key, value); },
-      removeItem: (key: string) => { saved.delete(key); },
+      setItem: (key: string, value: string) => {
+          saved.set(key, value);
+        },
+      removeItem: (key: string) => {
+          saved.delete(key);
+        },
     });
     const story = new FiveDayStory();
     story.choose('greet');
@@ -68,5 +80,4 @@ describe('orphaned progress recovery', () => {
     expect(saved.get(optionalKey)).toBe('notes from a future client');
     expect(saved.get(SERVICE_KEY)).toBe('future service data');
   });
-
 });
