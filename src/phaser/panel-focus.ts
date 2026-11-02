@@ -21,7 +21,7 @@ function isRendered(node: HTMLElement): boolean {
 function isHiddenByCollapsedDetails(node: HTMLElement): boolean {
   let collapsed = node.closest('details:not([open])');
   while (collapsed) {
-    if (node.tagName !== 'SUMMARY' || node.parentElement !== collapsed) return true;
+    if (collapsed.querySelector(':scope > summary') !== node) return true;
     collapsed = collapsed.parentElement?.closest('details:not([open])') ?? null;
   }
   return false;

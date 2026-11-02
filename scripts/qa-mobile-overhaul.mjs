@@ -46,14 +46,16 @@ const shot = async (page, name) => {
 };
 let page;
 try {
-  for (const [width, height] of [
+  const viewports = [
     [375, 667],
     [390, 844],
     [430, 932],
     [768, 1024],
     [1440, 900],
     [844, 390],
-  ]) {
+  ].filter(([width]) => !process.env.QA_WIDTH || String(width) === process.env.QA_WIDTH);
+  assert.ok(viewports.length > 0, 'Known mobile QA viewport required');
+  for (const [width, height] of viewports) {
     console.log(`Mobile QA viewport: ${width}x${height}`);
     page = await browser.newPage({ viewport: { width, height }, hasTouch: width < 900 });
     page.on('pageerror', (e) => errors.push(String(e)));
@@ -191,6 +193,56 @@ try {
     // A nested summary is in the DOM but hidden by its outer closed details.
     // Shift+Tab must wrap to the visible summary, not the invisible descendant.
     if (width === 390) {
+      // Exercise real selector matching and native focus, not the unit DOM double.
+      await page.evaluate(async () => {
+        const { panelTabStops, focusPanelUpdate, restorePanelFocus } =
+          await import('/src/phaser/panel-focus.ts');
+        const root = document.createElement('div');
+        root.innerHTML = `<button id="rc-close">Закрити</button>
+          <section class="conversation-exchange" tabindex="-1">Розмова</section>
+          <section class="conversation-exchange" tabindex="-1" hidden>Приховано</section>
+          <details><summary id="rc-first">Розділ</summary>
+            <summary id="rc-second" tabindex="0">Не заголовок розділу</summary>
+            <details><summary id="rc-nested">Вкладений розділ</summary></details>
+            <button id="rc-choice">Вибір</button><button id="rc-hidden" hidden>Приховано</button></details>`;
+        document.body.append(root);
+        const assert = (condition, message) => {
+          if (!condition) throw new Error(message);
+        };
+        try {
+          const fallback = root.querySelector('#rc-close');
+          const exchange = root.querySelector('.conversation-exchange');
+          assert(!exchange.matches('button'), 'Section must not match button selector');
+          assert(!panelTabStops(root).includes(exchange), 'tabindex -1 is not a tab stop');
+          focusPanelUpdate(root, fallback);
+          assert(document.activeElement === exchange, 'Conversation section receives focus');
+          exchange.hidden = true;
+          focusPanelUpdate(root, fallback);
+          assert(document.activeElement === fallback, 'Hidden sections never receive focus');
+          assert(
+            panelTabStops(root)
+              .map((node) => node.id)
+              .join(',') === 'rc-close,rc-first',
+            'Only the first summary of a closed details is reachable',
+          );
+          restorePanelFocus(root.querySelector('#rc-second'), fallback);
+          assert(
+            document.activeElement === fallback,
+            'Second summary cannot receive restored focus',
+          );
+          root.querySelector('details').open = true;
+          assert(
+            panelTabStops(root).some((node) => node.id === 'rc-nested'),
+            'Expanded parent exposes nested summary',
+          );
+          assert(
+            !panelTabStops(root).some((node) => node.id === 'rc-hidden'),
+            'Hidden choices stay excluded',
+          );
+        } finally {
+          root.remove();
+        }
+      });
       await page.evaluate(() => {
         const outer = document.createElement('details');
         outer.dataset.qaNestedDetails = 'true';

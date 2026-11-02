@@ -15,18 +15,20 @@ interface StopOptions {
   nestedCollapsed?: boolean;
   tabIndex?: number;
   exchange?: boolean;
+  secondSummary?: boolean;
 }
 
 function stop(options: StopOptions = {}): HTMLElement {
   const outerDetails = {} as HTMLElement;
   Object.assign(outerDetails, {
+    querySelector: () => null,
     closest: (selector: string) => (selector === 'details:not([open])' ? outerDetails : null),
     parentElement: null,
   });
   const closedDetails = {
     parentElement: options.nestedCollapsed ? outerDetails : null,
   } as HTMLElement;
-  return {
+  const node = {
     tagName: options.tag ?? 'BUTTON',
     className: options.exchange ? 'conversation-exchange' : '',
     tabIndex: options.tabIndex ?? 0,
@@ -54,6 +56,10 @@ function stop(options: StopOptions = {}): HTMLElement {
           ? closedDetails
           : null,
   } as unknown as HTMLElement;
+  Object.assign(closedDetails, {
+    querySelector: () => (options.directSummary && !options.secondSummary ? node : null),
+  });
+  return node;
 }
 
 function panel(stops: HTMLElement[]): HTMLElement {
@@ -161,6 +167,20 @@ describe('story panel keyboard navigation', () => {
     restorePanelFocus(summary, fallback);
     expect(summary.focus).toHaveBeenCalledWith({ preventScroll: true });
     expect(fallback.focus).not.toHaveBeenCalled();
+  });
+
+  it('does not expose a second direct summary inside a collapsed details group', () => {
+    const summary = stop({
+      tag: 'SUMMARY',
+      collapsed: true,
+      directSummary: true,
+      secondSummary: true,
+    });
+    const fallback = stop();
+    expect(panelTabStops(panel([summary, fallback]))).toEqual([fallback]);
+    restorePanelFocus(summary, fallback);
+    expect(summary.focus).not.toHaveBeenCalled();
+    expect(fallback.focus).toHaveBeenCalledWith({ preventScroll: true });
   });
 
   it('keeps controls inside an expanded topic available', () => {
