@@ -14,7 +14,11 @@ const begin = (topic: string, flags: string[]) => {
 const partialRoutes = [
   {
     group: 'tomorrow-books-group',
-    choices: ['tomorrow-window-new', 'tomorrow-window-letters-new', 'tomorrow-window-letters-back-new'],
+    choices: [
+      'tomorrow-window-new',
+      'tomorrow-window-letters-new',
+      'tomorrow-window-letters-back-new',
+    ],
     outcome: 'final_tomorrow_window_done',
     hidden: 'tomorrow-window-new',
   },
@@ -54,7 +58,9 @@ describe('Finale nested route completion boundaries', () => {
     ({ group, choices, outcome, hidden }) => {
       let state = begin('bookshop-tomorrow', initialFlags);
       state = selectOption(finalReading, state, group);
-      for (const choice of choices) state = selectOption(finalReading, state, choice);
+      for (const choice of choices) {
+        state = selectOption(finalReading, state, choice);
+      }
 
       expect(state.node).toBe('gathering');
       expect(state.flags).toContain(outcome);
