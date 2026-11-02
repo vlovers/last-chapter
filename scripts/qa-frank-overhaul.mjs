@@ -66,7 +66,9 @@ const openRoamingFrank = async () => {
     if (selected === 'frank') break;
   }
   assert.equal(selected, 'frank', 'Offscreen Frank must remain keyboard-selectable');
-  console.log(`Frank QA: navigating to ${touch ? 'offscreen mobile' : 'roaming desktop'} Frank with R/Enter`);
+  console.log(
+    `Frank QA: navigating to ${touch ? 'offscreen mobile' : 'roaming desktop'} Frank with R/Enter`,
+  );
   await page.keyboard.press('Enter');
   // The game must walk the player to the cat and open the real conversation.
   await heading.waitFor({ timeout: 30000 });
