@@ -39,6 +39,14 @@ describe('optional conversation authoring and save consistency', () => {
     }
   });
 
+  it('keeps every authored Mara conversation within four visible reply buttons', () => {
+    for (const story of [maraBookClub, maraAfterHours, maraReturnVisit, maraLetterDecision]) {
+      for (const node of story.nodes) {
+        expect(node.choices.length, `${story.id}/${node.id}`).toBeLessThanOrEqual(4);
+      }
+    }
+  });
+
   it('rejects duplicate narration prerequisites within the same node', () => {
     const entry = topic.nodes[0]!;
     expect(
