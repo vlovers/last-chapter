@@ -1,5 +1,5 @@
 import { evidenceKindLabels } from './journal-facts';
-import { focusPanelUpdate, panelTabStops } from './panel-focus';
+import { focusPanelUpdate, panelTabStops, restorePanelFocus } from './panel-focus';
 import { discoveredPeopleAtStage } from './discovered-people';
 import { OPTIONAL_PROGRESS_KEYS } from './optional-progress';
 import type { FiveDayStory } from './five-day-story';
@@ -195,7 +195,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       close.addEventListener('click', () => {
         mode = null;
         refresh();
-        (returnFocus ?? conversationButton).focus({ preventScroll: true });
+        restorePanelFocus(returnFocus, catalog);
       });
       panel.append(close);
     }
@@ -280,7 +280,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
             saveConversation();
             if (next.suspended) mode = null;
             refresh();
-            if (next.suspended) (returnFocus ?? conversationButton).focus({ preventScroll: true });
+            if (next.suspended) restorePanelFocus(returnFocus, catalog);
             else focusPanelUpdate(panel, conversationButton);
           });
           replies.append(button);
@@ -588,10 +588,12 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         first?.focus();
       }
     }
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape' && !event.isComposing) {
+      event.preventDefault();
+      event.stopPropagation();
       mode = null;
       refresh();
-      (returnFocus ?? conversationButton).focus({ preventScroll: true });
+      restorePanelFocus(returnFocus, catalog);
     }
     if (
       (event.key === 'ArrowDown' || event.key === 'ArrowUp') &&
@@ -615,6 +617,11 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     letterDecision = startConversation(maraLetterDecision);
     selectedTopic = maraBookClub;
     mode = null;
+    filter = 'all';
+    search = '';
+    journalTab = 'people';
+    reaction = null;
+    returnFocus = null;
     personalNotes = '';
     try {
       localStorage.setItem(OPTIONAL_PROGRESS_KEYS.notes, '');
