@@ -51,13 +51,17 @@ export function panelTabStops(panel: HTMLElement): HTMLElement[] {
 export function focusPanelUpdate(panel: HTMLElement, fallback: HTMLElement): void {
   const isUsable = (node: HTMLElement): boolean =>
     node.isConnected &&
-    node.tabIndex >= 0 &&
     !node.matches(':disabled') &&
     !node.closest('[hidden], [inert], [aria-hidden="true"]') &&
     !isHiddenByCollapsedDetails(node) &&
     isRendered(node);
-  const candidates = panel.querySelectorAll<HTMLElement>('.conversation-exchange, button');
-  const target = Array.from(candidates).find(isUsable) ?? fallback;
+  const exchange = Array.from(panel.querySelectorAll<HTMLElement>('.conversation-exchange')).find(
+    isUsable,
+  );
+  const button = Array.from(panel.querySelectorAll<HTMLElement>('button')).find(
+    (node) => node.tabIndex >= 0 && isUsable(node),
+  );
+  const target = exchange ?? button ?? fallback;
   target.focus({ preventScroll: true });
 }
 
