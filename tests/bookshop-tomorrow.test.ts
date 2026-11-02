@@ -113,6 +113,23 @@ describe('fifth-day bookshop tomorrow: six ordinary-life endings', () => {
     );
   });
 
+  it('accounts for Nora’s three novels when she selects two for the shelf', () => {
+    const scene = selectOption(finalReading, gathering(), 'bookshop-tomorrow');
+    expect(currentNode(finalReading, scene).text).toContain('три романи');
+    const shelf = enterActivity(scene, 'tomorrow-shelf');
+    expect(currentNode(finalReading, shelf).text).toContain('відкладає один');
+    expect(currentNode(finalReading, shelf).text).toContain('два інші');
+  });
+
+  it('offers Iris a choice without implying that the player grants permission', () => {
+    const scene = selectOption(finalReading, gathering(), 'bookshop-tomorrow');
+    const iris = enterActivity(scene, 'tomorrow-iris-new');
+    const option = availableOptions(finalReading, iris).find(
+      (entry) => entry.id === 'tomorrow-iris-choose-new',
+    );
+    expect(option?.label).toBe('Запропонувати Айріс самій обрати книжку');
+  });
+
   it('does not make a rumor disappear from the public room or the ending', () => {
     const flags = [...resolved, 'final_miller_ledger_rumor_seeded'];
     const scene = selectOption(finalReading, gathering(flags), 'bookshop-tomorrow');
