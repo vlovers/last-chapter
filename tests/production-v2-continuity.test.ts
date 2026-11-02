@@ -27,7 +27,7 @@ function follow(story: DialogueStory, path: string[], flags: string[] = []) {
 describe('Production V2: chronology, letter authorship and evidence boundaries', () => {
   it('introduces the found letter to Iris even if her day-two letter topic was skipped', () => {
     const visit = follow(irisDecision, ['welcome'], ['saw_envelope']);
-    expect(visit.text).toContain('Ви кладете перед Айріс знайдений конверт');
+    expect(visit.text).toContain('Ти кладеш перед Айріс знайдений конверт');
     expect(visit.text).toContain('Я писала це Лео');
     const fear = selectOption(irisDecision, visit.state, 'iris-letter-ask');
     expect(currentNode(irisDecision, fear).text).toContain('перечитаю');
