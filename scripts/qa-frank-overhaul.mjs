@@ -37,20 +37,24 @@ const cat = () =>
 const openRoamingFrank = async () => {
   const hotspot = page.getByRole('button', { name: 'Побути з Френком', exact: true });
   const heading = page.getByRole('heading', { name: 'Френк', exact: true });
-  if (await hotspot.isVisible()) {
+  if (touch && (await hotspot.isVisible())) {
     try {
-      // The in-world button moves with Frank; force skips Playwright's
-      // stability check but still dispatches an actual pointer/touch event.
-      if (touch) await hotspot.tap({ force: true });
-      else await hotspot.click({ force: true });
+      // On phones, verify the actual touch target when Frank is on-camera.
+      // The hotspot moves with the cat, so Playwright's stability wait is
+      // unsuitable; force still sends a real touch event.
+      await hotspot.tap({ force: true });
       await heading.waitFor({ timeout: 20000 });
       return;
     } catch (error) {
-      // Do not mask a broken visible interaction. Only switch navigation
-      // methods if Frank really left the camera while we approached him.
+      // A visible, nonfunctional touch target is a genuine mobile failure.
+      // Only use keyboard navigation when Frank has left the camera.
       if (await hotspot.isVisible()) throw error;
     }
   }
+  // On desktop the roaming button can move between Playwright's coordinate
+  // lookup and pointerdown, sending the click to the canvas underneath.
+  // Exercise the real accessible R/Enter approach instead; the stationary
+  // bowl and tree still receive pointer clicks later in this suite.
   await page.locator('#game').focus();
   let selected = null;
   for (let attempt = 0; attempt < 20; attempt++) {
@@ -62,7 +66,7 @@ const openRoamingFrank = async () => {
     if (selected === 'frank') break;
   }
   assert.equal(selected, 'frank', 'Offscreen Frank must remain keyboard-selectable');
-  console.log('Frank QA: navigating to offscreen Frank with R/Enter');
+  console.log(`Frank QA: navigating to ${touch ? 'offscreen mobile' : 'roaming desktop'} Frank with R/Enter`);
   await page.keyboard.press('Enter');
   // The game must walk the player to the cat and open the real conversation.
   await heading.waitFor({ timeout: 30000 });
