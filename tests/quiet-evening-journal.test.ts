@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { journalEvidence, journalFacts } from '../src/phaser/journal-facts';
 import { quietEvening } from '../src/content/quiet-evening';
+import { journalEvidence, journalFacts } from '../src/phaser/journal-facts';
 import { selectOption, startDialogue } from '../src/game/dialogue';
 
 const facts = new Map(journalFacts);
@@ -76,7 +76,9 @@ describe('quiet-evening journal coverage', () => {
     const examined = facts.get('quiet_evening_page_examined');
     expect(discovered).toContain('Автора не встановлено');
     expect(examined).toContain('дві цілі олівцеві зірочки');
-    expect(facts.get('iris_quiet_page_stars_compared')).toContain('авторство аркуша не підтверджено');
+    expect(facts.get('iris_quiet_page_stars_compared')).toContain(
+      'авторство аркуша не підтверджено',
+    );
   });
 
   it('does not duplicate journal fact flags or evidence provenance', () => {
