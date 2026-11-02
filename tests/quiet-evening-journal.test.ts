@@ -75,7 +75,8 @@ describe('quiet-evening journal coverage', () => {
     const discovered = facts.get('quiet_evening_page_found');
     const examined = facts.get('quiet_evening_page_examined');
     expect(discovered).toContain('Автора не встановлено');
-    expect(examined).toContain('авторство аркуша не підтверджено');
+    expect(examined).toContain('дві цілі олівцеві зірочки');
+    expect(facts.get('iris_quiet_page_stars_compared')).toContain('авторство аркуша не підтверджено');
   });
 
   it('does not duplicate journal fact flags or evidence provenance', () => {
