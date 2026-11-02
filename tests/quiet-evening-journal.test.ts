@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { journalEvidence, journalFacts } from '../src/phaser/journal-facts';
+import { quietEvening } from '../src/content/quiet-evening';
+import { selectOption, startDialogue } from '../src/game/dialogue';
 
 const facts = new Map(journalFacts);
 const evidence = new Map(journalEvidence.map((entry) => [entry.flag, entry]));
@@ -15,6 +17,26 @@ describe('quiet-evening journal coverage', () => {
   it.each(discovered)('provides authored journal copy for %s', (flag) => {
     expect(facts.get(flag)?.trim().length).toBeGreaterThan(20);
     expect(evidence.get(flag)?.source.trim().length).toBeGreaterThan(5);
+  });
+
+  it('records the manuscript only when the player keeps it', () => {
+    const opening = startDialogue(quietEvening);
+    const manuscript = selectOption(quietEvening, opening, 'tidy-books');
+    const kept = selectOption(quietEvening, manuscript, 'keep-page');
+    const left = selectOption(quietEvening, manuscript, 'leave-page');
+    expect(kept.flags).toContain('quiet_evening_page_found');
+    expect(left.flags).not.toContain('quiet_evening_page_found');
+  });
+
+  it('keeps the margin warning separate from taking the manuscript', () => {
+    const manuscript = selectOption(quietEvening, startDialogue(quietEvening), 'tidy-books');
+    const margin = selectOption(quietEvening, manuscript, 'read-margin');
+    const kept = selectOption(quietEvening, margin, 'margin-keep');
+    const left = selectOption(quietEvening, margin, 'margin-leave');
+    expect(kept.flags).toContain('quiet_evening_page_found');
+    expect(kept.flags).toContain('quiet_evening_margin_warning_seen');
+    expect(left.flags).not.toContain('quiet_evening_page_found');
+    expect(left.flags).toContain('quiet_evening_margin_warning_seen');
   });
 
   it('does not attribute unsupported day-two testimony to Iris', () => {
