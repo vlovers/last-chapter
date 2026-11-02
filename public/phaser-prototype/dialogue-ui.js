@@ -1,6 +1,11 @@
 import { assetFallback } from './assets.js';
 import { portraitDataUrl } from './visitor-portraits.js';
 import { normalizeEmotion, emotionLabel } from './visitor-emotions.js';
+/** Keep character/story conversations at a stable dock height between replies. */
+export function shouldCompactDialogue(node, isConversation) {
+  return !isConversation && node.choices.length <= 2 && node.text.length < 550;
+}
+
 export class DialogueUI {
   constructor(onChoose, onClose) {
     this.lifecycle = new AbortController();
@@ -71,7 +76,7 @@ export class DialogueUI {
     this.element.hidden = false;
     this.element.closest('#stage').classList.add('talking');
     this.element.classList.toggle('object-note', !isMara);
-    this.element.classList.toggle('compact', node.choices.length <= 2 && node.text.length < 550);
+    this.element.classList.toggle('compact', shouldCompactDialogue(node, isMara));
     const emotion = normalizeEmotion(node.mood);
     this.element.dataset.mood = emotion;
     this.mood.textContent = emotionLabel(emotion);
