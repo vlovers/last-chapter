@@ -89,10 +89,6 @@ export const journalFacts: readonly (readonly [string, string])[] = [
   ['book_club_started', 'Ви провели книжковий клуб у книгарні.'],
   ['book_club_skipped', 'Замість книжкового клубу ви обрали тихий вечір.'],
   [
-    'iris_mothers_draft_heard',
-    'Айріс згадала мамину чернетку «Загублені сторінки» та зірочки на полях.',
-  ],
-  [
     'quiet_evening_page_found',
     'Між старими романами знайдено аркуш із двома зірочками та уривком про відчинене вікно. Автора не встановлено.',
   ],
@@ -136,12 +132,6 @@ export const journalEvidence = [
     title: 'Папір і позначки',
     kind: 'observation',
     source: 'Огляд аркуша під лампою',
-  },
-  {
-    flag: 'iris_mothers_draft_heard',
-    title: 'Мамина чернетка',
-    kind: 'testimony',
-    source: 'Айріс · другий день',
   },
   {
     flag: 'iris_quiet_page_stars_compared',
