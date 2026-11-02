@@ -41,6 +41,13 @@ describe('Day five: after-case choices lead into their final-night consequences'
         flags: ['final_case_closure_complete'],
       };
       dialogue = selectOption(finalReading, dialogue, 'after-case-tea');
+      const group =
+        route.person === 'anna' || route.person === 'miller'
+          ? 'after-tea-help-group'
+          : route.person === 'iris'
+            ? 'after-tea-corner-group'
+            : 'after-tea-talk-group';
+      dialogue = selectOption(finalReading, dialogue, group);
       dialogue = selectOption(finalReading, dialogue, `after-tea-${route.person}-new`);
       dialogue = selectOption(finalReading, dialogue, `after-${route.person}-${route.choice}-new`);
       const finish = availableOptions(finalReading, dialogue)[0];
