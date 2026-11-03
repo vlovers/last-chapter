@@ -55,6 +55,19 @@ describe('day-four return visits remember what the characters already know', () 
     );
   });
 
+  it.each([
+    ['iris_day_four_letter_fear_heard', 'Я поки не перечитувала'],
+    ['iris_day_four_letter_feeling_heard', 'Конверт досі тут'],
+    ['iris_exhibition_plan_heard', 'Я все ще думаю'],
+  ])('Iris preserves the more specific %s callback after consent', (flag, expected) => {
+    const state: DialogueState = {
+      ...startDialogue(irisDecision),
+      node: 'welcome',
+      flags: ['saw_envelope', 'iris_letter_choice_respected', flag],
+    };
+    expect(currentNode(irisDecision, state).text).toContain(expected);
+  });
+
   it('Iris prioritizes a later refusal over earlier consent, including old saves', () => {
     const state: DialogueState = {
       ...startDialogue(irisDecision),
