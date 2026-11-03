@@ -130,8 +130,8 @@ describe('Quiet manuscript: consent, provenance and custody continuity', () => {
     expect(currentNode(finalReading, state).text).not.toContain('Так, я згодна');
     expect(seasonEnding({ flags }).epilogue).toContain('Айріс забрала сторінку додому');
     const visible = new Set(flags.filter((flag) => journalFlagVisible(flag, new Set(flags))));
-    expect(visible).toContain('final_quiet_manuscript_returned');
-    expect(visible).not.toContain('final_quiet_manuscript_archived');
+    expect(visible.has('final_quiet_manuscript_returned')).toBe(true);
+    expect(visible.has('final_quiet_manuscript_archived')).toBe(false);
   });
 
   it('does not expose future custody or permission decisions before they occur', () => {
