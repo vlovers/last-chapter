@@ -2030,6 +2030,18 @@ export const finalReading: DialogueStory = {
       text: 'На прилавку лежить старий конверт. Айріс дивиться на нього, але не бере. Лео біля вікна розмовляє з Марою. «Поклади поки за касу», — тихо просить Айріс.',
       textWhen: [
         {
+          requires: ['iris_letter_pressured_day4', 'opened_private_letter', 'iris_letter_breach_admitted'],
+          text: 'На конверті видно порушену печатку. Айріс пам’ятає твоє зізнання. «Я просила більше не порушувати цю тему», — тихо каже вона й відсуває лист від гостей. Лео залишається біля вікна.',
+        },
+        {
+          requires: ['iris_letter_pressured_day4', 'opened_private_letter'],
+          text: 'Айріс бачить порушену печатку на конверті, але ще не знає, хто її відкрив. «Я вже просила не повертатися до цього листа», — каже вона й відсуває його від гостей. Лео не втручається.',
+        },
+        {
+          requires: ['iris_letter_pressured_day4'],
+          text: 'Айріс залишає конверт біля альбому. «Ми вже говорили про це. Я попросила не повертатися до листа», — нагадує вона. Лео розмовляє з Марою біля вікна й не підходить.',
+        },
+        {
           requires: ['opened_private_letter', 'iris_letter_breach_admitted'],
           text: 'На конверті видно порушену печатку. Айріс знає, хто його відкрив. Вона переставляє конверт подалі від гостей і коротко каже: «Не зараз». Лео не підходить.',
         },
@@ -2052,7 +2064,13 @@ export const finalReading: DialogueStory = {
           label: 'Запропонувати приватну розмову, якщо обоє згодні',
           next: 'mutual',
           requires: ['iris_letter_choice_respected', 'leo_open_to_conversation'],
-          unless: ['opened_private_letter'],
+          unless: [
+            'opened_private_letter',
+            'iris_letter_pressured_day4',
+            'iris_letter_breach_admitted',
+            'final_letter_breach_disclosed',
+            'leo_letter_pressured_day4',
+          ],
         },
         {
           id: 'admit-breach-now',

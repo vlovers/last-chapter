@@ -20,12 +20,17 @@ describe('Private letter finale', () => {
       let state: DialogueState = selectOption(finalReading, startDialogue(finalReading), 'open');
       state = {
         ...state,
-        flags: [
-          'saw_envelope',
-          'iris_letter_choice_respected',
-          'leo_open_to_conversation',
-          'iris_letter_breach_admitted',
-        ],
+        flags:
+          choice === 'mutual'
+            ? ['saw_envelope', 'iris_letter_choice_respected', 'leo_open_to_conversation']
+            : choice === 'repair-trust'
+              ? ['saw_envelope', 'opened_private_letter', 'iris_letter_breach_admitted']
+              : [
+                  'saw_envelope',
+                  'iris_letter_choice_respected',
+                  'leo_open_to_conversation',
+                  'iris_letter_pressured_day4',
+                ],
       };
       state = selectOption(finalReading, state, 'letter');
       state = selectOption(finalReading, state, choice);
