@@ -42,9 +42,11 @@ describe('player-facing Ukrainian narrator voice across the first and final days
 
   it('keeps the privacy-breach ending in the same narrative voice', () => {
     const ending = node(finalReading, 'end');
-    expect(ending.textWhen?.some((entry) =>
-      entry.text.includes('Ти не намагаєшся наздогнати її з поясненнями'),
-    )).toBe(true);
+    expect(
+      ending.textWhen?.some((entry) =>
+        entry.text.includes('Ти не намагаєшся наздогнати її з поясненнями'),
+      ),
+    ).toBe(true);
   });
 
   it('remembers singular address in all three rumor accountability callbacks after save/restore', () => {
@@ -68,9 +70,7 @@ describe('player-facing Ukrainian narrator voice across the first and final days
         node: 'rumor-player-accountability',
         flags,
       };
-      const restored = decodeSave(
-        encodeSave({ stage: 'day5-reading', dialogue: state, flags }),
-      );
+      const restored = decodeSave(encodeSave({ stage: 'day5-reading', dialogue: state, flags }));
       expect(restored).not.toBeNull();
       const text = currentNode(finalReading, restored!.dialogue).text;
       for (const phrase of expected) expect(text).toContain(phrase);
