@@ -177,7 +177,12 @@ export const paperStudyNodes: readonly DialogueNode[] = [
         label: 'Запитати, чи хоче Айріс долучитися',
         next: 'paper-study-iris',
         requires: ['final_ledger_iris_told'],
-        unless: ['final_case_iris_declined'],
+        unless: [
+          'final_case_iris_declined',
+          'final_letter_breach_disclosed',
+          'iris_letter_breach_admitted',
+          'iris_letter_pressured_day4',
+        ],
       },
       {
         id: 'paper-voices-miller',
@@ -247,7 +252,12 @@ export const paperStudyNodes: readonly DialogueNode[] = [
         label: 'Віддати Айріс список запитань без вимоги відповіді',
         next: 'paper-study-outcome',
         requires: ['final_ledger_iris_told'],
-        unless: ['final_case_iris_declined', 'final_letter_breach_disclosed'],
+        unless: [
+          'final_case_iris_declined',
+          'final_letter_breach_disclosed',
+          'iris_letter_breach_admitted',
+          'iris_letter_pressured_day4',
+        ],
         grants: ['final_paper_iris_questions'],
       },
       {

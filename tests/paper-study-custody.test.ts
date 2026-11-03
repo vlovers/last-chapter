@@ -51,13 +51,19 @@ describe('paper study: manuscript custody and consent', () => {
   it.each(['final_letter_breach_disclosed', 'final_case_iris_declined'])(
     'does not grant access after %s',
     (boundary) => {
-      const state = play(
-        [...evidence, 'final_manuscript_provenance_decided', boundary],
-        ['paper-study-permission'],
+      const flags = [...evidence, 'final_manuscript_provenance_decided', boundary];
+      expect(availableOptions(finalReading, play(flags, [])).map((option) => option.id)).not.toContain(
+        'paper-study-permission',
       );
-      expect(availableOptions(finalReading, state).map((option) => option.id)).not.toContain(
-        'paper-permission-lend',
-      );
+      // Legacy saves may already be inside this scene when the boundary is restored.
+      const state: DialogueState = {
+        ...startDialogue(finalReading),
+        node: 'paper-study-permission',
+        flags,
+      };
+      expect(availableOptions(finalReading, state).map((option) => option.id)).toEqual([
+        'paper-permission-respect',
+      ]);
       const finished = selectOption(
         finalReading,
         selectOption(finalReading, state, 'paper-permission-respect'),

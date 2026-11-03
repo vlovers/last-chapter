@@ -10,7 +10,14 @@ export const paperStudyConsentOption: DialogueOption = {
     'final_ledger_scene_complete',
     'final_manuscript_provenance_decided',
   ],
-  unless: ['final_paper_study_done', 'final_paper_study_access_declined'],
+  unless: [
+    'final_paper_study_done',
+    'final_paper_study_access_declined',
+    'final_case_iris_declined',
+    'final_letter_breach_disclosed',
+    'iris_letter_breach_admitted',
+    'iris_letter_pressured_day4',
+  ],
 };
 
 export const paperStudyConsentNodes: readonly DialogueNode[] = [
