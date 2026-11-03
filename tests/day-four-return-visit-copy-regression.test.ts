@@ -117,4 +117,23 @@ describe('day-four return visits remember what the characters already know', () 
       );
     },
   );
+
+  it('Mara can still plan the surprise when the book was never bought', () => {
+    const state = play(maraDecision, ['saw_envelope'], ['greet', 'letter', 'privacy', 'privacy-back']);
+    const text = currentNode(maraDecision, state).text;
+    expect(text).toContain('як зробити йому сюрприз');
+    expect(text).not.toContain('вручити йому книжку');
+  });
+
+  it('Mara does not imply an unchosen gift after discussing her workday', () => {
+    const state: DialogueState = {
+      ...startDialogue(maraDecision),
+      node: 'greet',
+      flags: ['sold_station', 'mara_day_four_own_story_heard'],
+    };
+    const text = currentNode(maraDecision, state).text;
+    expect(text).toContain('як влаштувати Лео сюрприз');
+    expect(text).not.toContain('так і не вирішила');
+    expect(availableOptions(maraDecision, state).map((option) => option.id)).toContain('book');
+  });
 });
