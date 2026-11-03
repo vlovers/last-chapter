@@ -2030,7 +2030,11 @@ export const finalReading: DialogueStory = {
       text: 'На прилавку лежить старий конверт. Айріс дивиться на нього, але не бере. Лео біля вікна розмовляє з Марою. «Поклади поки за касу», — тихо просить Айріс.',
       textWhen: [
         {
-          requires: ['iris_letter_pressured_day4', 'opened_private_letter', 'iris_letter_breach_admitted'],
+          requires: [
+            'iris_letter_pressured_day4',
+            'opened_private_letter',
+            'iris_letter_breach_admitted',
+          ],
           text: 'На конверті видно порушену печатку. Айріс пам’ятає твоє зізнання. «Я просила більше не порушувати цю тему», — тихо каже вона й відсуває лист від гостей. Лео залишається біля вікна.',
         },
         {
