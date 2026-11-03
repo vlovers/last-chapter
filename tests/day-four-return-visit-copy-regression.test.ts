@@ -1,0 +1,100 @@
+import { describe, expect, it } from 'vitest';
+import { irisDecision } from '../src/content/day-four-iris';
+import { maraDecision } from '../src/content/day-four-mara';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  type DialogueStory,
+  type DialogueState,
+} from '../src/game/dialogue';
+import { decodeSave, encodeSave } from '../src/game/save';
+
+function play(story: DialogueStory, flags: readonly string[], path: readonly string[]) {
+  let state: DialogueState = { ...startDialogue(story), flags: [...flags] };
+  for (const option of path) state = selectOption(story, state, option);
+  return state;
+}
+
+describe('day-four return visits remember what the characters already know', () => {
+  it('Iris does not present the discovered envelope again after her choice was respected', () => {
+    const firstVisit = play(irisDecision, ['saw_envelope'], ['welcome']);
+    expect(currentNode(irisDecision, firstVisit).text).toContain('Ти кладеш перед Айріс');
+
+    const afterConsent = play(irisDecision, ['saw_envelope'], [
+      'welcome',
+      'letter',
+      'respect',
+      'respect-back',
+    ]);
+    expect(afterConsent.flags).toContain('iris_letter_choice_respected');
+    expect(currentNode(irisDecision, afterConsent).text).toContain(
+      'Дякую, що не вирішуєш за мене',
+    );
+    expect(currentNode(irisDecision, afterConsent).text).not.toContain(
+      'Ти кладеш перед Айріс',
+    );
+
+    const restored = decodeSave(
+      encodeSave({ stage: 'day4-iris', dialogue: afterConsent, flags: afterConsent.flags }),
+    );
+    expect(restored).not.toBeNull();
+    expect(currentNode(irisDecision, restored!.dialogue).text).toBe(
+      currentNode(irisDecision, afterConsent).text,
+    );
+    expect(availableOptions(irisDecision, restored!.dialogue).map((option) => option.id)).toEqual(
+      availableOptions(irisDecision, afterConsent).map((option) => option.id),
+    );
+  });
+
+  it('Iris prioritizes a later refusal over earlier consent, including old saves', () => {
+    const state: DialogueState = {
+      ...startDialogue(irisDecision),
+      node: 'welcome',
+      flags: ['saw_envelope', 'iris_letter_choice_respected', 'iris_letter_pressured_day4'],
+    };
+    const text = currentNode(irisDecision, state).text;
+    expect(text).toContain('а потім знову почав переконувати');
+    expect(text).toContain('лист сьогодні не обговорюємо');
+    expect(availableOptions(irisDecision, state).map((option) => option.id)).not.toContain('letter');
+  });
+
+  it.each(['sold_station', 'sold_roads', 'sold_letters'] as const)(
+    'Mara remembers her already-purchased %s book after a privacy-respecting conversation',
+    (bookFlag) => {
+      const state = play(maraDecision, ['saw_envelope', bookFlag], [
+        'greet',
+        'letter',
+        'privacy',
+        'privacy-back',
+      ]);
+      const text = currentNode(maraDecision, state).text;
+      expect(text).toContain('вирішити, коли вручити йому книжку');
+      expect(text).not.toContain('вибрати йому подарунок');
+
+      const restored = decodeSave(
+        encodeSave({ stage: 'day4-mara', dialogue: state, flags: state.flags }),
+      );
+      expect(restored).not.toBeNull();
+      expect(currentNode(maraDecision, restored!.dialogue).text).toBe(text);
+
+      const book = [
+        'mara-rest',
+        'mara-rest-back',
+        'mara-own-story-work',
+        'mara-own-story-followup-direct',
+        'mara-own-story-back',
+        'book',
+      ].reduce((progress, option) => selectOption(maraDecision, progress, option), restored!.dialogue);
+      expect(currentNode(maraDecision, book).text).toContain('Я досі не вручила Лео книжку');
+      expect(availableOptions(maraDecision, book).map((option) => option.id)).toContain(
+        bookFlag.replace('sold_', '') === 'station'
+          ? 'station'
+          : bookFlag.replace('sold_', '') === 'roads'
+            ? 'roads'
+            : 'letters',
+      );
+    },
+  );
+});
