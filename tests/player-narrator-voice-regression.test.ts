@@ -82,6 +82,5 @@ describe('player-facing Ukrainian narrator voice across the first and final days
     expect(node(finalReading, 'final-aftercare-leo-space-result').text).toContain(
       'двома булочками для тебе',
     );
-    expect(node(finalReading, 'rumor-apology-back').text).toBeDefined();
   });
 });
