@@ -52,6 +52,13 @@ const scenarios = [
     wait: 'не треба її переконувати',
     ask: 'Не треба знову питати її про лист',
   },
+  {
+    name: 'pressure and admitted breach both suppress the invitation',
+    flags: ['saw_envelope', 'iris_letter_pressured_day4', 'iris_letter_breach_admitted'],
+    letter: 'попросила більше не порушувати цю тему',
+    wait: 'Вона попросила не чіпати цю тему',
+    ask: 'нічого їй від мене не передавай',
+  },
 ] as const;
 
 function reachLetter(flags: readonly string[]) {
@@ -84,6 +91,7 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
       const returned = selectOption(leoDecision, wait, 'wait-back');
       expect(returned.node).toBe('welcome');
       expect(returned.flags).toContain('leo_letter_consent_respected');
+      if (blocked) expect(returned.flags).not.toContain('leo_open_to_conversation');
     });
   }
 
