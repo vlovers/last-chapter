@@ -86,11 +86,7 @@ describe('Leo respects Iris contact boundaries across day four', () => {
   }
 
   it('preserves Iris refusal narration when restoring a save in the photo scene', () => {
-    const photo = selectOption(
-      leoDecision,
-      reachWelcome(['iris_letter_pressured_day4']),
-      'past',
-    );
+    const photo = selectOption(leoDecision, reachWelcome(['iris_letter_pressured_day4']), 'past');
     const restored = decodeSave(
       encodeSave({ stage: 'day4-leo', dialogue: photo, flags: [...photo.flags] }),
     );
@@ -112,22 +108,18 @@ describe('Leo respects Iris contact boundaries across day four', () => {
       encodeSave({ stage: 'day4-leo', dialogue: pressure, flags: [...pressure.flags] }),
     );
     expect(restored).not.toBeNull();
-    expect(currentNode(leoDecision, restored!.dialogue).text).toContain(
-      'не стану її підганяти',
-    );
+    expect(currentNode(leoDecision, restored!.dialogue).text).toContain('не стану її підганяти');
     expect(selectOption(leoDecision, restored!.dialogue, 'push-back').node).toBe('welcome');
   });
 
   it('keeps legacy return IDs and the complete dialogue graph valid', () => {
     expect(validateDialogue(leoDecision)).toEqual([]);
-    expect(leoDecision.nodes.find((node) => node.id === 'past')?.options[0]?.id).toBe(
-      'past-back',
-    );
+    expect(leoDecision.nodes.find((node) => node.id === 'past')?.options[0]?.id).toBe('past-back');
     expect(leoDecision.nodes.find((node) => node.id === 'letter-push')?.options[0]?.id).toBe(
       'push-back',
     );
-    expect(
-      leoDecision.nodes.find((node) => node.id === 'past')?.options[0]?.next,
-    ).toBe('welcome');
+    expect(leoDecision.nodes.find((node) => node.id === 'past')?.options[0]?.next).toBe(
+      'welcome',
+    );
   });
 });
