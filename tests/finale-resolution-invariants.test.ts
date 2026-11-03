@@ -157,17 +157,15 @@ describe('Final gathering narrative invariants', () => {
     expect(options).not.toContain('repair-trust');
     expect(options).not.toContain('mutual');
     expect(options).toContain('wait');
-    expect(() => selectOption(finalReading, letter, 'repair-trust')).toThrow(
-      'Option unavailable',
-    );
+    expect(() => selectOption(finalReading, letter, 'repair-trust')).toThrow('Option unavailable');
 
     const restored = decodeSave(
       encodeSave({ stage: 'day5-reading', dialogue: letter, flags: [...letter.flags] }),
     );
     expect(restored).not.toBeNull();
-    expect(availableOptions(finalReading, restored!.dialogue).map((option) => option.id)).not.toContain(
-      'repair-trust',
-    );
+    expect(
+      availableOptions(finalReading, restored!.dialogue).map((option) => option.id),
+    ).not.toContain('repair-trust');
     const waiting = selectOption(finalReading, restored!.dialogue, 'wait');
     const returned = selectOption(finalReading, waiting, 'wait-back');
     expect(returned.flags).toContain('final_letter_kept_private');
