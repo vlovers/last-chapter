@@ -131,7 +131,6 @@ describe('Day-four Iris remembers the broken seal without inventing consent', ()
     expect(currentNode(irisDecision, letter).text).toContain('Я ще не знаю, хто');
   });
 
-
   it('does not offer a second confession in an admitted legacy letter scene', () => {
     const legacy = { ...reachWelcome(admitted), node: 'letter' };
     const choices = availableOptions(irisDecision, legacy).map((option) => option.id);
