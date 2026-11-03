@@ -30,7 +30,9 @@ describe('day-four Mara gift continuity for complete and legacy saves', () => {
   it('does not invent a purchased or hidden book when a save lacks day-one sale flags', () => {
     const state = reachGiftTopic();
     expect(state.node).toBe('book');
-    expect(currentNode(maraDecision, state).text).toContain('З подарунком для Лео ще не визначилася');
+    expect(currentNode(maraDecision, state).text).toContain(
+      'З подарунком для Лео ще не визначилася',
+    );
     expect(currentNode(maraDecision, state).text).not.toContain('Учора сховала її');
     expect(availableOptions(maraDecision, state).map((option) => option.id)).toEqual(['book-back']);
     const returned = selectOption(maraDecision, state, 'book-back');
