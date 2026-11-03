@@ -322,6 +322,16 @@ export const maraDecision: DialogueStory = {
       id: 'letter',
       speaker: 'Мара',
       text: 'Мара завмирає, але не перебиває. «Я розумію, що в Лео було життя до мене. І в мене було. Але якщо це чужий лист, я не хочу, щоб ти читав його мені замість авторки».',
+      textWhen: [
+        {
+          requires: ['mara_letter_pressured', 'mara_letter_privacy_respected'],
+          text: 'Мара кладе пакет на прилавок. «Ти обіцяв не втручатися, а потім вимагав, щоб Лео все пояснив. Я вже сказала: не вирішуй за нас». Вона киває на булочки. «Про пекарню можемо поговорити».',
+        },
+        {
+          requires: ['mara_letter_pressured'],
+          text: 'Мара відсуває пакет. «Ми вже говорили про лист. Я не просила тебе змушувати Лео до пояснень». Вона поправляє рукав. «Давай краще про щось інше».',
+        },
+      ],
       options: [
         {
           id: 'privacy',
@@ -339,7 +349,15 @@ export const maraDecision: DialogueStory = {
           id: 'push',
           label: '«Треба змусити Лео все пояснити сьогодні»',
           next: 'push',
+          unless: ['mara_letter_pressured'],
           grants: ['mara_letter_pressured'],
+        },
+        {
+          id: 'letter-back',
+          label: '«Гаразд, поговорімо про інше»',
+          next: 'greet',
+          suspend: true,
+          repeatability: 'repeatable',
         },
       ],
     },
