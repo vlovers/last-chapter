@@ -190,6 +190,15 @@ describe('Final gathering narrative invariants', () => {
       );
       const options = availableOptions(finalReading, letter).map((option) => option.id);
       expect(options.length, `mask ${mask}: ${options.join(', ')}`).toBeLessThanOrEqual(4);
+      expect(options.includes('repair-trust')).toBe(
+        active.includes('iris_letter_breach_admitted') &&
+          !active.includes('iris_letter_pressured_day4'),
+      );
+      const waiting = selectOption(finalReading, letter, 'wait');
+      const returned = selectOption(finalReading, waiting, 'wait-back');
+      expect(returned.flags).toContain('final_letter_kept_private');
+      expect(returned.flags).not.toContain('final_mutual_conversation');
+      expect(returned.flags).not.toContain('final_accepted_consequences');
       if (
         active.includes('opened_private_letter') ||
         active.includes('iris_letter_pressured_day4') ||
