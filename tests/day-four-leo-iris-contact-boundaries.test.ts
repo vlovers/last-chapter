@@ -113,11 +113,7 @@ describe('Leo respects Iris contact boundaries across day four', () => {
   });
 
   it('keeps Iris private refusal in the player narration until Leo is told', () => {
-    const photo = selectOption(
-      leoDecision,
-      reachWelcome(['iris_letter_pressured_day4']),
-      'past',
-    );
+    const photo = selectOption(leoDecision, reachWelcome(['iris_letter_pressured_day4']), 'past');
     const text = currentNode(leoDecision, photo).text;
     expect(text).toContain('Ти згадуєш, що Айріс попросила');
     expect(text).toContain('Лео прибирає телефон');
