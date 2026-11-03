@@ -82,4 +82,52 @@ describe('Phaser: under-the-lamp manuscript study', () => {
       story.choose('__more_choices');
     }
   });
+
+  it.each([
+    'final_case_iris_declined',
+    'final_letter_breach_disclosed',
+    'iris_letter_breach_admitted',
+    'iris_letter_pressured_day4',
+  ])('hides revoked manuscript permission on every paginated choice page after %s', (boundary) => {
+    const story = openFinale([
+      'final_chapter_evidence_reviewed',
+      'final_ledger_scene_complete',
+      'final_manuscript_provenance_decided',
+      'final_provenance_iris_custody',
+      boundary,
+    ]);
+    const seenPages = new Set<string>();
+    let reachedEnd = false;
+    for (let page = 0; page < 80; page++) {
+      const choices = story.open().choices;
+      const signature = choices.map((choice) => choice.id).join('|');
+      if (seenPages.has(signature)) {
+        reachedEnd = true;
+        break;
+      }
+      seenPages.add(signature);
+      expect(choices.length).toBeLessThanOrEqual(4);
+      expect(choices.some((choice) => choice.id === 'paper-study')).toBe(false);
+      expect(choices.some((choice) => choice.id === 'paper-study-permission')).toBe(false);
+      if (!choices.some((choice) => choice.id === '__more_choices')) {
+        reachedEnd = true;
+        break;
+      }
+      story.choose('__more_choices');
+    }
+    expect(reachedEnd).toBe(true);
+  });
+
+  it('still presents the consent request through the paginated finale when trust is intact', () => {
+    const story = openFinale([
+      'final_chapter_evidence_reviewed',
+      'final_ledger_scene_complete',
+      'final_manuscript_provenance_decided',
+      'final_provenance_iris_custody',
+    ]);
+    choosePaged(story, 'paper-study-permission');
+    expect(story.open().choices.map((choice) => choice.id)).toContain('paper-permission-lend');
+    story.choose('paper-permission-lend');
+    expect(story.open().text).toContain('П’ять хвилин');
+  });
 });
