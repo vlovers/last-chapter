@@ -23,13 +23,21 @@ describe('player-facing Ukrainian narrator voice across the first and final days
 
   it.each([
     ['morning', 'Ти допомагаєш розсунути столи'],
-    ['ledger-outcome', 'ти встигаєш зачинити шухляду'],
     ['rumor-player-accountability', 'Ти підходиш'],
     ['final-aftercare-leo-umbrella-result', 'Ти смієшся й просиш'],
     ['final-aftercare-leo-space-result', 'Ти повертаєшся до каси'],
     ['final-aftercare-iris-return-result', 'Ти киваєш'],
   ])('uses a consistent singular narrator in %s', (id, expected) => {
     expect(node(finalReading, id).text).toContain(expected);
+  });
+
+  it('keeps the private ledger callback in the singular narrator voice', () => {
+    const state = {
+      ...startDialogue(finalReading),
+      node: 'ledger-outcome',
+      flags: ['final_ledger_record_private'],
+    };
+    expect(currentNode(finalReading, state).text).toContain('ти встигаєш зачинити шухляду');
   });
 
   it('does not switch to formal address when Iris hangs one private picture', () => {
