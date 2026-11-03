@@ -119,7 +119,11 @@ describe('day-four return visits remember what the characters already know', () 
   );
 
   it('Mara can still plan the surprise when the book was never bought', () => {
-    const state = play(maraDecision, ['saw_envelope'], ['greet', 'letter', 'privacy', 'privacy-back']);
+    const state = play(
+      maraDecision,
+      ['saw_envelope'],
+      ['greet', 'letter', 'privacy', 'privacy-back'],
+    );
     const text = currentNode(maraDecision, state).text;
     expect(text).toContain('як зробити йому сюрприз');
     expect(text).not.toContain('вручити йому книжку');

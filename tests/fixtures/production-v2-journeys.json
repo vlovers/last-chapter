@@ -238,14 +238,7 @@
           "leave",
           "__advance"
         ],
-        "day4-leo": [
-          "welcome",
-          "letter",
-          "letter-wait",
-          "wait-back",
-          "finish",
-          "__advance"
-        ],
+        "day4-leo": ["welcome", "letter", "letter-wait", "wait-back", "finish", "__advance"],
         "day5-reading": [
           "open",
           "reading-program",
