@@ -30,11 +30,21 @@ const revoked = [
   {
     name: 'Leo rejected pressure to read the letter',
     flags: ['leo_letter_pressured_day4'],
-    narration: 'Старий лист досі запечатаний',
+    narration: 'попросив не наполягати на передачі чужого листа',
   },
   {
     name: 'a previous breach has already been disclosed',
     flags: ['opened_private_letter', 'final_letter_breach_disclosed'],
+    narration: 'Печатка на конверті порушена',
+  },
+  {
+    name: 'both Iris and Leo refused after pressure',
+    flags: ['iris_letter_pressured_day4', 'leo_letter_pressured_day4'],
+    narration: 'Я попросила не повертатися до листа',
+  },
+  {
+    name: 'Leo refused after an undisclosed seal breach',
+    flags: ['opened_private_letter', 'leo_letter_pressured_day4'],
     narration: 'Печатка на конверті порушена',
   },
   {
