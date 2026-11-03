@@ -66,8 +66,7 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
       const letter = reachLetter(scenario.flags);
       expect(currentNode(leoDecision, letter).text).toContain(scenario.letter);
       const blocked = scenario.flags.some(
-        (flag) =>
-          flag === 'iris_letter_pressured_day4' || flag === 'iris_letter_breach_admitted',
+        (flag) => flag === 'iris_letter_pressured_day4' || flag === 'iris_letter_breach_admitted',
       );
       const options = availableOptions(leoDecision, letter).map((option) => option.id);
       expect(options).toEqual(
@@ -77,9 +76,7 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
       const wait = selectOption(leoDecision, letter, 'letter-wait');
       expect(currentNode(leoDecision, wait).text).toContain(scenario.wait);
       if (blocked) {
-        expect(() => selectOption(leoDecision, letter, 'letter-ask')).toThrow(
-          'Option unavailable',
-        );
+        expect(() => selectOption(leoDecision, letter, 'letter-ask')).toThrow('Option unavailable');
       } else {
         const ask = selectOption(leoDecision, letter, 'letter-ask');
         expect(currentNode(leoDecision, ask).text).toContain(scenario.ask);

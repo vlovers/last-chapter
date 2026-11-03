@@ -325,9 +325,7 @@ export const leoDecision: DialogueStory = {
           text: '«Не треба знову питати її про лист». Лео ховає телефон. «Якщо Айріс захоче зустрітися, вона сама напише. А я поки поговорю з Марою про квиток».',
         },
       ],
-      options: [
-        { id: 'ask-back', label: '«Зрозумів, рішення за Айріс»', next: 'welcome' },
-      ],
+      options: [{ id: 'ask-back', label: '«Зрозумів, рішення за Айріс»', next: 'welcome' }],
     },
     {
       id: 'letter-push',
