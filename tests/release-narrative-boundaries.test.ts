@@ -34,12 +34,14 @@ describe('release: paper access respects already heard refusals', () => {
       ...(privateLedger ? ['final_ledger_record_private'] : []),
     ];
     expect(options(restore(at(flags)))).not.toContain('paper-study');
-    expect(
-      options(restore(at([...flags, 'final_manuscript_provenance_decided']))),
-    ).not.toContain('paper-study-permission');
+    expect(options(restore(at([...flags, 'final_manuscript_provenance_decided'])))).not.toContain(
+      'paper-study-permission',
+    );
     // Old saves can already be inside this node even when the entry is now gated.
     // Keep their safe exit, without re-opening access to the manuscripts.
-    let state = restore(at([...flags, 'final_manuscript_provenance_decided'], 'paper-study-permission'));
+    let state = restore(
+      at([...flags, 'final_manuscript_provenance_decided'], 'paper-study-permission'),
+    );
     expect(options(state)).toEqual(['paper-permission-respect']);
     expect(currentNode(finalReading, state).text).not.toContain('Аркуші можу показати');
     expect(() => selectOption(finalReading, state, 'paper-permission-lend')).toThrow();

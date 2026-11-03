@@ -99,9 +99,7 @@ describe('Phaser: manuscript custody after the fifth-day resolution', () => {
     expect(story.open().choices.map((choice) => choice.id)).toEqual(['paper-permission-respect']);
     story.choose('paper-permission-respect');
     const restored = new FiveDayStory();
-    expect(restored.open().choices.map((choice) => choice.id)).toEqual([
-      'paper-permission-return',
-    ]);
+    expect(restored.open().choices.map((choice) => choice.id)).toEqual(['paper-permission-return']);
     restored.choose('paper-permission-return');
     const saved = decodeSave(values.get(SAVE_KEY) ?? '');
     expect(saved?.flags).toContain('final_paper_study_access_declined');
