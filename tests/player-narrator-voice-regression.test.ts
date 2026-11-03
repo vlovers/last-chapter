@@ -78,6 +78,15 @@ describe('player-facing Ukrainian narrator voice across the first and final days
     }
   });
 
+  it('keeps Miller’s polite ви in speech while addressing the player as ти in narration', () => {
+    const callback = node(finalReading, 'rumor').textWhen?.find((entry) =>
+      entry.requires?.includes('rumor_challenged'),
+    );
+    expect(callback?.text).toContain('Пані Міллер помічає тебе');
+    expect(callback?.text).toContain('«Пам’ятаєте, ви сказали');
+    expect(node(millerVisit, 'hello').text).toContain('ви залишили старий дзвіночок');
+  });
+
   it('keeps the final bookshop return personal rather than formal', () => {
     expect(node(finalReading, 'final-aftercare-leo-space-result').text).toContain(
       'двома булочками для тебе',
