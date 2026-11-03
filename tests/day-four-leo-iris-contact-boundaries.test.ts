@@ -120,11 +120,7 @@ describe('Leo respects Iris contact boundaries across day four', () => {
   });
 
   it('does not make Leo know about a broken seal before the letter conversation', () => {
-    const photo = selectOption(
-      leoDecision,
-      reachWelcome(['iris_letter_breach_admitted']),
-      'past',
-    );
+    const photo = selectOption(leoDecision, reachWelcome(['iris_letter_breach_admitted']), 'past');
     const text = currentNode(leoDecision, photo).text;
     expect(text).toContain('Ти згадуєш, що Айріс зараз не хоче');
     expect(text).toContain('не надсилатиму їй старе фото');
