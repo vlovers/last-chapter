@@ -158,6 +158,9 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
       admitted && 'day4-leo' in admitted.overrides ? admitted.overrides['day4-leo'] : undefined;
     expect(route).toEqual(['welcome', 'letter', 'letter-wait', 'wait-back', 'finish', '__advance']);
     let state = reachLetter(['saw_envelope', 'iris_letter_breach_admitted']);
+    expect(availableOptions(leoDecision, state).map((option) => option.id)).not.toContain(
+      'letter-ask',
+    );
     state = selectOption(leoDecision, state, 'letter-wait');
     state = selectOption(leoDecision, state, 'wait-back');
     expect(state.node).toBe('welcome');
