@@ -142,6 +142,38 @@ describe('Final gathering narrative invariants', () => {
     expect(() => selectOption(finalReading, letter, 'mutual')).toThrow('Option unavailable');
   });
 
+  it('does not reopen an admitted breach after Iris asked to stop discussing the letter', () => {
+    const letter = selectOption(
+      finalReading,
+      gatheringWithFlags([
+        'saw_envelope',
+        'opened_private_letter',
+        'iris_letter_breach_admitted',
+        'iris_letter_pressured_day4',
+      ]),
+      'letter',
+    );
+    const options = availableOptions(finalReading, letter).map((option) => option.id);
+    expect(options).not.toContain('repair-trust');
+    expect(options).not.toContain('mutual');
+    expect(options).toContain('wait');
+    expect(() => selectOption(finalReading, letter, 'repair-trust')).toThrow(
+      'Option unavailable',
+    );
+
+    const restored = decodeSave(
+      encodeSave({ stage: 'day5-reading', dialogue: letter, flags: [...letter.flags] }),
+    );
+    expect(restored).not.toBeNull();
+    expect(availableOptions(finalReading, restored!.dialogue).map((option) => option.id)).not.toContain(
+      'repair-trust',
+    );
+    const waiting = selectOption(finalReading, restored!.dialogue, 'wait');
+    const returned = selectOption(finalReading, waiting, 'wait-back');
+    expect(returned.flags).toContain('final_letter_kept_private');
+    expect(returned.flags).not.toContain('final_accepted_consequences');
+  });
+
   it('never offers more than four letter choices across the consent and breach matrix', () => {
     const flags = [
       'iris_letter_choice_respected',
