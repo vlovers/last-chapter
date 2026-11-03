@@ -2092,6 +2092,7 @@ export const finalReading: DialogueStory = {
           label: 'Сказати Айріс, що розповів про лист, і не виправдовуватися',
           next: 'repair-trust',
           requires: ['iris_letter_breach_admitted'],
+          unless: ['iris_letter_pressured_day4'],
         },
         { id: 'wait', label: 'Залишити конверт Айріс і не квапити нікого', next: 'wait' },
         {
