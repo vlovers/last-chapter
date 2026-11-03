@@ -180,7 +180,11 @@ describe('Day-four Iris remembers the broken seal without inventing consent', ()
     expect(availableOptions(irisDecision, restored!.dialogue).map((option) => option.id)).toEqual([
       'letter-back',
     ]);
-    expect(selectOption(irisDecision, restored!.dialogue, 'letter-back').node).toBe('welcome');
+    const returned = selectOption(irisDecision, restored!.dialogue, 'letter-back');
+    expect(returned.node).toBe('welcome');
+    expect(
+      availableOptions(irisDecision, returned).map((option) => option.id),
+    ).not.toContain('letter');
   });
 
   it('retains graph validity and four-or-fewer authored letter choices', () => {
