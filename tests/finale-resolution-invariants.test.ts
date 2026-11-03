@@ -121,9 +121,9 @@ describe('Final gathering narrative invariants', () => {
         encodeSave({ stage: 'day5-reading', dialogue: state, flags: [...state.flags] }),
       );
       expect(restored).not.toBeNull();
-      expect(availableOptions(finalReading, restored!.dialogue).map((option) => option.id)).not.toContain(
-        route.hubChoice,
-      );
+      expect(
+        availableOptions(finalReading, restored!.dialogue).map((option) => option.id),
+      ).not.toContain(route.hubChoice);
     });
   }
 
@@ -153,10 +153,18 @@ describe('Final gathering narrative invariants', () => {
     ];
     for (let mask = 0; mask < 1 << flags.length; mask += 1) {
       const active = flags.filter((_, index) => (mask & (1 << index)) !== 0);
-      const letter = selectOption(finalReading, gatheringWithFlags(['saw_envelope', ...active]), 'letter');
+      const letter = selectOption(
+        finalReading,
+        gatheringWithFlags(['saw_envelope', ...active]),
+        'letter',
+      );
       const options = availableOptions(finalReading, letter).map((option) => option.id);
       expect(options.length, `mask ${mask}: ${options.join(', ')}`).toBeLessThanOrEqual(4);
-      if (active.includes('opened_private_letter') || active.includes('iris_letter_pressured_day4') || active.includes('leo_letter_pressured_day4')) {
+      if (
+        active.includes('opened_private_letter') ||
+        active.includes('iris_letter_pressured_day4') ||
+        active.includes('leo_letter_pressured_day4')
+      ) {
         expect(options).not.toContain('mutual');
       }
     }
