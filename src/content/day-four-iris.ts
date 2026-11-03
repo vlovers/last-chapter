@@ -528,6 +528,7 @@ export const irisDecision: DialogueStory = {
           id: 'offer',
           label: '«Я можу передати його лише з твоєї згоди»',
           next: 'offer',
+          unless: ['opened_private_letter'],
           grants: ['iris_letter_delivery_offered'],
         },
         {
