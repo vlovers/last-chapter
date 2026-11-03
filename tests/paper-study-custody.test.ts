@@ -52,9 +52,9 @@ describe('paper study: manuscript custody and consent', () => {
     'does not grant access after %s',
     (boundary) => {
       const flags = [...evidence, 'final_manuscript_provenance_decided', boundary];
-      expect(availableOptions(finalReading, play(flags, [])).map((option) => option.id)).not.toContain(
-        'paper-study-permission',
-      );
+      expect(
+        availableOptions(finalReading, play(flags, [])).map((option) => option.id),
+      ).not.toContain('paper-study-permission');
       // Legacy saves may already be inside this scene when the boundary is restored.
       const state: DialogueState = {
         ...startDialogue(finalReading),
