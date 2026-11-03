@@ -136,7 +136,7 @@ export const maraAfterHours: ConversationTopic = {
       speaker: 'Мара',
       text: 'Я обожнюю персонажів, з якими в реальному житті не захотіла б застрягнути в ліфті. Це не суперечність. Читання дає можливість спостерігати за небезпекою, не погоджуючись на неї.',
       choices: [
-        { id: 'tropes', label: 'Тоді обговорімо enemies-to-lovers', next: 'tropes' },
+        { id: 'tropes', label: 'А коли вороги закохуються одне в одного?', next: 'tropes' },
         { id: 'verity', label: 'А коли сама книжка обманює читача?', next: 'verity' },
         { id: 'nesta', label: 'Чи стосується це Нести?', next: 'nesta' },
         { id: 'exit', label: 'Гарна думка на завершення', next: '__exit' },
@@ -155,13 +155,13 @@ export const maraAfterHours: ConversationTopic = {
         },
         {
           id: 'friends',
-          label: 'А friends-to-lovers?',
+          label: 'А коли закохуються давні друзі?',
           next: 'friends',
           remember: 'after:friends',
         },
         {
           id: 'slow',
-          label: 'Мені не подобається затягнутий slow burn',
+          label: 'Не люблю, коли зближення героїв надто затягують',
           next: 'slow-burn',
           remember: 'after:slow-burn',
         },

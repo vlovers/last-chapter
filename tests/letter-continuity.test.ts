@@ -13,6 +13,29 @@ import {
 import { decodeSave, encodeSave } from '../src/game/save';
 
 describe('Iris letter continuity across five days', () => {
+  it.each([false, true])(
+    'does not invent a receipt comparison on envelope reentry (receipt seen: %s)',
+    (receiptSeen) => {
+      let state = selectOption(firstEvening, startDialogue(firstEvening), 'letter');
+      if (receiptSeen) state = { ...state, flags: [...state.flags, 'saw_receipt'] };
+      state = selectOption(firstEvening, state, 'letter-open');
+      const revisited = { ...state, node: 'letter' };
+      const restored = decodeSave(
+        encodeSave({ stage: 'evening', dialogue: revisited, flags: revisited.flags }),
+      );
+      expect(restored).not.toBeNull();
+      const text = currentNode(firstEvening, restored!.dialogue).text;
+      expect(text).toContain('Печатка вже порушена');
+      expect(text).not.toContain('Дата збігається з карткою');
+      expect(
+        availableOptions(firstEvening, restored!.dialogue).some(
+          (option) => option.id === 'letter-conclude',
+        ),
+      ).toBe(receiptSeen);
+      expect(restored!.flags.includes('saw_receipt')).toBe(receiptSeen);
+    },
+  );
+
   it('keeps an untouched envelope sealed and allows opening it once', () => {
     const atLetter = {
       ...startDialogue(firstEvening),

@@ -3,6 +3,10 @@ import { finalReading } from '../src/content/day-five';
 import { quietEvening } from '../src/content/quiet-evening';
 import { stageStory, type ChapterStage } from '../src/game/chapter';
 import { validateDialogue, type DialogueNode } from '../src/game/dialogue';
+import { maraAfterHours } from '../src/phaser/mara-after-hours';
+import { maraBookClub } from '../src/phaser/mara-book-club';
+import { maraLetterDecision } from '../src/phaser/mara-letter-decision';
+import { maraReturnVisit } from '../src/phaser/mara-return-visit';
 
 const playablePreFinaleStages = [
   'miller',
@@ -49,6 +53,29 @@ function expectFinishedNarration(node: DialogueNode) {
 }
 
 describe('Ukrainian scene-copy continuity', () => {
+  it('uses Ukrainian prose and replies in the main story and all optional Mara topics', () => {
+    const stages: readonly ChapterStage[] = [...playablePreFinaleStages, 'day5-reading'];
+    const texts = stages.flatMap((stage) =>
+      stageStory(stage).nodes.flatMap((node) => [
+        node.speaker,
+        ...authoredNarration(node),
+        ...node.options.map((option) => option.label),
+      ]),
+    );
+    for (const topic of [maraBookClub, maraAfterHours, maraReturnVisit, maraLetterDecision]) {
+      texts.push(topic.title);
+      for (const node of topic.nodes) {
+        texts.push(
+          node.speaker,
+          node.text,
+          ...(node.variants ?? []).map((variant) => variant.text),
+          ...node.choices.map((choice) => choice.label),
+        );
+      }
+    }
+    for (const text of texts) expect(text).not.toMatch(/[A-Za-z]{3,}/u);
+  });
+
   it('keeps authored narration complete across all four opening days', () => {
     for (const stage of playablePreFinaleStages) {
       const graph = stageStory(stage);

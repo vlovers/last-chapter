@@ -247,3 +247,14 @@ with the other accepted authors' work kept distinct. Full local check passes:
 authors are retained. The nine-viewport local mobile run, including all 19 story
 checkpoints and optional-topic reload, passed with zero runtime errors. Final
 published-head CI evidence is attached to PR #12 after the last push.
+
+The final language sweep translates the last three English trope labels and
+extends the existing Ukrainian-copy regression to every main and optional
+speaker, passage, conditional narration and reply. An opened-envelope reentry
+also no longer asserts a comparison with an unseen receipt; two restored-save
+cases retain both states and the correct comparison-choice availability.
+After this completion, own prose revisions cover **44 nodes**, and the integrated
+inventory changes **105 existing nodes**, of which **103** contain prose/label
+changes; one accepted Leo scene is added. Final local quality gate: **269 files /
+2744 tests**, including **58 added RC cases** (17 integrated), plus 369 retained
+cases from subsequent authors. No dependency versions changed.
