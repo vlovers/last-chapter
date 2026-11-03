@@ -154,7 +154,10 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
 
   it('keeps the full admitted-breach journey on the consent-respecting route', () => {
     const admitted = journeyFixture.scenarios.find((scenario) => scenario.id === 'admitted');
-    expect(admitted?.overrides['day4-leo']).toEqual([
+    const route = admitted && 'day4-leo' in admitted.overrides
+      ? admitted.overrides['day4-leo']
+      : undefined;
+    expect(route).toEqual([
       'welcome',
       'letter',
       'letter-wait',
