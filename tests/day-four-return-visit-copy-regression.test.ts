@@ -40,12 +40,8 @@ describe('day-four return visits remember what the characters already know', () 
 
     const afterConsent = play(irisDecision, flags, path);
     expect(afterConsent.flags).toContain('iris_letter_choice_respected');
-    expect(currentNode(irisDecision, afterConsent).text).toContain(
-      'Дякую, що не вирішуєш за мене',
-    );
-    expect(currentNode(irisDecision, afterConsent).text).not.toContain(
-      'Ти кладеш перед Айріс',
-    );
+    expect(currentNode(irisDecision, afterConsent).text).toContain('Дякую, що не вирішуєш за мене');
+    expect(currentNode(irisDecision, afterConsent).text).not.toContain('Ти кладеш перед Айріс');
 
     const restored = decodeSave(
       encodeSave({ stage: 'day4-iris', dialogue: afterConsent, flags: afterConsent.flags }),
@@ -68,18 +64,19 @@ describe('day-four return visits remember what the characters already know', () 
     const text = currentNode(irisDecision, state).text;
     expect(text).toContain('а потім знову почав переконувати');
     expect(text).toContain('лист сьогодні не обговорюємо');
-    expect(availableOptions(irisDecision, state).map((option) => option.id)).not.toContain('letter');
+    expect(availableOptions(irisDecision, state).map((option) => option.id)).not.toContain(
+      'letter',
+    );
   });
 
   it.each(['sold_station', 'sold_roads', 'sold_letters'] as const)(
     'Mara remembers her already-purchased %s book after a privacy-respecting conversation',
     (bookFlag) => {
-      const state = play(maraDecision, ['saw_envelope', bookFlag], [
-        'greet',
-        'letter',
-        'privacy',
-        'privacy-back',
-      ]);
+      const state = play(
+        maraDecision,
+        ['saw_envelope', bookFlag],
+        ['greet', 'letter', 'privacy', 'privacy-back'],
+      );
       const text = currentNode(maraDecision, state).text;
       expect(text).toContain('вирішити, коли вручити йому книжку');
       expect(text).not.toContain('вибрати йому подарунок');
