@@ -86,7 +86,7 @@ describe('day-four Mara gift continuity for complete and legacy saves', () => {
   it("keeps Mara's return-visit wording truthful when no book was sold", () => {
     const returned = selectOption(maraDecision, reachGiftTopic(), 'book-back');
     const text = currentNode(maraDecision, returned).text;
-    expect(text).toContain('як зробити Лео сюрприз');
+    expect(text).toContain('як влаштувати Лео сюрприз');
     expect(text).not.toContain('коли вручити Лео книжку');
   });
 
