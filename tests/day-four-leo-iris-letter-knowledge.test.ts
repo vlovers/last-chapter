@@ -1,0 +1,121 @@
+import { describe, expect, it } from 'vitest';
+import { leoDecision } from '../src/content/day-four-leo';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from '../src/game/dialogue';
+import { decodeSave, encodeSave } from '../src/game/save';
+
+const scenarios = [
+  {
+    name: 'unseen by Iris',
+    flags: ['saw_envelope'],
+    letter: 'Чи вона знає, що він знайшовся?',
+    wait: 'черзі за хлібом',
+    ask: 'Скажи їй, що я можу зустрітися',
+  },
+  {
+    name: 'Iris chose not to deliver the letter',
+    flags: ['saw_envelope', 'iris_letter_choice_respected'],
+    letter: 'не давала згоди передавати його',
+    wait: 'не давала згоди передавати його',
+    ask: 'Скажи їй, що я можу зустрітися',
+  },
+  {
+    name: 'Iris asked to stop discussing the letter',
+    flags: ['saw_envelope', 'iris_letter_pressured_day4'],
+    letter: 'попросила більше не порушувати цю тему',
+    wait: 'Вона попросила не чіпати цю тему',
+    ask: 'нічого їй від мене не передавай',
+  },
+  {
+    name: 'Iris learned about the broken seal',
+    flags: ['saw_envelope', 'iris_letter_breach_admitted'],
+    letter: 'не переказуєш Лео приватну розмову',
+    wait: 'не треба її переконувати',
+    ask: 'Не треба знову питати її про лист',
+  },
+  {
+    name: 'pressure takes precedence over earlier respect',
+    flags: [
+      'saw_envelope',
+      'iris_letter_choice_respected',
+      'iris_letter_pressured_day4',
+    ],
+    letter: 'попросила більше не порушувати цю тему',
+    wait: 'Вона попросила не чіпати цю тему',
+    ask: 'нічого їй від мене не передавай',
+  },
+  {
+    name: 'admitted breach takes precedence over earlier respect',
+    flags: [
+      'saw_envelope',
+      'iris_letter_choice_respected',
+      'iris_letter_breach_admitted',
+    ],
+    letter: 'не переказуєш Лео приватну розмову',
+    wait: 'не треба її переконувати',
+    ask: 'Не треба знову питати її про лист',
+  },
+] as const;
+
+function reachLetter(flags: readonly string[]) {
+  const initial = { ...startDialogue(leoDecision), flags: [...flags] };
+  const welcome = selectOption(leoDecision, initial, 'welcome');
+  return selectOption(leoDecision, welcome, 'letter');
+}
+
+describe('Leo respects Iris letter knowledge across day-four conversations', () => {
+  for (const scenario of scenarios) {
+    it(scenario.name, () => {
+      const letter = reachLetter(scenario.flags);
+      expect(currentNode(leoDecision, letter).text).toContain(scenario.letter);
+      expect(availableOptions(leoDecision, letter).map((option) => option.id)).toEqual([
+        'letter-wait',
+        'letter-ask',
+        'letter-push',
+      ]);
+      const wait = selectOption(leoDecision, letter, 'letter-wait');
+      expect(currentNode(leoDecision, wait).text).toContain(scenario.wait);
+      const ask = selectOption(leoDecision, letter, 'letter-ask');
+      expect(currentNode(leoDecision, ask).text).toContain(scenario.ask);
+      const returned = selectOption(leoDecision, wait, 'wait-back');
+      expect(returned.node).toBe('welcome');
+      expect(returned.flags).toContain('leo_letter_consent_respected');
+    });
+  }
+
+  it('preserves the correct knowledge-dependent narration after save restoration', () => {
+    const letter = reachLetter([
+      'saw_envelope',
+      'iris_letter_choice_respected',
+      'iris_letter_pressured_day4',
+    ]);
+    const restored = decodeSave(
+      encodeSave({ stage: 'day4-leo', dialogue: letter, flags: [...letter.flags] }),
+    );
+    expect(restored).not.toBeNull();
+    expect(currentNode(leoDecision, restored!.dialogue).text).toContain(
+      'попросила більше не порушувати цю тему',
+    );
+    expect(availableOptions(leoDecision, restored!.dialogue).length).toBeLessThanOrEqual(4);
+  });
+
+  it('keeps old option IDs, return edges and graph structure valid', () => {
+    expect(validateDialogue(leoDecision)).toEqual([]);
+    for (const id of ['letter-wait', 'letter-ask', 'letter-push']) {
+      expect(leoDecision.nodes.find((node) => node.id === 'letter')?.options).toEqual(
+        expect.arrayContaining([expect.objectContaining({ id })]),
+      );
+    }
+    expect(leoDecision.nodes.find((node) => node.id === 'letter-wait')?.options[0]?.next).toBe(
+      'welcome',
+    );
+    expect(leoDecision.nodes.find((node) => node.id === 'letter-ask')?.options[0]?.next).toBe(
+      'welcome',
+    );
+  });
+});
