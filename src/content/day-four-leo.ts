@@ -280,6 +280,7 @@ export const leoDecision: DialogueStory = {
           id: 'letter-ask',
           label: '«Можу запитати, чи вона хоче поговорити»',
           next: 'letter-ask',
+          unless: ['iris_letter_pressured_day4', 'iris_letter_breach_admitted'],
           grants: ['leo_open_to_conversation'],
         },
         {
@@ -325,7 +326,7 @@ export const leoDecision: DialogueStory = {
         },
       ],
       options: [
-        { id: 'ask-back', label: '«Передам лише твою готовність говорити»', next: 'welcome' },
+        { id: 'ask-back', label: '«Зрозумів, рішення за Айріс»', next: 'welcome' },
       ],
     },
     {

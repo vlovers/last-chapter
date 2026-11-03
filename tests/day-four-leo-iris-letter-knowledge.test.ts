@@ -65,15 +65,25 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
     it(scenario.name, () => {
       const letter = reachLetter(scenario.flags);
       expect(currentNode(leoDecision, letter).text).toContain(scenario.letter);
-      expect(availableOptions(leoDecision, letter).map((option) => option.id)).toEqual([
-        'letter-wait',
-        'letter-ask',
-        'letter-push',
-      ]);
+      const blocked = scenario.flags.some(
+        (flag) =>
+          flag === 'iris_letter_pressured_day4' || flag === 'iris_letter_breach_admitted',
+      );
+      const options = availableOptions(leoDecision, letter).map((option) => option.id);
+      expect(options).toEqual(
+        blocked ? ['letter-wait', 'letter-push'] : ['letter-wait', 'letter-ask', 'letter-push'],
+      );
+      expect(options.length).toBeLessThanOrEqual(4);
       const wait = selectOption(leoDecision, letter, 'letter-wait');
       expect(currentNode(leoDecision, wait).text).toContain(scenario.wait);
-      const ask = selectOption(leoDecision, letter, 'letter-ask');
-      expect(currentNode(leoDecision, ask).text).toContain(scenario.ask);
+      if (blocked) {
+        expect(() => selectOption(leoDecision, letter, 'letter-ask')).toThrow(
+          'Option unavailable',
+        );
+      } else {
+        const ask = selectOption(leoDecision, letter, 'letter-ask');
+        expect(currentNode(leoDecision, ask).text).toContain(scenario.ask);
+      }
       const returned = selectOption(leoDecision, wait, 'wait-back');
       expect(returned.node).toBe('welcome');
       expect(returned.flags).toContain('leo_letter_consent_respected');
@@ -109,5 +119,30 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
     expect(leoDecision.nodes.find((node) => node.id === 'letter-ask')?.options[0]?.next).toBe(
       'welcome',
     );
+  });
+
+  it.each([
+    {
+      name: 'explicit refusal',
+      flag: 'iris_letter_pressured_day4',
+      response: 'нічого їй від мене не передавай',
+    },
+    {
+      name: 'admitted breach',
+      flag: 'iris_letter_breach_admitted',
+      response: 'Не треба знову питати її про лист',
+    },
+  ])('keeps a legacy letter-ask save playable after $name', ({ flag, response }) => {
+    const letter = reachLetter(['saw_envelope', flag]);
+    const legacy = { ...letter, node: 'letter-ask' };
+    const restored = decodeSave(
+      encodeSave({ stage: 'day4-leo', dialogue: legacy, flags: [...legacy.flags] }),
+    );
+    expect(restored).not.toBeNull();
+    expect(currentNode(leoDecision, restored!.dialogue).text).toContain(response);
+    const options = availableOptions(leoDecision, restored!.dialogue);
+    expect(options.map((option) => option.id)).toEqual(['ask-back']);
+    expect(options[0]?.label).toBe('«Зрозумів, рішення за Айріс»');
+    expect(selectOption(leoDecision, restored!.dialogue, 'ask-back').node).toBe('welcome');
   });
 });
