@@ -118,8 +118,6 @@ describe('Leo respects Iris contact boundaries across day four', () => {
     expect(leoDecision.nodes.find((node) => node.id === 'letter-push')?.options[0]?.id).toBe(
       'push-back',
     );
-    expect(leoDecision.nodes.find((node) => node.id === 'past')?.options[0]?.next).toBe(
-      'welcome',
-    );
+    expect(leoDecision.nodes.find((node) => node.id === 'past')?.options[0]?.next).toBe('welcome');
   });
 });
