@@ -43,9 +43,7 @@ describe('day-four Iris letter legacy flag combinations', () => {
 
       if (pressured) {
         expect(ids).toEqual(['letter-back']);
-        expect(() => selectOption(irisDecision, state, 'pressure')).toThrow(
-          'Option unavailable',
-        );
+        expect(() => selectOption(irisDecision, state, 'pressure')).toThrow('Option unavailable');
       } else if (opened) {
         expect(ids).not.toContain('respect');
         expect(ids).not.toContain('offer');
