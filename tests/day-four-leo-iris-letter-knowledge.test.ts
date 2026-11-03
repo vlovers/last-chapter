@@ -1,3 +1,4 @@
+import journeyFixture from './fixtures/production-v2-journeys.json';
 import { describe, expect, it } from 'vitest';
 import { leoDecision } from '../src/content/day-four-leo';
 import {
@@ -149,5 +150,23 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
     expect(options.map((option) => option.id)).toEqual(['ask-back']);
     expect(options[0]?.label).toBe('«Зрозумів, рішення за Айріс»');
     expect(selectOption(leoDecision, restored!.dialogue, 'ask-back').node).toBe('welcome');
+  });
+
+  it('keeps the full admitted-breach journey on the consent-respecting route', () => {
+    const admitted = journeyFixture.scenarios.find((scenario) => scenario.id === 'admitted');
+    expect(admitted?.overrides['day4-leo']).toEqual([
+      'welcome',
+      'letter',
+      'letter-wait',
+      'wait-back',
+      'finish',
+      '__advance',
+    ]);
+    let state = reachLetter(['saw_envelope', 'iris_letter_breach_admitted']);
+    state = selectOption(leoDecision, state, 'letter-wait');
+    state = selectOption(leoDecision, state, 'wait-back');
+    expect(state.node).toBe('welcome');
+    expect(state.flags).toContain('leo_letter_consent_respected');
+    expect(state.flags).not.toContain('leo_open_to_conversation');
   });
 });
