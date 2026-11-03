@@ -11,14 +11,7 @@
       "leave-orchard",
       "__advance"
     ],
-    "mara": [
-      "hello",
-      "joke",
-      "professional",
-      "station",
-      "finish-station",
-      "__advance"
-    ],
+    "mara": ["hello", "joke", "professional", "station", "finish-station", "__advance"],
     "evening": [
       "receipt",
       "receipt-back",
@@ -30,39 +23,12 @@
       "keep-safe",
       "__advance"
     ],
-    "complete": [
-      "__advance"
-    ],
-    "iris": [
-      "welcome",
-      "ask-letter",
-      "letter-respect",
-      "respect-back",
-      "__advance"
-    ],
-    "anna": [
-      "hello",
-      "books",
-      "maps",
-      "purchase-end",
-      "__advance"
-    ],
-    "leo": [
-      "greet",
-      "finish",
-      "__advance"
-    ],
-    "day2-complete": [
-      "__advance"
-    ],
-    "eleanor": [
-      "greet",
-      "timeline",
-      "timeline-check",
-      "timeline-back",
-      "finish",
-      "__advance"
-    ],
+    "complete": ["__advance"],
+    "iris": ["welcome", "ask-letter", "letter-respect", "respect-back", "__advance"],
+    "anna": ["hello", "books", "maps", "purchase-end", "__advance"],
+    "leo": ["greet", "finish", "__advance"],
+    "day2-complete": ["__advance"],
+    "eleanor": ["greet", "timeline", "timeline-check", "timeline-back", "finish", "__advance"],
     "thomas": [
       "greet",
       "thomas-chairs",
@@ -71,27 +37,10 @@
       "finish",
       "__advance"
     ],
-    "nora": [
-      "hello",
-      "nora-tea",
-      "nora-tea-back",
-      "end",
-      "__skip_club"
-    ],
-    "book-club": [
-      "welcome",
-      "close",
-      "__explore_after_club"
-    ],
-    "quiet-evening": [
-      "tidy-books",
-      "read-margin",
-      "margin-keep",
-      "__advance"
-    ],
-    "day3-complete": [
-      "__advance"
-    ],
+    "nora": ["hello", "nora-tea", "nora-tea-back", "end", "__skip_club"],
+    "book-club": ["welcome", "close", "__explore_after_club"],
+    "quiet-evening": ["tidy-books", "read-margin", "margin-keep", "__advance"],
+    "day3-complete": ["__advance"],
     "day4-iris": [
       "welcome",
       "quiet-page",
@@ -109,22 +58,9 @@
       "leave",
       "__advance"
     ],
-    "day4-mara": [
-      "greet",
-      "finish",
-      "__advance"
-    ],
-    "day4-leo": [
-      "welcome",
-      "letter",
-      "letter-ask",
-      "ask-back",
-      "finish",
-      "__advance"
-    ],
-    "day4-complete": [
-      "__advance"
-    ]
+    "day4-mara": ["greet", "finish", "__advance"],
+    "day4-leo": ["welcome", "letter", "letter-ask", "ask-back", "finish", "__advance"],
+    "day4-complete": ["__advance"]
   },
   "scenarios": [
     {
@@ -214,23 +150,14 @@
         "final_frank_shop_quiet_corner",
         "final_frank_shop_no_promise"
       ],
-      "absent": [
-        "opened_private_letter",
-        "final_letter_kept_private"
-      ],
+      "absent": ["opened_private_letter", "final_letter_kept_private"],
       "summary": "поговорили наодинці",
       "group": "core"
     },
     {
       "id": "private-rumor",
       "overrides": {
-        "nora": [
-          "hello",
-          "nora-tea",
-          "nora-tea-back",
-          "end",
-          "__advance"
-        ],
+        "nora": ["hello", "nora-tea", "nora-tea-back", "end", "__advance"],
         "miller": [
           "greet",
           "town",
@@ -275,11 +202,7 @@
         "final_school_chairs_followup_done",
         "mara_door_joke_shared"
       ],
-      "absent": [
-        "opened_private_letter",
-        "final_mutual_conversation",
-        "final_player_rumor_owned"
-      ],
+      "absent": ["opened_private_letter", "final_mutual_conversation", "final_player_rumor_owned"],
       "summary": "залишила лист у себе",
       "group": "core"
     },
@@ -315,6 +238,14 @@
           "leave",
           "__advance"
         ],
+        "day4-leo": [
+          "welcome",
+          "letter",
+          "letter-wait",
+          "wait-back",
+          "finish",
+          "__advance"
+        ],
         "day5-reading": [
           "open",
           "reading-program",
@@ -330,14 +261,6 @@
           "repair-trust-back",
           "close",
           "__advance"
-        ],
-        "day4-leo": [
-          "welcome",
-          "letter",
-          "letter-wait",
-          "wait-back",
-          "finish",
-          "__advance"
         ]
       },
       "expected": [
@@ -348,10 +271,7 @@
         "final_school_chairs_followup_done",
         "mara_door_joke_shared"
       ],
-      "absent": [
-        "final_mutual_conversation",
-        "final_letter_kept_private"
-      ],
+      "absent": ["final_mutual_conversation", "final_letter_kept_private"],
       "summary": "не обіцяла пробачення",
       "group": "core"
     },
@@ -370,13 +290,7 @@
           "keep-safe",
           "__advance"
         ],
-        "nora": [
-          "hello",
-          "nora-tea",
-          "nora-tea-back",
-          "end",
-          "__advance"
-        ],
+        "nora": ["hello", "nora-tea", "nora-tea-back", "end", "__advance"],
         "day4-iris": [
           "welcome",
           "quiet-page",
@@ -419,10 +333,7 @@
         "final_school_chairs_followup_done",
         "mara_door_joke_shared"
       ],
-      "absent": [
-        "final_mutual_conversation",
-        "iris_letter_breach_admitted"
-      ],
+      "absent": ["final_mutual_conversation", "iris_letter_breach_admitted"],
       "summary": "не обіцяла пробачення",
       "group": "core"
     },
@@ -605,10 +516,7 @@
         "final_paper_study_done",
         "final_ledger_gap_annotated"
       ],
-      "absent": [
-        "opened_private_letter",
-        "final_letter_kept_private"
-      ],
+      "absent": ["opened_private_letter", "final_letter_kept_private"],
       "summary": "поговорили наодинці",
       "group": "investigation"
     },
@@ -734,10 +642,7 @@
         "final_workshop_photo_sources_separated",
         "final_paper_miller_limit_recorded"
       ],
-      "absent": [
-        "opened_private_letter",
-        "final_letter_kept_private"
-      ],
+      "absent": ["opened_private_letter", "final_letter_kept_private"],
       "summary": "поговорили наодинці",
       "group": "investigation"
     },
@@ -866,21 +771,8 @@
     {
       "id": "minimal-evidence",
       "overrides": {
-        "miller": [
-          "greet",
-          "books",
-          "orchard",
-          "leave-orchard",
-          "__advance"
-        ],
-        "mara": [
-          "hello",
-          "thank",
-          "professional",
-          "station",
-          "finish-station",
-          "__advance"
-        ],
+        "miller": ["greet", "books", "orchard", "leave-orchard", "__advance"],
+        "mara": ["hello", "thank", "professional", "station", "finish-station", "__advance"],
         "evening": [
           "receipt",
           "receipt-back",
@@ -889,43 +781,13 @@
           "keep-safe",
           "__advance"
         ],
-        "thomas": [
-          "greet",
-          "finish",
-          "__advance"
-        ],
-        "quiet-evening": [
-          "tidy-books",
-          "leave-page",
-          "__advance"
-        ],
-        "day4-iris": [
-          "welcome",
-          "letter",
-          "respect",
-          "respect-back",
-          "leave",
-          "__advance"
-        ],
-        "day5-reading": [
-          "open",
-          "letter",
-          "wait",
-          "wait-back",
-          "close",
-          "__advance"
-        ],
-        "eleanor": [
-          "greet",
-          "finish",
-          "__advance"
-        ]
+        "thomas": ["greet", "finish", "__advance"],
+        "quiet-evening": ["tidy-books", "leave-page", "__advance"],
+        "day4-iris": ["welcome", "letter", "respect", "respect-back", "leave", "__advance"],
+        "day5-reading": ["open", "letter", "wait", "wait-back", "close", "__advance"],
+        "eleanor": ["greet", "finish", "__advance"]
       },
-      "expected": [
-        "letter_secured",
-        "final_letter_kept_private",
-        "mara_buns_thanked"
-      ],
+      "expected": ["letter_secured", "final_letter_kept_private", "mara_buns_thanked"],
       "absent": [
         "opened_private_letter",
         "quiet_evening_page_found",
@@ -1049,10 +911,7 @@
         "final_reader_romance_two_books",
         "final_after_case_tea_done"
       ],
-      "absent": [
-        "opened_private_letter",
-        "final_letter_kept_private"
-      ],
+      "absent": ["opened_private_letter", "final_letter_kept_private"],
       "summary": "поговорили наодинці",
       "group": "daily"
     }
