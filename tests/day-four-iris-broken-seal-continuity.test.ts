@@ -71,6 +71,33 @@ describe('Day-four Iris remembers the broken seal without inventing consent', ()
     ).not.toContain('letter');
   });
 
+  it('thanks the player after respecting a broken-seal choice without forgetting the breach', () => {
+    const state = reachWelcome([...opened, 'iris_letter_choice_respected']);
+    const text = currentNode(irisDecision, state).text;
+    expect(text).toContain('Дякую, що не вирішуєш за мене');
+    expect(text).toContain('чому його відкрили');
+    expect(text).not.toContain('Хтось його відкривав?');
+  });
+
+  it('remembers both confession and respect without implying instant forgiveness', () => {
+    const flags = [...admitted, 'iris_letter_choice_respected'];
+    const text = currentNode(irisDecision, reachWelcome(flags)).text;
+    expect(text).toContain('Я почула твоє зізнання');
+    expect(text).toContain('довіра не повертається за одну розмову');
+    expect(text).not.toContain('ще хочу зрозуміти, чому його відкрили');
+  });
+
+  it.each([
+    ['iris_exhibition_plan_heard', 'Я все ще думаю'],
+    ['iris_day_four_letter_fear_heard', 'Я поки не перечитувала'],
+    ['iris_day_four_letter_feeling_heard', 'Конверт досі тут'],
+  ])('keeps the %s callback after an unadmitted broken seal', (flag, expected) => {
+    const state = reachWelcome([...opened, flag]);
+    const text = currentNode(irisDecision, state).text;
+    expect(text).toContain(expected);
+    expect(text).not.toContain('Хтось його відкривав?');
+  });
+
   it('keeps the sealed-letter scene neutral', () => {
     const text = currentNode(irisDecision, reachLetter(envelope)).text;
     expect(text).toContain('Я це писала Лео');

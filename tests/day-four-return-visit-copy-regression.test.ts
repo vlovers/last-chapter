@@ -36,7 +36,13 @@ describe('day-four return visits remember what the characters already know', () 
     },
   ])('Iris does not present the envelope again after $name', ({ flags, path }) => {
     const firstVisit = play(irisDecision, flags, ['welcome']);
-    expect(currentNode(irisDecision, firstVisit).text).toContain('Ти кладеш перед Айріс');
+    const firstText = currentNode(irisDecision, firstVisit).text;
+    if (flags.includes('opened_private_letter')) {
+      expect(firstText).toContain('порушену печатку');
+      expect(firstText).toContain('ще не знає, хто це зробив');
+    } else {
+      expect(firstText).toContain('Ти кладеш перед Айріс');
+    }
 
     const afterConsent = play(irisDecision, flags, path);
     expect(afterConsent.flags).toContain('iris_letter_choice_respected');
