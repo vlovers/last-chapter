@@ -520,6 +520,22 @@ export const irisDecision: DialogueStory = {
       text: '«Я це писала Лео. Колись. Не знаю, чи хочу, щоб він читав. І, будь ласка, не вирішуй за мене, що з цим робити. Я сама ще не вирішила».',
       textWhen: [
         {
+          requires: [
+            'iris_letter_pressured_day4',
+            'opened_private_letter',
+            'iris_letter_breach_admitted',
+          ],
+          text: '«Ти вже зізнався, що відкрив лист, а потім наполягав на його передачі», — нагадує Айріс. «Я попросила залишити цю тему. Не починаймо її знову».',
+        },
+        {
+          requires: ['iris_letter_pressured_day4', 'opened_private_letter'],
+          text: 'Айріс бачить порушену печатку. «Я не знаю, хто відкрив лист, але вже попросила не тиснути на мене щодо його передачі. Залишмо це».',
+        },
+        {
+          requires: ['iris_letter_pressured_day4'],
+          text: '«Я вже попросила не повертатися до листа», — каже Айріс. «Поговорімо про малюнки або просто випиймо чаю».',
+        },
+        {
           requires: ['opened_private_letter', 'iris_letter_breach_admitted'],
           text: '«Ти вже сказав, що відкрив конверт», — каже Айріс. «Це не означає, що тепер можна вирішувати за мене. Я сама визначу, чи прочитає Лео лист».',
         },
@@ -533,7 +549,7 @@ export const irisDecision: DialogueStory = {
           id: 'respect',
           label: '«Лист залишиться запечатаним, доки ти не вирішиш»',
           next: 'respect',
-          unless: ['opened_private_letter'],
+          unless: ['opened_private_letter', 'iris_letter_pressured_day4'],
           grants: ['iris_letter_choice_respected'],
         },
         {
@@ -541,6 +557,7 @@ export const irisDecision: DialogueStory = {
           label: '«Ти вирішуєш, що буде з листом. Я не передаватиму його без згоди»',
           next: 'respect',
           requires: ['opened_private_letter'],
+          unless: ['iris_letter_pressured_day4'],
           grants: ['iris_letter_choice_respected'],
         },
         {
@@ -548,19 +565,21 @@ export const irisDecision: DialogueStory = {
           label: '«Я порушив печатку без дозволу. Мені шкода»',
           next: 'breach',
           requires: ['opened_private_letter'],
+          unless: ['iris_letter_breach_admitted', 'iris_letter_pressured_day4'],
           grants: ['iris_letter_breach_admitted'],
         },
         {
           id: 'offer',
           label: '«Я можу передати його лише з твоєї згоди»',
           next: 'offer',
-          unless: ['opened_private_letter'],
+          unless: ['opened_private_letter', 'iris_letter_pressured_day4'],
           grants: ['iris_letter_delivery_offered'],
         },
         {
           id: 'pressure',
           label: '«Лео має прочитати його просто зараз»',
           next: 'pressure',
+          unless: ['iris_letter_pressured_day4'],
           grants: ['iris_letter_pressured_day4'],
         },
         {

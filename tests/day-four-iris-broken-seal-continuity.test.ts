@@ -131,6 +131,59 @@ describe('Day-four Iris remembers the broken seal without inventing consent', ()
     expect(currentNode(irisDecision, letter).text).toContain('Я ще не знаю, хто');
   });
 
+
+  it('does not offer a second confession in an admitted legacy letter scene', () => {
+    const legacy = { ...reachWelcome(admitted), node: 'letter' };
+    const choices = availableOptions(irisDecision, legacy).map((option) => option.id);
+    expect(choices).not.toContain('admit-opened');
+    expect(choices).toContain('letter-back');
+    expect(() => selectOption(irisDecision, legacy, 'admit-opened')).toThrow('Option unavailable');
+  });
+
+  it('honors a previous refusal in a sealed legacy letter scene', () => {
+    const legacy = {
+      ...reachWelcome([...envelope, 'iris_letter_pressured_day4']),
+      node: 'letter',
+    };
+    expect(currentNode(irisDecision, legacy).text).toContain('не повертатися до листа');
+    expect(availableOptions(irisDecision, legacy).map((option) => option.id)).toEqual([
+      'letter-back',
+    ]);
+  });
+
+  it('honors a previous refusal after an unadmitted broken seal', () => {
+    const legacy = { ...reachWelcome(pressured), node: 'letter' };
+    expect(currentNode(irisDecision, legacy).text).toContain('не знаю, хто відкрив лист');
+    expect(availableOptions(irisDecision, legacy).map((option) => option.id)).toEqual([
+      'letter-back',
+    ]);
+  });
+
+  it('prioritizes confession and refusal when both happened in a legacy scene', () => {
+    const legacy = {
+      ...reachWelcome([...admitted, 'iris_letter_pressured_day4']),
+      node: 'letter',
+    };
+    const text = currentNode(irisDecision, legacy).text;
+    expect(text).toContain('вже зізнався, що відкрив лист');
+    expect(text).toContain('Не починаймо її знову');
+    expect(availableOptions(irisDecision, legacy).map((option) => option.id)).toEqual([
+      'letter-back',
+    ]);
+  });
+
+  it('restores an old pressured letter save without reopening consent choices', () => {
+    const legacy = { ...reachWelcome(pressured), node: 'letter' };
+    const restored = decodeSave(
+      encodeSave({ stage: 'day4-iris', dialogue: legacy, flags: [...legacy.flags] }),
+    );
+    expect(restored).not.toBeNull();
+    expect(availableOptions(irisDecision, restored!.dialogue).map((option) => option.id)).toEqual([
+      'letter-back',
+    ]);
+    expect(selectOption(irisDecision, restored!.dialogue, 'letter-back').node).toBe('welcome');
+  });
+
   it('retains graph validity and four-or-fewer authored letter choices', () => {
     expect(validateDialogue(irisDecision)).toEqual([]);
     for (const flags of [envelope, opened]) {
