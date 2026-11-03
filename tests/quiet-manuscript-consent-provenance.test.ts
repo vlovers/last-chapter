@@ -97,30 +97,27 @@ describe('Quiet manuscript: consent, provenance and custody continuity', () => {
       'Заберу його',
       'Айріс забрала сторінку додому',
     ],
-  ] as const)('keeps the %s custody choice distinct after save/restore', (
-    choice,
-    granted,
-    excluded,
-    reply,
-    epilogue,
-  ) => {
-    const state = selectOption(finalReading, followup(), choice);
-    expect(state.flags).toContain(granted);
-    expect(state.flags).not.toContain(excluded);
-    expect(currentNode(finalReading, state).text).toContain(reply);
-    const returned = selectOption(finalReading, state, 'quiet-manuscript-result-back');
-    expect(returned.node).toBe('gathering');
-    expect(returned.flags).toContain('final_quiet_manuscript_followup');
-    expect(seasonEnding({ flags: returned.flags }).epilogue).toContain(epilogue);
-    const restored = decodeSave(
-      encodeSave({ stage: 'day5-reading', dialogue: returned, flags: [...returned.flags] }),
-    );
-    expect(restored).not.toBeNull();
-    expect(restored!.flags).toContain(granted);
-    expect(
-      availableOptions(finalReading, restored!.dialogue).map((option) => option.id),
-    ).not.toContain('quiet-manuscript-followup');
-  });
+  ] as const)(
+    'keeps the %s custody choice distinct after save/restore',
+    (choice, granted, excluded, reply, epilogue) => {
+      const state = selectOption(finalReading, followup(), choice);
+      expect(state.flags).toContain(granted);
+      expect(state.flags).not.toContain(excluded);
+      expect(currentNode(finalReading, state).text).toContain(reply);
+      const returned = selectOption(finalReading, state, 'quiet-manuscript-result-back');
+      expect(returned.node).toBe('gathering');
+      expect(returned.flags).toContain('final_quiet_manuscript_followup');
+      expect(seasonEnding({ flags: returned.flags }).epilogue).toContain(epilogue);
+      const restored = decodeSave(
+        encodeSave({ stage: 'day5-reading', dialogue: returned, flags: [...returned.flags] }),
+      );
+      expect(restored).not.toBeNull();
+      expect(restored!.flags).toContain(granted);
+      expect(
+        availableOptions(finalReading, restored!.dialogue).map((option) => option.id),
+      ).not.toContain('quiet-manuscript-followup');
+    },
+  );
 
   it('resolves conflicting legacy custody flags consistently across story and journal', () => {
     const flags = [
@@ -147,9 +144,7 @@ describe('Quiet manuscript: consent, provenance and custody continuity', () => {
     ]) {
       expect(journalFlagVisible(flag, flags)).toBe(false);
     }
-    expect(new Set(journalEvidence.map((entry) => entry.flag)).size).toBe(
-      journalEvidence.length,
-    );
+    expect(new Set(journalEvidence.map((entry) => entry.flag)).size).toBe(journalEvidence.length);
   });
 
   it('preserves valid dialogue graphs and stable legacy choice IDs', () => {

@@ -180,9 +180,7 @@ export class FiveDayStory {
   }
   get notes(): readonly string[] {
     const flags = new Set(this.chapter.flags);
-    return journalFacts
-      .filter(([flag]) => journalFlagVisible(flag, flags))
-      .map(([, text]) => text);
+    return journalFacts.filter(([flag]) => journalFlagVisible(flag, flags)).map(([, text]) => text);
   }
   get knownEvidence() {
     const flags = new Set(this.chapter.flags);
