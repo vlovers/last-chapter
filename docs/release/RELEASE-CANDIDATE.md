@@ -203,3 +203,15 @@ suite remains in place and was not duplicated.
 **This package is NOT READY until CI and Browser QA succeed for its final
 published SHA.** The PR remains Draft and must not be merged on the strength
 of the earlier passing head.
+
+## Final stack reconciliation — 2026-11-03
+
+After the first RC publication, accepted the subsequent day-four consent, gift,
+legacy-interior and manuscript-provenance work through `5849db3` via fast-forward.
+Its entire Browser QA matrix was green, but quality failed because an earlier
+Leo test omitted the newly added `letter-back` safe exit. The expected reply set
+now includes that exit while retaining every refusal, knowledge and four-choice
+assertion. Seven restored-state cases additionally prove safe deferral neither
+grants consent nor consumes the topic and can be resumed. No game code was changed
+by this reconciliation. Full local check: 268 files / 2730 passing tests.
+Final-head workflow results and SHA are reported in PR #12.

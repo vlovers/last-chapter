@@ -78,7 +78,9 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
       );
       const options = availableOptions(leoDecision, letter).map((option) => option.id);
       expect(options).toEqual(
-        blocked ? ['letter-wait', 'letter-push'] : ['letter-wait', 'letter-ask', 'letter-push'],
+        blocked
+          ? ['letter-wait', 'letter-push', 'letter-back']
+          : ['letter-wait', 'letter-ask', 'letter-push', 'letter-back'],
       );
       expect(options.length).toBeLessThanOrEqual(4);
       const wait = selectOption(leoDecision, letter, 'letter-wait');
@@ -95,6 +97,27 @@ describe('Leo respects Iris letter knowledge across day-four conversations', () 
       if (blocked) expect(returned.flags).not.toContain('leo_open_to_conversation');
     });
   }
+
+  it.each(scenarios)(
+    '$name: restored safe deferral preserves facts and remains resumable',
+    ({ flags }) => {
+      const letter = reachLetter(flags);
+      const restored = decodeSave(
+        encodeSave({ stage: 'day4-leo', dialogue: letter, flags: letter.flags }),
+      )!;
+      const deferred = selectOption(leoDecision, restored.dialogue, 'letter-back');
+      expect(deferred.node).toBe('welcome');
+      expect(deferred.flags).toEqual(letter.flags);
+      expect(deferred.flags).not.toContain('leo_open_to_conversation');
+      expect(deferred.flags).not.toContain('leo_letter_consent_respected');
+      expect(availableOptions(leoDecision, deferred).map((option) => option.id)).toContain(
+        'letter',
+      );
+      const resumed = selectOption(leoDecision, deferred, 'letter');
+      expect(resumed.node).toBe('letter');
+      expect(availableOptions(leoDecision, resumed).length).toBeLessThanOrEqual(4);
+    },
+  );
 
   it('preserves the correct knowledge-dependent narration after save restoration', () => {
     const letter = reachLetter([
