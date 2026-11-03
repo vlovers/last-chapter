@@ -18,16 +18,27 @@ function play(story: DialogueStory, flags: readonly string[], path: readonly str
 }
 
 describe('day-four return visits remember what the characters already know', () => {
-  it('Iris does not present the discovered envelope again after her choice was respected', () => {
-    const firstVisit = play(irisDecision, ['saw_envelope'], ['welcome']);
+  it.each([
+    {
+      name: 'sealed letter',
+      flags: ['saw_envelope'],
+      path: ['welcome', 'letter', 'respect', 'respect-back'],
+    },
+    {
+      name: 'opened letter without an admission',
+      flags: ['saw_envelope', 'opened_private_letter'],
+      path: ['welcome', 'letter', 'respect-opened', 'respect-back'],
+    },
+    {
+      name: 'offer to deliver only with consent',
+      flags: ['saw_envelope'],
+      path: ['welcome', 'letter', 'offer', 'offer-back'],
+    },
+  ])('Iris does not present the envelope again after $name', ({ flags, path }) => {
+    const firstVisit = play(irisDecision, flags, ['welcome']);
     expect(currentNode(irisDecision, firstVisit).text).toContain('Ти кладеш перед Айріс');
 
-    const afterConsent = play(irisDecision, ['saw_envelope'], [
-      'welcome',
-      'letter',
-      'respect',
-      'respect-back',
-    ]);
+    const afterConsent = play(irisDecision, flags, path);
     expect(afterConsent.flags).toContain('iris_letter_choice_respected');
     expect(currentNode(irisDecision, afterConsent).text).toContain(
       'Дякую, що не вирішуєш за мене',
@@ -86,14 +97,13 @@ describe('day-four return visits remember what the characters already know', () 
         'mara-own-story-followup-direct',
         'mara-own-story-back',
         'book',
-      ].reduce((progress, option) => selectOption(maraDecision, progress, option), restored!.dialogue);
+      ].reduce(
+        (progress, option) => selectOption(maraDecision, progress, option),
+        restored!.dialogue,
+      );
       expect(currentNode(maraDecision, book).text).toContain('Я досі не вручила Лео книжку');
       expect(availableOptions(maraDecision, book).map((option) => option.id)).toContain(
-        bookFlag.replace('sold_', '') === 'station'
-          ? 'station'
-          : bookFlag.replace('sold_', '') === 'roads'
-            ? 'roads'
-            : 'letters',
+        bookFlag.slice('sold_'.length),
       );
     },
   );
