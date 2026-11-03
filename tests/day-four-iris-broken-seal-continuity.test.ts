@@ -187,6 +187,28 @@ describe('Day-four Iris remembers the broken seal without inventing consent', ()
     );
   });
 
+  it('closes the letter topic after a first-time admission', () => {
+    const letter = reachLetter(opened);
+    const breach = selectOption(irisDecision, letter, 'admit-opened');
+    const returned = selectOption(irisDecision, breach, 'breach-back');
+    expect(returned.flags).toContain('iris_letter_breach_admitted');
+    expect(currentNode(irisDecision, returned).text).toContain('Я почула, що ти відкрив лист');
+    expect(availableOptions(irisDecision, returned).map((option) => option.id)).not.toContain(
+      'letter',
+    );
+  });
+
+  it('closes the letter topic after first-time pressure', () => {
+    const letter = reachLetter(envelope);
+    const pressure = selectOption(irisDecision, letter, 'pressure');
+    const returned = selectOption(irisDecision, pressure, 'pressure-back');
+    expect(returned.flags).toContain('iris_letter_pressured_day4');
+    expect(currentNode(irisDecision, returned).text).toContain('Я чула твої аргументи');
+    expect(availableOptions(irisDecision, returned).map((option) => option.id)).not.toContain(
+      'letter',
+    );
+  });
+
   it('retains graph validity and four-or-fewer authored letter choices', () => {
     expect(validateDialogue(irisDecision)).toEqual([]);
     for (const flags of [envelope, opened]) {
