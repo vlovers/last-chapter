@@ -25,6 +25,10 @@ export const irisDecision: DialogueStory = {
           text: 'Айріс відсуває конверт із порушеною печаткою. «Ти зізнався, що відкрив його без дозволу, а потім ще й наполягав на передачі Лео». Вона закриває альбом. «Про лист більше не говоримо. Малюнки можу показати».',
         },
         {
+          requires: ['iris_letter_pressured_day4', 'iris_letter_breach_admitted'],
+          text: 'Айріс закриває альбом. «Ти зізнався, що відкрив лист без дозволу, а потім ще й наполягав на передачі Лео». Вона відсуває конверт. «Про лист більше не говоримо. Можемо подивитися малюнки».',
+        },
+        {
           requires: ['iris_letter_pressured_day4', 'opened_private_letter'],
           text: 'Айріс бачить зім’ятий край печатки. «Я просила не тиснути на мене щодо листа. І ще хочу зрозуміти, чому конверт відкритий». Вона відсуває його. «Можемо поговорити про малюнки, але не про передачу листа».',
         },
@@ -540,6 +544,10 @@ export const irisDecision: DialogueStory = {
           text: '«Ти вже зізнався, що відкрив лист, а потім наполягав на його передачі», — нагадує Айріс. «Я попросила залишити цю тему. Не починаймо її знову».',
         },
         {
+          requires: ['iris_letter_pressured_day4', 'iris_letter_breach_admitted'],
+          text: '«Ти вже зізнався, що відкрив лист, а потім наполягав на його передачі», — нагадує Айріс. «Я попросила залишити цю тему. Не починаймо її знову».',
+        },
+        {
           requires: ['iris_letter_pressured_day4', 'opened_private_letter'],
           text: 'Айріс бачить порушену печатку. «Я не знаю, хто відкрив лист, але вже попросила не тиснути на мене щодо його передачі. Залишмо це».',
         },
@@ -552,6 +560,10 @@ export const irisDecision: DialogueStory = {
           text: '«Ти вже сказав, що відкрив конверт», — каже Айріс. «Це не означає, що тепер можна вирішувати за мене. Я сама визначу, чи прочитає Лео лист».',
         },
         {
+          requires: ['iris_letter_breach_admitted'],
+          text: '«Ти вже зізнався, що відкрив мій лист без дозволу», — каже Айріс. «Я не готова вирішувати, чи передавати його Лео. Будь ласка, не квап мене».',
+        },
+        {
           requires: ['opened_private_letter'],
           text: 'Айріс торкається зім’ятої печатки. «Хтось відкрив мій лист. Я ще не знаю, хто. І точно не готова віддавати його Лео». Вона залишає конверт біля альбому.',
         },
@@ -561,7 +573,11 @@ export const irisDecision: DialogueStory = {
           id: 'respect',
           label: '«Лист залишиться запечатаним, доки ти не вирішиш»',
           next: 'respect',
-          unless: ['opened_private_letter', 'iris_letter_pressured_day4'],
+          unless: [
+            'opened_private_letter',
+            'iris_letter_pressured_day4',
+            'iris_letter_breach_admitted',
+          ],
           grants: ['iris_letter_choice_respected'],
         },
         {
@@ -584,7 +600,11 @@ export const irisDecision: DialogueStory = {
           id: 'offer',
           label: '«Я можу передати його лише з твоєї згоди»',
           next: 'offer',
-          unless: ['opened_private_letter', 'iris_letter_pressured_day4'],
+          unless: [
+            'opened_private_letter',
+            'iris_letter_pressured_day4',
+            'iris_letter_breach_admitted',
+          ],
           grants: ['iris_letter_delivery_offered'],
         },
         {
@@ -598,7 +618,7 @@ export const irisDecision: DialogueStory = {
           suspend: true,
           repeatability: 'repeatable',
           id: 'letter-back',
-          label: '«Можемо повернутися до цього пізніше»',
+          label: '«Повернімося до інших тем»',
           next: 'welcome',
         },
       ],
@@ -652,6 +672,10 @@ export const irisDecision: DialogueStory = {
         {
           requires: ['opened_private_letter'],
           text: 'Айріс залишає малюнок вікна біля вітрини й ще раз дивиться на порушену печатку. «Я не знаю, хто відкрив конверт. Не передавай його нікому». Ти кладеш лист за касу й зачиняєш шухляду.',
+        },
+        {
+          requires: ['iris_letter_breach_admitted'],
+          text: 'Айріс залишає малюнок вікна біля вітрини. «Я почула твоє зізнання, але зараз не хочу говорити про лист», — каже вона. Ти залишаєш конверт за касою й зачиняєш шухляду.',
         },
         {
           requires: ['saw_envelope'],
