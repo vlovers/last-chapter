@@ -176,3 +176,30 @@ sequence. No existing scene IDs or save schema changed. One train follow-up
 scene and a conditional return choice were added. **CI and Browser QA must
 pass for the final head before this package is accepted.** PR #12 remains Draft;
 no merge or deployment is authorized.
+
+## H — Day-four return-visit copy and save continuity (2026-11-03)
+
+The previous `55f97e94a5e6b45c7adad4622f9a95e663d82950` head has confirmed
+[CI success](https://github.com/vlovers/last-chapter/actions/runs/41542184206)
+and [Browser QA success](https://github.com/vlovers/last-chapter/actions/runs/41542184019).
+This evidence applies to that SHA only.
+
+This incremental package fixes two contradictory return visits. After Iris
+has accepted the player's decision not to pass her letter without consent,
+her welcome now remembers the envelope instead of narrating its discovery
+again. This covers sealed letters, opened-but-unadmitted letters and a
+consent-only delivery offer; refusal and pressure narration retains priority.
+After Mara refuses to see someone else's letter, she no longer says she
+still needs to choose Leo's present: she already bought a book and is deciding
+when to give it to him.
+
+`tests/day-four-return-visit-copy-regression.test.ts` covers these routes,
+the original first-visit narration, precedence of pressure over earlier
+respect, all three book-sale flags, actual dialogue transitions, and
+encode/decode save restoration. Scene and option IDs, chapter flags and
+save format remain unchanged. The full five-day four-button pagination
+suite remains in place and was not duplicated.
+
+**This package is NOT READY until CI and Browser QA succeed for its final
+published SHA.** The PR remains Draft and must not be merged on the strength
+of the earlier passing head.
