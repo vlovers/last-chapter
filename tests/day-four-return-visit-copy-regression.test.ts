@@ -129,15 +129,42 @@ describe('day-four return visits remember what the characters already know', () 
     expect(text).not.toContain('вручити йому книжку');
   });
 
-  it('Mara does not imply an unchosen gift after discussing her workday', () => {
+  it.each(['sold_station', 'sold_roads', 'sold_letters'] as const)(
+    'Mara remembers the purchased %s gift after discussing her workday',
+    (sale) => {
+      const state: DialogueState = {
+        ...startDialogue(maraDecision),
+        node: 'greet',
+        flags: [sale, 'mara_day_four_own_story_heard'],
+      };
+      const text = currentNode(maraDecision, state).text;
+      expect(text).toContain('Книжку для Лео вже сховала');
+      expect(text).toContain('коли її вручити');
+      expect(text).not.toContain('як влаштувати Лео сюрприз');
+
+      // The gift topic is gated on the rest conversation, not merely the sale.
+      expect(availableOptions(maraDecision, state).map((option) => option.id)).not.toContain(
+        'book',
+      );
+      const rested = { ...state, flags: [...state.flags, 'mara_day_four_rest_heard'] };
+      expect(availableOptions(maraDecision, rested).map((option) => option.id)).toContain('book');
+      expect(currentNode(maraDecision, rested).text).toBe(text);
+
+      const restored = decodeSave(
+        encodeSave({ stage: 'day4-mara', dialogue: rested, flags: rested.flags }),
+      );
+      expect(restored).not.toBeNull();
+      expect(currentNode(maraDecision, restored!.dialogue).text).toBe(text);
+    },
+  );
+
+  it('Mara can still plan an unpurchased gift after discussing her workday', () => {
     const state: DialogueState = {
       ...startDialogue(maraDecision),
       node: 'greet',
-      flags: ['sold_station', 'mara_day_four_own_story_heard'],
+      flags: ['mara_day_four_own_story_heard'],
     };
-    const text = currentNode(maraDecision, state).text;
-    expect(text).toContain('як влаштувати Лео сюрприз');
-    expect(text).not.toContain('так і не вирішила');
-    expect(availableOptions(maraDecision, state).map((option) => option.id)).toContain('book');
+    expect(currentNode(maraDecision, state).text).toContain('як влаштувати Лео сюрприз');
+    expect(currentNode(maraDecision, state).text).not.toContain('Книжку для Лео вже сховала');
   });
 });
