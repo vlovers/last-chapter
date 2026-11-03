@@ -112,6 +112,28 @@ describe('Leo respects Iris contact boundaries across day four', () => {
     expect(selectOption(leoDecision, restored!.dialogue, 'push-back').node).toBe('welcome');
   });
 
+  it('keeps Iris private refusal in the player narration until Leo is told', () => {
+    const photo = selectOption(
+      leoDecision,
+      reachWelcome(['iris_letter_pressured_day4']),
+      'past',
+    );
+    const text = currentNode(leoDecision, photo).text;
+    expect(text).toContain('Ти згадуєш, що Айріс попросила');
+    expect(text).toContain('Лео прибирає телефон');
+  });
+
+  it('does not make Leo know about a broken seal before the letter conversation', () => {
+    const photo = selectOption(
+      leoDecision,
+      reachWelcome(['iris_letter_breach_admitted']),
+      'past',
+    );
+    const text = currentNode(leoDecision, photo).text;
+    expect(text).toContain('Ти згадуєш, що Айріс зараз не хоче');
+    expect(text).toContain('не надсилатиму їй старе фото');
+  });
+
   it('keeps legacy return IDs and the complete dialogue graph valid', () => {
     expect(validateDialogue(leoDecision)).toEqual([]);
     expect(leoDecision.nodes.find((node) => node.id === 'past')?.options[0]?.id).toBe('past-back');
