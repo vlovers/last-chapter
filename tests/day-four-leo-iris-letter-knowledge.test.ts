@@ -40,22 +40,14 @@ const scenarios = [
   },
   {
     name: 'pressure takes precedence over earlier respect',
-    flags: [
-      'saw_envelope',
-      'iris_letter_choice_respected',
-      'iris_letter_pressured_day4',
-    ],
+    flags: ['saw_envelope', 'iris_letter_choice_respected', 'iris_letter_pressured_day4'],
     letter: 'попросила більше не порушувати цю тему',
     wait: 'Вона попросила не чіпати цю тему',
     ask: 'нічого їй від мене не передавай',
   },
   {
     name: 'admitted breach takes precedence over earlier respect',
-    flags: [
-      'saw_envelope',
-      'iris_letter_choice_respected',
-      'iris_letter_breach_admitted',
-    ],
+    flags: ['saw_envelope', 'iris_letter_choice_respected', 'iris_letter_breach_admitted'],
     letter: 'не переказуєш Лео приватну розмову',
     wait: 'не треба її переконувати',
     ask: 'Не треба знову питати її про лист',
