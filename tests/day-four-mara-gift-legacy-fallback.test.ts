@@ -82,4 +82,23 @@ describe('day-four Mara gift continuity for complete and legacy saves', () => {
       'book-back',
     );
   });
+
+  it('keeps Mara\'s return-visit wording truthful when no book was sold', () => {
+    const returned = selectOption(maraDecision, reachGiftTopic(), 'book-back');
+    const text = currentNode(maraDecision, returned).text;
+    expect(text).toContain('як зробити Лео сюрприз');
+    expect(text).not.toContain('коли вручити Лео книжку');
+  });
+
+  it('does not assume a purchased book after the letter-privacy conversation', () => {
+    const returned = selectOption(
+      maraDecision,
+      reachGiftTopic(['mara_letter_privacy_respected']),
+      'book-back',
+    );
+    const text = currentNode(maraDecision, returned).text;
+    expect(text).toContain('як зробити йому сюрприз');
+    expect(text).not.toContain('коли вручити йому книжку');
+    expect(returned.flags).toContain('mara_letter_privacy_respected');
+  });
 });
