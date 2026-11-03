@@ -267,6 +267,10 @@ export const leoDecision: DialogueStory = {
       text: 'Він не простягає руку до прилавка. «Якщо це лист від Айріс, я не хочу отримати його через чужу цікавість. Чи вона знає, що він знайшовся?»',
       textWhen: [
         {
+          requires: ['leo_letter_pressured_day4'],
+          text: 'Лео відсуває конверт. «Я вже просив не тиснути на мене й не передавати лист без згоди Айріс». Він переводить погляд на вікно. «Можемо поговорити про щось інше».',
+        },
+        {
           requires: ['iris_letter_pressured_day4'],
           text: 'Ти кажеш Лео лише те, що Айріс знає про знайдений конверт і попросила більше не порушувати цю тему. Лео прибирає руку з прилавка. «Тоді не треба їй нічого передавати від мене. Вона сама вирішить, коли захоче поговорити».',
         },
@@ -290,14 +294,26 @@ export const leoDecision: DialogueStory = {
           id: 'letter-ask',
           label: '«Можу запитати, чи вона хоче поговорити»',
           next: 'letter-ask',
-          unless: ['iris_letter_pressured_day4', 'iris_letter_breach_admitted'],
+          unless: [
+            'iris_letter_pressured_day4',
+            'iris_letter_breach_admitted',
+            'leo_letter_pressured_day4',
+          ],
           grants: ['leo_open_to_conversation'],
         },
         {
           id: 'letter-push',
           label: '«Тобі варто прочитати його негайно»',
           next: 'letter-push',
+          unless: ['leo_letter_pressured_day4'],
           grants: ['leo_letter_pressured_day4'],
+        },
+        {
+          id: 'letter-back',
+          label: '«Добре, повернімося до інших тем»',
+          next: 'welcome',
+          suspend: true,
+          repeatability: 'repeatable',
         },
       ],
     },
