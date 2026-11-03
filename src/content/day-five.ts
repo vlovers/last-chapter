@@ -1549,13 +1549,13 @@ export const finalReading: DialogueStory = {
       options: [
         {
           id: 'quiet-manuscript-archive',
-          label: 'Зберегти аркуш у книгарні до нових відомостей',
+          label: '«Якщо ти згодна, залишимо аркуш у книгарні до нових відомостей?»',
           next: 'quiet-manuscript-result',
           grants: ['final_quiet_manuscript_archived'],
         },
         {
           id: 'quiet-manuscript-return',
-          label: 'Передати аркуш Айріс',
+          label: '«Можу віддати аркуш тобі, щоб ти сама вирішила»',
           next: 'quiet-manuscript-result',
           grants: ['final_quiet_manuscript_returned'],
         },
@@ -1567,12 +1567,12 @@ export const finalReading: DialogueStory = {
       text: '«Дякую, що не зробив із цього виставу». Вона відсуває альбом від Френка.',
       textWhen: [
         {
-          requires: ['final_quiet_manuscript_archived'],
-          text: '«Покладемо аркуш у конверт і запишемо лише дату знахідки». Айріс бере ручку.',
+          requires: ['final_quiet_manuscript_returned'],
+          text: '«Заберу його, дякую». Айріс ховає аркуш між сторінками альбому. «Якщо захочу продовжити пошуки, я прийду».',
         },
         {
-          requires: ['final_quiet_manuscript_returned'],
-          text: 'Айріс ховає аркуш між сторінками альбому. «Якщо захочу продовжити пошуки, я прийду».',
+          requires: ['final_quiet_manuscript_archived'],
+          text: '«Так, я згодна. Покладемо аркуш у конверт і запишемо лише дату знахідки». Айріс бере ручку.',
         },
       ],
       options: [

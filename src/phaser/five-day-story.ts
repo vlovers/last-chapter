@@ -40,7 +40,7 @@ import { completedOrders } from '../game/service';
 import { discardOrphanedOptionalProgress } from './optional-progress';
 import { storyProgress } from '../game/progress';
 import { catalogEntries, type CatalogFilter } from '../game/catalog';
-import { journalFacts, journalEvidence } from './journal-facts';
+import { journalFacts, journalEvidence, journalFlagVisible } from './journal-facts';
 import { accessibleClues, collectClue } from './clue-board';
 
 const stagePeople: Partial<Record<ChapterStage, { name: string; actor: string | null }>> = {
@@ -179,13 +179,15 @@ export class FiveDayStory {
     return storyProgress(this.stage);
   }
   get notes(): readonly string[] {
+    const flags = new Set(this.chapter.flags);
     return journalFacts
-      .filter(([flag]) => this.chapter.flags.includes(flag))
+      .filter(([flag]) => journalFlagVisible(flag, flags))
       .map(([, text]) => text);
   }
   get knownEvidence() {
+    const flags = new Set(this.chapter.flags);
     return journalEvidence
-      .filter((entry) => this.chapter.flags.includes(entry.flag))
+      .filter((entry) => journalFlagVisible(entry.flag, flags))
       .map((entry) => ({
         title: entry.title,
         kind: entry.kind,

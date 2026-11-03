@@ -146,6 +146,30 @@ export const journalEvidence = [
     source: 'Розмова з Айріс · четвертий день',
   },
   {
+    flag: 'iris_quiet_page_privacy_respected',
+    title: 'Домовленість про приватність аркуша',
+    kind: 'testimony',
+    source: 'Розмова з Айріс · четвертий день',
+  },
+  {
+    flag: 'iris_quiet_page_identity_questioned',
+    title: 'Умови перевірки почерку',
+    kind: 'testimony',
+    source: 'Розмова з Айріс · четвертий день',
+  },
+  {
+    flag: 'final_quiet_manuscript_returned',
+    title: 'Аркуш передано Айріс',
+    kind: 'custody',
+    source: 'Рішення Айріс · фінальний вечір',
+  },
+  {
+    flag: 'final_quiet_manuscript_archived',
+    title: 'Аркуш залишено в книгарні',
+    kind: 'custody',
+    source: 'Рішення Айріс · фінальний вечір',
+  },
+  {
     flag: 'saw_receipt',
     title: 'Картка бронювання',
     kind: 'record',
@@ -182,4 +206,13 @@ export const evidenceKindLabels = {
   record: 'Документ',
   testimony: 'Свідчення · слова співрозмовника',
   inference: 'Припущення · потребує перевірки',
+  custody: 'Зберігання · не доказ авторства',
 } as const;
+
+/** A recovered save may contain both custody flags; the actual handover wins. */
+export function journalFlagVisible(flag: string, flags: ReadonlySet<string>): boolean {
+  return (
+    flags.has(flag) &&
+    !(flag === 'final_quiet_manuscript_archived' && flags.has('final_quiet_manuscript_returned'))
+  );
+}
