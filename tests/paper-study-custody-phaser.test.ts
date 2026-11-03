@@ -15,12 +15,12 @@ Object.defineProperty(globalThis, 'localStorage', {
 
 afterEach(() => values.clear());
 
-function openFinale(flags: string[]) {
+function openFinale(flags: string[], node = 'gathering') {
   values.set(
     SAVE_KEY,
     encodeSave({
       stage: 'day5-reading',
-      dialogue: { node: 'gathering', flags, history: [] },
+      dialogue: { node, flags, history: [] },
       flags,
     }),
   );
@@ -45,7 +45,6 @@ describe('Phaser: manuscript custody after the fifth-day resolution', () => {
       'final_ledger_scene_complete',
       'final_manuscript_provenance_decided',
       'final_provenance_iris_custody',
-      'final_letter_breach_disclosed',
     ]);
     choosePaged(story, 'paper-study-permission');
     expect(story.open().choices.map((choice) => choice.id)).not.toContain('paper-permission-lend');
@@ -82,5 +81,31 @@ describe('Phaser: manuscript custody after the fifth-day resolution', () => {
     restored.choose('paper-study-edges');
     restored.choose('paper-edges-back');
     expect(restored.open().choices.map((choice) => choice.id)).toContain('paper-study-ink');
+  });
+
+  it.each([
+    'final_case_iris_declined',
+    'final_letter_breach_disclosed',
+    'iris_letter_breach_admitted',
+    'iris_letter_pressured_day4',
+  ])('restores an old permission scene safely after %s without lending originals', (boundary) => {
+    const flags = [
+      'final_chapter_evidence_reviewed',
+      'final_ledger_scene_complete',
+      'final_manuscript_provenance_decided',
+      boundary,
+    ];
+    const story = openFinale(flags, 'paper-study-permission');
+    expect(story.open().choices.map((choice) => choice.id)).toEqual(['paper-permission-respect']);
+    story.choose('paper-permission-respect');
+    const restored = new FiveDayStory();
+    expect(restored.open().choices.map((choice) => choice.id)).toEqual([
+      'paper-permission-return',
+    ]);
+    restored.choose('paper-permission-return');
+    const saved = decodeSave(values.get(SAVE_KEY) ?? '');
+    expect(saved?.flags).toContain('final_paper_study_access_declined');
+    expect(saved?.flags).not.toContain('final_paper_iris_lent_originals');
+    expect(saved?.flags).not.toContain('final_paper_study_done');
   });
 });

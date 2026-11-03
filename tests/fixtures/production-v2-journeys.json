@@ -706,9 +706,6 @@
           "case-decision-iris",
           "case-iris-decline",
           "case-result-finish",
-          "paper-study-permission",
-          "paper-permission-respect",
-          "paper-permission-return",
           "frank-shop-evening",
           "frank-shop-bookmark",
           "frank-shop-bookmark-wait",
@@ -750,13 +747,14 @@
         "final_frank_shop_no_promise",
         "rumor_amplified",
         "final_case_iris_declined",
-        "final_ledger_gap_speculation_printed",
-        "final_paper_study_access_declined"
+        "final_ledger_gap_speculation_printed"
       ],
       "absent": [
         "opened_private_letter",
         "final_letter_kept_private",
-        "final_paper_iris_lent_originals"
+        "final_paper_iris_lent_originals",
+        "final_paper_study_access_declined",
+        "final_paper_study_done"
       ],
       "summary": "поговорили наодинці",
       "group": "investigation"
