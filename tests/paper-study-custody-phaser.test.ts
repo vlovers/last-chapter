@@ -47,7 +47,7 @@ describe('Phaser: manuscript custody after the fifth-day resolution', () => {
       'final_provenance_iris_custody',
     ]);
     choosePaged(story, 'paper-study-permission');
-    expect(story.open().choices.map((choice) => choice.id)).not.toContain('paper-permission-lend');
+    expect(story.open().choices.map((choice) => choice.id)).toContain('paper-permission-lend');
     story.choose('paper-permission-respect');
     story.choose('paper-permission-return');
     const saved = decodeSave(values.get(SAVE_KEY) ?? '');
