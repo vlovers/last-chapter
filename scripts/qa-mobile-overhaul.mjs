@@ -503,6 +503,41 @@ try {
       );
       await talk.tap();
       await page.getByRole('heading', { name: 'Розмова з Марою' }).waitFor();
+      if (await page.evaluate(() => window.__lastChapterStory.day === 4)) {
+        const earlierTopic = page
+          .locator('#story-panel .story-filters button')
+          .filter({ hasText: /^Мара повертається$/u });
+        assert.equal(await earlierTopic.count(), 1);
+        const selectResolution = async () => {
+          await page.locator('#story-panel .conversation-topics summary').tap();
+          await page
+            .getByRole('button', { name: 'Лист, на який не обов’язково відповідати', exact: true })
+            .tap();
+        };
+        await selectResolution();
+        await page.getByRole('button', { name: 'Розкажеш, якщо хочеш?', exact: true }).tap();
+        await page
+          .locator('.conversation-exchange')
+          .filter({ hasText: 'не готова до зустрічі' })
+          .waitFor();
+        assert.equal(
+          await earlierTopic.count(),
+          0,
+          'A later meeting must retire earlier uncertainty',
+        );
+        await page.keyboard.press('Escape');
+        await page.reload();
+        await page.getByRole('button', { name: 'Відчинити книгарню' }).tap();
+        await page.getByRole('button', { name: 'Поговорити з Марою' }).tap();
+        assert.equal(await earlierTopic.count(), 0, 'Reload must retain the meeting order');
+        await selectResolution();
+        await page
+          .locator('.conversation-exchange')
+          .filter({ hasText: 'не готова до зустрічі' })
+          .waitFor();
+        assert.equal(await page.locator('.conversation-replies button').count(), 4);
+        await shot(page, '390-mara-letter-restored');
+      }
       await page.keyboard.press('Escape');
       assert.equal(await page.locator('#story-panel[hidden]').count(), 1);
     }

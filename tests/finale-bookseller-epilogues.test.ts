@@ -6,10 +6,10 @@ describe('Bookseller and Frank epilogues', () => {
   it.each([
     [
       ['bookseller_values_consent', 'bookseller_chose_silence'],
-      'Мовчання теж може бути відповіддю',
+      'Решта розмов побуде між тими, хто їх почав',
     ],
-    [['bookseller_values_agency', 'bookseller_chose_presence'], 'найкраща допомога'],
-    [['bookseller_values_change'], 'Не можна берегти місце'],
+    [['bookseller_values_agency', 'bookseller_chose_presence'], 'Ми його чекаємо?'],
+    [['bookseller_values_change'], 'поки залишити його біля вікна'],
   ] as const)('reflects the player values in the final narration', (flags, phrase) => {
     let state: DialogueState = selectOption(finalReading, startDialogue(finalReading), 'open');
     state = { ...state, flags };

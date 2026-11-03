@@ -43,8 +43,8 @@ three reading programs and school outcomes. Existing graph/ending tests cover
 all authored stories; new regressions cover the defects below.
 
 - An admitted day-four breach or pressure now blocks both paper-study entry
-  routes. Concealed breaches do not magically become Iris's knowledge. An old
-  save already inside an authorized comparison can still finish it.
+  routes. Concealed breaches do not magically become Iris's knowledge. Subsequent consent hardening also revokes access in old saves already
+  inside a comparison after an explicit refusal; that stronger guard is retained.
 - Paper examination and case closure now agree on one straight cut and one
   irregular edge. The distinction never becomes proof of an author's identity.
 - Iris gives an actual observation about the recipient and does not claim
@@ -215,3 +215,35 @@ assertion. Seven restored-state cases additionally prove safe deferral neither
 grants consent nor consumes the topic and can be resumed. No game code was changed
 by this reconciliation. Full local check: 268 files / 2730 passing tests.
 Final-head workflow results and SHA are reported in PR #12.
+
+## Optional-meeting editorial completion — 2026-11-03
+
+Reviewed all 48 nodes in the four optional Mara topics as well as the accepted
+five-day changes. Revised 30 optional nodes: concrete recollections, shorter
+book-club arguments, distinct empathy/accountability replies, direct answers to
+two personal questions, and Frank anecdotes that do not require the roaming cat
+to occupy a particular chair during a modal conversation. Mara still decides
+herself whether to reply to her own correspondent; this is separate from Iris's
+letter. Same-day callbacks no longer invent days or a week between meetings.
+
+Starting the later personal meeting retires the earlier undecided scene. The
+existing saved session supplies this condition, including legacy sessions at the
+decision node; no new save field or migration is required. Deferring its opening
+keeps the earlier meeting available. Eleven regression cases cover both orders,
+restoration, deferred entry, standalone resolution and immediate replies. The
+mobile runner proves the actual topic selector and decision survive reload.
+
+Three bookseller ending variants now show private conversation, waiting with
+Frank and accepting a changed shop layout through actions and character dialogue.
+Their conditions and priority beneath the letter endings remain unchanged.
+
+The current inventory is **854 main nodes + 48 optional nodes = 902**. Compared
+with the starting remote, the integrated work changes 103 existing nodes (101
+with text/choice-label changes), adds one Leo follow-up and removes none. Own RC
+packages rewrite 41 prose nodes (10 earlier + 30 optional + the ending node),
+with the other accepted authors' work kept distinct. Full local check passes:
+**269 test files / 2741 cases**, 55 additional cases from these RC packages
+(including 17 integrated recovery/journal cases); 369 subsequent cases from other
+authors are retained. The nine-viewport local mobile run, including all 19 story
+checkpoints and optional-topic reload, passed with zero runtime errors. Final
+published-head CI evidence is attached to PR #12 after the last push.

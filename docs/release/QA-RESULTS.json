@@ -650,5 +650,30 @@
       "Independent blind Ukrainian reader session",
       "Measured episode duration"
     ]
+  },
+  "scope": "Initial RC evidence below; latest integrated verification is recorded separately.",
+  "latestIntegratedVerification": {
+    "baselineBeforeEditorialCompletion": "5511cb5e1adf472b4372f5606b4629f1f1b35f33",
+    "date": "2026-11-03",
+    "quality": {
+      "files": 269,
+      "tests": 2741,
+      "check": "passed",
+      "ownAdditionalCases": 55,
+      "includedExistingCases": 17,
+      "subsequentOtherAuthorsCases": 369
+    },
+    "narrative": {
+      "mainNodes": 854,
+      "optionalNodes": 48,
+      "totalNodes": 902,
+      "ownProseNodesRewritten": 41,
+      "integratedExistingNodesChanged": 103,
+      "integratedProseOrLabelNodesChanged": 101,
+      "integratedAddedNodes": 1,
+      "removedNodes": 0
+    },
+    "mobile": "Nine viewports and 19 checkpoints passed; later Mara meeting excludes earlier uncertainty before and after reload.",
+    "ci": "See PR #12 for workflow results tied to the final published SHA."
   }
 }

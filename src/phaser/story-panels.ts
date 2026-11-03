@@ -155,7 +155,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     for (const [name, button] of Object.entries(controls)) {
       button.setAttribute('aria-expanded', String(mode === name));
     }
-    const count = availableMaraTopics(story.day).filter((t) =>
+    const count = availableMaraTopics(story.day, letterDecision).filter((t) =>
       conversationAvailable(t, sessionFor(t.id)),
     ).length;
     const maraKnown = discoveredPeople().some(([id]) => id === 'mara');
@@ -208,13 +208,13 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       panel.append(close);
     }
     if (mode === 'conversation') {
-      const topics = availableMaraTopics(story.day).filter((t) =>
+      const topics = availableMaraTopics(story.day, letterDecision).filter((t) =>
         conversationAvailable(t, sessionFor(t.id)),
       );
       selectedTopic =
         topics.find((t) => t.id === selectedTopic.id) ??
         topics[0] ??
-        allowedMaraTopic(story.day, selectedTopic);
+        allowedMaraTopic(story.day, selectedTopic, letterDecision);
       if (!topics.length) {
         panel.append(element('p', 'Усі доступні розмови завершено. Нові теми з’являться згодом.'));
         return;
