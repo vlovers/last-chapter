@@ -56,8 +56,9 @@ describe('Day-four Iris remembers the broken seal without inventing consent', ()
     expect(text).toContain('чому конверт відкритий');
     expect(text).toContain('не про передачу листа');
     expect(text).not.toContain('Ти сказав, що це мій вибір');
-    expect(availableOptions(irisDecision, reachWelcome(flags)).map((option) => option.id)).not
-      .toContain('letter');
+    expect(
+      availableOptions(irisDecision, reachWelcome(flags)).map((option) => option.id),
+    ).not.toContain('letter');
   });
 
   it('remembers both admitted opening and pressure, even with an old respect flag', () => {
@@ -65,8 +66,9 @@ describe('Day-four Iris remembers the broken seal without inventing consent', ()
     const text = currentNode(irisDecision, reachWelcome(flags)).text;
     expect(text).toContain('Ти зізнався, що відкрив його без дозволу');
     expect(text).toContain('наполягав на передачі Лео');
-    expect(availableOptions(irisDecision, reachWelcome(flags)).map((option) => option.id)).not
-      .toContain('letter');
+    expect(
+      availableOptions(irisDecision, reachWelcome(flags)).map((option) => option.id),
+    ).not.toContain('letter');
   });
 
   it('keeps the sealed-letter scene neutral', () => {
