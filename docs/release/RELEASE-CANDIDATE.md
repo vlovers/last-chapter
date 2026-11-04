@@ -258,3 +258,18 @@ inventory changes **105 existing nodes**, of which **103** contain prose/label
 changes; one accepted Leo scene is added. Final local quality gate: **269 files /
 2744 tests**, including **58 added RC cases** (17 integrated), plus 369 retained
 cases from subsequent authors. No dependency versions changed.
+
+## I — Verified GitHub CI gate (2026-11-04)
+
+The published head `e4b3ea097bd7e74ce39252af01064d2ef08b13a9` has confirmed GitHub Actions results:
+
+- [CI run 41764387110](https://github.com/vlovers/last-chapter/actions/runs/41764387110): **success**.
+- [Browser QA run 41764387291](https://github.com/vlovers/last-chapter/actions/runs/41764387291): **success**.
+- [Normalize formatting run 41764387099](https://github.com/vlovers/last-chapter/actions/runs/41764387099): **skipped**, not a passing check.
+
+Earlier `action_required` runs and SHA-specific NOT READY notes above are
+historical. These results clear the automated CI gate **only for the SHA above**;
+any subsequent code or documentation commit requires fresh checks. The PR remains
+Draft. Independent Ukrainian narrative read-through, physical-device acceptance
+and measured episode length are still unverified. No merge or deployment is
+authorized by this report.
