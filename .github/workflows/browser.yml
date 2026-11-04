@@ -31,10 +31,23 @@ jobs:
           PLAYWRIGHT_MODULE: ../node_modules/playwright/index.mjs
           QA_OUTPUT: /tmp/last-chapter-v5-qa
         run: npm run test:browser:v5
+      - name: Run gameplay polish browser QA
+        env:
+          PLAYWRIGHT_MODULE: ../node_modules/playwright/index.mjs
+          QA_OUTPUT: /tmp/last-chapter-polish-v1
+        run: npm run test:browser:polish
+      - name: Run stabilization and order matrix QA
+        env:
+          PLAYWRIGHT_MODULE: ../node_modules/playwright/index.mjs
+          QA_OUTPUT: /tmp/last-chapter-stabilization-qa
+        run: npm run test:browser:stabilization
       - name: Upload QA screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: phaser-root-browser-qa
-          path: /tmp/last-chapter-v5-qa
+          path: |
+            /tmp/last-chapter-v5-qa
+            /tmp/last-chapter-polish-v1
+            /tmp/last-chapter-stabilization-qa
           if-no-files-found: ignore

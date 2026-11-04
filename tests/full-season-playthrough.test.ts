@@ -89,7 +89,11 @@ function finishScene(initial: ChapterState, reverse: boolean): ChapterState {
     const options = availableOptions(stageStory(state.stage), state.dialogue);
     if (options.length === 0) return state;
     for (const option of reverse ? [...options].reverse() : options) {
-      queue.push(chooseChapterOption(state, option.id));
+      const chosen = chooseChapterOption(state, option.id);
+      // Exercise save/load at every mid-conversation choice, not only scene boundaries.
+      const restored = decodeSave(encodeSave(chosen));
+      expect(restored, `failed to restore ${state.stage}/${option.id}`).toEqual(chosen);
+      queue.push(restored!);
     }
     if (seen.size > 5000) throw new Error('Unbounded dialogue search: ' + state.stage);
   }

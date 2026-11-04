@@ -15,7 +15,7 @@ const SKIN = {
 const NAMES = {
   mara: 'Мара',
   miller: 'Пані Міллер',
-  iris: 'Ірис',
+  iris: 'Айріс',
   anna: 'Анна',
   leo: 'Лео',
   eleanor: 'Елеонора',

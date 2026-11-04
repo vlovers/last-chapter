@@ -7,7 +7,8 @@ import { mountStoryPanels } from '../src/phaser/story-panels';
 if (location.pathname === '/') {
   const story = new FiveDayStory();
   window.__lastChapterStory = story;
-  mountStoryPanels(story);
+  const disposePanels = mountStoryPanels(story);
+  if (import.meta.hot) import.meta.hot.dispose(disposePanels);
 }
 
 // Bundle the engine locally; keep the isolated public modules free of production state.

@@ -19,3 +19,13 @@ are regenerated on scene initialization. Portrait SVGs are their editable source
 The existing production portrait files under `/art/portraits/` were not modified.
 
 See `docs/art/v4/README.md` for screenshot comparisons and validation.
+
+## Mobile overhaul additions
+
+The resized counter (128×42), reading table (72×32), armchair (36×36), Devon Rex
+cat tree, cushion, cubby, bowl and actor hand/book gestures are original
+code-native pixel geometry in `environment.js`, `frank.js` and `actor-actions.js`.
+They use the room's existing palette and integer paint coordinates, without
+external assets, textures or CSS sprite scaling. Frank's compact geometry is
+rasterized directly onto the native grid. Rain, dust and reflections use small
+reused graphics rather than third-party image assets.

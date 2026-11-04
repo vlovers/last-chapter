@@ -1,0 +1,149 @@
+{
+  "results": [
+    {
+      "test": "first-use guidance and suspend/reload",
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "miller",
+      "book": "orchard",
+      "accepted": true,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "miller",
+      "book": "witnesses",
+      "accepted": true,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "miller",
+      "book": "station",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "miller",
+      "book": "roads",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "miller",
+      "book": "letters",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "mara",
+      "book": "orchard",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "mara",
+      "book": "witnesses",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "mara",
+      "book": "station",
+      "accepted": true,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "mara",
+      "book": "roads",
+      "accepted": true,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "mara",
+      "book": "letters",
+      "accepted": true,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "anna",
+      "book": "orchard",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "anna",
+      "book": "witnesses",
+      "accepted": true,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "anna",
+      "book": "station",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "anna",
+      "book": "roads",
+      "accepted": true,
+      "passed": true
+    },
+    {
+      "test": "catalog matrix",
+      "stage": "anna",
+      "book": "letters",
+      "accepted": false,
+      "passed": true
+    },
+    {
+      "test": "overlay/listener soak, long text, rotation, reduced motion and large save",
+      "openCloseCycles": 120,
+      "elapsedMs": 37384,
+      "initialListeners": {
+        "window": 20,
+        "document": 17
+      },
+      "finalListeners": {
+        "window": 20,
+        "document": 17
+      },
+      "long": {
+        "scroll": 4200,
+        "height": 127,
+        "width": 291,
+        "clientWidth": 291
+      },
+      "final": {
+        "canvas": {
+          "x": 0,
+          "y": 48,
+          "width": 375,
+          "height": 555
+        },
+        "zoom": 2,
+        "nodes": 31,
+        "stage": "miller",
+        "orders": 0,
+        "failed": false,
+        "reduced": true,
+        "fps": 60.548580185012696
+      },
+      "passed": true
+    }
+  ],
+  "errors": []
+}

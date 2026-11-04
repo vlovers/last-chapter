@@ -2,7 +2,7 @@
 export const journalFacts: readonly (readonly [string, string])[] = [
   [
     'met_frank',
-    'Ви познайомилися з Френком, сірим девон-рексом. На закладці під його лапою написано: «Не кожна таємниця просить, щоб її розкрили».',
+    'Ви познайомилися з Френком, маленьким сірим девон-рексом. Він любить тепло й сам обирає, коли підійти ближче.',
   ],
   ['explored_shelves', 'Ви оглянули книжкові полиці та знайшли п’ять видань для рекомендацій.'],
   ['explored_window', 'За вікном книгарні — дощовий осінній Беллвік.'],
@@ -76,5 +76,143 @@ export const journalFacts: readonly (readonly [string, string])[] = [
   ['saw_envelope', 'У книжці знайдено запечатаний лист від Айріс до Лео.'],
   ['opened_private_letter', 'Ви розкрили приватного листа без дозволу.'],
   ['letter_secured', 'Лист залишився у безпечному місці.'],
-  ['ask_eleanor_next_day', 'Завтра слід запитати Елеонору про закриття книгарні.'],
+  ['ask_eleanor_next_day', 'Запитати Елеонору про старі бронювання й закриття книгарні.'],
+  [
+    'iris_letter_breach_admitted',
+    'Айріс почула, що ви відкрили її лист без дозволу. Це не стало пробаченням.',
+  ],
+  [
+    'final_reading_program_done',
+    'Для спільного читання обрано видану книжку. Приватні матеріали до програми не потрапили.',
+  ],
+  ['final_school_chairs_time_agreed', 'Анна й Томас домовилися поговорити вдома після читання.'],
+  ['book_club_started', 'Ви провели книжковий клуб у книгарні.'],
+  ['book_club_skipped', 'Замість книжкового клубу ви обрали тихий вечір.'],
+  [
+    'quiet_evening_page_found',
+    'Між старими романами знайдено аркуш із двома зірочками та уривком про відчинене вікно. Автора не встановлено.',
+  ],
+  [
+    'quiet_evening_page_examined',
+    'На знайденому аркуші дві цілі олівцеві зірочки. Біля них не видно слідів гумки. Край паперу обрізано рівно.',
+  ],
+  [
+    'iris_quiet_page_stars_compared',
+    'На листівці матері Айріс три сині зірочки, на аркуші — дві олівцеві. Це різні позначки; авторство аркуша не підтверджено.',
+  ],
+  [
+    'iris_quiet_page_window_theory',
+    'Припущення: відчинене вікно в уривку може означати очікування, а не втечу. Так Айріс пам’ятає мамині історії.',
+  ],
+  ['iris_quiet_page_privacy_respected', 'Ви домовилися з Айріс поки не показувати аркуш іншим.'],
+  [
+    'iris_quiet_page_identity_questioned',
+    'Айріс погодилася на обережні запитання про почерк: без імен і фотографій аркуша.',
+  ],
+  [
+    'final_quiet_manuscript_returned',
+    'Ви передали знайдений аркуш Айріс. Вона забрала його в альбомі.',
+  ],
+  [
+    'final_quiet_manuscript_archived',
+    'За згодою Айріс аркуш збережено в закритому конверті у книгарні. У записі — лише дата й місце знахідки.',
+  ],
 ];
+
+/** Provenance for already-authored, already-heard journal facts. No new discoveries. */
+export const journalEvidence = [
+  {
+    flag: 'quiet_evening_page_found',
+    title: 'Загублена сторінка',
+    kind: 'observation',
+    source: 'Тихий вечір · стіл із книжками',
+  },
+  {
+    flag: 'quiet_evening_page_examined',
+    title: 'Папір і позначки',
+    kind: 'observation',
+    source: 'Огляд аркуша під лампою',
+  },
+  {
+    flag: 'iris_quiet_page_stars_compared',
+    title: 'Порівняння зірочок',
+    kind: 'observation',
+    source: 'Аркуш і листівка Айріс',
+  },
+  {
+    flag: 'iris_quiet_page_window_theory',
+    title: 'Вікно: втеча чи очікування?',
+    kind: 'inference',
+    source: 'Розмова з Айріс · четвертий день',
+  },
+  {
+    flag: 'iris_quiet_page_privacy_respected',
+    title: 'Домовленість про приватність аркуша',
+    kind: 'testimony',
+    source: 'Розмова з Айріс · четвертий день',
+  },
+  {
+    flag: 'iris_quiet_page_identity_questioned',
+    title: 'Умови перевірки почерку',
+    kind: 'testimony',
+    source: 'Розмова з Айріс · четвертий день',
+  },
+  {
+    flag: 'final_quiet_manuscript_returned',
+    title: 'Аркуш передано Айріс',
+    kind: 'custody',
+    source: 'Рішення Айріс · фінальний вечір',
+  },
+  {
+    flag: 'final_quiet_manuscript_archived',
+    title: 'Аркуш залишено в книгарні',
+    kind: 'custody',
+    source: 'Рішення Айріс · фінальний вечір',
+  },
+  {
+    flag: 'saw_receipt',
+    title: 'Картка бронювання',
+    kind: 'record',
+    source: 'Старі записи книгарні',
+  },
+  { flag: 'saw_repair_note', title: 'Журнал ремонту', kind: 'record', source: 'Журнал книгарні' },
+  {
+    flag: 'saw_envelope',
+    title: 'Запечатаний лист',
+    kind: 'observation',
+    source: 'Знайдено в книгарні',
+  },
+  {
+    flag: 'heard_about_leak',
+    title: 'Спогад про затоплення',
+    kind: 'testimony',
+    source: 'Пані Міллер',
+  },
+  {
+    flag: 'eleanor_confirmed_reservation',
+    title: 'Спогад про бронювання',
+    kind: 'testimony',
+    source: 'Елеонора',
+  },
+  {
+    flag: 'eleanor_confirmed_missing_notification',
+    title: 'Непідтверджене повідомлення',
+    kind: 'testimony',
+    source: 'Елеонора',
+  },
+] as const;
+export const evidenceKindLabels = {
+  observation: 'Спостереження',
+  record: 'Документ',
+  testimony: 'Свідчення · слова співрозмовника',
+  inference: 'Припущення · потребує перевірки',
+  custody: 'Зберігання · не доказ авторства',
+} as const;
+
+/** A recovered save may contain both custody flags; the actual handover wins. */
+export function journalFlagVisible(flag: string, flags: ReadonlySet<string>): boolean {
+  return (
+    flags.has(flag) &&
+    !(flag === 'final_quiet_manuscript_archived' && flags.has('final_quiet_manuscript_returned'))
+  );
+}

@@ -9,11 +9,17 @@ import firm from '../public/art/bookshop/mara-firm.svg?raw';
 describe('V4 authored art boundaries and provenance', () => {
   it('keeps every room paint rectangle on the native pixel grid and inside the canvas', () => {
     const rectangles = [];
+    const textureSizes = [];
     let layers = 0;
     const graphics = (position = {}) => ({
       layer: layers++,
       x: position.x ?? 0,
       y: position.y ?? 0,
+      generateTexture(key, w, h) {
+        textureSizes.push({ key, w, h });
+        return this;
+      },
+      destroy() {},
       setDepth() {
         return this;
       },
@@ -40,8 +46,38 @@ describe('V4 authored art boundaries and provenance', () => {
         return this;
       },
     });
-    drawEnvironment({ cameras: { main: { setBackgroundColor() {} } }, add: { graphics } });
+    drawEnvironment({
+      cameras: { main: { setBackgroundColor() {} } },
+      textures: { exists: () => false },
+      add: {
+        graphics,
+        image: () => ({
+          setOrigin() {
+            return this;
+          },
+          setDepth() {
+            return this;
+          },
+          setVisible() {
+            return this;
+          },
+        }),
+      },
+    });
     expect(rectangles.length).toBeGreaterThan(1000);
+    expect(textureSizes).toContainEqual({ key: 'bookshop-native-background', w: 640, h: 360 });
+    expect(textureSizes.reduce((sum, texture) => sum + texture.w * texture.h, 0)).toBeLessThan(
+      640 * 360 * 2,
+    );
+    expect(
+      textureSizes.every(
+        (texture) =>
+          Number.isInteger(texture.w) &&
+          Number.isInteger(texture.h) &&
+          texture.w > 0 &&
+          texture.h > 0,
+      ),
+    ).toBe(true);
     for (const [x, y, w, h, layer] of rectangles) {
       expect([x, y, w, h].every(Number.isInteger)).toBe(true);
       expect(x).toBeGreaterThanOrEqual(0);
@@ -96,6 +132,15 @@ describe('V4 authored art boundaries and provenance', () => {
         lines.length = 0;
         return this;
       },
+      fillStyle() {
+        return this;
+      },
+      fillRect() {
+        return this;
+      },
+      setAlpha() {
+        return this;
+      },
       lineStyle() {
         return this;
       },
@@ -116,8 +161,21 @@ describe('V4 authored art boundaries and provenance', () => {
       },
     };
     let reduced = false;
+    let layers = 0;
     const atmosphere = createAtmosphere(
-      { add: { graphics: () => rain } },
+      {
+        add: {
+          graphics: () =>
+            layers++ === 0
+              ? rain
+              : {
+                  ...rain,
+                  clear() {
+                    return this;
+                  },
+                },
+        },
+      },
       { halo: light, readingGlow: light, steam: light },
       () => reduced,
     );

@@ -1,0 +1,272 @@
+{
+  "baselineRef": "dc2b03b",
+  "modifiedScenes": 132,
+  "addedScenes": 8,
+  "removedScenes": 0,
+  "totalScenes": 847,
+  "files": [
+    {
+      "file": "src/content/after-case-tea.ts",
+      "modified": [
+        "after-case-mara",
+        "after-case-finish",
+        "after-case-leo-new",
+        "after-case-leo-walk-new"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/anna.ts",
+      "modified": [
+        "hello",
+        "classroom",
+        "end",
+        "anna-reflection",
+        "anna-reflection-deep",
+        "anna-reflection-apology",
+        "anna-reflection-end"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/bookshop-tomorrow.ts",
+      "modified": ["bookshop-tomorrow-iris-tea-new", "bookshop-tomorrow-iris-leave-new"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/case-evidence-audit.ts",
+      "modified": ["case-evidence-stars"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/day-five.ts",
+      "modified": [
+        "morning",
+        "gathering",
+        "archive-handover",
+        "ledger-aftercare",
+        "ledger-resolution",
+        "ledger-letter-connection",
+        "ledger-outcome",
+        "manuscript-provenance",
+        "workshop-evidence-owner",
+        "missing-chapter-after",
+        "margin-followup",
+        "margin-followup-result",
+        "workshop-followup",
+        "shared-table-answer",
+        "eleanor-memory",
+        "miller-memory",
+        "rumor-miller-followup",
+        "rumor-miller-books",
+        "iris",
+        "exhibit",
+        "frank-trust",
+        "day-four-leo-callback",
+        "end",
+        "final-aftercare-leo",
+        "final-aftercare-leo-wish-result",
+        "final-aftercare-leo-umbrella-result",
+        "final-aftercare-leo-space-result",
+        "final-aftercare-iris-return-result",
+        "final-aftercare-iris-quiet-result"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/day-four-iris.ts",
+      "modified": [
+        "arrival",
+        "welcome",
+        "iris-letter-feeling",
+        "iris-letter-ask",
+        "art",
+        "margin-note-end",
+        "past",
+        "end"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/day-four-leo.ts",
+      "modified": ["leo-future-followup", "evidence", "end"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/day-four-mara.ts",
+      "modified": ["arrival", "greet", "work", "station", "letters"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/eleanor.ts",
+      "modified": [
+        "greet",
+        "shop",
+        "flood",
+        "care",
+        "end",
+        "eleanor-reflection",
+        "eleanor-reflection-deep",
+        "eleanor-reflection-memory",
+        "eleanor-reflection-end"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/evening.ts",
+      "modified": ["repair-ledger", "eleanor-memory", "letter", "opened", "deduction", "end"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/first-day.ts",
+      "modified": [
+        "arrival",
+        "detectives",
+        "people-listen",
+        "jam",
+        "memory",
+        "memory-answer",
+        "end",
+        "miller-cinema-photo"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/frank-shop-evening.ts",
+      "modified": ["frank-shop-hub", "frank-shop-rest-cups-result"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/iris-evidence-final.ts",
+      "modified": [
+        "final-iris-evidence",
+        "final-iris-evidence-accountability",
+        "final-iris-evidence-private"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/iris.ts",
+      "modified": [
+        "art",
+        "art-more",
+        "return",
+        "iris-reflection",
+        "iris-reflection-deep",
+        "iris-reflection-art",
+        "iris-reflection-end"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/last-copy.ts",
+      "modified": ["last-copy-delayed", "last-copy-broken"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/leo.ts",
+      "modified": [
+        "greet",
+        "trains",
+        "town",
+        "leo-reflection",
+        "leo-reflection-deep",
+        "leo-reflection-end"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/mara.ts",
+      "modified": ["hello", "gift", "topics", "bakery", "trust-forgive", "mara-own-counter"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/nora-miller-cinema-final.ts",
+      "modified": ["final-nora-miller-cinema", "final-nora-miller-compare-result"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/nora.ts",
+      "modified": [
+        "hello",
+        "boundary",
+        "end",
+        "nora-reflection-consent",
+        "nora-reflection-end",
+        "nora-cinema-exhibit"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/quiet-evening.ts",
+      "modified": ["closing-leftovers", "window", "window-memory"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/reader-debates-final.ts",
+      "modified": ["final-reader-villain-nora", "final-reader-villain-iris"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/reading-program.ts",
+      "modified": [],
+      "added": ["reading-program", "reading-station", "reading-roads", "reading-letters"],
+      "removed": []
+    },
+    {
+      "file": "src/content/rumor-program.ts",
+      "modified": ["rumor-program"],
+      "added": [],
+      "removed": []
+    },
+    {
+      "file": "src/content/school-reading-followup.ts",
+      "modified": [],
+      "added": [
+        "school-reading-followup",
+        "school-chairs-anna",
+        "school-chairs-thomas",
+        "school-chairs-outcome"
+      ],
+      "removed": []
+    },
+    {
+      "file": "src/content/thomas.ts",
+      "modified": [
+        "greet",
+        "thomas-chairs",
+        "anna",
+        "end",
+        "thomas-reflection",
+        "thomas-reflection-deep",
+        "thomas-reflection-workshop",
+        "thomas-reflection-ask",
+        "thomas-reflection-fear",
+        "thomas-reflection-end"
+      ],
+      "added": [],
+      "removed": []
+    }
+  ]
+}

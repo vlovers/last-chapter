@@ -13,6 +13,29 @@ import {
 import { decodeSave, encodeSave } from '../src/game/save';
 
 describe('Iris letter continuity across five days', () => {
+  it.each([false, true])(
+    'does not invent a receipt comparison on envelope reentry (receipt seen: %s)',
+    (receiptSeen) => {
+      let state = selectOption(firstEvening, startDialogue(firstEvening), 'letter');
+      if (receiptSeen) state = { ...state, flags: [...state.flags, 'saw_receipt'] };
+      state = selectOption(firstEvening, state, 'letter-open');
+      const revisited = { ...state, node: 'letter' };
+      const restored = decodeSave(
+        encodeSave({ stage: 'evening', dialogue: revisited, flags: revisited.flags }),
+      );
+      expect(restored).not.toBeNull();
+      const text = currentNode(firstEvening, restored!.dialogue).text;
+      expect(text).toContain('Печатка вже порушена');
+      expect(text).not.toContain('Дата збігається з карткою');
+      expect(
+        availableOptions(firstEvening, restored!.dialogue).some(
+          (option) => option.id === 'letter-conclude',
+        ),
+      ).toBe(receiptSeen);
+      expect(restored!.flags.includes('saw_receipt')).toBe(receiptSeen);
+    },
+  );
+
   it('keeps an untouched envelope sealed and allows opening it once', () => {
     const atLetter = {
       ...startDialogue(firstEvening),
@@ -52,7 +75,7 @@ describe('Iris letter continuity across five days', () => {
 
     const admitted = selectOption(irisDecision, state, 'admit-opened');
     expect(admitted.flags).toContain('iris_letter_breach_admitted');
-    expect(currentNode(irisDecision, admitted).text).toMatch(/Треба було спитати|Ти мав запитати/);
+    expect(currentNode(irisDecision, admitted).text).toContain('Треба було спитати');
     expect(admitted.flags).not.toContain('iris_letter_choice_respected');
 
     const respected = selectOption(irisDecision, state, 'respect-opened');
@@ -79,10 +102,10 @@ describe('Iris letter continuity across five days', () => {
     expect(currentNode(finalReading, letter).text).toContain('досі запечатаний');
 
     const opened = { ...letter, flags: [...letter.flags, 'opened_private_letter'] };
-    expect(currentNode(finalReading, opened).text).toContain('порушена печатка');
+    expect(currentNode(finalReading, opened).text).toContain('Печатка на конверті порушена');
 
     const admitted = { ...opened, flags: [...opened.flags, 'iris_letter_breach_admitted'] };
-    expect(currentNode(finalReading, admitted).text).toContain('Айріс уже знає');
+    expect(currentNode(finalReading, admitted).text).toContain('Айріс знає');
     expect(availableOptions(finalReading, admitted).map((option) => option.id)).not.toContain(
       'mutual',
     );
@@ -91,7 +114,9 @@ describe('Iris letter continuity across five days', () => {
       ...admitted,
       flags: [...admitted.flags, 'iris_letter_choice_respected', 'leo_open_to_conversation'],
     };
-    expect(availableOptions(finalReading, ready).map((option) => option.id)).toContain('mutual');
+    expect(availableOptions(finalReading, ready).map((option) => option.id)).not.toContain(
+      'mutual',
+    );
     const saved = { stage: 'day5-reading' as const, dialogue: ready, flags: ready.flags };
     expect(decodeSave(encodeSave(saved))).toEqual(saved);
   });

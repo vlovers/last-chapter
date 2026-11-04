@@ -7,18 +7,22 @@ export interface Clue {
   readonly detail: string;
   readonly flag: string;
   readonly required: readonly string[];
+  readonly kind: 'observation' | 'inference';
 }
 
 export const CLUES: readonly Clue[] = [
   {
     id: 'bookmark',
-    label: 'Закладка Френка',
-    detail: 'На закладці — нерівний відбиток старого штампа книгарні. Кіт знайшов її не випадково?',
+    kind: 'observation',
+    label: 'Закладка біля вікна',
+    detail:
+      'Між книжками на підставці біля вікна лежить закладка з нерівним відбитком старого штампа книгарні.',
     flag: 'clue_bookmark',
-    required: ['met_frank'],
+    required: ['explored_window'],
   },
   {
     id: 'stamp',
+    kind: 'observation',
     label: 'Старий штамп',
     detail:
       'У прилавку — штамп з таким самим надщербленим краєм. Його використовували ще до затоплення.',
@@ -27,6 +31,7 @@ export const CLUES: readonly Clue[] = [
   },
   {
     id: 'shelf',
+    kind: 'observation',
     label: 'Нотатка на форзаці',
     detail: 'За книжками є короткий запис: «Не плутати дату бронювання з датою отримання».',
     flag: 'clue_shelf',
@@ -34,6 +39,7 @@ export const CLUES: readonly Clue[] = [
   },
   {
     id: 'timeline',
+    kind: 'inference',
     label: 'Зіставити три знахідки',
     detail:
       'Закладка, штамп і нотатка вказують на старі записи замовлень. Це привід перевірити хронологію, а не звинувачувати когось.',
@@ -43,7 +49,9 @@ export const CLUES: readonly Clue[] = [
 ];
 
 export function accessibleClues(flags: readonly string[]): readonly Clue[] {
-  return CLUES.filter((clue) => clue.required.every((flag) => flags.includes(flag)));
+  return CLUES.filter(
+    (clue) => flags.includes(clue.flag) || clue.required.every((flag) => flags.includes(flag)),
+  );
 }
 
 export function collectClue(state: ChapterState, id: string): ChapterState {
