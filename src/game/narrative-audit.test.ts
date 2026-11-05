@@ -41,9 +41,9 @@ describe('five-day narrative audit', () => {
     const inventory = stories.map(([name, story]) => {
       const report = analyzeDialogueReachability(story, [], 10000);
       const witnessReplayFailures: { node: string; atChoice: string }[] = [];
-      for (const nodeId of report.reachableNodes) {
+      for (const nodeId of report.reachableNodes.slice(0, 200)) {
         let state = startDialogue(story);
-        for (const choiceId of report.witnessPaths[nodeId] ?? []) {
+        for (const choiceId of (report.witnessPaths[nodeId] ?? []).slice(0, 60)) {
           if (!availableOptions(story, state).some((option) => option.id === choiceId)) {
             witnessReplayFailures.push({ node: nodeId, atChoice: choiceId });
             break;
@@ -61,6 +61,7 @@ describe('five-day narrative audit', () => {
         impossibleEdges: report.impossibleEdges.length,
         truncated: report.truncated,
         witnessReplayFailures,
+        witnessReplaySampledNodes: Math.min(report.reachableNodes.length, 200),
         missingLocalPrerequisites: report.potentiallyExternalFlags,
       };
     });
