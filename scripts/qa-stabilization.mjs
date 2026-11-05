@@ -299,7 +299,14 @@ try {
   await page.getByRole('button', { name: 'Знахідки', exact: true }).click();
   await page.getByText('Документ · Старі записи книгарні', { exact: true }).waitFor();
   await page.getByText('Свідчення · слова співрозмовника · Пані Міллер', { exact: true }).waitFor();
-  await page.getByText('Припущення · потребує перевірки', { exact: true }).waitFor();
+  // Evidence labels include their source; the kind alone is not standalone text.
+  const inference = page.locator('#story-panel .evidence-card[data-kind="inference"]');
+  await inference
+    .getByText('Припущення · потребує перевірки · Розмова з Айріс · четвертий день', {
+      exact: true,
+    })
+    .waitFor();
+  await inference.getByRole('heading', { name: 'Вікно: втеча чи очікування?' }).waitFor();
   await screenshot(page, 'journal-provenance');
   await page.keyboard.press('Escape');
   await page.waitForTimeout(Number(process.env.QA_SOAK_MS || 30000));
