@@ -7,6 +7,8 @@ export interface DialogueReachabilityResult {
   readonly unreachableEdges: readonly string[];
   /** Edges that require and exclude the same fact: impossible under any initial facts. */
   readonly impossibleEdges: readonly string[];
+  /** Prerequisite facts that cannot be granted by any choice in this story. */
+  readonly potentiallyExternalFlags: readonly string[];
   readonly truncated: boolean;
   readonly exploredStates: number;
   /** First feasible option-ID route from the start to each reached node. */
@@ -37,6 +39,12 @@ export function analyzeDialogueReachability(
       .filter((option) => (option.requires ?? []).some((flag) => (option.unless ?? []).includes(flag)))
       .map((option) => JSON.stringify([node.id, option.id, option.next])),
   );
+  const localGrants = new Set(story.nodes.flatMap((node) =>
+    node.options.flatMap((option) => option.grants ?? []),
+  ));
+  const potentiallyExternalFlags = [...new Set(story.nodes.flatMap((node) =>
+    node.options.flatMap((option) => option.requires ?? []),
+  ))].filter((flag) => !localGrants.has(flag));
   const allEdges = story.nodes.flatMap((node) =>
     node.options.map((option) => JSON.stringify([node.id, option.id, option.next])),
   );
@@ -77,6 +85,7 @@ export function analyzeDialogueReachability(
     unreachableNodes: story.nodes.map((node) => node.id).filter((id) => !reachableNodes.has(id)),
     unreachableEdges: allEdges.filter((edge) => !reachableEdges.has(edge)),
     impossibleEdges,
+    potentiallyExternalFlags,
     truncated,
     exploredStates: visited.size,
     witnessPaths,
