@@ -119,11 +119,16 @@ function validCompletionKey(key: string, story: ReturnType<typeof stageStory>): 
     const option = node?.options.find((item) => item.id === optionId);
     if (!option) return false;
     const allowed = option.reopensWhen ?? [];
-    return (
-      new Set(reopened).size === reopened.length &&
-      reopened.every((flag) => allowed.includes(flag)) &&
-      reopened.every((flag, index) => allowed.indexOf(flag) === index || allowed.indexOf(flag) < index)
-    );
+    // completionKey() serializes a subset in the authored reopensWhen order.
+    // Reject reordered, duplicated or foreign flags; older keys may contain
+    // only the subset that was active when the option was selected.
+    let previousIndex = -1;
+    for (const flag of reopened) {
+      const index = allowed.indexOf(flag);
+      if (index <= previousIndex) return false;
+      previousIndex = index;
+    }
+    return true;
   } catch {
     return false;
   }
