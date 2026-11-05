@@ -95,6 +95,9 @@ class Bookshop extends Phaser.Scene {
     this.cameras.main.setOrigin(0, 0).setZoom(plan.zoom).removeBounds();
     this.frameCamera();
     this.interactions.resize();
+    // Publish hit areas with the new camera before the first interactive frame.
+    // Otherwise an immediate phone tap can still hit the previous-size shelf.
+    this.interactions.update(this.characters.player, this.characters.mara, this.state);
   }
   frameCamera() {
     const camera = this.cameras.main,

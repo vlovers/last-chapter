@@ -104,6 +104,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   let personalNotes = '';
   const seenJournal = new Set<string>();
   let pendingPlayerTurn: string | null = null;
+  let replyReadyAt = 0;
   try {
     if (story.isProgressSaved)
       personalNotes = (localStorage.getItem(OPTIONAL_PROGRESS_KEYS.notes) ?? '').slice(0, 4000);
@@ -226,6 +227,13 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         topics[0] ??
         allowedMaraTopic(story.day, selectedTopic, letterDecision);
       if (!topics.length) {
+        if (pendingPlayerTurn) {
+          const turn = element('section', '', 'player-turn');
+          turn.setAttribute('aria-label', 'Ви');
+          turn.append(element('h3', 'Ви'), element('p', pendingPlayerTurn));
+          panel.append(turn);
+          pendingPlayerTurn = null;
+        }
         panel.append(element('p', 'Усі доступні розмови завершено. Нові теми з’являться згодом.'));
         return;
       }
@@ -293,6 +301,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
           const button = element('button', choice.label);
           button.type = 'button';
           button.addEventListener('click', () => {
+            if (button.disabled || performance.now() < replyReadyAt) return;
+            button.disabled = true;
+            replyReadyAt = performance.now() + 220;
             const next = answerConversation(
               selectedTopic,
               { ...activeConversation, memories: sharedMemories() },
@@ -303,7 +314,11 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
             else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next;
             else conversation = next;
             saveConversation();
-            pendingPlayerTurn = next.suspended ? null : spokenChoice(choice);
+            // All four legacy optional topics were reviewed: their unquoted
+            // labels are direct speech. Future action choices can opt out.
+            pendingPlayerTurn = next.suspended
+              ? null
+              : spokenChoice({ ...choice, delivery: choice.delivery ?? 'speech' });
             if (next.suspended) mode = null;
             refresh();
             if (next.suspended) restorePanelFocus(returnFocus, catalog);
@@ -641,6 +656,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   };
   const toggle = (next: 'journal' | 'catalog' | 'conversation') => {
     pendingPlayerTurn = null;
+    replyReadyAt = 0;
     if (next === 'conversation' && story.actor !== 'mara') return;
     returnFocus = document.activeElement as HTMLElement;
     reaction = next === 'catalog' ? story.lastRecommendation : null;

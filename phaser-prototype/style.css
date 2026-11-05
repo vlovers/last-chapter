@@ -1292,3 +1292,8 @@ body.reduced * {
 .npc-turn-label {
   display: block;
 }
+@media (orientation: landscape) and (max-height: 550px) {
+  #dialogue-text:has(#player-turn) {
+    max-height: 40svh;
+  }
+}

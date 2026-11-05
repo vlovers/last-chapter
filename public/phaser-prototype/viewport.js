@@ -45,12 +45,17 @@ export function frameDialogue(player, companion, width, height, zoom, dock) {
   }
   return {
     x: companion
-      ? Math.round(
-          (Math.abs(player.x - companion.x) > width / zoom - 64
-            ? companion.x
-            : (player.x + companion.x) / 2) -
-            width / (2 * zoom),
-        )
+      ? frameWorld(
+          {
+            x:
+              Math.abs(player.x - companion.x) > width / zoom - 64
+                ? companion.x
+                : (player.x + companion.x) / 2,
+            y: player.y,
+          },
+          width / zoom,
+          height / zoom,
+        ).x
       : frame.x,
     y: Math.round(player.y - Math.max(65, (height - dock.height - 24) * 0.7) / zoom),
   };
