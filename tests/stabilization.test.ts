@@ -112,9 +112,11 @@ describe('large saves and investigation provenance', () => {
         ...state.dialogue,
         flags,
         history: Array(5000).fill('greet'),
-        completed: Array.from({ length: 2000 }, (_, i) =>
-          JSON.stringify(['arrival', `topic_${i}`, []]),
-        ),
+        completed: [
+          JSON.stringify(['arrival', 'greet', []]),
+          JSON.stringify(['hello', 'books', []]),
+          JSON.stringify(['hello', 'eleanor', []]),
+        ],
         pending: [],
       },
     };

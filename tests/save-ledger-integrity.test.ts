@@ -127,8 +127,8 @@ describe('dialogue save ledger integrity', () => {
     const dialogue = {
       ...state.dialogue,
       pending: [
-        { hub: 'arrival', key: 'topic-a' },
-        { hub: 'arrival', key: 'topic-b' },
+        { hub: 'hello', key: JSON.stringify(['hello', 'books', []]) },
+        { hub: 'hello', key: JSON.stringify(['hello', 'eleanor', []]) },
       ],
     };
     const valid = { ...state, dialogue };

@@ -11,14 +11,18 @@ describe('analyzeDialogueReachability', () => {
     start: 'start',
     nodes: [
       {
-        id: 'start', speaker: 'Narrator', text: 'Begin',
+        id: 'start',
+        speaker: 'Narrator',
+        text: 'Begin',
         options: [
           { id: 'grant', label: 'Learn', next: 'middle', grants: ['known'] },
           { id: 'skip', label: 'Skip', next: 'middle' },
         ],
       },
       {
-        id: 'middle', speaker: 'Narrator', text: 'Middle',
+        id: 'middle',
+        speaker: 'Narrator',
+        text: 'Middle',
         options: [
           { id: 'gated', label: 'Use knowledge', next: 'end', requires: ['known'] },
           { id: 'return', label: 'Return', next: 'start' },
@@ -32,12 +36,18 @@ describe('analyzeDialogueReachability', () => {
     const duplicated: DialogueStory = {
       start: 'start',
       nodes: [
-        { id: 'start', speaker: 'A', text: 'First', options: [
-          { id: 'real', label: 'Real', next: 'end' },
-        ] },
-        { id: 'start', speaker: 'A', text: 'Duplicate', options: [
-          { id: 'phantom', label: 'Phantom', next: 'end' },
-        ] },
+        {
+          id: 'start',
+          speaker: 'A',
+          text: 'First',
+          options: [{ id: 'real', label: 'Real', next: 'end' }],
+        },
+        {
+          id: 'start',
+          speaker: 'A',
+          text: 'Duplicate',
+          options: [{ id: 'phantom', label: 'Phantom', next: 'end' }],
+        },
         { id: 'end', speaker: 'B', text: 'End', options: [] },
       ],
     };
@@ -59,9 +69,12 @@ describe('analyzeDialogueReachability', () => {
     const gated: DialogueStory = {
       start: 'start',
       nodes: [
-        { id: 'start', speaker: 'A', text: 'A', options: [
-          { id: 'external', label: 'Open', next: 'end', requires: ['other_story'] },
-        ] },
+        {
+          id: 'start',
+          speaker: 'A',
+          text: 'A',
+          options: [{ id: 'external', label: 'Open', next: 'end', requires: ['other_story'] }],
+        },
         { id: 'end', speaker: 'B', text: 'B', options: [] },
       ],
     };
@@ -75,9 +88,12 @@ describe('analyzeDialogueReachability', () => {
     const impossible: DialogueStory = {
       start: 'start',
       nodes: [
-        { id: 'start', speaker: 'A', text: 'A', options: [
-          { id: 'impossible', label: 'No', next: 'end', requires: ['x'], unless: ['x'] },
-        ] },
+        {
+          id: 'start',
+          speaker: 'A',
+          text: 'A',
+          options: [{ id: 'impossible', label: 'No', next: 'end', requires: ['x'], unless: ['x'] }],
+        },
         { id: 'end', speaker: 'B', text: 'B', options: [] },
       ],
     };
@@ -104,10 +120,15 @@ describe('analyzeDialogueReachability', () => {
     const parallel: DialogueStory = {
       start: 'start',
       nodes: [
-        { id: 'start', speaker: 'A', text: 'A', options: [
-          { id: 'first', label: 'First', next: 'end' },
-          { id: 'second', label: 'Second', next: 'end' },
-        ] },
+        {
+          id: 'start',
+          speaker: 'A',
+          text: 'A',
+          options: [
+            { id: 'first', label: 'First', next: 'end' },
+            { id: 'second', label: 'Second', next: 'end' },
+          ],
+        },
         { id: 'end', speaker: 'B', text: 'B', options: [] },
       ],
     };
@@ -118,11 +139,16 @@ describe('analyzeDialogueReachability', () => {
     const accumulating: DialogueStory = {
       start: 'hub',
       nodes: [
-        { id: 'hub', speaker: 'A', text: 'A', options: [
-          { id: 'a', label: 'A', next: 'hub', grants: ['a'] },
-          { id: 'b', label: 'B', next: 'hub', grants: ['b'] },
-          { id: 'both', label: 'Both', next: 'end', requires: ['a', 'b'] },
-        ] },
+        {
+          id: 'hub',
+          speaker: 'A',
+          text: 'A',
+          options: [
+            { id: 'a', label: 'A', next: 'hub', grants: ['a'] },
+            { id: 'b', label: 'B', next: 'hub', grants: ['b'] },
+            { id: 'both', label: 'Both', next: 'end', requires: ['a', 'b'] },
+          ],
+        },
         { id: 'end', speaker: 'B', text: 'B', options: [] },
       ],
     };
@@ -135,10 +161,15 @@ describe('analyzeDialogueReachability', () => {
     const loop: DialogueStory = {
       start: 'hub',
       nodes: [
-        { id: 'hub', speaker: 'A', text: 'A', options: [
-          { id: 'again', label: 'Again', next: 'hub' },
-          { id: 'also', label: 'Also', next: 'hub' },
-        ] },
+        {
+          id: 'hub',
+          speaker: 'A',
+          text: 'A',
+          options: [
+            { id: 'again', label: 'Again', next: 'hub' },
+            { id: 'also', label: 'Also', next: 'hub' },
+          ],
+        },
       ],
     };
     const result = analyzeDialogueReachability(loop);
@@ -168,10 +199,15 @@ describe('analyzeDialogueReachability', () => {
     const fork: DialogueStory = {
       start: 'start',
       nodes: [
-        { id: 'start', speaker: 'A', text: 'A', options: [
-          { id: 'left', label: 'Left', next: 'left' },
-          { id: 'right', label: 'Right', next: 'right' },
-        ] },
+        {
+          id: 'start',
+          speaker: 'A',
+          text: 'A',
+          options: [
+            { id: 'left', label: 'Left', next: 'left' },
+            { id: 'right', label: 'Right', next: 'right' },
+          ],
+        },
         { id: 'left', speaker: 'B', text: 'B', options: [] },
         { id: 'right', speaker: 'C', text: 'C', options: [] },
       ],
@@ -180,5 +216,4 @@ describe('analyzeDialogueReachability', () => {
     expect(result.witnessPaths.left).toEqual(['left']);
     expect(result.witnessPaths.right).toEqual(['right']);
   });
-
 });

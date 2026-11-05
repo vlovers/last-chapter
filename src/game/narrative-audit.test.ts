@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { DialogueStory } from './dialogue';
-import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from './dialogue';
+import {
+  availableOptions,
+  currentNode,
+  selectOption,
+  startDialogue,
+  validateDialogue,
+} from './dialogue';
 import { analyzeDialogueReachability } from './dialogue-reachability';
 import { millerVisit } from '../content/first-day';
 import { maraVisit } from '../content/mara';
@@ -89,22 +95,25 @@ describe('five-day narrative audit', () => {
 
   it('Mara remembers which of the three books was chosen', () => {
     const book = maraDecision.nodes.find((node) => node.id === 'book');
-    const variants = book?.textWhen?.filter((entry) =>
-      ['sold_station', 'sold_roads', 'sold_letters'].some((flag) => entry.requires.includes(flag)),
-    ) ?? [];
+    const variants =
+      book?.textWhen?.filter((entry) =>
+        ['sold_station', 'sold_roads', 'sold_letters'].some((flag) =>
+          entry.requires.includes(flag),
+        ),
+      ) ?? [];
     expect(variants).toHaveLength(3);
     expect(new Set(variants.map((entry) => entry.text)).size).toBe(3);
   });
 
-
   it('renders a different Mara gift memory for each saved book choice', () => {
     const flags = ['sold_station', 'sold_roads', 'sold_letters'] as const;
-    const rendered = flags.map((flag) =>
-      currentNode(maraDecision, {
-        ...startDialogue(maraDecision),
-        node: 'book',
-        flags: [flag],
-      }).text,
+    const rendered = flags.map(
+      (flag) =>
+        currentNode(maraDecision, {
+          ...startDialogue(maraDecision),
+          node: 'book',
+          flags: [flag],
+        }).text,
     );
     expect(new Set(rendered).size).toBe(flags.length);
     expect(rendered.every((text) => text.trim().length > 40)).toBe(true);
@@ -112,9 +121,10 @@ describe('five-day narrative audit', () => {
 
   it('keeps Iris letter choices gated behind discovering the envelope', () => {
     const welcome = irisDecision.nodes.find((node) => node.id === 'welcome');
-    const letterChoices = welcome?.options.filter((option) =>
-      ['letter', 'iris-letter-feeling', 'iris-letter-ask'].includes(option.id),
-    ) ?? [];
+    const letterChoices =
+      welcome?.options.filter((option) =>
+        ['letter', 'iris-letter-feeling', 'iris-letter-ask'].includes(option.id),
+      ) ?? [];
     expect(letterChoices).toHaveLength(3);
     for (const option of letterChoices) {
       expect(option.requires).toContain('saw_envelope');
@@ -124,16 +134,19 @@ describe('five-day narrative audit', () => {
   it('does not permit repeated pressure after Iris or Leo sets a boundary', () => {
     const irisWelcome = irisDecision.nodes.find((node) => node.id === 'welcome');
     const leoWelcome = leoDecision.nodes.find((node) => node.id === 'welcome');
-    expect(irisWelcome?.options.find((option) => option.id === 'letter')?.unless)
-      .toContain('iris_letter_pressured_day4');
-    expect(leoWelcome?.options.find((option) => option.id === 'letter')?.unless)
-      .toContain('leo_letter_pressured_day4');
+    expect(irisWelcome?.options.find((option) => option.id === 'letter')?.unless).toContain(
+      'iris_letter_pressured_day4',
+    );
+    expect(leoWelcome?.options.find((option) => option.id === 'letter')?.unless).toContain(
+      'leo_letter_pressured_day4',
+    );
   });
 
   it('requires actual timeline evidence before Leo discusses the booking', () => {
     const welcome = leoDecision.nodes.find((node) => node.id === 'welcome');
-    expect(welcome?.options.find((option) => option.id === 'evidence')?.requires)
-      .toContain('eleanor_timeline_checked');
+    expect(welcome?.options.find((option) => option.id === 'evidence')?.requires).toContain(
+      'eleanor_timeline_checked',
+    );
   });
 
   it('keeps all three Mara gift callbacks specific to their book', () => {

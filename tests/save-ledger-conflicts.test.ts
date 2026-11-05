@@ -58,11 +58,11 @@ describe('save completion and pending ledger conflicts', () => {
       ...checkpoint(),
       dialogue: {
         ...checkpoint().dialogue,
-        completed: ['already-done'],
+        completed: [JSON.stringify(['hello', 'chat', []])],
         pending: [
-          { hub: 'arrival', key: 'topic-a' },
-          { hub: 'arrival', key: 'topic-b' },
-          { hub: 'other-hub', key: 'topic-c' },
+          { hub: 'arrival', key: JSON.stringify(['arrival', 'greet', []]) },
+          { hub: 'hello', key: JSON.stringify(['hello', 'books', []]) },
+          { hub: 'hello', key: JSON.stringify(['hello', 'eleanor', []]) },
         ],
       },
     };

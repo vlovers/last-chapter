@@ -200,8 +200,7 @@ export function decodeSave(raw: string): ChapterState | null {
         }
         if (
           pending.some(
-            ({ hub, key }) =>
-              !validCompletionKey(key, story) || JSON.parse(key)[0] !== hub,
+            ({ hub, key }) => !validCompletionKey(key, story) || JSON.parse(key)[0] !== hub,
           )
         ) {
           return null;
