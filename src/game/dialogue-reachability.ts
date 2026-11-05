@@ -7,6 +7,8 @@ export interface DialogueReachabilityResult {
   readonly unreachableEdges: readonly string[];
   readonly truncated: boolean;
   readonly exploredStates: number;
+  /** First feasible option-ID route from the start to each reached node. */
+  readonly witnessPaths: Readonly<Record<string, readonly string[]>>;
 }
 
 /**
@@ -22,9 +24,10 @@ export function analyzeDialogueReachability(
   const reachableNodes = new Set<string>();
   const reachableEdges = new Set<string>();
   const visited = new Set<string>();
+  const witnessPaths: Record<string, readonly string[]> = {};
   const queued = new Set<string>();
-  const queue: { node: string; flags: readonly string[] }[] = [
-    { node: story.start, flags: [...new Set(initialFlags)].sort() },
+  const queue: { node: string; flags: readonly string[]; path: readonly string[] }[] = [
+    { node: story.start, flags: [...new Set(initialFlags)].sort(), path: [] },
   ];
   queued.add(JSON.stringify([story.start, queue[0]!.flags]));
   const allEdges = story.nodes.flatMap((node) =>
@@ -46,6 +49,7 @@ export function analyzeDialogueReachability(
     const node = byId.get(state.node);
     if (!node) continue;
     reachableNodes.add(node.id);
+    witnessPaths[node.id] ??= state.path;
     const facts = new Set(state.flags);
     for (const option of node.options) {
       if (!(option.requires ?? []).every((flag) => facts.has(flag))) continue;
@@ -55,7 +59,7 @@ export function analyzeDialogueReachability(
       const nextKey = JSON.stringify([option.next, nextFlags]);
       if (!queued.has(nextKey)) {
         queued.add(nextKey);
-        queue.push({ node: option.next, flags: nextFlags });
+        queue.push({ node: option.next, flags: nextFlags, path: [...state.path, option.id] });
       }
     }
   }
@@ -67,5 +71,6 @@ export function analyzeDialogueReachability(
     unreachableEdges: allEdges.filter((edge) => !reachableEdges.has(edge)),
     truncated,
     exploredStates: visited.size,
+    witnessPaths,
   };
 }
