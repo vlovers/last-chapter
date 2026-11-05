@@ -4,6 +4,9 @@ export type SceneId = string;
 export interface DialogueOption {
   readonly id: string;
   readonly label: string;
+  /** Optional presentation metadata. It has no effect on flags, traversal or saves. */
+  readonly delivery?: 'speech' | 'action';
+  readonly spokenText?: string;
   readonly next: SceneId;
   readonly requires?: readonly string[];
   /** Hide an option if any of these facts is already true. */
