@@ -49,6 +49,11 @@ describe('five-day narrative audit', () => {
         potentiallyExternalOrUnreachableEdges: report.unreachableEdges.length,
         impossibleEdges: report.impossibleEdges.length,
         truncated: report.truncated,
+        missingLocalPrerequisites: [...new Set(story.nodes.flatMap((node) =>
+          node.options.flatMap((option) => option.requires ?? []),
+        ))].filter((flag) => !story.nodes.some((node) =>
+          node.options.some((option) => (option.grants ?? []).includes(flag)),
+        )),
       };
     });
     // Missing local prerequisites are not necessarily errors: flags may be granted in other stories.
@@ -64,6 +69,25 @@ describe('five-day narrative audit', () => {
   it.each(stories)('%s has no contradictory choice gates', (_name, story) => {
     const result = analyzeDialogueReachability(story, [], 10000);
     expect(result.impossibleEdges).toEqual([]);
+  });
+
+  it.each(stories)('%s has valid witness routes for locally reachable nodes', (_name, story) => {
+    const report = analyzeDialogueReachability(story, [], 10000);
+    const nodes = new Map(story.nodes.map((node) => [node.id, node]));
+    for (const id of report.reachableNodes) {
+      let current = story.start;
+      const flags = new Set<string>();
+      for (const choiceId of report.witnessPaths[id] ?? []) {
+        const node = nodes.get(current);
+        const option = node?.options.find((item) => item.id === choiceId);
+        expect(option, `Missing choice ${current}/${choiceId}`).toBeDefined();
+        expect((option?.requires ?? []).every((flag) => flags.has(flag))).toBe(true);
+        expect((option?.unless ?? []).some((flag) => flags.has(flag))).toBe(false);
+        for (const flag of option?.grants ?? []) flags.add(flag);
+        current = option!.next;
+      }
+      expect(current).toBe(id);
+    }
   });
 
   it.each(stories)('%s can enter its opening scene', (_name, story) => {
