@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { DialogueStory } from './dialogue';
+import { availableOptions, selectOption, startDialogue, type DialogueStory } from './dialogue';
 import { analyzeDialogueReachability } from './dialogue-reachability';
 import { annaVisit } from '../content/anna';
 import { thomasVisit } from '../content/thomas';
@@ -124,6 +124,41 @@ describe('analyzeDialogueReachability', () => {
     const result = analyzeDialogueReachability(loop);
     expect(result.exploredStates).toBe(1);
     expect(result.truncated).toBe(false);
+  });
+
+  it('replays the witness path through the real dialogue engine', () => {
+    const report = analyzeDialogueReachability(story);
+    let state = startDialogue(story);
+    for (const choiceId of report.witnessPaths.end ?? []) {
+      expect(availableOptions(story, state).map((option) => option.id)).toContain(choiceId);
+      state = selectOption(story, state, choiceId);
+    }
+    expect(state.node).toBe('end');
+    expect(state.flags).toContain('known');
+  });
+
+  it('does not report a complete audit when the state cap is zero', () => {
+    const result = analyzeDialogueReachability(story, [], 0);
+    expect(result.truncated).toBe(true);
+    expect(result.exploredStates).toBe(0);
+    expect(result.reachableNodes).toEqual([]);
+  });
+
+  it('keeps separate witness paths for alternate destinations', () => {
+    const fork: DialogueStory = {
+      start: 'start',
+      nodes: [
+        { id: 'start', speaker: 'A', text: 'A', options: [
+          { id: 'left', label: 'Left', next: 'left' },
+          { id: 'right', label: 'Right', next: 'right' },
+        ] },
+        { id: 'left', speaker: 'B', text: 'B', options: [] },
+        { id: 'right', speaker: 'C', text: 'C', options: [] },
+      ],
+    };
+    const result = analyzeDialogueReachability(fork);
+    expect(result.witnessPaths.left).toEqual(['left']);
+    expect(result.witnessPaths.right).toEqual(['right']);
   });
 
 });
