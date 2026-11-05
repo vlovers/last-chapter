@@ -4,6 +4,18 @@
 ## Changes
 <!-- Summarize the cohesive changes. -->
 
+## Parallel-agent delivery and integration
+- Parent issue / accountable owner / narrative lead / integrator:
+- Target branch + exact base SHA / current head SHA:
+- Dependency PRs and existing/superseded work:
+- Owned days, scenes, character arcs and shared flags/save contracts:
+- [ ] This PR is one complete, playable/testable batch rather than artificial micro-PRs.
+- [ ] Shared canon, choice consequences and save/registry edits have a designated integration owner.
+- [ ] Independent narrative and engineering review references the latest head SHA.
+- [ ] Conflicting agent work was preserved and reconciled; tests repeated after meaningful integration.
+
+See [multi-agent narrative workflow](../docs/engineering/MULTI_AGENT_WORKFLOW.md).
+
 ## Verification
 <!-- List exact commands, test results and CI links. Mark unrun checks explicitly. -->
 
