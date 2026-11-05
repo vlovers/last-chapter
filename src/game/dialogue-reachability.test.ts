@@ -32,6 +32,7 @@ describe('analyzeDialogueReachability', () => {
     const result = analyzeDialogueReachability(story);
     expect(result.truncated).toBe(false);
     expect(result.reachableNodes).toContain('end');
+    expect(result.witnessPaths.end).toEqual(['grant', 'gated']);
     expect(result.reachableEdges).toContain(JSON.stringify(['middle', 'gated', 'end']));
   });
 
@@ -47,6 +48,7 @@ describe('analyzeDialogueReachability', () => {
     };
     expect(analyzeDialogueReachability(gated).unreachableNodes).toContain('end');
     expect(analyzeDialogueReachability(gated, ['other_story']).reachableNodes).toContain('end');
+    expect(analyzeDialogueReachability(gated).witnessPaths.end).toBeUndefined();
   });
 
   it('excludes contradictory conditions', () => {
@@ -104,7 +106,9 @@ describe('analyzeDialogueReachability', () => {
         { id: 'end', speaker: 'B', text: 'B', options: [] },
       ],
     };
-    expect(analyzeDialogueReachability(accumulating).reachableNodes).toContain('end');
+    const result = analyzeDialogueReachability(accumulating);
+    expect(result.reachableNodes).toContain('end');
+    expect(result.witnessPaths.end).toEqual(['a', 'b', 'both']);
   });
 
   it('does not multiply queued identical states in a loop', () => {
