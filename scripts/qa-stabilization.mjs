@@ -288,6 +288,8 @@ try {
       'clue_stamp',
       'clue_shelf',
       'clue_timeline',
+      // Inference provenance is only visible after the player has formed this theory.
+      'iris_quiet_page_window_theory',
     );
     localStorage.setItem('last-chapter:save:v1', JSON.stringify(data));
   });
