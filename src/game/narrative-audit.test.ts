@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { DialogueStory } from './dialogue';
-import { availableOptions, selectOption, startDialogue, validateDialogue } from './dialogue';
+import { availableOptions, currentNode, selectOption, startDialogue, validateDialogue } from './dialogue';
 import { analyzeDialogueReachability } from './dialogue-reachability';
 import { millerVisit } from '../content/first-day';
 import { maraVisit } from '../content/mara';
@@ -96,6 +96,19 @@ describe('five-day narrative audit', () => {
     expect(new Set(variants.map((entry) => entry.text)).size).toBe(3);
   });
 
+
+  it('renders a different Mara gift memory for each saved book choice', () => {
+    const flags = ['sold_station', 'sold_roads', 'sold_letters'] as const;
+    const rendered = flags.map((flag) =>
+      currentNode(maraDecision, {
+        ...startDialogue(maraDecision),
+        node: 'book',
+        flags: [flag],
+      }).text,
+    );
+    expect(new Set(rendered).size).toBe(flags.length);
+    expect(rendered.every((text) => text.trim().length > 40)).toBe(true);
+  });
 
   it('keeps Iris letter choices gated behind discovering the envelope', () => {
     const welcome = irisDecision.nodes.find((node) => node.id === 'welcome');
