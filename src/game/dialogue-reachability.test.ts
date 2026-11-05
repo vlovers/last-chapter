@@ -47,6 +47,7 @@ describe('analyzeDialogueReachability', () => {
       ],
     };
     expect(analyzeDialogueReachability(gated).unreachableNodes).toContain('end');
+    expect(analyzeDialogueReachability(gated).impossibleEdges).toEqual([]);
     expect(analyzeDialogueReachability(gated, ['other_story']).reachableNodes).toContain('end');
     expect(analyzeDialogueReachability(gated).witnessPaths.end).toBeUndefined();
   });
@@ -61,9 +62,9 @@ describe('analyzeDialogueReachability', () => {
         { id: 'end', speaker: 'B', text: 'B', options: [] },
       ],
     };
-    expect(analyzeDialogueReachability(impossible, ['x']).unreachableEdges).toContain(
-      JSON.stringify(['start', 'impossible', 'end']),
-    );
+    const result = analyzeDialogueReachability(impossible, ['x']);
+    expect(result.unreachableEdges).toContain(JSON.stringify(['start', 'impossible', 'end']));
+    expect(result.impossibleEdges).toContain(JSON.stringify(['start', 'impossible', 'end']));
   });
 
   it('reports truncation rather than claiming full coverage', () => {
