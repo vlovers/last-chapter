@@ -28,6 +28,25 @@ describe('analyzeDialogueReachability', () => {
     ],
   };
 
+  it('uses the same first duplicate node definition as the dialogue runtime', () => {
+    const duplicated: DialogueStory = {
+      start: 'start',
+      nodes: [
+        { id: 'start', speaker: 'A', text: 'First', options: [
+          { id: 'real', label: 'Real', next: 'end' },
+        ] },
+        { id: 'start', speaker: 'A', text: 'Duplicate', options: [
+          { id: 'phantom', label: 'Phantom', next: 'end' },
+        ] },
+        { id: 'end', speaker: 'B', text: 'End', options: [] },
+      ],
+    };
+    const result = analyzeDialogueReachability(duplicated);
+    expect(result.reachableEdges).toContain(JSON.stringify(['start', 'real', 'end']));
+    expect(result.reachableEdges).not.toContain(JSON.stringify(['start', 'phantom', 'end']));
+    expect(result.witnessPaths.end).toEqual(['real']);
+  });
+
   it('revisits nodes after flags change and reaches gated edges', () => {
     const result = analyzeDialogueReachability(story);
     expect(result.truncated).toBe(false);
