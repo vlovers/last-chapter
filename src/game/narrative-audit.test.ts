@@ -41,14 +41,28 @@ describe('five-day narrative audit', () => {
     const inventory = stories.map(([name, story]) => {
       const report = analyzeDialogueReachability(story, [], 10000);
       const witnessReplayFailures: { node: string; atChoice: string }[] = [];
+      let witnessReplaySkippedLongPaths = 0;
+      let witnessReplayVerifiedNodes = 0;
       for (const nodeId of report.reachableNodes.slice(0, 200)) {
+        const path = report.witnessPaths[nodeId] ?? [];
+        if (path.length > 60) {
+          witnessReplaySkippedLongPaths++;
+          continue;
+        }
         let state = startDialogue(story);
-        for (const choiceId of (report.witnessPaths[nodeId] ?? []).slice(0, 60)) {
+        let failed = false;
+        for (const choiceId of path) {
           if (!availableOptions(story, state).some((option) => option.id === choiceId)) {
             witnessReplayFailures.push({ node: nodeId, atChoice: choiceId });
+            failed = true;
             break;
           }
           state = selectOption(story, state, choiceId);
+        }
+        if (!failed && state.node !== nodeId) {
+          witnessReplayFailures.push({ node: nodeId, atChoice: '(destination mismatch)' });
+        } else if (!failed) {
+          witnessReplayVerifiedNodes++;
         }
       }
       return {
@@ -62,6 +76,8 @@ describe('five-day narrative audit', () => {
         truncated: report.truncated,
         witnessReplayFailures,
         witnessReplaySampledNodes: Math.min(report.reachableNodes.length, 200),
+        witnessReplayVerifiedNodes,
+        witnessReplaySkippedLongPaths,
         missingLocalPrerequisites: report.potentiallyExternalFlags,
       };
     });
