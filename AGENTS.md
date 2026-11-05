@@ -12,7 +12,7 @@ Preserve the richer contract on the active game integration branch `feat/dialogu
 - `src/game/` owns deterministic narrative state transitions and must not depend on DOM or persistence; `src/content/` owns authored narrative data, `src/styles/` visual styling, and `tests/` knowledge/trust/branching regressions.
 - Use the project's documented Node 22 + npm workflow. Run applicable `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, and `npm run check`; report skipped or unavailable checks explicitly.
 - Distinguish rumor, observation, and confirmed truth. NPCs must not know facts they could not learn; player choices cannot rewrite objective facts retroactively. Changes to consequences require narrative review and deterministic regression tests.
-- Player-facing text is natural Ukrainian (`uk-UA`), as specified in `docs/LOCALIZATION.md`. Respect confidentiality, consent, character autonomy, and plausible consequences.
+- Player-facing text is natural Ukrainian (`uk-UA`), according to the localization contract on the active gameplay branch (verify its path before use). Respect confidentiality, consent, character autonomy, and plausible consequences.
 - Never introduce unlicensed assets, unverified real-world allegations, or unsafely rendered imported prose. Document asset provenance.
 - Do not claim an unfinished episode or feature is implemented. Do not inflate dialogue merely to meet a target duration.
 
@@ -38,6 +38,6 @@ Follow [the narrative multi-agent workflow](docs/engineering/MULTI_AGENT_WORKFLO
 ## Definition of Done
 Acceptance criteria met; regression tests and applicable checks green; docs updated; security and operational impact recorded; independent review obtained; no unresolved blocking findings.
 
-See also: [independent review policy](docs/engineering/REVIEW_POLICY.md) and [release checklist](docs/engineering/RELEASE_CHECKLIST.md). These documents supplement this contract and `CONTRIBUTING.md`; they do not replace stricter project-specific requirements.
+See also: [independent review policy](docs/engineering/REVIEW_POLICY.md) and [release checklist](docs/engineering/RELEASE_CHECKLIST.md). These documents supplement this contract; confirm any additional contributing and gameplay policies exist on the actual target branch before treating them as authoritative.
 
 Cross-repository governance tracking: vlovers/ai-office#87. These instructions apply only to this repository.
