@@ -30,3 +30,49 @@ export function frameWorld(player, width, height) {
         );
   return { x: Math.round(x), y: Math.round(y) };
 }
+
+/** Landscape reading uses the left half of the room; portrait uses the space above the dock. */
+export function frameDialogue(player, companion, width, height, zoom, dock) {
+  const frame = frameWorld(player, width / zoom, height / zoom);
+  if (width > height && height < 550) {
+    const available = (width - dock.width - 24) / zoom;
+    const center = companion
+      ? Math.abs(player.x - companion.x) > available - 64
+        ? companion.x
+        : (player.x + companion.x) / 2
+      : player.x;
+    return { x: Math.round(center - (width - dock.width - 24) / (2 * zoom)), y: frame.y };
+  }
+  return {
+    x: companion
+      ? frameWorld(
+          {
+            x:
+              Math.abs(player.x - companion.x) > width / zoom - 64
+                ? companion.x
+                : (player.x + companion.x) / 2,
+            y: player.y,
+          },
+          width / zoom,
+          height / zoom,
+        ).x
+      : frame.x,
+    y: Math.round(player.y - Math.max(65, (height - dock.height - 24) * 0.7) / zoom),
+  };
+}
+
+/** A partially visible object's hit area still fits entirely inside the viewport. */
+export function touchTarget(projected, width, height) {
+  const visibleLeft = Math.max(0, projected.x),
+    visibleTop = Math.max(0, projected.y);
+  const visibleWidth = Math.max(0, Math.min(width, projected.x + projected.w) - visibleLeft);
+  const visibleHeight = Math.max(0, Math.min(height, projected.y + projected.h) - visibleTop);
+  const w = Math.max(44, visibleWidth),
+    h = Math.max(44, visibleHeight);
+  return {
+    x: Math.max(0, Math.min(width - w, visibleLeft + (visibleWidth - w) / 2)),
+    y: Math.max(0, Math.min(height - h, visibleTop + (visibleHeight - h) / 2)),
+    w,
+    h,
+  };
+}

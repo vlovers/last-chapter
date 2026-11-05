@@ -1,9 +1,17 @@
 import { assetFallback } from './assets.js';
 import { portraitDataUrl } from './visitor-portraits.js';
 import { normalizeEmotion, emotionLabel } from './visitor-emotions.js';
+import { spokenChoice } from './player-turn.js';
 /** Keep character/story conversations at a stable dock height between replies. */
 export function shouldCompactDialogue(node, isConversation) {
   return !isConversation && node.choices.length <= 2 && node.text.length < 550;
+}
+
+/** Follow visual DOM order, including the catalog shortcut and scrollable prose. */
+export function dialogueTabStops(element) {
+  return [...element.querySelectorAll('button, [tabindex="0"]')].filter(
+    (node) => !node.disabled && !node.closest('[hidden], [inert]'),
+  );
 }
 
 export class DialogueUI {
@@ -13,6 +21,9 @@ export class DialogueUI {
     this.element = document.querySelector('#dialogue');
     this.name = document.querySelector('#speaker');
     this.text = document.querySelector('#dialogue-text');
+    this.text.tabIndex = 0;
+    this.text.setAttribute('role', 'region');
+    this.text.setAttribute('aria-label', 'Репліка. Прокрутіть, щоб прочитати повністю.');
     this.choices = document.querySelector('#choices');
     this.portrait = document.querySelector('#portrait');
     this.fallback = document.querySelector('#portrait-fallback');
@@ -22,7 +33,8 @@ export class DialogueUI {
     this.skip = document.createElement('button');
     this.skip.type = 'button';
     this.skip.id = 'typewriter-skip';
-    this.skip.textContent = 'Показати весь текст';
+    this.skip.textContent = 'Уся репліка';
+    this.skip.setAttribute('aria-label', 'Показати весь текст');
     this.skip.addEventListener('click', () => this.finishTyping(), options);
     this.element.querySelector('.dialogue-title').insertBefore(this.skip, this.close);
     document.addEventListener(
@@ -41,7 +53,7 @@ export class DialogueUI {
     this.element.addEventListener(
       'keydown',
       (event) => {
-        if (event.repeat) {
+        if (event.repeat && ['Enter', 'Space', 'Tab'].includes(event.code)) {
           event.preventDefault();
           return;
         }
@@ -50,13 +62,14 @@ export class DialogueUI {
           onClose();
           return;
         }
-        const buttons = [
-          ...this.choices.querySelectorAll('button'),
-          ...(!this.skip.hidden ? [this.skip] : []),
-          this.close,
-        ];
+        if (event.isComposing) return;
+        const buttons = dialogueTabStops(this.element);
         const index = buttons.indexOf(document.activeElement);
-        if (['ArrowDown', 'ArrowUp', 'Tab'].includes(event.code)) {
+        // Arrow keys scroll the prose region natively. On answers they navigate.
+        if (
+          event.code === 'Tab' ||
+          (['ArrowDown', 'ArrowUp'].includes(event.code) && document.activeElement !== this.text)
+        ) {
           event.preventDefault();
           const direction = event.code === 'ArrowUp' || event.shiftKey ? -1 : 1;
           buttons[(index + direction + buttons.length) % buttons.length]?.focus();
@@ -76,7 +89,10 @@ export class DialogueUI {
     this.element.hidden = false;
     this.element.closest('#stage').classList.add('talking');
     this.element.classList.toggle('object-note', !isMara);
-    this.element.classList.toggle('compact', shouldCompactDialogue(node, isMara));
+    this.element.classList.toggle(
+      'compact',
+      shouldCompactDialogue(node, isMara && node.speaker !== 'Оповідач'),
+    );
     const emotion = normalizeEmotion(node.mood);
     this.element.dataset.mood = emotion;
     this.mood.textContent = emotionLabel(emotion);
@@ -97,12 +113,28 @@ export class DialogueUI {
     this.finishTyping();
     this.fullText = node.text;
     this.text.replaceChildren();
+    this.text.scrollTop = 0;
     const accessible = document.createElement('span');
     accessible.className = 'sr-only';
     accessible.textContent = node.text;
     this.visualText = document.createElement('span');
     this.visualText.setAttribute('aria-hidden', 'true');
     this.text.append(accessible, this.visualText);
+    if (this.pendingPlayerTurn) {
+      const turn = document.createElement('section');
+      turn.id = 'player-turn';
+      turn.setAttribute('aria-label', 'Ви');
+      const name = document.createElement('h3');
+      name.textContent = 'Ви';
+      const words = document.createElement('p');
+      words.textContent = this.pendingPlayerTurn;
+      turn.append(name, words);
+      const reply = document.createElement('strong');
+      reply.className = 'npc-turn-label';
+      reply.textContent = node.speaker;
+      this.text.prepend(turn, reply);
+    }
+    this.pendingPlayerTurn = null;
     this.skip.hidden = reduced;
     this.text.style.minHeight = '';
     this.visualText.textContent = node.text;
@@ -176,9 +208,11 @@ export class DialogueUI {
         button.disabled = true;
         button.dataset.selected = 'true';
         this.finishTyping();
+        this.pendingPlayerTurn = spokenChoice(choice);
         try {
           this.onChoose(choice.id);
         } catch (error) {
+          this.pendingPlayerTurn = null;
           button.disabled = false;
           delete button.dataset.selected;
           throw error;
@@ -211,6 +245,7 @@ export class DialogueUI {
     }
   }
   hide() {
+    this.pendingPlayerTurn = null;
     this.finishTyping();
     this.element.hidden = true;
     this.element.closest('#stage').classList.remove('talking');

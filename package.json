@@ -19,7 +19,8 @@
     "test:browser:mobile": "node scripts/qa-mobile-overhaul.mjs",
     "test:browser:stabilization": "node scripts/qa-stabilization.mjs",
     "test:browser:performance": "node scripts/qa-bookshop-performance.mjs",
-    "test:browser:save-recovery": "node scripts/qa-save-recovery.mjs"
+    "test:browser:save-recovery": "node scripts/qa-save-recovery.mjs",
+    "test:browser:ux": "node scripts/qa-ux-ui-production.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
