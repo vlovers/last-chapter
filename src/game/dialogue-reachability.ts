@@ -1,0 +1,66 @@
+import type { DialogueStory } from './dialogue';
+
+export interface DialogueReachabilityResult {
+  readonly reachableNodes: readonly string[];
+  readonly reachableEdges: readonly string[];
+  readonly unreachableNodes: readonly string[];
+  readonly unreachableEdges: readonly string[];
+  readonly truncated: boolean;
+  readonly exploredStates: number;
+}
+
+/**
+ * Flag-feasibility exploration, not full save-ledger simulation.
+ * External story facts can be supplied as initialFlags.
+ */
+export function analyzeDialogueReachability(
+  story: DialogueStory,
+  initialFlags: readonly string[] = [],
+  maxStates = 10000,
+): DialogueReachabilityResult {
+  const byId = new Map(story.nodes.map((node) => [node.id, node]));
+  const reachableNodes = new Set<string>();
+  const reachableEdges = new Set<string>();
+  const visited = new Set<string>();
+  const queue: { node: string; flags: readonly string[] }[] = [
+    { node: story.start, flags: [...new Set(initialFlags)].sort() },
+  ];
+  const allEdges = story.nodes.flatMap((node) =>
+    node.options.map((option) => JSON.stringify([node.id, option.id, option.next])),
+  );
+  let cursor = 0;
+  let truncated = false;
+  const limit = Math.max(0, Math.floor(maxStates));
+
+  while (cursor < queue.length) {
+    if (visited.size >= limit) {
+      truncated = true;
+      break;
+    }
+    const state = queue[cursor++]!;
+    const key = JSON.stringify([state.node, state.flags]);
+    if (visited.has(key)) continue;
+    visited.add(key);
+    const node = byId.get(state.node);
+    if (!node) continue;
+    reachableNodes.add(node.id);
+    const facts = new Set(state.flags);
+    for (const option of node.options) {
+      if (!(option.requires ?? []).every((flag) => facts.has(flag))) continue;
+      if ((option.unless ?? []).some((flag) => facts.has(flag))) continue;
+      reachableEdges.add(JSON.stringify([node.id, option.id, option.next]));
+      const nextFlags = [...new Set([...state.flags, ...(option.grants ?? [])])].sort();
+      const nextKey = JSON.stringify([option.next, nextFlags]);
+      if (!visited.has(nextKey)) queue.push({ node: option.next, flags: nextFlags });
+    }
+  }
+
+  return {
+    reachableNodes: [...reachableNodes],
+    reachableEdges: [...reachableEdges],
+    unreachableNodes: story.nodes.map((node) => node.id).filter((id) => !reachableNodes.has(id)),
+    unreachableEdges: allEdges.filter((edge) => !reachableEdges.has(edge)),
+    truncated,
+    exploredStates: visited.size,
+  };
+}
