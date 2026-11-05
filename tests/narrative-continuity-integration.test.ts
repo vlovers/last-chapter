@@ -104,6 +104,45 @@ describe('narrative continuity integration: remembered greeting', () => {
   });
 });
 
+describe('narrative continuity integration: save boundary', () => {
+  it('rejects a save that invents a pending topic without a completion ledger', () => {
+    const state = giftWith([]);
+    const raw = JSON.parse(encodeSave({ stage: 'day4-mara', dialogue: state, flags: state.flags }));
+    delete raw.completed;
+    raw.pending = [{ hub: 'greet', key: 'invented' }];
+    expect(decodeSave(JSON.stringify(raw))).toBeNull();
+  });
+
+  it('rejects a save with the same topic simultaneously completed and pending', () => {
+    const state = giftWith([]);
+    const raw = JSON.parse(encodeSave({ stage: 'day4-mara', dialogue: state, flags: state.flags }));
+    raw.completed = ['["greet","book",[]]'];
+    raw.pending = [{ hub: 'greet', key: '["greet","book",[]]' }];
+    expect(decodeSave(JSON.stringify(raw))).toBeNull();
+  });
+
+  it('rejects duplicate world flags instead of changing dialogue branch priority', () => {
+    const state = giftWith(['sold_station']);
+    const raw = JSON.parse(encodeSave({ stage: 'day4-mara', dialogue: state, flags: state.flags }));
+    raw.flags.push('sold_station');
+    expect(decodeSave(JSON.stringify(raw))).toBeNull();
+  });
+
+  it('preserves an unchanged active scene and options through save/restore', () => {
+    const state = giftWith(['sold_roads']);
+    const saved = decodeSave(encodeSave({ stage: 'day4-mara', dialogue: state, flags: state.flags }));
+    expect(saved).not.toBeNull();
+    expect(saved!.stage).toBe('day4-mara');
+    expect(saved!.dialogue.node).toBe(state.node);
+    expect(currentNode(maraDecision, saved!.dialogue).text).toBe(
+      currentNode(maraDecision, state).text,
+    );
+    expect(availableOptions(maraDecision, saved!.dialogue).map(({ id }) => id)).toEqual(
+      availableOptions(maraDecision, state).map(({ id }) => id),
+    );
+  });
+});
+
 describe('narrative continuity integration: Anna and Thomas', () => {
   it.each([
     ['thomas_chairs_owned_mistake', 'Він подзвонив мені'],
