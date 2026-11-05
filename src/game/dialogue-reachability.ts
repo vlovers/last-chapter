@@ -5,6 +5,8 @@ export interface DialogueReachabilityResult {
   readonly reachableEdges: readonly string[];
   readonly unreachableNodes: readonly string[];
   readonly unreachableEdges: readonly string[];
+  /** Edges that require and exclude the same fact: impossible under any initial facts. */
+  readonly impossibleEdges: readonly string[];
   readonly truncated: boolean;
   readonly exploredStates: number;
   /** First feasible option-ID route from the start to each reached node. */
@@ -30,6 +32,11 @@ export function analyzeDialogueReachability(
     { node: story.start, flags: [...new Set(initialFlags)].sort(), path: [] },
   ];
   queued.add(JSON.stringify([story.start, queue[0]!.flags]));
+  const impossibleEdges = story.nodes.flatMap((node) =>
+    node.options
+      .filter((option) => (option.requires ?? []).some((flag) => (option.unless ?? []).includes(flag)))
+      .map((option) => JSON.stringify([node.id, option.id, option.next])),
+  );
   const allEdges = story.nodes.flatMap((node) =>
     node.options.map((option) => JSON.stringify([node.id, option.id, option.next])),
   );
@@ -69,6 +76,7 @@ export function analyzeDialogueReachability(
     reachableEdges: [...reachableEdges],
     unreachableNodes: story.nodes.map((node) => node.id).filter((id) => !reachableNodes.has(id)),
     unreachableEdges: allEdges.filter((edge) => !reachableEdges.has(edge)),
+    impossibleEdges,
     truncated,
     exploredStates: visited.size,
     witnessPaths,
