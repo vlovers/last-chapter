@@ -49,3 +49,23 @@ This branch is based on `feat/narrative-player-voice-depth-20261105` (PR #33), *
 - Mara's `thank` branch explicitly mentions `із корицею`, while her `joke` branch keeps the wedge promise. The callbacks remain mutually exclusive.
 - Three additional integration tests cover those distinct branches and their flags.
 - This remains a source-level fix only; full test and Browser QA results are not yet verified.
+
+## GitHub Actions audit — 2026-11-05 03:00 Europe/Kyiv
+
+Checked exact PR heads against Actions:
+
+| PR | Head SHA | CI | Browser QA |
+| --- | --- | --- | --- |
+| #33 | `062bcf9c4d5525531d0e53e1ae1c7de4bdde77e6` | Failure | Failure |
+| #35 | `131b6add0884746ce6f21f089efdf7a36b375a92` | Queued | Failure |
+| #36 | `2f4f8666cf7a46dba7912607e9dbdd15e97713ed` | Queued | Queued |
+
+PR #33's quality job `126962096608` failed at `prettier --check .`, **before** running TypeScript, unit tests or build. The exact parse failures were `src/content/eleanor.ts:35` (unescaped apostrophe in `доп'ємо`) and `src/content/first-day.ts:27` (unescaped apostrophe in `дріб'язку`). Both source-level parse errors were already corrected on PR #36. A failed PR #33 CI run is therefore not evidence that the tests on PR #36 failed; conversely, queued PR #36 jobs are not evidence of success.
+
+For PR #33, all thirteen Browser QA matrix jobs inside its CI workflow were marked failed; their root causes have not yet been inspected and must not be attributed to the syntax errors without logs. PR #35's browser failure is also unresolved. Do not merge until the current head's CI and Browser QA are verified, and the local combined PR #33/#35 integration's seventeen reported failures are rechecked.
+
+### Immediate next verification
+
+1. Inspect PR #36's own quality job when it starts. If it fails on formatting, fix the exact lines; if tests fail, use actual log assertions and source option IDs.
+2. Check the separate Browser QA workflow logs rather than inferring a cause from the matrix failure count.
+3. Reconcile all fixes with the user's unfinished local integration branch without overwriting or staging that working tree.
