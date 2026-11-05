@@ -102,13 +102,14 @@ try {
         ),
       'Player precedes NPC in reading order',
     );
+    // The dialogue auto-focuses the first reply. A Playwright Enter after
+    // multiple DOM assertions is not an immediate key repeat: it can be a
+    // legitimate choice after the 220ms guard. Test prose keyboard isolation
+    // separately from a truly synchronous double activation.
     const once = await save();
+    await page.locator('#dialogue-text').focus();
     await page.keyboard.press('Enter');
-    assert.equal(await save(), once, 'Immediate Enter cannot consume the next node');
-    if (width < 900) {
-      await page.locator('#choices [data-choice="gossip"]').tap();
-      assert.equal(await save(), once, 'Immediate second touch cannot consume the next node');
-    }
+    assert.equal(await save(), once, 'Enter on dialogue prose cannot select a reply');
     assert.deepEqual((await geometry()).canvas, world.canvas, 'Dialogue never resizes the world');
     const reading = await page.locator('#dialogue-text').evaluate((node) => {
       const rect = node.getBoundingClientRect();
@@ -126,7 +127,15 @@ try {
     await page.keyboard.press('Tab');
     assert.equal(await page.locator('#choices button:focus').count(), 1, 'Tab reaches answers');
 
-    for (const id of ['gossip', 'what-saw', 'challenge']) await choose(id);
+    // Exercise a real stale-button double tap without introducing fabricated
+    // option IDs or advancing the authored journey twice.
+    await page.waitForTimeout(240);
+    const staleChoice = await page.locator('#choices [data-choice="gossip"]').elementHandle();
+    await staleChoice.click();
+    const afterFirst = await save();
+    await staleChoice.evaluate((button) => button.click());
+    assert.equal(await save(), afterFirst, 'Detached prior reply cannot advance the next node');
+    for (const id of ['what-saw', 'challenge']) await choose(id);
     const flags = JSON.parse(await save()).flags;
     assert.equal(flags.filter((flag) => flag === 'rumor_challenged').length, 1);
     const checkpoint = await save();
