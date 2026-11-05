@@ -31,6 +31,24 @@ const stories: readonly [string, DialogueStory][] = [
 ];
 
 describe('five-day narrative audit', () => {
+  it('prints a reproducible per-story flag-feasibility inventory', () => {
+    const inventory = stories.map(([name, story]) => {
+      const report = analyzeDialogueReachability(story, [], 10000);
+      return {
+        story: name,
+        nodes: story.nodes.length,
+        reachableNodes: report.reachableNodes.length,
+        potentiallyExternalOrUnreachableNodes: report.unreachableNodes.length,
+        potentiallyExternalOrUnreachableEdges: report.unreachableEdges.length,
+        impossibleEdges: report.impossibleEdges.length,
+        truncated: report.truncated,
+      };
+    });
+    // Missing local prerequisites are not necessarily errors: flags may be granted in other stories.
+    console.info('Narrative flag-feasibility inventory:', JSON.stringify(inventory, null, 2));
+    expect(inventory).toHaveLength(stories.length);
+  });
+
   it.each(stories)('%s has structurally valid dialogue', (_name, story) => {
     expect(validateDialogue(story)).toEqual([]);
   });
