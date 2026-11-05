@@ -71,6 +71,42 @@ describe('five-day narrative audit', () => {
     expect(new Set(variants.map((entry) => entry.text)).size).toBe(3);
   });
 
+
+  it('keeps Iris letter choices gated behind discovering the envelope', () => {
+    const welcome = irisDecision.nodes.find((node) => node.id === 'welcome');
+    const letterChoices = welcome?.options.filter((option) =>
+      ['letter', 'iris-letter-feeling', 'iris-letter-ask'].includes(option.id),
+    ) ?? [];
+    expect(letterChoices).toHaveLength(3);
+    for (const option of letterChoices) {
+      expect(option.requires).toContain('saw_envelope');
+    }
+  });
+
+  it('does not permit repeated pressure after Iris or Leo sets a boundary', () => {
+    const irisWelcome = irisDecision.nodes.find((node) => node.id === 'welcome');
+    const leoWelcome = leoDecision.nodes.find((node) => node.id === 'welcome');
+    expect(irisWelcome?.options.find((option) => option.id === 'letter')?.unless)
+      .toContain('iris_letter_pressured_day4');
+    expect(leoWelcome?.options.find((option) => option.id === 'letter')?.unless)
+      .toContain('leo_letter_pressured_day4');
+  });
+
+  it('requires actual timeline evidence before Leo discusses the booking', () => {
+    const welcome = leoDecision.nodes.find((node) => node.id === 'welcome');
+    expect(welcome?.options.find((option) => option.id === 'evidence')?.requires)
+      .toContain('eleanor_timeline_checked');
+  });
+
+  it('keeps all three Mara gift callbacks specific to their book', () => {
+    const book = maraDecision.nodes.find((node) => node.id === 'book');
+    for (const flag of ['sold_station', 'sold_roads', 'sold_letters']) {
+      const variant = book?.textWhen?.find((entry) => entry.requires.includes(flag));
+      expect(variant, flag).toBeDefined();
+      expect(variant?.text.trim().length).toBeGreaterThan(40);
+    }
+  });
+
   it.each(stories)('%s has structurally valid dialogue', (_name, story) => {
     expect(validateDialogue(story)).toEqual([]);
   });
