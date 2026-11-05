@@ -53,6 +53,31 @@ describe('narrative continuity integration: purchased and legacy gifts', () => {
   });
 });
 
+describe('narrative continuity integration: remembered greeting', () => {
+  it('keeps the door-wedge callback exclusive to the chosen joke, including after save/restore', () => {
+    const arrival = startDialogue(maraDecision);
+    expect(currentNode(maraDecision, arrival).text).not.toContain('дерев’яний клинець');
+
+    const joked = { ...arrival, flags: ['mara_door_joke_shared'] };
+    expect(currentNode(maraDecision, joked).text).toContain('дерев’яний клинець');
+    const saved = decodeSave(encodeSave({ stage: 'day4-mara', dialogue: joked, flags: joked.flags }));
+    expect(saved).not.toBeNull();
+    expect(currentNode(maraDecision, saved!.dialogue).text).toContain('дерев’яний клинець');
+
+    const thanked = { ...arrival, flags: ['mara_buns_thanked'] };
+    expect(currentNode(maraDecision, thanked).text).not.toContain('дерев’яний клинець');
+  });
+
+  it('does not grant a gift-encouragement flag merely by opening the book topic', () => {
+    for (const sale of ['sold_station', 'sold_roads', 'sold_letters']) {
+      const state = giftWith([sale]);
+      expect(state.flags).not.toContain('mara_gift_encouraged');
+      const returned = selectOption(maraDecision, state, 'book-back');
+      expect(returned.flags).not.toContain('mara_gift_encouraged');
+    }
+  });
+});
+
 describe('narrative continuity integration: Anna and Thomas', () => {
   it.each([
     ['thomas_chairs_owned_mistake', 'Він подзвонив мені'],
