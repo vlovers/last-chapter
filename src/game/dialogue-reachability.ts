@@ -22,15 +22,17 @@ export function analyzeDialogueReachability(
   const reachableNodes = new Set<string>();
   const reachableEdges = new Set<string>();
   const visited = new Set<string>();
+  const queued = new Set<string>();
   const queue: { node: string; flags: readonly string[] }[] = [
     { node: story.start, flags: [...new Set(initialFlags)].sort() },
   ];
+  queued.add(JSON.stringify([story.start, queue[0]!.flags]));
   const allEdges = story.nodes.flatMap((node) =>
     node.options.map((option) => JSON.stringify([node.id, option.id, option.next])),
   );
   let cursor = 0;
   let truncated = false;
-  const limit = Math.max(0, Math.floor(maxStates));
+  const limit = Number.isFinite(maxStates) ? Math.max(0, Math.floor(maxStates)) : 10000;
 
   while (cursor < queue.length) {
     if (visited.size >= limit) {
@@ -51,7 +53,10 @@ export function analyzeDialogueReachability(
       reachableEdges.add(JSON.stringify([node.id, option.id, option.next]));
       const nextFlags = [...new Set([...state.flags, ...(option.grants ?? [])])].sort();
       const nextKey = JSON.stringify([option.next, nextFlags]);
-      if (!visited.has(nextKey)) queue.push({ node: option.next, flags: nextFlags });
+      if (!queued.has(nextKey)) {
+        queued.add(nextKey);
+        queue.push({ node: option.next, flags: nextFlags });
+      }
     }
   }
 
