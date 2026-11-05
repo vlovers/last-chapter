@@ -121,6 +121,27 @@ describe('narrative continuity integration: save boundary', () => {
     expect(decodeSave(JSON.stringify(raw))).toBeNull();
   });
 
+  it('rejects unknown completed options that could hide unrelated topics', () => {
+    const state = giftWith([]);
+    const raw = JSON.parse(encodeSave({ stage: 'day4-mara', dialogue: state, flags: state.flags }));
+    raw.completed = ['["greet","not-a-real-option",[]]'];
+    expect(decodeSave(JSON.stringify(raw))).toBeNull();
+  });
+
+  it('rejects pending entries whose hub differs from their completion key', () => {
+    const state = giftWith([]);
+    const raw = JSON.parse(encodeSave({ stage: 'day4-mara', dialogue: state, flags: state.flags }));
+    raw.pending = [{ hub: 'book', key: '["greet","book",[]]' }];
+    expect(decodeSave(JSON.stringify(raw))).toBeNull();
+  });
+
+  it('rejects completion keys with forged reopen conditions', () => {
+    const state = giftWith([]);
+    const raw = JSON.parse(encodeSave({ stage: 'day4-mara', dialogue: state, flags: state.flags }));
+    raw.completed = ['["greet","book",["invented_flag"]]'];
+    expect(decodeSave(JSON.stringify(raw))).toBeNull();
+  });
+
   it('rejects duplicate world flags instead of changing dialogue branch priority', () => {
     const state = giftWith(['sold_station']);
     const raw = JSON.parse(encodeSave({ stage: 'day4-mara', dialogue: state, flags: state.flags }));
