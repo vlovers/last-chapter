@@ -1,6 +1,6 @@
 import { createActorActions, cueActor } from './actor-actions.js';
 import { createFrameBudget } from './performance.js';
-import { viewportPlan, frameWorld } from './viewport.js';
+import { viewportPlan, frameWorld, frameDialogue } from './viewport.js';
 import { WIDTH, HEIGHT, SPEED } from './config.js';
 import { validateManifest, ASSET_MANIFEST } from './assets.js';
 import { drawEnvironment } from './environment.js';
@@ -104,11 +104,20 @@ class Bookshop extends Phaser.Scene {
     const targetX = this.cameraLook?.x ?? player.x;
     const frame = frameWorld({ x: targetX, y: player.y }, width, height);
     camera.scrollX = frame.x;
-    const sheet = this.state.mode === 'dialogue' ? $('#dialogue').offsetHeight || 0 : 0;
+    const dock = $('#dialogue');
+    const sheet = this.state.mode === 'dialogue' ? dock.offsetHeight || 0 : 0;
     // Reading is a camera composition change only: viewport size and zoom stay fixed.
-    camera.scrollY = Math.round(
-      sheet ? player.y - Math.max(65, (camera.height - sheet - 24) * 0.7) / camera.zoom : frame.y,
-    );
+    if (sheet) {
+      const companion = ['story', 'mara'].includes(this.activeDialogue?.kind)
+        ? this.characters.mara
+        : null;
+      const reading = frameDialogue(player, companion, camera.width, camera.height, camera.zoom, {
+        width: dock.offsetWidth,
+        height: sheet,
+      });
+      camera.scrollX = reading.x;
+      camera.scrollY = reading.y;
+    } else camera.scrollY = frame.y;
   }
   refreshStory() {
     if (!this.story) return;
@@ -216,8 +225,7 @@ class Bookshop extends Phaser.Scene {
       );
     });
     this.listen(window, 'keydown', (event) => {
-      if (!this.started || this.failed || this.state.mode !== 'explore' || $('#settings').open)
-        return;
+      if (!this.canExplore()) return;
       const inGame = [$('#game'), $('#context-action'), document.body].includes(
         document.activeElement,
       );
@@ -363,6 +371,7 @@ class Bookshop extends Phaser.Scene {
       !this.failed &&
       this.state.mode === 'explore' &&
       !$('#settings').open &&
+      !$('#explore-menu')?.open &&
       !document.body.classList.contains('reading')
     );
   }

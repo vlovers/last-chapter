@@ -1152,6 +1152,12 @@ footer {
   }
 }
 @media (orientation: landscape) and (max-height: 550px) {
+  .story-toolbar {
+    padding-block: 3px;
+  }
+  .story-toolbar-actions button {
+    padding-block: 4px;
+  }
   main {
     grid-template-rows: 0 minmax(0, 1fr) calc(52px + env(safe-area-inset-bottom));
   }
