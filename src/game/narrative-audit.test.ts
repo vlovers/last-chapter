@@ -62,6 +62,15 @@ describe('five-day narrative audit', () => {
     expect(inventory.every((item) => item.exploredStates !== 0)).toBe(true);
   });
 
+  it('Mara remembers which of the three books was chosen', () => {
+    const book = maraDecision.nodes.find((node) => node.id === 'book');
+    const variants = book?.textWhen?.filter((entry) =>
+      ['sold_station', 'sold_roads', 'sold_letters'].some((flag) => entry.requires.includes(flag)),
+    ) ?? [];
+    expect(variants).toHaveLength(3);
+    expect(new Set(variants.map((entry) => entry.text)).size).toBe(3);
+  });
+
   it.each(stories)('%s has structurally valid dialogue', (_name, story) => {
     expect(validateDialogue(story)).toEqual([]);
   });
