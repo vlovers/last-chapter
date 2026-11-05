@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { annaVisit } from '../src/content/anna';
+import { maraVisit } from '../src/content/mara';
 import { maraDecision } from '../src/content/day-four-mara';
 import { thomasVisit } from '../src/content/thomas';
 import { availableOptions, currentNode, selectOption, startDialogue } from '../src/game/dialogue';
@@ -50,6 +51,31 @@ describe('narrative continuity integration: purchased and legacy gifts', () => {
     const back = selectOption(maraDecision, state, 'book-back');
     expect(currentNode(maraDecision, back).text).toContain('як зробити йому сюрприз');
     expect(back.flags).not.toContain('mara_gift_encouraged');
+  });
+});
+
+describe('narrative continuity integration: day-one and day-two chronology', () => {
+  it('describes tomorrow’s school reading on day two', () => {
+    const state = selectOption(annaVisit, startDialogue(annaVisit), 'hello');
+    expect(currentNode(annaVisit, state).text).toContain('завтра читання');
+  });
+
+  it('answers Mara’s thanked-buns greeting with cinnamon, not the door-wedge promise', () => {
+    let state = selectOption(maraVisit, startDialogue(maraVisit), 'hello');
+    state = selectOption(maraVisit, state, 'thank');
+    expect(currentNode(maraVisit, state).text).toContain('із корицею');
+    expect(currentNode(maraVisit, state).text).not.toContain('Завтра принесу клинець');
+    expect(state.flags).toContain('mara_buns_thanked');
+    expect(state.flags).not.toContain('mara_door_joke_shared');
+  });
+
+  it('answers Mara’s door joke with the wedge promise, not the buns-thanks callback', () => {
+    let state = selectOption(maraVisit, startDialogue(maraVisit), 'hello');
+    state = selectOption(maraVisit, state, 'joke');
+    expect(currentNode(maraVisit, state).text).toContain('Завтра принесу клинець');
+    expect(currentNode(maraVisit, state).text).not.toContain('із корицею');
+    expect(state.flags).toContain('mara_door_joke_shared');
+    expect(state.flags).not.toContain('mara_buns_thanked');
   });
 });
 
