@@ -49,11 +49,7 @@ describe('five-day narrative audit', () => {
         potentiallyExternalOrUnreachableEdges: report.unreachableEdges.length,
         impossibleEdges: report.impossibleEdges.length,
         truncated: report.truncated,
-        missingLocalPrerequisites: [...new Set(story.nodes.flatMap((node) =>
-          node.options.flatMap((option) => option.requires ?? []),
-        ))].filter((flag) => !story.nodes.some((node) =>
-          node.options.some((option) => (option.grants ?? []).includes(flag)),
-        )),
+        missingLocalPrerequisites: report.potentiallyExternalFlags,
       };
     });
     // Missing local prerequisites are not necessarily errors: flags may be granted in other stories.
