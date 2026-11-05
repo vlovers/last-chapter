@@ -89,6 +89,23 @@ describe('narrative continuity integration: Anna and Thomas', () => {
     expect(currentNode(annaVisit, state).text).toContain(expected);
   });
 
+  it.each([
+    ['anna-chairs-defend', 'anna_chairs_player_defended_thomas'],
+    ['anna-chairs-listen', 'anna_chairs_player_heard_anna'],
+    ['anna-chairs-change-topic', 'anna_chairs_player_changed_topic'],
+  ])('preserves player stance %s without consuming other branches', (option, flag) => {
+    let state = { ...startDialogue(annaVisit), flags: ['thomas_chairs_discussed'] };
+    state = selectOption(annaVisit, state, 'hello');
+    state = selectOption(annaVisit, state, 'anna-thomas-chairs-followup');
+    state = selectOption(annaVisit, state, option);
+    expect(state.flags).toContain(flag);
+    const returned = selectOption(annaVisit, state, 'anna-chairs-back');
+    expect(returned.flags).toContain('anna_thomas_chairs_followup_discussed');
+    expect(availableOptions(annaVisit, returned).map(({ id }) => id)).not.toContain(
+      'anna-thomas-chairs-followup',
+    );
+  });
+
   it('anchors Thomas missed promise to the day-three school reading', () => {
     let state = startDialogue(thomasVisit);
     state = selectOption(thomasVisit, state, 'greet');
