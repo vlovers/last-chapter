@@ -3,6 +3,9 @@ import { focusPanelUpdate, panelTabStops, restorePanelFocus } from './panel-focu
 import { discoveredPeopleAtStage } from './discovered-people';
 import { OPTIONAL_PROGRESS_KEYS } from './optional-progress';
 import type { FiveDayStory } from './five-day-story';
+import { journalEntries, unreadJournalIds } from './journal-view';
+import { portraitDataUrl } from '../../public/phaser-prototype/visitor-portraits.js';
+import { spokenChoice } from '../../public/phaser-prototype/player-turn.js';
 import {
   answerConversation,
   conversationAvailable,
@@ -99,6 +102,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   let reaction: { text: string; accepted: boolean } | null = null;
   let returnFocus: HTMLElement | null = null;
   let personalNotes = '';
+  const seenJournal = new Set<string>();
+  let pendingPlayerTurn: string | null = null;
   try {
     if (story.isProgressSaved)
       personalNotes = (localStorage.getItem(OPTIONAL_PROGRESS_KEYS.notes) ?? '').slice(0, 4000);
@@ -132,6 +137,10 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   saveWarning.hidden = true;
   root.prepend(saveWarning);
   const refresh = () => {
+    const entries = journalEntries(story);
+    const unread = unreadJournalIds(story, seenJournal).length;
+    journal.dataset.unread = String(unread);
+    journal.title = unread ? `Нових записів: ${unread}` : 'Нотатник книгаря';
     saveWarning.hidden = story.isProgressSaved;
     timeline.replaceChildren();
     for (const day of story.progress) {
@@ -180,6 +189,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
           : 'Книжкова полиця',
     );
     panel.setAttribute('role', 'dialog');
+    panel.removeAttribute('aria-live');
     panel.setAttribute('aria-modal', 'true');
     panel.classList.toggle('story-panel--conversation', mode === 'conversation');
     panel.classList.toggle('story-panel--journal', mode === 'journal');
@@ -269,6 +279,13 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         const exchange = element('section', '', 'conversation-exchange');
         exchange.tabIndex = -1;
         exchange.setAttribute('aria-live', 'polite');
+        if (pendingPlayerTurn) {
+          const turn = element('section', '', 'player-turn');
+          turn.setAttribute('aria-label', 'Ви');
+          turn.append(element('h3', 'Ви'), element('p', pendingPlayerTurn));
+          exchange.append(turn);
+        }
+        pendingPlayerTurn = null;
         exchange.append(element('h3', node.speaker), element('p', node.text));
         panel.append(exchange);
         const replies = element('div', '', 'conversation-replies');
@@ -286,6 +303,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
             else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next;
             else conversation = next;
             saveConversation();
+            pendingPlayerTurn = next.suspended ? null : spokenChoice(choice);
             if (next.suspended) mode = null;
             refresh();
             if (next.suspended) restorePanelFocus(returnFocus, catalog);
@@ -303,6 +321,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       for (const [id, label] of [
         ['people', 'Люди'],
         ['clues', 'Знахідки'],
+        ['events', 'Події'],
+        ['tasks', 'Завдання'],
         ['orders', 'Замовлення'],
         ['rumors', 'Чутки'],
         ['notes', 'Мої записи'],
@@ -319,9 +339,16 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       }
       panel.append(tabs);
       if (journalTab === 'people') {
+        const people = element('div', '', 'journal-people');
         for (const [id, name] of discoveredPeople()) {
-          const card = element('article', '', 'evidence-card');
-          card.append(
+          const card = element('article', '', 'evidence-card person-card');
+          const portrait = element('img', '');
+          portrait.src = portraitDataUrl(id) ?? '/art/bookshop/mara.svg';
+          portrait.alt = '';
+          portrait.width = 48;
+          portrait.height = 60;
+          const bio = element('div', '');
+          bio.append(
             element('h3', name!),
             element(
               'p',
@@ -330,8 +357,10 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
                 : 'Ви вже зустрічалися в книгарні.',
             ),
           );
-          panel.append(card);
+          card.append(portrait, bio);
+          people.append(card);
         }
+        panel.append(people);
         // Keep optional authored conversations accessible without another persistent HUD control.
         const talk = element('button', 'Поговорити з Марою');
         talk.addEventListener('click', () => {
@@ -350,30 +379,17 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
               ),
             );
         }
-        const decisions = story.notes.filter((note) => !note.startsWith('Чутка:'));
-        if (decisions.length) {
-          panel.append(element('h3', 'Почуте й важливі рішення'));
-          const list = element('ul', '', 'story-notes');
-          for (const note of decisions) list.append(element('li', note));
-          panel.append(list);
-        }
       } else if (journalTab === 'clues') {
         const collected = story.evidence.filter((clue) => clue.collected);
-        for (const entry of story.knownEvidence) {
+        for (const entry of entries.clues) {
           const card = element('article', '', 'evidence-card');
+          card.dataset.kind = entry.kind;
+          card.dataset.new = String(!seenJournal.has(entry.id));
+          seenJournal.add(entry.id);
           card.append(
             element('small', `${evidenceKindLabels[entry.kind]} · ${entry.source}`),
             element('h3', entry.title),
             element('p', entry.detail),
-          );
-          panel.append(card);
-        }
-        for (const clue of collected) {
-          const card = element('article', '', 'evidence-card');
-          card.append(
-            element('small', evidenceKindLabels[clue.kind]),
-            element('h3', clue.label),
-            element('p', clue.detail),
           );
           panel.append(card);
         }
@@ -407,6 +423,42 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
           });
           panel.append(gather);
         }
+      } else if (journalTab === 'events') {
+        panel.append(element('h3', 'Почуте й важливі рішення'));
+        const list = element('ol', '', 'story-notes journal-page');
+        for (const entry of entries.events) {
+          const item = element('li', entry.detail);
+          item.dataset.new = String(!seenJournal.has(entry.id));
+          seenJournal.add(entry.id);
+          list.append(item);
+        }
+        panel.append(list);
+        if (!entries.events.length)
+          panel.append(element('p', 'Тут з’являться почуті історії та ваші рішення.'));
+      } else if (journalTab === 'tasks') {
+        const task = element('article', '', 'evidence-card');
+        task.append(
+          element('small', `День ${story.day} · зараз`),
+          element('h3', story.guidance.action),
+          element('p', story.guidance.text),
+        );
+        const proceed = element(
+          'button',
+          story.request ? 'Відкрити каталог' : 'Повернутися до історії',
+        );
+        proceed.type = 'button';
+        proceed.addEventListener('click', () => {
+          mode = null;
+          refresh();
+          window.dispatchEvent(
+            new Event(story.request ? 'last-chapter:catalog-open' : 'last-chapter:continue'),
+          );
+        });
+        task.append(proceed);
+        panel.append(
+          task,
+          element('p', 'Дослідження книгарні й додаткові розмови — за бажанням.', 'optional-hint'),
+        );
       } else if (journalTab === 'orders') {
         if (story.request)
           panel.append(
@@ -427,9 +479,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         if (!story.orders.length) panel.append(element('p', 'Ще немає виконаних замовлень.'));
       } else if (journalTab === 'rumors') {
         panel.append(element('p', 'Чутки — це чужі слова, а не підтвердження подій.'));
-        const rumors = story.notes.filter((note) => note.startsWith('Чутка:'));
-        for (const note of rumors) panel.append(element('p', note, 'evidence-card'));
-        if (!rumors.length) panel.append(element('p', 'Ви ще не чули чуток.'));
+        for (const entry of entries.rumors) {
+          const card = element('p', entry.detail, 'evidence-card');
+          card.dataset.kind = 'rumor';
+          card.dataset.new = String(!seenJournal.has(entry.id));
+          seenJournal.add(entry.id);
+          panel.append(card);
+        }
+        if (!entries.rumors.length) panel.append(element('p', 'Ви ще не чули чуток.'));
       } else {
         const label = element('label', 'Ваші думки й запитання');
         label.htmlFor = 'personal-notes';
@@ -437,16 +494,28 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         notes.id = 'personal-notes';
         notes.maxLength = 4000;
         notes.value = personalNotes;
+        const status = element(
+          'p',
+          'Ці записи залишаються лише у вашому браузері.',
+          'notes-status',
+        );
+        status.setAttribute('role', 'status');
         notes.addEventListener('input', () => {
           personalNotes = notes.value;
-          if (!story.isProgressSaved) return;
+          if (!story.isProgressSaved) {
+            status.textContent =
+              'Запис доступний лише до закриття сторінки: збереження зараз недоступне.';
+            return;
+          }
           try {
             localStorage.setItem(OPTIONAL_PROGRESS_KEYS.notes, personalNotes);
+            status.textContent = 'Збережено в цьому браузері.';
           } catch {
-            /* optional */
+            status.textContent =
+              'Не вдалося зберегти запис. Залиште сторінку відкритою або скопіюйте текст.';
           }
         });
-        panel.append(label, notes, element('p', 'Ці записи залишаються лише у вашому браузері.'));
+        panel.append(label, notes, status);
       }
     } else if (mode === 'catalog') {
       panel.append(element('p', 'Каталог книгарні', 'catalog-eyebrow'));
@@ -518,6 +587,9 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       tools.append(searchInput, filters);
       panel.append(tools);
       const shelf = element('div', '', 'story-book-grid');
+      const count = element('p', '', 'catalog-count');
+      count.setAttribute('role', 'status');
+      panel.append(count);
       const renderShelf = () => {
         shelf.replaceChildren();
         for (const book of story
@@ -528,25 +600,19 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
               .includes(search.toLocaleLowerCase('uk-UA').trim()),
           )) {
           const card = element('article', '', 'story-book');
-          const cover = element('div', book.title[0]!, 'book-cover');
-          cover.setAttribute('aria-hidden', 'true');
-          cover.style.setProperty(
-            '--cover',
-            (
-              {
-                orchard: '#697b5e',
-                witnesses: '#736481',
-                station: '#577a83',
-                roads: '#a47755',
-                letters: '#9b6665',
-              } as Record<string, string>
-            )[book.id]!,
-          );
+          const cover = element('img', '', 'book-cover');
+          cover.src = `/art/bookshop/covers/${book.id}.svg`;
+          cover.alt = '';
+          cover.width = 64;
+          cover.height = 92;
           card.append(
             cover,
             element('h3', book.title),
             element('small', `${book.genre} · ${book.length}`),
           );
+          const sentenceEnd = book.blurb.indexOf('. ');
+          const preview = sentenceEnd >= 0 ? book.blurb.slice(0, sentenceEnd + 1) : book.blurb;
+          card.append(element('p', preview, 'book-blurb'));
           const details = element('details', '');
           const summary = element('summary', 'Про книжку');
           details.append(summary, element('p', book.blurb), element('p', book.tone));
@@ -567,12 +633,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         }
         if (!shelf.children.length)
           shelf.append(element('p', 'За цим запитом книжок немає. Спробуйте інше слово.'));
+        count.textContent = `Знайдено видань: ${shelf.querySelectorAll('.story-book').length} з ${story.catalog().length}`;
       };
       renderShelf();
       panel.append(shelf);
     }
   };
   const toggle = (next: 'journal' | 'catalog' | 'conversation') => {
+    pendingPlayerTurn = null;
     if (next === 'conversation' && story.actor !== 'mara') return;
     returnFocus = document.activeElement as HTMLElement;
     reaction = next === 'catalog' ? story.lastRecommendation : null;
@@ -643,6 +711,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     reaction = null;
     returnFocus = null;
     personalNotes = '';
+    pendingPlayerTurn = null;
+    seenJournal.clear();
     try {
       localStorage.setItem(OPTIONAL_PROGRESS_KEYS.notes, '');
     } catch {

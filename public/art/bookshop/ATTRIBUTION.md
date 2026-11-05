@@ -29,3 +29,12 @@ They use the room's existing palette and integer paint coordinates, without
 external assets, textures or CSS sprite scaling. Frank's compact geometry is
 rasterized directly onto the native grid. Rain, dust and reflections use small
 reused graphics rather than third-party image assets.
+
+# UX/UI catalog covers — 2026-11-05
+
+`covers/{orchard,witnesses,station,roads,letters}.svg` are original code-authored
+48 × 72 pixel geometric artwork created for Last Chapter in this repository.
+The orchard, eye, station, map and envelope motifs use only integer SVG geometry,
+the shared autumn palette and crisp-edge rendering. No external art, fonts,
+photographs, trademarks or generated bitmap assets are included. The journal
+reuses the existing deterministic `visitor-portraits.js` pixel portraits.
