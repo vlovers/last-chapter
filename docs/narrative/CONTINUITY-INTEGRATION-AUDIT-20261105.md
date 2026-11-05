@@ -69,3 +69,12 @@ For PR #33, all thirteen Browser QA matrix jobs inside its CI workflow were mark
 1. Inspect PR #36's own quality job when it starts. If it fails on formatting, fix the exact lines; if tests fail, use actual log assertions and source option IDs.
 2. Check the separate Browser QA workflow logs rather than inferring a cause from the matrix failure count.
 3. Reconcile all fixes with the user's unfinished local integration branch without overwriting or staging that working tree.
+
+## 05:55 Kyiv — save ledger hardening and CI evidence
+
+- PR #36 head before this batch: `d3739274fe521aca269bd3fc960421b34dbea313`.
+- GitHub Actions run `41958891329`: all 14 Browser QA matrix jobs passed, including `save-recovery`, mobile, five-day and finale; `quality` failed at `Format`, so lint, TypeScript, Vitest, build and audit did **not** execute.
+- Standalone Browser QA run `41958891322` succeeded. This does not prove that PR #36 passes the complete CI gate.
+- Fixed `validCompletionKey`: reopening flags must be an ordered subsequence of `option.reopensWhen`, matching the serializer's `.filter(...)` order. The prior index expression could accept an out-of-order subsequence.
+- Added tests for forged reopening flags and for round-tripping the actual ledger produced by gameplay.
+- Follow-up priority: run Prettier on the eight previously reported files and verify full quality gate. GitHub contents API does not provide a Prettier execution environment, so formatting has not been certified locally.
