@@ -106,6 +106,38 @@ describe('narrative continuity integration: Anna and Thomas', () => {
     );
   });
 
+  it.each([
+    ['anna_chairs_player_defended_thomas', 'Ти мене захищав?'],
+    ['anna_chairs_player_heard_anna', 'Ти її вислухав?'],
+    ['anna_chairs_player_changed_topic', 'Ви говорили про читання?'],
+  ])('Thomas remembers Anna conversation stance %s after save/restore', (flag, expected) => {
+    let state = {
+      ...startDialogue(thomasVisit),
+      flags: ['anna_thomas_chairs_followup_discussed', flag],
+    };
+    state = selectOption(thomasVisit, state, 'greet');
+    state = selectOption(thomasVisit, state, 'thomas-anna-chairs-reaction');
+    expect(currentNode(thomasVisit, state).text).toContain(expected);
+    const saved = decodeSave(encodeSave({ stage: 'thomas', dialogue: state, flags: state.flags }));
+    expect(saved).not.toBeNull();
+    expect(currentNode(thomasVisit, saved!.dialogue).text).toContain(expected);
+    state = selectOption(thomasVisit, saved!.dialogue, 'thomas-anna-chairs-direct');
+    expect(state.flags).toContain('thomas_anna_chairs_direct_talk');
+    state = selectOption(thomasVisit, state, 'thomas-anna-chairs-back');
+    expect(state.flags).toContain('thomas_anna_chairs_reaction_discussed');
+    expect(availableOptions(thomasVisit, state).map(({ id }) => id)).not.toContain(
+      'thomas-anna-chairs-reaction',
+    );
+  });
+
+  it('does not expose the Thomas follow-up before Anna was consulted', () => {
+    let state = startDialogue(thomasVisit);
+    state = selectOption(thomasVisit, state, 'greet');
+    expect(availableOptions(thomasVisit, state).map(({ id }) => id)).not.toContain(
+      'thomas-anna-chairs-reaction',
+    );
+  });
+
   it('anchors Thomas missed promise to the day-three school reading', () => {
     let state = startDialogue(thomasVisit);
     state = selectOption(thomasVisit, state, 'greet');
