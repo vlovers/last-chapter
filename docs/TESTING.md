@@ -14,6 +14,14 @@ portrait fallback metadata and unsupported audio. Runtime JavaScript is linted a
 
 ## Optional browser smoke tests
 
+`npm run test:browser:ux` checks the production UI at 320×568, 360×780, 375×667,
+375×812, 390×844, 430×932, 768×1024, 1440×900 and 844×390. It covers transient
+spoken player turns before NPC replies, action labels, rapid Enter/touch guards,
+reload without replay, long Ukrainian prose, offscreen Frank navigation, local
+cover loading, search/filtering, notebook knowledge boundaries and notes. It can
+run against Vite preview by setting `BASE_URL`; screenshots and JSON go to
+`QA_OUTPUT`. See [the UX/UI record](qa/ux-ui-production/README.md).
+
 The repository does not add a browser automation library to game dependencies. Install
 Playwright in a temporary directory and use installed Google Chrome, or configure another
 available Chromium channel. With Vite running:

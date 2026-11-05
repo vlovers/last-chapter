@@ -71,6 +71,8 @@ jobs:
             command: QA_WIDTH=390 QA_GROUP=daily node scripts/qa-narrative-v2.mjs
           - name: save-recovery
             command: npm run test:browser:save-recovery
+          - name: ux-ui
+            command: npm run test:browser:ux
           - name: performance
             command: node scripts/qa-bookshop-performance.mjs
     steps:
@@ -107,6 +109,13 @@ jobs:
         with:
           name: vite-log-${{ matrix.suite.name }}
           path: /tmp/last-chapter-vite.log
+          if-no-files-found: ignore
+      - name: Upload UX/UI browser evidence
+        if: always() && matrix.suite.name == 'ux-ui'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ux-ui-browser-qa
+          path: /tmp/last-chapter-qa
           if-no-files-found: ignore
       - name: Upload finale matrix evidence
         if: always() && matrix.suite.name == 'finale'

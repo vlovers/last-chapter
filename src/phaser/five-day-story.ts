@@ -375,6 +375,8 @@ export class FiveDayStory {
       return {
         id: option.id,
         label: option.label,
+        ...(option.delivery ? { delivery: option.delivery } : {}),
+        ...(option.spokenText ? { spokenText: option.spokenText } : {}),
         ...(book
           ? {
               book: {
