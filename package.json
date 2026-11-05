@@ -8,6 +8,7 @@
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:narrative": "vitest run tests/five-day-integrity-matrix.test.ts tests/narrative-harness-integrity.test.ts tests/production-v2-five-day-journeys.test.ts tests/ending-consequence-matrix.test.ts",
     "test:browser": "node scripts/qa-phaser.mjs",
     "test:browser:v5": "node scripts/qa-phaser-v5.mjs",
     "lint": "eslint .",

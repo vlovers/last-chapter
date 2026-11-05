@@ -29,19 +29,19 @@ export const schoolReadingFollowupNodes: readonly DialogueNode[] = [
         id: 'school-chairs-defend',
         label: '«Томас намагався допомогти по-своєму»',
         next: 'school-chairs-anna',
-        grants: ['final_school_chairs_defended'],
+        grants: ['final_school_chairs_defended', 'anna_chairs_player_defended_thomas'],
       },
       {
         id: 'school-chairs-listen',
         label: '«Ти розраховувала на допомогу, а лишилася сама»',
         next: 'school-chairs-anna',
-        grants: ['final_school_chairs_listened'],
+        grants: ['final_school_chairs_listened', 'anna_chairs_player_heard_anna'],
       },
       {
         id: 'school-chairs-reading',
         label: '«Не вирішуватиму за вас. Що діти читали на пікніку?»',
         next: 'school-chairs-anna',
-        grants: ['final_school_chairs_reading'],
+        grants: ['final_school_chairs_reading', 'anna_chairs_player_changed_topic'],
       },
     ],
   },
@@ -82,6 +82,20 @@ export const schoolReadingFollowupNodes: readonly DialogueNode[] = [
     id: 'school-chairs-thomas',
     speaker: 'Томас',
     text: '«Ще ні. Я весь час збираюся прийти з готовим рішенням. А потім знаходиться робота». Анна піднімає брову. «Можна прийти без рішення. Але треба прийти». Він посміхається: «Це я зрозумів».',
+    textWhen: [
+      {
+        requires: ['final_school_chairs_defended'],
+        text: '«Я чув, як ти мене захищав», — каже Томас. «Але я обіцяв і не прийшов. Анні від моїх пояснень не легше». Він повертається до неї. «Можемо поговорити після вечора?»',
+      },
+      {
+        requires: ['final_school_chairs_listened'],
+        text: '«Ти її вислухав. А я щоразу починаю з того, скільки було роботи». Томас дивиться на Анну. «Про стільці я пам’ятаю. Можемо сьогодні поговорити без поспіху?» Вона відкладає книжку. «Треба ще домовитися коли».',
+      },
+      {
+        requires: ['final_school_chairs_reading'],
+        text: '«Про книжковий пікнік я міг би слухати довго», — каже Томас. Анна прибирає телефон. «Але він не замінить нашої розмови». Томас киває. «Не замінить. Давай знайдемо час».',
+      },
+    ],
     options: [
       {
         id: 'school-chairs-plan',
