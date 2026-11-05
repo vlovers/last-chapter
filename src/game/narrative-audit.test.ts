@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { DialogueStory } from './dialogue';
-import { validateDialogue } from './dialogue';
+import { availableOptions, selectOption, startDialogue, validateDialogue } from './dialogue';
 import { analyzeDialogueReachability } from './dialogue-reachability';
 import { millerVisit } from '../content/first-day';
 import { maraVisit } from '../content/mara';
@@ -40,6 +40,17 @@ describe('five-day narrative audit', () => {
   it('prints a reproducible per-story flag-feasibility inventory', () => {
     const inventory = stories.map(([name, story]) => {
       const report = analyzeDialogueReachability(story, [], 10000);
+      const witnessReplayFailures: { node: string; atChoice: string }[] = [];
+      for (const nodeId of report.reachableNodes) {
+        let state = startDialogue(story);
+        for (const choiceId of report.witnessPaths[nodeId] ?? []) {
+          if (!availableOptions(story, state).some((option) => option.id === choiceId)) {
+            witnessReplayFailures.push({ node: nodeId, atChoice: choiceId });
+            break;
+          }
+          state = selectOption(story, state, choiceId);
+        }
+      }
       return {
         story: name,
         nodes: story.nodes.length,
@@ -49,6 +60,7 @@ describe('five-day narrative audit', () => {
         potentiallyExternalOrUnreachableEdges: report.unreachableEdges.length,
         impossibleEdges: report.impossibleEdges.length,
         truncated: report.truncated,
+        witnessReplayFailures,
         missingLocalPrerequisites: report.potentiallyExternalFlags,
       };
     });
