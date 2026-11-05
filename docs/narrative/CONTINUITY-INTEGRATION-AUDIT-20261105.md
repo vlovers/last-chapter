@@ -6,14 +6,14 @@ This branch is based on `feat/narrative-player-voice-depth-20261105` (PR #33), *
 
 ## Confirmed source-level findings and fixes
 
-| Area | Invariant | Change |
-| --- | --- | --- |
-| Eleanor's tea option | Apostrophe in `доп'ємо` must not terminate a TypeScript string | Use a double-quoted literal |
-| First-day Miller dialogue | Apostrophe in `дріб'язку` must not terminate a TypeScript string | Use a template literal |
-| Mara's day-four gift, no purchase | A legacy save without `sold_station`, `sold_roads`, or `sold_letters` must not imply a purchased or wrapped book | Neutral no-purchase default |
-| Mara's purchased book | Each of the three sale flags maps to its own specific gift; the book has not yet been given to Leo | Clarified purchased variants |
-| Anna's response to Thomas | Owning a missed promise differs from buying six replacement chairs | Preserve separate conditional responses and align the opening wording |
-| Day-three Thomas | He missed the *same day's* school reading, not a future reading | Explicit `сьогоднішнім читанням` |
+| Area                              | Invariant                                                                                                        | Change                                                                |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Eleanor's tea option              | Apostrophe in `доп'ємо` must not terminate a TypeScript string                                                   | Use a double-quoted literal                                           |
+| First-day Miller dialogue         | Apostrophe in `дріб'язку` must not terminate a TypeScript string                                                 | Use a template literal                                                |
+| Mara's day-four gift, no purchase | A legacy save without `sold_station`, `sold_roads`, or `sold_letters` must not imply a purchased or wrapped book | Neutral no-purchase default                                           |
+| Mara's purchased book             | Each of the three sale flags maps to its own specific gift; the book has not yet been given to Leo               | Clarified purchased variants                                          |
+| Anna's response to Thomas         | Owning a missed promise differs from buying six replacement chairs                                               | Preserve separate conditional responses and align the opening wording |
+| Day-three Thomas                  | He missed the _same day's_ school reading, not a future reading                                                  | Explicit `сьогоднішнім читанням`                                      |
 
 ## Added integration regression coverage
 
@@ -54,11 +54,11 @@ This branch is based on `feat/narrative-player-voice-depth-20261105` (PR #33), *
 
 Checked exact PR heads against Actions:
 
-| PR | Head SHA | CI | Browser QA |
-| --- | --- | --- | --- |
-| #33 | `062bcf9c4d5525531d0e53e1ae1c7de4bdde77e6` | Failure | Failure |
-| #35 | `131b6add0884746ce6f21f089efdf7a36b375a92` | Queued | Failure |
-| #36 | `2f4f8666cf7a46dba7912607e9dbdd15e97713ed` | Queued | Queued |
+| PR  | Head SHA                                   | CI      | Browser QA |
+| --- | ------------------------------------------ | ------- | ---------- |
+| #33 | `062bcf9c4d5525531d0e53e1ae1c7de4bdde77e6` | Failure | Failure    |
+| #35 | `131b6add0884746ce6f21f089efdf7a36b375a92` | Queued  | Failure    |
+| #36 | `2f4f8666cf7a46dba7912607e9dbdd15e97713ed` | Queued  | Queued     |
 
 PR #33's quality job `126962096608` failed at `prettier --check .`, **before** running TypeScript, unit tests or build. The exact parse failures were `src/content/eleanor.ts:35` (unescaped apostrophe in `доп'ємо`) and `src/content/first-day.ts:27` (unescaped apostrophe in `дріб'язку`). Both source-level parse errors were already corrected on PR #36. A failed PR #33 CI run is therefore not evidence that the tests on PR #36 failed; conversely, queued PR #36 jobs are not evidence of success.
 

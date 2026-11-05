@@ -32,7 +32,11 @@ export const leoVisit: DialogueStory = {
         },
       ],
       options: [
-        { id: 'leo-schedule', label: '«Скільки разів за зміну тебе звинувачують у запізненні потяга?»', next: 'trains' },
+        {
+          id: 'leo-schedule',
+          label: '«Скільки разів за зміну тебе звинувачують у запізненні потяга?»',
+          next: 'trains',
+        },
         {
           id: 'leo-station-funny',
           label: '«Яка найдивніша річ губилася у ваших потягах?»',

@@ -40,15 +40,19 @@ export function analyzeDialogueReachability(
   queued.add(JSON.stringify([story.start, queue[0]!.flags]));
   const impossibleEdges = story.nodes.flatMap((node) =>
     node.options
-      .filter((option) => (option.requires ?? []).some((flag) => (option.unless ?? []).includes(flag)))
+      .filter((option) =>
+        (option.requires ?? []).some((flag) => (option.unless ?? []).includes(flag)),
+      )
       .map((option) => JSON.stringify([node.id, option.id, option.next])),
   );
-  const localGrants = new Set(story.nodes.flatMap((node) =>
-    node.options.flatMap((option) => option.grants ?? []),
-  ));
-  const potentiallyExternalFlags = [...new Set(story.nodes.flatMap((node) =>
-    node.options.flatMap((option) => option.requires ?? []),
-  ))].filter((flag) => !localGrants.has(flag));
+  const localGrants = new Set(
+    story.nodes.flatMap((node) => node.options.flatMap((option) => option.grants ?? [])),
+  );
+  const potentiallyExternalFlags = [
+    ...new Set(
+      story.nodes.flatMap((node) => node.options.flatMap((option) => option.requires ?? [])),
+    ),
+  ].filter((flag) => !localGrants.has(flag));
   const allEdges = story.nodes.flatMap((node) =>
     node.options.map((option) => JSON.stringify([node.id, option.id, option.next])),
   );

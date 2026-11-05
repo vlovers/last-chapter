@@ -5,6 +5,13 @@ The narrative suite covers deterministic knowledge, trust, dialogue, five-day sc
 book recommendations, endings and save migrations. It must continue to pass when changing
 the independent Phaser slice.
 
+`npm run test:narrative` runs the deterministic consequence matrix, graph diagnostics,
+existing ten five-day journeys and ending-dimension regressions. The reusable harness
+restores production saves after every choice, exercises legacy saves without completion
+ledgers, verifies every paginated screen has at most four choices, and distinguishes
+bounded exploration from proven dead ends and closed loops. See the
+[executed audit, coverage matrix and limits](narrative/FIVE-DAY-CONSEQUENCE-INTEGRITY-20261105.md).
+
 `tests/phaser-slice.test.js` tests every Mara branch, state isolation/immutability,
 interaction proximity and arrival gates, nonoverlapping hit areas, movement boundaries,
 substepped collision and sliding, safe navigation segments, reachable approach points,
