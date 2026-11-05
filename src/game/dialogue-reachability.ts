@@ -24,7 +24,11 @@ export function analyzeDialogueReachability(
   initialFlags: readonly string[] = [],
   maxStates = 10000,
 ): DialogueReachabilityResult {
-  const byId = new Map(story.nodes.map((node) => [node.id, node]));
+  // Mirror the runtime's first-definition semantics for duplicate IDs.
+  const byId = new Map<string, (typeof story.nodes)[number]>();
+  for (const node of story.nodes) {
+    if (!byId.has(node.id)) byId.set(node.id, node);
+  }
   const reachableNodes = new Set<string>();
   const reachableEdges = new Set<string>();
   const visited = new Set<string>();
