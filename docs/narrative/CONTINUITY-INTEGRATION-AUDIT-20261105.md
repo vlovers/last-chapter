@@ -42,3 +42,10 @@ This branch is based on `feat/narrative-player-voice-depth-20261105` (PR #33), *
 - The last reported combined merge had 17 failing tests; this audit PR does not claim to resolve all of them.
 - `textWhen` uses the most specific matching variant by default, while `afterwordWhen` appends independent callbacks. New flags can change the chosen text without changing the dialogue node; validate cross-character callbacks with restored saves.
 - The `save.ts` decoder validates stage and node but cannot prove the historical story path actually occurred. Flag provenance must be protected by gameplay transitions and regression tests.
+
+## Follow-up: day-one/day-two copy continuity
+
+- Day-two Anna now says `У нас завтра читання`, preserving the established chronology and the expected lowercase substring.
+- Mara's `thank` branch explicitly mentions `із корицею`, while her `joke` branch keeps the wedge promise. The callbacks remain mutually exclusive.
+- Three additional integration tests cover those distinct branches and their flags.
+- This remains a source-level fix only; full test and Browser QA results are not yet verified.
