@@ -14,16 +14,22 @@ import { irisDecision } from '../content/day-four-iris';
 import { maraDecision } from '../content/day-four-mara';
 import { leoDecision } from '../content/day-four-leo';
 import { finalReading } from '../content/day-five';
+import { noraVisit } from '../content/nora';
+import { firstEvening } from '../content/evening';
+import { quietEvening } from '../content/quiet-evening';
 
 const stories: readonly [string, DialogueStory][] = [
   ['day1/miller', millerVisit],
   ['day1/mara', maraVisit],
+  ['day1/evening', firstEvening],
   ['day2/iris', irisVisit],
   ['day2/anna', annaVisit],
   ['day2/leo', leoVisit],
   ['day3/eleanor', eleanorVisit],
   ['day3/thomas', thomasVisit],
   ['day3/book-club', bookClub],
+  ['day3/nora', noraVisit],
+  ['day3/quiet-evening', quietEvening],
   ['day4/iris', irisDecision],
   ['day4/mara', maraDecision],
   ['day4/leo', leoDecision],
@@ -37,6 +43,7 @@ describe('five-day narrative audit', () => {
       return {
         story: name,
         nodes: story.nodes.length,
+        exploredStates: report.exploredStates,
         reachableNodes: report.reachableNodes.length,
         potentiallyExternalOrUnreachableNodes: report.unreachableNodes.length,
         potentiallyExternalOrUnreachableEdges: report.unreachableEdges.length,
@@ -47,6 +54,7 @@ describe('five-day narrative audit', () => {
     // Missing local prerequisites are not necessarily errors: flags may be granted in other stories.
     console.info('Narrative flag-feasibility inventory:', JSON.stringify(inventory, null, 2));
     expect(inventory).toHaveLength(stories.length);
+    expect(inventory.every((item) => item.exploredStates !== 0)).toBe(true);
   });
 
   it.each(stories)('%s has structurally valid dialogue', (_name, story) => {
