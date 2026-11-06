@@ -1,0 +1,147 @@
+{
+  "environment": "Headless desktop Chrome, mobile viewport; CPU throttling is a simulation, not a physical phone benchmark.",
+  "results": [
+    {
+      "cpuThrottle": 1,
+      "width": 390,
+      "height": 844,
+      "seconds": 10,
+      "minFps": 31.58087968826294,
+      "medianFps": 35.42724609375,
+      "maxFps": 46.375,
+      "samples": [
+        {
+          "fps": 46.375,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 42.53125,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 39.6484375,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 37.236328125,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 35.42724609375,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 34.0704345703125,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 33.302825927734375,
+          "nodes": 31,
+          "decorReduced": true,
+          "failed": false
+        },
+        {
+          "fps": 32.47711944580078,
+          "nodes": 31,
+          "decorReduced": true,
+          "failed": false
+        },
+        {
+          "fps": 32.107839584350586,
+          "nodes": 31,
+          "decorReduced": true,
+          "failed": false
+        },
+        {
+          "fps": 31.58087968826294,
+          "nodes": 31,
+          "decorReduced": true,
+          "failed": false
+        }
+      ]
+    },
+    {
+      "cpuThrottle": 4,
+      "width": 390,
+      "height": 844,
+      "seconds": 10,
+      "minFps": 31.59790873527527,
+      "medianFps": 35.754150390625,
+      "maxFps": 47.0625,
+      "samples": [
+        {
+          "fps": 47.0625,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 43.046875,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 39.78515625,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 37.3388671875,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 35.754150390625,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 33.81561279296875,
+          "nodes": 31,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 32.86170959472656,
+          "nodes": 31,
+          "decorReduced": true,
+          "failed": false
+        },
+        {
+          "fps": 32.39628219604492,
+          "nodes": 31,
+          "decorReduced": true,
+          "failed": false
+        },
+        {
+          "fps": 31.79721164703369,
+          "nodes": 31,
+          "decorReduced": true,
+          "failed": false
+        },
+        {
+          "fps": 31.59790873527527,
+          "nodes": 31,
+          "decorReduced": true,
+          "failed": false
+        }
+      ]
+    }
+  ]
+}

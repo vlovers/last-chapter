@@ -1,0 +1,26 @@
+{
+  "base": "http://127.0.0.1:4174",
+  "browser": "155.0.8059.85",
+  "results": [
+    {
+      "test": "desktop, movement, objects, resume, privacy, station ending, audio, save isolation",
+      "status": "passed"
+    },
+    {
+      "test": "tablet, reduced motion, keyboard-only selection, roads ending, text wrapping",
+      "status": "passed"
+    },
+    {
+      "test": "missing portrait, unavailable Web Audio, confidentiality boundary",
+      "status": "passed"
+    },
+    {
+      "test": "missing initialization module produces Ukrainian recovery message",
+      "status": "passed"
+    },
+    {
+      "test": "production narrative still loads with unchanged save",
+      "status": "passed"
+    }
+  ]
+}

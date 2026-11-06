@@ -1,0 +1,28 @@
+name: One-time V5 format
+on:
+  push:
+    branches:
+      - feat/unified-five-day-phaser-v5
+permissions:
+  contents: write
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - run: npx prettier --write phaser-prototype/style.css public/phaser-prototype/dialogue-ui.js public/phaser-prototype/visitor-roaming.js tests/phaser-visitor-roaming.test.js tests/phaser-browsing-actions.test.js public/phaser-prototype/visitor-book.js tests/phaser-visitor-book.test.js tests/phaser-visitor-book-render.test.js public/phaser-prototype/visitor-reactions.js tests/phaser-visitor-reactions.test.js public/phaser-prototype/visitor-emotions.js tests/phaser-visitor-emotions.test.js public/phaser-prototype/visitor-lifecycle.js tests/phaser-visitor-lifecycle.test.js tests/phaser-visitor-staging.test.js public/phaser-prototype/visitor-portraits.js public/phaser-prototype/dialogue-ui.js
+      - run: |
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .
+            git commit -m "style(v5): format visitor staging and dialogue"
+            git push origin HEAD:feat/unified-five-day-phaser-v5
+          fi

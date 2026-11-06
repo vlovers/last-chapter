@@ -1,0 +1,38 @@
+{
+  "name": "last-chapter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:narrative": "vitest run tests/five-day-integrity-matrix.test.ts tests/narrative-harness-integrity.test.ts tests/production-v2-five-day-journeys.test.ts tests/ending-consequence-matrix.test.ts tests/release-finale-journeys.test.ts tests/production-save-route-matrix.test.ts tests/release-save-recovery.test.ts",
+    "test:browser": "node scripts/qa-phaser.mjs",
+    "test:browser:v5": "node scripts/qa-phaser-v5.mjs",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build",
+    "test:browser:polish": "node scripts/qa-polish-v1.mjs",
+    "test:browser:mobile": "node scripts/qa-mobile-overhaul.mjs",
+    "test:browser:stabilization": "node scripts/qa-stabilization.mjs",
+    "test:browser:performance": "node scripts/qa-bookshop-performance.mjs",
+    "test:browser:save-recovery": "node scripts/qa-save-recovery.mjs",
+    "test:browser:ux": "node scripts/qa-ux-ui-production.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^16.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.0.0",
+    "vite": "^7.0.0",
+    "vitest": "^5.0.5"
+  },
+  "dependencies": {
+    "phaser": "3.90.0"
+  }
+}

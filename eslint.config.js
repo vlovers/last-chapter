@@ -1,0 +1,15 @@
+import js from '@eslint/js';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  { ignores: ['dist/**', 'coverage/**'] },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  { languageOptions: { globals: globals.browser } },
+  { files: ['scripts/**/*.mjs'], languageOptions: { globals: globals.node } },
+  {
+    files: ['public/phaser-prototype/**/*.js'],
+    languageOptions: { globals: { Phaser: 'readonly' } },
+  },
+);

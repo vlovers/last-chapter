@@ -1,0 +1,16 @@
+name: Engineering task
+description: Define an agent-ready scoped task
+title: 'chore: '
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Context, scope and acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Owned files, dependencies and verification plan
+    validations:
+      required: true

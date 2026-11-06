@@ -1,0 +1,879 @@
+import { evidenceKindLabels } from './journal-facts';
+import { focusPanelUpdate, panelTabStops, restorePanelFocus } from './panel-focus';
+import { discoveredPeopleAtStage } from './discovered-people';
+import { OPTIONAL_PROGRESS_KEYS } from './optional-progress';
+import type { FiveDayStory } from './five-day-story';
+import { journalEntries, unreadJournalIds } from './journal-view';
+import { portraitDataUrl } from '../../public/phaser-prototype/visitor-portraits.js';
+import { spokenChoice } from '../../public/phaser-prototype/player-turn.js';
+import {
+  answerConversation,
+  conversationAvailable,
+  conversationView,
+  normalizeMemories,
+  restoreConversation,
+  startConversation,
+  type ConversationSession,
+} from './conversation-engine';
+import { maraBookClub } from './mara-book-club';
+import { maraAfterHours } from './mara-after-hours';
+import { maraReturnVisit } from './mara-return-visit';
+import { maraLetterDecision } from './mara-letter-decision';
+import { allowedMaraTopic, availableMaraTopics } from './mara-topic-availability';
+
+declare global {
+  interface Window {
+    __lastChapterRefresh?: () => void;
+  }
+}
+import type { CatalogFilter } from '../game/catalog';
+
+/** The Phaser shell owns movement; this accessible DOM dock owns reading and reference material. */
+export function mountStoryPanels(story: FiveDayStory): () => void {
+  const root = document.querySelector<HTMLElement>('#story-tools');
+  const journal = document.querySelector<HTMLButtonElement>('#journal-toggle');
+  const catalog = document.querySelector<HTMLButtonElement>('#catalog-toggle');
+  const panel = document.querySelector<HTMLElement>('#story-panel');
+  const timeline = document.querySelector<HTMLOListElement>('#day-timeline');
+  const continueButton = document.querySelector<HTMLButtonElement>('#story-continue');
+  if (!root || !journal || !catalog || !panel || !timeline || !continueButton) {
+    throw new Error('Не знайдено панель історії');
+  }
+  const controls = { journal, catalog };
+  journal.setAttribute('aria-label', 'Нотатник');
+  catalog.setAttribute('aria-label', 'Каталог книжок');
+  let mode: 'journal' | 'catalog' | 'conversation' | null = null;
+  const conversationKey = OPTIONAL_PROGRESS_KEYS.bookClub;
+  let selectedTopic = maraBookClub;
+  const letterKey = OPTIONAL_PROGRESS_KEYS.letter;
+  let letterDecision: ConversationSession = startConversation(maraLetterDecision);
+  const returnKey = OPTIONAL_PROGRESS_KEYS.returnVisit;
+  let returnVisit: ConversationSession = startConversation(maraReturnVisit);
+  const afterHoursKey = OPTIONAL_PROGRESS_KEYS.afterHours;
+  let conversation: ConversationSession = startConversation(maraBookClub);
+  let afterHours: ConversationSession = startConversation(maraAfterHours);
+  const sharedMemories = () =>
+    normalizeMemories([
+      ...conversation.memories,
+      ...afterHours.memories,
+      ...returnVisit.memories,
+      ...letterDecision.memories,
+    ]);
+  let conversationReadFailed = false;
+  const loadConversations = () => {
+    if (!story.isProgressSaved) return;
+    try {
+      // Read the whole shared-memory group before replacing any session. A
+      // transient failure must not leave three defaults ready to overwrite saves.
+      const [saved, savedAfterHours, savedReturn, savedLetter] = [
+        conversationKey,
+        afterHoursKey,
+        returnKey,
+        letterKey,
+      ].map((key) => localStorage.getItem(key));
+      conversation = saved
+        ? (restoreConversation(maraBookClub, saved) ?? conversation)
+        : conversation;
+      afterHours = savedAfterHours
+        ? (restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours)
+        : afterHours;
+      returnVisit = savedReturn
+        ? (restoreConversation(maraReturnVisit, savedReturn) ?? returnVisit)
+        : returnVisit;
+      letterDecision = savedLetter
+        ? (restoreConversation(maraLetterDecision, savedLetter) ?? letterDecision)
+        : letterDecision;
+      conversationReadFailed = false;
+    } catch {
+      conversationReadFailed = true;
+    }
+  };
+  loadConversations();
+  const saveConversation = () => {
+    // A newer chapter owns its sidecars too. Keep this session in memory until
+    // the current build can persist its own chapter, preserving the newer data.
+    if (!story.isProgressSaved || conversationReadFailed) return;
+    try {
+      localStorage.setItem(conversationKey, JSON.stringify(conversation));
+      localStorage.setItem(afterHoursKey, JSON.stringify(afterHours));
+      localStorage.setItem(returnKey, JSON.stringify(returnVisit));
+      localStorage.setItem(letterKey, JSON.stringify(letterDecision));
+    } catch {
+      /* optional */
+    }
+  };
+  const conversationButton = document.createElement('button');
+  conversationButton.type = 'button';
+  conversationButton.className = 'story-talk-toggle';
+  conversationButton.textContent = 'Мара · Поговорити';
+  conversationButton.setAttribute('aria-label', 'Поговорити з Марою');
+  conversationButton.setAttribute('aria-expanded', 'false');
+  root.querySelector('.story-toolbar-actions')?.append(conversationButton);
+  let filter: CatalogFilter = 'all';
+  let search = '';
+  let journalTab = 'people';
+  let reaction: { text: string; accepted: boolean } | null = null;
+  let returnFocus: HTMLElement | null = null;
+  let personalNotes = '';
+  const seenJournal = new Set<string>();
+  let pendingPlayerTurn: string | null = null;
+  let replyReadyAt = 0;
+  let notesReadFailed = false;
+  const loadPersonalNotes = () => {
+    if (!story.isProgressSaved) return;
+    try {
+      personalNotes = (localStorage.getItem(OPTIONAL_PROGRESS_KEYS.notes) ?? '').slice(0, 4000);
+      notesReadFailed = false;
+    } catch {
+      notesReadFailed = true;
+    }
+  };
+  loadPersonalNotes();
+  const discoveredPeople = () => discoveredPeopleAtStage(story.stage);
+  const element = <K extends keyof HTMLElementTagNameMap>(
+    tag: K,
+    text: string,
+    className = '',
+  ): HTMLElementTagNameMap[K] => {
+    const node = document.createElement(tag);
+    node.textContent = text;
+    if (className) node.className = className;
+    return node;
+  };
+  const sessionFor = (id: string) =>
+    id === maraBookClub.id
+      ? conversation
+      : id === maraAfterHours.id
+        ? afterHours
+        : id === maraReturnVisit.id
+          ? returnVisit
+          : letterDecision;
+  const saveWarning = document.createElement('p');
+  saveWarning.id = 'save-warning';
+  saveWarning.setAttribute('role', 'alert');
+  saveWarning.textContent =
+    'Не вдалося зберегти прогрес. Після оновлення сторінки останні рішення можуть зникнути.';
+  saveWarning.hidden = true;
+  root.prepend(saveWarning);
+  let recoveryNotice: HTMLElement | null = null;
+  if (story.didRecoverUnreadableSave) {
+    recoveryNotice = element(
+      'p',
+      'Попереднє збереження не вдалося прочитати. Почато нову історію. Копія попереднього прогресу й записів доступна в нотатнику: «Мої записи».',
+    );
+    recoveryNotice.id = 'save-recovery-notice';
+    recoveryNotice.setAttribute('role', 'status');
+    document
+      .querySelector('#loading .welcome')
+      ?.insertBefore(recoveryNotice, document.querySelector('#enter'));
+  }
+  const appendRecoveryDownload = () => {
+    if (story.recoveryBackup === null) return;
+    const recovery = element('div', '', 'evidence-card');
+    const notice = element(
+      'p',
+      'Попереднє збереження не вдалося прочитати. Його копія та попередні записи залишилися в цьому браузері для відновлення.',
+    );
+    notice.setAttribute('role', 'status');
+    const download = element('button', 'Завантажити резервну копію');
+    download.type = 'button';
+    download.addEventListener('click', () => {
+      const url = URL.createObjectURL(
+        new Blob([story.recoveryBackup!], { type: 'application/json' }),
+      );
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'last-chapter-recovery.json';
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+    recovery.append(notice, download);
+    panel.append(recovery);
+  };
+  const refresh = () => {
+    const entries = journalEntries(story);
+    const unread = unreadJournalIds(story, seenJournal).length;
+    journal.dataset.unread = String(unread);
+    journal.title = unread ? `Нових записів: ${unread}` : 'Нотатник книгаря';
+    saveWarning.hidden = story.isProgressSaved;
+    timeline.replaceChildren();
+    for (const day of story.progress) {
+      const item = element('li', String(day.day), `day-step day-step--${day.status}`);
+      item.title = day.label;
+      item.setAttribute(
+        'aria-label',
+        `${day.label} · ${day.status === 'completed' ? 'завершено' : day.status === 'current' ? 'зараз' : 'попереду'}`,
+      );
+      if (day.status === 'current') item.setAttribute('aria-current', 'step');
+      timeline.append(item);
+    }
+    continueButton.textContent = `День ${story.day} · ${story.visitor}`;
+    continueButton.setAttribute(
+      'aria-label',
+      `День ${story.day} · ${story.visitor} · ${story.guidance.action}`,
+    );
+    continueButton.dataset.action = story.guidance.action;
+    continueButton.title = story.guidance.text;
+    continueButton.setAttribute('data-stage', story.stage);
+    for (const [name, button] of Object.entries(controls)) {
+      button.setAttribute('aria-expanded', String(mode === name));
+    }
+    const count = availableMaraTopics(story.day, letterDecision).filter((t) =>
+      conversationAvailable(t, sessionFor(t.id)),
+    ).length;
+    const maraKnown = discoveredPeople().some(([id]) => id === 'mara');
+    const maraPresent = story.actor === 'mara';
+    conversationButton.hidden = !maraKnown;
+    conversationButton.disabled = !maraPresent;
+    conversationButton.dataset.new = maraPresent ? (count ? String(count) : '✓') : '';
+    conversationButton.title = !maraPresent
+      ? 'Мари зараз немає у книгарні.'
+      : count
+        ? `Доступно тем: ${count}`
+        : 'Доступні розмови завершено';
+    conversationButton.setAttribute('aria-expanded', String(mode === 'conversation'));
+    panel.hidden = mode === null;
+    document.body.classList.toggle('reading', mode !== null);
+    panel.setAttribute(
+      'aria-label',
+      mode === 'conversation'
+        ? 'Розмова з Марою'
+        : mode === 'journal'
+          ? 'Нотатник книгаря'
+          : 'Книжкова полиця',
+    );
+    panel.setAttribute('role', 'dialog');
+    panel.removeAttribute('aria-live');
+    panel.setAttribute('aria-modal', 'true');
+    panel.classList.toggle('story-panel--conversation', mode === 'conversation');
+    panel.classList.toggle('story-panel--journal', mode === 'journal');
+    panel.classList.toggle('story-panel--catalog', mode === 'catalog');
+    const blocked = mode !== null;
+    const talking = document.querySelector('#stage')?.classList.contains('talking');
+    const loadingElement = document.querySelector<HTMLElement>('#loading');
+    const loading = Boolean(loadingElement && !loadingElement.hidden);
+    for (const selector of ['#game', '#hotspots', '.hud', '#context-action']) {
+      const surface = document.querySelector<HTMLElement>(selector);
+      if (surface) surface.inert = blocked || Boolean(talking) || loading;
+    }
+    const toolbar = root.querySelector<HTMLElement>('.story-toolbar');
+    if (toolbar) toolbar.inert = blocked || loading;
+
+    panel.replaceChildren();
+    if (mode !== null) {
+      const close = element('button', '×', 'panel-close');
+      close.type = 'button';
+      close.setAttribute('aria-label', 'Повернутися до книгарні');
+      close.addEventListener('click', () => {
+        mode = null;
+        refresh();
+        restorePanelFocus(returnFocus, catalog);
+      });
+      panel.append(close);
+    }
+    if (mode === 'conversation') {
+      if (conversationReadFailed) {
+        panel.append(
+          element(
+            'p',
+            'Не вдалося прочитати попередні розмови. Їх збережено в браузері; нові відповіді поки недоступні.',
+          ),
+        );
+        const retry = element('button', 'Спробувати прочитати розмови');
+        retry.type = 'button';
+        retry.addEventListener('click', () => {
+          loadConversations();
+          refresh();
+          focusPanelUpdate(panel, conversationButton);
+        });
+        panel.append(retry);
+        return;
+      }
+      const topics = availableMaraTopics(story.day, letterDecision).filter((t) =>
+        conversationAvailable(t, sessionFor(t.id)),
+      );
+      selectedTopic =
+        topics.find((t) => t.id === selectedTopic.id) ??
+        topics[0] ??
+        allowedMaraTopic(story.day, selectedTopic, letterDecision);
+      if (!topics.length) {
+        if (pendingPlayerTurn) {
+          const turn = element('section', '', 'player-turn');
+          turn.setAttribute('aria-label', 'Ви');
+          turn.append(element('h3', 'Ви'), element('p', pendingPlayerTurn));
+          panel.append(turn);
+          pendingPlayerTurn = null;
+        }
+        panel.append(element('p', 'Усі доступні розмови завершено. Нові теми з’являться згодом.'));
+        return;
+      }
+      const topicSelector = element('div', '', 'story-filters');
+      for (const topic of topics) {
+        const button = element('button', topic.title);
+        button.type = 'button';
+        button.setAttribute('aria-pressed', String(selectedTopic.id === topic.id));
+        button.addEventListener('click', () => {
+          selectedTopic = topic;
+          refresh();
+          focusPanelUpdate(panel, conversationButton);
+        });
+        topicSelector.append(button);
+      }
+      panel.append(element('p', 'Мара · у книгарні', 'conversation-eyebrow'));
+      panel.append(element('h2', 'Розмова з Марою'));
+      const topicDetails = element('details', '', 'conversation-topics');
+      const topicSummary = element('summary', `Тема: ${selectedTopic.title} · змінити`);
+      topicDetails.append(topicSummary, topicSelector);
+      panel.append(topicDetails);
+      const activeConversation =
+        selectedTopic.id === maraBookClub.id
+          ? conversation
+          : selectedTopic.id === maraAfterHours.id
+            ? afterHours
+            : selectedTopic.id === maraReturnVisit.id
+              ? returnVisit
+              : letterDecision;
+      if (activeConversation.finished) {
+        panel.append(element('p', 'Розмову завершено.'));
+        if (selectedTopic.repeatability === 'repeatable') {
+          const again = element('button', 'Почати ще одну розмову');
+          again.addEventListener('click', () => {
+            const next = startConversation(selectedTopic, sharedMemories());
+            if (selectedTopic.id === maraAfterHours.id) afterHours = next;
+            else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next;
+            else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next;
+            else conversation = next;
+            saveConversation();
+            refresh();
+            focusPanelUpdate(panel, conversationButton);
+          });
+          panel.append(again);
+        }
+      } else {
+        const node = conversationView(selectedTopic, {
+          ...activeConversation,
+          memories: sharedMemories(),
+        });
+        const exchange = element('section', '', 'conversation-exchange');
+        exchange.tabIndex = -1;
+        exchange.setAttribute('aria-live', 'polite');
+        if (pendingPlayerTurn) {
+          const turn = element('section', '', 'player-turn');
+          turn.setAttribute('aria-label', 'Ви');
+          turn.append(element('h3', 'Ви'), element('p', pendingPlayerTurn));
+          exchange.append(turn);
+        }
+        pendingPlayerTurn = null;
+        exchange.append(element('h3', node.speaker), element('p', node.text));
+        panel.append(exchange);
+        const replies = element('div', '', 'conversation-replies');
+        for (const choice of node.choices) {
+          const button = element('button', choice.label);
+          button.type = 'button';
+          button.addEventListener('click', () => {
+            if (button.disabled || performance.now() < replyReadyAt) return;
+            button.disabled = true;
+            replyReadyAt = performance.now() + 220;
+            const next = answerConversation(
+              selectedTopic,
+              { ...activeConversation, memories: sharedMemories() },
+              choice.id,
+            );
+            if (selectedTopic.id === maraAfterHours.id) afterHours = next;
+            else if (selectedTopic.id === maraReturnVisit.id) returnVisit = next;
+            else if (selectedTopic.id === maraLetterDecision.id) letterDecision = next;
+            else conversation = next;
+            saveConversation();
+            // All four legacy optional topics were reviewed: their unquoted
+            // labels are direct speech. Future action choices can opt out.
+            pendingPlayerTurn =
+              next.suspended || next.finished
+                ? null
+                : spokenChoice({ ...choice, delivery: choice.delivery ?? 'speech' });
+            // An exit returns to the shop; it cannot start an unrelated topic
+            // or pair the goodbye with another conversation's opening line.
+            if (next.suspended || next.finished) mode = null;
+            refresh();
+            if (next.suspended || next.finished) restorePanelFocus(returnFocus, catalog);
+            else focusPanelUpdate(panel, conversationButton);
+          });
+          replies.append(button);
+        }
+        panel.append(replies);
+      }
+    } else if (mode === 'journal') {
+      panel.append(element('p', 'Записи з Беллвіка', 'notebook-eyebrow'));
+      panel.append(element('h2', 'Нотатник книгаря'));
+      const tabs = element('nav', '', 'journal-tabs');
+      tabs.setAttribute('aria-label', 'Розділи нотатника');
+      for (const [id, label] of [
+        ['people', 'Люди'],
+        ['clues', 'Знахідки'],
+        ['events', 'Події'],
+        ['tasks', 'Завдання'],
+        ['orders', 'Замовлення'],
+        ['rumors', 'Чутки'],
+        ['notes', 'Мої записи'],
+      ]) {
+        const button = element('button', label!);
+        button.type = 'button';
+        button.setAttribute('aria-pressed', String(journalTab === id));
+        button.addEventListener('click', () => {
+          journalTab = id!;
+          refresh();
+          panel.querySelector<HTMLButtonElement>("[aria-pressed='true']")?.focus();
+        });
+        tabs.append(button);
+      }
+      panel.append(tabs);
+      if (journalTab === 'people') {
+        const people = element('div', '', 'journal-people');
+        for (const [id, name] of discoveredPeople()) {
+          const card = element('article', '', 'evidence-card person-card');
+          const portrait = element('img', '');
+          portrait.src = portraitDataUrl(id) ?? '/art/bookshop/mara.svg';
+          portrait.alt = '';
+          portrait.width = 48;
+          portrait.height = 60;
+          const bio = element('div', '');
+          bio.append(
+            element('h3', name!),
+            element(
+              'p',
+              story.actor === id
+                ? 'Зараз у книгарні. Можна продовжити розмову.'
+                : 'Ви вже зустрічалися в книгарні.',
+            ),
+          );
+          card.append(portrait, bio);
+          people.append(card);
+        }
+        panel.append(people);
+        // Keep optional authored conversations accessible without another persistent HUD control.
+        const talk = element('button', 'Поговорити з Марою');
+        talk.addEventListener('click', () => {
+          mode = 'conversation';
+          refresh();
+          focusPanelUpdate(panel, conversationButton);
+        });
+        talk.disabled = story.actor !== 'mara';
+        if (discoveredPeople().some(([id]) => id === 'mara')) {
+          panel.append(talk);
+          if (talk.disabled)
+            panel.append(
+              element(
+                'p',
+                'Мари зараз немає у книгарні. Додаткові розмови можна продовжити під час її візиту.',
+              ),
+            );
+        }
+      } else if (journalTab === 'clues') {
+        const collected = story.evidence.filter((clue) => clue.collected);
+        for (const entry of entries.clues) {
+          const card = element('article', '', 'evidence-card');
+          card.dataset.kind = entry.kind;
+          card.dataset.new = String(!seenJournal.has(entry.id));
+          seenJournal.add(entry.id);
+          card.append(
+            element('small', `${evidenceKindLabels[entry.kind]} · ${entry.source}`),
+            element('h3', entry.title),
+            element('p', entry.detail),
+          );
+          panel.append(card);
+        }
+        panel.append(element('h3', 'Відкриті запитання'));
+        panel.append(
+          element(
+            'p',
+            collected.length || story.knownEvidence.length
+              ? 'Що ці знахідки підтверджують? Про що варто запитати, не роблячи висновків за інших?'
+              : 'Огляньте книгарню. Тут з’являться лише досліджені знахідки.',
+          ),
+        );
+        // Available evidence remains an explicit investigation action, separate from discovered cards.
+        for (const clue of story.evidence.filter((clue) => !clue.collected)) {
+          const gather = element('button', `Дослідити: ${clue.label}`);
+          gather.type = 'button';
+          gather.dataset.clueId = clue.id;
+          gather.addEventListener('click', () => {
+            // Rebuilding the journal removes the clicked button. Keep keyboard
+            // focus on the next available clue, or the active journal tab.
+            const position = Array.from(
+              panel.querySelectorAll<HTMLButtonElement>('[data-clue-id]'),
+            ).indexOf(gather);
+            story.gatherEvidence(clue.id);
+            refresh();
+            const remaining = panel.querySelectorAll<HTMLButtonElement>('[data-clue-id]');
+            const target =
+              remaining[Math.min(position, remaining.length - 1)] ??
+              panel.querySelector<HTMLButtonElement>(".journal-tabs [aria-pressed='true']");
+            target?.focus({ preventScroll: true });
+          });
+          panel.append(gather);
+        }
+      } else if (journalTab === 'events') {
+        panel.append(element('h3', 'Почуте й важливі рішення'));
+        const list = element('ol', '', 'story-notes journal-page');
+        for (const entry of entries.events) {
+          const item = element('li', entry.detail);
+          item.dataset.new = String(!seenJournal.has(entry.id));
+          seenJournal.add(entry.id);
+          list.append(item);
+        }
+        panel.append(list);
+        if (!entries.events.length)
+          panel.append(element('p', 'Тут з’являться почуті історії та ваші рішення.'));
+      } else if (journalTab === 'tasks') {
+        const task = element('article', '', 'evidence-card');
+        task.append(
+          element('small', `День ${story.day} · зараз`),
+          element('h3', story.guidance.action),
+          element('p', story.guidance.text),
+        );
+        const proceed = element(
+          'button',
+          story.request ? 'Відкрити каталог' : 'Повернутися до історії',
+        );
+        proceed.type = 'button';
+        proceed.addEventListener('click', () => {
+          mode = null;
+          refresh();
+          window.dispatchEvent(
+            new Event(story.request ? 'last-chapter:catalog-open' : 'last-chapter:continue'),
+          );
+        });
+        task.append(proceed);
+        panel.append(
+          task,
+          element('p', 'Дослідження книгарні й додаткові розмови — за бажанням.', 'optional-hint'),
+        );
+      } else if (journalTab === 'orders') {
+        if (story.request)
+          panel.append(
+            element(
+              'p',
+              `${story.request.customer} чекає на рекомендацію. Підберіть книжку в каталозі.`,
+            ),
+          );
+        for (const order of story.orders) {
+          const receipt = element('article', '', 'story-receipt');
+          receipt.append(
+            element('strong', order.customer),
+            element('span', order.book.title),
+            element('small', `Виконано · ${order.note}`),
+          );
+          panel.append(receipt);
+        }
+        if (!story.orders.length) panel.append(element('p', 'Ще немає виконаних замовлень.'));
+      } else if (journalTab === 'rumors') {
+        panel.append(element('p', 'Чутки — це чужі слова, а не підтвердження подій.'));
+        for (const entry of entries.rumors) {
+          const card = element('p', entry.detail, 'evidence-card');
+          card.dataset.kind = 'rumor';
+          card.dataset.new = String(!seenJournal.has(entry.id));
+          seenJournal.add(entry.id);
+          panel.append(card);
+        }
+        if (!entries.rumors.length) panel.append(element('p', 'Ви ще не чули чуток.'));
+      } else {
+        const label = element('label', 'Ваші думки й запитання');
+        label.htmlFor = 'personal-notes';
+        const notes = element('textarea', '', 'personal-notes');
+        notes.id = 'personal-notes';
+        notes.maxLength = 4000;
+        notes.value = personalNotes;
+        notes.disabled = notesReadFailed;
+        const status = element(
+          'p',
+          notesReadFailed
+            ? 'Не вдалося прочитати попередні записи. Їх збережено в браузері. Спробуйте прочитати їх ще раз, перш ніж редагувати.'
+            : 'Ці записи залишаються лише у вашому браузері.',
+          'notes-status',
+        );
+        status.setAttribute('role', 'status');
+        notes.addEventListener('input', () => {
+          if (notesReadFailed) return;
+          personalNotes = notes.value;
+          if (!story.isProgressSaved) {
+            status.textContent =
+              'Запис доступний лише до закриття сторінки: збереження зараз недоступне.';
+            return;
+          }
+          try {
+            localStorage.setItem(OPTIONAL_PROGRESS_KEYS.notes, personalNotes);
+            status.textContent = 'Збережено в цьому браузері.';
+          } catch {
+            status.textContent =
+              'Не вдалося зберегти запис. Залиште сторінку відкритою або скопіюйте текст.';
+          }
+        });
+        panel.append(label, notes, status);
+        if (notesReadFailed) {
+          const retry = element('button', 'Спробувати прочитати записи');
+          retry.type = 'button';
+          retry.addEventListener('click', () => {
+            loadPersonalNotes();
+            refresh();
+            if (!notesReadFailed)
+              panel.querySelector<HTMLTextAreaElement>('#personal-notes')?.focus();
+            else focusPanelUpdate(panel, journal);
+          });
+          panel.append(retry);
+        }
+        appendRecoveryDownload();
+      }
+    } else if (mode === 'catalog') {
+      panel.append(element('p', 'Каталог книгарні', 'catalog-eyebrow'));
+      panel.append(element('h2', 'Книжки на полицях'));
+      if (!story.isRecommendationMemoryAvailable) {
+        panel.append(
+          element(
+            'p',
+            'Історію попередніх рекомендацій не вдалося прочитати. Її збережено в браузері; нові спроби поки залишаються лише на цій сторінці. Оновіть сторінку, щоб спробувати знову.',
+          ),
+        );
+      }
+      if (reaction) {
+        const result = element('div', '', 'evidence-card');
+        result.setAttribute('role', 'status');
+        result.append(
+          element('p', reaction.text),
+          element('strong', reaction.accepted ? 'Замовлення виконано' : 'Шукаємо далі'),
+        );
+        if (reaction.accepted) {
+          const resume = element('button', 'Продовжити розмову');
+          resume.addEventListener('click', () => {
+            mode = null;
+            refresh();
+            window.dispatchEvent(new Event('last-chapter:continue'));
+          });
+          result.append(resume);
+        }
+        panel.append(result);
+      }
+      const request = story.request;
+      if (request) {
+        const brief = element('div', '', 'evidence-card');
+        brief.append(element('strong', `Підбираємо книжку · ${request.customer}`));
+        brief.append(element('p', request.prompt));
+        if (request.asked) brief.append(element('p', request.answer));
+        else {
+          const clarify = element('button', request.question);
+          clarify.addEventListener('click', () => {
+            story.clarifyRequest();
+            refresh();
+            panel.querySelector<HTMLButtonElement>('.panel-close')?.focus();
+          });
+          brief.append(clarify);
+        }
+        panel.append(brief);
+      }
+      const tools = element('div', '', 'panel-tools');
+      const searchInput = element('input', '', 'catalog-search');
+      searchInput.type = 'search';
+      searchInput.placeholder = 'Знайти назву, жанр або тему…';
+      searchInput.setAttribute('aria-label', 'Пошук книжок');
+      searchInput.value = search;
+      searchInput.addEventListener('input', () => {
+        search = searchInput.value;
+        // Preserve the active search field while filtering. Replacing it on each
+        // keystroke interrupts mobile keyboards and IME composition.
+        renderShelf();
+      });
+      const filters = element('div', '', 'story-filters');
+      const labels: readonly [CatalogFilter, string][] = [
+        ['all', 'Усі'],
+        ['mystery', 'Детективи'],
+        ['literary', 'Проза та листи'],
+      ];
+      for (const [value, label] of labels) {
+        const button = element('button', label!);
+        button.type = 'button';
+        button.setAttribute('aria-pressed', String(filter === value));
+        button.addEventListener('click', () => {
+          filter = value;
+          refresh();
+          panel.querySelector<HTMLButtonElement>(".story-filters [aria-pressed='true']")?.focus();
+        });
+        filters.append(button);
+      }
+      tools.append(searchInput, filters);
+      panel.append(tools);
+      const shelf = element('div', '', 'story-book-grid');
+      const count = element('p', '', 'catalog-count');
+      count.setAttribute('role', 'status');
+      panel.append(count);
+      const renderShelf = () => {
+        shelf.replaceChildren();
+        for (const book of story
+          .catalog(filter)
+          .filter((book) =>
+            `${book.title} ${book.genre} ${book.blurb}`
+              .toLocaleLowerCase('uk-UA')
+              .includes(search.toLocaleLowerCase('uk-UA').trim()),
+          )) {
+          const card = element('article', '', 'story-book');
+          const cover = element('img', '', 'book-cover');
+          cover.src = `/art/bookshop/covers/${book.id}.svg`;
+          cover.alt = '';
+          cover.width = 64;
+          cover.height = 92;
+          card.append(
+            cover,
+            element('h3', book.title),
+            element('small', `${book.genre} · ${book.length}`),
+          );
+          const sentenceEnd = book.blurb.indexOf('. ');
+          const preview = sentenceEnd >= 0 ? book.blurb.slice(0, sentenceEnd + 1) : book.blurb;
+          card.append(element('p', preview, 'book-blurb'));
+          const details = element('details', '');
+          const summary = element('summary', 'Про книжку');
+          details.append(summary, element('p', book.blurb), element('p', book.tone));
+          card.append(details);
+          if (request) {
+            const recommend = element('button', 'Запропонувати книжку');
+            recommend.type = 'button';
+            recommend.setAttribute('aria-label', `Запропонувати «${book.title}»`);
+            recommend.addEventListener('click', () => {
+              reaction = story.recommend(book.id);
+              refresh();
+              panel.scrollTop = 0;
+              panel.querySelector<HTMLButtonElement>('.panel-close')?.focus();
+            });
+            card.append(recommend);
+          }
+          shelf.append(card);
+        }
+        if (!shelf.children.length)
+          shelf.append(element('p', 'За цим запитом книжок немає. Спробуйте інше слово.'));
+        count.textContent = `Знайдено видань: ${shelf.querySelectorAll('.story-book').length} з ${story.catalog().length}`;
+      };
+      renderShelf();
+      panel.append(shelf);
+    }
+  };
+  const toggle = (next: 'journal' | 'catalog' | 'conversation') => {
+    pendingPlayerTurn = null;
+    replyReadyAt = 0;
+    if (next === 'conversation' && story.actor !== 'mara') return;
+    returnFocus = document.activeElement as HTMLElement;
+    reaction = next === 'catalog' ? story.lastRecommendation : null;
+    mode = mode === next ? null : next;
+    refresh();
+    if (mode) focusPanelUpdate(panel, panel);
+  };
+  const conversationClick = () => toggle('conversation');
+  const journalClick = () => toggle('journal');
+  const catalogClick = () => toggle('catalog');
+  const continueClick = () => {
+    mode = null;
+    refresh();
+    window.dispatchEvent(
+      new CustomEvent(story.request ? 'last-chapter:catalog-open' : 'last-chapter:continue'),
+    );
+  };
+  conversationButton.addEventListener('click', conversationClick);
+  journal.addEventListener('click', journalClick);
+  catalog.addEventListener('click', catalogClick);
+  continueButton.addEventListener('click', continueClick);
+  const panelKeys = (event: KeyboardEvent) => {
+    if (!mode) return;
+    if (event.key === 'Tab') {
+      const focusable = panelTabStops(panel);
+      const first = focusable[0],
+        last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    }
+    if (event.key === 'Escape' && !event.isComposing) {
+      event.preventDefault();
+      event.stopPropagation();
+      mode = null;
+      refresh();
+      restorePanelFocus(returnFocus, catalog);
+    }
+    if (
+      (event.key === 'ArrowDown' || event.key === 'ArrowUp') &&
+      (event.target as HTMLElement).tagName === 'BUTTON'
+    ) {
+      const buttons = panelTabStops(panel).filter(
+        (node): node is HTMLButtonElement => node.tagName === 'BUTTON',
+      );
+      const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+      event.preventDefault();
+      buttons[
+        (index + (event.key === 'ArrowDown' ? 1 : -1) + buttons.length) % buttons.length
+      ]?.focus({ preventScroll: true });
+    }
+  };
+  panel.addEventListener('keydown', panelKeys);
+  const newGame = () => {
+    conversation = startConversation(maraBookClub);
+    afterHours = startConversation(maraAfterHours);
+    returnVisit = startConversation(maraReturnVisit);
+    letterDecision = startConversation(maraLetterDecision);
+    selectedTopic = maraBookClub;
+    mode = null;
+    filter = 'all';
+    search = '';
+    journalTab = 'people';
+    reaction = null;
+    returnFocus = null;
+    personalNotes = '';
+    notesReadFailed = false;
+    conversationReadFailed = false;
+    pendingPlayerTurn = null;
+    seenJournal.clear();
+    try {
+      localStorage.setItem(OPTIONAL_PROGRESS_KEYS.notes, '');
+    } catch {
+      /* optional */
+    }
+    saveConversation();
+    refresh();
+  };
+  const openOrderCatalog = () => {
+    // The catalog can open from a dialogue event rather than its toolbar
+    // button. Return focus to a visible control when the panel closes.
+    returnFocus = catalog;
+    mode = 'catalog';
+    reaction = story.lastRecommendation;
+    refresh();
+    panel.querySelector<HTMLInputElement>('.catalog-search')?.focus({ preventScroll: true });
+  };
+  window.addEventListener('last-chapter:catalog-open', openOrderCatalog);
+  window.addEventListener('last-chapter:new-game', newGame);
+  window.__lastChapterRefresh = refresh;
+  refresh();
+  return () => {
+    conversationButton.removeEventListener('click', conversationClick);
+    conversationButton.remove();
+    saveWarning.remove();
+    recoveryNotice?.remove();
+    journal.removeEventListener('click', journalClick);
+    catalog.removeEventListener('click', catalogClick);
+    continueButton.removeEventListener('click', continueClick);
+    panel.removeEventListener('keydown', panelKeys);
+    window.removeEventListener('last-chapter:catalog-open', openOrderCatalog);
+    window.removeEventListener('last-chapter:new-game', newGame);
+    if (window.__lastChapterRefresh === refresh) window.__lastChapterRefresh = undefined;
+    mode = null;
+    panel.hidden = true;
+    panel.replaceChildren();
+    document.body.classList.remove('reading');
+    const toolbar = root.querySelector<HTMLElement>('.story-toolbar');
+    const loadingElement = document.querySelector<HTMLElement>('#loading');
+    const loading = Boolean(loadingElement && !loadingElement.hidden);
+    const talking = Boolean(document.querySelector('#stage')?.classList.contains('talking'));
+    for (const selector of ['#game', '#hotspots', '.hud', '#context-action']) {
+      const surface = document.querySelector<HTMLElement>(selector);
+      if (surface) surface.inert = talking || loading;
+    }
+    if (toolbar) toolbar.inert = loading;
+  };
+}

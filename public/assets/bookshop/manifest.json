@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "id": "bookshop-visitors",
+      "path": "/assets/bookshop/visitors.svg",
+      "source": "original-project-art",
+      "license": "project-original",
+      "format": "svg-sprite-sheet",
+      "width": 128,
+      "height": 96,
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": {
+        "reader": {
+          "start": 0,
+          "end": 3
+        },
+        "mara": {
+          "start": 4,
+          "end": 7
+        }
+      },
+      "usage": "Prototype character placeholder art; replace only after a cohesive licensed pack and character sheet have been reviewed."
+    }
+  ]
+}

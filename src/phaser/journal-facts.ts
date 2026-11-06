@@ -1,0 +1,218 @@
+/** Existing journal copy, shared with the original five-day narrative. */
+export const journalFacts: readonly (readonly [string, string])[] = [
+  [
+    'met_frank',
+    'Ви познайомилися з Френком, маленьким сірим девон-рексом. Він любить тепло й сам обирає, коли підійти ближче.',
+  ],
+  ['explored_shelves', 'Ви оглянули книжкові полиці та знайшли п’ять видань для рекомендацій.'],
+  ['explored_window', 'За вікном книгарні — дощовий осінній Беллвік.'],
+  ['explored_counter', 'На шухляді прилавка написано: «Спочатку вислухай».'],
+  ['explored_plant', 'Рослина біля вікна пережила багато зим.'],
+  ['heard_about_leak', 'Пані Міллер каже, що сім років тому книгарню затопило.'],
+  [
+    'rumor_heard',
+    'Чутка: пані Міллер бачила Томаса з жінкою біля громадського центру. Це не доказ зради.',
+  ],
+  ['leo_likes_trains', 'Мара каже, що Лео любить потяги й розклади.'],
+  ['mara_talked_about_leo', 'Мара хоче подарувати Лео книжку, яка покаже, що вона його розуміє.'],
+  ['saw_receipt', 'Картка бронювання: Лео Марш. Підпису про отримання немає.'],
+  ['nora_interested_in_letters', 'Нора цікавиться книжками про листування й право на відповідь.'],
+  [
+    'nora_confidentiality_respected',
+    'Ви не наполягали на розголошенні приватних звернень до центру.',
+  ],
+  ['nora_confidentiality_pressed', 'Ви наполягали на розмові про чужу приватність.'],
+  ['thomas_shared_work_stress', 'Томас розповів про нерівномірні замовлення та втому.'],
+  ['thomas_rumor_respected', 'Ви вирішили не поширювати неперевірені чутки про Томаса.'],
+  ['thomas_privacy_pressed', 'Ви наполягали на поясненнях щодо особистого життя Томаса.'],
+  ['eleanor_confirmed_closure', 'Елеонора підтвердила закриття книгарні після затоплення.'],
+  [
+    'eleanor_confirmed_reservation',
+    'Елеонора пам’ятає бронювання Лео, але не знає, чи він приходив.',
+  ],
+  ['eleanor_confirmed_missing_notification', 'Немає доказів, що Лео повідомили про закриття.'],
+  [
+    'eleanor_supported_privacy',
+    'Елеонора радить поважати право авторки й адресата листа на рішення.',
+  ],
+  ['leo_shared_future_plan', 'Лео й Мара мріють разом побачити зимове море.'],
+  [
+    'leo_letter_disclosed_carefully',
+    'Ви повідомили Лео про лист, не наполягаючи на його відкритті.',
+  ],
+  ['leo_letter_pressured', 'Ви тиснули на Лео через знайдений лист.'],
+  ['anna_listened_to', 'Ви вислухали Анну, не роблячи висновків про її шлюб.'],
+  ['anna_rumor_boundary', 'Анна попросила не обговорювати її сім’ю через чутки.'],
+  ['anna_rumor_pressed', 'Ви наполягали на розмові про непідтверджену чутку.'],
+  ['iris_boundary_respected', 'Ви поважали бажання Айріс не поспішати з особистою розмовою.'],
+  ['iris_requested_privacy', 'Айріс попросила поки що не передавати знайдений лист.'],
+  ['iris_recalled_closure', 'Айріс пам’ятає зачинену книгарню перед своїм від’їздом.'],
+  ['saw_repair_note', 'Журнал ремонту підтверджує, що книгарню закрили через протікання.'],
+  ['mara_boundaries_respected', 'Мара вдячна, що ви не наполягали на особистій розмові.'],
+  ['mara_listened_about_work', 'Мара зізналася, що їй важко відмовляти в додатковій роботі.'],
+  ['club_made_space', 'На книжковому клубі ви підтримали право кожного говорити у своєму темпі.'],
+  ['club_respected_privacy', 'Книжковий клуб домовився не перетворювати чужі історії на плітки.'],
+  ['club_chose_evidence', 'Учасники клубу нагадали одне одному перевіряти факти.'],
+  ['club_encouraged_children', 'Анна планує принести малюнки учнів на наступну зустріч.'],
+  [
+    'leo_understood_timeline',
+    'Лео дізнався, що бронювання існувало, але підтвердження дзвінка немає.',
+  ],
+  ['leo_letter_consent_respected', 'Ви не передавали лист Лео без згоди Айріс.'],
+  ['leo_open_to_conversation', 'Лео готовий поговорити з Айріс, якщо вона цього захоче.'],
+  ['leo_letter_pressured_day4', 'Ви наполягали, щоб Лео негайно прочитав лист.'],
+  ['leo_respected_mara_relationship', 'Ви підтримали стосунки Лео й Мари без нав’язування рішень.'],
+  ['leo_supported_mutual_consent', 'Ви підтримали право Айріс і Лео самим обрати розмову.'],
+  ['mara_supported_independence', 'Ви підтримали право Мари вирішувати за себе.'],
+  ['mara_letter_privacy_respected', 'Ви не розголосили Марі приватного листа.'],
+  ['mara_letter_pressured', 'Ви наполягали, щоб Мара негайно дізналася про лист.'],
+  ['mara_gift_encouraged', 'Ви підтримали вибір Мари щодо подарунка Лео.'],
+  ['mara_future_supported', 'Мара мріє про власний столик для читання біля пекарні.'],
+  ['iris_letter_choice_respected', 'Ви залишили рішення щодо листа за Айріс.'],
+  ['iris_letter_delivery_offered', 'Ви запропонували допомогти з листом лише за згоди Айріс.'],
+  ['iris_letter_pressured_day4', 'Ви наполягали, щоб Айріс передала лист негайно.'],
+  ['iris_offered_exhibition', 'Ви запропонували Айріс показати малюнки в книгарні.'],
+  ['iris_supported_autonomy', 'Ви підтримали право Айріс самій обирати майбутнє.'],
+  ['saw_envelope', 'У книжці знайдено запечатаний лист від Айріс до Лео.'],
+  ['opened_private_letter', 'Ви розкрили приватного листа без дозволу.'],
+  ['letter_secured', 'Лист залишився у безпечному місці.'],
+  ['ask_eleanor_next_day', 'Запитати Елеонору про старі бронювання й закриття книгарні.'],
+  [
+    'iris_letter_breach_admitted',
+    'Айріс почула, що ви відкрили її лист без дозволу. Це не стало пробаченням.',
+  ],
+  [
+    'final_reading_program_done',
+    'Для спільного читання обрано видану книжку. Приватні матеріали до програми не потрапили.',
+  ],
+  ['final_school_chairs_time_agreed', 'Анна й Томас домовилися поговорити вдома після читання.'],
+  ['book_club_started', 'Ви провели книжковий клуб у книгарні.'],
+  ['book_club_skipped', 'Замість книжкового клубу ви обрали тихий вечір.'],
+  [
+    'quiet_evening_page_found',
+    'Між старими романами знайдено аркуш із двома зірочками та уривком про відчинене вікно. Автора не встановлено.',
+  ],
+  [
+    'quiet_evening_page_examined',
+    'На знайденому аркуші дві цілі олівцеві зірочки. Біля них не видно слідів гумки. Край паперу обрізано рівно.',
+  ],
+  [
+    'iris_quiet_page_stars_compared',
+    'На листівці матері Айріс три сині зірочки, на аркуші — дві олівцеві. Це різні позначки; авторство аркуша не підтверджено.',
+  ],
+  [
+    'iris_quiet_page_window_theory',
+    'Припущення: відчинене вікно в уривку може означати очікування, а не втечу. Так Айріс пам’ятає мамині історії.',
+  ],
+  ['iris_quiet_page_privacy_respected', 'Ви домовилися з Айріс поки не показувати аркуш іншим.'],
+  [
+    'iris_quiet_page_identity_questioned',
+    'Айріс погодилася на обережні запитання про почерк: без імен і фотографій аркуша.',
+  ],
+  [
+    'final_quiet_manuscript_returned',
+    'Ви передали знайдений аркуш Айріс. Вона забрала його в альбомі.',
+  ],
+  [
+    'final_quiet_manuscript_archived',
+    'За згодою Айріс аркуш збережено в закритому конверті у книгарні. У записі — лише дата й місце знахідки.',
+  ],
+];
+
+/** Provenance for already-authored, already-heard journal facts. No new discoveries. */
+export const journalEvidence = [
+  {
+    flag: 'quiet_evening_page_found',
+    title: 'Загублена сторінка',
+    kind: 'observation',
+    source: 'Тихий вечір · стіл із книжками',
+  },
+  {
+    flag: 'quiet_evening_page_examined',
+    title: 'Папір і позначки',
+    kind: 'observation',
+    source: 'Огляд аркуша під лампою',
+  },
+  {
+    flag: 'iris_quiet_page_stars_compared',
+    title: 'Порівняння зірочок',
+    kind: 'observation',
+    source: 'Аркуш і листівка Айріс',
+  },
+  {
+    flag: 'iris_quiet_page_window_theory',
+    title: 'Вікно: втеча чи очікування?',
+    kind: 'inference',
+    source: 'Розмова з Айріс · четвертий день',
+  },
+  {
+    flag: 'iris_quiet_page_privacy_respected',
+    title: 'Домовленість про приватність аркуша',
+    kind: 'testimony',
+    source: 'Розмова з Айріс · четвертий день',
+  },
+  {
+    flag: 'iris_quiet_page_identity_questioned',
+    title: 'Умови перевірки почерку',
+    kind: 'testimony',
+    source: 'Розмова з Айріс · четвертий день',
+  },
+  {
+    flag: 'final_quiet_manuscript_returned',
+    title: 'Аркуш передано Айріс',
+    kind: 'custody',
+    source: 'Рішення Айріс · фінальний вечір',
+  },
+  {
+    flag: 'final_quiet_manuscript_archived',
+    title: 'Аркуш залишено в книгарні',
+    kind: 'custody',
+    source: 'Рішення Айріс · фінальний вечір',
+  },
+  {
+    flag: 'saw_receipt',
+    title: 'Картка бронювання',
+    kind: 'record',
+    source: 'Старі записи книгарні',
+  },
+  { flag: 'saw_repair_note', title: 'Журнал ремонту', kind: 'record', source: 'Журнал книгарні' },
+  {
+    flag: 'saw_envelope',
+    title: 'Запечатаний лист',
+    kind: 'observation',
+    source: 'Знайдено в книгарні',
+  },
+  {
+    flag: 'heard_about_leak',
+    title: 'Спогад про затоплення',
+    kind: 'testimony',
+    source: 'Пані Міллер',
+  },
+  {
+    flag: 'eleanor_confirmed_reservation',
+    title: 'Спогад про бронювання',
+    kind: 'testimony',
+    source: 'Елеонора',
+  },
+  {
+    flag: 'eleanor_confirmed_missing_notification',
+    title: 'Непідтверджене повідомлення',
+    kind: 'testimony',
+    source: 'Елеонора',
+  },
+] as const;
+export const evidenceKindLabels = {
+  observation: 'Спостереження',
+  record: 'Документ',
+  testimony: 'Свідчення · слова співрозмовника',
+  inference: 'Припущення · потребує перевірки',
+  custody: 'Зберігання · не доказ авторства',
+} as const;
+
+/** A recovered save may contain both custody flags; the actual handover wins. */
+export function journalFlagVisible(flag: string, flags: ReadonlySet<string>): boolean {
+  return (
+    flags.has(flag) &&
+    !(flag === 'final_quiet_manuscript_archived' && flags.has('final_quiet_manuscript_returned'))
+  );
+}
