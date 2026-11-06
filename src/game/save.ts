@@ -106,7 +106,11 @@ export function encodeSave(state: ChapterState): string {
 }
 
 /** Validate ledger shape without replaying old histories or trusting forged topic keys. */
-function validCompletionKey(key: string, story: ReturnType<typeof stageStory>): boolean {
+function validCompletionKey(
+  key: string,
+  story: ReturnType<typeof stageStory>,
+  savedFlags: ReadonlySet<string>,
+): boolean {
   try {
     const value: unknown = JSON.parse(key);
     if (!Array.isArray(value) || value.length !== 3) return false;
@@ -117,7 +121,8 @@ function validCompletionKey(key: string, story: ReturnType<typeof stageStory>): 
     }
     const node = story.nodes.find((item) => item.id === nodeId);
     const option = node?.options.find((item) => item.id === optionId);
-    if (!option) return false;
+    // The engine never records suspended or repeatable choices as completed topics.
+    if (!option || option.suspend || option.repeatability === 'repeatable') return false;
     const allowed = option.reopensWhen ?? [];
     // completionKey() serializes a subset in the authored reopensWhen order.
     // Reject reordered, duplicated or foreign flags; older keys may contain
@@ -125,7 +130,7 @@ function validCompletionKey(key: string, story: ReturnType<typeof stageStory>): 
     let previousIndex = -1;
     for (const flag of reopened) {
       const index = allowed.indexOf(flag);
-      if (index <= previousIndex) return false;
+      if (index <= previousIndex || !savedFlags.has(flag)) return false;
       previousIndex = index;
     }
     return true;
@@ -195,13 +200,14 @@ export function decodeSave(raw: string): ChapterState | null {
       // story graph, so only enforce shape there.
       if (stage !== 'day3-complete') {
         const story = stageStory(stage);
-        if (!(obj.completed as string[]).every((key) => validCompletionKey(key, story))) {
+        const savedFlags = new Set(obj.flags as string[]);
+        if (!(obj.completed as string[]).every((key) => validCompletionKey(key, story, savedFlags))) {
           return null;
         }
         if (
           pending.some(
             ({ hub, key }) =>
-              !validCompletionKey(key, story) || JSON.parse(key)[0] !== hub,
+              !validCompletionKey(key, story, savedFlags) || JSON.parse(key)[0] !== hub,
           )
         ) {
           return null;
