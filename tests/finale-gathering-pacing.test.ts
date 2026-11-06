@@ -82,15 +82,15 @@ describe('day-five gathering pacing and optional callbacks', () => {
   ])(
     'returns from $name aftercare once without blocking the finale',
     ({ flag, entry, choice, back, done }) => {
-    const state = gather([flag]);
-    expect(choices(state)).toContain(entry);
-    const conversation = selectOption(finalReading, state, entry);
-    const result = selectOption(finalReading, conversation, choice);
-    const returned = selectOption(finalReading, result, back);
-    expect(returned.node).toBe('gathering');
-    expect(returned.flags).toContain(done);
-    expect(choices(returned)).not.toContain(entry);
-    expect(choices(returned)).toContain('close');
+      const state = gather([flag]);
+      expect(choices(state)).toContain(entry);
+      const conversation = selectOption(finalReading, state, entry);
+      const result = selectOption(finalReading, conversation, choice);
+      const returned = selectOption(finalReading, result, back);
+      expect(returned.node).toBe('gathering');
+      expect(returned.flags).toContain(done);
+      expect(choices(returned)).not.toContain(entry);
+      expect(choices(returned)).toContain('close');
     },
   );
 

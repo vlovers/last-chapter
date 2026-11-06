@@ -203,7 +203,9 @@ export function decodeSave(raw: string): ChapterState | null {
       if (stage !== 'day3-complete') {
         const story = stageStory(stage);
         const savedFlags = new Set(obj.flags as string[]);
-        if (!(obj.completed as string[]).every((key) => validCompletionKey(key, story, savedFlags))) {
+        if (
+          !(obj.completed as string[]).every((key) => validCompletionKey(key, story, savedFlags))
+        ) {
           return null;
         }
         if (
