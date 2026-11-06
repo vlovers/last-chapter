@@ -95,10 +95,7 @@ describe('day-five gathering pacing and optional callbacks', () => {
   );
 
   it('keeps other optional conversations accessible after returning', () => {
-    const state = gather([
-      'final_after_anna_class_books_reserved',
-      'final_after_leo_mara_walk',
-    ]);
+    const state = gather(['final_after_anna_class_books_reserved', 'final_after_leo_mara_walk']);
     const conversation = selectOption(finalReading, state, 'final-aftercare-anna-option');
     const result = selectOption(finalReading, conversation, 'final-aftercare-anna-vote');
     const back = selectOption(finalReading, result, 'final-aftercare-anna-vote-back');
