@@ -105,6 +105,40 @@ export function encodeSave(state: ChapterState): string {
   return serialized;
 }
 
+/** Validate ledger shape without replaying old histories or trusting forged topic keys. */
+function validCompletionKey(
+  key: string,
+  story: ReturnType<typeof stageStory>,
+  savedFlags: ReadonlySet<string>,
+): boolean {
+  try {
+    const value: unknown = JSON.parse(key);
+    if (!Array.isArray(value) || value.length !== 3) return false;
+    const [nodeId, optionId, reopened] = value as unknown[];
+    if (typeof nodeId !== 'string' || typeof optionId !== 'string') return false;
+    if (!Array.isArray(reopened) || !reopened.every((flag) => typeof flag === 'string')) {
+      return false;
+    }
+    const node = story.nodes.find((item) => item.id === nodeId);
+    const option = node?.options.find((item) => item.id === optionId);
+    // The engine never records suspended or repeatable choices as completed topics.
+    if (!option || option.suspend || option.repeatability === 'repeatable') return false;
+    const allowed = option.reopensWhen ?? [];
+    // completionKey() serializes a subset in the authored reopensWhen order.
+    // Reject reordered, duplicated or foreign flags; older keys may contain
+    // only the subset that was active when the option was selected.
+    let previousIndex = -1;
+    for (const flag of reopened) {
+      const index = allowed.indexOf(flag);
+      if (index <= previousIndex || !savedFlags.has(flag)) return false;
+      previousIndex = index;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function decodeSave(raw: string): ChapterState | null {
   try {
     if (exceedsSaveLimit(raw)) return null;
@@ -161,6 +195,24 @@ export function decodeSave(raw: string): ChapterState | null {
       const pending = obj.pending as { hub: string; key: string }[];
       if (pending.some(({ key }) => completed.has(key))) return null;
       if (new Set(pending.map(({ key }) => key)).size !== pending.length) return null;
+      // A malformed ledger could otherwise hide real choices or invent progress.
+      // Older day-three checkpoints may contain keys from their historical
+      // story graph, so only enforce shape there.
+      if (stage !== 'day3-complete') {
+        const story = stageStory(stage);
+        const savedFlags = new Set(obj.flags as string[]);
+        if (!(obj.completed as string[]).every((key) => validCompletionKey(key, story, savedFlags))) {
+          return null;
+        }
+        if (
+          pending.some(
+            ({ hub, key }) =>
+              !validCompletionKey(key, story, savedFlags) || JSON.parse(key)[0] !== hub,
+          )
+        ) {
+          return null;
+        }
+      }
     }
     const dialogue = {
       node: obj.node,

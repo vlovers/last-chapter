@@ -38,18 +38,19 @@ export function analyzeDialogueReachability(
     { node: story.start, flags: [...new Set(initialFlags)].sort(), path: [] },
   ];
   queued.add(JSON.stringify([story.start, queue[0]!.flags]));
-  const impossibleEdges = story.nodes.flatMap((node) =>
+  const effectiveNodes = [...byId.values()];
+  const impossibleEdges = effectiveNodes.flatMap((node) =>
     node.options
       .filter((option) => (option.requires ?? []).some((flag) => (option.unless ?? []).includes(flag)))
       .map((option) => JSON.stringify([node.id, option.id, option.next])),
   );
-  const localGrants = new Set(story.nodes.flatMap((node) =>
+  const localGrants = new Set(effectiveNodes.flatMap((node) =>
     node.options.flatMap((option) => option.grants ?? []),
   ));
-  const potentiallyExternalFlags = [...new Set(story.nodes.flatMap((node) =>
+  const potentiallyExternalFlags = [...new Set(effectiveNodes.flatMap((node) =>
     node.options.flatMap((option) => option.requires ?? []),
   ))].filter((flag) => !localGrants.has(flag));
-  const allEdges = story.nodes.flatMap((node) =>
+  const allEdges = effectiveNodes.flatMap((node) =>
     node.options.map((option) => JSON.stringify([node.id, option.id, option.next])),
   );
   let cursor = 0;
@@ -86,7 +87,7 @@ export function analyzeDialogueReachability(
   return {
     reachableNodes: [...reachableNodes],
     reachableEdges: [...reachableEdges],
-    unreachableNodes: story.nodes.map((node) => node.id).filter((id) => !reachableNodes.has(id)),
+    unreachableNodes: effectiveNodes.map((node) => node.id).filter((id) => !reachableNodes.has(id)),
     unreachableEdges: allEdges.filter((edge) => !reachableEdges.has(edge)),
     impossibleEdges,
     potentiallyExternalFlags,

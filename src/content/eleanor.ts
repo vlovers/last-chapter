@@ -32,7 +32,7 @@ export const eleanorVisit: DialogueStory = {
         },
         {
           id: 'eleanor-tea',
-          label: '«Спершу доп'ємо чай. Полиця нікуди не втече»',
+          label: "«Спершу доп'ємо чай. Полиця нікуди не втече»",
           next: 'shop',
         },
         {
