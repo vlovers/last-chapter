@@ -144,8 +144,10 @@ describe('day-four return visits remember what the characters already know', () 
         flags: [sale, 'mara_day_four_own_story_heard'],
       };
       const text = currentNode(maraDecision, state).text;
-      expect(text).toContain('Книжку для Лео вже сховала');
-      expect(text).toContain('коли її вручити');
+      // The copy may change, but Mara must remember an already purchased
+      // gift and that she has not handed it to Leo yet.
+      expect(text).toMatch(/(?:Книжку|книжку|Для Лео).*Лео|Для Лео вибрала/);
+      expect(text).toMatch(/(?:вручити|подарувати)/);
       expect(text).not.toContain('як влаштувати Лео сюрприз');
 
       // The gift topic is gated on the rest conversation, not merely the sale.

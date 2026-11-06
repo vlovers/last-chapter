@@ -98,7 +98,9 @@ describe('Production V2: chronology, letter authorship and evidence boundaries',
 
   it('school reading is tomorrow on day two and today when Thomas misses it on day three', () => {
     expect(follow(annaVisit, ['hello']).text).toContain('завтра читання');
-    expect(follow(thomasVisit, ['greet', 'thomas-chairs']).text).toContain('сьогоднішнє читання');
+    expect(follow(thomasVisit, ['greet', 'thomas-chairs']).text).toContain(
+      'перед сьогоднішнім читанням',
+    );
     expect(follow(thomasVisit, ['greet', 'anna']).text).toContain('сьогодні було читання');
   });
 

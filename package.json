@@ -8,6 +8,7 @@
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:narrative": "vitest run tests/five-day-integrity-matrix.test.ts tests/narrative-harness-integrity.test.ts tests/production-v2-five-day-journeys.test.ts tests/ending-consequence-matrix.test.ts tests/release-finale-journeys.test.ts tests/production-save-route-matrix.test.ts tests/release-save-recovery.test.ts",
     "test:browser": "node scripts/qa-phaser.mjs",
     "test:browser:v5": "node scripts/qa-phaser-v5.mjs",
     "lint": "eslint .",
@@ -18,7 +19,8 @@
     "test:browser:mobile": "node scripts/qa-mobile-overhaul.mjs",
     "test:browser:stabilization": "node scripts/qa-stabilization.mjs",
     "test:browser:performance": "node scripts/qa-bookshop-performance.mjs",
-    "test:browser:save-recovery": "node scripts/qa-save-recovery.mjs"
+    "test:browser:save-recovery": "node scripts/qa-save-recovery.mjs",
+    "test:browser:ux": "node scripts/qa-ux-ui-production.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

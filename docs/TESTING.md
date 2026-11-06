@@ -5,6 +5,21 @@ The narrative suite covers deterministic knowledge, trust, dialogue, five-day sc
 book recommendations, endings and save migrations. It must continue to pass when changing
 the independent Phaser slice.
 
+`npm run test:narrative` runs the deterministic consequence matrix, graph diagnostics,
+existing ten five-day journeys and ending-dimension regressions. The reusable harness
+restores production saves after every choice, exercises legacy saves without completion
+ledgers, verifies every paginated screen has at most four choices, and distinguishes
+bounded exploration from proven dead ends and closed loops. See the
+[executed audit, coverage matrix and limits](narrative/FIVE-DAY-CONSEQUENCE-INTEGRITY-20261105.md).
+
+The narrative command also includes the release save-route matrix (80 deterministic
+current/legacy routes), seven complete consequence journeys, and rejected-save
+preservation tests. See the [combined integration audit and QA matrix](integration/RELEASE-READINESS-20261105.md).
+`test:browser:save-recovery` verifies seven scenarios: missing/corrupt/future
+chapters, blocked storage, and transient read denial for notes, an active optional
+conversation and a completed optional conversation. It also checks the exact
+downloaded archive, small-phone controls, retry behavior and retained progress.
+
 `tests/phaser-slice.test.js` tests every Mara branch, state isolation/immutability,
 interaction proximity and arrival gates, nonoverlapping hit areas, movement boundaries,
 substepped collision and sliding, safe navigation segments, reachable approach points,
@@ -13,6 +28,14 @@ portrait fallback metadata and unsupported audio. Runtime JavaScript is linted a
 `npm run typecheck` covers the existing TypeScript code, not the public JS modules.
 
 ## Optional browser smoke tests
+
+`npm run test:browser:ux` checks the production UI at 320×568, 360×780, 375×667,
+375×812, 390×844, 430×932, 768×1024, 1440×900 and 844×390. It covers transient
+spoken player turns before NPC replies, action labels, rapid Enter/touch guards,
+reload without replay, long Ukrainian prose, offscreen Frank navigation, local
+cover loading, search/filtering, notebook knowledge boundaries and notes. It can
+run against Vite preview by setting `BASE_URL`; screenshots and JSON go to
+`QA_OUTPUT`. See [the UX/UI record](qa/ux-ui-production/README.md).
 
 The repository does not add a browser automation library to game dependencies. Install
 Playwright in a temporary directory and use installed Google Chrome, or configure another

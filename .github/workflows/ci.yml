@@ -40,7 +40,10 @@ jobs:
 
   browser:
     name: Browser QA / ${{ matrix.suite.name }}
-    runs-on: ubuntu-latest
+    # The observed hosted image already supplies Chromium's shared libraries
+    # and Liberation fonts. Pin that OS family instead of changing dependencies
+    # implicitly when ubuntu-latest migrates.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -56,7 +59,9 @@ jobs:
             command: node scripts/qa-frank-overhaul.mjs
           - name: finale
             command: node scripts/qa-finale-matrix.mjs
-          # Bounded groups: all ten scenarios at both mobile widths.
+          # All ten scenarios at both widths. The fixture balances long routes
+          # across these existing groups; five core routes exceeded 20 minutes
+          # including setup/cleanup on run 42070187073 despite passing assertions.
           - name: narrative-v2-360-core
             command: QA_WIDTH=360 QA_GROUP=core node scripts/qa-narrative-v2.mjs
           - name: narrative-v2-390-core
@@ -71,6 +76,8 @@ jobs:
             command: QA_WIDTH=390 QA_GROUP=daily node scripts/qa-narrative-v2.mjs
           - name: save-recovery
             command: npm run test:browser:save-recovery
+          - name: ux-ui
+            command: npm run test:browser:ux
           - name: performance
             command: node scripts/qa-bookshop-performance.mjs
     steps:
@@ -86,8 +93,11 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Install browser tooling
         run: |
-          npm install --no-save --package-lock=false playwright@1.56.0
-          npx playwright install --with-deps chromium
+          npm install --no-save --package-lock=false --no-audit --no-fund playwright@1.56.0
+          # --with-deps re-downloaded optional fonts for over nine minutes in
+          # run 42201187341. Keep the same pinned Chromium and host validation;
+          # the actual browser launch still fails if a required library is absent.
+          npx playwright install chromium
       - name: Start game server
         run: |
           npm run dev -- --host 127.0.0.1 > /tmp/last-chapter-vite.log 2>&1 &
@@ -107,6 +117,13 @@ jobs:
         with:
           name: vite-log-${{ matrix.suite.name }}
           path: /tmp/last-chapter-vite.log
+          if-no-files-found: ignore
+      - name: Upload UX/UI browser evidence
+        if: always() && matrix.suite.name == 'ux-ui'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ux-ui-browser-qa
+          path: /tmp/last-chapter-qa
           if-no-files-found: ignore
       - name: Upload finale matrix evidence
         if: always() && matrix.suite.name == 'finale'

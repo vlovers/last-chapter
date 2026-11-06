@@ -1,4 +1,6 @@
 export interface ConversationChoice {
+  readonly delivery?: 'speech' | 'action';
+  readonly spokenText?: string;
   id: string;
   label: string;
   next: string;

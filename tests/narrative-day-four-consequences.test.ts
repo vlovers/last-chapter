@@ -45,7 +45,7 @@ describe('Day four decisions have day five consequences', () => {
     expect(currentNode(thomasVisit, avoided).text).toContain('розмова знову почекає');
     expect(
       currentNode(finalReading, { ...owned, node: 'final-couple-anna-thomas' }).text,
-    ).toContain('третій поверх');
+    ).toContain('другий поверх');
     expect(
       currentNode(finalReading, { ...avoided, node: 'final-couple-anna-thomas' }).text,
     ).toContain('ще не поговорили');

@@ -1,4 +1,4 @@
-import { projectRect } from './viewport.js';
+import { projectRect, touchTarget } from './viewport.js';
 import { HOTSPOTS, nearestSpot, eligible } from './world.js';
 import { visitorApproach } from './visitor-roaming.js';
 export class Interactions {
@@ -85,6 +85,49 @@ export class Interactions {
     };
     scene.scale.on('resize', this.resize);
     this.resize();
+    this.menuButton = document.createElement('button');
+    this.menuButton.type = 'button';
+    this.menuButton.id = 'explore-toggle';
+    this.menuButton.textContent = 'Оглянути';
+    this.menuButton.setAttribute('aria-label', 'Оглянути книгарню');
+    this.menuButton.setAttribute('aria-haspopup', 'dialog');
+    document.querySelector('.hud nav').prepend(this.menuButton);
+    this.menu = document.createElement('dialog');
+    this.menu.id = 'explore-menu';
+    this.menu.setAttribute('aria-labelledby', 'explore-title');
+    document.body.append(this.menu);
+    this.menuButton.addEventListener('click', () => {
+      if (!scene.canExplore()) return;
+      this.menu.replaceChildren();
+      const title = document.createElement('h2');
+      title.id = 'explore-title';
+      title.textContent = 'Оглянути книгарню';
+      const hint = document.createElement('p');
+      hint.textContent =
+        'Оберіть предмет — і ви підійдете до нього. Можна також торкнутися предмета в книгарні.';
+      this.menu.append(title, hint);
+      const list = document.createElement('div');
+      list.className = 'explore-list';
+      for (const spot of this.spots) {
+        if (this.buttons.get(spot.id).dataset.available !== 'true') continue;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = spot.label;
+        button.dataset.spot = spot.id;
+        button.addEventListener('click', () => {
+          this.menu.close();
+          onInteract(spot);
+        });
+        list.append(button);
+      }
+      const close = document.createElement('button');
+      close.type = 'button';
+      close.textContent = 'Повернутися до книгарні';
+      close.addEventListener('click', () => this.menu.close());
+      this.menu.append(list, close);
+      scene.keys.clear();
+      this.menu.showModal();
+    });
   }
   update(player, mara, state) {
     const maraSpot = this.spots.find((spot) => spot.id === 'mara');
@@ -95,14 +138,18 @@ export class Interactions {
       const button = this.buttons.get(spot.id),
         rect = spot.rect;
       const projected = projectRect(rect, this.scene.cameras.main);
-      const left = projected.x + (projected.w - Math.max(44, projected.w)) / 2;
-      const top = projected.y + (projected.h - Math.max(44, projected.h)) / 2;
-      const style = `${left}px;${top}px;${Math.max(44, projected.w)}px;${Math.max(44, projected.h)}px`;
+      const {
+        x: left,
+        y: top,
+        w,
+        h,
+      } = touchTarget(projected, this.scene.scale.width, this.scene.scale.height);
+      const style = `${left}px;${top}px;${w}px;${h}px`;
       if (button.dataset.geometry !== style) {
         button.style.left = `${left}px`;
         button.style.top = `${top}px`;
-        button.style.width = `${Math.max(44, projected.w)}px`;
-        button.style.height = `${Math.max(44, projected.h)}px`;
+        button.style.width = `${w}px`;
+        button.style.height = `${h}px`;
         button.dataset.geometry = style;
       }
       const available =
@@ -182,5 +229,7 @@ export class Interactions {
     this.lifecycle.abort();
     this.scene.scale.off('resize', this.resize);
     this.root.replaceChildren();
+    this.menuButton?.remove();
+    this.menu?.remove();
   }
 }
