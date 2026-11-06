@@ -3318,18 +3318,22 @@ export const finalReading: DialogueStory = {
       afterwordWhen: [
         {
           requires: ['final_case_sealed'],
+          unless: ['final_case_deferred'],
           text: 'Наступного ранку Нора кладе в шухляду конверт із перевіреними фактами. На ньому немає імені автора: цифра сімнадцять у журналі є, а зв’язку з рукописом ніхто не довів.',
         },
         {
           requires: ['final_case_deferred'],
+          unless: ['final_case_sealed'],
           text: 'Наступного ранку Елеонора залишає порожній конверт у шухляді. Нора приносить нові закладки, але не оголошує нерозгадану історію розкритою.',
         },
         {
           requires: ['final_case_iris_boundaries'],
+          unless: ['final_case_iris_declined'],
           text: 'Наступного ранку на столі Нори немає копії записів для гостей. Айріс сама вирішуватиме, чи показувати свій конверт і кому саме.',
         },
         {
           requires: ['final_case_iris_declined'],
+          unless: ['final_case_iris_boundaries'],
           text: 'Айріс не захотіла обговорювати підсумок цього вечора. Нора залишає конверт у шухляді й не намагається повернути її до столу; дозволу на публікацію ніхто не давав.',
         },
         {
