@@ -79,7 +79,9 @@ describe('all five days: every authored scene fits four buttons and exposes its 
           addVariant(required);
           for (const excluded of option.unless ?? []) addVariant([...required, excluded]);
           for (const reopened of option.reopensWhen ?? []) addVariant([...required, reopened]);
-          if (option.repeatability !== 'repeatable') {
+          // The engine never stores suspended or repeatable choices as completed.
+          // Synthetic visibility snapshots must satisfy the real save decoder.
+          if (option.repeatability !== 'repeatable' && !option.suspend) {
             const completedKey = JSON.stringify([node.id, option.id, []]);
             addVariant(required, [completedKey]);
             if (option.reopensWhen?.length) {
