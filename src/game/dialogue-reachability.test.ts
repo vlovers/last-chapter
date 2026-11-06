@@ -216,4 +216,33 @@ describe('analyzeDialogueReachability', () => {
     expect(result.witnessPaths.left).toEqual(['left']);
     expect(result.witnessPaths.right).toEqual(['right']);
   });
+
+  it('ignores shadowed duplicate-node transitions in audit inventories', () => {
+    const duplicated: DialogueStory = {
+      start: 'start',
+      nodes: [
+        {
+          id: 'start',
+          speaker: 'A',
+          text: 'First',
+          options: [{ id: 'real', label: 'Real', next: 'end' }],
+        },
+        {
+          id: 'start',
+          speaker: 'A',
+          text: 'Shadowed',
+          options: [
+            { id: 'ghost', label: 'Ghost', next: 'missing', requires: ['x'], unless: ['x'] },
+          ],
+        },
+        { id: 'end', speaker: 'B', text: 'End', options: [] },
+      ],
+    };
+    const report = analyzeDialogueReachability(duplicated);
+    expect(report.reachableEdges).toEqual([JSON.stringify(['start', 'real', 'end'])]);
+    expect(report.unreachableEdges).toEqual([]);
+    expect(report.impossibleEdges).toEqual([]);
+    expect(report.potentiallyExternalFlags).toEqual([]);
+    expect(report.unreachableNodes).toEqual([]);
+  });
 });

@@ -79,7 +79,9 @@ describe('day-five gathering pacing and optional callbacks', () => {
       back: 'final-aftercare-eleanor-sort-back',
       done: 'final_aftercare_eleanor_done',
     },
-  ])('returns from $name aftercare once without blocking the finale', ({ flag, entry, choice, back, done }) => {
+  ])(
+    'returns from $name aftercare once without blocking the finale',
+    ({ flag, entry, choice, back, done }) => {
     const state = gather([flag]);
     expect(choices(state)).toContain(entry);
     const conversation = selectOption(finalReading, state, entry);
@@ -89,7 +91,8 @@ describe('day-five gathering pacing and optional callbacks', () => {
     expect(returned.flags).toContain(done);
     expect(choices(returned)).not.toContain(entry);
     expect(choices(returned)).toContain('close');
-  });
+    },
+  );
 
   it('keeps other optional conversations accessible after returning', () => {
     const state = gather([
