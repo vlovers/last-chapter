@@ -97,8 +97,33 @@ The recommendation regression failed before the fix and passes afterward.
   at 360px and once at 390px. Historical job setup sometimes consumes several
   minutes; the 20-minute limit remains unchanged.
 
-No workflow reruns or empty commits were requested. The final push should trigger
-one consolidated set of checks; remote status belongs to that exact commit.
+No workflow reruns or empty commits were requested. Remote status belongs to the
+exact final commit, not an earlier green head.
+
+### Confirmed CI setup follow-up
+
+The consolidated integration commit `7b62939bb0fb77ba65d0392ed51e815d42bebe00`
+passed quality, thirteen of fourteen CI browser jobs, and the separate Browser QA
+workflow. The previously cancelled 390px core job passed in **9m18s** after the
+group rebalance. However, [run 42201187341](https://github.com/vlovers/last-chapter/actions/runs/42201187341)
+cancelled the 360px core job at its 20-minute limit during the third scenario.
+Its first two scenarios completed without errors; the third is not counted as
+completed.
+
+That job spent **10m12s** installing browser tooling, including **9m10s** fetching
+21.1 MB of additional font packages from the Ubuntu mirror. The log explicitly
+reports every Chromium runtime shared library, Liberation fonts and the emoji
+font already installed. The separate successful Browser QA workflow used the
+same hosted `ubuntu-24.04` image (`ubuntu24/20261101.360`).
+
+A necessary CI follow-up pins the browser jobs to the observed Ubuntu 24.04 OS
+family and uses `npx playwright install chromium` without repeating apt font
+installation. Playwright **1.56.0**, its Chromium binary, host-library validation,
+all fourteen browser jobs, assertions, artifact uploads and the **20-minute**
+limit remain intact. No library-validation bypass or timeout increase is used.
+This is a code/configuration correction after a confirmed timeout, not a manual
+or speculative workflow rerun. Application code and the local gameplay results
+below are unchanged. The final PR records the new commit's Actions outcome.
 
 ## Final narrative QA matrix
 

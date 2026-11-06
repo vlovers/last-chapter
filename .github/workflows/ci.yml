@@ -40,7 +40,10 @@ jobs:
 
   browser:
     name: Browser QA / ${{ matrix.suite.name }}
-    runs-on: ubuntu-latest
+    # The observed hosted image already supplies Chromium's shared libraries
+    # and Liberation fonts. Pin that OS family instead of changing dependencies
+    # implicitly when ubuntu-latest migrates.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -90,8 +93,11 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Install browser tooling
         run: |
-          npm install --no-save --package-lock=false playwright@1.56.0
-          npx playwright install --with-deps chromium
+          npm install --no-save --package-lock=false --no-audit --no-fund playwright@1.56.0
+          # --with-deps re-downloaded optional fonts for over nine minutes in
+          # run 42201187341. Keep the same pinned Chromium and host validation;
+          # the actual browser launch still fails if a required library is absent.
+          npx playwright install chromium
       - name: Start game server
         run: |
           npm run dev -- --host 127.0.0.1 > /tmp/last-chapter-vite.log 2>&1 &
