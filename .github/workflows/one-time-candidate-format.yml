@@ -1,0 +1,31 @@
+name: One-time integration candidate formatter
+on:
+  push:
+    branches: [automation/format-last-chapter-20261106]
+permissions:
+  contents: write
+concurrency:
+  group: one-time-last-chapter-format
+  cancel-in-progress: false
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - run: npm run format
+      - name: Commit formatting to isolated branch only
+        run: |
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -u
+            git commit -m "style: normalize integrated release candidate"
+            git push origin HEAD:automation/format-last-chapter-20261106
+          fi
