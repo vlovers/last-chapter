@@ -6,6 +6,37 @@ This is a **temporary prototype save**, not a production-ready secure save syste
 
 A later production save should include a deterministic event history, migration tests, story content version and recovery UX for incompatible saves. No account or cloud storage is needed for this game.
 
+## Unreadable-save recovery
+
+Before replacing a rejected current/older save, the browser adapter preserves its
+exact stored string, recommendation sidecar, all four optional conversations and
+personal notes under `last-chapter:save:recovery:v1`. The archive contains
+`{ version: 1, snapshots: [{ entries: { [storageKey]: storedString } }] }`.
+It retains earlier snapshots and deduplicates identical snapshots. Rejected
+content is never used to infer narrative facts or completion.
+
+The opening screen explains that a new story was started. **Нотатник → Мої записи
+→ Завантажити резервну копію** downloads the local archive for manual repair;
+nothing is uploaded. The archive also remains available after reloading or
+starting a new season. This preserves data for recovery, not automatic repair of
+an invalid save.
+
+If any source read, archive validation, write or readback fails, the original
+save and sidecars remain in place and the fallback story stays unsaved. A newer
+save version is protected in place as before. Valid current and legacy chapter
+saves keep their existing version/key, flags, histories and completion behavior.
+Unknown nonempty flags are retained; missing flags are not invented. Archive
+growth can exhaust browser storage; that condition protects the original record
+and displays the existing unsaved-progress warning instead of deleting backups.
+
+A read error for a valid sidecar is also distinct from a missing record. Optional
+conversations read their shared-memory group before accepting replies; a failed
+read offers a retry and cannot overwrite active or completed sessions. Personal
+notes stay protected from editing until their read succeeds. Recommendation
+history stays protected until reload, with a catalog notice; chapter choices and
+receipts can still save independently. An explicit new-season action resets
+these session protections along with the previous season's optional progress.
+
 ## Gameplay polish V1 completion ledger
 
 The existing v1 key and version remain valid. Saves may additionally contain

@@ -59,27 +59,40 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       ...returnVisit.memories,
       ...letterDecision.memories,
     ]);
-  try {
-    if (story.isProgressSaved) {
-      const saved = localStorage.getItem(conversationKey);
-      if (saved) conversation = restoreConversation(maraBookClub, saved) ?? conversation;
-      const savedAfterHours = localStorage.getItem(afterHoursKey);
-      if (savedAfterHours)
-        afterHours = restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours;
-      const savedReturn = localStorage.getItem(returnKey);
-      if (savedReturn)
-        returnVisit = restoreConversation(maraReturnVisit, savedReturn) ?? returnVisit;
-      const savedLetter = localStorage.getItem(letterKey);
-      if (savedLetter)
-        letterDecision = restoreConversation(maraLetterDecision, savedLetter) ?? letterDecision;
+  let conversationReadFailed = false;
+  const loadConversations = () => {
+    if (!story.isProgressSaved) return;
+    try {
+      // Read the whole shared-memory group before replacing any session. A
+      // transient failure must not leave three defaults ready to overwrite saves.
+      const [saved, savedAfterHours, savedReturn, savedLetter] = [
+        conversationKey,
+        afterHoursKey,
+        returnKey,
+        letterKey,
+      ].map((key) => localStorage.getItem(key));
+      conversation = saved
+        ? (restoreConversation(maraBookClub, saved) ?? conversation)
+        : conversation;
+      afterHours = savedAfterHours
+        ? (restoreConversation(maraAfterHours, savedAfterHours) ?? afterHours)
+        : afterHours;
+      returnVisit = savedReturn
+        ? (restoreConversation(maraReturnVisit, savedReturn) ?? returnVisit)
+        : returnVisit;
+      letterDecision = savedLetter
+        ? (restoreConversation(maraLetterDecision, savedLetter) ?? letterDecision)
+        : letterDecision;
+      conversationReadFailed = false;
+    } catch {
+      conversationReadFailed = true;
     }
-  } catch {
-    /* storage may be unavailable */
-  }
+  };
+  loadConversations();
   const saveConversation = () => {
     // A newer chapter owns its sidecars too. Keep this session in memory until
     // the current build can persist its own chapter, preserving the newer data.
-    if (!story.isProgressSaved) return;
+    if (!story.isProgressSaved || conversationReadFailed) return;
     try {
       localStorage.setItem(conversationKey, JSON.stringify(conversation));
       localStorage.setItem(afterHoursKey, JSON.stringify(afterHours));
@@ -105,12 +118,17 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const seenJournal = new Set<string>();
   let pendingPlayerTurn: string | null = null;
   let replyReadyAt = 0;
-  try {
-    if (story.isProgressSaved)
+  let notesReadFailed = false;
+  const loadPersonalNotes = () => {
+    if (!story.isProgressSaved) return;
+    try {
       personalNotes = (localStorage.getItem(OPTIONAL_PROGRESS_KEYS.notes) ?? '').slice(0, 4000);
-  } catch {
-    /* optional */
-  }
+      notesReadFailed = false;
+    } catch {
+      notesReadFailed = true;
+    }
+  };
+  loadPersonalNotes();
   const discoveredPeople = () => discoveredPeopleAtStage(story.stage);
   const element = <K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -137,6 +155,41 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     'Не вдалося зберегти прогрес. Після оновлення сторінки останні рішення можуть зникнути.';
   saveWarning.hidden = true;
   root.prepend(saveWarning);
+  let recoveryNotice: HTMLElement | null = null;
+  if (story.didRecoverUnreadableSave) {
+    recoveryNotice = element(
+      'p',
+      'Попереднє збереження не вдалося прочитати. Почато нову історію. Копія попереднього прогресу й записів доступна в нотатнику: «Мої записи».',
+    );
+    recoveryNotice.id = 'save-recovery-notice';
+    recoveryNotice.setAttribute('role', 'status');
+    document
+      .querySelector('#loading .welcome')
+      ?.insertBefore(recoveryNotice, document.querySelector('#enter'));
+  }
+  const appendRecoveryDownload = () => {
+    if (story.recoveryBackup === null) return;
+    const recovery = element('div', '', 'evidence-card');
+    const notice = element(
+      'p',
+      'Попереднє збереження не вдалося прочитати. Його копія та попередні записи залишилися в цьому браузері для відновлення.',
+    );
+    notice.setAttribute('role', 'status');
+    const download = element('button', 'Завантажити резервну копію');
+    download.type = 'button';
+    download.addEventListener('click', () => {
+      const url = URL.createObjectURL(
+        new Blob([story.recoveryBackup!], { type: 'application/json' }),
+      );
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'last-chapter-recovery.json';
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+    recovery.append(notice, download);
+    panel.append(recovery);
+  };
   const refresh = () => {
     const entries = journalEntries(story);
     const unread = unreadJournalIds(story, seenJournal).length;
@@ -219,6 +272,23 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       panel.append(close);
     }
     if (mode === 'conversation') {
+      if (conversationReadFailed) {
+        panel.append(
+          element(
+            'p',
+            'Не вдалося прочитати попередні розмови. Їх збережено в браузері; нові відповіді поки недоступні.',
+          ),
+        );
+        const retry = element('button', 'Спробувати прочитати розмови');
+        retry.type = 'button';
+        retry.addEventListener('click', () => {
+          loadConversations();
+          refresh();
+          focusPanelUpdate(panel, conversationButton);
+        });
+        panel.append(retry);
+        return;
+      }
       const topics = availableMaraTopics(story.day, letterDecision).filter((t) =>
         conversationAvailable(t, sessionFor(t.id)),
       );
@@ -316,12 +386,15 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
             saveConversation();
             // All four legacy optional topics were reviewed: their unquoted
             // labels are direct speech. Future action choices can opt out.
-            pendingPlayerTurn = next.suspended
-              ? null
-              : spokenChoice({ ...choice, delivery: choice.delivery ?? 'speech' });
-            if (next.suspended) mode = null;
+            pendingPlayerTurn =
+              next.suspended || next.finished
+                ? null
+                : spokenChoice({ ...choice, delivery: choice.delivery ?? 'speech' });
+            // An exit returns to the shop; it cannot start an unrelated topic
+            // or pair the goodbye with another conversation's opening line.
+            if (next.suspended || next.finished) mode = null;
             refresh();
-            if (next.suspended) restorePanelFocus(returnFocus, catalog);
+            if (next.suspended || next.finished) restorePanelFocus(returnFocus, catalog);
             else focusPanelUpdate(panel, conversationButton);
           });
           replies.append(button);
@@ -509,13 +582,17 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         notes.id = 'personal-notes';
         notes.maxLength = 4000;
         notes.value = personalNotes;
+        notes.disabled = notesReadFailed;
         const status = element(
           'p',
-          'Ці записи залишаються лише у вашому браузері.',
+          notesReadFailed
+            ? 'Не вдалося прочитати попередні записи. Їх збережено в браузері. Спробуйте прочитати їх ще раз, перш ніж редагувати.'
+            : 'Ці записи залишаються лише у вашому браузері.',
           'notes-status',
         );
         status.setAttribute('role', 'status');
         notes.addEventListener('input', () => {
+          if (notesReadFailed) return;
           personalNotes = notes.value;
           if (!story.isProgressSaved) {
             status.textContent =
@@ -531,10 +608,31 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
           }
         });
         panel.append(label, notes, status);
+        if (notesReadFailed) {
+          const retry = element('button', 'Спробувати прочитати записи');
+          retry.type = 'button';
+          retry.addEventListener('click', () => {
+            loadPersonalNotes();
+            refresh();
+            if (!notesReadFailed)
+              panel.querySelector<HTMLTextAreaElement>('#personal-notes')?.focus();
+            else focusPanelUpdate(panel, journal);
+          });
+          panel.append(retry);
+        }
+        appendRecoveryDownload();
       }
     } else if (mode === 'catalog') {
       panel.append(element('p', 'Каталог книгарні', 'catalog-eyebrow'));
       panel.append(element('h2', 'Книжки на полицях'));
+      if (!story.isRecommendationMemoryAvailable) {
+        panel.append(
+          element(
+            'p',
+            'Історію попередніх рекомендацій не вдалося прочитати. Її збережено в браузері; нові спроби поки залишаються лише на цій сторінці. Оновіть сторінку, щоб спробувати знову.',
+          ),
+        );
+      }
       if (reaction) {
         const result = element('div', '', 'evidence-card');
         result.setAttribute('role', 'status');
@@ -727,6 +825,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     reaction = null;
     returnFocus = null;
     personalNotes = '';
+    notesReadFailed = false;
+    conversationReadFailed = false;
     pendingPlayerTurn = null;
     seenJournal.clear();
     try {
@@ -754,6 +854,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     conversationButton.removeEventListener('click', conversationClick);
     conversationButton.remove();
     saveWarning.remove();
+    recoveryNotice?.remove();
     journal.removeEventListener('click', journalClick);
     catalog.removeEventListener('click', catalogClick);
     continueButton.removeEventListener('click', continueClick);

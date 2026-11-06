@@ -12,6 +12,11 @@ validates and migrates saves; the browser adapter owns persistence. The simulati
 does not import DOM or storage. Regression scenarios cover all five days, trust,
 branching and save continuity. The finished episode's runtime remains unmeasured.
 
+`src/phaser/save-recovery.ts` preserves rejected chapter strings and their sidecars
+before a fallback can replace them. It owns browser storage outside the pure
+simulation; downloaded recovery data never becomes trusted story state. See the
+[recovery format and failure behavior](SAVE-FORMAT.md#unreadable-save-recovery).
+
 `phaser-prototype/style.css` defines the shared autumn UI system. DialogueUI renders
 transient player speech before the resulting NPC reply without repeating a choice
 or serializing presentation state. `player-turn.js` recognizes wholly quoted legacy

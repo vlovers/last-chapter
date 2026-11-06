@@ -56,7 +56,9 @@ jobs:
             command: node scripts/qa-frank-overhaul.mjs
           - name: finale
             command: node scripts/qa-finale-matrix.mjs
-          # Bounded groups: all ten scenarios at both mobile widths.
+          # All ten scenarios at both widths. The fixture balances long routes
+          # across these existing groups; five core routes exceeded 20 minutes
+          # including setup/cleanup on run 42070187073 despite passing assertions.
           - name: narrative-v2-360-core
             command: QA_WIDTH=360 QA_GROUP=core node scripts/qa-narrative-v2.mjs
           - name: narrative-v2-390-core

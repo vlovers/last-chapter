@@ -268,6 +268,44 @@ try {
     0,
     'Optional speech is not replayed on reopen',
   );
+  for (const label of ['У книжці мені цікаві навіть небезпечні герої', 'На сьогодні досить']) {
+    await page.waitForTimeout(240);
+    await page.getByRole('button', { name: label, exact: true }).click();
+  }
+  assert.equal(
+    await page.locator('#story-panel').isVisible(),
+    false,
+    'An exit returns to the shop',
+  );
+  assert.equal(
+    await page
+      .getByRole('button', { name: 'Поговорити з Марою', exact: true })
+      .evaluate((button) => document.activeElement === button),
+    true,
+    'Completing a topic restores keyboard focus',
+  );
+  const completedOptional = await page.evaluate(() =>
+    localStorage.getItem('last-chapter:conversation:mara:v1'),
+  );
+  assert.equal(JSON.parse(completedOptional).finished, true);
+  await page.reload();
+  await page.locator('#enter').click();
+  await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
+  assert.equal(
+    await page.locator('.player-turn').count(),
+    0,
+    'A completed goodbye is not replayed',
+  );
+  assert.equal(
+    await page.getByRole('button', { name: 'Книжкові суперечки з Марою', exact: true }).count(),
+    0,
+    'A completed topic stays absent after reload',
+  );
+  assert.equal(
+    await page.evaluate(() => localStorage.getItem('last-chapter:conversation:mara:v1')),
+    completedOptional,
+    'Opening the next topic does not rewrite the completed session',
+  );
   await page.keyboard.press('Escape');
   await page.locator('#story-continue').click();
   // View-only fixture: no mutation of authored content or the simulation.

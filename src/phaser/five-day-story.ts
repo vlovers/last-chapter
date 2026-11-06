@@ -38,6 +38,7 @@ import { seasonEnding } from '../game/endings';
 import { inspectShopSpot, shopSpots, type ShopSpotId } from '../game/exploration';
 import { completedOrders } from '../game/service';
 import { discardOrphanedOptionalProgress } from './optional-progress';
+import { preserveUnreadableProgress, RECOVERY_KEY } from './save-recovery';
 import { storyProgress } from '../game/progress';
 import { catalogEntries, type CatalogFilter } from '../game/catalog';
 import { journalFacts, journalEvidence, journalFlagVisible } from './journal-facts';
@@ -124,7 +125,10 @@ export class FiveDayStory {
   private service = restoreService('');
   private saveAvailable = true;
   private saveRecoveryPending = false;
+  private recoveryBackupRaw: string | null = null;
+  private recoveredUnreadableSave = false;
   private serviceDirty = false;
+  private serviceReadFailed = false;
   private choicePage = 0;
   private choicePageKey = '';
   constructor() {
@@ -132,22 +136,32 @@ export class FiveDayStory {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
       saved = decodeSave(raw ?? '');
-      if (!saved && raw && isNewerSaveVersion(raw)) {
-        // An older game build must not overwrite a save from a newer build.
-        this.saveAvailable = false;
-        this.saveRecoveryPending = true;
+      if (!saved && raw !== null) {
+        if (!isNewerSaveVersion(raw)) this.recoveryBackupRaw = preserveUnreadableProgress(raw);
+        this.recoveredUnreadableSave = this.recoveryBackupRaw !== null;
+        if (isNewerSaveVersion(raw) || this.recoveryBackupRaw === null) {
+          // Preserve unsupported saves, and rejected saves whose backup failed.
+          this.saveAvailable = false;
+          this.saveRecoveryPending = true;
+        }
       }
     } catch {
       // Reading may be blocked before the first player choice.
       this.saveAvailable = false;
       this.saveRecoveryPending = true;
     }
+    try {
+      this.recoveryBackupRaw ??= localStorage.getItem(RECOVERY_KEY);
+    } catch {
+      /* A backup read failure must not invalidate an otherwise valid chapter. */
+    }
     this.chapter = saved ?? startChapter();
     if (saved) {
       try {
         this.service = restoreService(localStorage.getItem(SERVICE_KEY) ?? '');
       } catch {
-        /* optional */
+        // A denied read is not an empty recommendation history.
+        this.serviceReadFailed = true;
       }
     } else if (!this.saveRecoveryPending) {
       // Optional conversations, personal notes and service attempts belong to
@@ -159,6 +173,16 @@ export class FiveDayStory {
   /** False when the most recent narrative save could not be persisted. */
   get isProgressSaved(): boolean {
     return this.saveAvailable;
+  }
+  /** Downloadable recovery data stays local and is never used as narrative state. */
+  get recoveryBackup(): string | null {
+    return this.recoveryBackupRaw;
+  }
+  get didRecoverUnreadableSave(): boolean {
+    return this.recoveredUnreadableSave;
+  }
+  get isRecommendationMemoryAvailable(): boolean {
+    return !this.serviceReadFailed;
   }
   get stage(): ChapterStage {
     return this.chapter.stage;
@@ -299,7 +323,7 @@ export class FiveDayStory {
   }
   private persistService() {
     // An unreadable or newer chapter may own previous recommendation history.
-    if (this.saveRecoveryPending || !this.saveAvailable) {
+    if (this.saveRecoveryPending || !this.saveAvailable || this.serviceReadFailed) {
       this.serviceDirty = true;
       return;
     }
@@ -481,6 +505,7 @@ export class FiveDayStory {
       // mounted (or its new-game event listener has already been removed).
       discardOrphanedOptionalProgress();
       this.service = restoreService('');
+      this.serviceReadFailed = false;
       this.persistService();
     }
     if (restarting && typeof window !== 'undefined')
