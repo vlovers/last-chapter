@@ -92,3 +92,7 @@ Pending: execute Vitest and browser visual QA before integrating. PR #41 remains
 An audit of the original parchment CSS found rules whose values did not follow the new theme variables: timeline completion used `var(--paper)` (now a dark surface) as foreground over a dark button, the portrait fallback had the same problem, and the toolbar/day indicators retained the old green/ochre styling. Explicit v0.3 overrides now cover the timeline, tool rail, continue-action secondary label, unread counters, portrait fallback and book/journal text. Focus indicators are reinforced for search, notes, filters and expandable book details. Forced-colors users get visible borders and selected-tab outlines.
 
 **Not validated visually:** check actual WCAG contrast for rendered states, browser focus traversal, 360px portrait and landscape. The CSS remains an additive layer until a screenshot-led cleanup can consolidate old declarations.
+
+## Slice 7 — partial weather updates
+
+The atmosphere setter now merges partial environment updates instead of replacing the entire time/weather state. A weather-only update retains the active time of day, including its lamp intensity and halo visibility. Added regression coverage and reformatted the new tests. Browser and Vitest execution remain pending.

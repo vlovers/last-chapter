@@ -88,11 +88,12 @@ export function createAtmosphere(scene, lights, reduced, lowQuality = () => fals
   };
   const applyEnvironment = (value) => {
     if (!value) return;
-    environment = value;
-    mood = palettes[value.time] ?? palettes.dusk;
+    // Merge partial updates: weather-only changes must not erase the current time.
+    environment = { ...environment, ...value };
+    mood = palettes[environment.time] ?? palettes.dusk;
     dayGrade.clear().fillStyle(mood.color, mood.alpha).fillRect(21, 18, 598, 320);
-    lights.halo.setVisible(value.time === 'dusk' || value.time === 'night');
-    lights.readingGlow.setAlpha(value.time === 'day' || value.time === 'morning' ? 0.35 : 0.85);
+    lights.halo.setVisible(environment.time === 'dusk' || environment.time === 'night');
+    lights.readingGlow.setAlpha(environment.time === 'day' || environment.time === 'morning' ? 0.35 : 0.85);
     drawSky();
     draw();
   };

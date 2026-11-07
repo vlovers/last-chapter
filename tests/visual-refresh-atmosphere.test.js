@@ -60,7 +60,11 @@ describe('visual refresh atmosphere', () => {
 
   it('uses distinct window palettes for morning, day, dusk and night', () => {
     const { scene, graphics } = setup();
-    const lights = { halo: { setVisible: vi.fn(), setAlpha: vi.fn() }, readingGlow: { setAlpha: vi.fn() }, steam: { setY: () => ({ setAlpha: vi.fn() }), setAlpha: vi.fn() } };
+    const lights = {
+      halo: { setVisible: vi.fn(), setAlpha: vi.fn() },
+      readingGlow: { setAlpha: vi.fn() },
+      steam: { setY: () => ({ setAlpha: vi.fn() }), setAlpha: vi.fn() },
+    };
     const atmosphere = createAtmosphere(scene, lights, () => true);
     const sky = graphics[1];
     const colors = [];
@@ -71,6 +75,17 @@ describe('visual refresh atmosphere', () => {
     }
     expect(new Set(colors).size).toBe(4);
   });
+  it('keeps the current time when only weather is updated', () => {
+    const { scene, lights } = setup();
+    const atmosphere = createAtmosphere(scene, lights, () => false);
+    atmosphere.setEnvironment({ time: 'day', weather: 'clear' });
+    atmosphere.setEnvironment({ weather: 'rain' });
+    expect(lights.halo.setVisible).toHaveBeenLastCalledWith(false);
+    expect(lights.readingGlow.setAlpha).toHaveBeenLastCalledWith(0.35);
+    atmosphere.update(1000, 16);
+    expect(lights.readingGlow.setAlpha.mock.lastCall[0]).toBeLessThan(0.42);
+  });
+
   it('resets halo visibility according to the current time of day', () => {
     const { scene, lights } = setup();
     const atmosphere = createAtmosphere(scene, lights, () => false);
@@ -84,11 +99,15 @@ describe('visual refresh atmosphere', () => {
 
   it('does not advance rain by a huge amount on the first frame or after reset', () => {
     const { scene, graphics } = setup();
-    const atmosphere = createAtmosphere(scene, {
-      halo: { setVisible: vi.fn(), setAlpha: vi.fn() },
-      readingGlow: { setAlpha: vi.fn() },
-      steam: { setY: () => ({ setAlpha: vi.fn() }), setAlpha: vi.fn() },
-    }, () => false);
+    const atmosphere = createAtmosphere(
+      scene,
+      {
+        halo: { setVisible: vi.fn(), setAlpha: vi.fn() },
+        readingGlow: { setAlpha: vi.fn() },
+        steam: { setY: () => ({ setAlpha: vi.fn() }), setAlpha: vi.fn() },
+      },
+      () => false,
+    );
     atmosphere.setEnvironment({ time: 'dusk', weather: 'rain' });
     const rain = graphics[0];
     rain.lineBetween.mockClear();
