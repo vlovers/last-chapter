@@ -199,7 +199,11 @@ try {
     await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
     await clickStoryContinue(page);
     assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), save);
+    // Escape belongs to the dialogue keyboard scope; after a toolbar click focus
+    // can remain on the toolbar, so explicitly focus the open dialogue first.
+    await page.locator('#dialogue').locator('button:visible').first().focus();
     await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#dialogue').isVisible(), false);
     // Optional conversations require Mara to be physically in this visit.
     assert.equal(
       await page
