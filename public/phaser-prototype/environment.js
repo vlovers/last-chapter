@@ -4,7 +4,7 @@ import { drawShelf } from './shelf-art.js';
 // Original V4 room painting. Furniture footprints match world.js exactly.
 // Every raised new prop sits on an existing solid object or on the back wall.
 export function drawEnvironment(scene) {
-  scene.cameras.main.setBackgroundColor('#1c2026');
+  scene.cameras.main.setBackgroundColor('#101328');
   const ink = COLORS.dark,
     wood = COLORS.wood,
     honey = COLORS.woodLight,
@@ -17,11 +17,11 @@ export function drawEnvironment(scene) {
       graphics.fillRect(x, y, w, h);
     };
   const r = painter(g);
-  r(0, 0, WIDTH, HEIGHT, 0x1c2026);
+  r(0, 0, WIDTH, HEIGHT, 0x101328);
   // Aged olive plaster and walnut wainscot. Quiet contrast to the amber wood.
-  r(13, 9, 614, 151, 0x363b36);
-  r(21, 18, 598, 130, 0x6b7060);
-  r(21, 18, 598, 9, 0x535c50);
+  r(13, 9, 614, 151, 0x29283c);
+  r(21, 18, 598, 130, 0x45445b);
+  r(21, 18, 598, 9, 0x35334a);
   for (const [x, y, w] of [
     [37, 24, 64],
     [252, 20, 77],
@@ -32,12 +32,12 @@ export function drawEnvironment(scene) {
     r(x, y, w, 1, 0x777a66);
     r(x + 5, y + 3, Math.floor(w / 2), 1, 0x636c5b);
   }
-  r(21, 145, 598, 15, 0x604435);
+  r(21, 145, 598, 15, 0x4a3544);
   r(21, 147, 598, 2, honey);
-  r(21, 151, 598, 3, 0x402f2c);
+  r(21, 151, 598, 3, 0x302639);
   // Individual staggered floorboards: grain clusters, joinery and a few authored knots.
   const plankColors = [0x90674c, 0x986e50, 0x8b6046, 0x9d7353, 0x896248];
-  r(21, 159, 598, 184, 0x483a32);
+  r(21, 159, 598, 184, 0x342b38);
   for (let row = 0, y = 159; y < 343; row++, y += 18) {
     for (let col = -1, x = 21 - (row % 3) * 33; x < 619; col++, x += 101) {
       const left = Math.max(21, x),
@@ -59,8 +59,8 @@ export function drawEnvironment(scene) {
   r(21, 159, 598, 3, ink, 0.45);
   r(21, 162, 598, 4, ink, 0.15);
   // Deep window reveal; cold glass with three layers of Bellwick roofs.
-  r(243, 16, 156, 130, 0x3a302c);
-  r(248, 21, 146, 117, 0x22333e);
+  r(243, 16, 156, 130, 0x241e34);
+  r(248, 21, 146, 117, 0x1a2845);
   for (let i = 0; i < 10; i++)
     r(
       255,
@@ -146,11 +146,11 @@ export function drawEnvironment(scene) {
     r(x + 4, 147, 24, 1, 0x644f3c);
   }
   // Worn wine-red reading rug, with a restrained woven border and floral corners.
-  r(265, 205, 285, 116, 0x3d3434);
-  r(269, 208, 277, 109, 0x78504b);
-  r(273, 211, 269, 103, 0xbd9565);
-  r(276, 214, 263, 97, 0x75464a);
-  r(282, 220, 251, 85, 0x503d40);
+  r(265, 205, 285, 116, 0x2b243a);
+  r(269, 208, 277, 109, 0x60415c);
+  r(273, 211, 269, 103, 0x987398);
+  r(276, 214, 263, 97, 0x563651);
+  r(282, 220, 251, 85, 0x392d43);
   for (let x = 277; x < 540; x += 12) {
     r(x, 215, 5, 1, paper);
     r(x + 3, 308, 5, 1, paper);

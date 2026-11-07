@@ -62,3 +62,11 @@ The first commit is a CSS-only visual foundation and this specification. It does
 ### QA still required
 
 Inspect actual rendered portrait legibility, color contrast and text overflow on all named screens. In particular, check long book descriptions, notes textarea, journal tabs and 360×800 choices. Run `npm run check` and browser suites after PR #41's click-interception fix. The design branch is intentionally not a release candidate.
+
+## Slice 3 — environment color pass (implemented, pending QA)
+
+The existing native 640×360 bookshop painting has a controlled palette update: blue-black camera surround, indigo plaster and window reveal, violet-shadowed wainscot, floor base and reading rug. The original shelf positions, furniture geometry, world collision footprints, door, window panes, character pathfinding and interactive hotspot coordinates are unchanged. Warm wood, honey and lamp colors remain in place to retain the bookshop's human atmosphere instead of applying a flat purple filter.
+
+This is **not** the isometric room from the concept image; converting the scene to isometric projection would require new art, navigation and hit-testing and must be scoped separately. The next visual QA should compare the same story checkpoint across day/night and weather, with characters and dialogue both visible, and assess text/world contrast.
+
+No runtime browser validation or visual screenshot review has been performed for this commit. The PR #41 pointer-interception blocker still prevents release approval.
