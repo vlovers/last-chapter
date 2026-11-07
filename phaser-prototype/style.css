@@ -1511,3 +1511,104 @@ button:active { background: #624498; }
 .veil { background: #0c0e22e8; }
 .welcome p { color: #c5b9e7; }
 #enter { color: #fff; background: #7045ca; border-color: #c29cff; }
+
+/* Visual Refresh v0.3 — secondary surfaces: catalog, journal, notes and settings. */
+#story-panel {
+  color-scheme: dark;
+  color: #eeeaff;
+  background: #151329;
+  border: 2px solid #7455a8;
+  border-radius: 16px;
+  box-shadow: 0 0 0 100vmax #060917c9, 0 24px 64px #060715d9;
+  scrollbar-color: #75549f #211d3a;
+}
+#story-panel > h2, #story-panel h3 { color: #f3eeff; }
+#story-panel p, #story-panel li { color: #ded8f2; }
+#story-panel :focus-visible { outline-color: #c5a6ff; }
+#story-panel .panel-close {
+  color: #f0eaff;
+  background: #39275f;
+  border-color: #7758ad;
+  box-shadow: 0 0 0 4px #151329;
+}
+.catalog-eyebrow, .notebook-eyebrow, .conversation-eyebrow { color: #b69aea; }
+.panel-tools { background: #151329; border-bottom-color: #514276; }
+.catalog-search, .personal-notes {
+  color: #f1edff;
+  background: #211d3a;
+  border: 1px solid #66528b;
+  border-radius: 9px;
+}
+.catalog-search::placeholder, .personal-notes::placeholder { color: #b4a8ce; opacity: 1; }
+.story-filters button { color: #d7c5ff; background: #211b36; border-color: #66518d; }
+.story-filters [aria-pressed='true'] { color: #fff; background: #6947ac; border-color: #b78cff; }
+.catalog-count, .notes-status, .optional-hint { color: #b4b0d0; }
+.story-book {
+  color: #ede8ff;
+  background: #211d3a;
+  border: 1px solid #4d406b;
+  border-bottom: 3px solid #7f5bbb;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px #080b1a44;
+}
+.story-book small, .story-receipt small { color: #b9b0d1; }
+.story-book details { border-top-color: #554675; }
+.story-book summary { color: #d1b8ff; }
+.book-cover { border-color: #8b6cbd; box-shadow: 3px 3px #120f24; }
+.story-panel--journal {
+  background: linear-gradient(90deg, #30234b 0, #30234b 8px, #151329 9px, #151329 100%) !important;
+}
+.journal-tabs { border-bottom-color: #514276; }
+.journal-tabs button { color: #d8c8f6; background: #211d3a; border-color: #594879; }
+.journal-tabs [aria-pressed='true'] { color: #fff; background: #6845a5; border-color: #ae84ec; }
+.evidence-card {
+  color: #eeeaff;
+  background: #211d3a;
+  border: 1px solid #52416e;
+  border-left: 3px solid #9d83df;
+  border-radius: 10px;
+}
+.evidence-card small { color: #bfb3d6; }
+.evidence-card[data-kind='inference'], .evidence-card[data-kind='rumor'] {
+  border-left-color: #d3a66f;
+  background: #30253c;
+}
+.evidence-card[data-new='true']::before { color: #c5a6ff; }
+.person-card img { background: #282443; border-color: #69538c; border-radius: 8px; }
+.story-notes li { border-bottom-color: #514276; }
+.story-notes li[data-new='true']::marker { color: #b99af8; }
+.story-receipt {
+  color: #eeeaff;
+  background: #211d3a;
+  border: 1px dashed #8764b9;
+  border-radius: 10px;
+}
+.personal-notes {
+  background: repeating-linear-gradient(#211d3a 0 31px, #413458 31px 32px);
+}
+#player-turn, .player-turn {
+  color: #f0eaff;
+  background: #30254d;
+  border-left-color: #b18aff;
+  border-radius: 8px;
+}
+dialog {
+  color: #eeeaff;
+  background: #17172d;
+  border: 2px solid #8665ba;
+  border-radius: 16px;
+  color-scheme: dark;
+  box-shadow: 0 20px 60px #060715c9;
+}
+dialog::backdrop { background: #060917d9; }
+dialog p { color: #d5cce9; }
+dialog kbd, kbd { color: #c4a4ff; }
+#save-warning:not([hidden]) { background: #4b2b3e; color: #ffe4ed; }
+@media (max-width: 700px) {
+  #story-panel { border-radius: 0; border-width: 0 0 0 3px; }
+  #dialogue { border-radius: 14px 14px 0 0; }
+}
+@media (orientation: landscape) and (max-height: 550px) {
+  #dialogue { border-radius: 14px; }
+  #story-panel { border-radius: 12px; }
+}
