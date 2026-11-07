@@ -1612,3 +1612,76 @@ dialog kbd, kbd { color: #c4a4ff; }
   #dialogue { border-radius: 14px; }
   #story-panel { border-radius: 12px; }
 }
+
+/* Visual Refresh v0.3 — contrast/accessibility audit of inherited parchment rules. */
+.story-tools {
+  background: #101429;
+  border-top-color: #604e88;
+}
+.day-step {
+  color: #c4badb;
+  border-color: #67548b;
+  border-radius: 6px;
+}
+.day-step--completed {
+  color: #f4edff;
+  background: #49326f;
+  border-color: #8161b6;
+}
+.day-step--current {
+  color: #17112b;
+  background: #c5a6ff;
+  border-color: #e0ccff;
+}
+#story-continue {
+  border-color: #a788df;
+}
+#story-continue::after {
+  color: #d2bfff;
+}
+#journal-toggle[data-unread]:not([data-unread='0'])::after {
+  color: #16122b;
+  background: #c5a6ff;
+  border-radius: 6px;
+}
+#portrait-fallback {
+  color: #f1eaff;
+}
+.story-filters [aria-pressed='true'],
+.journal-tabs [aria-pressed='true'] {
+  color: #fff;
+}
+#story-panel .story-book h3,
+#story-panel .story-book .book-blurb,
+#story-panel .evidence-card p,
+#story-panel .person-card p,
+#story-panel .story-receipt {
+  color: #eae4fa;
+}
+.story-book summary {
+  color: #d5bcff;
+}
+.story-book details[open] {
+  border-top-color: #76639b;
+}
+#story-panel .story-filters button:focus-visible,
+#story-panel .journal-tabs button:focus-visible,
+#story-panel .story-book summary:focus-visible {
+  outline: 3px solid #d5baff;
+  outline-offset: 2px;
+}
+#story-panel .personal-notes:focus-visible,
+#story-panel .catalog-search:focus-visible {
+  outline: 3px solid #c5a6ff;
+  outline-offset: 2px;
+}
+@media (forced-colors: active) {
+  #story-panel, #dialogue, dialog, .story-book, .evidence-card {
+    border: 1px solid CanvasText;
+  }
+  .story-filters [aria-pressed='true'],
+  .journal-tabs [aria-pressed='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}

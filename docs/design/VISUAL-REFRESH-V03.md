@@ -86,3 +86,9 @@ No new geometry, weather schedule, story state, sprites or DOM interactions were
 - Add regression tests for both lifecycle cases, without modifying narrative timing, scene coordinates or hit-testing.
 
 Pending: execute Vitest and browser visual QA before integrating. PR #41 remains a dependency.
+
+## Slice 6 — inherited-color and accessibility hardening
+
+An audit of the original parchment CSS found rules whose values did not follow the new theme variables: timeline completion used `var(--paper)` (now a dark surface) as foreground over a dark button, the portrait fallback had the same problem, and the toolbar/day indicators retained the old green/ochre styling. Explicit v0.3 overrides now cover the timeline, tool rail, continue-action secondary label, unread counters, portrait fallback and book/journal text. Focus indicators are reinforced for search, notes, filters and expandable book details. Forced-colors users get visible borders and selected-tab outlines.
+
+**Not validated visually:** check actual WCAG contrast for rendered states, browser focus traversal, 360px portrait and landscape. The CSS remains an additive layer until a screenshot-led cleanup can consolidate old declarations.
