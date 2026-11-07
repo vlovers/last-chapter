@@ -15,7 +15,12 @@ export function createActorActions(scene) {
         const kind = actor.cue?.kind ?? (actor === speaking ? 'talk' : null);
         actor.sprite.setCrop();
         actor.shadow.setVisible(true);
+        actor.sprite.setAngle(0);
         if (!kind) continue;
+        if (!reduced && kind === 'talk') {
+          const nod = actor.mood === 'firm' ? 0 : Math.sin(time / 260) * 1.4;
+          actor.sprite.setAngle(nod);
+        }
         const x = Math.round(actor.x),
           y = Math.round(actor.y);
         const side = actor.direction === 'left' ? -1 : 1;
@@ -32,6 +37,12 @@ export function createActorActions(scene) {
           rect(x + side * 12 - 5, y - 26, 12, 7, 0x657d72);
           rect(x + side * 12 - 3, y - 25, 8, 4, 0xe9d5af);
         } else {
+          // A restrained mouth/hand cadence reads at native resolution; the
+          // sprite stays on its authored baseline, without scaling the artwork.
+          if (kind === 'talk' && !reduced && actor.direction !== 'up') {
+            const mouthX = actor.direction === 'left' ? -5 : actor.direction === 'right' ? 4 : -1;
+            rect(x + mouthX, y - 29, 2, Math.floor(time / 150) % 2 ? 2 : 1, 0x695044);
+          }
           rect(x + side * 9 - 2, y - 22 - lift, 5, 4, 0xe8b88a);
           if (kind === 'greet' && !reduced) rect(x + side * 10 - 2, y - 29 - lift, 4, 6, 0xe8b88a);
         }

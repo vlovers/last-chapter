@@ -6,6 +6,10 @@ export const maraDecision: DialogueStory = {
   nodes: [
     {
       id: 'arrival',
+      staging: [
+        { kind: 'move', actor: 'visitor', x: 240, y: 235 },
+        { kind: 'face', actor: 'visitor', direction: 'left' },
+      ],
       speaker: 'Оповідач',
       text: 'По обіді Мара заходить із двома паперовими пакетами. «Один із булочками для книгарні, інший — із вечерею, яку я нарешті не віддам комусь іншому». Вона втомлена, але усміхається.',
       afterwordWhen: [
@@ -381,6 +385,7 @@ export const maraDecision: DialogueStory = {
     },
     {
       id: 'end',
+      staging: [{ kind: 'exit', actor: 'visitor' }],
       speaker: 'Оповідач',
       text: 'Мара йде до пекарні через сквер. Уже на порозі згадує про забуту булочку, махає рукою й кричить: «Залишайте собі!»',
       options: [],

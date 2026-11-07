@@ -150,6 +150,32 @@ export function createFrank(scene) {
       tickFrank(state, delta, player, options);
       render(options.reduced);
     },
+    stage(command) {
+      const from = { x: state.x, y: state.y };
+      const target = { x: command.x ?? from.x, y: command.y ?? from.y };
+      const pose = () => {
+        state.x = target.x;
+        state.y = target.y;
+        state.elevation = 0;
+        state.remaining = 20000;
+        state.path = [];
+        state.activity = command.action === 'rest' ? 'resting' : 'looking';
+        render(scene.reduced);
+      };
+      state.path = [];
+      return {
+        duration: Math.max(450, (Math.hypot(target.x - from.x, target.y - from.y) / 90) * 1000),
+        update(progress) {
+          state.x = from.x + (target.x - from.x) * progress;
+          state.y = from.y + (target.y - from.y) * progress;
+          state.activity = progress < 1 ? 'walking' : 'looking';
+          state.elapsed += 16;
+          state.facing = target.x >= from.x ? 1 : -1;
+          render(scene.reduced);
+        },
+        finish: pose,
+      };
+    },
     react(action, player) {
       const result = reactFrank(state, action, player);
       persist();

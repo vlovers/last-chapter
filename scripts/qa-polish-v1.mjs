@@ -1,3 +1,4 @@
+import { chooseById } from './qa-dialogue.mjs';
 import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -41,32 +42,9 @@ async function openMara(page) {
   }
 }
 async function choose(page, id) {
-  await page.waitForTimeout(250);
-  const choice = page.locator(`#choices button[data-choice="${id}"]`);
-  const visitedPages = new Set();
-  // The playable UI shows three replies and a fourth pagination button.
-  // Walk real pages instead of assuming every engine option is rendered at once.
-  for (let attempt = 0; attempt < 40; attempt++) {
-    if (await choice.isVisible()) {
-      await choice.click();
-      return;
-    }
-    const visibleIds = await page
-      .locator('#choices button[data-choice]')
-      .evaluateAll((buttons) => buttons.map((button) => button.dataset.choice));
-    const signature = visibleIds.join(',');
-    if (visitedPages.has(signature)) break;
-    visitedPages.add(signature);
-    const nextPage = page.locator('#choices button[data-choice="__more_choices"]');
-    if (!(await nextPage.isVisible())) break;
-    await nextPage.click();
-    // Dialogue buttons intentionally ignore clicks during their first 220 ms.
-    await page.waitForTimeout(250);
-  }
-  throw new Error(
-    `Choice "${id}" is not reachable through UI pages: ${[...visitedPages].join(' -> ')}`,
-  );
+  await chooseById(page, id);
 }
+
 async function layout(page) {
   await page.waitForTimeout(300);
   const measured = await page.evaluate(() => {

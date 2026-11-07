@@ -1,3 +1,4 @@
+import { revealAnswer } from './qa-dialogue.mjs';
 import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -67,7 +68,11 @@ async function waitScene(page, predicate) {
 }
 async function choose(page, name) {
   await ready(page);
-  await page.getByRole('button', { name, exact: true }).click();
+  const button = page
+    .locator('#choices')
+    .getByRole('button', { name, exact: true, includeHidden: true });
+  await revealAnswer(page, button);
+  await button.click();
 }
 async function inspect(page, name, speaker) {
   await page.getByRole('button', { name, exact: true }).click();

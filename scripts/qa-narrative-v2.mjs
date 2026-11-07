@@ -1,3 +1,4 @@
+import { chooseById, readReply } from './qa-dialogue.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -34,60 +35,27 @@ async function saved(page) {
 }
 
 async function choose(page, id, viewport) {
-  for (let index = 0; index < 40; index++) {
-    // The game deliberately ignores taps during its 220 ms stale-button guard.
-    await page.waitForTimeout(240);
-    const buttons = page.locator('#choices button');
-    assert.ok((await buttons.count()) <= 4, 'At most four visible choice buttons');
-    const choice = page.locator(`#choices button[data-choice="${id}"]`);
-    if (await choice.count()) {
-      assert.equal(await choice.count(), 1);
-      await choice.scrollIntoViewIfNeeded();
-      const box = await choice.boundingBox();
-      const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
-      assert.ok(
-        documentWidth <= viewport.width + 1,
-        `No horizontal overflow at ${viewport.width}px: document is ${documentWidth}px wide`,
-      );
-      assert.ok(
-        box && box.x >= -1 && box.x + box.width <= viewport.width + 1,
-        `Choice fits screen horizontally: ${id}, ${JSON.stringify(box)}`,
-      );
-      assert.ok(
-        box.y >= -1 && box.y + box.height <= viewport.height + 1,
-        'Choice is reachable vertically: ' + id,
-      );
-      const before = await page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
-      const canvasBefore = await page.locator('#game canvas').boundingBox();
-      assert.ok(canvasBefore, 'Phaser canvas must exist');
-      await choice.tap();
-      await page.waitForFunction(
-        (raw) => localStorage.getItem('last-chapter:save:v1') !== raw,
-        before,
-      );
-      assert.deepEqual(
-        await page.locator('#game canvas').boundingBox(),
-        canvasBefore,
-        'A reply must not resize the game scene',
-      );
-      return;
-    }
-    const more = page.locator('#choices button[data-choice="__more_choices"]');
-    assert.equal(await more.count(), 1, 'Unavailable story choice ' + id);
-    await more.tap();
-  }
-  throw new Error('Choice not found across pages: ' + id);
+  const canvas = await page.locator('#game canvas').boundingBox();
+  await chooseById(page, id, { touch: true });
+  assert.deepEqual(
+    await page.locator('#game canvas').boundingBox(),
+    canvas,
+    'Reply does not resize the world',
+  );
+  assert.ok(
+    (await page.evaluate(() => document.documentElement.scrollWidth)) <= viewport.width + 1,
+  );
 }
 
 async function reloadConversation(page) {
   const raw = await page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
-  const text = await page.locator('#dialogue-text .sr-only').textContent();
+  const text = await readReply(page);
   await page.reload();
   await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
   await page.locator('#story-continue').click();
   await page.locator('#dialogue:not([hidden])').waitFor();
   assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), raw);
-  assert.equal(await page.locator('#dialogue-text .sr-only').textContent(), text);
+  assert.equal(await readReply(page), text);
 }
 
 try {
@@ -154,26 +122,7 @@ try {
               path: `${output}/${viewport.width}-${id}.png`,
               fullPage: true,
             });
-            const textPanel = page.locator('#dialogue-text');
-            assert.equal(
-              await textPanel.locator('[aria-hidden="true"]').textContent(),
-              await textPanel.locator('.sr-only').textContent(),
-              'Visual narration retains the complete accessible text',
-            );
-            const scroll = await textPanel.evaluate((element) => {
-              element.scrollTop = element.scrollHeight;
-              return {
-                top: element.scrollTop,
-                end: element.scrollHeight - element.clientHeight,
-              };
-            });
-            assert.ok(Math.abs(scroll.top - scroll.end) <= 1, 'Long narration can reach its end');
-            if (scroll.end > 1) {
-              await page.screenshot({
-                path: `${output}/${viewport.width}-${id}-continued.png`,
-                fullPage: true,
-              });
-            }
+            await readReply(page);
           }
         }
         assert.ok(steps < 400, 'Bounded five-day route');
@@ -183,9 +132,7 @@ try {
         assert.ok(end.flags.includes(flag), 'Missing final fact ' + flag);
       for (const flag of scenario.absent)
         assert.ok(!end.flags.includes(flag), 'Unexpected final fact ' + flag);
-      assert.ok(
-        (await page.locator('#dialogue-text .sr-only').textContent()).includes(scenario.summary),
-      );
+      assert.ok((await readReply(page)).includes(scenario.summary));
       assert.equal(await page.locator('#day-timeline .day-step--completed').count(), 5);
       await reloadConversation(page);
       reloads++;

@@ -1,3 +1,4 @@
+import { chooseById, revealAnswer } from './qa-dialogue.mjs';
 import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -24,22 +25,7 @@ const snapshot = (page) =>
       nodes: scene.children.length,
     };
   });
-const choose = async (page, id) => {
-  for (let pageIndex = 0; pageIndex < 30; pageIndex++) {
-    await page.waitForTimeout(240);
-    const choice = page.locator(`#choices button[data-choice="${id}"]`);
-    if (await choice.count()) {
-      await choice.click();
-      return;
-    }
-    const more = page.locator('#choices button[data-choice="__more_choices"]');
-    if (!(await more.count())) {
-      throw new Error(`Dialogue option ${id} is not available on this node`);
-    }
-    await more.click();
-  }
-  throw new Error(`Dialogue option ${id} was not found across 30 choice pages`);
-};
+const choose = (page, id) => chooseById(page, id);
 const shot = async (page, name) => {
   await page.waitForTimeout(1050);
   return page.screenshot({ path: `${output}/${name}.png` });
@@ -160,6 +146,7 @@ try {
       const buttons = page.locator('#choices button');
       assert.ok((await buttons.count()) <= 4);
       for (const button of await buttons.all()) {
+        await revealAnswer(page, button);
         await button.scrollIntoViewIfNeeded();
         const bounds = await button.boundingBox();
         assert.ok(bounds && bounds.width >= 44 && bounds.height >= 44, '44px touch targets');

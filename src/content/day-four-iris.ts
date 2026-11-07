@@ -7,6 +7,10 @@ export const irisDecision: DialogueStory = {
   nodes: [
     {
       id: 'arrival',
+      staging: [
+        { kind: 'move', actor: 'visitor', x: 240, y: 235 },
+        { kind: 'face', actor: 'visitor', direction: 'left' },
+      ],
       speaker: 'Оповідач',
       text: 'На четвертий ранок дощ стихає. Айріс ставить на прилавок альбом і дістає олівець із волосся. «Знову шукала його в усіх кишенях. Добре хоч пензлі туди не ховаю»',
       options: [{ id: 'welcome', label: 'Запропонувати чай і вислухати Айріс', next: 'welcome' }],
@@ -662,6 +666,7 @@ export const irisDecision: DialogueStory = {
     },
     {
       id: 'end',
+      staging: [{ kind: 'exit', actor: 'visitor' }],
       speaker: 'Оповідач',
       text: 'Айріс прибирає альбом у сумку. «Малюнок вікна поки залишу тут», — каже вона й кладе аркуш подалі від мокрих чашок. Ти знаходиш для нього сухе місце біля вітрини.',
       textWhen: [

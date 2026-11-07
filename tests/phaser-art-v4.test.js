@@ -151,6 +151,9 @@ describe('V4 authored art boundaries and provenance', () => {
     };
     const values = [];
     const light = {
+      setVisible() {
+        return this;
+      },
       setAlpha(value) {
         values.push(value);
         return this;

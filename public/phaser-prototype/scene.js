@@ -1,3 +1,5 @@
+import { createSceneDirector } from './scene-director.js';
+import { sceneDirectorDriver } from './director-driver.js';
 import { createActorActions, cueActor } from './actor-actions.js';
 import { createFrameBudget } from './performance.js';
 import { viewportPlan, frameWorld, frameDialogue } from './viewport.js';
@@ -66,12 +68,14 @@ class Bookshop extends Phaser.Scene {
     this.characters = createCharacters(this, this.story ? ['player', ...VISITOR_IDS] : undefined);
     this.visitorBook = createVisitorBook(this);
     this.actorActions = createActorActions(this);
+    this.director = createSceneDirector(sceneDirectorDriver(this));
     this.lastStoryActor = this.story ? null : 'mara';
     this.lastStoryDay = null;
     this.dialogue = new DialogueUI(
       (id) => this.choose(id),
       () => this.closeDialogue(),
     );
+    this.listen(this.dialogue.skip, 'click', () => this.director.finish());
     this.interactions = new Interactions(this, (spot) => this.approach(spot), Boolean(this.story));
     this.interactions.update(this.characters.player, this.characters.mara, this.state);
     this.refreshStory();
@@ -111,14 +115,15 @@ class Bookshop extends Phaser.Scene {
     const sheet = this.state.mode === 'dialogue' ? dock.offsetHeight || 0 : 0;
     // Reading is a camera composition change only: viewport size and zoom stay fixed.
     if (sheet) {
-      const companion = ['story', 'mara'].includes(this.activeDialogue?.kind)
-        ? this.characters.mara
-        : null;
+      const companion =
+        ['story', 'mara'].includes(this.activeDialogue?.kind) && this.characters.mara.sprite.visible
+          ? this.characters.mara
+          : null;
       const reading = frameDialogue(player, companion, camera.width, camera.height, camera.zoom, {
         width: dock.offsetWidth,
         height: sheet,
       });
-      camera.scrollX = reading.x;
+      camera.scrollX = this.cameraLook ? frame.x : reading.x;
       camera.scrollY = reading.y;
     } else camera.scrollY = frame.y;
   }
@@ -146,6 +151,7 @@ class Bookshop extends Phaser.Scene {
       }
       this.lastStoryActor = actor;
       if (actor) {
+        visitor.stagedExit = false;
         visitor.name = actor;
         visitor.sprite.anims.stop();
         visitor.direction = 'left';
@@ -167,9 +173,12 @@ class Bookshop extends Phaser.Scene {
     }
     if (this.lastStoryDay !== this.story.day) {
       this.lastStoryDay = this.story.day;
-      this.atmosphere.setDay(this.story.day);
     }
-    const visible = Boolean(actor);
+    this.atmosphere.setEnvironment(this.story.environment);
+    const environment = this.story.environment;
+    $('#stage').dataset.time = environment.time;
+    $('#stage').dataset.weather = environment.weather;
+    const visible = Boolean(actor) && !this.characters.mara.stagedExit;
     this.characters.mara.sprite.setVisible(visible);
     this.characters.mara.shadow.setVisible(visible);
     this.state = { ...this.state, visitorVisible: visible };
@@ -183,7 +192,7 @@ class Bookshop extends Phaser.Scene {
     }
     $('#objective').textContent = `День ${this.story.day} · ${this.story.guidance.text}`;
     const eyebrow = document.querySelector('.masthead .eyebrow');
-    if (eyebrow) eyebrow.textContent = `Беллвік · День ${this.story.day}`;
+    if (eyebrow) eyebrow.textContent = `Беллвік · День ${this.story.day} · ${environment.label}`;
     $('#stage').dataset.day = String(this.story.day);
     window.__lastChapterRefresh?.();
   }
@@ -470,6 +479,33 @@ class Bookshop extends Phaser.Scene {
       $(selector).inert = true;
     $('#context-action').hidden = true;
     if (this.story) $('#story-tools').inert = true;
+    this.presentedNode = node;
+    this.characters.mara.mood = node.mood ?? 'quiet';
+    if (node.staging?.length && this.director.key !== node.beat) {
+      const pendingTurn = this.dialogue.pendingPlayerTurn;
+      this.dialogue.show(
+        { speaker: 'Книгарня', text: 'Мить у книгарні…', choices: [], ephemeral: true },
+        false,
+        false,
+        this.reduced,
+      );
+      this.dialogue.pendingPlayerTurn = pendingTurn;
+      this.dialogue.choices.inert = true;
+      const skip = document.createElement('button');
+      skip.id = 'stage-skip';
+      skip.type = 'button';
+      skip.textContent = 'Завершити дію';
+      skip.addEventListener('click', () => this.director.finish(), { once: true });
+      this.dialogue.element.querySelector('.dialogue-title').append(skip);
+      this.dialogue.element.dataset.staging = 'true';
+      this.director.play(node.beat, node.staging, () => {
+        this.dialogue.element.querySelector('#stage-skip')?.remove();
+        this.dialogue.choices.inert = false;
+        delete this.dialogue.element.dataset.staging;
+        if (this.state.mode === 'dialogue') this.showDialogue();
+      });
+      return;
+    }
     this.dialogue.show(
       node,
       this.activeDialogue.kind === 'mara' || this.activeDialogue.kind === 'story',
@@ -479,6 +515,7 @@ class Bookshop extends Phaser.Scene {
     );
   }
   choose(id) {
+    if (this.director.active) return;
     if (this.activeDialogue?.kind === 'frank') {
       if (id === 'frank-more') {
         this.activeDialogue.note = {
@@ -527,6 +564,10 @@ class Bookshop extends Phaser.Scene {
   }
   closeDialogue() {
     if (this.state.mode !== 'dialogue') return;
+    this.director.finish(false);
+    this.dialogue.element.querySelector('#stage-skip')?.remove();
+    this.dialogue.choices.inert = false;
+    delete this.dialogue.element.dataset.staging;
     if (this.activeDialogue.kind === 'mara' && !this.state.completed)
       this.savedConversation = this.activeDialogue;
     this.activeDialogue = null;
@@ -711,7 +752,11 @@ class Bookshop extends Phaser.Scene {
           );
       }
       const speaking =
-        this.story && this.state.mode === 'dialogue' && this.activeDialogue?.kind === 'story';
+        this.story &&
+        this.state.mode === 'dialogue' &&
+        this.activeDialogue?.kind === 'story' &&
+        this.presentedNode?.speaker !== 'Оповідач' &&
+        !this.director.active;
       const stationary = this.state.mara === 'ready' && !this.roaming.path.length;
       if (this.story && stationary && this.state.visitorVisible !== false) {
         const reaction = visitorReaction(mara, player, speaking, time, this.reduced);
@@ -736,6 +781,7 @@ class Bookshop extends Phaser.Scene {
         time,
         this.reduced,
       );
+      this.director.update(delta, this.reduced);
       this.actorActions.update([player, mara], time, this.reduced, speaking ? mara : null);
       this.frameCamera();
       this.interactions.update(player, mara, this.state);
@@ -764,6 +810,7 @@ class Bookshop extends Phaser.Scene {
     this.frank?.destroy();
     this.visitorBook?.destroy();
     this.actorActions?.destroy();
+    this.director?.reset();
     this.dialogue?.destroy();
     this.interactions?.destroy();
     void this.audio?.dispose();

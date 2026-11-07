@@ -1,0 +1,32 @@
+{
+  "results": [
+    {
+      "test": "missing",
+      "passed": true
+    },
+    {
+      "test": "corrupt",
+      "passed": true
+    },
+    {
+      "test": "future",
+      "passed": true
+    },
+    {
+      "test": "blocked storage",
+      "passed": true
+    },
+    {
+      "test": "notes read denial and retry",
+      "passed": true
+    },
+    {
+      "test": "active conversation read denial and retry",
+      "passed": true
+    },
+    {
+      "test": "completed conversation read denial and retry",
+      "passed": true
+    }
+  ]
+}
