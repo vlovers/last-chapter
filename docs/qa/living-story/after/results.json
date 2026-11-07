@@ -1,0 +1,236 @@
+{
+  "results": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "reducedMotion": true,
+      "dialogueHeight": 390,
+      "answerIds": ["leo-course-now", "leo-schedule", "leo-station-funny", "__more_choices"],
+      "saveReload": true,
+      "history": true,
+      "keyboard": true
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "reducedMotion": true,
+      "dialogueHeight": 480,
+      "answerIds": ["leo-course-now", "leo-schedule", "leo-station-funny", "__more_choices"],
+      "saveReload": true,
+      "history": true,
+      "keyboard": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "reducedMotion": true,
+      "dialogueHeight": 500,
+      "answerIds": ["leo-course-now", "leo-schedule", "leo-station-funny", "__more_choices"],
+      "saveReload": true,
+      "history": true,
+      "keyboard": true
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "reducedMotion": true,
+      "dialogueHeight": 363.515625,
+      "answerIds": ["leo-course-now", "leo-schedule", "leo-station-funny", "__more_choices"],
+      "saveReload": true,
+      "history": true,
+      "keyboard": true
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "reducedMotion": true,
+      "dialogueHeight": 390,
+      "answerIds": ["leo-course-now", "leo-schedule", "leo-station-funny", "__more_choices"],
+      "saveReload": true,
+      "history": true,
+      "keyboard": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "reducedMotion": true,
+      "dialogueHeight": 322,
+      "answerIds": ["leo-course-now", "leo-schedule", "leo-station-funny", "__more_choices"],
+      "saveReload": true,
+      "history": true,
+      "keyboard": true
+    },
+    {
+      "realMotion": true,
+      "before": {
+        "x": 582.0401886373196,
+        "y": 221.3183924545072,
+        "visible": true,
+        "angle": 0,
+        "direction": "left",
+        "animation": "leo-left-walk",
+        "staging": true,
+        "failed": false,
+        "environment": {
+          "time": "dusk",
+          "weather": "clear",
+          "label": "надвечір’я · ясно"
+        },
+        "cat": {
+          "x": 485,
+          "y": 205,
+          "activity": "sitting"
+        }
+      },
+      "during": {
+        "x": 505.2277473633353,
+        "y": 224.39089010546658,
+        "visible": true,
+        "angle": 0,
+        "direction": "left",
+        "animation": "leo-left-walk",
+        "staging": true,
+        "failed": false,
+        "environment": {
+          "time": "dusk",
+          "weather": "clear",
+          "label": "надвечір’я · ясно"
+        },
+        "cat": {
+          "x": 485,
+          "y": 205,
+          "activity": "sitting"
+        }
+      },
+      "after": {
+        "x": 240,
+        "y": 235,
+        "visible": true,
+        "angle": 0,
+        "direction": "left",
+        "animation": "leo-left-idle",
+        "staging": false,
+        "failed": false,
+        "environment": {
+          "time": "dusk",
+          "weather": "clear",
+          "label": "надвечір’я · ясно"
+        },
+        "cat": {
+          "x": 485,
+          "y": 205,
+          "activity": "sitting"
+        }
+      },
+      "speakingAngles": [0.2328402948890016, 1.2653571755940902],
+      "interruption": true,
+      "skip": true
+    },
+    {
+      "stage": "miller",
+      "environment": {
+        "time": "morning",
+        "weather": "cloudy",
+        "label": "ранок · хмарно"
+      }
+    },
+    {
+      "stage": "mara",
+      "environment": {
+        "time": "dusk",
+        "weather": "rain",
+        "label": "надвечір’я · дощ"
+      }
+    },
+    {
+      "stage": "evening",
+      "environment": {
+        "time": "night",
+        "weather": "rain",
+        "label": "ніч · дощ"
+      }
+    },
+    {
+      "stage": "anna",
+      "environment": {
+        "time": "day",
+        "weather": "clear",
+        "label": "день · ясно"
+      }
+    },
+    {
+      "stage": "eleanor",
+      "environment": {
+        "time": "morning",
+        "weather": "rain",
+        "label": "ранок · дощ"
+      }
+    },
+    {
+      "stage": "thomas",
+      "environment": {
+        "time": "day",
+        "weather": "cloudy",
+        "label": "день · хмарно"
+      }
+    },
+    {
+      "stage": "day4-iris",
+      "environment": {
+        "time": "morning",
+        "weather": "cloudy",
+        "label": "ранок · хмарно"
+      }
+    },
+    {
+      "stage": "day4-leo",
+      "environment": {
+        "time": "dusk",
+        "weather": "clear",
+        "label": "надвечір’я · ясно"
+      }
+    },
+    {
+      "stage": "day5-reading",
+      "environment": {
+        "time": "dusk",
+        "weather": "clear",
+        "label": "надвечір’я · ясно"
+      }
+    },
+    {
+      "stage": "season-complete",
+      "environment": {
+        "time": "night",
+        "weather": "clear",
+        "label": "ніч · ясно"
+      }
+    },
+    {
+      "frankStaging": true,
+      "catBefore": {
+        "x": 483.6666123273732,
+        "y": 205.20726233253265,
+        "activity": "walking"
+      },
+      "catAfter": {
+        "x": 292,
+        "y": 235,
+        "activity": "looking"
+      }
+    }
+  ],
+  "errors": []
+}

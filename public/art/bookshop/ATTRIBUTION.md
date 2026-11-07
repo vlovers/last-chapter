@@ -38,3 +38,7 @@ The orchard, eye, station, map and envelope motifs use only integer SVG geometry
 the shared autumn palette and crisp-edge rendering. No external art, fonts,
 photographs, trademarks or generated bitmap assets are included. The journal
 reuses the existing deterministic `visitor-portraits.js` pixel portraits.
+
+Living Story (#40): window sky/rooftop/sun/moon variations and speaking mouth/hand/nod
+cues are original procedural extensions of the existing in-repository pixel art.
+No external artwork, textures, fonts or animation sheets were imported.

@@ -1,3 +1,4 @@
+import { storyEnvironment } from '../game/story-environment';
 import {
   assessRecommendation,
   requestContext,
@@ -189,6 +190,9 @@ export class FiveDayStory {
   }
   get day(): number {
     return dayOf(this.chapter.stage);
+  }
+  get environment() {
+    return storyEnvironment(this.stage, this.chapter.dialogue.node);
   }
   get visitor(): string {
     return (
@@ -454,6 +458,9 @@ export class FiveDayStory {
     ];
     const member = castMember(node.speaker);
     return {
+      beat: `${this.stage}:${node.id}:${this.chapter.dialogue.history.length}`,
+      staging: node.staging ?? [],
+      mood: node.mood ?? 'quiet',
       speaker: node.speaker,
       text: node.text,
       choices: visibleChoices,

@@ -1,3 +1,4 @@
+import { chooseById, readReply, revealAnswer } from './qa-dialogue.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { launchQaBrowser } from './qa-browser.mjs';
@@ -23,13 +24,7 @@ const viewports = [
 let page;
 const save = () => page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
 const shot = (name) => page.screenshot({ path: `${output}/${name}.png` });
-const choose = async (id) => {
-  await page.waitForTimeout(240);
-  const button = page.locator(`#choices [data-choice="${id}"]`);
-  await button.scrollIntoViewIfNeeded();
-  if (page.viewportSize().width < 900) await button.tap();
-  else await button.click();
-};
+const choose = (id) => chooseById(page, id, { touch: page.viewportSize().width < 900 });
 const geometry = () =>
   page.evaluate(() => ({
     width: document.documentElement.scrollWidth,
@@ -89,19 +84,13 @@ try {
     const words = '«Я тільки приїхав. Тут усі так уважно стежать одне за одним?»';
     assert.equal(await page.locator('#player-turn').count(), 1);
     assert.equal(await page.locator('#player-turn p').textContent(), words);
-    assert.equal(await page.locator('.npc-turn-label').textContent(), 'Пані Міллер');
-    assert.ok(
-      await page
-        .locator('#dialogue-text')
-        .evaluate(
-          (node) =>
-            node
-              .querySelector('#player-turn')
-              .compareDocumentPosition(node.querySelector('.npc-turn-label')) &
-            Node.DOCUMENT_POSITION_FOLLOWING,
-        ),
-      'Player precedes NPC in reading order',
+    assert.equal(
+      await page.locator('#speaker').textContent(),
+      'Пані Міллер',
+      'Reply follows the player speech',
     );
+    const completeReply = await readReply(page);
+    assert.ok(completeReply.length > 0, 'NPC reply remains readable after the player');
     // The dialogue auto-focuses the first reply. A Playwright Enter after
     // multiple DOM assertions is not an immediate key repeat: it can be a
     // legitimate choice after the 220ms guard. Test prose keyboard isolation
@@ -111,25 +100,33 @@ try {
     await page.keyboard.press('Enter');
     assert.equal(await save(), once, 'Enter on dialogue prose cannot select a reply');
     assert.deepEqual((await geometry()).canvas, world.canvas, 'Dialogue never resizes the world');
-    const reading = await page.locator('#dialogue-text').evaluate((node) => {
-      const rect = node.getBoundingClientRect();
-      const label = node.querySelector('.npc-turn-label').getBoundingClientRect();
-      return { height: rect.height, npcLines: rect.bottom - label.bottom };
-    });
+    const reading = await page
+      .locator('#dialogue-text')
+      .evaluate((node) => ({ height: node.clientHeight, content: node.scrollHeight }));
     assert.ok(
-      reading.npcLines >= 20,
-      'At least the start of the NPC response is visible after the player',
+      reading.height > 0 && reading.content <= reading.height + 1,
+      'Prose page fits without scrolling',
     );
     await shot(`${width}-${height}-player-turn`);
     await page.locator('#dialogue-text').focus();
     await page.keyboard.press('ArrowDown');
-    assert.equal(await page.locator('#dialogue-text:focus').count(), 1, 'Arrow keys scroll prose');
-    await page.keyboard.press('Tab');
-    assert.equal(await page.locator('#choices button:focus').count(), 1, 'Tab reaches answers');
+    assert.equal(
+      await page.locator('#dialogue-text:focus').count(),
+      1,
+      'Arrow keys retain prose focus',
+    );
+    for (let i = 0; i < 12 && !(await page.locator('#choices button:focus').count()); i++)
+      await page.keyboard.press('Tab');
+    assert.equal(
+      await page.locator('#choices button:focus').count(),
+      1,
+      'Tab reaches a visible answer',
+    );
 
     // Exercise a real stale-button double tap without introducing fabricated
     // option IDs or advancing the authored journey twice.
     await page.waitForTimeout(240);
+    await revealAnswer(page, page.locator('#choices [data-choice="gossip"]'));
     const staleChoice = await page.locator('#choices [data-choice="gossip"]').elementHandle();
     await staleChoice.click();
     const afterFirst = await save();
@@ -139,7 +136,7 @@ try {
     const flags = JSON.parse(await save()).flags;
     assert.equal(flags.filter((flag) => flag === 'rumor_challenged').length, 1);
     const checkpoint = await save();
-    const npc = await page.locator('#dialogue-text .sr-only').textContent();
+    const npc = await readReply(page);
     await page.reload();
     await page.locator('#enter').click();
     await page.locator('#story-continue').click();
@@ -149,7 +146,7 @@ try {
       'Reload does not replay the player turn',
     );
     assert.equal(await save(), checkpoint, 'Reload applies no extra flags');
-    assert.equal(await page.locator('#dialogue-text .sr-only').textContent(), npc);
+    assert.equal(await readReply(page), npc);
     await page.keyboard.press('Escape');
     await page.locator('#catalog-toggle').click();
     assert.equal(await page.locator('.story-book').count(), 5);
@@ -230,7 +227,8 @@ try {
     await page.locator('#player-turn p').textContent(),
     '«Двері перемагають. Може, їм зарплату платити?»',
   );
-  await page.getByRole('button', { name: 'Показати весь текст', exact: true }).click();
+  if (await page.locator('#typewriter-skip').isVisible())
+    await page.locator('#typewriter-skip').evaluate((button) => button.click());
   assert.equal(
     await page.locator('#dialogue-text [aria-hidden="true"]').textContent(),
     await page.locator('#dialogue-text .sr-only').textContent(),
@@ -326,13 +324,16 @@ try {
     );
   });
   assert.equal(await page.locator('#player-turn').count(), 1);
-  await page.locator('#dialogue-text').focus();
-  await page.keyboard.press('ControlOrMeta+End');
-  const end = await page.locator('#dialogue-text').evaluate((node) => {
-    node.scrollTop = node.scrollHeight;
-    return node.scrollHeight - node.scrollTop - node.clientHeight;
-  });
-  assert.ok(Math.abs(end) <= 1, 'Long player and NPC text is reachable');
+  const longText = await readReply(page);
+  assert.equal(
+    longText,
+    'Українська репліка без скорочень. '.repeat(40).trim(),
+    'Every word of long Ukrainian narration is reachable through pages',
+  );
+  assert.ok(
+    await page.locator('#dialogue-pages span').textContent(),
+    'Pages have a visible position indicator',
+  );
   await shot('320-long-ukrainian-turns');
   await page.close();
   assert.deepEqual(errors, []);

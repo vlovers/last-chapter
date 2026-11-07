@@ -7,6 +7,10 @@ export const maraVisit: DialogueStory = {
   nodes: [
     {
       id: 'arrival',
+      staging: [
+        { kind: 'move', actor: 'visitor', x: 240, y: 235 },
+        { kind: 'face', actor: 'visitor', direction: 'left' },
+      ],
       speaker: 'Оповідач',
       text: 'Надворі дощ стає густішим. До книгарні заходить дівчина в борошні на рукаві й ставить на прилавок паперовий пакунок. Пахне корицею.',
       options: [{ id: 'hello', label: 'Привітатися', next: 'hello' }],

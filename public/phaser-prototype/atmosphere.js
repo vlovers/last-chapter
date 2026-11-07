@@ -6,12 +6,16 @@ export function createAtmosphere(scene, lights, reduced, lowQuality = () => fals
     speed: 1 + (i % 3),
   }));
   let mood;
+  let environment = { time: 'dusk', weather: 'rain' };
+  const sky = scene.add.graphics().setDepth(0.5);
   let lastDraw = -Infinity;
   const dust = scene.add.graphics().setDepth(2);
   const reflection = scene.add.graphics().setDepth(1.1);
   reflection.fillStyle(0xc5d6dd, 0.08).fillRect(273, 36, 2, 24).fillRect(275, 38, 1, 8);
   const draw = () => {
-    rain.clear().lineStyle(1, 0xc5d6dd, mood?.rain ?? 0.42);
+    rain.clear();
+    if (environment.weather !== 'rain') return;
+    rain.lineStyle(1, 0xc5d6dd, 0.6);
     for (const drop of lowQuality() ? drops.slice(0, 14) : drops) {
       // Keep wooden mullions in front of the weather.
       if (drop.x >= 316 && drop.x <= 325) continue;
@@ -21,22 +25,86 @@ export function createAtmosphere(scene, lights, reduced, lowQuality = () => fals
   };
   // Subtle environmental grade sits behind furniture and characters.
   const dayGrade = scene.add.graphics().setDepth(1.25);
-  const moods = [
-    { color: 0xe2b78c, alpha: 0.035, rain: 0.42 },
-    { color: 0xa8b9b0, alpha: 0.055, rain: 0.57 },
-    { color: 0xe4aa79, alpha: 0.07, rain: 0.3 },
-    { color: 0x8599b4, alpha: 0.065, rain: 0.65 },
-    { color: 0xf5c389, alpha: 0.085, rain: 0.22 },
-  ];
-  mood = moods[0];
-  draw();
-  const applyDay = (day) => {
-    mood = moods[Math.max(0, Math.min(moods.length - 1, day - 1))];
+  const palettes = {
+    morning: { sky: 0xb6c7bd, roof: 0x678078, color: 0xffe0a5, alpha: 0.06 },
+    day: { sky: 0x96bdc5, roof: 0x637d78, color: 0xffe6aa, alpha: 0.075 },
+    dusk: { sky: 0xd49b82, roof: 0x675c69, color: 0xe4aa79, alpha: 0.065 },
+    night: { sky: 0x253952, roof: 0x293342, color: 0x7185a2, alpha: 0.09 },
+  };
+  const drawSky = () => {
+    sky.clear();
+    const pane = (x, y, w, h, color, alpha = 1) => {
+      // Paint only glass. Mullions and curtains are never tinted over.
+      for (const [left, right] of [
+        [255, 317],
+        [324, 387],
+      ])
+        for (const [top, bottom] of [
+          [28, 74],
+          [80, 132],
+        ]) {
+          const px = Math.max(left, x),
+            py = Math.max(top, y);
+          const pw = Math.min(right, x + w) - px,
+            ph = Math.min(bottom, y + h) - py;
+          if (pw > 0 && ph > 0) sky.fillStyle(color, alpha).fillRect(px, py, pw, ph);
+        }
+    };
+    pane(255, 28, 132, 104, mood.sky);
+    if (environment.weather === 'cloudy' || environment.weather === 'rain') {
+      pane(255, 28, 132, 104, 0x697e87, environment.weather === 'rain' ? 0.52 : 0.25);
+      pane(263, 40, 48, 4, 0xd2d8cd, 0.45);
+      pane(330, 51, 50, 3, 0xd2d8cd, 0.4);
+    } else {
+      pane(355, 36, 9, 9, environment.time === 'night' ? 0xf5e9c8 : 0xffe4a2);
+      if (environment.time === 'night')
+        for (const [x, y] of [
+          [265, 38],
+          [292, 51],
+          [336, 34],
+          [374, 60],
+        ])
+          pane(x, y, 1, 1, 0xf5e9c8);
+    }
+    for (const [x, w, h] of [
+      [256, 18, 19],
+      [279, 25, 27],
+      [309, 19, 22],
+      [335, 22, 32],
+      [364, 21, 23],
+    ]) {
+      pane(x, 109 - h, w, h, mood.roof);
+      pane(x + 3, 105 - h, w - 6, 4, mood.roof);
+    }
+    for (const [x, w, h] of [
+      [255, 33, 23],
+      [291, 26, 17],
+      [326, 29, 22],
+      [359, 28, 29],
+    ]) {
+      pane(x, 133 - h, w, h, mood.roof);
+      pane(x + 4, 136 - h, 3, 6, environment.time === 'night' ? 0xecc18b : 0xa1b6ad);
+    }
+  };
+  const applyEnvironment = (value) => {
+    if (!value) return;
+    environment = value;
+    mood = palettes[value.time] ?? palettes.dusk;
     dayGrade.clear().fillStyle(mood.color, mood.alpha).fillRect(21, 18, 598, 320);
+    lights.halo.setVisible(value.time === 'dusk' || value.time === 'night');
+    lights.readingGlow.setAlpha(value.time === 'day' || value.time === 'morning' ? 0.35 : 0.85);
+    drawSky();
     draw();
   };
+  applyEnvironment(environment);
   return {
-    setDay: applyDay,
+    setDay(day) {
+      applyEnvironment({
+        time: day === 1 ? 'dusk' : 'day',
+        weather: day === 1 ? 'rain' : 'cloudy',
+      });
+    },
+    setEnvironment: applyEnvironment,
     update(time, delta) {
       if (reduced()) {
         dust.clear();

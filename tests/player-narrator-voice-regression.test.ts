@@ -17,12 +17,12 @@ function node(story: DialogueStory, id: string) {
 
 describe('player-facing Ukrainian narrator voice across the first and final days', () => {
   it('uses singular ти in the first key handoff and after Miller leaves', () => {
-    expect(node(millerVisit, 'arrival').text).toContain('віддає тобі ключ');
+    expect(node(millerVisit, 'arrival').text).toContain('Біля тебе чекає');
     expect(node(millerVisit, 'end').text).toContain('Ти записуєш продану книжку');
   });
 
   it.each([
-    ['morning', 'Ти допомагаєш розсунути столи'],
+    ['morning', 'Ти перевіряєш список'],
     ['rumor-player-accountability', 'Ти підходиш'],
     ['final-aftercare-leo-umbrella-result', 'Ти смієшся й просиш'],
     ['final-aftercare-leo-space-result', 'Ти повертаєшся до каси'],

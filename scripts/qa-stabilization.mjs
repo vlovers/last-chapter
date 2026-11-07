@@ -1,3 +1,4 @@
+import { chooseById, readReply, waitForDialogue } from './qa-dialogue.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { launchQaBrowser } from './qa-browser.mjs';
@@ -17,10 +18,7 @@ const enter = async (page) => {
   await page.goto(base);
   await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
 };
-const choose = async (page, id) => {
-  await page.waitForTimeout(240);
-  await page.locator(`#choices button[data-choice="${id}"]`).click();
-};
+const choose = (page, id) => chooseById(page, id);
 const state = (page) =>
   page.evaluate(async () => {
     const { game } = await import('/phaser-prototype/scene.js'),
@@ -216,6 +214,7 @@ try {
   assert.deepEqual(await listeners(page), initialListeners);
   assert.equal((await state(page)).nodes, original.nodes);
   await page.locator('#story-continue').click();
+  await waitForDialogue(page);
   // Explicit renderer stress fixture; this text is not shipped narrative content.
   await page.evaluate(async () => {
     const { game } = await import('/phaser-prototype/scene.js');
@@ -234,7 +233,7 @@ try {
       'iris',
     );
   });
-  await page.locator('#typewriter-skip').click();
+  await page.locator('#typewriter-skip').evaluate((button) => button.click());
   assert.ok(
     await page.locator('#dialogue :focus').count(),
     'Skipping text preserves dialogue focus',
@@ -245,7 +244,11 @@ try {
     width: node.scrollWidth,
     clientWidth: node.clientWidth,
   }));
-  assert.ok(long.scroll > long.height);
+  assert.ok(
+    long.scroll <= long.height + 1,
+    'The long reply is paged rather than clipped or scrolled',
+  );
+  assert.ok((await readReply(page)).length > 1000, 'All long prose is reachable through pages');
   assert.ok(long.width <= long.clientWidth + 1);
   await screenshot(page, 'long-text-fixture');
   await page.keyboard.press('Tab');

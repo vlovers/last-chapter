@@ -1,3 +1,4 @@
+import { chooseById } from './qa-dialogue.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -19,20 +20,7 @@ async function enter() {
 }
 
 async function chooseAcrossPages(id) {
-  for (let index = 0; index < 40; index++) {
-    await page.waitForTimeout(240);
-    const count = await page.locator('#choices button').count();
-    assert.ok(count <= 4, 'More than four choices shown: ' + count);
-    const choice = page.locator('#choices button[data-choice="' + id + '"]');
-    if (await choice.count()) {
-      await choice.click();
-      return;
-    }
-    const more = page.locator('#choices button[data-choice="__more_choices"]');
-    assert.ok(await more.count(), 'Missing choice and pagination: ' + id);
-    await more.click();
-  }
-  throw new Error('Choice not found across 40 pages: ' + id);
+  await chooseById(page, id);
 }
 
 try {
