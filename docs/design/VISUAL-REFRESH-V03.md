@@ -49,3 +49,16 @@ Run `npm run check`, browser polish, mobile, UX and five-day journeys. Test real
 ## Current limits
 
 The first commit is a CSS-only visual foundation and this specification. It does **not** add an isometric bedroom, sprite sheets, new portraits, new gameplay, or fix PR #41 CI. Browser QA and screenshot acceptance are pending; do not label the design production-ready.
+
+## Slice 2 — secondary UI and portrait backdrop (implemented, pending QA)
+
+- Catalog book cards, search, filters and cover frames use the shared indigo/violet palette.
+- Journal tabs, evidence cards, people entries, notes paper and receipts now have coherent dark surfaces with differentiated rumor/inference accents.
+- Settings and modal backdrops use the same contrast and focus colors.
+- The deterministic 64×80 canvas portraits use a new indigo/violet stage and a warm bookshop sidelight. Face silhouettes, character-specific hair/clothes and mood geometry remain intact; this is **not** a full character redraw or new animation set.
+- Browser theme-color updated to match the new surround.
+- No changes to save state, story data, scene commands, viewport geometry or hit targets.
+
+### QA still required
+
+Inspect actual rendered portrait legibility, color contrast and text overflow on all named screens. In particular, check long book descriptions, notes textarea, journal tabs and 360×800 choices. Run `npm run check` and browser suites after PR #41's click-interception fix. The design branch is intentionally not a release candidate.

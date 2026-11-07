@@ -41,12 +41,22 @@ export function portraitDataUrl(id, mood = 'quiet') {
   const coat = p.coat ?? '#8b5261';
   const light = p.light ?? '#b97a83';
   const skin = SKIN[id];
-  r(0, 0, 64, 80, '#374d48');
-  r(4, 4, 56, 72, '#60746a');
-  r(7, 7, 50, 66, '#a28d70');
-  r(9, 9, 46, 64, '#56665d');
-  r(11, 64, 42, 12, '#364d49');
-  r(5, 72, 54, 4, '#c3a277');
+  // Bellwick v0.3 portrait stage: indigo depth, violet rim and warm side light.
+  // All details are painted on integer pixels; the 64x80 asset stays deterministic.
+  r(0, 0, 64, 80, '#100f25');
+  r(3, 3, 58, 74, '#6c4b9d');
+  r(5, 5, 54, 70, '#211b3a');
+  r(8, 8, 48, 64, '#30294b');
+  r(10, 10, 44, 60, '#25233e');
+  r(10, 10, 3, 48, '#69508c');
+  r(13, 10, 2, 39, '#aa7d7d');
+  r(51, 12, 3, 43, '#14152e');
+  r(10, 63, 44, 9, '#17172d');
+  r(5, 72, 54, 3, '#8c68b5');
+  r(7, 7, 50, 1, '#9e79ca');
+  // Character-specific bookshop light: amber from the lamp on the left.
+  r(14, 16, 3, 22, '#8e5c65');
+  r(15, 17, 1, 17, '#cf9576');
   // Shoulders and distinctive coat.
   r(7, 58, 50, 17, coat);
   r(12, 53, 40, 17, coat);
