@@ -13,6 +13,35 @@ const browser = fixture.browser;
 const results = [];
 const errors = [];
 let currentPage;
+async function clickStoryContinue(page) {
+  const button = page.locator('#story-continue');
+  await button.waitFor({ state: 'visible' });
+  const hit = await button.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const target = document.elementFromPoint(x, y);
+    const dock = document.querySelector('#story-tools');
+    const dockRect = dock?.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    return {
+      button: { x: rect.x, y: rect.y, width: rect.width, height: rect.height },
+      dock: dockRect ? { x: dockRect.x, y: dockRect.y, width: dockRect.width, height: dockRect.height } : null,
+      viewport: { width: innerWidth, height: innerHeight },
+      hitTag: target?.tagName.toLowerCase() ?? null,
+      hitId: target?.id ?? null,
+      hitClass: typeof target?.className === 'string' ? target.className : null,
+      pointerEvents: style.pointerEvents,
+      zIndex: style.zIndex,
+      parentClass: element.parentElement?.className ?? null,
+      dialogueHidden: document.querySelector('#dialogue')?.hidden,
+      clickable: target === element || element.contains(target),
+    };
+  });
+  assert.ok(hit.clickable, `Story continue blocked: ${JSON.stringify(hit)}`);
+  await button.click();
+}
+
 async function sceneSnapshot(page) {
   return page.evaluate(async () => {
     const { game } = await import('/phaser-prototype/scene.js');
@@ -137,7 +166,7 @@ try {
         ambient: { initial, final: samples.at(-1), samples: samples.length },
       });
     }
-    await page.locator('#story-continue').click();
+    await clickStoryContinue(page);
     const dimensions = await layout(page);
     assert.ok(dimensions.scrollWidth <= width + 1, `${device}: horizontal overflow`);
     assert.ok(
@@ -162,7 +191,7 @@ try {
     const save = await page.evaluate(() => localStorage.getItem('last-chapter:save:v1'));
     await page.reload();
     await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
-    await page.locator('#story-continue').click();
+    await clickStoryContinue(page);
     assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), save);
     await page.keyboard.press('Escape');
     // Optional conversations require Mara to be physically in this visit.
@@ -173,7 +202,7 @@ try {
         .isVisible(),
       false,
     );
-    await page.locator('#story-continue').click();
+    await clickStoryContinue(page);
     for (const id of ['books', 'orchard', 'leave-orchard', '__advance']) await choose(page, id);
     await page.keyboard.press('Escape');
     // Optional topic finishes once; the day-unlocked next topic replaces it.
@@ -245,7 +274,7 @@ try {
         throw new Error('No terminal route: ' + stage);
       });
       visited.push(plan.stage);
-      await page.locator('#story-continue').click();
+      await clickStoryContinue(page);
       await page.locator('#dialogue:not([hidden])').waitFor();
       if (['miller', 'iris', 'eleanor', 'day4-iris', 'day5-reading'].includes(plan.stage)) {
         await layout(page);
@@ -256,13 +285,13 @@ try {
         // Suspending the actual story dialogue and reloading retains its node.
         await page.reload();
         await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
-        await page.locator('#story-continue').click();
+        await clickStoryContinue(page);
         assert.equal(await page.locator('#choices button[data-choice="bakery-tired"]').count(), 1);
         for (const id of ['bakery-tired', 'tired-ask', 'silence-return']) await choose(page, id);
         assert.equal(await page.locator('#choices button[data-choice="bakery"]').count(), 0);
         await page.reload();
         await page.getByRole('button', { name: 'Відчинити книгарню' }).click();
-        await page.locator('#story-continue').click();
+        await clickStoryContinue(page);
         assert.equal(await page.locator('#choices button[data-choice="bakery"]').count(), 0);
         await layout(page);
         await page.screenshot({
@@ -283,7 +312,7 @@ try {
     assert.equal(new Set(visited).size, 19);
     assert.equal((await sceneSnapshot(page)).failed, false);
     results.push({ device, dimensions, visited });
-    await page.locator('#story-continue').click();
+    await clickStoryContinue(page);
     await choose(page, '__restart');
     await page.keyboard.press('Escape');
     const restarted = await page.evaluate(() => ({
