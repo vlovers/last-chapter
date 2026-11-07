@@ -8,7 +8,7 @@ export function createAtmosphere(scene, lights, reduced, lowQuality = () => fals
   let mood;
   let environment = { time: 'dusk', weather: 'rain' };
   const sky = scene.add.graphics().setDepth(0.5);
-  let lastDraw = -Infinity;
+  let lastDraw = null;
   const dust = scene.add.graphics().setDepth(2);
   const reflection = scene.add.graphics().setDepth(1.1);
   reflection.fillStyle(0xc5d6dd, 0.08).fillRect(273, 36, 2, 24).fillRect(275, 38, 1, 8);
@@ -111,8 +111,10 @@ export function createAtmosphere(scene, lights, reduced, lowQuality = () => fals
         return;
       }
       // Weather needs only 30 updates/s; a degraded budget uses 15 and no dust.
-      if (time - lastDraw < (lowQuality() ? 66 : 33)) return;
-      const step = Math.min(100, time - lastDraw || delta);
+      if (lastDraw !== null && time - lastDraw < (lowQuality() ? 66 : 33)) return;
+      // On the first frame, advance by delta rather than by an infinite elapsed time.
+      const elapsed = lastDraw === null ? delta : time - lastDraw;
+      const step = Math.max(0, Math.min(100, elapsed));
       lastDraw = time;
       dust.clear();
       if (!lowQuality())
@@ -139,6 +141,8 @@ export function createAtmosphere(scene, lights, reduced, lowQuality = () => fals
       dust.clear();
       reflection.setAlpha(1);
       lights.halo.setAlpha(1);
+      lights.halo.setVisible(environment.time === 'dusk' || environment.time === 'night');
+      lastDraw = null;
       lights.readingGlow.setAlpha(environment.time === 'day' || environment.time === 'morning' ? 0.35 : 0.85);
       lights.steam.setY(0).setAlpha(0.15);
     },

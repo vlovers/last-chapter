@@ -78,3 +78,11 @@ No runtime browser validation or visual screenshot review has been performed for
 - Added focused Vitest coverage for light intensity across update/reset and for four distinct sky palettes. These are source changes only until CI or local tests confirm execution.
 
 No new geometry, weather schedule, story state, sprites or DOM interactions were changed. PR #41 still needs browser QA repaired before integration.
+
+## Slice 5 — atmosphere lifecycle regression fixes
+
+- Preserve daylight/overnight halo visibility across `reset()`, rather than unconditionally restoring a visible halo.
+- Use the frame delta for the first rain animation frame and after reset. The old `-Infinity` sentinel caused the first update to jump the rain by 100ms regardless of elapsed frame time.
+- Add regression tests for both lifecycle cases, without modifying narrative timing, scene coordinates or hit-testing.
+
+Pending: execute Vitest and browser visual QA before integrating. PR #41 remains a dependency.

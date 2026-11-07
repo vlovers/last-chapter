@@ -60,7 +60,8 @@ describe('visual refresh atmosphere', () => {
 
   it('uses distinct window palettes for morning, day, dusk and night', () => {
     const { scene, graphics } = setup();
-    const atmosphere = createAtmosphere(scene, { halo: { setVisible: vi.fn(), setAlpha: vi.fn() }, readingGlow: { setAlpha: vi.fn() }, steam: { setY: () => ({ setAlpha: vi.fn() }), setAlpha: vi.fn() } }, () => true);
+    const lights = { halo: { setVisible: vi.fn(), setAlpha: vi.fn() }, readingGlow: { setAlpha: vi.fn() }, steam: { setY: () => ({ setAlpha: vi.fn() }), setAlpha: vi.fn() } };
+    const atmosphere = createAtmosphere(scene, lights, () => true);
     const sky = graphics[1];
     const colors = [];
     for (const time of ['morning', 'day', 'dusk', 'night']) {
@@ -69,5 +70,36 @@ describe('visual refresh atmosphere', () => {
       colors.push(sky.fillStyle.mock.calls[0][0]);
     }
     expect(new Set(colors).size).toBe(4);
+  });
+  it('resets halo visibility according to the current time of day', () => {
+    const { scene, lights } = setup();
+    const atmosphere = createAtmosphere(scene, lights, () => false);
+    atmosphere.setEnvironment({ time: 'day', weather: 'clear' });
+    atmosphere.reset();
+    expect(lights.halo.setVisible).toHaveBeenLastCalledWith(false);
+    atmosphere.setEnvironment({ time: 'night', weather: 'rain' });
+    atmosphere.reset();
+    expect(lights.halo.setVisible).toHaveBeenLastCalledWith(true);
+  });
+
+  it('does not advance rain by a huge amount on the first frame or after reset', () => {
+    const { scene, graphics } = setup();
+    const atmosphere = createAtmosphere(scene, {
+      halo: { setVisible: vi.fn(), setAlpha: vi.fn() },
+      readingGlow: { setAlpha: vi.fn() },
+      steam: { setY: () => ({ setAlpha: vi.fn() }), setAlpha: vi.fn() },
+    }, () => false);
+    atmosphere.setEnvironment({ time: 'dusk', weather: 'rain' });
+    const rain = graphics[0];
+    rain.lineBetween.mockClear();
+    atmosphere.update(100000, 16);
+    const first = rain.lineBetween.mock.calls[0];
+    expect(first[1]).toBeGreaterThan(30);
+    expect(first[1]).toBeLessThan(34);
+    atmosphere.reset();
+    rain.lineBetween.mockClear();
+    atmosphere.update(200000, 16);
+    const second = rain.lineBetween.mock.calls[0];
+    expect(second[1] - first[1]).toBeLessThan(2);
   });
 });
