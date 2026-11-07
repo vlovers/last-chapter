@@ -37,6 +37,10 @@ async function clickStoryContinue(page) {
       zIndex: style.zIndex,
       parentClass: element.parentElement?.className ?? null,
       dialogueHidden: document.querySelector('#dialogue')?.hidden,
+      toolbarInert: element.closest('.story-toolbar')?.inert,
+      panelHidden: document.querySelector('#story-panel')?.hidden,
+      panelRole: document.querySelector('#story-panel')?.getAttribute('role'),
+      bodyReading: document.body.classList.contains('reading'),
       clickable: target === element || element.contains(target),
     };
   });
