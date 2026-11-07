@@ -26,7 +26,9 @@ async function clickStoryContinue(page) {
     const style = getComputedStyle(element);
     return {
       button: { x: rect.x, y: rect.y, width: rect.width, height: rect.height },
-      dock: dockRect ? { x: dockRect.x, y: dockRect.y, width: dockRect.width, height: dockRect.height } : null,
+      dock: dockRect
+        ? { x: dockRect.x, y: dockRect.y, width: dockRect.width, height: dockRect.height }
+        : null,
       viewport: { width: innerWidth, height: innerHeight },
       hitTag: target?.tagName.toLowerCase() ?? null,
       hitId: target?.id ?? null,
