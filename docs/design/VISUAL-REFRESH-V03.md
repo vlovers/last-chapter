@@ -70,3 +70,11 @@ The existing native 640×360 bookshop painting has a controlled palette update: 
 This is **not** the isometric room from the concept image; converting the scene to isometric projection would require new art, navigation and hit-testing and must be scoped separately. The next visual QA should compare the same story checkpoint across day/night and weather, with characters and dialogue both visible, and assess text/world contrast.
 
 No runtime browser validation or visual screenshot review has been performed for this commit. The PR #41 pointer-interception blocker still prevents release approval.
+
+## Slice 4 — day/night atmosphere consistency
+
+- Morning, daylight, dusk and night now use distinct indigo-family sky/rooftop palettes in the existing window panes; the warm bookshop lamp remains a contrasting in-world light.
+- Fixed a real atmosphere bug: the per-frame reading-lamp flicker previously forced brightness back to the evening baseline after `setEnvironment({time:'day'})`. It now preserves the selected daylight/night baseline through animation and `reset()`.
+- Added focused Vitest coverage for light intensity across update/reset and for four distinct sky palettes. These are source changes only until CI or local tests confirm execution.
+
+No new geometry, weather schedule, story state, sprites or DOM interactions were changed. PR #41 still needs browser QA repaired before integration.

@@ -26,10 +26,10 @@ export function createAtmosphere(scene, lights, reduced, lowQuality = () => fals
   // Subtle environmental grade sits behind furniture and characters.
   const dayGrade = scene.add.graphics().setDepth(1.25);
   const palettes = {
-    morning: { sky: 0xb6c7bd, roof: 0x678078, color: 0xffe0a5, alpha: 0.06 },
-    day: { sky: 0x96bdc5, roof: 0x637d78, color: 0xffe6aa, alpha: 0.075 },
-    dusk: { sky: 0xd49b82, roof: 0x675c69, color: 0xe4aa79, alpha: 0.065 },
-    night: { sky: 0x253952, roof: 0x293342, color: 0x7185a2, alpha: 0.09 },
+    morning: { sky: 0xa8b8c7, roof: 0x56677d, color: 0xffdca6, alpha: 0.055 },
+    day: { sky: 0x8eacc9, roof: 0x53657c, color: 0xffe6b3, alpha: 0.06 },
+    dusk: { sky: 0xa47caa, roof: 0x4f456a, color: 0xe5a87b, alpha: 0.065 },
+    night: { sky: 0x202b52, roof: 0x252943, color: 0x7c78ae, alpha: 0.09 },
   };
   const drawSky = () => {
     sky.clear();
@@ -128,7 +128,9 @@ export function createAtmosphere(scene, lights, reduced, lowQuality = () => fals
       }
       draw();
       lights.halo.setAlpha(0.8 + Math.sin(time / 1900) * 0.09);
-      lights.readingGlow.setAlpha(0.85 + Math.sin(time / 2400) * 0.06);
+      // Keep the time-of-day brightness when animating: daylight must not jump to night glow.
+      const readingBase = environment.time === 'day' || environment.time === 'morning' ? 0.35 : 0.85;
+      lights.readingGlow.setAlpha(readingBase + Math.sin(time / 2400) * 0.06);
       lights.steam
         .setY(-Math.floor((time % 3600) / 1200))
         .setAlpha(0.12 + Math.sin(time / 1200) * 0.07);
@@ -137,7 +139,7 @@ export function createAtmosphere(scene, lights, reduced, lowQuality = () => fals
       dust.clear();
       reflection.setAlpha(1);
       lights.halo.setAlpha(1);
-      lights.readingGlow.setAlpha(1);
+      lights.readingGlow.setAlpha(environment.time === 'day' || environment.time === 'morning' ? 0.35 : 0.85);
       lights.steam.setY(0).setAlpha(0.15);
     },
   };
