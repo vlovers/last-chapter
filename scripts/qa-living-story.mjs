@@ -12,6 +12,33 @@ const results = [],
   errors = [];
 let page;
 const shot = (name) => page.screenshot({ path: `${output}/${name}.png` });
+// Fail with actionable layout evidence instead of masking blocked controls with force clicks.
+async function clickStoryContinue() {
+  const button = page.locator('#story-continue');
+  await button.waitFor({ state: 'visible' });
+  const hit = await button.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const target = document.elementFromPoint(x, y);
+    const style = getComputedStyle(element);
+    return {
+      rect: { x: rect.x, y: rect.y, width: rect.width, height: rect.height },
+      viewport: { width: innerWidth, height: innerHeight },
+      target: target?.tagName.toLowerCase() ?? null,
+      targetId: target?.id ?? null,
+      targetClass: typeof target?.className === 'string' ? target.className : null,
+      pointerEvents: style.pointerEvents,
+      position: style.position,
+      zIndex: style.zIndex,
+      parent: element.parentElement?.className ?? null,
+      clickable: target === element || element.contains(target),
+    };
+  });
+  assert.ok(hit.clickable, `Story continue is covered or outside viewport: ${JSON.stringify(hit)}`);
+  await button.click();
+}
+
 const sceneState = () =>
   page.evaluate(async () => {
     const { game } = await import('/phaser-prototype/scene.js');
@@ -54,7 +81,7 @@ async function open(viewport, reduced = true, stage = 'leo') {
   }, stage);
   await page.reload();
   await page.locator('#enter').click();
-  await page.locator('#story-continue').click();
+  await clickStoryContinue();
 }
 async function layout() {
   return page.evaluate(() => {
@@ -138,7 +165,7 @@ try {
     const environment = (await sceneState()).environment;
     await page.reload();
     await page.locator('#enter').click();
-    await page.locator('#story-continue').click();
+    await clickStoryContinue();
     assert.equal(await page.evaluate(() => localStorage.getItem('last-chapter:save:v1')), save);
     assert.deepEqual(
       (await sceneState()).environment,
@@ -230,7 +257,7 @@ try {
   await page.keyboard.press('Escape');
   assert.equal((await sceneState()).staging, false, 'Closing during an exit cancels the timeline');
   assert.equal((await sceneState()).visible, false, 'Interrupted exit settles the departed pose');
-  await page.locator('#story-continue').click();
+  await clickStoryContinue();
   await waitForDialogue(page);
   assert.ok((await readReply(page)).includes('Лео вже біля дверей'));
   results.push({
