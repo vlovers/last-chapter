@@ -1463,3 +1463,51 @@ body.reduced * {
   padding: 4px 8px;
   font-size: 12px;
 }
+
+/* Visual Refresh v0.3: CSS-only indigo foundation; preserve gameplay geometry. */
+:root {
+  --ink: #eeeaff;
+  --muted: #b4b0d0;
+  --paper: #151329;
+  --paper-light: #211d3a;
+  --rule: #514276;
+  --wood: #8262c2;
+  --pine: #39275f;
+  --pine-light: #533887;
+  --gold: #b79aff;
+  --night: #0b1020;
+  color: #eeeaff;
+  background: var(--night);
+}
+body { background: #0b1020; }
+.masthead { background: #101226; border-bottom-color: #62509a; }
+.eyebrow, .masthead > span, h1 span { color: #b7a9e5; }
+h1 { color: #f6f2ff; }
+#stage { background: #101328; }
+button { color: #f4efff; background: #30244f; border-color: #67518f; border-radius: 9px; }
+button:hover { background: #4b3577; border-color: #aa87fa; }
+button:active { background: #624498; }
+:focus-visible { outline-color: #c5a6ff; }
+.hud button, #context-action, .hotspot span, #toast { background: #11152bef; border-color: #66518f; color: #eeeaff; }
+#objective { background: #12162def; border-left-color: #a88aff; border-radius: 10px; color: #eeeaff; }
+#dialogue {
+  color: #f3efff;
+  background: linear-gradient(145deg, #211a3b, #11152a);
+  border-color: #9668e0;
+  border-radius: 16px;
+  box-shadow: 0 16px 44px #070716bd, 0 0 0 1px #c4a4ff33;
+}
+.dialogue-title { border-bottom-color: #514477; }
+.portrait-frame { background: #34224e; border-color: #ad80ef; border-radius: 10px; overflow: hidden; }
+#speaker { color: #eee7ff; font-weight: 700; }
+#dialogue-text, #player-turn { color: #e7e2fa; }
+#dialogue #player-turn { border-left-color: #b18aff; }
+#close-dialogue, #typewriter-skip, #dialogue-pages button, #dialogue-history-toggle, #dialogue #browse-order { color: #c9b8fa; }
+#dialogue-pages { border-top-color: #554477; }
+#choices button { color: #f0eaff; background: #29213f; border-color: #625085; border-left-color: #a475f3; border-radius: 9px; box-shadow: none; }
+#choices button::before { color: #bba0f6; }
+#choices button:hover, #choices button:focus-visible { color: #fff; background: #48336e; border-color: #ba92ff; }
+#dialogue :focus-visible { outline-color: #c7a8ff; }
+.veil { background: #0c0e22e8; }
+.welcome p { color: #c5b9e7; }
+#enter { color: #fff; background: #7045ca; border-color: #c29cff; }
