@@ -25,6 +25,10 @@ jobs:
           node-version-file: .nvmrc
       - name: Install reproducibly
         run: npm ci --no-audit --no-fund
+      - name: Governance contract and regression tests
+        run: |
+          node --test test/check-governance.test.mjs
+          node scripts/check-governance.mjs
       - name: Format
         run: npm run format:check
       - name: Lint
