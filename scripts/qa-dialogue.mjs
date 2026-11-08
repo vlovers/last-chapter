@@ -39,6 +39,24 @@ export async function chooseById(page, id, { touch = false } = {}) {
         box.y + box.height <= viewport.height + 1,
       'Full answer label fits the viewport: ' + id,
     );
+    // A visible answer may still be covered by a dialogue page control or
+    // an overflowing body. Fail with the actual obstructing element instead
+    // of waiting 30 seconds for Playwright's generic click timeout.
+    const hit = await target.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const top = document.elementFromPoint(x, y);
+      const owner = top?.closest('#dialogue-pages, #dialogue-text, #choices, .dialogue-body');
+      return {
+        hit: top === element || element.contains(top),
+        target: element.getAttribute('data-choice'),
+        obstruction: top?.outerHTML.slice(0, 250) ?? null,
+        owner: owner?.id || owner?.className || null,
+        point: { x: Math.round(x), y: Math.round(y) },
+      };
+    });
+    assert.ok(hit.hit, 'Dialogue answer is obscured: ' + JSON.stringify(hit));
     if (touch) await target.tap();
     else await target.click();
     if (target === button) {
