@@ -1,3 +1,5 @@
+import { validateStaging, type StageCommand } from './staging';
+
 export type TopicId = string;
 export type SceneId = string;
 
@@ -7,6 +9,8 @@ export interface DialogueOption {
   /** Optional presentation metadata. It has no effect on flags, traversal or saves. */
   readonly delivery?: 'speech' | 'action';
   readonly spokenText?: string;
+  /** Alternate phrasings of one topic share visibility, while keeping saved edge IDs. */
+  readonly topic?: string;
   readonly next: SceneId;
   readonly requires?: readonly string[];
   /** Hide an option if any of these facts is already true. */
@@ -32,6 +36,8 @@ export interface DialogueNode {
     readonly unless?: readonly string[];
     readonly text: string;
   }[];
+  readonly mood?: 'quiet' | 'warm' | 'thoughtful' | 'firm' | 'sad' | 'surprised';
+  readonly staging?: readonly StageCommand[];
   readonly options: readonly DialogueOption[];
   readonly hub?: boolean;
   /** Some endings have an authored ethical priority independent of flag count. */
@@ -202,11 +208,18 @@ export function availableOptions(
   // ledger. Build membership indexes once rather than scanning for each option.
   const flags = new Set(state.flags);
   const completed = new Set(progress.completed ?? []);
+  const completedTopics = new Set(
+    node.options
+      .filter((option) => option.topic && completed.has(completionKey(node, option, flags)))
+      .map((option) => option.topic),
+  );
   return node.options.filter(
     (option) =>
       (option.requires ?? []).every((flag) => flags.has(flag)) &&
       !(option.unless ?? []).some((flag) => flags.has(flag)) &&
-      (option.repeatability === 'repeatable' || !completed.has(completionKey(node, option, flags))),
+      (option.repeatability === 'repeatable' ||
+        (!completed.has(completionKey(node, option, flags)) &&
+          (!option.topic || !completedTopics.has(option.topic)))),
   );
 }
 
@@ -278,6 +291,7 @@ export function validateDialogue(story: DialogueStory): readonly string[] {
     if (!node.id.trim()) errors.push('Empty node id');
     if (!node.speaker.trim()) errors.push(`Empty speaker: ${node.id}`);
     if (!node.text.trim()) errors.push(`Empty text: ${node.id}`);
+    for (const error of validateStaging(node.staging ?? [])) errors.push(`${node.id}: ${error}`);
     const conditionalFlagSets = new Set<string>();
     const earlierAuthoredConditions: string[][] = [];
     for (const variant of node.textWhen ?? []) {

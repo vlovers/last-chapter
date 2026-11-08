@@ -14,3 +14,15 @@ smoke test run `npm exec vite preview -- --host 127.0.0.1 --port 4173`.
 
 [Slice guide](art/PHASER-VERTICAL-SLICE.md) documents controls, modules, original asset
 provenance and limits. [Testing](TESTING.md) documents optional browser QA tooling.
+
+## Living Story presentation
+
+See [issue #40 implementation and visual evidence](qa/living-story/README.md).
+`DialogueNode.staging` contains presentation commands, never simulation effects.
+`storyEnvironment(stage, node)` derives time/weather from persisted story progress.
+Topic aliases use `DialogueOption.topic` to share completion visibility while
+retaining the original edge-based save keys. New alias groups must have matching
+completion/reopen semantics and legacy-save regression coverage.
+
+Local browser checks: `node scripts/qa-living-story.mjs`. The optional Playwright
+module and base URL can be supplied through `PLAYWRIGHT_MODULE` and `BASE_URL`.

@@ -1,3 +1,4 @@
+import { chooseById, revealAnswer } from './qa-dialogue.mjs';
 import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -24,22 +25,7 @@ const snapshot = (page) =>
       nodes: scene.children.length,
     };
   });
-const choose = async (page, id) => {
-  for (let pageIndex = 0; pageIndex < 30; pageIndex++) {
-    await page.waitForTimeout(240);
-    const choice = page.locator(`#choices button[data-choice="${id}"]`);
-    if (await choice.count()) {
-      await choice.click();
-      return;
-    }
-    const more = page.locator('#choices button[data-choice="__more_choices"]');
-    if (!(await more.count())) {
-      throw new Error(`Dialogue option ${id} is not available on this node`);
-    }
-    await more.click();
-  }
-  throw new Error(`Dialogue option ${id} was not found across 30 choice pages`);
-};
+const choose = (page, id) => chooseById(page, id);
 const shot = async (page, name) => {
   await page.waitForTimeout(1050);
   return page.screenshot({ path: `${output}/${name}.png` });
@@ -160,6 +146,7 @@ try {
       const buttons = page.locator('#choices button');
       assert.ok((await buttons.count()) <= 4);
       for (const button of await buttons.all()) {
+        await revealAnswer(page, button);
         await button.scrollIntoViewIfNeeded();
         const bounds = await button.boundingBox();
         assert.ok(bounds && bounds.width >= 44 && bounds.height >= 44, '44px touch targets');
@@ -541,6 +528,34 @@ try {
       await page.keyboard.press('Escape');
       assert.equal(await page.locator('#story-panel[hidden]').count(), 1);
     }
+    // A day transition or reload can leave a dialogue open. Close it through the
+    // actual UI control before checking whether the toolbar receives pointer input.
+    if (await page.locator('#dialogue:not([hidden])').count()) {
+      await page.locator('#close-dialogue').click();
+      await page.locator('#dialogue').waitFor({ state: 'hidden' });
+    }
+    // The continuation must be physically tappable after closing a conversation.
+    // A visible button can still sit beneath the stage or an unclosed overlay.
+    const continueHitTarget = await page.evaluate(() => {
+      const button = document.querySelector('#story-continue');
+      const bounds = button.getBoundingClientRect();
+      const x = bounds.left + bounds.width / 2;
+      const y = bounds.top + bounds.height / 2;
+      const target = document.elementFromPoint(x, y);
+      return {
+        stage: window.__lastChapterStory.stage,
+        button: { x, y, width: bounds.width, height: bounds.height },
+        target: target?.id || target?.tagName || null,
+        hit: target === button || button.contains(target),
+        dialogueHidden: document.querySelector('#dialogue').hidden,
+        panelHidden: document.querySelector('#story-panel').hidden,
+        viewport: { width: innerWidth, height: innerHeight },
+      };
+    });
+    assert.ok(
+      continueHitTarget.hit,
+      `Story continue must receive real pointer input: ${JSON.stringify(continueHitTarget)}`,
+    );
     await page.locator('#story-continue').click();
     const plan = await page.evaluate(async () => {
       const { stageStory, chooseChapterOption } = await import('/src/game/chapter.ts');
@@ -679,7 +694,10 @@ try {
     } else {
       await choose(page, '__advance');
     }
-    await page.keyboard.press('Escape');
+    if (await page.locator('#dialogue:not([hidden])').count()) {
+      await page.locator('#close-dialogue').click();
+      await page.locator('#dialogue').waitFor({ state: 'hidden' });
+    }
     if (nextDay) {
       // A day transition must survive a full mobile page reload, not just
       // in-memory dialogue state. Check the visible choices and order ledger.
@@ -712,7 +730,8 @@ try {
       assert.deepEqual(restored, checkpoint, `Day transition ${plan.stage} must restore`);
       await page.locator('#story-continue').tap();
       await page.locator('#dialogue:not([hidden])').waitFor();
-      await page.keyboard.press('Escape');
+      await page.locator('#close-dialogue').click();
+      await page.locator('#dialogue').waitFor({ state: 'hidden' });
     }
   }
   assert.deepEqual(visited, [

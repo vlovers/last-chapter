@@ -1308,3 +1308,158 @@ body.reduced * {
     max-height: 40svh;
   }
 }
+
+/* Living Story: a stable reading dock; prose and answer pages own separate rows. */
+#dialogue,
+#dialogue.compact {
+  height: min(44svh, 390px);
+  max-height: none;
+}
+#dialogue .dialogue-body,
+#dialogue.compact .dialogue-body {
+  max-height: none;
+  grid-template-rows: 46px minmax(0, 1fr) 38px 128px;
+}
+#dialogue #dialogue-text,
+#dialogue #dialogue-text:has(#player-turn) {
+  max-height: none;
+  margin: 8px 0 4px;
+  padding: 0 2px;
+  overflow: hidden;
+  scrollbar-gutter: auto;
+  font:
+    17px/1.5 Georgia,
+    serif;
+}
+#dialogue #player-turn {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+#dialogue #player-turn {
+  padding-left: 9px;
+  margin-bottom: 8px;
+  border-left: 2px solid #688166;
+}
+#dialogue #player-turn strong {
+  display: none;
+}
+#dialogue .npc-turn-label {
+  display: block;
+}
+#dialogue #choices,
+#dialogue.compact #choices {
+  max-height: none;
+  overflow: hidden;
+  align-content: start;
+  gap: 8px;
+}
+#dialogue #choices button {
+  padding: 8px 10px 8px 31px;
+  font-size: 14px;
+  line-height: 1.3;
+}
+#dialogue-pages {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+}
+#dialogue-pages button,
+#dialogue-history-toggle {
+  min-height: 32px;
+  padding: 3px 7px;
+  font-size: 12px;
+  background: transparent;
+  color: var(--pine);
+  border-color: transparent;
+}
+#dialogue-pages button:disabled {
+  visibility: hidden;
+}
+#answers-next {
+  margin-left: auto;
+}
+#dialogue #browse-order {
+  font-size: 0;
+  padding: 4px;
+  min-width: 32px;
+  color: var(--pine);
+  background: transparent;
+}
+#dialogue #browse-order::after {
+  content: '▤';
+  font-size: 22px;
+}
+#dialogue.history-open #dialogue-text {
+  overflow-y: auto;
+  grid-row: 2 / 5;
+}
+#dialogue.history-open #dialogue-pages,
+#dialogue.history-open #choices {
+  visibility: hidden;
+}
+#dialogue.history-open #dialogue-text p {
+  margin: 0 0 12px;
+}
+@media (max-width: 700px) and (orientation: portrait) {
+  #dialogue,
+  #dialogue.compact {
+    height: min(60svh, 500px);
+    padding: 8px max(12px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left));
+  }
+  #dialogue .dialogue-body {
+    grid-template-rows: 44px minmax(0, 1fr) 44px 188px;
+  }
+  #dialogue #dialogue-text {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  #dialogue #choices button {
+    padding-block: 7px;
+    min-height: 44px;
+  }
+  #dialogue-pages button,
+  #dialogue-history-toggle {
+    min-height: 44px;
+  }
+  #typewriter-skip {
+    font-size: 0;
+    min-width: 28px;
+  }
+  #typewriter-skip::after {
+    content: '»';
+    font-size: 20px;
+  }
+}
+@media (max-width: 359px) and (orientation: portrait) {
+  #dialogue,
+  #dialogue.compact {
+    height: 64svh;
+  }
+  #dialogue .dialogue-body {
+    grid-template-rows: 44px minmax(0, 1fr) 44px 148px;
+  }
+}
+@media (orientation: landscape) and (max-height: 550px) {
+  #dialogue,
+  #dialogue.compact {
+    height: calc(100% - 16px);
+    width: min(56%, 620px);
+  }
+  #dialogue .dialogue-body {
+    grid-template-rows: 44px minmax(0, 1fr) 36px 110px;
+  }
+}
+#dialogue[data-staging] #dialogue-history-toggle,
+#dialogue[data-staging] #typewriter-skip {
+  display: none;
+}
+#stage-skip {
+  min-height: 44px;
+  padding: 4px 8px;
+  font-size: 12px;
+}

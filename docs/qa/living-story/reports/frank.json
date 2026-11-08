@@ -1,0 +1,176 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "height": 900,
+      "paused": {
+        "activity": "sitting",
+        "elevation": 0,
+        "x": 485,
+        "y": 205,
+        "pets": 0,
+        "meals": 0,
+        "games": 0,
+        "valid": true,
+        "nodes": 32,
+        "fps": 58.875,
+        "simulationMs": 156.51333333333335
+      },
+      "eating": {
+        "activity": "eating",
+        "elevation": 0,
+        "x": 512.9641321281036,
+        "y": 210.9923140274508,
+        "pets": 1,
+        "meals": 1,
+        "games": 0,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60.2760009765625,
+        "simulationMs": 3723.0433333333335
+      },
+      "resting": {
+        "activity": "resting",
+        "elevation": 85,
+        "x": 438.00093252211593,
+        "y": 210.99999990438974,
+        "pets": 1,
+        "meals": 1,
+        "games": 1,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60.50982326149824,
+        "simulationMs": 13755.943333333324
+      },
+      "loaded": {
+        "activity": "sitting",
+        "elevation": 0,
+        "x": 485,
+        "y": 205,
+        "pets": 1,
+        "meals": 1,
+        "games": 1,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60,
+        "simulationMs": 14.983666666666664
+      },
+      "errors": []
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "paused": {
+        "activity": "sitting",
+        "elevation": 0,
+        "x": 485,
+        "y": 205,
+        "pets": 0,
+        "meals": 0,
+        "games": 0,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60.578125,
+        "simulationMs": 141.47493333333335
+      },
+      "eating": {
+        "activity": "eating",
+        "elevation": 0,
+        "x": 512.9633694422206,
+        "y": 210.99215059476157,
+        "pets": 1,
+        "meals": 1,
+        "games": 0,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60.53694272041321,
+        "simulationMs": 5291.25493333333
+      },
+      "resting": {
+        "activity": "resting",
+        "elevation": 85,
+        "x": 438.0001698531753,
+        "y": 210.9999999822147,
+        "pets": 1,
+        "meals": 1,
+        "games": 1,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60.57417077829672,
+        "simulationMs": 15290.894933333322
+      },
+      "loaded": {
+        "activity": "sitting",
+        "elevation": 0,
+        "x": 485,
+        "y": 205,
+        "pets": 1,
+        "meals": 1,
+        "games": 1,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60,
+        "simulationMs": 14.990266666666667
+      },
+      "errors": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "paused": {
+        "activity": "sitting",
+        "elevation": 0,
+        "x": 485,
+        "y": 205,
+        "pets": 0,
+        "meals": 0,
+        "games": 0,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60.390625,
+        "simulationMs": 139.88666666666663
+      },
+      "eating": {
+        "activity": "eating",
+        "elevation": 0,
+        "x": 512.9638778994758,
+        "y": 210.99225954988768,
+        "pets": 1,
+        "meals": 1,
+        "games": 0,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60.60933208465576,
+        "simulationMs": 5173.036666666667
+      },
+      "resting": {
+        "activity": "resting",
+        "elevation": 85,
+        "x": 438.00093829909235,
+        "y": 210.99999990311525,
+        "pets": 1,
+        "meals": 1,
+        "games": 1,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60.52313574571622,
+        "simulationMs": 15172.626666666658
+      },
+      "loaded": {
+        "activity": "sitting",
+        "elevation": 0,
+        "x": 485,
+        "y": 205,
+        "pets": 1,
+        "meals": 1,
+        "games": 1,
+        "valid": true,
+        "nodes": 32,
+        "fps": 60,
+        "simulationMs": 13.317000000000007
+      },
+      "errors": []
+    }
+  ],
+  "errors": []
+}

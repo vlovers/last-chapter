@@ -6,14 +6,19 @@ export const annaVisit: DialogueStory = {
   nodes: [
     {
       id: 'arrival',
+      staging: [
+        { kind: 'move', actor: 'visitor', x: 240, y: 235 },
+        { kind: 'face', actor: 'visitor', direction: 'left' },
+      ],
       speaker: 'Оповідач',
-      text: 'Після обіду до книгарні заходить жінка з полотняною торбою, повною зошитів. Вона обережно струшує дощ із парасольки й усміхається, побачивши дитячі книжки.',
+      text: 'Біля прилавка Анна перехоплює важку торбу із зошитами. На сонці сохне складена парасолька. Вона дивиться на дитячі книжки: «Мені потрібно шість однакових. Або інший план на завтрашнє читання».',
       options: [{ id: 'hello', label: 'Привітатися', next: 'hello' }],
     },
     {
       id: 'hello',
+      mood: 'sad',
       speaker: 'Анна',
-      text: '«Я Анна Гейл, викладаю в місцевій школі. У нас завтра читання, а шість примірників кудись зникли. Джуліан підозрює бібліотекарку, Емма — Джуліана. Я підозрюю шафу в учительській, але доказів поки немає».',
+      text: '«Я Анна Гейл, зі школи. У нас завтра читання, а шість примірників зникли. Емма хоче детектив, Джуліан — дракона, а я вже встигла пообіцяти обом, що книжка їм сподобається». Вона зітхає. «Є щось, за що мені завтра не доведеться вибачатися?»',
       textWhen: [
         {
           requires: ['anna_school_theater_hero_heard'],
@@ -48,6 +53,7 @@ export const annaVisit: DialogueStory = {
         },
         {
           id: 'anna-reading-children',
+          topic: 'anna-class-readers',
           label: '«А що діти самі хочуть читати?»',
           next: 'school',
         },
@@ -83,7 +89,12 @@ export const annaVisit: DialogueStory = {
           requires: ['thomas_chairs_discussed'],
           unless: ['anna_thomas_chairs_followup_discussed'],
         },
-        { id: 'school', label: '«Що люблять читати ваші учні?»', next: 'school' },
+        {
+          id: 'school',
+          topic: 'anna-class-readers',
+          label: '«Що люблять читати ваші учні?»',
+          next: 'school',
+        },
         {
           id: 'anna-school-funny',
           label: '«А який найдивніший відгук на книжку ти отримувала?»',
@@ -383,6 +394,7 @@ export const annaVisit: DialogueStory = {
     },
     {
       id: 'end',
+      staging: [{ kind: 'exit', actor: 'visitor' }],
       speaker: 'Оповідач',
       text: 'Анна складає список до торби й підхоплює парасолю. «Здається, до школи ще встигну без нового дощу». За вікном двоє школярів стрибають через калюжу. Вона спиняється на порозі: «Максе, портфель — не човен!»',
       options: [],

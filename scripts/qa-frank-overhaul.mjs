@@ -1,3 +1,4 @@
+import { chooseById } from './qa-dialogue.mjs';
 import { launchQaBrowser } from './qa-browser.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -73,13 +74,7 @@ const openRoamingFrank = async () => {
   // The game must walk the player to the cat and open the real conversation.
   await heading.waitFor({ timeout: 30000 });
 };
-const choose = async (id) => {
-  await page.waitForTimeout(250);
-  assert.ok((await page.locator('#choices button').count()) <= 4, 'Four Frank choices maximum');
-  const button = page.locator(`#choices button[data-choice="${id}"]`);
-  if (touch) await button.tap();
-  else await button.click();
-};
+const choose = (id) => chooseById(page, id, { touch });
 const waitActivity = async (name, simulationBudget = 15000) => {
   const initial = await cat();
   const end = Date.now() + 90000;

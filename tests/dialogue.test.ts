@@ -153,7 +153,9 @@ describe('Ukrainian dialogue slice', () => {
   });
 
   it('uses Ukrainian prose and dialogue choices', () => {
-    expect(currentNode(millerVisit, startDialogue(millerVisit)).text).toContain('Дзвіночок');
+    expect(currentNode(millerVisit, startDialogue(millerVisit)).text).toContain(
+      'Мені потрібен детектив',
+    );
     expect(availableOptions(millerVisit, startDialogue(millerVisit))).toHaveLength(1);
   });
 });

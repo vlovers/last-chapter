@@ -1,0 +1,175 @@
+{
+  "environment": "Headless desktop Chrome, mobile viewport; CPU throttling is a simulation, not a physical phone benchmark.",
+  "results": [
+    {
+      "cpuThrottle": 1,
+      "width": 390,
+      "height": 844,
+      "seconds": 10,
+      "minFps": 58.375,
+      "medianFps": 59.9073486328125,
+      "maxFps": 60.51365327835083,
+      "navigation": {
+        "before": {
+          "playerX": 171,
+          "cameraX": 74,
+          "nodes": 32,
+          "failed": false
+        },
+        "after": {
+          "playerX": 395.9909999999982,
+          "cameraX": 298,
+          "nodes": 32,
+          "failed": false
+        }
+      },
+      "samples": [
+        {
+          "fps": 58.375,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 58.78125,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 59.3359375,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 59.501953125,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 59.87646484375,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 59.9073486328125,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.180511474609375,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.13538360595703,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.35153770446777,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.51365327835083,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        }
+      ]
+    },
+    {
+      "cpuThrottle": 4,
+      "width": 390,
+      "height": 844,
+      "seconds": 10,
+      "minFps": 59.3544921875,
+      "medianFps": 60.22935104370117,
+      "maxFps": 60.47265625,
+      "navigation": {
+        "before": {
+          "playerX": 171,
+          "cameraX": 74,
+          "nodes": 32,
+          "failed": false
+        },
+        "after": {
+          "playerX": 395.9909999999982,
+          "cameraX": 298,
+          "nodes": 32,
+          "failed": false
+        }
+      },
+      "samples": [
+        {
+          "fps": 60.0625,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.296875,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.47265625,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 59.3544921875,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 59.765869140625,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.07440185546875,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.30580139160156,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.22935104370117,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.17201328277588,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        },
+        {
+          "fps": 60.37900996208191,
+          "nodes": 32,
+          "decorReduced": false,
+          "failed": false
+        }
+      ]
+    }
+  ]
+}

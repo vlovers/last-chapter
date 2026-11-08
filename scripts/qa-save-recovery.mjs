@@ -1,3 +1,4 @@
+import { chooseById } from './qa-dialogue.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -71,7 +72,7 @@ try {
     // Exercise an actual story write, not just the constructor's storage cleanup.
     await page.locator('#story-continue').click();
     await page.waitForTimeout(240);
-    await page.locator('#choices [data-choice="greet"]').click();
+    await chooseById(page, 'greet');
     await page.getByRole('heading', { name: 'Пані Міллер', exact: true }).waitFor();
     const afterChoice = await page.evaluate(
       ({ saveKey, serviceKey, optionalKeys }) => ({
@@ -97,7 +98,7 @@ try {
       await page.locator('#story-continue').click();
       for (const id of ['books', 'orchard', 'leave-orchard', '__advance']) {
         await page.waitForTimeout(240);
-        await page.locator(`#choices [data-choice="${id}"]`).click();
+        await chooseById(page, id);
       }
       await page.keyboard.press('Escape');
       await page.getByRole('button', { name: 'Поговорити з Марою', exact: true }).click();
@@ -173,12 +174,12 @@ try {
     await page.waitForTimeout(240);
     if (damage === 'future') {
       // The old client must start a disposable chapter, not mutate the future save.
-      await page.locator('#choices [data-choice="greet"]').click();
+      await chooseById(page, 'greet');
       await page.locator('#save-warning:not([hidden])').waitFor();
       assert.equal(await page.evaluate((key) => localStorage.getItem(key), SAVE_KEY), actual.save);
     } else {
       // The saved greeting must resume at Miller's next reply, not replay arrival.
-      await page.locator('#choices [data-choice="books"]').click();
+      await chooseById(page, 'books');
       await page.waitForFunction(
         (key) => JSON.parse(localStorage.getItem(key) ?? '{}').node === 'order',
         SAVE_KEY,
@@ -222,7 +223,7 @@ try {
     await page.locator('#save-warning:not([hidden])').waitFor();
     await page.locator('#story-continue').click();
     await page.waitForTimeout(240);
-    await page.locator('#choices [data-choice="greet"]').click();
+    await chooseById(page, 'greet');
     await page.getByRole('heading', { name: 'Пані Міллер', exact: true }).waitFor();
     await page.locator('#save-warning:not([hidden])').waitFor();
     // Denied storage stays denied after a full navigation, without a crash.
@@ -231,7 +232,7 @@ try {
     await page.locator('#save-warning:not([hidden])').waitFor();
     await page.locator('#story-continue').click();
     await page.waitForTimeout(240);
-    await page.locator('#choices [data-choice="greet"]').click();
+    await chooseById(page, 'greet');
     await page.locator('#save-warning:not([hidden])').waitFor();
     assert.deepEqual(errors, [], 'Browser errors with blocked storage, including reload');
     console.log('PASS: blocked storage warns and dialogue remains interactive after reload');
