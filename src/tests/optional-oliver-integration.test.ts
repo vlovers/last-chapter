@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { startChapter, startSecondDay, type ChapterState } from '../game/chapter';
+import { startChapter, type ChapterState } from '../game/chapter';
+import { irisVisit } from '../content/iris';
+import { startDialogue } from '../game/dialogue';
 import {
   OLIVER_COMPLETED,
   canStartOliver,
@@ -10,7 +12,7 @@ import {
 } from '../game/optional-oliver';
 import { decodeSave, encodeSave } from '../game/save';
 
-const dayTwo = () => startSecondDay({ ...startChapter(), stage: 'complete' });
+const dayTwo = (): ChapterState => ({ ...startChapter(), stage: 'iris', dialogue: startDialogue(irisVisit) });
 
 describe('optional Oliver side conversation integration', () => {
   it('is unavailable before Day 2 and cannot be started twice', () => {
