@@ -42,6 +42,16 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
   const refresh = () => {
     trigger.hidden = !story.oliverAvailable;
     if (!story.oliverAvailable) {
+      // A story transition can invalidate the side conversation while it owns focus.
+      // Move focus out before hiding the panel so keyboard users are not stranded.
+      if (panel.contains(document.activeElement)) {
+        const fallback = document.querySelector<HTMLElement>('#story-continue');
+        if (fallback && !fallback.hidden && !fallback.hasAttribute('disabled')) {
+          fallback.focus();
+        } else {
+          document.querySelector<HTMLElement>('.story-toolbar-actions button:not([hidden])')?.focus();
+        }
+      }
       panel.hidden = true;
       trigger.setAttribute('aria-expanded', 'false');
       session = null;
@@ -56,6 +66,11 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
   };
 
   const paint = () => {
+    // Never paint stale choices after a Day 2 transition or save reset.
+    if (!story.oliverAvailable) {
+      refresh();
+      return;
+    }
     if (!session) return;
     const current = oliverLine(session);
     line.textContent = current.speaker + ': «' + current.text + '»';
@@ -65,7 +80,10 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
       finish.type = 'button';
       finish.textContent = 'Завершити розмову';
       finish.addEventListener('click', () => {
-        if (!session) return;
+        if (!session || !story.oliverAvailable) {
+          refresh();
+          return;
+        }
         story.completeOliver(session);
         dismiss();
         window.__lastChapterRefresh?.();
@@ -77,7 +95,10 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
         button.type = 'button';
         button.textContent = option.label;
         button.addEventListener('click', () => {
-          if (!session) return;
+          if (!session || !story.oliverAvailable) {
+            refresh();
+            return;
+          }
           session = chooseOliver(session, option.id);
           paint();
         });
