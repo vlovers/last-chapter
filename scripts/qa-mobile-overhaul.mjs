@@ -528,6 +528,12 @@ try {
       await page.keyboard.press('Escape');
       assert.equal(await page.locator('#story-panel[hidden]').count(), 1);
     }
+    // A day transition or reload can leave a dialogue open. Close it through the
+    // actual UI control before checking whether the toolbar receives pointer input.
+    if (await page.locator('#dialogue:not([hidden])').count()) {
+      await page.locator('#close-dialogue').click();
+      await page.locator('#dialogue[hidden]').waitFor();
+    }
     // The continuation must be physically tappable after closing a conversation.
     // A visible button can still sit beneath the stage or an unclosed overlay.
     const continueHitTarget = await page.evaluate(() => {
@@ -688,7 +694,10 @@ try {
     } else {
       await choose(page, '__advance');
     }
-    await page.keyboard.press('Escape');
+    if (await page.locator('#dialogue:not([hidden])').count()) {
+      await page.locator('#close-dialogue').click();
+      await page.locator('#dialogue[hidden]').waitFor();
+    }
     if (nextDay) {
       // A day transition must survive a full mobile page reload, not just
       // in-memory dialogue state. Check the visible choices and order ledger.
@@ -721,7 +730,8 @@ try {
       assert.deepEqual(restored, checkpoint, `Day transition ${plan.stage} must restore`);
       await page.locator('#story-continue').tap();
       await page.locator('#dialogue:not([hidden])').waitFor();
-      await page.keyboard.press('Escape');
+      await page.locator('#close-dialogue').click();
+      await page.locator('#dialogue[hidden]').waitFor();
     }
   }
   assert.deepEqual(visited, [
