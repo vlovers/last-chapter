@@ -2815,3 +2815,31 @@ main {
   position: relative;
   z-index: 1;
 }
+
+/* Portrait dialogue: reserve a real scroll viewport for choices. Earlier
+   compact styles set a prose minimum that could push answers above their
+   clipping box and make them untappable. */
+@media (orientation: portrait) and (max-width: 700px) {
+  #dialogue .dialogue-body {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #dialogue .dialogue-body > #dialogue-text {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: min(15svh, 120px);
+    overflow-y: auto;
+  }
+  #dialogue .dialogue-body > #dialogue-pages {
+    flex: 0 0 auto;
+  }
+  #dialogue .dialogue-body > #choices {
+    flex: 1 1 auto;
+    min-height: 88px;
+    max-height: none;
+    overflow-y: auto;
+    scroll-padding-block: 8px;
+  }
+}
