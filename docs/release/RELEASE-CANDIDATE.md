@@ -1,5 +1,29 @@
 # Release candidate verification
 
+> **Current status — 2026-11-08 (read this before historical sections):** The implementation of Living Story v0.2 was merged into `main` via [PR #41](https://github.com/vlovers/last-chapter/pull/41) at [`46bfb96`](https://github.com/vlovers/last-chapter/commit/46bfb96da0fe11189d6736dd45703d5b301c5924). Its [PR-head CI #2547](https://github.com/vlovers/last-chapter/actions/runs/42440820434) passed **15/15** jobs, including mobile, save-recovery, finale and narrative journeys. That does **not** prove CI on subsequent `main` commits, physical-device acceptance, deployment or a public v0.2 release. The package version is still `0.1.0`. [Release acceptance #42](https://github.com/vlovers/last-chapter/issues/42) tracks the remaining independent device/browser, accessibility, Ukrainian editorial, playtime, license, versioning and deployment checks. **Do not tag or deploy v0.2 solely from this historical RC record.**
+
+## How to interpret this record
+
+Sections A–I below preserve the chronological QA evidence and SHA-specific conclusions from October–November 2026. Statements such as “PR #12 remains Draft”, “not ready” and “CI pending” refer to their **historical branch heads**; they are not current instructions to undo or re-merge work already accepted into `main`. Do not rewrite or discard the original evidence. For the current product status see [README](../../README.md) and [roadmap](../ROADMAP.md); for release approval use [#42](https://github.com/vlovers/last-chapter/issues/42).
+
+## Current release evidence and outstanding gates
+
+| Gate | Evidence / state |
+| --- | --- |
+| Living Story integration | PR #41 merged, `46bfb96` |
+| PR-head automated QA | CI #2547: 15/15 passed; SHA-specific only |
+| Exact release/tag commit CI | **Not verified** |
+| Physical iPhone/Safari and Android/Chrome | **Not verified** |
+| Desktop Safari/Firefox, keyboard, screen reader, zoom | **Not verified** |
+| Independent Ukrainian editorial review | **Not verified** |
+| Measured first-run and replay duration | **Not verified** |
+| Distribution licenses / attribution | **Not verified** |
+| Version, tag and public deployment | **Not completed** (`package.json`: `0.1.0`) |
+
+**Release decision:** implementation integrated; **v0.2 publication remains on hold** until the evidence in issue #42 is recorded and reviewed. This file is an audit trail, not a release authorization.
+
+---
+
 Starting remote: `57b0192d6a4727d7bfde85b3ab4b71abe06e668a`.
 Stack: PR #9 → #10 → #12, unchanged. Isolated worktree; the original checkout's
 untracked files are untouched. Earlier narrative V2 work is retained.
