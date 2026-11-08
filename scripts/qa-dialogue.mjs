@@ -54,6 +54,29 @@ export async function chooseById(page, id, { touch = false } = {}) {
         obstruction: top?.outerHTML.slice(0, 250) ?? null,
         owner: owner?.id || owner?.className || null,
         point: { x: Math.round(x), y: Math.round(y) },
+        geometry: Object.fromEntries(
+          ['#dialogue', '.dialogue-body', '#dialogue-text', '#dialogue-pages', '#choices']
+            .map((selector) => {
+              const node = document.querySelector(selector);
+              if (!node) return null;
+              const box = node.getBoundingClientRect();
+              const style = getComputedStyle(node);
+              return [
+                selector,
+                {
+                  x: Math.round(box.x),
+                  y: Math.round(box.y),
+                  width: Math.round(box.width),
+                  height: Math.round(box.height),
+                  display: style.display,
+                  position: style.position,
+                  overflow: style.overflow,
+                  zIndex: style.zIndex,
+                },
+              ];
+            })
+            .filter(Boolean),
+        ),
       };
     });
     assert.ok(hit.hit, 'Dialogue answer is obscured: ' + JSON.stringify(hit));
