@@ -486,7 +486,7 @@ export function drawEnvironment(scene) {
   // Gentle vignette at the perimeter, leaving the central reading area legible.
   const vignette = scene.add.graphics().setDepth(353);
   vignette.fillStyle(0x110e19, 0.18);
-  vign.fillRect(12, 9, WIDTH - 24, 7);
+  vignette.fillRect(12, 9, WIDTH - 24, 7);
   vignette.fillRect(12, HEIGHT - 16, WIDTH - 24, 7);
   vignette.fillRect(12, 9, 7, HEIGHT - 18);
   vignette.fillRect(WIDTH - 19, 9, 7, HEIGHT - 18);
