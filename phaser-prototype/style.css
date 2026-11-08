@@ -1660,3 +1660,47 @@ body {
     background: #20322b;
   }
 }
+
+/* Narrow phones: prioritize readable, full-width dialogue choices. */
+@media (max-width: 480px) and (orientation: portrait) {
+  #dialogue,
+  #dialogue.compact {
+    width: calc(100% - 20px);
+    inset-inline: 10px;
+    border-radius: 10px;
+  }
+  #dialogue .dialogue-body {
+    grid-template-rows: 44px minmax(0, 1fr) 40px minmax(148px, 188px);
+  }
+  #dialogue #choices {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+    padding: 3px 2px 5px;
+  }
+  #dialogue #choices button {
+    width: 100%;
+    min-height: 46px;
+    padding: 9px 12px 9px 40px;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  #dialogue #choices button::before {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  #dialogue .dialogue-title {
+    padding-left: 54px;
+  }
+  #dialogue #speaker {
+    font-size: 21px;
+  }
+}
+@media (max-width: 359px) and (orientation: portrait) {
+  #dialogue .dialogue-body {
+    grid-template-rows: 42px minmax(0, 1fr) 40px minmax(132px, 148px);
+  }
+  #dialogue #choices button {
+    min-height: 44px;
+    font-size: 13px;
+  }
+}
