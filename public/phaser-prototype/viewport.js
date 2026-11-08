@@ -1,7 +1,11 @@
 // CSS pixels and native world pixels stay separate. Zoom is always an integer.
 export function viewportPlan(width, height) {
+  // A landscape phone is wide but short: zooming from width alone crops the room.
+  // Use a single world pixel per CSS pixel so the full 640px room fits horizontally.
   const zoom =
-    width < 1024
+    width > height && height < 550 && width >= 640 && width < 1024
+      ? 1
+      : width < 1024
       ? Math.max(1, Math.floor(width / (width < 600 ? 180 : 300)))
       : Math.max(1, Math.floor(Math.min(width / 640, height / 360)));
   return { zoom, width: width / zoom, height: height / zoom };
