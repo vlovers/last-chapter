@@ -59,10 +59,12 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
   };
 
   const dismiss = () => {
-    panel.hidden = true;
-    trigger.setAttribute('aria-expanded', 'false');
+    // Refresh eligibility before hiding the panel: after completion the trigger
+    // is no longer focusable, so refresh must move focus to the story controls.
     refresh();
     if (!trigger.hidden) trigger.focus();
+    panel.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
   };
 
   const paint = () => {
@@ -109,7 +111,10 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
   };
 
   trigger.addEventListener('click', () => {
-    if (!story.oliverAvailable) return;
+    if (!story.oliverAvailable) {
+      refresh();
+      return;
+    }
     session ??= story.beginOliver();
     panel.hidden = false;
     trigger.setAttribute('aria-expanded', 'true');
