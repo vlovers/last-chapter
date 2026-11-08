@@ -2288,3 +2288,95 @@ main {
 @media (prefers-reduced-motion: reduce) {
   #dialogue *, #story-panel * { transition: none !important; animation: none !important; }
 }
+
+/* QA follow-up from desktop preview: keep every choice visible and the card balanced. */
+#dialogue {
+  height: auto;
+  min-height: 258px;
+  max-height: min(38svh, 360px);
+  grid-template-columns: 132px minmax(0, 1fr);
+  align-items: center;
+  overflow: visible;
+}
+#dialogue .dialogue-body {
+  min-height: 220px;
+  grid-template-rows: 42px minmax(64px, 1fr) auto;
+  align-items: stretch;
+}
+#dialogue #dialogue-text {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+#dialogue #choices {
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #806091 transparent;
+  padding: 4px 4px 4px 0;
+}
+#dialogue #choices button {
+  flex: 0 0 auto;
+  min-height: 48px;
+}
+@media (max-width: 900px) {
+  #dialogue {
+    width: min(900px, calc(100% - 32px));
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 14px;
+  }
+  #dialogue .portrait-frame {
+    width: 100px;
+    height: 126px;
+  }
+  #dialogue .dialogue-body {
+    grid-template-columns: minmax(0, 1fr) minmax(190px, 38%);
+    column-gap: 14px;
+  }
+}
+@media (max-width: 700px) {
+  #dialogue {
+    height: auto;
+    min-height: 0;
+    max-height: min(58svh, 520px);
+    grid-template-columns: 64px minmax(0, 1fr);
+    align-items: start;
+    overflow: hidden;
+  }
+  #dialogue .portrait-frame {
+    width: 62px;
+    height: 82px;
+    align-self: start;
+  }
+  #dialogue .dialogue-body {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(44px, auto) minmax(0, 1fr) auto;
+    overflow: hidden;
+  }
+  #dialogue .dialogue-title { grid-column: 1; grid-row: 1; }
+  #dialogue #dialogue-text {
+    grid-column: 1;
+    grid-row: 2;
+    max-height: 15svh;
+    overflow-y: auto;
+  }
+  #dialogue #choices {
+    grid-column: 1;
+    grid-row: 3;
+    min-height: 0;
+    max-height: 23svh;
+    overflow-y: auto;
+  }
+  #dialogue .dialogue-body > small { grid-column: 1; grid-row: 4; }
+}
+@media (max-height: 760px) and (min-width: 701px) {
+  #dialogue {
+    min-height: 220px;
+    max-height: 36svh;
+    bottom: 14px;
+    padding-block: 12px;
+  }
+  #dialogue .dialogue-body { min-height: 190px; }
+  #dialogue #choices button { min-height: 42px; padding-block: 8px; }
+}
