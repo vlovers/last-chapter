@@ -2566,3 +2566,53 @@ main {
   #dialogue .dialogue-body { grid-template-columns: minmax(0, 1fr) minmax(165px, 48%); }
   #dialogue #choices button { min-height: 34px; }
 }
+
+/* Screenshot QA: restore contrast and reserve enough room for the reading panel. */
+#dialogue #dialogue-text,
+#dialogue #dialogue-text p,
+#dialogue .dialogue-body,
+#dialogue .dialogue-body p {
+  color: #f0e8f4;
+}
+#dialogue #dialogue-text strong,
+#dialogue #dialogue-text em {
+  color: #fff6ff;
+}
+@media (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
+  #stage {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) minmax(148px, 44%);
+    gap: 0;
+    padding: 4px max(8px, env(safe-area-inset-right)) 0 max(8px, env(safe-area-inset-left));
+  }
+  #game {
+    grid-row: 1;
+    height: 100%;
+    width: 100%;
+    min-height: 0;
+    border-radius: 8px 8px 0 0;
+  }
+  #dialogue {
+    position: relative;
+    grid-row: 2;
+    justify-self: center;
+    align-self: stretch;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    transform: none;
+    margin: 0;
+    width: min(100%, 850px);
+    height: 100%;
+    max-height: none;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 -6px 22px #08070e7a;
+  }
+  #dialogue[hidden] { display: none !important; }
+  #stage:has(#dialogue[hidden]) { grid-template-rows: minmax(0, 1fr); }
+  #dialogue .dialogue-body { min-height: 0; }
+  #dialogue #dialogue-text { color: #f0e8f4; }
+  #dialogue #choices button { min-height: 36px; }
+  #context-action { bottom: 12px; }
+  #toast { bottom: 6px; }
+}
