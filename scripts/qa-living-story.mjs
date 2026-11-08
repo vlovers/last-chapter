@@ -252,8 +252,14 @@ try {
   await shot('1440-speaking-b');
   assert.notEqual(pose1.angle, pose2.angle, 'Conversational nod is visible over time');
   assert.equal(pose1.direction, 'left', 'Visitor turns to the bookseller');
-  await chooseById(page, 'finish');
-  await page.locator('#dialogue[data-staging]').waitFor();
+  // chooseById waits until staging is over, so it cannot test interruption mid-exit.
+  // Click the authored choice directly and assert that the exit timeline actually starts.
+  await waitForDialogue(page);
+  const finish = page.locator('#choices button[data-choice="finish"]');
+  await revealAnswer(page, finish);
+  await finish.click();
+  await page.locator('#dialogue[data-staging]').waitFor({ timeout: 5000 });
+  assert.equal((await sceneState()).staging, true, 'Exit timeline starts before interruption');
   await page.keyboard.press('Escape');
   assert.equal((await sceneState()).staging, false, 'Closing during an exit cancels the timeline');
   assert.equal((await sceneState()).visible, false, 'Interrupted exit settles the departed pose');
