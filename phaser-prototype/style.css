@@ -2685,3 +2685,25 @@ main {
     visibility: visible;
   }
 }
+
+/* Mobile portrait: the dialogue dock must not resize between answer pages. */
+@media (orientation: portrait) and (max-width: 700px) {
+  #dialogue,
+  #dialogue.compact {
+    box-sizing: border-box;
+    height: min(58svh, 470px);
+    min-height: 0;
+    max-height: min(58svh, 470px);
+    overflow: hidden;
+  }
+  #dialogue .dialogue-body {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+  #dialogue #choices {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
