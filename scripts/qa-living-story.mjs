@@ -254,8 +254,9 @@ try {
   assert.equal(pose1.direction, 'left', 'Visitor turns to the bookseller');
   // chooseById waits until staging is over, so it cannot test interruption mid-exit.
   // Click the authored choice directly and assert that the exit timeline actually starts.
-  await waitForDialogue(page);
+  await readReply(page);
   const finish = page.locator('#choices button[data-choice="finish"]');
+  assert.equal(await finish.count(), 1, 'Authored exit choice exists after reading the reply');
   await revealAnswer(page, finish);
   await finish.click();
   await page.locator('#dialogue[data-staging]').waitFor({ timeout: 5000 });
