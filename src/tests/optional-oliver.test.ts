@@ -30,7 +30,18 @@ describe('optional Oliver dialogue', () => {
     expect(state.flags).toEqual([]);
   });
 
-  it('never presents more than four choices', () => {\n    expect(Math.max(...oliverUnreadBook.nodes.map((node) => node.options.length))).toBeLessThanOrEqual(4);\n  });\n\n  it('keeps all node and choice IDs unique', () => {\n    const nodeIds = oliverUnreadBook.nodes.map((node) => node.id);\n    const optionIds = oliverUnreadBook.nodes.flatMap((node) => node.options.map((option) => option.id));\n    expect(new Set(nodeIds).size).toBe(nodeIds.length);\n    expect(new Set(optionIds).size).toBe(optionIds.length);\n  });\n\n  it('can enter through the joke response', () => {
+  it('never presents more than four choices', () => {
+    expect(Math.max(...oliverUnreadBook.nodes.map((node) => node.options.length))).toBeLessThanOrEqual(4);
+  });
+
+  it('keeps all node and choice IDs unique', () => {
+    const nodeIds = oliverUnreadBook.nodes.map((node) => node.id);
+    const optionIds = oliverUnreadBook.nodes.flatMap((node) => node.options.map((option) => option.id));
+    expect(new Set(nodeIds).size).toBe(nodeIds.length);
+    expect(new Set(optionIds).size).toBe(optionIds.length);
+  });
+
+  it('can enter through the joke response', () => {
     const state = play('oliver-unread-joke', 'oliver-unread-joke-continue');
     expect(currentNode(oliverUnreadBook, state).id).toBe('oliver-unread-game');
   });
