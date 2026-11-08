@@ -26,6 +26,9 @@ export async function chooseById(page, id, { touch = false } = {}) {
       : page.locator('#choices button[data-choice="__more_choices"]');
     assert.equal(await target.count(), 1, 'Choice reachable through pages: ' + id);
     await revealAnswer(page, target);
+    // On narrow screens the answer list is independently scrollable. Bring the
+    // selected answer into view before checking its hit target and tapping it.
+    await target.scrollIntoViewIfNeeded();
     const box = await target.boundingBox();
     const viewport = page.viewportSize();
     assert.ok(
