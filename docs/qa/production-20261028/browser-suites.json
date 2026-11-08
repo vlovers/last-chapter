@@ -1,0 +1,22 @@
+[
+  {
+    "suite": "legacy",
+    "exitCode": 0,
+    "status": "passed"
+  },
+  {
+    "suite": "polish",
+    "exitCode": 0,
+    "status": "passed"
+  },
+  {
+    "suite": "stabilization",
+    "exitCode": 0,
+    "status": "passed"
+  },
+  {
+    "suite": "frank",
+    "exitCode": 0,
+    "status": "passed"
+  }
+]

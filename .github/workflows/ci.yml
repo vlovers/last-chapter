@@ -25,6 +25,10 @@ jobs:
           node-version-file: .nvmrc
       - name: Install reproducibly
         run: npm ci --no-audit --no-fund
+      - name: Governance contract and regression tests
+        run: |
+          node --test test/check-governance.test.mjs
+          node scripts/check-governance.mjs
       - name: Format
         run: npm run format:check
       - name: Lint
@@ -77,7 +81,9 @@ jobs:
           - name: save-recovery
             command: npm run test:browser:save-recovery
           - name: ux-ui
-            command: npm run test:browser:ux
+            # Reuse the existing Chromium fixture/job for the real continue hit-target
+            # regression, avoiding another expensive browser matrix shard.
+            command: npm run test:browser:ux && node scripts/qa-living-story.mjs
           - name: performance
             command: node scripts/qa-bookshop-performance.mjs
     steps:

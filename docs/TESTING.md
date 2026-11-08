@@ -95,3 +95,7 @@ exit code even when the browser transport never closes.
 See the [executed test/UX report](qa/stabilization/README.md) and
 [narrative integration plan](integration/NARRATIVE-READINESS.md). Future content
 proposals are not counted as implemented scenes.
+
+## Living Story continuation and responsive regression
+
+The existing `ux-ui` browser CI matrix entry runs `npm run test:browser:ux` and then `node scripts/qa-living-story.mjs` against the same Vite server and pinned Chromium. This deliberately reuses the existing job and artifact upload instead of spawning an extra matrix job or workflow. The second script performs a **normal Playwright click** on `#story-continue`, checks its center against `document.elementFromPoint` (no `force: true`), and verifies desktop, narrow mobile, tablet and landscape layouts, dialogue paging, save/reload, staged character motion and weather. Screenshots and JSON evidence go to `QA_OUTPUT` and are uploaded as `ux-ui-browser-qa` even if a test fails. A green check must be confirmed for the exact commit SHA; historical screenshots do not constitute current release acceptance. If the combined job approaches its 20-minute limit, optimize the fixture or split the invocation within existing jobs rather than adding another CI shard.
