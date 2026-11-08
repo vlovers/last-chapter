@@ -256,7 +256,16 @@ try {
   // Click the authored choice directly and assert that the exit timeline actually starts.
   await readReply(page);
   const finish = page.locator('#choices button[data-choice="finish"]');
-  assert.equal(await finish.count(), 1, 'Authored exit choice exists after reading the reply');
+  // The hub renders only the current choice batch; advance authored batches
+  // without selecting the exit through chooseById (which waits for staging).
+  for (let batch = 0; batch < 20 && !(await finish.count()); batch++) {
+    const more = page.locator('#choices button[data-choice="__more_choices"]');
+    assert.equal(await more.count(), 1, 'Exit remains reachable through choice batches');
+    await revealAnswer(page, more);
+    await more.click();
+    await waitForDialogue(page);
+  }
+  assert.equal(await finish.count(), 1, 'Authored exit choice exists in a reachable batch');
   await revealAnswer(page, finish);
   await finish.click();
   await page.locator('#dialogue[data-staging]').waitFor({ timeout: 5000 });
