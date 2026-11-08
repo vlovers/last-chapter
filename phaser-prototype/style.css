@@ -1602,3 +1602,61 @@ body {
     line-height: 1.5;
   }
 }
+
+/* Welcome and in-world actions use the same bookshop design language. */
+.welcome {
+  width: min(520px, calc(100% - 32px));
+  padding: clamp(24px, 4vw, 42px);
+  border: 1px solid #ad9572;
+  border-radius: 12px;
+  background: linear-gradient(155deg, #263c35f5, #182821f7);
+  box-shadow: 0 22px 65px #07100dc2;
+}
+.welcome .eyebrow {
+  color: #e7c58e;
+}
+.welcome h2 {
+  color: #fff3d9;
+  line-height: 1.16;
+  text-wrap: balance;
+}
+.welcome p {
+  color: #e7d7bb;
+}
+#enter {
+  border-radius: 7px;
+  box-shadow: 0 3px 0 #9e7a4d;
+}
+#enter:hover:not(:disabled),
+#enter:focus-visible:not(:disabled) {
+  background: #f3ce92;
+  border-color: #fff1cf;
+}
+#context-action {
+  border-radius: 8px;
+  background: #22362ef2;
+  box-shadow: 0 5px 20px #07120e9c;
+}
+#toast {
+  border: 1px solid #7b775f;
+  border-radius: 7px;
+  background: #1e3029ed;
+  color: #f7ebd7;
+}
+@media (max-width: 700px) {
+  .welcome {
+    padding: 24px 20px;
+  }
+  .welcome h2 {
+    font-size: clamp(26px, 7vw, 34px);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .welcome,
+  #context-action,
+  #toast,
+  #objective,
+  .hud button {
+    background: #20322b;
+  }
+}
