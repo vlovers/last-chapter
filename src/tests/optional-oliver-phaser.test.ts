@@ -47,6 +47,26 @@ describe('Phaser Oliver facade and persisted reload', () => {
     expect(() => story.beginOliver()).toThrow();
   });
 
+
+  it('does not offer Oliver while a future-version save is awaiting recovery', () => {
+    const storage = memoryStorage({ [SAVE_KEY]: JSON.stringify({ version: 999, chapter: dayTwo() }) });
+    vi.stubGlobal('localStorage', storage);
+    const story = new FiveDayStory();
+    expect(story.oliverAvailable).toBe(false);
+    expect(() => story.beginOliver()).toThrow('Oliver is unavailable');
+  });
+
+  it('does not offer Oliver when the narrative save cannot be read', () => {
+    const storage = memoryStorage();
+    vi.stubGlobal('localStorage', {
+      ...storage,
+      getItem: () => { throw new Error('Storage access denied'); },
+    });
+    const story = new FiveDayStory();
+    expect(story.oliverAvailable).toBe(false);
+    expect(() => story.beginOliver()).toThrow('Oliver is unavailable');
+  });
+
   it('cannot finish an unfinished conversation', () => {
     const storage = memoryStorage({ [SAVE_KEY]: encodeSave(dayTwo()) });
     vi.stubGlobal('localStorage', storage);
