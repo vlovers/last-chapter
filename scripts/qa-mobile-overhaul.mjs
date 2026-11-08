@@ -532,7 +532,7 @@ try {
     // actual UI control before checking whether the toolbar receives pointer input.
     if (await page.locator('#dialogue:not([hidden])').count()) {
       await page.locator('#close-dialogue').click();
-      await page.locator('#dialogue[hidden]').waitFor();
+      await page.locator('#dialogue').waitFor({ state: 'hidden' });
     }
     // The continuation must be physically tappable after closing a conversation.
     // A visible button can still sit beneath the stage or an unclosed overlay.
@@ -696,7 +696,7 @@ try {
     }
     if (await page.locator('#dialogue:not([hidden])').count()) {
       await page.locator('#close-dialogue').click();
-      await page.locator('#dialogue[hidden]').waitFor();
+      await page.locator('#dialogue').waitFor({ state: 'hidden' });
     }
     if (nextDay) {
       // A day transition must survive a full mobile page reload, not just
@@ -731,7 +731,7 @@ try {
       await page.locator('#story-continue').tap();
       await page.locator('#dialogue:not([hidden])').waitFor();
       await page.locator('#close-dialogue').click();
-      await page.locator('#dialogue[hidden]').waitFor();
+      await page.locator('#dialogue').waitFor({ state: 'hidden' });
     }
   }
   assert.deepEqual(visited, [
