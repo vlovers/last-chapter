@@ -2380,3 +2380,61 @@ main {
   #dialogue .dialogue-body { min-height: 190px; }
   #dialogue #choices button { min-height: 42px; padding-block: 8px; }
 }
+
+/* Final dialogue sizing: show the complete choice stack on common laptop heights. */
+#dialogue {
+  height: 292px;
+  min-height: 276px;
+  max-height: min(46svh, 390px);
+  bottom: clamp(12px, 2.4vh, 26px);
+}
+#dialogue .dialogue-body {
+  min-height: 248px;
+  grid-template-rows: 44px minmax(52px, 1fr) auto;
+}
+#dialogue #choices {
+  max-height: 248px;
+  align-content: center;
+}
+#dialogue #choices button {
+  min-height: 46px;
+  padding-block: 9px;
+}
+#dialogue .dialogue-body > small {
+  padding-top: 4px;
+}
+@media (max-height: 820px) and (min-width: 701px) {
+  #dialogue {
+    height: 264px;
+    min-height: 252px;
+    max-height: 42svh;
+    bottom: 12px;
+  }
+  #dialogue .dialogue-body {
+    min-height: 224px;
+    grid-template-rows: 40px minmax(44px, 1fr) auto;
+  }
+  #dialogue #choices {
+    max-height: 224px;
+    gap: 7px;
+  }
+  #dialogue #choices button {
+    min-height: 42px;
+    padding-block: 7px;
+  }
+}
+@media (max-width: 700px) {
+  #dialogue {
+    height: auto;
+    min-height: 0;
+    max-height: min(64svh, 570px);
+    bottom: 8px;
+  }
+  #dialogue .dialogue-body {
+    min-height: 0;
+    grid-template-rows: auto minmax(36px, auto) minmax(0, 1fr) auto;
+  }
+  #dialogue #choices {
+    max-height: min(28svh, 230px);
+  }
+}
