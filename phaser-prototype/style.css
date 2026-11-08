@@ -2779,3 +2779,21 @@ main {
   }
   #dialogue .dialogue-body > small { flex: 0 0 auto; }
 }
+
+/* Dialogue pagination is injected at runtime; reserve its own space in the dock. */
+@media (orientation: portrait) and (max-width: 700px) {
+  #dialogue .dialogue-body > #dialogue-pages {
+    position: relative;
+    inset: auto;
+    grid-area: auto;
+    order: 2;
+    flex: 0 0 auto;
+    min-height: 44px;
+    width: 100%;
+    z-index: 1;
+  }
+  #dialogue .dialogue-title { order: 0; }
+  #dialogue #dialogue-text { order: 1; }
+  #dialogue #choices { order: 3; }
+  #dialogue .dialogue-body > small { order: 4; }
+}
