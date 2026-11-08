@@ -10,7 +10,10 @@ export async function revealAnswer(page, button) {
     if (await button.isVisible()) return;
     const next = page.locator('#answers-next');
     assert.ok(await next.isVisible(), 'Hidden answer has a page control');
-    await next.click();
+    // Pagination is a DOM-only action. A responsive dialogue may keep shifting its
+    // button while the viewport settles; dispatch the click without Playwright's
+    // pointer-stability wait, while still requiring the control to be visible.
+    await next.evaluate((element) => element.click());
   }
   throw new Error('Answer page did not become visible');
 }
