@@ -16,6 +16,7 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
   trigger.textContent = 'Поговорити з Олівером';
   trigger.hidden = true;
   trigger.setAttribute('aria-controls', 'oliver-side-dialogue');
+  trigger.setAttribute('aria-expanded', 'false');
 
   const panel = document.createElement('section');
   panel.id = 'oliver-side-dialogue';
@@ -42,12 +43,14 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
     trigger.hidden = !story.oliverAvailable;
     if (!story.oliverAvailable) {
       panel.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
       session = null;
     }
   };
 
   const dismiss = () => {
     panel.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
     refresh();
     if (!trigger.hidden) trigger.focus();
   };
@@ -88,10 +91,13 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
     if (!story.oliverAvailable) return;
     session ??= story.beginOliver();
     panel.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
     paint();
   });
   close.addEventListener('click', dismiss);
   panel.addEventListener('keydown', (event) => {
+    // Do not let the Phaser movement/interaction shortcuts consume dialogue keys.
+    event.stopPropagation();
     if (event.key === 'Escape') {
       event.preventDefault();
       dismiss();
