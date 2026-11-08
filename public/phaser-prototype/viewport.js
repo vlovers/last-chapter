@@ -39,7 +39,10 @@ export function frameWorld(player, width, height) {
 export function frameDialogue(player, companion, width, height, zoom, dock) {
   const frame = frameWorld(player, width / zoom, height / zoom);
   if (width > height && height < 550) {
-    const available = (width - dock.width - 24) / zoom;
+    // A bottom-mounted landscape dialogue does not obscure the world horizontally.
+    // Never subtract its width from the camera's available scene width.
+    if (width / zoom >= 640) return frame;
+    const available = Math.max(64, (width - Math.min(dock.width, width / 3) - 24) / zoom);
     const center = companion
       ? Math.abs(player.x - companion.x) > available - 64
         ? companion.x
