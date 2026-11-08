@@ -16,3 +16,16 @@
   .oliver-side-choices { grid-template-columns: minmax(0, 1fr); }
   .oliver-side-dialogue { margin-inline: 0; }
 }
+
+/* Keep the optional action from widening the toolbar at 360px viewports. */
+.oliver-trigger {
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.oliver-side-dialogue {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
