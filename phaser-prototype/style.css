@@ -2616,3 +2616,72 @@ main {
   #context-action { bottom: 12px; }
   #toast { bottom: 6px; }
 }
+
+/* Landscape screenshot QA: readable notebook/catalog and scrollable short-height overlays. */
+#story-panel {
+  background: #1b1623;
+  color: #f4edf8;
+  color-scheme: dark;
+}
+#story-panel h2,
+#story-panel h3,
+#story-panel p,
+#story-panel li,
+#story-panel label,
+#story-panel .catalog-eyebrow,
+#story-panel .notebook-eyebrow,
+#story-panel .conversation-eyebrow {
+  color: #f4edf8;
+}
+#story-panel .panel-tools {
+  background: #1b1623;
+  border-color: #655070;
+}
+#story-panel .catalog-search,
+#story-panel .personal-notes {
+  background: #2b2235;
+  color: #fff5ff;
+  border-color: #816b91;
+}
+#story-panel .catalog-search::placeholder,
+#story-panel .personal-notes::placeholder { color: #c5b8cf; }
+#story-panel .story-filters button { color: #f4edf8; }
+#story-panel .story-filters [aria-pressed='true'] { color: #fff; }
+@media (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
+  #story-panel {
+    position: fixed;
+    inset: max(6px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right))
+      max(6px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+    width: min(680px, calc(100vw - 16px));
+    height: auto;
+    max-height: calc(100dvh - 12px);
+    margin: auto;
+    padding: 12px 16px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  #story-panel > h2 { font-size: 23px; margin-bottom: 8px; }
+  #story-panel h3 { font-size: 17px; }
+  #story-panel .panel-tools { top: -12px; padding: 8px 0 4px; }
+  #story-panel .story-filters { gap: 6px; margin: 7px 0; }
+  #story-panel .story-filters button { min-height: 36px; padding: 6px 10px; }
+  #story-panel .panel-close { min-height: 40px; width: 40px; }
+  dialog {
+    box-sizing: border-box;
+    width: min(680px, calc(100vw - 24px));
+    max-width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+    padding: 12px 18px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  dialog h2 { font-size: 23px; }
+  dialog p { font-size: 12px; line-height: 1.4; }
+  dialog label { margin: 8px 0 4px; }
+  #dialogue #dialogue-text,
+  #dialogue #dialogue-text p {
+    color: #f4edf8 !important;
+    opacity: 1;
+    visibility: visible;
+  }
+}
