@@ -270,7 +270,13 @@ try {
   await finish.click();
   await page.locator('#dialogue[data-staging]').waitFor({ timeout: 5000 });
   assert.equal((await sceneState()).staging, true, 'Exit timeline starts before interruption');
+  // Keyboard dismissal belongs to the focused dialogue, not the previously clicked choice.
+  await page.locator('#dialogue').focus();
   await page.keyboard.press('Escape');
+  await page.waitForFunction(async () => {
+    const { game } = await import('/phaser-prototype/scene.js');
+    return !game.scene.getScene('bookshop').director.active;
+  });
   assert.equal((await sceneState()).staging, false, 'Closing during an exit cancels the timeline');
   assert.equal((await sceneState()).visible, false, 'Interrupted exit settles the departed pose');
   await clickStoryContinue();
