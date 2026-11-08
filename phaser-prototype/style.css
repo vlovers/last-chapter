@@ -2707,3 +2707,39 @@ main {
     overscroll-behavior: contain;
   }
 }
+
+/* Keep portrait answers in their own grid track: prose must never cover buttons. */
+@media (orientation: portrait) and (max-width: 700px) {
+  #dialogue .dialogue-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(36px, auto) minmax(0, 1fr) auto;
+    align-content: stretch;
+  }
+  #dialogue .dialogue-title {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 0;
+  }
+  #dialogue #dialogue-text {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 0;
+    max-height: min(15svh, 120px);
+    overflow-y: auto;
+  }
+  #dialogue #choices {
+    grid-column: 1;
+    grid-row: 3;
+    min-height: 0;
+    max-height: none;
+    align-content: start;
+    overflow-y: auto;
+    position: relative;
+    z-index: 1;
+  }
+  #dialogue .dialogue-body > small {
+    grid-column: 1;
+    grid-row: 4;
+  }
+}
