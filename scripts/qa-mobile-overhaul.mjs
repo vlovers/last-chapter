@@ -528,6 +528,28 @@ try {
       await page.keyboard.press('Escape');
       assert.equal(await page.locator('#story-panel[hidden]').count(), 1);
     }
+    // The continuation must be physically tappable after closing a conversation.
+    // A visible button can still sit beneath the stage or an unclosed overlay.
+    const continueHitTarget = await page.evaluate(() => {
+      const button = document.querySelector('#story-continue');
+      const bounds = button.getBoundingClientRect();
+      const x = bounds.left + bounds.width / 2;
+      const y = bounds.top + bounds.height / 2;
+      const target = document.elementFromPoint(x, y);
+      return {
+        stage: window.__lastChapterStory.stage,
+        button: { x, y, width: bounds.width, height: bounds.height },
+        target: target?.id || target?.tagName || null,
+        hit: target === button || button.contains(target),
+        dialogueHidden: document.querySelector('#dialogue').hidden,
+        panelHidden: document.querySelector('#story-panel').hidden,
+        viewport: { width: innerWidth, height: innerHeight },
+      };
+    });
+    assert.ok(
+      continueHitTarget.hit,
+      `Story continue must receive real pointer input: ${JSON.stringify(continueHitTarget)}`,
+    );
     await page.locator('#story-continue').click();
     const plan = await page.evaluate(async () => {
       const { stageStory, chooseChapterOption } = await import('/src/game/chapter.ts');
