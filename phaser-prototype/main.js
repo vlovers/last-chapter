@@ -2,13 +2,15 @@ import Phaser from 'phaser';
 import './style.css';
 import { FiveDayStory } from '../src/phaser/five-day-story';
 import { mountStoryPanels } from '../src/phaser/story-panels';
+import { mountOliverConversation } from '../src/phaser/optional-oliver-ui';
 
 // Only the canonical route uses the shared five-day narrative.
 if (location.pathname === '/') {
   const story = new FiveDayStory();
   window.__lastChapterStory = story;
   const disposePanels = mountStoryPanels(story);
-  if (import.meta.hot) import.meta.hot.dispose(disposePanels);
+  const disposeOliver = mountOliverConversation(story);
+  if (import.meta.hot) import.meta.hot.dispose(() => { disposeOliver(); disposePanels(); });
 }
 
 // Bundle the engine locally; keep the isolated public modules free of production state.

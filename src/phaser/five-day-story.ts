@@ -1,3 +1,4 @@
+import { canStartOliver, finishOliver, startOliver, type OliverSession } from '../game/optional-oliver';
 import { storyEnvironment } from '../game/story-environment';
 import {
   assessRecommendation,
@@ -185,6 +186,21 @@ export class FiveDayStory {
   get isRecommendationMemoryAvailable(): boolean {
     return !this.serviceReadFailed;
   }
+  get oliverAvailable(): boolean {
+    return canStartOliver(this.chapter) && !this.saveRecoveryPending;
+  }
+
+  beginOliver(): OliverSession {
+    if (!this.oliverAvailable) throw new Error('Oliver is unavailable');
+    return startOliver(this.chapter);
+  }
+
+  completeOliver(session: OliverSession): void {
+    if (!this.oliverAvailable) throw new Error('Oliver is unavailable');
+    this.chapter = finishOliver(this.chapter, session);
+    this.persist();
+  }
+
   get stage(): ChapterStage {
     return this.chapter.stage;
   }

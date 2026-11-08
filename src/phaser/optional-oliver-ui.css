@@ -1,0 +1,31 @@
+.oliver-trigger[hidden], .oliver-side-dialogue[hidden] { display: none !important; }
+.oliver-side-dialogue {
+  margin: 0.75rem 0 0;
+  padding: clamp(0.85rem, 3vw, 1.25rem);
+  border: 1px solid rgba(215, 185, 144, 0.45);
+  border-radius: 0.85rem;
+  background: #26212b;
+  color: #f8eee2;
+}
+.oliver-side-dialogue h2 { margin: 0 0 0.6rem; font-size: 1.1rem; }
+.oliver-side-line { line-height: 1.55; max-width: 70ch; }
+.oliver-side-choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 0.5rem; margin: 0.85rem 0; }
+.oliver-side-dialogue button { min-height: 44px; padding: 0.65rem 0.85rem; white-space: normal; }
+.oliver-side-dialogue button:focus-visible, .oliver-trigger:focus-visible { outline: 3px solid #f1c783; outline-offset: 3px; }
+@media (max-width: 480px) {
+  .oliver-side-choices { grid-template-columns: minmax(0, 1fr); }
+  .oliver-side-dialogue { margin-inline: 0; }
+}
+
+/* Keep the optional action from widening the toolbar at 360px viewports. */
+.oliver-trigger {
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.oliver-side-dialogue {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
