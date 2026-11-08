@@ -51,6 +51,28 @@ describe('optional Oliver side conversation integration', () => {
     expect(canStartOliver(saved as ChapterState)).toBe(false);
   });
 
+
+  it.each(['complete', 'eleanor', 'day3-complete', 'day4-iris', 'season-complete'] as const)(
+    'rejects a stale Oliver session after transitioning to %s',
+    (stage) => {
+      const chapter = dayTwo();
+      const finished = chooseOliver(startOliver(chapter), 'oliver-unread-decline');
+      const transitioned = { ...chapter, stage };
+      expect(canStartOliver(transitioned)).toBe(false);
+      expect(() => startOliver(transitioned)).toThrow('Oliver is not available');
+      expect(() => finishOliver(transitioned, finished)).toThrow('Oliver is no longer available');
+    },
+  );
+
+  it('rejects replay after completion even when the saved dialogue remains unchanged', () => {
+    const chapter = dayTwo();
+    const finished = chooseOliver(startOliver(chapter), 'oliver-unread-decline');
+    const completed = finishOliver(chapter, finished);
+    expect(completed.dialogue.node).toBe(chapter.dialogue.node);
+    expect(completed.dialogue.flags).toContain(OLIVER_COMPLETED);
+    expect(() => finishOliver(completed, finished)).toThrow('Oliver is no longer available');
+  });
+
   it('does not grant mystery or trust flags', () => {
     const chapter = dayTwo();
     const session = chooseOliver(startOliver(chapter), 'oliver-unread-decline');
