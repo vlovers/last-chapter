@@ -2836,10 +2836,17 @@ main {
     flex: 0 0 auto;
   }
   #dialogue .dialogue-body > #choices {
-    flex: 1 1 auto;
-    min-height: 88px;
+    /* The answer scroller must shrink below its content's intrinsic height.
+       Otherwise the restart action can extend outside the portrait viewport. */
+    flex: 1 1 0;
+    min-height: 0;
     max-height: none;
     overflow-y: auto;
+    overscroll-behavior: contain;
     scroll-padding-block: 8px;
+  }
+  #dialogue .dialogue-body > #choices button {
+    box-sizing: border-box;
+    max-width: 100%;
   }
 }
