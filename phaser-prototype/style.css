@@ -1463,3 +1463,75 @@ body.reduced * {
   padding: 4px 8px;
   font-size: 12px;
 }
+
+/* Editorial refresh: tactile book surfaces, restrained lighting, accessible controls. */
+:root {
+  --paper: #f0e5d0;
+  --paper-light: #fff9ed;
+  --ink: #302b27;
+  --muted: #6c6158;
+  --rule: #c5b39a;
+  --wood: #8e6a50;
+  --pine: #314d46;
+  --pine-light: #42665b;
+  --gold: #e4b979;
+  --night: #171e1b;
+}
+body {
+  background: radial-gradient(ellipse at 50% 0%, #35483d 0%, #171e1b 68%);
+}
+.masthead {
+  background: linear-gradient(100deg, #1c2824, #293b32);
+  border-bottom-color: #6f7258;
+  box-shadow: 0 6px 24px #0b1514a6;
+}
+.masthead h1 {
+  letter-spacing: 0.015em;
+}
+#dialogue {
+  border: 1px solid #d4bd99;
+  border-radius: 12px;
+  background: linear-gradient(145deg, var(--paper-light), var(--paper));
+  box-shadow:
+    0 18px 60px #101813b8,
+    0 0 0 5px #1d2926a8,
+    inset 0 0 0 1px #ffffff9c;
+}
+#choices button {
+  border: 1px solid #c4b39b;
+  border-left: 3px solid #668479;
+  border-radius: 7px;
+  background: #fffaf1;
+  box-shadow: 0 2px 0 #d5c4a8;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+#choices button:hover,
+#choices button:focus-visible {
+  background: #eaf0e5;
+  border-color: #55786c;
+  box-shadow: 0 3px 0 #9eae9c;
+}
+#choices button:active {
+  background: #dce7d9;
+  box-shadow: none;
+}
+#story-panel {
+  border: 1px solid #c6aa83;
+  border-radius: 12px;
+  background: linear-gradient(150deg, #fff8e8, #eaddc3);
+  box-shadow:
+    0 0 0 100vmax #0d1915c9,
+    0 22px 70px #07120fb3,
+    inset 0 0 0 4px #fff6df;
+}
+#story-panel .panel-close {
+  border-radius: 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  #choices button {
+    transition: none;
+  }
+}
