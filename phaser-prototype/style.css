@@ -1535,3 +1535,70 @@ body {
     transition: none;
   }
 }
+
+/* Editorial hierarchy: reading comfort without changing gameplay geometry. */
+#speaker {
+  color: #473629;
+  letter-spacing: 0.012em;
+}
+.dialogue-title {
+  border-bottom-color: #cdbb9f;
+}
+#dialogue-text {
+  color: #352f2a;
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.portrait-frame {
+  border-color: #9b7957;
+  border-radius: 5px;
+  background: #38594f;
+  box-shadow: 0 2px 8px #3a332c38;
+}
+#objective {
+  border: 1px solid #82765b;
+  border-left: 3px solid var(--gold);
+  border-radius: 7px;
+  background: #1c2825f2;
+  box-shadow: 0 6px 20px #0a1413a1;
+  color: #f7ead2;
+}
+.hud button {
+  border-color: #72816e;
+  border-radius: 7px;
+  background: #1b2925f2;
+  box-shadow: 0 4px 14px #0a14137d;
+}
+.day-step {
+  border-radius: 6px;
+}
+.day-step--current {
+  box-shadow: 0 0 0 2px #e4b9794d;
+}
+.story-toolbar-actions button {
+  border-radius: 7px;
+}
+#story-continue {
+  border-color: #d1ac72;
+  background: #3d6256;
+}
+#story-continue:hover,
+#story-continue:focus-visible {
+  background: #4b7465;
+}
+#story-panel > h2 {
+  color: #453326;
+  letter-spacing: 0.01em;
+}
+#story-panel h3 {
+  color: #4b3b2c;
+}
+@media (max-width: 700px) {
+  #objective {
+    border-radius: 5px;
+  }
+  #dialogue-text {
+    line-height: 1.5;
+  }
+}
