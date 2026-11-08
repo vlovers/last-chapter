@@ -469,23 +469,19 @@ export function drawEnvironment(scene) {
     rain.lineStyle(i % 4 === 0 ? 1.2 : 0.7, 0xb6c6d0, i % 3 === 0 ? 0.65 : 0.32);
     rain.lineBetween(x, y, x - 2, y + 6 + (i % 4));
   }
-  // Small autumn leaves at the upper corners, outside the walkable and clickable floor.
+  // Small autumn leaves at the upper corners, outside the walkable floor.
   const leaves = scene.add.graphics().setDepth(352).setAlpha(0.72);
-  for (const [x, y, rotation, scale] of [
-    [34, 28, -0.7, 1], [51, 18, 0.4, 0.7], [594, 31, 0.8, 0.9],
-    [610, 48, -0.4, 0.65], [80, 20, 0.2, 0.55], [566, 18, -0.8, 0.6],
+  for (const [x, y, scale, color] of [
+    [34, 28, 1, 0xa6533f], [51, 18, 0.7, 0xc07843], [594, 31, 0.9, 0xa6533f],
+    [610, 48, 0.65, 0xc07843], [80, 20, 0.55, 0xb56843], [566, 18, 0.6, 0xa6533f],
   ]) {
-    leaves.save();
-    leaves.translateCanvas(x, y);
-    leaves.rotateCanvas(rotation);
-    leaves.fillStyle(0xa6533f, 0.88);
+    leaves.fillStyle(color, 0.88);
     leaves.fillPoints([
-      { x: 0, y: -7 * scale }, { x: 4 * scale, y: -2 * scale },
-      { x: 8 * scale, y: 0 }, { x: 3 * scale, y: 2 * scale },
-      { x: 1 * scale, y: 7 * scale }, { x: -2 * scale, y: 2 * scale },
-      { x: -7 * scale, y: 1 * scale }, { x: -3 * scale, y: -2 * scale },
+      { x, y: y - 7 * scale }, { x: x + 4 * scale, y: y - 2 * scale },
+      { x: x + 8 * scale, y }, { x: x + 3 * scale, y: y + 2 * scale },
+      { x: x + scale, y: y + 7 * scale }, { x: x - 2 * scale, y: y + 2 * scale },
+      { x: x - 7 * scale, y: y + scale }, { x: x - 3 * scale, y: y - 2 * scale },
     ], true);
-    leaves.restore();
   }
   // Gentle vignette at the perimeter, leaving the central reading area legible.
   const vignette = scene.add.graphics().setDepth(353);
