@@ -40,7 +40,7 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
 
   const refresh = () => {
     trigger.hidden = !story.oliverAvailable;
-    if (!story.oliverAvailable && !panel.hidden) {
+    if (!story.oliverAvailable) {
       panel.hidden = true;
       session = null;
     }
@@ -48,7 +48,6 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
 
   const dismiss = () => {
     panel.hidden = true;
-    session = null;
     refresh();
     if (!trigger.hidden) trigger.focus();
   };
@@ -87,7 +86,7 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
 
   trigger.addEventListener('click', () => {
     if (!story.oliverAvailable) return;
-    session = story.beginOliver();
+    session ??= story.beginOliver();
     panel.hidden = false;
     paint();
   });
@@ -102,7 +101,10 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
   panel.append(heading, line, choices, close);
   toolbar.append(trigger);
   toolbar.parentElement?.after(panel);
-  const newGame = () => dismiss();
+  const newGame = () => {
+    session = null;
+    dismiss();
+  };
   window.addEventListener('last-chapter:new-game', newGame);
   const observer = new MutationObserver(refresh);
   observer.observe(timeline, { childList: true, subtree: true });
