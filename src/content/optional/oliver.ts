@@ -1,11 +1,9 @@
 import type { DialogueStory } from '../../game/dialogue';
 
 /**
- * Optional Day 2 conversation. Deliberately separate from the chapter stage
- * machine until the existing character-presence and save systems are mapped.
- *
+ * Optional Day 2 conversation, mounted as a separate panel by the Phaser shell.
+ * The canonical chapter stage and dialogue remain unchanged.
  * No book purchase, relationship mutation or mystery evidence.
- * This content is not wired to the current Phaser Day 2 runtime yet.
  */
 export const oliverUnreadBook: DialogueStory = {
   start: 'oliver-unread-opening',
