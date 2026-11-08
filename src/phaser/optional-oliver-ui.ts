@@ -82,7 +82,7 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
         choices.append(button);
       }
     }
-    choices.querySelector('button')?.focus();
+    choices.querySelector<HTMLButtonElement>('button')?.focus();
   };
 
   trigger.addEventListener('click', () => {
@@ -102,12 +102,15 @@ export function mountOliverConversation(story: FiveDayStory): () => void {
   panel.append(heading, line, choices, close);
   toolbar.append(trigger);
   toolbar.parentElement?.after(panel);
+  const newGame = () => dismiss();
+  window.addEventListener('last-chapter:new-game', newGame);
   const observer = new MutationObserver(refresh);
   observer.observe(timeline, { childList: true, subtree: true });
   refresh();
 
   return () => {
     observer.disconnect();
+    window.removeEventListener('last-chapter:new-game', newGame);
     trigger.remove();
     panel.remove();
   };
