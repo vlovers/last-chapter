@@ -1,10 +1,16 @@
 # Roadmap — Narrative First
 
-> Historical product decision (2026-10-24): prioritize a complete five-day narrative before expanding shop mechanics. The Living Story implementation has since been integrated through [PR #41](https://github.com/vlovers/last-chapter/pull/41); this roadmap distinguishes integrated implementation from **unverified release acceptance**. Do not interpret completed implementation as approval to publish.
+> Historical product decision (2026-10-24): prioritize a complete five-day narrative before
+> expanding shop mechanics. The Living Story implementation has since been integrated
+> through [PR #41](https://github.com/vlovers/last-chapter/pull/41); this roadmap
+> distinguishes integrated implementation from **unverified release acceptance**.
+> Do not interpret completed implementation as approval to publish.
 
 ## Phase 1 — Complete playable narrative (IMPLEMENTED; EDITORIAL ACCEPTANCE OPEN)
 
-**Exit criterion:** a player can start Day 1, complete all five days, see a coherent ending and replay materially different choices using a deliberately plain, accessible interface. All player-facing copy is Ukrainian.
+**Exit criterion:** a player can start Day 1, complete all five days, see a coherent
+ending and replay materially different choices using a deliberately plain,
+accessible interface. All player-facing copy is Ukrainian.
 
 - [x] Browser-first TypeScript/Vite prototype; deterministic dialogue and state rules.
 - [x] Initial book recommendations, first-day encounters, evening letter and versioned local save prototype.
