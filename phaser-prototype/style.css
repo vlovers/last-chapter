@@ -2797,3 +2797,21 @@ main {
   #dialogue #choices { order: 3; }
   #dialogue .dialogue-body > small { order: 4; }
 }
+
+/* Keep dialogue answers above adjacent prose and pagination hit regions.
+   This is intentionally scoped to the dock, not the scene or overlays. */
+#dialogue .dialogue-body {
+  isolation: isolate;
+}
+#dialogue #dialogue-text,
+#dialogue #dialogue-pages {
+  z-index: 1;
+}
+#dialogue #choices {
+  position: relative;
+  z-index: 3;
+}
+#dialogue #choices button {
+  position: relative;
+  z-index: 1;
+}
