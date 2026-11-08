@@ -451,6 +451,49 @@ export function drawEnvironment(scene) {
   f(12, 342, 616, 7, 0x332c29);
   f(17, 341, 606, 2, honey);
   f(21, 337, 598, 4, ink, 0.2);
+  // Autumn-night art direction: a deeper plum room, rain-lit arch and warm pools.
+  const architecture = scene.add.graphics().setDepth(1);
+  architecture.lineStyle(2, 0x9a6e72, 0.78);
+  architecture.beginPath();
+  architecture.arc(321, 86, 70, Math.PI, 0, false);
+  architecture.strokePath();
+  architecture.lineStyle(1, 0xd6a56e, 0.55);
+  architecture.beginPath();
+  architecture.arc(321, 86, 64, Math.PI, 0, false);
+  architecture.strokePath();
+  // Rain catches the cool window light; short streaks keep the animation inexpensive.
+  const rain = scene.add.graphics().setDepth(1.2).setAlpha(0.38);
+  for (let i = 0; i < 18; i++) {
+    const x = 260 + ((i * 37) % 122);
+    const y = 31 + ((i * 23) % 91);
+    rain.lineStyle(i % 4 === 0 ? 1.2 : 0.7, 0xb6c6d0, i % 3 === 0 ? 0.65 : 0.32);
+    rain.lineBetween(x, y, x - 2, y + 6 + (i % 4));
+  }
+  // Small autumn leaves at the upper corners, outside the walkable and clickable floor.
+  const leaves = scene.add.graphics().setDepth(352).setAlpha(0.72);
+  for (const [x, y, rotation, scale] of [
+    [34, 28, -0.7, 1], [51, 18, 0.4, 0.7], [594, 31, 0.8, 0.9],
+    [610, 48, -0.4, 0.65], [80, 20, 0.2, 0.55], [566, 18, -0.8, 0.6],
+  ]) {
+    leaves.save();
+    leaves.translateCanvas(x, y);
+    leaves.rotateCanvas(rotation);
+    leaves.fillStyle(0xa6533f, 0.88);
+    leaves.fillPoints([
+      { x: 0, y: -7 * scale }, { x: 4 * scale, y: -2 * scale },
+      { x: 8 * scale, y: 0 }, { x: 3 * scale, y: 2 * scale },
+      { x: 1 * scale, y: 7 * scale }, { x: -2 * scale, y: 2 * scale },
+      { x: -7 * scale, y: 1 * scale }, { x: -3 * scale, y: -2 * scale },
+    ], true);
+    leaves.restore();
+  }
+  // Gentle vignette at the perimeter, leaving the central reading area legible.
+  const vignette = scene.add.graphics().setDepth(353);
+  vignette.fillStyle(0x110e19, 0.18);
+  vign.fillRect(12, 9, WIDTH - 24, 7);
+  vignette.fillRect(12, HEIGHT - 16, WIDTH - 24, 7);
+  vignette.fillRect(12, 9, 7, HEIGHT - 18);
+  vignette.fillRect(WIDTH - 19, 9, 7, HEIGHT - 18);
   cache(g, 'bookshop-native-background', WIDTH, HEIGHT, 0);
-  return { halo, readingGlow, parcel, steam };
+  return { halo, readingGlow, parcel, steam, architecture, rain, leaves, vignette };
 }
