@@ -2848,9 +2848,11 @@ main {
     overflow: hidden;
   }
   #dialogue .dialogue-body > #dialogue-text {
+    /* The prose must not consume the entire dock when its pages are long. */
     flex: 0 1 auto;
     min-height: 0;
-    max-height: min(15svh, 120px);
+    max-height: min(12svh, 96px);
+    overflow-x: hidden;
     overflow-y: auto;
   }
   #dialogue .dialogue-body > #dialogue-pages {
