@@ -83,6 +83,11 @@ try {
     await choose('town');
     const words = '«Я тільки приїхав. Тут усі так уважно стежать одне за одним?»';
     assert.equal(await page.locator('#player-turn').count(), 1);
+    await page.waitForFunction(
+      (expected) => document.querySelector('#player-turn p')?.textContent === expected,
+      words,
+      { timeout: 10000 },
+    );
     assert.equal(await page.locator('#player-turn p').textContent(), words);
     assert.equal(
       await page.locator('#speaker').textContent(),
