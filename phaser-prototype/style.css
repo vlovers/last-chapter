@@ -2847,6 +2847,10 @@ main {
     flex-direction: column;
     overflow: hidden;
   }
+  /* The earlier #dialogue #dialogue-text:has(#player-turn) rule has higher
+     specificity than a plain #dialogue-text selector. Match it here so
+     player turns cannot consume the answer scroller's vertical space. */
+  #dialogue .dialogue-body > #dialogue-text:has(#player-turn),
   #dialogue .dialogue-body > #dialogue-text {
     /* The prose must not consume the entire dock when its pages are long. */
     flex: 0 1 auto;
