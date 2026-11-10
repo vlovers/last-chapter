@@ -2837,6 +2837,26 @@ main {
   }
 }
 
+/* Narrow portrait devices need guaranteed space for a complete tap target.
+   The speaker header can otherwise take most of the flex column when its
+   contents wrap, leaving a choice scroller shorter than one button. */
+@media (orientation: portrait) and (max-width: 359px) {
+  #dialogue .dialogue-body > .dialogue-title {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: 64px;
+    overflow-y: auto;
+  }
+  #dialogue .dialogue-body > #dialogue-text,
+  #dialogue .dialogue-body > #dialogue-text:has(#player-turn) {
+    max-height: 64px;
+  }
+  #dialogue .dialogue-body > #choices {
+    flex: 1 1 auto;
+    min-height: 88px;
+  }
+}
+
 /* Portrait dialogue: reserve a real scroll viewport for choices. Earlier
    compact styles set a prose minimum that could push answers above their
    clipping box and make them untappable. */
