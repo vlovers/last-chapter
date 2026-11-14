@@ -2,6 +2,8 @@
 
 ## Implemented in main
 
+- Oliver’s optional Day 2 book conversation, with same-page resume and saved completion.
+- Editorial reading surfaces and navigation, cached autumn decorations and landscape framing.
 - Five-day canonical Phaser game, 19 chapter/checkpoint states, branching Ukrainian conversations and composable endings.
 - Three catalog orders across five original books, optional Mara conversations, journal and evidence provenance.
 - Responsive paginated dialogue, keyboard/touch controls, deterministic time/weather, staged character actions and Frank interactions.
@@ -21,23 +23,16 @@ Living Story was integrated through [PR #41](https://github.com/vlovers/last-cha
 - Verify old, corrupt, missing, blocked and future-version saves, restart and Frank sidecars.
 - Review distribution licenses/attribution; align package version, changelog and deployment instructions before release approval.
 
-The package is still `0.1.0`. No deployment is configured. The existing large Phaser bundle advisory remains. Automated viewport tests do not establish physical-device or full accessibility acceptance.
+The candidate is `0.2.0-rc.1`; it is not a public v0.2 release. No deployment is configured. The existing large Phaser bundle advisory remains. Automated viewport tests do not establish physical-device or full accessibility acceptance.
 
-## Open PRs — triage snapshot, 2026-11-14
+## Consolidation and remaining source work
 
-| PR                                                     | Classification       | Required next step                                                                                                                                               |
-| ------------------------------------------------------ | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [#45](https://github.com/vlovers/last-chapter/pull/45) | Needs changes        | Preserve unique UI/environment/viewport work; latest CI failed and browser run was cancelled. Update its CSS-only description and verify mobile/visual behavior. |
-| [#44](https://github.com/vlovers/last-chapter/pull/44) | Needs changes        | Preserve unique Oliver runtime/UI/tests; repair latest CI and complete browser/editorial acceptance.                                                             |
-| [#43](https://github.com/vlovers/last-chapter/pull/43) | Needs changes        | Reconcile overlapping agent-doc edits after maintenance; repair formatting/CI and review unique governance tooling and historical QA.                            |
-| [#28](https://github.com/vlovers/last-chapter/pull/28) | Historical reference | Preserve production QA artifacts and unique recovery/navigation assertions; do not delete its stacked base.                                                      |
-| [#27](https://github.com/vlovers/last-chapter/pull/27) | Historical reference | Preserve security, PR-template and governance differences until reconciled with #43.                                                                             |
-| [#21](https://github.com/vlovers/last-chapter/pull/21) | Historical reference | Retain unique authored packs and orchestration proposal; its non-main base is not canonical gameplay.                                                            |
-| [#20](https://github.com/vlovers/last-chapter/pull/20) | Historical reference | Opening prose differs from #44; preserve until editorial equivalence is accepted.                                                                                |
+- #44/#20: optional Oliver dialogue and controller recovered; the original #20 story data is identical in the candidate. The integration uses the existing accessible reading panel rather than the offscreen standalone panel.
+- #45: editorial colors/surfaces, cached autumn decoration, landscape framing and QA diagnostics integrated. Experimental resizing, permanent rain and synthetic pagination clicks are replaced by the stable runtime layout and real interaction checks.
+- #43: release checklist, staging-interruption QA and historical production artifacts recovered. Unique governance validators, policy and multi-agent instructions remain historical proposals; they are not release blockers.
+- #21 retains authored packs/orchestration that differ from the current canon; #27 retains security/governance differences; #28 retains historical navigation/recovery code and assertions. Preserve these branches until separately reconciled.
 
-PR [#29](https://github.com/vlovers/last-chapter/pull/29) was closed as superseded after reviewing all 15 residual changed files: its voice bible is identical, progression logic and regression coverage are present, and older dialogue/browser integration changes have independent replacements in main. Its branch is retained as historical reference.
-
-None of the remaining heads is verified ready to merge. An empty commit-status list or absence of workflow runs is not passing CI.
+Physical-device, independent editorial, accessibility, measured playtime and owner rights decisions remain in #42. Chromium, Firefox and WebKit engine smoke does not imply physical iPhone/Safari acceptance.
 
 ## Planned after acceptance
 

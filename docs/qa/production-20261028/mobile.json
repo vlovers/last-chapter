@@ -1,0 +1,311 @@
+{
+  "results": [
+    {
+      "width": 375,
+      "height": 667,
+      "before": {
+        "canvas": {
+          "x": 0,
+          "y": 48,
+          "width": 375,
+          "height": 555
+        },
+        "scale": 2,
+        "player": {
+          "x": 171,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 57,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "stable": {
+        "canvas": {
+          "x": 0,
+          "y": 48,
+          "width": 375,
+          "height": 555
+        },
+        "scale": 2,
+        "player": {
+          "x": 195.00030000000015,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 57.75,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "overflow": {
+        "x": false,
+        "y": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "before": {
+        "canvas": {
+          "x": 0,
+          "y": 48,
+          "width": 390,
+          "height": 732
+        },
+        "scale": 2,
+        "player": {
+          "x": 171,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 59.75,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "stable": {
+        "canvas": {
+          "x": 0,
+          "y": 48,
+          "width": 390,
+          "height": 732
+        },
+        "scale": 2,
+        "player": {
+          "x": 197.99730000000017,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60.0625,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "overflow": {
+        "x": false,
+        "y": false
+      }
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "before": {
+        "canvas": {
+          "x": 0,
+          "y": 48,
+          "width": 430,
+          "height": 820
+        },
+        "scale": 2,
+        "player": {
+          "x": 171,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "stable": {
+        "canvas": {
+          "x": 0,
+          "y": 48,
+          "width": 430,
+          "height": 820
+        },
+        "scale": 2,
+        "player": {
+          "x": 190.49940000000012,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60.25,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "overflow": {
+        "x": false,
+        "y": false
+      }
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "before": {
+        "canvas": {
+          "x": 0,
+          "y": 56,
+          "width": 768,
+          "height": 904
+        },
+        "scale": 2,
+        "player": {
+          "x": 171,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "stable": {
+        "canvas": {
+          "x": 0,
+          "y": 56,
+          "width": 768,
+          "height": 904
+        },
+        "scale": 2,
+        "player": {
+          "x": 190.49490000000011,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60.375,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "overflow": {
+        "x": false,
+        "y": false
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "before": {
+        "canvas": {
+          "x": 0,
+          "y": 56,
+          "width": 1440,
+          "height": 780
+        },
+        "scale": 2,
+        "player": {
+          "x": 171,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "stable": {
+        "canvas": {
+          "x": 0,
+          "y": 56,
+          "width": 1440,
+          "height": 780
+        },
+        "scale": 2,
+        "player": {
+          "x": 193.5003000000001,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60.4375,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "overflow": {
+        "x": false,
+        "y": false
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "before": {
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 338
+        },
+        "scale": 2,
+        "player": {
+          "x": 171,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "stable": {
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 338
+        },
+        "scale": 2,
+        "player": {
+          "x": 191.99760000000012,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60.1875,
+        "lowEffects": false,
+        "nodes": 31
+      },
+      "overflow": {
+        "x": false,
+        "y": false
+      }
+    },
+    {
+      "visited": [
+        "miller",
+        "mara",
+        "evening",
+        "complete",
+        "iris",
+        "anna",
+        "leo",
+        "day2-complete",
+        "eleanor",
+        "thomas",
+        "nora",
+        "book-club",
+        "day3-complete",
+        "day4-iris",
+        "day4-mara",
+        "day4-leo",
+        "day4-complete",
+        "day5-reading",
+        "season-complete"
+      ],
+      "orders": [
+        {
+          "stage": "miller",
+          "count": 1
+        },
+        {
+          "stage": "mara",
+          "count": 2
+        },
+        {
+          "stage": "anna",
+          "count": 3
+        }
+      ],
+      "performance": {
+        "canvas": {
+          "x": 0,
+          "y": 48,
+          "width": 390,
+          "height": 732
+        },
+        "scale": 2,
+        "player": {
+          "x": 171,
+          "y": 204
+        },
+        "failed": false,
+        "fps": 60.375,
+        "lowEffects": false,
+        "nodes": 31
+      }
+    }
+  ],
+  "errors": []
+}

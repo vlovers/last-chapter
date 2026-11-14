@@ -1,9 +1,13 @@
 // CSS pixels and native world pixels stay separate. Zoom is always an integer.
 export function viewportPlan(width, height) {
+  // A landscape phone is wide but short: zooming from width alone crops the room.
+  // Use a single world pixel per CSS pixel so the full 640px room fits horizontally.
   const zoom =
-    width < 1024
-      ? Math.max(1, Math.floor(width / (width < 600 ? 180 : 300)))
-      : Math.max(1, Math.floor(Math.min(width / 640, height / 360)));
+    width > height && height < 550 && width >= 640 && width < 1024
+      ? 1
+      : width < 1024
+        ? Math.max(1, Math.floor(width / (width < 600 ? 180 : 300)))
+        : Math.max(1, Math.floor(Math.min(width / 640, height / 360)));
   return { zoom, width: width / zoom, height: height / zoom };
 }
 export function projectRect(rect, camera) {
@@ -35,13 +39,16 @@ export function frameWorld(player, width, height) {
 export function frameDialogue(player, companion, width, height, zoom, dock) {
   const frame = frameWorld(player, width / zoom, height / zoom);
   if (width > height && height < 550) {
-    const available = (width - dock.width - 24) / zoom;
+    // A bottom-mounted landscape dialogue does not obscure the world horizontally.
+    // Never subtract its width from the camera's available scene width.
+    if (width / zoom >= 640 && dock.width >= width * 0.75) return frame;
+    const available = Math.max(64, (width - dock.width - 24) / zoom);
     const center = companion
       ? Math.abs(player.x - companion.x) > available - 64
         ? companion.x
         : (player.x + companion.x) / 2
       : player.x;
-    return { x: Math.round(center - (width - dock.width - 24) / (2 * zoom)), y: frame.y };
+    return { x: Math.round(center - available / 2), y: frame.y };
   }
   return {
     x: companion

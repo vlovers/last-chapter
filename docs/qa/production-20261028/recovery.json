@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "test": "missing narrative save clears orphan conversations, notes and receipts; keyboard focus",
+      "status": "passed"
+    },
+    {
+      "test": "corrupt narrative save clears orphan conversations, notes and receipts; keyboard focus",
+      "status": "passed"
+    },
+    {
+      "test": "blocked browser storage shows the save warning and leaves dialogue playable",
+      "status": "passed"
+    }
+  ],
+  "errors": []
+}

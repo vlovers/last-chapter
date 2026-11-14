@@ -31,7 +31,7 @@ shares the module tree in `public/phaser-prototype/`. It implements exploration,
 animated characters and one Ukrainian Mara encounter. Its pure spatial/dialogue/state
 helpers have no Phaser, DOM, production-state or persistence imports. The scene composes
 rendering, interactions, audio, dialogue presentation and lifecycle handling. It never
-reads or writes production saves. Phaser is bundled locally and loaded only by this entry.
+reads or writes production saves. Both entries load the local Phaser bundle.
 
 See [Phaser V1 architecture, controls and asset pipeline](art/PHASER-VERTICAL-SLICE.md),
 [save format](SAVE-FORMAT.md), [testing](TESTING.md), and [ADR 0001](DECISIONS/0001-browser-first.md).
@@ -50,3 +50,7 @@ dock. Completion topic aliases preserve the original edge-based save keys.
 `src/main.ts`, `src/styles/main.css` and the small `model.ts` simulation belong to
 the earlier DOM spike. They are retained for historical integrations; neither Vite
 entry loads that UI. New gameplay belongs in the canonical modules above.
+
+## Optional Oliver dialogue
+
+`src/game/optional-oliver.ts` gates the authored Day 2 graph without advancing the main chapter. `FiveDayStory` persists only its completion flag through the existing save codec. The existing story reading panel owns presentation, focus, world-input blocking and same-page session lifetime. Closing the panel suspends the session in memory; new game or leaving Day 2 discards it. Full reload does not restore an unfinished session.

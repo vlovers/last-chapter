@@ -4,11 +4,11 @@ A Ukrainian-language pixel-art browser game about a small-town bookshop. Meet vi
 
 ## Current status
 
-The five-day **Living Story is implemented in `main`** through [PR #41](https://github.com/vlovers/last-chapter/pull/41). The canonical game includes responsive paginated dialogue, staged character actions, deterministic time/weather, three customer orders, a journal, optional conversations, interactive Frank and versioned local saves with recovery.
+The five-day **Living Story is implemented in `main`** through [PR #41](https://github.com/vlovers/last-chapter/pull/41). The canonical game includes responsive paginated dialogue, staged character actions, deterministic time/weather, three customer orders, a journal, optional Day 2 dialogue with Oliver, interactive Frank and versioned local saves with recovery.
 
-**v0.2 is not publicly released.** The package remains `0.1.0`. Physical-device and Safari/Firefox checks, independent Ukrainian editorial and accessibility review, measured playtime, distribution licenses and release approval remain tracked in [release acceptance #42](https://github.com/vlovers/last-chapter/issues/42). Historical QA reports apply to their recorded commits; they are not current release approval.
+**v0.2 is not publicly released.** The candidate package is `0.2.0-rc.1`; no release tag or public publication has been made. Physical-device and Safari/Firefox checks, independent Ukrainian editorial and accessibility review, measured playtime, distribution licenses and release approval remain tracked in [release acceptance #42](https://github.com/vlovers/last-chapter/issues/42). Historical QA reports apply to their recorded commits; they are not current release approval.
 
-Oliver's optional dialogue (#44), the editorial UI refresh (#45) and governance reconciliation (#43) are **open PRs**, outside current `main`. Older narrative packs are retained for reconciliation. See the [roadmap](docs/ROADMAP.md) for priorities and PR status.
+The consolidation recovers Oliver's story/controller from #44/#20, editorial styling from #45 and release-checklist/staging-QA guidance from #43. Historical narrative/governance branches with unique work are preserved. See the [candidate acceptance record](docs/release/RELEASE-CANDIDATE.md) and [roadmap](docs/ROADMAP.md).
 
 ## Run locally
 

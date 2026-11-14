@@ -23,6 +23,8 @@ export async function chooseById(page, id, { touch = false } = {}) {
       : page.locator('#choices button[data-choice="__more_choices"]');
     assert.equal(await target.count(), 1, 'Choice reachable through pages: ' + id);
     await revealAnswer(page, target);
+    // The measured pager already fits complete answers. Avoid extra scrolling
+    // and stability waits on every choice; retain real pointer and hit checks.
     const box = await target.boundingBox();
     const viewport = page.viewportSize();
     assert.ok(
@@ -33,6 +35,47 @@ export async function chooseById(page, id, { touch = false } = {}) {
         box.y + box.height <= viewport.height + 1,
       'Full answer label fits the viewport: ' + id,
     );
+    // A visible answer may still be covered by a dialogue page control or
+    // an overflowing body. Fail with the actual obstructing element instead
+    // of waiting 30 seconds for Playwright's generic click timeout.
+    const hit = await target.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const top = document.elementFromPoint(x, y);
+      const owner = top?.closest('#dialogue-pages, #dialogue-text, #choices, .dialogue-body');
+      return {
+        hit: top === element || element.contains(top),
+        target: element.getAttribute('data-choice'),
+        obstruction: top?.outerHTML.slice(0, 250) ?? null,
+        owner: owner?.id || owner?.className || null,
+        point: { x: Math.round(x), y: Math.round(y) },
+        geometry: Object.fromEntries(
+          ['#dialogue', '.dialogue-body', '#dialogue-text', '#dialogue-pages', '#choices']
+            .map((selector) => {
+              const node = document.querySelector(selector);
+              if (!node) return null;
+              const box = node.getBoundingClientRect();
+              const style = getComputedStyle(node);
+              return [
+                selector,
+                {
+                  x: Math.round(box.x),
+                  y: Math.round(box.y),
+                  width: Math.round(box.width),
+                  height: Math.round(box.height),
+                  display: style.display,
+                  position: style.position,
+                  overflow: style.overflow,
+                  zIndex: style.zIndex,
+                },
+              ];
+            })
+            .filter(Boolean),
+        ),
+      };
+    });
+    assert.ok(hit.hit, 'Dialogue answer is obscured: ' + JSON.stringify(hit));
     if (touch) await target.tap();
     else await target.click();
     if (target === button) {

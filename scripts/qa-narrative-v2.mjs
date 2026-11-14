@@ -42,8 +42,26 @@ async function choose(page, id, viewport) {
     canvas,
     'Reply does not resize the world',
   );
+  const overflow = await page.evaluate(() => {
+    const width = document.documentElement.scrollWidth;
+    const viewportWidth = document.documentElement.clientWidth;
+    const offenders = [...document.querySelectorAll('body *')]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && rect.right > viewportWidth + 1;
+      })
+      .slice(0, 8)
+      .map((element) => ({
+        tag: element.tagName.toLowerCase(),
+        id: element.id,
+        className: typeof element.className === 'string' ? element.className : '',
+        right: Math.round(element.getBoundingClientRect().right),
+      }));
+    return { width, offenders };
+  });
   assert.ok(
-    (await page.evaluate(() => document.documentElement.scrollWidth)) <= viewport.width + 1,
+    overflow.width <= viewport.width + 1,
+    'Horizontal overflow after choice ' + id + ': ' + JSON.stringify(overflow),
   );
 }
 
