@@ -100,6 +100,7 @@ try {
     await page.keyboard.press('Enter');
     await panel(page).waitFor();
     await geometry(page);
+    await page.screenshot({ path: `${output}/${engine}-${viewport.width}-oliver.png` });
     assert.equal(await panel(page).locator('.conversation-actions button').count(), 3);
     await panel(page).getByRole('button', { name: 'Назви книжку.', exact: true }).click();
     const text = await panel(page).locator('.conversation-exchange').textContent();

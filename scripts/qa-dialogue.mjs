@@ -23,20 +23,8 @@ export async function chooseById(page, id, { touch = false } = {}) {
       : page.locator('#choices button[data-choice="__more_choices"]');
     assert.equal(await target.count(), 1, 'Choice reachable through pages: ' + id);
     await revealAnswer(page, target);
-    // On narrow screens the answer list is independently scrollable. Bring the
-    // selected answer into view before checking its hit target and tapping it.
-    await target.scrollIntoViewIfNeeded();
-    // Playwright can consider an answer visible when only its lower portion is
-    // inside the scrollport. Center it within #choices before hit-testing:
-    // the dialogue pagination row sits immediately above that scrollport.
-    await target.evaluate((element) => {
-      const choices = element.closest('#choices');
-      if (!choices) return;
-      const viewport = choices.getBoundingClientRect();
-      const answer = element.getBoundingClientRect();
-      const offset = answer.top + answer.height / 2 - (viewport.top + viewport.height / 2);
-      choices.scrollTop += offset;
-    });
+    // The measured pager already fits complete answers. Avoid extra scrolling
+    // and stability waits on every choice; retain real pointer and hit checks.
     const box = await target.boundingBox();
     const viewport = page.viewportSize();
     assert.ok(
