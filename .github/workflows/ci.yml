@@ -82,9 +82,18 @@ jobs:
           - name: save-recovery
             command: npm run test:browser:save-recovery
           - name: ux-ui
-            command: npm run test:browser:ux
+            command: npm run test:browser:ux && QA_OUTPUT=/tmp/last-chapter-qa/living-story node scripts/qa-living-story.mjs
           - name: performance
             command: node scripts/qa-bookshop-performance.mjs
+          - name: release-chromium
+            engine: chromium
+            command: QA_ENGINE=chromium node scripts/qa-consolidation.mjs
+          - name: release-firefox
+            engine: firefox
+            command: QA_ENGINE=firefox node scripts/qa-consolidation.mjs
+          - name: release-webkit
+            engine: webkit
+            command: QA_ENGINE=webkit node scripts/qa-consolidation.mjs
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
@@ -103,7 +112,12 @@ jobs:
           # --with-deps re-downloaded optional fonts for over nine minutes in
           # run 42201187341. Keep the same pinned Chromium and host validation;
           # the actual browser launch still fails if a required library is absent.
-          npx playwright install chromium
+          QA_BROWSER_ENGINE='${{ matrix.suite.engine || 'chromium' }}'
+          if [ "$QA_BROWSER_ENGINE" = chromium ]; then
+            npx playwright install chromium
+          else
+            npx playwright install --with-deps "$QA_BROWSER_ENGINE"
+          fi
       - name: Start game server
         run: |
           npm run dev -- --host 127.0.0.1 > /tmp/last-chapter-vite.log 2>&1 &
@@ -164,5 +178,12 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: interaction-qa-${{ matrix.suite.name }}
+          path: /tmp/last-chapter-qa
+          if-no-files-found: ignore
+      - name: Upload release compatibility evidence
+        if: always() && startsWith(matrix.suite.name, 'release-')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ${{ matrix.suite.name }}-acceptance
           path: /tmp/last-chapter-qa
           if-no-files-found: ignore

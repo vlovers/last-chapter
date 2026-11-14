@@ -124,3 +124,9 @@ exit code even when the browser transport never closes.
 See the [executed test/UX report](qa/stabilization/README.md) and
 [narrative integration plan](integration/NARRATIVE-READINESS.md). Future content
 proposals are not counted as implemented scenes.
+
+## Consolidated release candidate
+
+`npm run test:browser:consolidation` exercises Oliver's Day 1/Day 2/Day 3 availability, all completion/decline semantics, same-page dismissal/resume, save reload, keyboard focus trapping and 320/360/390/430/tablet/desktop/956px landscape layouts. Set `QA_ENGINE=firefox` or `QA_ENGINE=webkit` to use those installed Playwright engines; the default is Chromium. This is automated engine testing, not physical Safari/iPhone acceptance or a full accessibility audit.
+
+The existing CI workflow runs the three engine cases alongside the full regression matrix. The `ux-ui` entry also runs `qa-living-story.mjs`; its separate `living-story/` output folder preserves both suites' artifacts. No CI workflow or governance enforcement was added.

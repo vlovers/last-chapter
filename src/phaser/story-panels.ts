@@ -20,6 +20,9 @@ import { maraAfterHours } from './mara-after-hours';
 import { maraReturnVisit } from './mara-return-visit';
 import { maraLetterDecision } from './mara-letter-decision';
 import { allowedMaraTopic, availableMaraTopics } from './mara-topic-availability';
+import { chooseOliver, oliverLine, type OliverSession } from '../game/optional-oliver';
+import { availableOptions } from '../game/dialogue';
+import { oliverUnreadBook } from '../content/optional/oliver';
 
 declare global {
   interface Window {
@@ -42,7 +45,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   const controls = { journal, catalog };
   journal.setAttribute('aria-label', 'Нотатник');
   catalog.setAttribute('aria-label', 'Каталог книжок');
-  let mode: 'journal' | 'catalog' | 'conversation' | null = null;
+  let mode: 'journal' | 'catalog' | 'conversation' | 'oliver' | null = null;
+  let oliver: OliverSession | null = null;
   const conversationKey = OPTIONAL_PROGRESS_KEYS.bookClub;
   let selectedTopic = maraBookClub;
   const letterKey = OPTIONAL_PROGRESS_KEYS.letter;
@@ -109,6 +113,13 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   conversationButton.setAttribute('aria-label', 'Поговорити з Марою');
   conversationButton.setAttribute('aria-expanded', 'false');
   root.querySelector('.story-toolbar-actions')?.append(conversationButton);
+  const oliverButton = document.createElement('button');
+  oliverButton.type = 'button';
+  oliverButton.className = 'oliver-trigger';
+  oliverButton.textContent = 'Олівер';
+  oliverButton.setAttribute('aria-label', 'Поговорити з Олівером');
+  oliverButton.setAttribute('aria-controls', 'story-panel');
+  root.querySelector('.story-toolbar-actions')?.append(oliverButton);
   let filter: CatalogFilter = 'all';
   let search = '';
   let journalTab = 'people';
@@ -191,6 +202,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     panel.append(recovery);
   };
   const refresh = () => {
+    const lostOliverFocus =
+      mode === 'oliver' && !story.oliverAvailable && panel.contains(document.activeElement);
+    if (!story.oliverAvailable) {
+      oliver = null;
+      if (mode === 'oliver') mode = null;
+    }
+    oliverButton.hidden = !story.oliverAvailable;
+    oliverButton.setAttribute('aria-expanded', String(mode === 'oliver'));
     const entries = journalEntries(story);
     const unread = unreadJournalIds(story, seenJournal).length;
     journal.dataset.unread = String(unread);
@@ -236,16 +255,21 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     document.body.classList.toggle('reading', mode !== null);
     panel.setAttribute(
       'aria-label',
-      mode === 'conversation'
-        ? 'Розмова з Марою'
-        : mode === 'journal'
-          ? 'Нотатник книгаря'
-          : 'Книжкова полиця',
+      mode === 'oliver'
+        ? 'Розмова з Олівером'
+        : mode === 'conversation'
+          ? 'Розмова з Марою'
+          : mode === 'journal'
+            ? 'Нотатник книгаря'
+            : 'Книжкова полиця',
     );
     panel.setAttribute('role', 'dialog');
     panel.removeAttribute('aria-live');
     panel.setAttribute('aria-modal', 'true');
-    panel.classList.toggle('story-panel--conversation', mode === 'conversation');
+    panel.classList.toggle(
+      'story-panel--conversation',
+      mode === 'conversation' || mode === 'oliver',
+    );
     panel.classList.toggle('story-panel--journal', mode === 'journal');
     panel.classList.toggle('story-panel--catalog', mode === 'catalog');
     const blocked = mode !== null;
@@ -270,6 +294,42 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
         restorePanelFocus(returnFocus, catalog);
       });
       panel.append(close);
+    }
+    if (lostOliverFocus) restorePanelFocus(null, continueButton);
+    if (mode === 'oliver' && oliver) {
+      panel.append(element('h2', 'Розмова з Олівером'));
+      const current = oliverLine(oliver);
+      const exchange = element('p', current.text, 'conversation-exchange');
+      exchange.tabIndex = -1;
+      exchange.setAttribute('aria-live', 'polite');
+      panel.append(exchange);
+      const actions = element('div', '', 'conversation-actions');
+      if (oliver.complete) {
+        const finish = element('button', 'Завершити розмову');
+        finish.type = 'button';
+        finish.addEventListener('click', () => {
+          if (!oliver || !story.oliverAvailable) return refresh();
+          story.completeOliver(oliver);
+          oliver = null;
+          mode = null;
+          refresh();
+          restorePanelFocus(null, continueButton);
+        });
+        actions.append(finish);
+      } else {
+        for (const option of availableOptions(oliverUnreadBook, oliver.dialogue)) {
+          const button = element('button', option.label);
+          button.type = 'button';
+          button.addEventListener('click', () => {
+            if (!oliver || !story.oliverAvailable) return refresh();
+            oliver = chooseOliver(oliver, option.id);
+            refresh();
+            focusPanelUpdate(panel, panel);
+          });
+          actions.append(button);
+        }
+      }
+      panel.append(actions);
     }
     if (mode === 'conversation') {
       if (conversationReadFailed) {
@@ -752,10 +812,14 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
       panel.append(shelf);
     }
   };
-  const toggle = (next: 'journal' | 'catalog' | 'conversation') => {
+  const toggle = (next: 'journal' | 'catalog' | 'conversation' | 'oliver') => {
     pendingPlayerTurn = null;
     replyReadyAt = 0;
     if (next === 'conversation' && story.actor !== 'mara') return;
+    if (next === 'oliver') {
+      if (!story.oliverAvailable) return;
+      oliver ??= story.beginOliver();
+    }
     returnFocus = document.activeElement as HTMLElement;
     reaction = next === 'catalog' ? story.lastRecommendation : null;
     mode = mode === next ? null : next;
@@ -763,6 +827,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     if (mode) focusPanelUpdate(panel, panel);
   };
   const conversationClick = () => toggle('conversation');
+  const oliverClick = () => toggle('oliver');
   const journalClick = () => toggle('journal');
   const catalogClick = () => toggle('catalog');
   const continueClick = () => {
@@ -773,6 +838,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
     );
   };
   conversationButton.addEventListener('click', conversationClick);
+  oliverButton.addEventListener('click', oliverClick);
   journal.addEventListener('click', journalClick);
   catalog.addEventListener('click', catalogClick);
   continueButton.addEventListener('click', continueClick);
@@ -813,6 +879,7 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   };
   panel.addEventListener('keydown', panelKeys);
   const newGame = () => {
+    oliver = null;
     conversation = startConversation(maraBookClub);
     afterHours = startConversation(maraAfterHours);
     returnVisit = startConversation(maraReturnVisit);
@@ -853,6 +920,8 @@ export function mountStoryPanels(story: FiveDayStory): () => void {
   return () => {
     conversationButton.removeEventListener('click', conversationClick);
     conversationButton.remove();
+    oliverButton.removeEventListener('click', oliverClick);
+    oliverButton.remove();
     saveWarning.remove();
     recoveryNotice?.remove();
     journal.removeEventListener('click', journalClick);

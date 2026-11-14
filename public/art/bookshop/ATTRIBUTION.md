@@ -42,3 +42,11 @@ reuses the existing deterministic `visitor-portraits.js` pixel portraits.
 Living Story (#40): window sky/rooftop/sun/moon variations and speaking mouth/hand/nod
 cues are original procedural extensions of the existing in-repository pixel art.
 No external artwork, textures, fonts or animation sheets were imported.
+
+## v0.2 candidate inventory and distribution review
+
+The candidate retains the existing original-project room/visitor SVGs, eight portrait SVGs, Mara expressions, five catalog covers and procedural room/character/Frank art. Autumn arch/leaf accents are original code geometry recovered from PR #45 and painted into the existing cached background. No marketplace art, recordings, web fonts or remote asset requests were added. System fonts are referenced by family name and are not redistributed. Audio is synthesized in `public/phaser-prototype/audio.js`.
+
+Installed runtime dependency notices for Phaser 3.90.0 and EventEmitter3 are copied verbatim to `/THIRD_PARTY_NOTICES.txt`, which Vite includes in the built site. Optional Spine plugins in node_modules are not imported into this build. The asset-sourcing register lists candidate packs, not distributed art.
+
+**Pending:** the owner must approve distribution rights/terms for the game's original story/art and verify all provenance as part of #42. `project-original` identifies source; it does not grant an open-source license. The repository currently has no general project LICENSE. No public-release approval is inferred from this inventory.

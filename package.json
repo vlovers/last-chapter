@@ -1,6 +1,6 @@
 {
   "name": "last-chapter",
-  "version": "0.1.0",
+  "version": "0.2.0-rc.1",
   "private": true,
   "type": "module",
   "engines": {
@@ -23,7 +23,8 @@
     "test:browser:stabilization": "node scripts/qa-stabilization.mjs",
     "test:browser:performance": "node scripts/qa-bookshop-performance.mjs",
     "test:browser:save-recovery": "node scripts/qa-save-recovery.mjs",
-    "test:browser:ux": "node scripts/qa-ux-ui-production.mjs"
+    "test:browser:ux": "node scripts/qa-ux-ui-production.mjs",
+    "test:browser:consolidation": "node scripts/qa-consolidation.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

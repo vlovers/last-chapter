@@ -1,3 +1,45 @@
+# v0.2 release candidate — consolidation status
+
+**Candidate version: `0.2.0-rc.1`. This is preparation, not a public release.** Base: maintenance merge `3b192a1`. The candidate integrates Oliver's optional Day 2 conversation from #44, the original authored text from #20, a conservative editorial visual pass from #45, and release-checklist/staging-QA improvements from #43.
+
+## Integrated behavior
+
+- Oliver uses the existing reading panel, focus trap, Escape handling and world-input lock. Three playful branches and a decline leave the canonical chapter untouched; only completion is saved. Unfinished sessions resume within the page, but not after full reload. Completion persists with the existing v1 save format and clears on a new game.
+- Editorial paper reading surfaces, plum navigation, autumn arch/leaves and landscape framing retain the stable dialogue dock, real pointer hit targets and dynamic story weather. Decorative room geometry is cached; no permanent rain or extra live scene layers were introduced.
+- Historical production QA from #28/#43 is preserved under `docs/qa/production-20261028/`; it describes its original branch, not this candidate.
+- The release checklist recovered from #43 is [here](../engineering/RELEASE_CHECKLIST.md). Extra governance enforcement and multi-agent instructions remain unmerged.
+
+## Acceptance evidence
+
+Record the final candidate SHA and CI run in [issue #42](https://github.com/vlovers/last-chapter/issues/42). A successful PR-head run and a later main/release commit are distinct evidence. Local checks and exact-head CI results are reported on the consolidation PR; do not substitute the older reports below.
+
+| Gate                                                                 | Candidate status                                                                  |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Quality, narrative/save regressions and build                        | Final local/CI results recorded on consolidation PR                               |
+| Chromium five-day, mobile, Frank, save recovery and staging suites   | Exact-head CI required                                                            |
+| Oliver/layout/keyboard smoke in Chromium, Firefox and WebKit engines | Exact-head CI required; engine emulation is not physical Safari/iPhone acceptance |
+| Physical iPhone/Safari and Android/Chrome, all five days and replay  | **PENDING — real devices required**                                               |
+| Desktop Safari/Firefox full playthrough, screen reader and 200% zoom | **PENDING — independent human acceptance**                                        |
+| Ukrainian editorial/continuity review and measured playtime          | **PENDING — independent reviewer/playtest**                                       |
+| Media provenance and bundled notices                                 | Source inventory reviewed; owner distribution-rights approval remains pending     |
+| Public version/tag/deployment                                        | **NOT PERFORMED**                                                                 |
+
+Runtime media are local original-project SVG/procedural art, system fonts and synthesized audio. `public/THIRD_PARTY_NOTICES.txt` preserves the installed Phaser/EventEmitter3 MIT notices in the production build. The repository has no owner-approved general distribution license; `project-original` metadata is provenance, not a grant to redistribute the game's story/art. No third-party candidate art pack has been imported. See [attribution](../../public/art/bookshop/ATTRIBUTION.md).
+
+## Candidate verification and rollback
+
+Run `npm ci`, `npm run check`, `npm run test:narrative` and the browser suites in [Testing](../TESTING.md). Build both routes with `npm run build`; serve `dist/` locally with `npm exec vite preview -- --host 127.0.0.1 --port 4173`. No production host or deployment command is configured.
+
+Keep exported recovery archives and browser storage private. Do not clear storage to work around save failures. Completion uses the existing save flags; rolling back to maintenance `3b192a1` does not require a save-schema reset. Preserve future-version saves and sidecars. The existing large Phaser bundle advisory remains.
+
+Do not tag, publish or deploy until #42 records the required device, editorial, accessibility, timing, rights and maintainer decisions.
+
+---
+
+## Historical release candidate evidence
+
+The sections below retain their original dates, versions and SHA-specific outcomes. Their former “current” statements are historical; the consolidation status above is the current candidate record.
+
 # Release candidate verification
 
 > **Current status — 2026-11-08 (read this before historical sections):** The implementation of Living Story v0.2 was merged into `main` via [PR #41](https://github.com/vlovers/last-chapter/pull/41) at [`46bfb96`](https://github.com/vlovers/last-chapter/commit/46bfb96da0fe11189d6736dd45703d5b301c5924). Its [PR-head CI #2547](https://github.com/vlovers/last-chapter/actions/runs/42440820434) passed **15/15** jobs, including mobile, save-recovery, finale and narrative journeys. That does **not** prove CI on subsequent `main` commits, physical-device acceptance, deployment or a public v0.2 release. The package version is still `0.1.0`. [Release acceptance #42](https://github.com/vlovers/last-chapter/issues/42) tracks the remaining independent device/browser, accessibility, Ukrainian editorial, playtime, license, versioning and deployment checks. **Do not tag or deploy v0.2 solely from this historical RC record.**

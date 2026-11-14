@@ -252,9 +252,32 @@ try {
   await shot('1440-speaking-b');
   assert.notEqual(pose1.angle, pose2.angle, 'Conversational nod is visible over time');
   assert.equal(pose1.direction, 'left', 'Visitor turns to the bookseller');
-  await chooseById(page, 'finish');
-  await page.locator('#dialogue[data-staging]').waitFor();
+  // chooseById waits until staging is over, so it cannot test interruption mid-exit.
+  // Click the authored choice directly and assert that the exit timeline actually starts.
+  await readReply(page);
+  const finish = page.locator('#choices button[data-choice="finish"]');
+  // The hub renders only the current choice batch; advance authored batches
+  // without selecting the exit through chooseById (which waits for staging).
+  for (let batch = 0; batch < 20 && !(await finish.count()); batch++) {
+    const more = page.locator('#choices button[data-choice="__more_choices"]');
+    assert.equal(await more.count(), 1, 'Exit remains reachable through choice batches');
+    await revealAnswer(page, more);
+    await more.click();
+    await waitForDialogue(page);
+  }
+  assert.equal(await finish.count(), 1, 'Authored exit choice exists in a reachable batch');
+  await revealAnswer(page, finish);
+  await finish.click();
+  await page.locator('#dialogue[data-staging]').waitFor({ timeout: 5000 });
+  assert.equal((await sceneState()).staging, true, 'Exit timeline starts before interruption');
+  // Focus a real keyboard target inside the dialogue. The panel itself is not tabbable.
+  await page.locator('#close-dialogue').focus();
   await page.keyboard.press('Escape');
+  await page.waitForFunction(async () => {
+    const { game } = await import('/phaser-prototype/scene.js');
+    const scene = game.scene.getScene('bookshop');
+    return !scene.director.active && scene.state.mode !== 'dialogue';
+  });
   assert.equal((await sceneState()).staging, false, 'Closing during an exit cancels the timeline');
   assert.equal((await sceneState()).visible, false, 'Interrupted exit settles the departed pose');
   await clickStoryContinue();

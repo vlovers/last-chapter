@@ -42,6 +42,7 @@ try {
     [768, 1024],
     [1440, 900],
     [844, 390],
+    [956, 440], // iPhone 16 Pro Max landscape: primary handheld target
   ].filter(([width]) => !process.env.QA_WIDTH || String(width) === process.env.QA_WIDTH);
   assert.ok(viewports.length > 0, 'Known mobile QA viewport required');
   for (const [width, height] of viewports) {

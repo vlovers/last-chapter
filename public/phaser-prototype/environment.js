@@ -451,6 +451,35 @@ export function drawEnvironment(scene) {
   f(12, 342, 616, 7, 0x332c29);
   f(17, 341, 606, 2, honey);
   f(21, 337, 598, 4, ink, 0.2);
+  // PR #45's autumn arch/leaves share the cached background, not live layers.
+  // Weather stays owned by the story-driven atmosphere; no permanent rain overlay.
+  for (const [radius, color, alpha] of [
+    [70, 0x9a6e72, 0.78],
+    [64, 0xd6a56e, 0.55],
+  ]) {
+    g.lineStyle(1, color, alpha);
+    for (let step = 0; step < 40; step++) {
+      const angle = Math.PI + (step * Math.PI) / 40;
+      const next = Math.PI + ((step + 1) * Math.PI) / 40;
+      g.lineBetween(
+        321 + Math.round(Math.cos(angle) * radius),
+        86 + Math.round(Math.sin(angle) * radius),
+        321 + Math.round(Math.cos(next) * radius),
+        86 + Math.round(Math.sin(next) * radius),
+      );
+    }
+  }
+  for (const [x, y, color] of [
+    [34, 28, 0xa6533f],
+    [51, 18, 0xc07843],
+    [594, 31, 0xa6533f],
+    [610, 48, 0xc07843],
+    [80, 20, 0xb56843],
+    [566, 18, 0xa6533f],
+  ]) {
+    r(x - 2, y - 5, 4, 11, color, 0.72);
+    r(x - 5, y - 1, 10, 3, color, 0.72);
+  }
   cache(g, 'bookshop-native-background', WIDTH, HEIGHT, 0);
   return { halo, readingGlow, parcel, steam };
 }

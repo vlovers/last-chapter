@@ -1,8 +1,11 @@
 // This fixture owns the entire QA CLI process and its browser server.
 // Keep cleanup bounded, while allowing any original assertion to escape finally.
-export async function launchQaBrowser(chromium, { shutdownMs = 5000, exitGraceMs = 1000 } = {}) {
+export async function launchQaBrowser(
+  chromium,
+  { shutdownMs = 5000, exitGraceMs = 1000, channel = process.env.BROWSER_CHANNEL || 'chrome' } = {},
+) {
   const server = await chromium.launchServer({
-    channel: process.env.BROWSER_CHANNEL || 'chrome',
+    ...(channel ? { channel } : {}),
     headless: true,
   });
   const browser = await chromium.connect(server.wsEndpoint());
