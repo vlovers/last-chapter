@@ -1,71 +1,55 @@
-# Roadmap — Narrative First
+# Roadmap
 
-> Historical product decision (2026-10-24): prioritize a complete five-day narrative before expanding shop mechanics. The Living Story implementation has since been integrated through [PR #41](https://github.com/vlovers/last-chapter/pull/41); this roadmap distinguishes integrated implementation from **unverified release acceptance**. Do not interpret completed implementation as approval to publish.
+## Implemented in main
 
-## Phase 1 — Complete playable narrative (IMPLEMENTED; EDITORIAL ACCEPTANCE OPEN)
+- Five-day canonical Phaser game, 19 chapter/checkpoint states, branching Ukrainian conversations and composable endings.
+- Three catalog orders across five original books, optional Mara conversations, journal and evidence provenance.
+- Responsive paginated dialogue, keyboard/touch controls, deterministic time/weather, staged character actions and Frank interactions.
+- Versioned saves, legacy migrations, restart/replay, completion ledgers and rejected-save recovery.
+- Deterministic narrative/save regressions and desktop/mobile browser QA.
 
-**Exit criterion:** a player can start Day 1, complete all five days, see a coherent ending and replay materially different choices using a deliberately plain, accessible interface. All player-facing copy is Ukrainian.
+Living Story was integrated through [PR #41](https://github.com/vlovers/last-chapter/pull/41), commit `46bfb96`. Its historical PR-head CI passed 15/15 jobs. Later commits require their own checks; this is not a public release.
 
-- [x] Browser-first TypeScript/Vite prototype; deterministic dialogue and state rules.
-- [x] Initial book recommendations, first-day encounters, evening letter and versioned local save prototype.
-- [x] First-pass five-day Story Bible, eight-character Bible, dialogue examples, state and experience principles (docs/story).
-- [ ] Reconcile old narrative documents with the five-day canon; complete Mystery & Puzzle Bible.
-- [x] Write and integrate full Day 1: substantial optional conversations, ethical choices, feedback and continuity. *(integrated implementation; release review remains open)*
-- [x] Write and integrate Day 2: Iris returns, Anna/Thomas rumor arc and distinct conversational routes. *(integrated implementation; release review remains open)*
-- [x] Write and integrate Day 3: book club, evidence chronology, counselor confidentiality. *(integrated implementation; release review remains open)*
-- [x] Write and integrate Day 4: trust, letter-delivery decisions and relationship boundaries. *(integrated implementation; release review remains open)*
-- [x] Write and integrate Day 5: community reading, personal resolutions and composable epilogues. *(integrated implementation; release review remains open)*
-- [ ] Expand to 15–20 original fictional books with meaningful discussion and recommendation follow-ups.
-- [x] Implement topic hub, natural exits, dialogue history, journal, evidence provenance, separate trust/boundary signals. *(integrated implementation; release review remains open)*
-- [ ] Implement ending composition, versioned save migrations, restart/replay, skip/read-history and autosave.
-- [x] Unit and scenario tests for every five-day path, unreachable scenes, continuity and no spoiler leaks. *(integrated implementation; release review remains open)*
-- [ ] Ukrainian editorial pass; timed playtests targeting 4–5 hours main path, 7–9 hours with optional conversations (targets, not measured results).
+## Current milestone: v0.2 release acceptance
 
-**Phase 1 deliberately excludes:** production sprites, animated scenes, elaborate UI, shopping minigames, new neighborhoods, mobile store packaging, AI-generated live dialogue.
+[Issue #42](https://github.com/vlovers/last-chapter/issues/42) is the active release checklist:
 
-## Phase 2 — Living bookshop gameplay
+- Verify CI on the exact release/tag commit.
+- Record physical iPhone/Safari and Android/Chrome playthroughs, desktop Safari/Firefox, touch, safe areas and landscape.
+- Review keyboard navigation, screen-reader behavior, 200% zoom and reduced motion.
+- Obtain independent Ukrainian editorial/continuity review and measured first-run/replay durations.
+- Verify old, corrupt, missing, blocked and future-version saves, restart and Frank sidecars.
+- Review distribution licenses/attribution; align package version, changelog and deployment instructions before release approval.
 
-**Entry:** Phase 1 narrative is playable end to end and core plot no longer depends on UI prototypes.
+The package is still `0.1.0`. No deployment is configured. The existing large Phaser bundle advisory remains. Automated viewport tests do not establish physical-device or full accessibility acceptance.
 
-- [ ] Catalog and shelf navigation; meaningful book matching and order fulfillment.
-- [ ] Visitor schedules, daily routines, book club preparation, events and light investigations.
-- [ ] 2–3 fair puzzles with clues, hints and no irreversible softlocks.
-- [ ] Balance pacing so activities support rather than interrupt deep conversations.
-- [ ] Test touch controls and accessibility in a functional, unstyled web build.
+## Open PRs — triage snapshot, 2026-11-14
 
-## Phase 3 — Visual production and release
+| PR                                                     | Classification       | Required next step                                                                                                                                               |
+| ------------------------------------------------------ | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [#45](https://github.com/vlovers/last-chapter/pull/45) | Needs changes        | Preserve unique UI/environment/viewport work; latest CI failed and browser run was cancelled. Update its CSS-only description and verify mobile/visual behavior. |
+| [#44](https://github.com/vlovers/last-chapter/pull/44) | Needs changes        | Preserve unique Oliver runtime/UI/tests; repair latest CI and complete browser/editorial acceptance.                                                             |
+| [#43](https://github.com/vlovers/last-chapter/pull/43) | Needs changes        | Reconcile overlapping agent-doc edits after maintenance; repair formatting/CI and review unique governance tooling and historical QA.                            |
+| [#28](https://github.com/vlovers/last-chapter/pull/28) | Historical reference | Preserve production QA artifacts and unique recovery/navigation assertions; do not delete its stacked base.                                                      |
+| [#27](https://github.com/vlovers/last-chapter/pull/27) | Historical reference | Preserve security, PR-template and governance differences until reconciled with #43.                                                                             |
+| [#21](https://github.com/vlovers/last-chapter/pull/21) | Historical reference | Retain unique authored packs and orchestration proposal; its non-main base is not canonical gameplay.                                                            |
+| [#20](https://github.com/vlovers/last-chapter/pull/20) | Historical reference | Opening prose differs from #44; preserve until editorial equivalence is accepted.                                                                                |
 
-**Entry:** gameplay and narrative loops have passed playtests.
+PR [#29](https://github.com/vlovers/last-chapter/pull/29) was closed as superseded after reviewing all 15 residual changed files: its voice bible is identical, progression logic and regression coverage are present, and older dialogue/browser integration changes have independent replacements in main. Its branch is retained as historical reference.
 
-- [ ] Original pixel-art location, portraits, expressions, lighting, weather and animation (direction documented in `docs/art/PIXEL-ART-DIRECTION.md`; no production sprites yet).
-- [ ] Music, ambience, sound controls and reduced-motion support.
-- [ ] Final responsive UX and Cyrillic typography; keyboard/touch/screen reader review.
-- [ ] Browser regression/performance tests, licenses and provenance.
-- [ ] Web release; evaluate Capacitor iOS/Android packaging after mobile browser testing.
+None of the remaining heads is verified ready to merge. An empty commit-status list or absence of workflow runs is not passing CI.
 
-## Engineering quality gates (continuous, not a separate art phase)
+## Planned after acceptance
 
-- [x] Committed lockfile, `npm ci`, initial format/lint/typecheck/tests/build/security audit verification.
-- [ ] Confirm CI on each new PR commit.
-- [ ] Preserve existing files when committing to GitHub; use current branch head and base tree.
-- [x] Merge Living Story implementation via PR #41 after its 15/15 PR-head CI passed (commit `46bfb96`).
-- [ ] Verify the exact release/tag commit and obtain independent release acceptance in [#42](https://github.com/vlovers/last-chapter/issues/42).
+- Reconcile historical story/design documents and unique open-PR material against the current canon.
+- Expand the five-book catalog and recommendation follow-ups; 15–20 books remain a design target.
+- Use editorial playtests to prioritize narrative depth, investigations and pacing.
+- Extend shop routines, events and puzzles where they support the story.
+- Revisit asset/animation/audio production, performance and accessibility based on device evidence.
+- Evaluate iOS/Android packaging after mobile browser acceptance.
 
-## Current honest status (2026-11-08)
+The original three-day/40-minute proposal and later 4–5-hour main-path / 7–9-hour optional-path targets are historical or aspirational. No duration is claimed as measured.
 
-The canonical Phaser game in `main` contains the integrated five-day Living Story, staged character actions, responsive dialogue, save recovery, journal, Frank interactions and multiple endings. [PR #41](https://github.com/vlovers/last-chapter/pull/41) was squash-merged as [`46bfb96`](https://github.com/vlovers/last-chapter/commit/46bfb96da0fe11189d6736dd45703d5b301c5924); its [CI #2547](https://github.com/vlovers/last-chapter/actions/runs/42440820434) passed 15/15 jobs on the **PR head**, not necessarily on the latest `main` or a release tag.
+## Reference documents
 
-**Current priority: [v0.2 release acceptance #42](https://github.com/vlovers/last-chapter/issues/42), not re-implementing the five days.** Physical iPhone/Android and Safari/Firefox checks, independent Ukrainian editorial review, accessibility, measured runtime, licensing/provenance, version alignment and deployment verification are outstanding. `package.json` still says `0.1.0`; no public v0.2 release is confirmed. The 4–5-hour main-path and 7–9-hour optional-path figures above are aspirational targets, **not measured durations**.
-
-The older PR #5 draft-only instruction and the original V1 prototype notes below are historical. Remaining old PRs require file-level reconciliation before merge/closure; do not delete unique branches or QA evidence.
-
-## Isolated bookshop slice V1 (2026-10-24)
-
-A playable Phaser encounter now demonstrates a 640×360 original room, four-direction
-characters, furniture collision and navigation, four contextual object inspections,
-Mara's arrival and branching book-gift request, reduced motion, and gesture-gated audio.
-This completes a separate technical vertical slice, not production narrative integration
-or the runtime targets above. See [V1 guide](art/PHASER-VERTICAL-SLICE.md).
-
-Next: Ukrainian narrative/art review; stronger sprite expressions and audio mix; broader
-hardware/accessibility verification before considering an approved state bridge.
+[Story Bible](story/01-STORY-BIBLE.md), [architecture](ARCHITECTURE.md), [testing](TESTING.md) and [historical release evidence](release/RELEASE-CANDIDATE.md). Dated QA and migration documents retain the facts and limitations of their original commits; use #42 for current release acceptance.

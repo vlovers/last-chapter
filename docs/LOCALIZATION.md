@@ -15,4 +15,4 @@
 
 ## Current state
 
-The initial prototype had English strings in `src/main.ts`. This decision requires translating them before treating the playable prototype as Ukrainian-complete. The opening fixture and HTML document language were updated first.
+The canonical five-day game and isolated encounter use Ukrainian text and HTML `lang="uk"`. `src/main.ts` is the retained earlier DOM spike, outside the current Vite entries. Independent editorial review remains part of release acceptance #42; automated checks do not establish natural phrasing or continuity.
