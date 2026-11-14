@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { viewportPlan, projectRect, frameWorld } from '../public/phaser-prototype/viewport.js';
+import { viewportPlan, projectRect, frameWorld, frameDialogue } from '../public/phaser-prototype/viewport.js';
 import { Interactions } from '../public/phaser-prototype/interactions.js';
 import { createFrameBudget } from '../public/phaser-prototype/performance.js';
 import {
@@ -62,6 +62,25 @@ describe('native mobile geometry', () => {
     );
     expect(Object.values(rect).every(Number.isInteger)).toBe(true);
     expect(rect.x).toBe(67 * plan.zoom);
+  });
+  it('centers the complete room in a 956px landscape phone even when dialogue is open', () => {
+    const plan = viewportPlan(956, 210);
+    expect(plan.zoom).toBe(1);
+    const player = { x: 171, y: 204 };
+    const companion = { x: 420, y: 204 };
+    const dock = { width: 820, height: 180 };
+    const idle = frameWorld(player, plan.width, plan.height);
+    const talking = frameDialogue(player, companion, 956, 210, plan.zoom, dock);
+    expect(talking).toEqual(idle);
+    expect(talking.x).toBeLessThan(0);
+    expect(talking.x + 640).toBeLessThan(956);
+  });
+  it('keeps landscape camera framing stable across different dialogue panel widths', () => {
+    const player = { x: 171, y: 204 };
+    const companion = { x: 420, y: 204 };
+    const a = frameDialogue(player, companion, 844, 180, 1, { width: 400, height: 150 });
+    const b = frameDialogue(player, companion, 844, 180, 1, { width: 800, height: 150 });
+    expect(a).toEqual(b);
   });
   it('projects the top-left camera origin using scroll coordinates, not the centered worldView', () => {
     expect(
