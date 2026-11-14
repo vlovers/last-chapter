@@ -23,6 +23,7 @@ jobs:
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
           node-version-file: .nvmrc
+          cache: npm
       - name: Install reproducibly
         run: npm ci --no-audit --no-fund
       - name: Format
@@ -53,6 +54,10 @@ jobs:
             command: npm run test:browser
           - name: five-day
             command: npm run test:browser:v5
+          - name: polish
+            command: npm run test:browser:polish
+          - name: stabilization
+            command: npm run test:browser:stabilization
           - name: mobile
             command: npm run test:browser:mobile
           - name: frank
@@ -89,6 +94,7 @@ jobs:
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
           node-version-file: .nvmrc
+          cache: npm
       - name: Install reproducibly
         run: npm ci --no-audit --no-fund
       - name: Install browser tooling
@@ -148,6 +154,13 @@ jobs:
           if-no-files-found: ignore
       - name: Upload responsive and Frank evidence
         if: always() && (matrix.suite.name == 'mobile' || matrix.suite.name == 'frank')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: interaction-qa-${{ matrix.suite.name }}
+          path: /tmp/last-chapter-qa
+          if-no-files-found: ignore
+      - name: Upload polish and stabilization evidence
+        if: always() && (matrix.suite.name == 'polish' || matrix.suite.name == 'stabilization')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: interaction-qa-${{ matrix.suite.name }}

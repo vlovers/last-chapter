@@ -27,6 +27,16 @@ function isHiddenByCollapsedDetails(node: HTMLElement): boolean {
   return false;
 }
 
+/** Share visibility rules between tab navigation and programmatic focus. */
+function isVisiblePanelTarget(node: HTMLElement): boolean {
+  return (
+    !node.matches(':disabled') &&
+    !node.closest('[hidden], [inert], [aria-hidden="true"]') &&
+    !isHiddenByCollapsedDetails(node) &&
+    isRendered(node)
+  );
+}
+
 /** Keyboard navigation must ignore controls hidden by a closed <details>, inert
  * overlays, or disabled states; those controls are still found by querySelectorAll. */
 export function panelTabStops(panel: HTMLElement): HTMLElement[] {
@@ -34,27 +44,12 @@ export function panelTabStops(panel: HTMLElement): HTMLElement[] {
     panel.querySelectorAll<HTMLElement>(
       'button, input, textarea, select, summary, a[href], [tabindex]:not([tabindex="-1"])',
     ),
-  ).filter((node) => {
-    if (
-      node.tabIndex < 0 ||
-      node.matches(':disabled') ||
-      node.closest('[hidden], [inert], [aria-hidden="true"]') ||
-      !isRendered(node)
-    ) {
-      return false;
-    }
-    return !isHiddenByCollapsedDetails(node);
-  });
+  ).filter((node) => node.tabIndex >= 0 && isVisiblePanelTarget(node));
 }
 
 /** Announce a newly selected conversation rather than jumping to the close button. */
 export function focusPanelUpdate(panel: HTMLElement, fallback: HTMLElement): void {
-  const isUsable = (node: HTMLElement): boolean =>
-    node.isConnected &&
-    !node.matches(':disabled') &&
-    !node.closest('[hidden], [inert], [aria-hidden="true"]') &&
-    !isHiddenByCollapsedDetails(node) &&
-    isRendered(node);
+  const isUsable = (node: HTMLElement): boolean => node.isConnected && isVisiblePanelTarget(node);
   const exchange = Array.from(panel.querySelectorAll<HTMLElement>('.conversation-exchange')).find(
     isUsable,
   );
@@ -69,12 +64,7 @@ export function focusPanelUpdate(panel: HTMLElement, fallback: HTMLElement): voi
  * transition may hide or disable the button that originally opened the dock. */
 export function restorePanelFocus(preferred: HTMLElement | null, fallback: HTMLElement): void {
   const usable =
-    preferred?.isConnected &&
-    preferred.tabIndex >= 0 &&
-    !preferred.matches(':disabled') &&
-    !preferred.closest('[hidden], [inert], [aria-hidden="true"]') &&
-    !isHiddenByCollapsedDetails(preferred) &&
-    isRendered(preferred);
+    preferred?.isConnected && preferred.tabIndex >= 0 && isVisiblePanelTarget(preferred);
   const target = usable && preferred ? preferred : fallback;
   target.focus({ preventScroll: true });
 }

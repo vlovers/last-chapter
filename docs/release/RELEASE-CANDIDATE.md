@@ -8,17 +8,17 @@ Sections A–I below preserve the chronological QA evidence and SHA-specific con
 
 ## Current release evidence and outstanding gates
 
-| Gate | Evidence / state |
-| --- | --- |
-| Living Story integration | PR #41 merged, `46bfb96` |
-| PR-head automated QA | CI #2547: 15/15 passed; SHA-specific only |
-| Exact release/tag commit CI | **Not verified** |
-| Physical iPhone/Safari and Android/Chrome | **Not verified** |
-| Desktop Safari/Firefox, keyboard, screen reader, zoom | **Not verified** |
-| Independent Ukrainian editorial review | **Not verified** |
-| Measured first-run and replay duration | **Not verified** |
-| Distribution licenses / attribution | **Not verified** |
-| Version, tag and public deployment | **Not completed** (`package.json`: `0.1.0`) |
+| Gate                                                  | Evidence / state                            |
+| ----------------------------------------------------- | ------------------------------------------- |
+| Living Story integration                              | PR #41 merged, `46bfb96`                    |
+| PR-head automated QA                                  | CI #2547: 15/15 passed; SHA-specific only   |
+| Exact release/tag commit CI                           | **Not verified**                            |
+| Physical iPhone/Safari and Android/Chrome             | **Not verified**                            |
+| Desktop Safari/Firefox, keyboard, screen reader, zoom | **Not verified**                            |
+| Independent Ukrainian editorial review                | **Not verified**                            |
+| Measured first-run and replay duration                | **Not verified**                            |
+| Distribution licenses / attribution                   | **Not verified**                            |
+| Version, tag and public deployment                    | **Not completed** (`package.json`: `0.1.0`) |
 
 **Release decision:** implementation integrated; **v0.2 publication remains on hold** until the evidence in issue #42 is recorded and reviewed. This file is an audit trail, not a release authorization.
 

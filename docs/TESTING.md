@@ -29,6 +29,11 @@ portrait fallback metadata and unsupported audio. Runtime JavaScript is linted a
 
 ## Optional browser smoke tests
 
+CI runs quality/security and browser suites in `.github/workflows/ci.yml`.
+The former separate Browser QA workflow's polish and stabilization suites remain
+in that matrix; its duplicate V5 run and obsolete branch-formatting workflows
+have been removed.
+
 `npm run test:browser:ux` checks the production UI at 320×568, 360×780, 375×667,
 375×812, 390×844, 430×932, 768×1024, 1440×900 and 844×390. It covers transient
 spoken player turns before NPC replies, action labels, rapid Enter/touch guards,
@@ -42,7 +47,7 @@ Playwright in a temporary directory and use installed Google Chrome, or configur
 available Chromium channel. With Vite running:
 
 ```sh
-npm install --prefix /tmp/last-chapter-browser --no-save playwright@1.58.2
+npm install --prefix /tmp/last-chapter-browser --no-save --package-lock=false playwright@1.56.0
 PLAYWRIGHT_MODULE=/tmp/last-chapter-browser/node_modules/playwright/index.mjs npm run test:browser
 ```
 
@@ -61,6 +66,30 @@ The runner owns its Chrome server and allows five seconds for graceful shutdown,
 then terminates only that fixture if the installed browser stalls during cleanup.
 
 See [V1 QA record](qa/PHASER-VERTICAL-SLICE-V1.md) for the checks actually executed.
+
+## Suite selection
+
+| Area                                              | Command                              |
+| ------------------------------------------------- | ------------------------------------ |
+| Canonical five-day progression                    | `npm run test:browser:v5`            |
+| Save/load, rejected saves and storage denial      | `npm run test:browser:save-recovery` |
+| Dialogue, touch, focus and viewport stability     | `npm run test:browser:mobile`        |
+| Long text, journal, catalog and keyboard          | `npm run test:browser:ux`            |
+| Complete narrative journeys at both mobile widths | `node scripts/qa-narrative-v2.mjs`   |
+| Ending combinations and finale navigation         | `node scripts/qa-finale-matrix.mjs`  |
+| Staged actions, dialogue pages and time/weather   | `node scripts/qa-living-story.mjs`   |
+| Frank actions and saved activity                  | `node scripts/qa-frank-overhaul.mjs` |
+| Frame/object budget                               | `npm run test:browser:performance`   |
+
+CI shards all ten narrative journeys across 360/390 widths and core,
+investigation and daily groups. To reproduce one shard use
+`QA_WIDTH=360 QA_GROUP=core node scripts/qa-narrative-v2.mjs`.
+The dedicated Living Story suite is a separate local check; shared behaviors
+also have coverage in the CI suites.
+
+Record the tested SHA, command, environment and result. Compare failures with
+the unchanged baseline before attributing them to a refactor. Dated reports are
+historical evidence; physical-device, editorial and release gates remain in #42.
 
 ## Gameplay polish V1
 

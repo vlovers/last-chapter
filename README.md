@@ -1,39 +1,58 @@
 # Last Chapter — Between the Lines
 
-A browser-first **pixel-art small-town bookshop narrative game**. Customers arrive to buy books, talk about their lives and pass along rumors. The player can listen, investigate and decide when to keep or share information, with consequences for relationships across the town.
+A Ukrainian-language pixel-art browser game about a small-town bookshop. Meet visitors, recommend books, investigate conflicting accounts and choose what to keep private. Choices carry into relationships and endings across five days.
 
-**Status (2026-11-08):** the canonical Phaser bookshop includes the five-day Living Story integrated into `main` through [PR #41](https://github.com/vlovers/last-chapter/pull/41) ([merge commit `46bfb96`](https://github.com/vlovers/last-chapter/commit/46bfb96da0fe11189d6736dd45703d5b301c5924)). It provides a stable mobile viewport, overlay dialogue, compact catalog recommendations for three customers, an investigation journal and an interactive Frank with a cat tree. `/phaser-prototype/` preserves the isolated single-encounter slice. The [PR-head CI run #2547](https://github.com/vlovers/last-chapter/actions/runs/42440820434) passed 15/15 jobs, including mobile, save-recovery, finale and narrative browser checks; this evidence is specific to that tested head, **not proof of a production deployment or of subsequent commits passing**. **v0.2 is not yet publicly released**: physical-device and cross-browser acceptance, independent Ukrainian editorial review, accessibility review, measured playtime, asset-license review and deployment verification remain open in [release acceptance #42](https://github.com/vlovers/last-chapter/issues/42). `package.json` still reports `0.1.0` until versioning is approved. The [historical release-candidate report](docs/release/RELEASE-CANDIDATE.md) and [mobile overhaul QA](docs/qa/mobile-overhaul/README.md) preserve earlier evidence; their pre-merge instructions are historical, not current release gates.
+## Current status
 
-The [stabilization report](docs/qa/stabilization/README.md) records CI repairs,
-order/save regression coverage, UX changes and measured limits. The
-[narrative readiness plan](docs/integration/NARRATIVE-READINESS.md) separates
-playable content from the unapproved design pack and lists concrete integration tasks.
+The five-day **Living Story is implemented in `main`** through [PR #41](https://github.com/vlovers/last-chapter/pull/41). The canonical game includes responsive paginated dialogue, staged character actions, deterministic time/weather, three customer orders, a journal, optional conversations, interactive Frank and versioned local saves with recovery.
 
-## Quick start
+**v0.2 is not publicly released.** The package remains `0.1.0`. Physical-device and Safari/Firefox checks, independent Ukrainian editorial and accessibility review, measured playtime, distribution licenses and release approval remain tracked in [release acceptance #42](https://github.com/vlovers/last-chapter/issues/42). Historical QA reports apply to their recorded commits; they are not current release approval.
 
-Requires Node.js 22 and npm.
+Oliver's optional dialogue (#44), the editorial UI refresh (#45) and governance reconciliation (#43) are **open PRs**, outside current `main`. Older narrative packs are retained for reconciliation. See the [roadmap](docs/ROADMAP.md) for priorities and PR status.
+
+## Run locally
+
+Use Node.js **22.13+ within Node 22**, or **Node 24**, and npm. `.nvmrc` selects the Node 22 line.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open the localhost URL displayed by Vite for the five-day bookshop, or `/phaser-prototype/` for the isolated encounter. See the [slice guide](docs/art/PHASER-VERTICAL-SLICE.md) for controls and architecture. Run `npm run check` for formatting, lint, type checks, unit tests and build. A committed `package-lock.json` pins dependencies. CI uses `npm ci` for reproducible installation.
+Open the URL printed by Vite. `/` is the five-day game; `/phaser-prototype/` is the isolated Mara encounter. No backend, database, environment secrets or external game services are required.
 
-## Intended play loop
+## Stack and structure
 
-- **Day:** meet visitors, have optional conversations, recommend books, hear rumors, note observations.
-- **Evening:** read the notebook, compare conflicting accounts and choose how to act.
-- **Town:** events have a fixed truth; different characters have different beliefs, secrets and information.
-- **Replay:** branching consequences and authored initial variations, not arbitrary random endings.
-- **Art:** consistent pixel-art scenes with restrained animation and accessible dialogue text.
+TypeScript, JavaScript, Phaser 3.90, Vite, Vitest, ESLint and Prettier. Dependencies are pinned by `package-lock.json`.
 
-## Docs
+| Path                            | Purpose                                                          |
+| ------------------------------- | ---------------------------------------------------------------- |
+| `src/content/`                  | Authored Ukrainian scenes, character and book data               |
+| `src/game/`                     | Pure dialogue, knowledge, progression, save codec and endings    |
+| `src/phaser/`                   | Browser adapters, UI panels, optional conversations and recovery |
+| `phaser-prototype/`             | Browser entries and shared stylesheet                            |
+| `public/phaser-prototype/`      | Phaser scene, movement, dialogue presentation and art generation |
+| `public/art/`, `public/assets/` | Local artwork and provenance                                     |
+| `tests/`, `scripts/qa-*.mjs`    | Deterministic regressions and browser QA                         |
+| `docs/`                         | Architecture, story design, development and historical QA        |
 
-[Agent rules](AGENTS.md) · [Architecture](docs/ARCHITECTURE.md) · [Story direction](docs/NARRATIVE.md) · [Development](docs/DEVELOPMENT.md) · [Testing](docs/TESTING.md) · [Roadmap](docs/ROADMAP.md) · [Contribution guide](CONTRIBUTING.md)
+`src/main.ts` and `src/styles/` retain the earlier DOM spike; neither current Vite entry loads it.
 
-Issue → scoped work → implementation → tests → PR → CI → review → merge. Do not merge solely because CI is green.
+## Verify
 
-## Language
+```sh
+npm run check          # format, lint, TypeScript, all unit/integration tests, build
+npm run test:narrative # focused five-day, ending and save regression matrices
+npm run test:browser:mobile
+npm run test:browser:save-recovery
+```
 
-The game is **Ukrainian-only** (`uk-UA`). Engineering documentation and source identifiers may remain English. See [Localization policy](docs/LOCALIZATION.md).
+Browser tests require a running game server and optional Playwright tooling; see [Testing](docs/TESTING.md) for setup and all suites. CI runs quality/security checks and the browser matrix in [ci.yml](.github/workflows/ci.yml).
+
+## Roadmap and documentation
+
+Next: complete [v0.2 release acceptance](https://github.com/vlovers/last-chapter/issues/42), reconcile unique work in open PRs, then plan further bookshop/content expansion. Runtime targets remain unmeasured; mobile-store packaging and additional neighborhoods are planned work.
+
+[Agent rules](AGENTS.md) · [Architecture](docs/ARCHITECTURE.md) · [Story direction](docs/NARRATIVE.md) · [Development](docs/DEVELOPMENT.md) · [Testing](docs/TESTING.md) · [Roadmap](docs/ROADMAP.md) · [Contributing](CONTRIBUTING.md) · [Localization](docs/LOCALIZATION.md)
+
+All player-facing text is Ukrainian (`uk-UA`). Engineering documentation and identifiers may be English.

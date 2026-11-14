@@ -1,5 +1,7 @@
 # Narrative integration readiness — 2026-10-26
 
+> Historical snapshot: implementation and limitations below describe the original branch/date. For current runtime ownership and release status, see [Architecture](../ARCHITECTURE.md), [Roadmap](../ROADMAP.md) and release acceptance #42. Preserve the original narrative and QA evidence.
+
 This is an implementation handoff, not approval to replace the existing story.
 Runtime reviewed: PR #23 on `feat/mobile-bookshop-overhaul`; parent head
 `4be9d770e9c7fa1db48ace3f8200d8573f0f1b5a`.
