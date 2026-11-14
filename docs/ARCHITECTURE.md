@@ -37,3 +37,16 @@ See [Phaser V1 architecture, controls and asset pipeline](art/PHASER-VERTICAL-SL
 [save format](SAVE-FORMAT.md), [testing](TESTING.md), and [ADR 0001](DECISIONS/0001-browser-first.md).
 The canonical bridge is covered by five-day, save and browser regressions; the
 isolated entry continues to leave production saves untouched.
+
+## Living Story presentation
+
+`src/game/staging.ts` defines optional presentation commands on authored dialogue
+nodes. `public/phaser-prototype/scene-director.js` and `director-driver.js` execute
+them with lifecycle/interruption guards; they do not decide narrative outcomes.
+`src/game/story-environment.ts` derives time and weather from saved story progress.
+`dialogue-pages.js` measures prose and answer pagination inside the stable dialogue
+dock. Completion topic aliases preserve the original edge-based save keys.
+
+`src/main.ts`, `src/styles/main.css` and the small `model.ts` simulation belong to
+the earlier DOM spike. They are retained for historical integrations; neither Vite
+entry loads that UI. New gameplay belongs in the canonical modules above.

@@ -1,5 +1,7 @@
 # V5 — canonical Phaser route and shared narrative bridge
 
+> Historical snapshot: implementation and limitations below describe the original branch/date. For current runtime ownership and release status, see [Architecture](../ARCHITECTURE.md), [Roadmap](../ROADMAP.md) and release acceptance #42. Preserve the original narrative and QA evidence.
+
 Status: **canonical gameplay integrated; browser-smoke verified; needs full human playthrough and character-art polish before merging**.
 
 ## Implemented in this branch
